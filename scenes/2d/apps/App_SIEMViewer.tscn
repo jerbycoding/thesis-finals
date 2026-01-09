@@ -1,0 +1,122 @@
+[gd_scene load_steps=2 format=3 uid="uid://b7x8k9m2n3p4q"]
+
+[ext_resource type="Script" path="res://scripts/2d/apps/app_SIEMViewer.gd" id="1_siem"]
+
+[node name="App_SIEMViewer" type="Control"]
+custom_minimum_size = Vector2(750, 550)
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_siem")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.070588, 0.082353, 0.14902, 0.8)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ColorRect"]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="HeaderLabel" type="Label" parent="ColorRect/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "SIEM Log Viewer"
+vertical_alignment = 1
+
+[node name="FilterContainer" type="HBoxContainer" parent="ColorRect/VBoxContainer"]
+layout_mode = 2
+
+[node name="FilterAll" type="Button" parent="ColorRect/VBoxContainer/FilterContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "All"
+
+[node name="FilterSecurity" type="Button" parent="ColorRect/VBoxContainer/FilterContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Security Only"
+
+[node name="FilterHighSeverity" type="Button" parent="ColorRect/VBoxContainer/FilterContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "High Severity"
+
+[node name="Spacer" type="Control" parent="ColorRect/VBoxContainer/FilterContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HSeparator" type="HSeparator" parent="ColorRect/VBoxContainer"]
+layout_mode = 2
+
+[node name="AttachSection" type="PanelContainer" parent="ColorRect/VBoxContainer"]
+layout_mode = 2
+visible = false
+
+[node name="MarginContainer" type="MarginContainer" parent="ColorRect/VBoxContainer/AttachSection"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 5.0
+offset_top = 5.0
+offset_right = -5.0
+offset_bottom = -5.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ColorRect/VBoxContainer/AttachSection/MarginContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="ColorRect/VBoxContainer/AttachSection/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Attach to Ticket:"
+theme_override_font_sizes/font_size = 14
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ColorRect/VBoxContainer/AttachSection/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="TicketDropdown" type="OptionButton" parent="ColorRect/VBoxContainer/AttachSection/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Select Ticket..."
+
+[node name="AttachButton" type="Button" parent="ColorRect/VBoxContainer/AttachSection/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Attach"
+
+[node name="LogDetailSection" type="PanelContainer" parent="ColorRect/VBoxContainer"]
+layout_mode = 2
+visible = false
+
+[node name="MarginContainer" type="MarginContainer" parent="ColorRect/VBoxContainer/LogDetailSection"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ColorRect/VBoxContainer/LogDetailSection/MarginContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="ColorRect/VBoxContainer/LogDetailSection/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Log Details:"
+theme_override_font_sizes/font_size = 14
+
+[node name="LogDetailLabel" type="RichTextLabel" parent="ColorRect/VBoxContainer/LogDetailSection/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+bbcode_enabled = true
+text = "Log details will be shown here."
+fit_content = true
+
+[node name="ScrollContainer" type="ScrollContainer" parent="ColorRect/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="LogList" type="VBoxContainer" parent="ColorRect/VBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+

@@ -1,0 +1,177 @@
+[gd_scene load_steps=4 format=3 uid="uid://c3humlfk5uhg8"]
+
+[ext_resource type="Script" uid="uid://5j6lxa236ajd" path="res://scripts/2d/computer_desktop.gd" id="1_0kbkv"]
+[ext_resource type="Script" uid="uid://c28t6vqktfrln" path="res://scripts/2d/DesktopClock.gd" id="1_0l3ag"]
+[ext_resource type="Script" uid="uid://cbi6smmdpx4yu" path="res://scripts/2d/ExitButton.gd" id="2_0kbkv"]
+
+[node name="ComputerDesktop" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_0kbkv")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+color = Color(0.0392157, 0.0392157, 0.101961, 1)
+
+[node name="AppWindowContainer" type="Control" parent="ColorRect"]
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="SystemTray" type="ColorRect" parent="ColorRect"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -45.0
+offset_bottom = -5.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 1
+color = Color(0.117647, 0.164706, 0.227451, 1)
+
+[node name="DesktopClock" type="Label" parent="ColorRect/SystemTray"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_right = 2.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.918016, 1.06743)
+text = "12:00"
+vertical_alignment = 1
+script = ExtResource("1_0l3ag")
+
+[node name="Button" type="Button" parent="ColorRect/SystemTray"]
+layout_mode = 0
+offset_left = 1100.0
+offset_top = 6.0
+offset_right = 1141.0
+offset_bottom = 37.0
+text = "EXIT"
+script = ExtResource("2_0kbkv")
+
+[node name="AppLauncher" type="Control" parent="ColorRect"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 50.0
+offset_top = 50.0
+offset_right = 450.0
+offset_bottom = 450.0
+mouse_filter = 1
+
+[node name="SIEM_Icon" type="TextureButton" parent="ColorRect/AppLauncher"]
+layout_mode = 0
+offset_right = 180.0
+offset_bottom = 180.0
+
+[node name="IconBackground" type="ColorRect" parent="ColorRect/AppLauncher/SIEM_Icon"]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.117647, 0.164706, 0.227451, 1)
+
+[node name="Label" type="Label" parent="ColorRect/AppLauncher/SIEM_Icon/IconBackground"]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "SIEM"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Email_Icon" type="TextureButton" parent="ColorRect/AppLauncher"]
+layout_mode = 0
+offset_left = 200.0
+offset_right = 380.0
+offset_bottom = 180.0
+
+[node name="IconBackground" type="ColorRect" parent="ColorRect/AppLauncher/Email_Icon"]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.117647, 0.164706, 0.227451, 1)
+
+[node name="Label" type="Label" parent="ColorRect/AppLauncher/Email_Icon/IconBackground"]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "EMAIL"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Terminal_Icon" type="TextureButton" parent="ColorRect/AppLauncher"]
+layout_mode = 0
+offset_top = 200.0
+offset_right = 180.0
+offset_bottom = 380.0
+
+[node name="IconBackground" type="ColorRect" parent="ColorRect/AppLauncher/Terminal_Icon"]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.117647, 0.164706, 0.227451, 1)
+
+[node name="Label" type="Label" parent="ColorRect/AppLauncher/Terminal_Icon/IconBackground"]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "TERMINAL"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Tickets_Icon" type="TextureButton" parent="ColorRect/AppLauncher"]
+layout_mode = 0
+offset_left = 200.0
+offset_top = 200.0
+offset_right = 380.0
+offset_bottom = 380.0
+
+[node name="IconBackground" type="ColorRect" parent="ColorRect/AppLauncher/Tickets_Icon"]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.117647, 0.164706, 0.227451, 1)
+
+[node name="Label" type="Label" parent="ColorRect/AppLauncher/Tickets_Icon/IconBackground"]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "TICKETS"
+horizontal_alignment = 1
+vertical_alignment = 1

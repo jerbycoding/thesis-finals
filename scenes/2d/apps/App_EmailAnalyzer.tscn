@@ -1,0 +1,163 @@
+[gd_scene load_steps=2 format=3 uid="uid://bl81gxshfy21s"]
+
+[ext_resource type="Script" uid="uid://cnlitr17gagoc" path="res://scripts/2d/apps/app_EmailAnalyzer.gd" id="1_email"]
+
+[node name="App_EmailAnalyzer" type="Control"]
+custom_minimum_size = Vector2(900, 700)
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_email")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.070588, 0.082353, 0.14902, 0.8)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ColorRect"]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="HeaderLabel" type="Label" parent="ColorRect/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Email Analyzer"
+vertical_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="ColorRect/VBoxContainer"]
+layout_mode = 2
+
+[node name="EmailViewContainer" type="HSplitContainer" parent="ColorRect/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="InboxPanel" type="PanelContainer" parent="ColorRect/VBoxContainer/EmailViewContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.4
+
+[node name="MarginContainer" type="MarginContainer" parent="ColorRect/VBoxContainer/EmailViewContainer/InboxPanel"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ColorRect/VBoxContainer/EmailViewContainer/InboxPanel/MarginContainer"]
+layout_mode = 2
+
+[node name="InboxLabel" type="Label" parent="ColorRect/VBoxContainer/EmailViewContainer/InboxPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Inbox"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="ColorRect/VBoxContainer/EmailViewContainer/InboxPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="EmailList" type="VBoxContainer" parent="ColorRect/VBoxContainer/EmailViewContainer/InboxPanel/MarginContainer/VBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DetailPanel" type="PanelContainer" parent="ColorRect/VBoxContainer/EmailViewContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.6
+
+[node name="MarginContainer" type="MarginContainer" parent="ColorRect/VBoxContainer/EmailViewContainer/DetailPanel"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer"]
+layout_mode = 2
+
+[node name="PlaceholderLabel" type="Label" parent="ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Select an email to view details"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="EmailDetailView" type="VBoxContainer" parent="ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+
+[node name="SubjectLabel" type="Label" parent="ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer/EmailDetailView"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Subject: [No Subject]"
+
+[node name="SenderLabel" type="Label" parent="ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer/EmailDetailView"]
+layout_mode = 2
+text = "From: [No Sender]"
+
+[node name="HSeparator2" type="HSeparator" parent="ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer/EmailDetailView"]
+layout_mode = 2
+
+[node name="BodyLabel" type="Label" parent="ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer/EmailDetailView"]
+layout_mode = 2
+text = "[Email body will appear here]"
+autowrap_mode = 3
+
+[node name="AttachmentsLabel" type="Label" parent="ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer/EmailDetailView"]
+visible = false
+layout_mode = 2
+text = "Attachments: None"
+
+[node name="HSeparator3" type="HSeparator" parent="ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer/EmailDetailView"]
+layout_mode = 2
+
+[node name="InspectionTools" type="VBoxContainer" parent="ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer/EmailDetailView"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="InspectionLabel" type="Label" parent="ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer/EmailDetailView/InspectionTools"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Inspection Tools:"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer/EmailDetailView/InspectionTools"]
+layout_mode = 2
+
+[node name="ViewHeadersButton" type="Button" parent="ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer/EmailDetailView/InspectionTools/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "View Headers"
+
+[node name="ScanAttachmentsButton" type="Button" parent="ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer/EmailDetailView/InspectionTools/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Scan Attachments"
+
+[node name="CheckLinksButton" type="Button" parent="ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer/EmailDetailView/InspectionTools/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Check Links"
+
+[node name="InspectionResultsContainer" type="ScrollContainer" parent="ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer/EmailDetailView/InspectionTools"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 150)
+size_flags_vertical = 3
+
+[node name="InspectionResults" type="RichTextLabel" parent="ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer/EmailDetailView/InspectionTools/InspectionResultsContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+bbcode_enabled = true
+fit_content = true
+
+[node name="HSeparator4" type="HSeparator" parent="ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer/EmailDetailView"]
+layout_mode = 2
+
+[node name="DecisionButtons" type="HBoxContainer" parent="ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer/EmailDetailView"]
+layout_mode = 2
+
+[node name="ApproveButton" type="Button" parent="ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer/EmailDetailView/DecisionButtons"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Approve (Deliver)"
+
+[node name="QuarantineButton" type="Button" parent="ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer/EmailDetailView/DecisionButtons"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Quarantine"
+
+[node name="EscalateButton" type="Button" parent="ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer/EmailDetailView/DecisionButtons"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Escalate"

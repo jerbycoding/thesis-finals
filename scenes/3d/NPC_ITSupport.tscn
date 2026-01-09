@@ -1,0 +1,27 @@
+[gd_scene load_steps=4 format=3 uid="uid://bckc0uyxlcl5a"]
+
+[ext_resource type="Script" uid="uid://byi0voyi5w5et" path="res://scripts/3d/NPC_ITSupport.gd" id="1_npc"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_it"]
+radius = 0.4
+height = 1.8
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_interact"]
+size = Vector3(3, 3, 3)
+
+[node name="NPC_ITSupport" type="CharacterBody3D"]
+script = ExtResource("1_npc")
+npc_id = "it_support"
+npc_name = "IT Support"
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+shape = SubResource("CapsuleShape3D_it")
+
+[node name="InteractionArea" type="Area3D" parent="."]
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="InteractionArea"]
+shape = SubResource("BoxShape3D_interact")

@@ -1,0 +1,128 @@
+[gd_scene load_steps=2 format=3 uid="uid://cy8j1fgu48puc"]
+
+[ext_resource type="Script" path="res://scripts/2d/apps/app_shift_report.gd" id="1_abcde"]
+
+[node name="App_ShiftReport" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_abcde")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.05, 0.06, 0.09, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 50
+theme_override_constants/margin_top = 50
+theme_override_constants/margin_right = 50
+theme_override_constants/margin_bottom = 50
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 48
+text = "End of Shift Report"
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="ArchetypeLabel" type="Label" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 36
+text = "Archetype: [ARCHETYPE]"
+horizontal_alignment = 1
+
+[node name="ArchetypeDescription" type="Label" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+autowrap_mode = 2
+text = "[Archetype Description...]"
+horizontal_alignment = 1
+
+[node name="ArchetypeFeedback" type="Label" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+autowrap_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "[Archetype Feedback...]"
+horizontal_alignment = 1
+
+
+[node name="HSeparator2" type="HSeparator" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 40
+
+[node name="MetricsGrid" type="GridContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+columns = 2
+
+[node name="TicketsCompletedLabel" type="Label" parent="MarginContainer/VBoxContainer/MetricsGrid"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Tickets Completed:"
+
+[node name="TicketsCompletedValue" type="Label" parent="MarginContainer/VBoxContainer/MetricsGrid"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "0"
+
+[node name="AvgTimeLabel" type="Label" parent="MarginContainer/VBoxContainer/MetricsGrid"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Average Resolution Time:"
+
+[node name="AvgTimeValue" type="Label" parent="MarginContainer/VBoxContainer/MetricsGrid"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "0s"
+
+[node name="RisksTakenLabel" type="Label" parent="MarginContainer/VBoxContainer/MetricsGrid"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Risks Taken:"
+
+[node name="RisksTakenValue" type="Label" parent="MarginContainer/VBoxContainer/MetricsGrid"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "0"
+
+[node name="ConsequencesLabel" type="Label" parent="MarginContainer/VBoxContainer/MetricsGrid"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Consequences Triggered:"
+
+[node name="ConsequencesValue" type="Label" parent="MarginContainer/VBoxContainer/MetricsGrid"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "0"
+
+[node name="ContinueButton" type="Button" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+text = "Continue to Next Shift (Placeholder)"

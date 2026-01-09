@@ -1,0 +1,25 @@
+[gd_scene load_steps=5 format=3 uid="uid://b2d35yngg7u75"]
+
+[ext_resource type="Script" uid="uid://dx3637o27a75s" path="res://scripts/PlayerController.gd" id="1_15gk4"]
+[ext_resource type="PackedScene" uid="uid://pwr7hj6luthk" path="res://scenes/ui/InteractionPrompt.tscn" id="2_lib7b"]
+[ext_resource type="PackedScene" uid="uid://c5v8gkq0xyt6k" path="res://scenes/ui/ShiftTimerHUD.tscn" id="3_st_hud"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_jib20"]
+radius = 0.4
+height = 1.8
+
+[node name="Player3D" type="CharacterBody3D"]
+script = ExtResource("1_15gk4")
+
+[node name="InteractionPrompt" parent="." instance=ExtResource("2_lib7b")]
+[node name="ShiftTimerHUD" parent="." instance=ExtResource("3_st_hud")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+shape = SubResource("CapsuleShape3D_jib20")
+
+[node name="CameraPivot" type="Node3D" parent="."]
+
+[node name="Camera3D" type="Camera3D" parent="CameraPivot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 0)
+fov = 70.0

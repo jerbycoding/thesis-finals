@@ -1,0 +1,76 @@
+[gd_scene load_steps=3 format=3 uid="uid://bu5gakvnfr7d4"]
+
+[ext_resource type="Script" uid="uid://dso6bmk5jkle3" path="res://scripts/2d/apps/components/window_frame.gd" id="1_k1wc0"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_17tsm"]
+bg_color = Color(0.117647, 0.164706, 0.227451, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.2, 0.22, 0.3, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+
+[node name="WindowFrame" type="Control"]
+custom_minimum_size = Vector2(300, 200)
+layout_mode = 3
+anchors_preset = 0
+offset_left = 50.0
+offset_top = 50.0
+offset_right = 368.0
+offset_bottom = 257.0
+script = ExtResource("1_k1wc0")
+
+[node name="Border" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_17tsm")
+clip_contents = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Border"]
+layout_mode = 2
+
+[node name="TitleBar" type="HBoxContainer" parent="Border/VBoxContainer"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+mouse_filter = 0
+
+[node name="TitleLabel" type="Label" parent="Border/VBoxContainer/TitleBar"]
+layout_mode = 2
+size_flags_horizontal = 1
+size_flags_vertical = 1
+text = "Window"
+vertical_alignment = 1
+
+[node name="Spacer" type="Control" parent="Border/VBoxContainer/TitleBar"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+
+[node name="CloseButton" type="Button" parent="Border/VBoxContainer/TitleBar"]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+text = "X"
+flat = true
+
+[node name="ContentContainer" type="MarginContainer" parent="Border/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+clip_contents = true
