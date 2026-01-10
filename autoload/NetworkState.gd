@@ -84,6 +84,11 @@ func register_host(hostname: String, initial_state: Dictionary = {"status": "CLE
 func get_host_state(hostname: String) -> Dictionary:
 	return host_states.get(hostname, {})
 
+func load_state(data: Dictionary):
+	if data:
+		host_states = data
+		print("NetworkState state loaded.")
+
 # Updates the state of a specific host.
 func update_host_state(hostname: String, new_state: Dictionary):
 	if host_states.has(hostname):

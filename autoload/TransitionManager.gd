@@ -103,32 +103,43 @@ func exit_desktop_mode():
 	is_transitioning = false
 	transition_completed.emit()
 
-func change_scene_to(path: String):
-	if not overlay_instance or is_transitioning:
-		print("DEBUG: Scene change blocked: already transitioning or no overlay")
+func change_scene_to(path: String, narrative_to_start_after: String = ""):
+	if not overlay_instance:
+		print(">>> TRANSITION ERROR: Overlay instance is null!")
+		return
+	if is_transitioning:
+		print(">>> TRANSITION BLOCKED: A transition is already in progress. New request for '", path, "' was ignored.")
 		return
 	
-	print("DEBUG: change_scene_to: Starting transition to ", path)
+	print(">>> TRANSITION START: To '", path, "'")
 	is_transitioning = true
 	transition_started.emit()
 	
-	print("DEBUG: change_scene_to: Fading in overlay...")
 	overlay_instance.fade_in()
+	print(">>> TRANSITION FADE_IN: Waiting for fade-in to complete...")
 	await overlay_instance.fade_finished
-	print("DEBUG: change_scene_to: Overlay fade finished. Changing scene.")
+	print(">>> TRANSITION FADE_IN: Complete.")
 	
-	# Change scene
+	print(">>> TRANSITION SCENE_CHANGE: Changing scene in tree to '", path, "'...")
 	get_tree().change_scene_to_file(path)
 	
-	# Small delay to ensure scene is loaded and ready
 	await get_tree().create_timer(0.1).timeout
-	print("DEBUG: change_scene_to: Scene changed and timer finished. Fading out.")
+	print(">>> TRANSITION SCENE_CHANGE: Scene tree changed.")
 	
-	# Fade from black
 	overlay_instance.fade_out()
+	print(">>> TRANSITION FADE_OUT: Waiting for fade-out to complete...")
 	await overlay_instance.fade_finished
-	print("DEBUG: change_scene_to: Fade out complete. Transition finished.")
+	print(">>> TRANSITION FADE_OUT: Complete.")
 	
 	is_transitioning = false
 	transition_completed.emit()
+	print(">>> TRANSITION END: To '", path, "'")
+	
+	# After everything is done, check if there's a follow-up narrative action
+	if not narrative_to_start_after.is_empty():
+		if NarrativeDirector:
+			print(">>> TRANSITION ACTION: Starting narrative '", narrative_to_start_after, "' after scene change.")
+			NarrativeDirector.start_shift(narrative_to_start_after)
+		else:
+			push_error("TransitionManager: Cannot start narrative, NarrativeDirector not found!")
 

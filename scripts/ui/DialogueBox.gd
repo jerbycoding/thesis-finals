@@ -53,8 +53,10 @@ func show_dialogue(dialogue_data: Dictionary, npc: String = ""):
 	# Release mouse cursor for dialogue interaction
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	
-	# Wait for scene tree to be ready (important for dynamically instantiated nodes)
-	await get_tree().process_frame
+	# The await here was causing issues during scene transitions.
+	# Since the DialogueBox is now a persistent singleton, its nodes are
+	# guaranteed to be ready after its own _ready() function has completed.
+	# await get_tree().process_frame
 	
 	# Ensure nodes are ready - find them if not already found
 	if not portrait_label:
@@ -170,9 +172,9 @@ func _on_choice_selected(choice_index: int):
 					"choice_text": choice.get("text", "")
 				})
 			
-			# Handle choice effects
-			if choice.has("effect"):
-				_apply_choice_effect(choice["effect"])
+			# The signal is emitted, and the connected object (the NPC via the DialogueManager)
+			# will handle the consequences. The DialogueBox itself does not.
+			dialogue_choice_selected.emit(choice)
 			
 			# Move to next line or close
 			if choice.has("next_line"):
@@ -181,29 +183,12 @@ func _on_choice_selected(choice_index: int):
 				current_line_index += 1
 			
 			_show_current_line()
-	
-	dialogue_choice_selected.emit(choice)
 
-func _apply_choice_effect(effect: Dictionary):
-	if effect.has("relationship_change"):
-		var npc = effect.get("npc", npc_id)
-		var change = effect["relationship_change"]
-		if ConsequenceEngine:
-			ConsequenceEngine.update_npc_relationship(npc, change)
-	
-	if effect.has("unlock_event"):
-		# Trigger event unlock
-		pass
 
 func _close_dialogue():
 	hide()
-	# Restore mouse capture for 3D mode
-	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-
-	# Set the game mode back to 3D to re-enable player movement
-	if GameState:
-		GameState.set_game_mode(GameState.GameMode.MODE_3D)
-
+	# The DialogueManager is responsible for changing game state and mouse mode.
+	# This UI element just signals that it has been closed.
 	dialogue_closed.emit()
 
 func _input(event):

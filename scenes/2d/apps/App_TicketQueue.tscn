@@ -69,8 +69,8 @@ theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
 [node name="DetailView" type="VBoxContainer" parent="ColorRect/VBoxContainer/HBoxContainer/DetailPanel/MarginContainer"]
-layout_mode = 2
 visible = false
+layout_mode = 2
 
 [node name="TitleLabel" type="Label" parent="ColorRect/VBoxContainer/HBoxContainer/DetailPanel/MarginContainer/DetailView"]
 layout_mode = 2
@@ -93,11 +93,9 @@ fit_content = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
 text = "Required Steps:"
-visible = false
 
 [node name="StepsContainer" type="VBoxContainer" parent="ColorRect/VBoxContainer/HBoxContainer/DetailPanel/MarginContainer/DetailView"]
 layout_mode = 2
-visible = false
 
 [node name="PlaceholderLabel" type="Label" parent="ColorRect/VBoxContainer/HBoxContainer/DetailPanel/MarginContainer"]
 layout_mode = 2

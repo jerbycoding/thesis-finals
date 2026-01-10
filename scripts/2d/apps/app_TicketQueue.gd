@@ -90,17 +90,17 @@ func _update_detail_view(ticket: TicketResource):
 			child.queue_free()
 		
 		# Add new steps
-		# if selected_ticket.steps.is_empty():
-		# 	var no_steps_label = Label.new()
-		# 	no_steps_label.text = "No specific steps outlined."
-		# 	steps_container.add_child(no_steps_label)
-		# else:
-		# 	for i in range(selected_ticket.steps.size()):
-		# 		var step = selected_ticket.steps[i]
-		# 		var step_label = Label.new()
-		# 		step_label.text = "%d. %s" % [i + 1, step]
+		if selected_ticket.steps.is_empty():
+			var no_steps_label = Label.new()
+			no_steps_label.text = "No specific steps outlined."
+			steps_container.add_child(no_steps_label)
+		else:
+			for i in range(selected_ticket.steps.size()):
+				var step = selected_ticket.steps[i]
+				var step_label = Label.new()
+				step_label.text = "%d. %s" % [i + 1, step]
 
-		# 		steps_container.add_child(step_label)
+				steps_container.add_child(step_label)
 
 func _on_ticket_added(ticket: TicketResource):
 	if not ticket:

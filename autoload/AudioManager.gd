@@ -48,4 +48,7 @@ var SFX = {
 	"terminal_beep": "res://assets/sfx/terminal_beep.ogg",  #/
 	"music_ambient_desktop": "res://assets/music/ambient_desktop.ogg", # /
 	# Add more as needed
+	"consequence_alert": "res://assets/sfx/notification_error.ogg", # Using existing error sound
+	"ticket_spawn": "res://assets/sfx/newTicket.ogg", # Using existing new ticket sound
+	"ui_hover": "res://assets/sfx/button_click.ogg", # Using existing button click sound
 }

@@ -77,6 +77,11 @@ func log_tool_used(tool_name: String):
 		metrics.tools_used[tool_name] = 0
 	metrics.tools_used[tool_name] += 1
 
+func load_state(data: Dictionary):
+	if data:
+		metrics = data
+		print("ArchetypeAnalyzer state loaded.")
+
 # --- Analysis Function ---
 
 func get_analysis_results() -> Dictionary:

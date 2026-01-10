@@ -7,7 +7,7 @@ const CONSEQUENCE_EVAL_INTERVAL: float = 15.0 # Evaluate every 15 seconds
 signal consequence_triggered(consequence_type: String, details: Dictionary)
 signal followup_ticket_scheduled(ticket_id: String, delay: float)
 
-var choice_log: Array[Dictionary] = []
+var choice_log: Array = []
 
 var scheduled_consequences: Array[Dictionary] = []
 
@@ -32,70 +32,49 @@ enum ConsequenceType {
 
 
 func update_npc_relationship(npc_id: String, change: float):
-
 	if not npc_relationships.has(npc_id):
-
 		npc_relationships[npc_id] = 0.0
-
 	
-
 	npc_relationships[npc_id] += change
-
 	print("❤️ NPC relationship updated: ", npc_id, " | New Score: ", npc_relationships[npc_id])
 
-
+func load_state(relationships: Dictionary, choices: Array):
+	if relationships:
+		npc_relationships = relationships
+	if choices:
+		choice_log = choices
+	
+	# Clear any consequences that were scheduled from the previous session
+	scheduled_consequences.clear()
+	
+	print("ConsequenceEngine state loaded.")
 
 func trigger_consequence(consequence_id: String):
-
 	print("🚨 CONSECUTIVE TRIGGERED by NarrativeDirector: ", consequence_id)
-
 	match consequence_id:
-
 		"missed_attachment_scan":
-
 			_schedule_followup_ticket("MALWARE-CLEANUP-NARRATIVE", 30.0, "Narrative-driven malware cleanup due to missed attachment scan")
-
 		_:
-
 			print("⚠ Unknown consequence ID received: ", consequence_id)
 
-
-
 func _ready():
-
 	# Connect to the NarrativeDirector to listen for scripted consequence events
-
 	if NarrativeDirector:
-
 		NarrativeDirector.spawn_consequence_requested.connect(trigger_consequence)
-
-
 
 	# Start a timer to periodically evaluate for emergent consequences
 
 	var consequence_timer = get_tree().create_timer(CONSEQUENCE_EVAL_INTERVAL, false)
-
 	consequence_timer.timeout.connect(_evaluate_consequences)
 
-
-
 func _evaluate_consequences():
-
 	# TODO: Implement logic to evaluate player choices from 'choice_log'
-
 	# and trigger emergent consequences based on patterns of behavior.
-
 	print("⚙️ Evaluating for emergent consequences...")
-
 	pass
 
-
-
 func log_ticket_completion(ticket_id: String, completion_type: String, ticket: TicketResource, time_remaining: float):
-
 	print("📝 Logging ticket completion: ", ticket_id, " - ", completion_type)
-
-	
 
 	var choice_data = {
 
@@ -112,18 +91,13 @@ func log_ticket_completion(ticket_id: String, completion_type: String, ticket: T
 		"ticket_severity": ticket.severity
 
 	}
-
 	
-
 	choice_log.append(choice_data)
 
 	
-
 	# Check for hidden risks
-
 	_check_hidden_risks(ticket, completion_type)
 
-	
 
 	# Schedule consequences based on completion type
 
@@ -132,92 +106,50 @@ func log_ticket_completion(ticket_id: String, completion_type: String, ticket: T
 
 
 func _check_hidden_risks(ticket: TicketResource, completion_type: String):
-
 	# Check if player triggered any hidden risks
-
 	if ticket.hidden_risks.is_empty():
 
 		return
-
-	
 
 	# Check if player has sufficient evidence (all required logs attached)
 
 	var has_sufficient = ticket.has_sufficient_evidence()
 
-	
 
 	# For efficient/emergency completion, check if they missed required logs
-
 	if completion_type == "efficient" or completion_type == "emergency":
-
 		if not has_sufficient:
-
 			# Player rushed completion without all required evidence
-
 			for risk in ticket.hidden_risks:
-
 				print("⚠ Hidden risk detected: ", risk)
-
 				# Schedule consequence based on risk
-
 				_trigger_hidden_risk_consequence(ticket, risk, completion_type)
-
-
-
 func _trigger_hidden_risk_consequence(ticket: TicketResource, risk: String, completion_type: String):
-
 	# Parse risk description to determine consequence
-
 	if "malware" in risk.to_lower() or "clicked" in risk.to_lower():
-
 		# Spawn malware cleanup ticket
-
 		_schedule_followup_ticket("MALWARE-CLEANUP", 60.0, "Malware cleanup required after missed detection")
-
 	elif "breach" in risk.to_lower() or "data" in risk.to_lower():
-
 		# Spawn data breach report
-
 		_schedule_followup_ticket("BREACH-REPORT", 30.0, "Data breach report required")
-
 	else:
-
 		# Generic followup
-
 		_schedule_followup_ticket("FOLLOWUP-001", 90.0, "Follow-up investigation required")
-
-
-
 func _schedule_consequences(ticket: TicketResource, completion_type: String, time_remaining: float):
-
 	match completion_type:
-
 		"compliant":
-
 			# Compliant completion - usually no negative consequences
-
 			print("✓ Compliant completion - No negative consequences")
-
 			# Could add positive consequences (bonus time, reputation gain)
-
 		
-
 		"efficient":
-
 			# Efficient completion - moderate risk
-
 			if time_remaining < ticket.base_time * 0.3:  # Used less than 30% of time
-
 				print("⚠ Efficient completion with very little time used - High risk")
-
 				_schedule_followup_ticket("EFFICIENT-RISK", 60.0, "Rushed resolution may have missed critical checks")
-
 			else:
 
 				print("✓ Efficient completion - Moderate risk accepted")
-
-		
 
 		"emergency":
 
@@ -371,7 +303,7 @@ func log_email_decision(email_id: String, decision: String, email: EmailResource
 
 
 
-func get_choice_history() -> Array[Dictionary]:
+func get_choice_history() -> Array:
 
 	return choice_log.duplicate()
 

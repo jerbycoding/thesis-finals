@@ -130,8 +130,8 @@ size_flags_horizontal = 3
 text = "Check Links"
 
 [node name="InspectionResultsContainer" type="ScrollContainer" parent="ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer/EmailDetailView/InspectionTools"]
-layout_mode = 2
 custom_minimum_size = Vector2(0, 150)
+layout_mode = 2
 size_flags_vertical = 3
 
 [node name="InspectionResults" type="RichTextLabel" parent="ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer/EmailDetailView/InspectionTools/InspectionResultsContainer"]

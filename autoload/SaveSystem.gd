@@ -1,0 +1,98 @@
+# SaveSystem.gd
+# Autoload singleton for handling saving and loading game state.
+# This system is responsible for collecting data from all relevant managers,
+# serializing it to a JSON file, and distributing loaded data back to the managers.
+extends Node
+
+# The path to the save file in the user's data directory.
+const SAVE_PATH = "user://savegame.json"
+
+# Emitted after data has been successfully loaded and distributed to all managers.
+signal game_loaded
+
+# Collects data from all managers and writes it to the save file.
+func save_game():
+	# For now, we assume saving at the end of shift 1 always means shift 2 is next.
+	# A more robust system would get the next shift from NarrativeDirector.
+	var next_shift = "second_shift"
+
+	var save_data = {
+		# --- Player State ---
+		"player_archetype": ArchetypeAnalyzer.get_analysis_results().get("archetype", "Pragmatic"),
+		"player_metrics": ArchetypeAnalyzer.metrics,
+		
+		# --- World State ---
+		"next_shift_name": next_shift,
+		"npc_relationships": ConsequenceEngine.npc_relationships,
+		"network_state": NetworkState.host_states,
+		
+		# --- Progress State ---
+		"active_tickets": _get_ticket_ids_from_array(TicketManager.get_active_tickets()),
+		"completed_tickets": _get_ticket_ids_from_array(TicketManager.completed_tickets),
+		"choice_log": ConsequenceEngine.get_choice_history()
+	}
+	
+	var file = FileAccess.open(SAVE_PATH, FileAccess.WRITE)
+	if file:
+		var json_string = JSON.stringify(save_data, "\t")
+		file.store_string(json_string)
+		file.close()
+		print("Game state saved successfully to: ", ProjectSettings.globalize_path(SAVE_PATH))
+	else:
+		print("ERROR: Could not open save file for writing: ", SAVE_PATH)
+
+# Loads the game state from the file and distributes it.
+func load_game() -> bool:
+	if not FileAccess.file_exists(SAVE_PATH):
+		print("No save file found.")
+		return false
+	
+	var file = FileAccess.open(SAVE_PATH, FileAccess.READ)
+	if file:
+		var json_parser = JSON.new()
+		var error = json_parser.parse(file.get_as_text())
+		file.close()
+		
+		if error == OK:
+			var save_data = json_parser.get_data()
+			_distribute_loaded_data(save_data)
+			print("Game state loaded successfully.")
+			game_loaded.emit()
+			return true
+		else:
+			print("ERROR: Failed to parse save file: ", json_parser.get_error_message())
+			return false
+	return false
+
+# Checks if a save file exists.
+func has_save_file() -> bool:
+	return FileAccess.file_exists(SAVE_PATH)
+
+# Calls the 'load_state' function on each manager with its relevant data slice.
+func _distribute_loaded_data(data: Dictionary):
+	if ArchetypeAnalyzer and data.has("player_metrics"):
+		ArchetypeAnalyzer.load_state(data.player_metrics)
+	
+	if ConsequenceEngine and data.has("npc_relationships"):
+		ConsequenceEngine.load_state(data.npc_relationships, data.get("choice_log", []))
+		
+	if NetworkState and data.has("network_state"):
+		NetworkState.load_state(data.network_state)
+		
+	if TicketManager and data.has("active_tickets"):
+		TicketManager.load_state(data.active_tickets, data.get("completed_tickets", []))
+	
+	print("Save data distributed to all managers.")
+
+	# After restoring state, start the next narrative arc.
+	if NarrativeDirector and data.has("next_shift_name"):
+		# Use call_deferred to ensure all nodes are ready after scene transition
+		NarrativeDirector.call_deferred("start_shift", data.next_shift_name)
+
+# Helper function to convert an array of TicketResource objects to an array of their IDs.
+func _get_ticket_ids_from_array(tickets: Array) -> Array[String]:
+	var ids: Array[String] = []
+	for ticket in tickets:
+		if ticket is TicketResource:
+			ids.append(ticket.ticket_id)
+	return ids

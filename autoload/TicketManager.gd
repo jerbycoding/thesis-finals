@@ -16,6 +16,9 @@ var ticket_library: Array[String] = [
 	"res://resources/tickets/ticket_spear_phish.gd",
 	"res://resources/tickets/ticket_malware_containment.gd",
 	"res://resources/tickets/ticket_data_exfiltration.gd",
+	"res://resources/tickets/ticket_ransomware_01.gd",
+	"res://resources/tickets/ticket_insider_threat_01.gd",
+	"res://resources/tickets/ticket_social_eng_01.gd",
 ]
 
 # A mapping from simple narrative IDs to full resource paths
@@ -23,7 +26,10 @@ var ticket_id_map: Dictionary = {
 	"phishing_intro": "res://resources/tickets/ticket_spear_phish.gd",
 	"spear_phishing": "res://resources/tickets/ticket_spear_phish.gd",
 	"malware_response": "res://resources/tickets/ticket_malware_containment.gd",
-	"data_exfil": "res://resources/tickets/ticket_data_exfiltration.gd"
+	"data_exfil": "res://resources/tickets/ticket_data_exfiltration.gd",
+	"ransom_001": "res://resources/tickets/ticket_ransomware_01.gd",
+	"insider_001": "res://resources/tickets/ticket_insider_threat_01.gd",
+	"social_001": "res://resources/tickets/ticket_social_eng_01.gd",
 }
 
 func _ready():
@@ -46,6 +52,45 @@ func _ready():
 	
 	# Load initial tickets for testing - DISABLED in favor of narrative control
 	# _load_initial_tickets()
+
+func load_state(active_ids: Array, completed_ids: Array):
+	active_tickets.clear()
+	completed_tickets.clear()
+	
+	for ticket_id in active_ids:
+		var ticket_path = _get_ticket_path_by_id(ticket_id)
+		if not ticket_path.is_empty():
+			var ticket_script = load(ticket_path)
+			if ticket_script:
+				var ticket_instance = ticket_script.new()
+				# Use a quiet add, since we don't want to trigger "new ticket" notifications
+				active_tickets.append(ticket_instance)
+	
+	for ticket_id in completed_ids:
+		var ticket_path = _get_ticket_path_by_id(ticket_id)
+		if not ticket_path.is_empty():
+			var ticket_script = load(ticket_path)
+			if ticket_script:
+				var ticket_instance = ticket_script.new()
+				completed_tickets.append(ticket_instance)
+	
+	print("TicketManager state loaded. Active: ", active_tickets.size(), ", Completed: ", completed_tickets.size())
+
+func _get_ticket_path_by_id(ticket_id: String) -> String:
+	# First, check the narrative map
+	for key in ticket_id_map:
+		var ticket_script = load(ticket_id_map[key])
+		if ticket_script and ticket_script.new().ticket_id == ticket_id:
+			return ticket_id_map[key]
+			
+	# If not in the map, search the full library
+	for path in ticket_library:
+		var ticket_script = load(path)
+		if ticket_script and ticket_script.new().ticket_id == ticket_id:
+			return path
+			
+	print("ERROR: Could not find ticket path for ID: ", ticket_id)
+	return ""
 
 func spawn_ticket_by_id(ticket_id: String):
 	if not ticket_id_map.has(ticket_id):

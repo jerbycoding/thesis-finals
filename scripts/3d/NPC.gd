@@ -1,4 +1,4 @@
-# NPC.gd
+
 # Base script for all NPCs in the game
 extends CharacterBody3D
 
@@ -8,10 +8,9 @@ extends CharacterBody3D
 
 var player_nearby: bool = false
 var interaction_area: Area3D = null
-var dialogue_box_scene = preload("res://scenes/ui/DialogueBox.tscn")
-static var dialogue_box_instance: Control = null
 
 func _ready():
+
 	# Find interaction area
 	interaction_area = $InteractionArea
 	if interaction_area:
@@ -41,45 +40,47 @@ func _input(event):
 		start_dialogue("default")
 
 func start_dialogue(dialogue_id: String = "default"):
-	# Get dialogue data
-	var dialogue = get_dialogue(dialogue_id)
-	if dialogue.is_empty():
-		print("⚠ No dialogue found for: ", dialogue_id)
-		return
-	
-	# Create dialogue box if it doesn't exist
-	if not dialogue_box_instance:
-		dialogue_box_instance = dialogue_box_scene.instantiate()
-		get_tree().root.add_child(dialogue_box_instance)
-		dialogue_box_instance.dialogue_choice_selected.connect(_on_dialogue_choice_selected)
-	
-	# Show dialogue
-	dialogue_box_instance.show_dialogue(dialogue, npc_id)
-	
-	# Disable player movement
-	if GameState:
-		GameState.set_game_mode(GameState.GameMode.MODE_DIALOGUE)
+	# Delegate starting the dialogue to the DialogueManager.
+	# This avoids scene-specific instances and ensures the dialogue UI
+	# is handled by a persistent system.
+	if DialogueManager:
+		DialogueManager.start_dialogue(self, dialogue_id)
+	else:
+		push_error("DialogueManager not found. Cannot start dialogue.")
 
 func _on_dialogue_choice_selected(choice: Dictionary):
+	# This function is now called by the DialogueManager when a choice is made.
 	# Handle choice effects
 	if choice.has("effect"):
 		_apply_choice_effect(choice["effect"])
 
+
 func _apply_choice_effect(effect: Dictionary):
+	# This function is called when a dialogue choice with an 'effect' is made.
+
+	# Handle relationship changes first, as they are synchronous.
 	if effect.has("relationship_change"):
 		var npc = effect.get("npc", npc_id)
-		var change = effect["relationship_change"]
+		var change = effect.get("relationship_change", 0.0)
 		if ConsequenceEngine:
 			ConsequenceEngine.update_npc_relationship(npc, change)
 	
+	# Handle scene changes, which are asynchronous and may have a follow-up action.
 	if effect.has("change_scene"):
-		var scene_path = effect["change_scene"]
-		if TransitionManager:
-			TransitionManager.change_scene_to(scene_path)
+		var scene_path = effect.get("change_scene", "")
+		var narrative_to_start_after = effect.get("then_start_narrative", "")
+		
+		if scene_path.is_empty():
+			push_error("NPC effect has 'change_scene' but the path is empty.")
+			return
 			
-	if effect.has("start_narrative"):
-		if NarrativeDirector:
-			NarrativeDirector.start_shift()
+		if TransitionManager:
+			# Pass both the scene to change to, and the narrative to start after completion.
+			TransitionManager.change_scene_to(scene_path, narrative_to_start_after)
+		else:
+			push_error("NPC effect cannot change scene, TransitionManager is not available.")
+
+
 
 func _on_narrative_interaction_requested(requested_npc_id: String, dialogue_id: String):
 	if requested_npc_id == npc_id:
@@ -90,4 +91,3 @@ func get_dialogue(dialogue_id: String) -> Dictionary:
 	if dialogue_data.has(dialogue_id):
 		return dialogue_data[dialogue_id]
 	return {}
-

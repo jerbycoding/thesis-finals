@@ -3,7 +3,7 @@ extends Control
 
 @onready var timer_label: Label = $TimerLabel
 
-const SHIFT_DURATION = 300.0 # 5 minutes
+const SHIFT_DURATION = 60.0 # 1 minute for testing
 
 func _ready():
 	hide() # Hidden by default

@@ -18,7 +18,7 @@ func _ready():
 				{
 					"text": "Your first shift will be critical. Follow protocol, but remember: time is a resource. Balance thoroughness with efficiency. The board is watching.",
 					"choices": [
-						{"text": "Understood. I'm ready to begin my shift.", "effect": {"change_scene": "res://scenes/SOC_Office.tscn", "start_narrative": true}}
+						{"text": "Understood. I'm ready to begin my shift.", "effect": {"change_scene": "res://scenes/SOC_Office.tscn", "then_start_narrative": "first_shift"}}
 					]
 				}
 			]
@@ -40,6 +40,22 @@ func _ready():
 				{
 					"text": "Shift complete. Submit your preliminary report. We'll review your performance and determine your analyst archetype.",
 					"choices": []
+				}
+			]
+		},
+		"briefing_second_shift": {
+			"npc_name": "CISO",
+			"portrait": "👔",
+			"lines": [
+				{
+					"text": "Welcome back. Based on your previous performance, we're increasing your responsibilities. Expect more complex threats. The training wheels are off.",
+					"choices": []
+				},
+				{
+					"text": "We've detected a potential ransomware attack and there are rumors of an insider threat. Stay vigilant. Don't let me down.",
+					"choices": [
+						{"text": "I understand. I'm ready for the challenge.", "effect": {"change_scene": "res://scenes/SOC_Office.tscn", "then_start_narrative": "second_shift"}}
+					]
 				}
 			]
 		}

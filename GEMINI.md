@@ -2,7 +2,7 @@
 
 ## 1. Project Overview
 
-This project is a single-player, 3D/2D hybrid simulation game titled **"Incident Response: SOC Simulator"**. It is being developed using the **Godot Engine (v4.3+)** and **GDScript**.
+This project is a single-player, 3D/2D hybrid simulation game titled **"Incident Response: SOC Simulator"**. It is being developed using the **Godot Engine (v4.3+)** and **GDScript**. The project is configured for Godot 4.4 features.
 
 The core concept places the player in the role of a Security Operations Center (SOC) analyst. The gameplay revolves around managing and investigating security incident tickets within a simulated corporate environment. The central theme is the tension between following slow, safe protocols and succumbing to pressure for fast, risky resolutions, with every decision having cascading consequences.
 
@@ -10,11 +10,18 @@ The core concept places the player in the role of a Security Operations Center (
 
 *   **Hybrid 2D/3D World:** The player navigates a 3D office environment but interacts with a 2D desktop interface to use analysis tools. This transition is a core architectural feature managed by `TransitionManager.gd` and `GameState.gd`.
 *   **Autoload Singletons:** The project relies heavily on globally accessible singleton scripts (found in the `autoload/` directory) to manage the game's core systems. These include:
-    *   `GameState`: Manages the current mode (3D, 2D, or Dialogue).
-    *   `TicketManager`: Handles the lifecycle of security incidents (tickets).
+    *   `ArchetypeAnalyzer`: Tracks player metrics (e.g., risks taken, time per ticket) to determine their "analyst archetype" (e.g., 'Cowboy', 'By-the-Book') at the end of a shift.
+    *   `AudioManager`: Manages the playback of background music and sound effects.
     *   `ConsequenceEngine`: A crucial system that logs player choices and triggers delayed, cascading consequences.
+    *   `CorporateVoice`: Provides a library of corporate-toned phrases to ensure a consistent narrative style in UI text and notifications.
+    *   `EmailSystem`: Backend manager for the player's email client tool.
+    *   `GameState`: Manages the current mode (3D, 2D, or Dialogue).
+    *   `LogSystem`: Backend manager for the SIEM log viewer tool.
     *   `NarrativeDirector`: Manages the scripted story flow and NPC interactions.
-    *   `LogSystem`, `EmailSystem`, `TerminalSystem`: Backend managers for the player's analysis tools.
+    *   `NetworkState`: Manages the state (e.g., Clean, Infected, Isolated) of all hosts in the simulated corporate network.
+    *   `TerminalSystem`: Backend manager for the terminal/command-line tool.
+    *   `TicketManager`: Handles the lifecycle of security incidents (tickets).
+    *   `TransitionManager`: Manages the visual and state transitions between the 3D world and the 2D desktop.
 *   **Resource-Based Data:** Game data like tickets, logs, and emails are defined using custom `Resource` scripts (e.g., `TicketResource.gd`, `EmailResource.gd`). This is a standard and effective Godot practice for creating custom, reusable data structures.
 *   **Scene-Based Tools:** The 2D analysis tools (SIEM, Email Analyzer, Terminal) are built as individual scenes (`.tscn`) with corresponding GDScript files for their logic, located in `scenes/2d/apps/` and `scripts/2d/apps/`.
 
@@ -25,7 +32,7 @@ This is a standard Godot project. There are no external build scripts or package
 ### Running the Game:
 
 1.  **Open the project** in the Godot Engine (version 4.3 or higher).
-2.  The main scene is `SOC_Office.tscn` (`uid://vte6dvnhq611`).
+2.  The main scene is `res://scenes/ui/TitleScreen.tscn`.
 3.  **Press the "Play" button** (F5) in the top-right of the Godot editor to run the game.
 
 ### Testing:

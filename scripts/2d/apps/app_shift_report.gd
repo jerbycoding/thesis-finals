@@ -18,6 +18,9 @@ func _ready():
 func show_report(results: Dictionary):
 	print("ShiftReport: Showing report with results: ", results)
 	
+	# Ensure mouse is visible for UI interaction
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	
 	var archetype_name = results.get("archetype", "Unknown")
 	var archetype_data = ArchetypeAnalyzer.ARCHETYPE_DEFINITIONS.get(archetype_name, {})
 	
@@ -30,12 +33,17 @@ func show_report(results: Dictionary):
 	risks_taken_value.text = str(results.get("risks_taken", 0))
 	consequences_value.text = str(results.get("consequences_triggered", 0))
 	
+	# Auto-save progress at the end of the shift
+	if SaveSystem:
+		SaveSystem.save_game()
+	
 	show()
 	# Bring to front to ensure it's on top of other UI
 	move_to_front()
 
 func _on_continue_pressed():
-	# For now, this will just quit the game.
-	# A future implementation would load the next shift or return to a main menu.
-	print("ShiftReport: Continue pressed. Quitting for now.")
-	get_tree().quit()
+	print("ShiftReport: Continue pressed. Starting second shift briefing.")
+	hide() # Hide the report itself
+	
+	if NarrativeDirector:
+		NarrativeDirector.start_second_shift_briefing()

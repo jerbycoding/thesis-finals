@@ -1,6 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://b7x8k9m2n3p4q"]
+[gd_scene load_steps=2 format=3 uid="uid://b7x8lam2n3p4q"]
 
-[ext_resource type="Script" path="res://scripts/2d/apps/app_SIEMViewer.gd" id="1_siem"]
+[ext_resource type="Script" uid="uid://6k1oj4j4v32b" path="res://scripts/2d/apps/app_SIEMViewer.gd" id="1_siem"]
 
 [node name="App_SIEMViewer" type="Control"]
 custom_minimum_size = Vector2(750, 550)
@@ -51,26 +51,19 @@ size_flags_horizontal = 3
 layout_mode = 2
 
 [node name="AttachSection" type="PanelContainer" parent="ColorRect/VBoxContainer"]
-layout_mode = 2
 visible = false
+layout_mode = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="ColorRect/VBoxContainer/AttachSection"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 5.0
-offset_top = 5.0
-offset_right = -5.0
-offset_bottom = -5.0
+layout_mode = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="ColorRect/VBoxContainer/AttachSection/MarginContainer"]
 layout_mode = 2
 
 [node name="Label" type="Label" parent="ColorRect/VBoxContainer/AttachSection/MarginContainer/VBoxContainer"]
 layout_mode = 2
-text = "Attach to Ticket:"
 theme_override_font_sizes/font_size = 14
+text = "Attach to Ticket:"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="ColorRect/VBoxContainer/AttachSection/MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -78,7 +71,6 @@ layout_mode = 2
 [node name="TicketDropdown" type="OptionButton" parent="ColorRect/VBoxContainer/AttachSection/MarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Select Ticket..."
 
 [node name="AttachButton" type="Button" parent="ColorRect/VBoxContainer/AttachSection/MarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
@@ -86,8 +78,8 @@ size_flags_horizontal = 0
 text = "Attach"
 
 [node name="LogDetailSection" type="PanelContainer" parent="ColorRect/VBoxContainer"]
-layout_mode = 2
 visible = false
+layout_mode = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="ColorRect/VBoxContainer/LogDetailSection"]
 layout_mode = 2
@@ -101,8 +93,8 @@ layout_mode = 2
 
 [node name="Label" type="Label" parent="ColorRect/VBoxContainer/LogDetailSection/MarginContainer/VBoxContainer"]
 layout_mode = 2
-text = "Log Details:"
 theme_override_font_sizes/font_size = 14
+text = "Log Details:"
 
 [node name="LogDetailLabel" type="RichTextLabel" parent="ColorRect/VBoxContainer/LogDetailSection/MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -118,5 +110,3 @@ size_flags_vertical = 3
 [node name="LogList" type="VBoxContainer" parent="ColorRect/VBoxContainer/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-
-

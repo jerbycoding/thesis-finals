@@ -30,11 +30,17 @@ NetworkState="*res://autoload/NetworkState.gd"
 ArchetypeAnalyzer="*res://autoload/ArchetypeAnalyzer.gd"
 CorporateVoice="*res://autoload/CorporateVoice.gd"
 AudioManager="*res://autoload/AudioManager.gd"
+SaveSystem="*res://autoload/SaveSystem.gd"
+DialogueManager="*res://autoload/DialogueManager.gd"
 
 [display]
 
 window/size/mode=3
 window/stretch/aspect="expand"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/gdUnit4/plugin.cfg")
 
 [input]
 
