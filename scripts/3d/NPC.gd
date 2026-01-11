@@ -4,7 +4,7 @@ extends CharacterBody3D
 
 @export var npc_id: String = "npc"
 @export var npc_name: String = "NPC"
-@export var dialogue_data: Dictionary = {}
+@export var dialogue_resources: Dictionary = {}
 
 var player_nearby: bool = false
 var interaction_area: Area3D = null
@@ -44,7 +44,11 @@ func start_dialogue(dialogue_id: String = "default"):
 	# This avoids scene-specific instances and ensures the dialogue UI
 	# is handled by a persistent system.
 	if DialogueManager:
-		DialogueManager.start_dialogue(self, dialogue_id)
+		var dialogue_resource = get_dialogue(dialogue_id)
+		if dialogue_resource:
+			DialogueManager.start_dialogue(self, dialogue_resource)
+		else:
+			push_warning("No dialogue resource found for ID '%s' on NPC '%s'" % [dialogue_id, npc_name])
 	else:
 		push_error("DialogueManager not found. Cannot start dialogue.")
 
@@ -86,8 +90,8 @@ func _on_narrative_interaction_requested(requested_npc_id: String, dialogue_id: 
 	if requested_npc_id == npc_id:
 		start_dialogue(dialogue_id)
 
-func get_dialogue(dialogue_id: String) -> Dictionary:
-	# Override in child classes or load from JSON
-	if dialogue_data.has(dialogue_id):
-		return dialogue_data[dialogue_id]
-	return {}
+func get_dialogue(dialogue_id: String) -> DialogueDataResource:
+	# Load from the exported dictionary of resources
+	if dialogue_resources.has(dialogue_id):
+		return dialogue_resources[dialogue_id]
+	return null

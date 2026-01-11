@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="DialogueDataResource" load_steps=2]
+
+[ext_resource type="Script" path="res://resources/dialogue/DialogueDataResource.gd" id="1_dialogue_data"]
+
+[resource]
+script = ExtResource("1_dialogue_data")
+npc_name = "CISO"
+portrait = "👔"
+lines = [
+    {"choices": [], "text": "Welcome to the Security Operations Center. I'm the Chief Information Security Officer. We're currently monitoring an active phishing campaign targeting our organization."},
+    {"choices": [{"effect": {"change_scene": "res://scenes/SOC_Office.tscn", "then_start_narrative": "first_shift"}, "text": "Understood. I'm ready to begin my shift."}], "text": "Your first shift will be critical. Follow protocol, but remember: time is a resource. Balance thoroughness with efficiency. The board is watching."}
+]

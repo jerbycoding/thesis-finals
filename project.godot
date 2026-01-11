@@ -32,6 +32,7 @@ CorporateVoice="*res://autoload/CorporateVoice.gd"
 AudioManager="*res://autoload/AudioManager.gd"
 SaveSystem="*res://autoload/SaveSystem.gd"
 DialogueManager="*res://autoload/DialogueManager.gd"
+DesktopWindowManager="*res://autoload/DesktopWindowManager.gd"
 
 [display]
 

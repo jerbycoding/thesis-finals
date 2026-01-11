@@ -14,6 +14,8 @@ The core concept places the player in the role of a Security Operations Center (
     *   `AudioManager`: Manages the playback of background music and sound effects.
     *   `ConsequenceEngine`: A crucial system that logs player choices and triggers delayed, cascading consequences.
     *   `CorporateVoice`: Provides a library of corporate-toned phrases to ensure a consistent narrative style in UI text and notifications.
+    *   `DesktopWindowManager`: Manages the lifecycle, positioning, and Z-ordering of all desktop application windows.
+    *   `DialogueManager`: Centralized system for managing NPC dialogue flow, displaying the dialogue UI, and handling player choices, ensuring persistence across scene changes.
     *   `EmailSystem`: Backend manager for the player's email client tool.
     *   `GameState`: Manages the current mode (3D, 2D, or Dialogue).
     *   `LogSystem`: Backend manager for the SIEM log viewer tool.
@@ -22,7 +24,8 @@ The core concept places the player in the role of a Security Operations Center (
     *   `TerminalSystem`: Backend manager for the terminal/command-line tool.
     *   `TicketManager`: Handles the lifecycle of security incidents (tickets).
     *   `TransitionManager`: Manages the visual and state transitions between the 3D world and the 2D desktop.
-*   **Resource-Based Data:** Game data like tickets, logs, and emails are defined using custom `Resource` scripts (e.g., `TicketResource.gd`, `EmailResource.gd`). This is a standard and effective Godot practice for creating custom, reusable data structures.
+*   **Resource-Based Data:** Game data like tickets, logs, emails, and dialogue content are defined using custom `Resource` scripts (e.g., `TicketResource.gd`, `EmailResource.gd`, `DialogueDataResource.gd`). This is a standard and effective Godot practice for creating custom, reusable data structures.
+*   **New Data Type:** `DialogueDataResource.gd` is a new custom resource used to store structured dialogue data (NPC name, portrait, lines, choices, effects) separate from NPC scripts.
 *   **Scene-Based Tools:** The 2D analysis tools (SIEM, Email Analyzer, Terminal) are built as individual scenes (`.tscn`) with corresponding GDScript files for their logic, located in `scenes/2d/apps/` and `scripts/2d/apps/`.
 
 ## 2. Building and Running
@@ -37,9 +40,29 @@ This is a standard Godot project. There are no external build scripts or package
 
 ### Testing:
 
-There is no formal testing framework evident in the project files. Based on the sprint documentation (`sprint/*.md`), testing is performed manually by playing through specific gameplay arcs and verifying that systems (like the Consequence Engine) behave as expected.
+The project now integrates the **GdUnit4** testing framework for automated unit and integration tests.
 
-*TODO: If a formal testing framework (like GdUnit4) is introduced, document the commands to run tests here.*
+### Running Tests:
+1.  Ensure you have GdUnit4 installed as an addon in your project.
+2.  Open your project in the Godot Engine (version 4.3+).
+3.  Tests can be run directly from the Godot editor's GdUnit4 panel or via the command line.
+
+**To run tests from the command line (Windows example):**
+Execute the `runtest.cmd` script located in your `addons/gdUnit4/` directory from your project's root:
+
+```cmd
+addons/gdUnit4/runtest.cmd --godot_binary "C:\Path\To\Your\Godot.exe" -a "res://tests/unit/"
+```
+
+*   Replace `"C:\Path\To\Your\Godot.exe"` with the absolute path to your Godot executable.
+*   The `-a "res://tests/unit/"` argument specifies to run all tests in the `tests/unit/` directory.
+
+**To run tests from the command line (Linux/macOS example):**
+```bash
+addons/gdUnit4/runtest.sh --godot_binary "/path/to/your/Godot" -a "res://tests/unit/"
+```
+
+**Test File Location:** Unit tests are located in the `tests/unit/` directory.
 
 ## 3. Development Conventions
 

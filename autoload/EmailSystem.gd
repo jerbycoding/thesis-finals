@@ -4,15 +4,17 @@ extends Node
 
 signal email_added(email: EmailResource)
 signal email_decision_made(email_id: String, decision: String)  # "approve", "quarantine", "escalate"
+signal email_decision_processed(email: EmailResource, decision: String, inspection_state: Dictionary)
 
 var all_emails: Array[EmailResource] = []
 var processed_emails: Array[String] = []  # Email IDs that have been processed
 
+
 # Email library - paths to email scripts
 var email_library: Array[String] = [
-	"res://resources/emails/email_phishing_01.gd",
-	"res://resources/emails/email_legit_urgent.gd",
-	"res://resources/emails/email_spear_phish.gd",
+	"res://resources/emails/EmailPhishing01.gd",
+	"res://resources/emails/EmailLegitUrgent.gd",
+	"res://resources/emails/EmailSpearPhish.gd",
 ]
 
 func _ready():
@@ -101,93 +103,6 @@ func make_decision(email_id: String, decision: String, inspection_state: Diction
 	
 	print("📧 Decision made on email ", email_id, ": ", decision)
 	
-	# Trigger consequences based on decision
-	_trigger_email_consequences(email, decision, inspection_state)
-
-func _trigger_email_consequences(email: EmailResource, decision: String, inspection_state: Dictionary):
-	# Check if this is a spear phishing email
-	var is_spear_phishing = _is_spear_phishing_email(email)
-	
-	# Wrong decisions trigger consequences
-	if email.is_malicious and decision == "approve":
-		# Approved malicious email - spawn malware ticket
-		print("🚨 CONSEQUENCE: Approved malicious email!")
-		if ConsequenceEngine:
-			ConsequenceEngine.log_email_decision(email.email_id, decision, email)
-			
-			# Spear phishing has more severe consequences (data breach)
-			if is_spear_phishing:
-				print("🚨 SPEAR PHISHING DETECTED: Approved spear phishing email!")
-				ConsequenceEngine._schedule_followup_ticket("DATA-BREACH", 120.0, "Data breach from approved spear phishing email - delayed detection")
-				if NotificationManager:
-					NotificationManager.show_notification(CorporateVoice.get_phrase("email_approved_malicious_spear_phishing"), "error", 6.0)
-			else:
-				ConsequenceEngine._schedule_followup_ticket("MALWARE-OUTBREAK", 30.0, "Malware outbreak from approved malicious email")
-				if NotificationManager:
-					NotificationManager.show_notification(CorporateVoice.get_phrase("email_approved_malicious"), "error", 5.0)
-	
-	elif not email.is_malicious and decision == "quarantine":
-		# Quarantined legitimate email - spawn user complaint
-		print("⚠ CONSEQUENCE: Quarantined legitimate email!")
-		if ConsequenceEngine:
-			ConsequenceEngine.log_email_decision(email.email_id, decision, email)
-			ConsequenceEngine._schedule_followup_ticket("USER-COMPLAINT", 60.0, "User complaint: legitimate email quarantined")
-		if NotificationManager:
-			NotificationManager.show_notification(CorporateVoice.get_phrase("email_quarantined_legitimate"), "warning", 4.0)
-	
-	elif email.is_malicious and decision == "quarantine":
-		# Correctly quarantined malicious email - positive outcome
-		print("✓ Correctly quarantined malicious email")
-		var completion_type = "compliant"
-
-		# Check for hidden risks on the associated ticket
-		if TicketManager and email.related_ticket == "SPEAR-PHISH-001":
-			var ticket = TicketManager.get_ticket_by_id(email.related_ticket)
-			if ticket and ticket.hidden_risks.has("missed_attachment_scan"):
-				if not inspection_state.get("attachments", false):
-					print("🚨 HIDDEN RISK TRIGGERED: Player quarantined email without scanning attachments!")
-					# We still pass 'compliant' to complete_ticket, but trigger the specific consequence
-					if ConsequenceEngine:
-						ConsequenceEngine.trigger_consequence("missed_attachment_scan")
-					if NotificationManager:
-						NotificationManager.show_notification(CorporateVoice.get_phrase("hidden_risk_attachment_scan_missed"), "error", 6.0)
-		
-		# Complete the associated ticket if it exists
-		if TicketManager and not email.related_ticket.is_empty():
-			TicketManager.complete_ticket(email.related_ticket, completion_type)
-		
-		if NotificationManager:
-			NotificationManager.show_notification(CorporateVoice.get_phrase("email_quarantined_malicious"), "success", 3.0)
-	
-	elif email.is_malicious and decision == "escalate":
-		# Escalated malicious email - good decision, but takes time
-		print("✓ Escalated malicious email for review")
-		if NotificationManager:
-			NotificationManager.show_notification(CorporateVoice.get_phrase("email_escalated_malicious"), "info", 3.0)
-
-func _is_spear_phishing_email(email: EmailResource) -> bool:
-	# Check if email is spear phishing based on:
-	# 1. Email ID contains "SPEAR" or "spear"
-	# 2. Related ticket is spear phishing ticket
-	# 3. Subject contains spear phishing indicators
-	# 4. Has spoofed sender but appears legitimate (CEO, executive, etc.)
-	
-	if "spear" in email.email_id.to_lower():
-		return true
-	
-	if email.related_ticket and "spear" in email.related_ticket.to_lower():
-		return true
-	
-	# Spear phishing often spoofs executives
-	if email.sender in ["CEO", "CFO", "CTO", "Executive"] and email.is_malicious:
-		# Check if it has suspicious elements despite appearing legitimate
-		if email.clues.has("spoofed_sender") or email.clues.has("bad_attachment"):
-			return true
-	
-	# Check subject for spear phishing patterns
-	if "spear" in email.subject.to_lower() or "targeted" in email.subject.to_lower():
-		return true
-	
-	return false
-
+	# Emit a signal with all context. Other systems will listen for this.
+	email_decision_processed.emit(email, decision, inspection_state)
 

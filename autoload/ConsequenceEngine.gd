@@ -6,6 +6,7 @@ const CONSEQUENCE_EVAL_INTERVAL: float = 15.0 # Evaluate every 15 seconds
 
 signal consequence_triggered(consequence_type: String, details: Dictionary)
 signal followup_ticket_scheduled(ticket_id: String, delay: float)
+signal followup_ticket_creation_requested(ticket_data: TicketResource)
 
 var choice_log: Array = []
 
@@ -62,10 +63,77 @@ func _ready():
 	if NarrativeDirector:
 		NarrativeDirector.spawn_consequence_requested.connect(trigger_consequence)
 
+	# Connect to TicketManager to listen for ticket completion events
+	if TicketManager:
+		TicketManager.ticket_completed.connect(_on_ticket_completed_by_manager)
+
+	# Connect to EmailSystem for email decisions
+	if EmailSystem:
+		EmailSystem.email_decision_processed.connect(_on_email_decision_processed)
+
+	# Connect to TerminalSystem for critical actions
+	if TerminalSystem:
+		TerminalSystem.critical_host_isolated.connect(_on_critical_host_isolated)
+
 	# Start a timer to periodically evaluate for emergent consequences
 
 	var consequence_timer = get_tree().create_timer(CONSEQUENCE_EVAL_INTERVAL, false)
 	consequence_timer.timeout.connect(_evaluate_consequences)
+
+func _on_critical_host_isolated(hostname: String):
+	# This new handler creates a consequence when the terminal isolates a critical host.
+	_schedule_followup_ticket("SERVICE-OUTAGE", 20.0, "Service outage on " + hostname + " due to network isolation.")
+
+
+func _on_email_decision_processed(email: EmailResource, decision: String, inspection_state: Dictionary):
+	# This is the new handler for the decoupled signal from EmailSystem.
+	log_email_decision(email.email_id, decision, email)
+	
+	var is_spear_phishing = _is_spear_phishing_email(email)
+	
+	# Wrong decisions trigger consequences
+	if email.is_malicious and decision == "approve":
+		# Approved malicious email - spawn malware ticket
+		print("🚨 CONSEQUENCE: Approved malicious email!")
+		
+		# Spear phishing has more severe consequences (data breach)
+		if is_spear_phishing:
+			print("🚨 SPEAR PHISHING DETECTED: Approved spear phishing email!")
+			_schedule_followup_ticket("DATA-BREACH", 120.0, "Data breach from approved spear phishing email - delayed detection")
+		else:
+			_schedule_followup_ticket("MALWARE-OUTBREAK", 30.0, "Malware outbreak from approved malicious email")
+	
+	elif not email.is_malicious and decision == "quarantine":
+		# Quarantined legitimate email - spawn user complaint
+		print("⚠ CONSEQUENCE: Quarantined legitimate email!")
+		_schedule_followup_ticket("USER-COMPLAINT", 60.0, "User complaint: legitimate email quarantined")
+	
+	elif email.is_malicious and decision == "quarantine":
+		# Check for hidden risks on the associated ticket
+		if email.related_ticket == "SPEAR-PHISH-001":
+			if not inspection_state.get("attachments", false):
+				print("🚨 HIDDEN RISK TRIGGERED: Player quarantined email without scanning attachments!")
+				trigger_consequence("missed_attachment_scan")
+
+func _is_spear_phishing_email(email: EmailResource) -> bool:
+	# This helper is moved from EmailSystem to make ConsequenceEngine self-contained.
+	if "spear" in email.email_id.to_lower():
+		return true
+	
+	if email.related_ticket and "spear" in email.related_ticket.to_lower():
+		return true
+	
+	# Spear phishing often spoofs executives
+	if email.sender in ["CEO", "CFO", "CTO", "Executive"] and email.is_malicious:
+		if email.clues.has("spoofed_sender") or email.clues.has("bad_attachment"):
+			return true
+	
+	# Check subject for spear phishing patterns
+	if "spear" in email.subject.to_lower() or "targeted" in email.subject.to_lower():
+		return true
+	
+	return false
+
 
 func _evaluate_consequences():
 	# TODO: Implement logic to evaluate player choices from 'choice_log'
@@ -73,35 +141,26 @@ func _evaluate_consequences():
 	print("⚙️ Evaluating for emergent consequences...")
 	pass
 
-func log_ticket_completion(ticket_id: String, completion_type: String, ticket: TicketResource, time_remaining: float):
-	print("📝 Logging ticket completion: ", ticket_id, " - ", completion_type)
+func _on_ticket_completed_by_manager(ticket: TicketResource, completion_type: String, time_taken: float):
+	print("📝 ConsequenceEngine: Logged ticket completion: ", ticket.ticket_id, " - ", completion_type)
 
 	var choice_data = {
-
-		"ticket_id": ticket_id,
-
+		"ticket_id": ticket.ticket_id,
 		"completion_type": completion_type,
-
-		"time_remaining": time_remaining,
-
+		"time_taken": time_taken, # Changed from time_remaining to time_taken
 		"timestamp": Time.get_ticks_msec(),
-
 		"ticket_category": ticket.category,
-
 		"ticket_severity": ticket.severity
-
 	}
 	
 	choice_log.append(choice_data)
-
 	
 	# Check for hidden risks
 	_check_hidden_risks(ticket, completion_type)
 
-
 	# Schedule consequences based on completion type
+	_schedule_consequences(ticket, completion_type, time_taken) # Pass time_taken instead of time_remaining
 
-	_schedule_consequences(ticket, completion_type, time_remaining)
 
 
 
@@ -241,7 +300,7 @@ func _spawn_followup_ticket(ticket_id: String, reason: String):
 
 	if TicketManager:
 
-		TicketManager.add_ticket(followup_ticket)
+		followup_ticket_creation_requested.emit(followup_ticket)
 
 		consequence_triggered.emit("followup_ticket", {"ticket_id": ticket_id, "reason": reason})
 

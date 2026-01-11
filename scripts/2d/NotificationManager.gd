@@ -21,6 +21,32 @@ func _ready():
 		ConsequenceEngine.consequence_triggered.connect(_on_consequence_triggered)
 		ConsequenceEngine.followup_ticket_scheduled.connect(_on_followup_ticket_scheduled)
 
+	if EmailSystem:
+		EmailSystem.email_decision_processed.connect(_on_email_decision_processed)
+
+func _on_email_decision_processed(email: EmailResource, decision: String, inspection_state: Dictionary):
+	# This new handler shows notifications based on the email decision event.
+	if email.is_malicious and decision == "approve":
+		var is_spear_phishing = "spear" in email.email_id.to_lower() or (email.related_ticket and "spear" in email.related_ticket.to_lower())
+		if is_spear_phishing:
+			show_notification(CorporateVoice.get_phrase("email_approved_malicious_spear_phishing"), "error", 6.0)
+		else:
+			show_notification(CorporateVoice.get_phrase("email_approved_malicious"), "error", 5.0)
+
+	elif not email.is_malicious and decision == "quarantine":
+		show_notification(CorporateVoice.get_phrase("email_quarantined_legitimate"), "warning", 4.0)
+
+	elif email.is_malicious and decision == "quarantine":
+		# Check for the hidden risk of not scanning attachments
+		if email.related_ticket == "SPEAR-PHISH-001" and not inspection_state.get("attachments", false):
+			show_notification(CorporateVoice.get_phrase("hidden_risk_attachment_scan_missed"), "error", 6.0)
+		else:
+			show_notification(CorporateVoice.get_phrase("email_quarantined_malicious"), "success", 3.0)
+	
+	elif email.is_malicious and decision == "escalate":
+		show_notification(CorporateVoice.get_phrase("email_escalated_malicious"), "info", 3.0)
+
+
 func set_desktop(desktop: Control):
 	desktop_instance = desktop
 	print("NotificationManager: Desktop instance set")

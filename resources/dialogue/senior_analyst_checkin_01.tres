@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="DialogueDataResource" load_steps=2]
+
+[ext_resource type="Script" path="res://resources/dialogue/DialogueDataResource.gd" id="1_dialogue_data"]
+
+[resource]
+script = ExtResource("1_dialogue_data")
+npc_name = "Senior Analyst"
+portrait = "👨‍💻"
+lines = [
+    {"choices": [{"effect": {"npc": "senior_analyst", "relationship_change": 0.2}, "text": "I'm being thorough, checking everything."}, {"effect": {"npc": "senior_analyst", "relationship_change": -0.1}, "text": "Trying to move fast. Time is tight."}, {"effect": {"npc": "senior_analyst", "relationship_change": 0.1}, "text": "Any tips?"}], "text": "Hey, how's your first ticket going? Don't rush it - I've seen too many analysts skip steps and create bigger problems."},
+    {"choices": [], "text": "Remember: Email headers tell you everything. And always scan attachments. Always."}
+]

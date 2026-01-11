@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://dutsi1r0rqtwn"]
 
-[ext_resource type="Script" uid="uid://p3uitm5au0vw" path="res://scripts/2d/apps/components/ticket_card.gd" id="1_coujv"]
+[ext_resource type="Script" uid="uid://p3uitm5au0vw" path="res://scripts/2d/apps/components/TicketCard.gd" id="1_coujv"]
 
 [sub_resource type="StyleBoxFlat" id="PanelStyle"]
 bg_color = Color(0.1, 0.12, 0.18, 1)

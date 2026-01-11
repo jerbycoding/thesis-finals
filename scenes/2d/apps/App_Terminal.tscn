@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://3la4xx13eaj1"]
 
-[ext_resource type="Script" uid="uid://1b1t5ow8n8ns" path="res://scripts/2d/apps/app_Terminal.gd" id="1_terminal"]
+[ext_resource type="Script" uid="uid://1b1t5ow8n8ns" path="res://scripts/2d/apps/App_Terminal.gd" id="1_terminal"]
 
 [node name="App_Terminal" type="Control"]
 layout_mode = 3

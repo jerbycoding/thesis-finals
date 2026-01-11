@@ -142,4 +142,3 @@ func change_scene_to(path: String, narrative_to_start_after: String = ""):
 			NarrativeDirector.start_shift(narrative_to_start_after)
 		else:
 			push_error("TransitionManager: Cannot start narrative, NarrativeDirector not found!")
-

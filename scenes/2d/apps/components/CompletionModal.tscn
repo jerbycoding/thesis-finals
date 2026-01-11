@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://c5x6y708bab0c"]
 
-[ext_resource type="Script" uid="uid://u2mto2lqbji5" path="res://scripts/2d/apps/components/completion_modal.gd" id="1_comp"]
+[ext_resource type="Script" uid="uid://u2mto2lqbji5" path="res://scripts/2d/apps/components/CompletionModal.gd" id="1_comp"]
 
 [node name="CompletionModal" type="AcceptDialog"]
 initial_position = 1

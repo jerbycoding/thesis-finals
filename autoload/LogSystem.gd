@@ -10,16 +10,16 @@ var reviewed_logs: Array[String] = []
 
 # Log library - paths to log scripts
 var log_library: Array[String] = [
-	"res://resources/logs/log_phishing_attempt.gd",
-	"res://resources/logs/log_email_blocked.gd",
-	"res://resources/logs/log_auth_failure.gd",
-	"res://resources/logs/log_system_normal.gd",
-	"res://resources/logs/log_network_scan.gd",
-	"res://resources/logs/log_malware_beacon.gd",
-	"res://resources/logs/log_user_clicked.gd",
-	"res://resources/logs/log_malware_001.gd",
-	"res://resources/logs/log_exfil_001.gd",
-	"res://resources/logs/log_network_001.gd",
+	"res://resources/logs/LogPhishingAttempt.gd",
+	"res://resources/logs/LogEmailBlocked.gd",
+	"res://resources/logs/LogAuthFailure.gd",
+	"res://resources/logs/LogSystemNormal.gd",
+	"res://resources/logs/LogNetworkScan.gd",
+	"res://resources/logs/LogMalwareBeacon.gd",
+	"res://resources/logs/LogUserClicked.gd",
+	"res://resources/logs/LogMalware001.gd",
+	"res://resources/logs/LogExfil001.gd",
+	"res://resources/logs/LogNetwork001.gd",
 ]
 
 func _ready():

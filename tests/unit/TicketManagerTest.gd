@@ -1,5 +1,5 @@
 # tests/unit/TicketManagerTest.gd
-extends "res://addons/gdUnit4/src/core/GdUnitTestSuite.gd"
+extends "res://addons/gdUnit4/src/GdUnitTestSuite.gd"
 
 # This test suite is for the TicketManager autoload singleton.
 # We will access the global TicketManager instance directly.
@@ -55,7 +55,7 @@ func test_spawn_ticket_by_id():
 	# We can call the function directly to ensure it adds a ticket.
 	
 	# Ensure the map is populated (it should be by default)
-	assert_true(TicketManager.ticket_id_map.has("phishing_intro"))
+	assert_bool(TicketManager.ticket_id_map.has("phishing_intro")).is_true()
 	
 	# Call the function
 	TicketManager.spawn_ticket_by_id("phishing_intro")

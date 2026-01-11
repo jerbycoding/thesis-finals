@@ -1,6 +1,5 @@
 extends Node
 
-
 # Autoload singleton for playing sound effects and managing background music.
 
 @onready var sfx_player: AudioStreamPlayer = AudioStreamPlayer.new()

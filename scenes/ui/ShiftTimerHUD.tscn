@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://c5v8gkq0xyt6k"]
 
-[ext_resource type="Script" path="res://scripts/ui/shift_timer_hud.gd" id="1_st_hud"]
+[ext_resource type="Script" path="res://scripts/ui/ShiftTimerHUD.gd" id="1_st_hud"]
 
 [node name="ShiftTimerHUD" type="Control"]
 layout_mode = 3

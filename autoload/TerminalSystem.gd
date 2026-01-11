@@ -6,9 +6,10 @@ signal command_run(command_name: String, args: Array) # Emitted when a command i
 signal command_executed(command: String, success: bool, output: String) # For UI feedback
 signal terminal_locked(seconds: float)
 signal terminal_unlocked()
+signal critical_host_isolated(hostname: String)
 
 var is_locked: bool = false
-var lock_until: float = 0.0
+var lock_timer: Timer
 
 # Available commands
 var commands: Dictionary = {
@@ -52,10 +53,11 @@ func _ready():
 	print("========================================")
 	print("TerminalSystem initialized")
 	print("========================================")
+	lock_timer = Timer.new()
+	add_child(lock_timer)
+	lock_timer.one_shot = true
+	lock_timer.timeout.connect(_unlock_terminal)
 
-func _process(delta):
-	if is_locked and Time.get_ticks_msec() / 1000.0 >= lock_until:
-		_unlock_terminal()
 
 func execute_command(command_line: String) -> Dictionary:
 	# Parse command
@@ -68,7 +70,7 @@ func execute_command(command_line: String) -> Dictionary:
 	
 	# Check if terminal is locked
 	if is_locked:
-		var remaining = lock_until - (Time.get_ticks_msec() / 1000.0)
+		var remaining = lock_timer.time_left
 		return {
 			"success": false,
 			"output": CorporateVoice.get_formatted_phrase("terminal_locked_message", {"seconds": str(int(remaining))})
@@ -164,8 +166,8 @@ func _cmd_isolate(args: Array) -> Dictionary:
 	# If host was critical, trigger a service outage.
 	if host_info.get("critical", false):
 		output += "\n[color=red]" + CorporateVoice.get_formatted_phrase("critical_server_offline", {"hostname": hostname}) + "[/color]"
-		if ConsequenceEngine:
-			ConsequenceEngine._schedule_followup_ticket("SERVICE-OUTAGE", 20.0, "Service outage on " + hostname + " due to network isolation.")
+		critical_host_isolated.emit(hostname)
+
 	
 	return {"success": true, "output": output}
 
@@ -230,12 +232,11 @@ func _cmd_list() -> Dictionary:
 
 func lock_terminal(seconds: float):
 	is_locked = true
-	lock_until = (Time.get_ticks_msec() / 1000.0) + seconds
+	lock_timer.start(seconds)
 	terminal_locked.emit(seconds)
 
 func _unlock_terminal():
 	is_locked = false
-	lock_until = 0.0
 	terminal_unlocked.emit()
 
 func is_terminal_locked() -> bool:

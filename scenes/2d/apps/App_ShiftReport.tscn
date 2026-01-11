@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://cy8j1fgu48puc"]
 
-[ext_resource type="Script" uid="uid://bcp3ri6ga7mmm" path="res://scripts/2d/apps/app_shift_report.gd" id="1_abcde"]
+[ext_resource type="Script" uid="uid://bcp3ri6ga7mmm" path="res://scripts/2d/apps/App_ShiftReport.gd" id="1_abcde"]
 
 [node name="App_ShiftReport" type="Control"]
 layout_mode = 3

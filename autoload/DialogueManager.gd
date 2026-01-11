@@ -16,19 +16,23 @@ func _ready():
 	dialogue_box_instance.dialogue_closed.connect(_on_dialogue_closed)
 	print("DialogueManager ready.")
 
-func start_dialogue(requesting_npc: Node, dialogue_id: String):
+func start_dialogue(requesting_npc: Node, dialogue_resource: DialogueDataResource):
 	if not is_instance_valid(requesting_npc):
 		print("ERROR: DialogueManager started with an invalid NPC.")
+		return
+	
+	if dialogue_resource == null:
+		print("ERROR: DialogueManager started with a null dialogue resource.")
 		return
 
 	current_npc = requesting_npc
 	
-	# Get dialogue data from the NPC
-	var dialogue_data = current_npc.get_dialogue(dialogue_id)
-	if dialogue_data.is_empty():
-		print("WARNING: No dialogue found for ID '%s' on NPC '%s'" % [dialogue_id, current_npc.name])
-		_close_dialogue_session()
-		return
+	# Construct the dialogue_data dictionary from the resource
+	var dialogue_data = {
+		"npc_name": dialogue_resource.npc_name,
+		"portrait": dialogue_resource.portrait,
+		"lines": dialogue_resource.lines
+	}
 	
 	# Show the dialogue
 	dialogue_box_instance.show_dialogue(dialogue_data, current_npc.npc_name)

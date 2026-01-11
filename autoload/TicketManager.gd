@@ -11,25 +11,25 @@ var active_tickets: Array[TicketResource] = []
 var completed_tickets: Array[TicketResource] = []
 
 # Ticket library - paths to ticket scripts
-var ticket_library: Array[String] = [
-	"res://resources/tickets/ticket_phishing_01.gd",
-	"res://resources/tickets/ticket_spear_phish.gd",
-	"res://resources/tickets/ticket_malware_containment.gd",
-	"res://resources/tickets/ticket_data_exfiltration.gd",
-	"res://resources/tickets/ticket_ransomware_01.gd",
-	"res://resources/tickets/ticket_insider_threat_01.gd",
-	"res://resources/tickets/ticket_social_eng_01.gd",
+var ticket_library: Array[Script] = [
+	preload("res://resources/tickets/TicketPhishing01.gd"),
+	preload("res://resources/tickets/TicketSpearPhish.gd"),
+	preload("res://resources/tickets/TicketMalwareContainment.gd"),
+	preload("res://resources/tickets/TicketDataExfiltration.gd"),
+	preload("res://resources/tickets/TicketRansomware01.gd"),
+	preload("res://resources/tickets/TicketInsiderThreat01.gd"),
+	preload("res://resources/tickets/TicketSocialEng01.gd"),
 ]
 
 # A mapping from simple narrative IDs to full resource paths
 var ticket_id_map: Dictionary = {
-	"phishing_intro": "res://resources/tickets/ticket_spear_phish.gd",
-	"spear_phishing": "res://resources/tickets/ticket_spear_phish.gd",
-	"malware_response": "res://resources/tickets/ticket_malware_containment.gd",
-	"data_exfil": "res://resources/tickets/ticket_data_exfiltration.gd",
-	"ransom_001": "res://resources/tickets/ticket_ransomware_01.gd",
-	"insider_001": "res://resources/tickets/ticket_insider_threat_01.gd",
-	"social_001": "res://resources/tickets/ticket_social_eng_01.gd",
+	"phishing_intro": preload("res://resources/tickets/TicketSpearPhish.gd"),
+	"spear_phishing": preload("res://resources/tickets/TicketSpearPhish.gd"),
+	"malware_response": preload("res://resources/tickets/TicketMalwareContainment.gd"),
+	"data_exfil": preload("res://resources/tickets/TicketDataExfiltration.gd"),
+	"ransom_001": preload("res://resources/tickets/TicketRansomware01.gd"),
+	"insider_001": preload("res://resources/tickets/TicketInsiderThreat01.gd"),
+	"social_001": preload("res://resources/tickets/TicketSocialEng01.gd"),
 }
 
 func _ready():
@@ -49,9 +49,27 @@ func _ready():
 	if NarrativeDirector:
 		NarrativeDirector.spawn_ticket_requested.connect(spawn_ticket_by_id)
 		print("TicketManager connected to NarrativeDirector")
+
+	if EmailSystem:
+		EmailSystem.email_decision_processed.connect(_on_email_decision_processed)
+		print("TicketManager connected to EmailSystem")
+
+	if ConsequenceEngine:
+		ConsequenceEngine.followup_ticket_creation_requested.connect(add_ticket)
+		print("TicketManager connected to ConsequenceEngine")
 	
 	# Load initial tickets for testing - DISABLED in favor of narrative control
 	# _load_initial_tickets()
+
+func _on_email_decision_processed(email: EmailResource, decision: String, inspection_state: Dictionary):
+	# Handles completing a ticket when an associated email is correctly actioned.
+	if email.is_malicious and decision == "quarantine":
+		if not email.related_ticket.is_empty():
+			# Check if the ticket is still active before completing
+			if get_ticket_by_id(email.related_ticket) != null:
+				print("TicketManager: Completing ticket %s due to correct email quarantine." % email.related_ticket)
+				complete_ticket(email.related_ticket, "compliant")
+
 
 func load_state(active_ids: Array, completed_ids: Array):
 	active_tickets.clear()
@@ -79,15 +97,14 @@ func load_state(active_ids: Array, completed_ids: Array):
 func _get_ticket_path_by_id(ticket_id: String) -> String:
 	# First, check the narrative map
 	for key in ticket_id_map:
-		var ticket_script = load(ticket_id_map[key])
+		var ticket_script = ticket_id_map[key] # Now holds a preloaded script
 		if ticket_script and ticket_script.new().ticket_id == ticket_id:
-			return ticket_id_map[key]
+			return ticket_script.resource_path
 			
 	# If not in the map, search the full library
-	for path in ticket_library:
-		var ticket_script = load(path)
+	for ticket_script in ticket_library:
 		if ticket_script and ticket_script.new().ticket_id == ticket_id:
-			return path
+			return ticket_script.resource_path
 			
 	print("ERROR: Could not find ticket path for ID: ", ticket_id)
 	return ""
@@ -97,39 +114,31 @@ func spawn_ticket_by_id(ticket_id: String):
 		print(CorporateVoice.get_formatted_phrase("ticket_id_not_found_map", {"ticket_id": ticket_id}))
 		return
 
-	var ticket_path = ticket_id_map[ticket_id]
-	if ResourceLoader.exists(ticket_path):
-		var TicketScript = load(ticket_path)
-		if TicketScript:
-			var ticket = TicketScript.new()
-			add_ticket(ticket)
-		else:
-			print(CorporateVoice.get_formatted_phrase("ticket_script_load_failed", {"path": ticket_path}))
+	var TicketScript = ticket_id_map[ticket_id]
+	if TicketScript:
+		var ticket = TicketScript.new()
+		add_ticket(ticket)
 	else:
-		print(CorporateVoice.get_formatted_phrase("ticket_script_not_found", {"path": ticket_path}))
+		# This case should ideally not happen now, since preload would have failed on game start
+		print(CorporateVoice.get_formatted_phrase("ticket_script_load_failed", {"path": ""}))
 
 func _load_initial_tickets():
 	print("📋 Loading initial tickets...")
 	
 	# Load all tickets from the library
-	for ticket_path in ticket_library:
-		if ResourceLoader.exists(ticket_path):
-			print("  ✓ Found ticket script at: ", ticket_path)
-			var TicketScript = load(ticket_path)
-			if TicketScript:
-				var ticket = TicketScript.new()
-				
-				print("  - Ticket ID: ", ticket.ticket_id)
-				print("  - Title: ", ticket.title)
-				print("  - Severity: ", ticket.severity)
-				print("  - Required Tool: ", ticket.required_tool)
-				
-				add_ticket(ticket)
-			else:
-				print("  ❌ ERROR: Failed to load ticket script: ", ticket_path)
+	for TicketScript in ticket_library:
+		if TicketScript:
+			var ticket = TicketScript.new()
+			
+			print("  - Ticket ID: ", ticket.ticket_id)
+			print("  - Title: ", ticket.title)
+			print("  - Severity: ", ticket.severity)
+			print("  - Required Tool: ", ticket.required_tool)
+			
+			add_ticket(ticket)
 		else:
-			print("  ❌ ERROR: Ticket script not found at: ", ticket_path)
-	
+			print("  ❌ ERROR: Failed to load ticket script from library")
+
 	print("📋 Total tickets loaded: ", active_tickets.size())
 
 
@@ -190,11 +199,8 @@ func complete_ticket(ticket_id: String, completion_type: String = "compliant"):
 			ticket_completed.emit(ticket, completion_type, time_taken)
 			
 			# Trigger consequence engine if it exists
-			if ConsequenceEngine:
-				# This log is more for emergent consequences, not the archetype
-				# We pass the ticket so it can check for hidden risks
-				ConsequenceEngine.log_ticket_completion(ticket_id, completion_type, ticket, 0.0) # time_remaining is deprecated
-			
+			# ConsequenceEngine will listen for the ticket_completed signal directly.
+			# The direct call has been removed to decouple the singletons.
 			return
 	
 	print(CorporateVoice.get_formatted_phrase("ticket_not_found_for_completion_warning", {"ticket_id": ticket_id}))
@@ -224,14 +230,15 @@ func spawn_random_ticket():
 		print(CorporateVoice.get_phrase("no_tickets_in_library_warning"))
 		return
 	
-	var random_path = ticket_library.pick_random()
+	var TicketScript = ticket_library.pick_random()
 	
-	if ResourceLoader.exists(random_path):
-		var TicketScript = load(random_path)
+	if TicketScript:
 		var ticket = TicketScript.new()
 		add_ticket(ticket)
 	else:
-		print(CorporateVoice.get_formatted_phrase("ticket_script_not_found", {"path": random_path}))
+		# This case should not happen if the library is populated correctly
+		print(CorporateVoice.get_formatted_phrase("ticket_script_not_found", {"path": "random"}))
+
 
 func attach_log_to_ticket(ticket_id: String, log_id: String) -> bool:
 	# Attach a log to a ticket as evidence

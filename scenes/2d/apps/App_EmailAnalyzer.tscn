@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://bl81gxshfy21s"]
 
-[ext_resource type="Script" uid="uid://cnlitr17gagoc" path="res://scripts/2d/apps/app_EmailAnalyzer.gd" id="1_email"]
+[ext_resource type="Script" uid="uid://cnlitr17gagoc" path="res://scripts/2d/apps/App_EmailAnalyzer.gd" id="1_email"]
 
 [node name="App_EmailAnalyzer" type="Control"]
 custom_minimum_size = Vector2(900, 700)

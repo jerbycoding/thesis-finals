@@ -22,21 +22,21 @@ func _discover_hosts_from_resources():
 	print("🌐 Discovering hosts from resource files...")
 	var resource_files = [
 		# Tickets
-		"res://resources/tickets/ticket_data_exfiltration.gd",
-		"res://resources/tickets/ticket_malware_containment.gd",
-		"res://resources/tickets/ticket_phishing_01.gd",
-		"res://resources/tickets/ticket_spear_phish.gd",
+		"res://resources/tickets/TicketDataExfiltration.gd",
+		"res://resources/tickets/TicketMalwareContainment.gd",
+		"res://resources/tickets/TicketPhishing01.gd",
+		"res://resources/tickets/TicketSpearPhish.gd",
 		# Logs
-		"res://resources/logs/log_auth_failure.gd",
-		"res://resources/logs/log_email_blocked.gd",
-		"res://resources/logs/log_exfil_001.gd",
-		"res://resources/logs/log_malware_001.gd",
-		"res://resources/logs/log_malware_beacon.gd",
-		"res://resources/logs/log_network_001.gd",
-		"res://resources/logs/log_network_scan.gd",
-		"res://resources/logs/log_phishing_attempt.gd",
-		"res://resources/logs/log_system_normal.gd",
-		"res://resources/logs/log_user_clicked.gd"
+		"res://resources/logs/LogAuthFailure.gd",
+		"res://resources/logs/LogEmailBlocked.gd",
+		"res://resources/logs/LogExfil001.gd",
+		"res://resources/logs/LogMalware001.gd",
+		"res://resources/logs/LogMalwareBeacon.gd",
+		"res://resources/logs/LogNetwork001.gd",
+		"res://resources/logs/LogNetworkScan.gd",
+		"res://resources/logs/LogPhishingAttempt.gd",
+		"res://resources/logs/LogSystemNormal.gd",
+		"res://resources/logs/LogUserClicked.gd"
 	]
 	
 	var regex = RegEx.new()

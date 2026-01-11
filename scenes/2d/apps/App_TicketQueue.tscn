@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://bhcyqynotx27e"]
 
-[ext_resource type="Script" uid="uid://biay8aieuagch" path="res://scripts/2d/apps/app_TicketQueue.gd" id="1_4yihl"]
+[ext_resource type="Script" uid="uid://biay8aieuagch" path="res://scripts/2d/apps/App_TicketQueue.gd" id="1_4yihl"]
 
 [node name="App_TicketQueue" type="Control"]
 custom_minimum_size = Vector2(850, 550)
