@@ -32,26 +32,22 @@ var second_shift_arc = [
 var current_active_arc: Array = []
 var shift_report_scene = preload("res://scenes/2d/apps/App_ShiftReport.tscn")
 
-var shift_timer: float = 0.0
+var shift_start_time: float = 0.0
 var current_event_index: int = 0
 var _is_shift_active: bool = false
 var is_first_ticket_completed: bool = false # State to prevent re-triggering
+var event_timer: Timer
 
-func _process(delta):
-	if not _is_shift_active:
-		return
-
-	shift_timer += delta
+func _ready():
+	# Connect to TicketManager to handle event-driven narrative beats
+	if TicketManager:
+		TicketManager.ticket_completed.connect(_on_ticket_completed)
 	
-	# Use a while loop to process multiple events that might occur in the same frame
-	while current_event_index < current_active_arc.size():
-		var next_event = current_active_arc[current_event_index]
-		if next_event.has("time") and shift_timer >= next_event.time:
-			_trigger_event(next_event)
-			current_event_index += 1
-		else:
-			# No more time-based events to process for now
-			break
+	# Initialize event timer
+	event_timer = Timer.new()
+	add_child(event_timer)
+	event_timer.one_shot = true
+	event_timer.timeout.connect(_on_event_timer_timeout)
 
 func start_shift(shift_name: String = "first_shift"):
 	print("NarrativeDirector: Starting shift: ", shift_name)
@@ -67,16 +63,43 @@ func start_shift(shift_name: String = "first_shift"):
 
 	_is_shift_active = true
 	is_first_ticket_completed = false
-	shift_timer = 0.0
+	shift_start_time = Time.get_ticks_msec()
 	current_event_index = 0
 	shift_started.emit()
+	
+	_schedule_next_event()
+
+func _on_event_timer_timeout():
+	if current_event_index < current_active_arc.size():
+		var event = current_active_arc[current_event_index]
+		_trigger_event(event)
+		current_event_index += 1
+		_schedule_next_event()
+
+func _schedule_next_event():
+	if not _is_shift_active:
+		return
+		
+	if current_event_index < current_active_arc.size():
+		var next_event = current_active_arc[current_event_index]
+		if next_event.has("time"):
+			var current_elapsed = get_shift_timer()
+			var delay = max(0.01, next_event.time - current_elapsed)
+			event_timer.start(delay)
+		else:
+			# Event doesn't have a time (might be manual), skip for now
+			current_event_index += 1
+			_schedule_next_event()
 
 func stop_shift():
 	print("NarrativeDirector: Shift has ended.")
 	_is_shift_active = false
+	event_timer.stop()
 
 func get_shift_timer() -> float:
-	return shift_timer
+	if not _is_shift_active:
+		return 0.0
+	return (Time.get_ticks_msec() - shift_start_time) / 1000.0
 
 func is_shift_active() -> bool:
 	return _is_shift_active
@@ -110,11 +133,6 @@ func _trigger_event(event_data: Dictionary):
 			else:
 				print("ERROR: ArchetypeAnalyzer not found!")
 				emit_signal("shift_ended", {})
-
-func _ready():
-	# Connect to TicketManager to handle event-driven narrative beats
-	if TicketManager:
-		TicketManager.ticket_completed.connect(_on_ticket_completed)
 
 
 func _on_ticket_completed(ticket: TicketResource, completion_type: String, time_taken: float):

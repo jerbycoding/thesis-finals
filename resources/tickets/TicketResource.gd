@@ -14,6 +14,7 @@ class_name TicketResource
 @export var required_log_ids: Array[String] = [] # Log IDs that should be attached for compliant completion
 var attached_log_ids: Array[String] = [] # Log IDs that player has attached
 var spawn_timestamp: float = 0.0
+var expiry_timestamp: float = 0.0
 
 func _to_string() -> String:
 	return "[Ticket: %s - %s]" % [ticket_id, title]
@@ -40,4 +41,13 @@ func has_sufficient_evidence() -> bool:
 	for required_id in required_log_ids:
 		if required_id not in attached_log_ids:
 			return false
+	return true
+
+func validate() -> bool:
+	if ticket_id.is_empty():
+		return false
+	if steps.size() > 3:
+		return false
+	if base_time <= 0:
+		return false
 	return true

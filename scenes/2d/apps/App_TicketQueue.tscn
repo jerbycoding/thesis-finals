@@ -1,104 +1,153 @@
-[gd_scene load_steps=2 format=3 uid="uid://bhcyqynotx27e"]
+[gd_scene load_steps=5 format=3 uid="uid://bhcyqynotx27e"]
 
 [ext_resource type="Script" uid="uid://biay8aieuagch" path="res://scripts/2d/apps/App_TicketQueue.gd" id="1_4yihl"]
+[ext_resource type="PackedScene" uid="uid://c5x6y708bab0c" path="res://scenes/2d/apps/components/CompletionModal.tscn" id="2_modal"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Header"]
+content_margin_left = 15.0
+content_margin_top = 10.0
+content_margin_right = 15.0
+content_margin_bottom = 10.0
+bg_color = Color(0.0509804, 0.054902, 0.0901961, 1)
+border_width_bottom = 2
+border_color = Color(0.2, 1, 0.2, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Detail"]
+content_margin_left = 20.0
+content_margin_top = 20.0
+content_margin_right = 20.0
+content_margin_bottom = 20.0
+bg_color = Color(0.0509804, 0.054902, 0.0901961, 0.784314)
+border_width_left = 1
+border_color = Color(0.258824, 0.352941, 0.470588, 0.3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_List"]
+bg_color = Color(0.0392157, 0.0392157, 0.101961, 0.5)
 
 [node name="App_TicketQueue" type="Control"]
-custom_minimum_size = Vector2(850, 550)
+custom_minimum_size = Vector2(900, 600)
 layout_mode = 3
 anchors_preset = 0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("1_4yihl")
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="Background" type="ColorRect" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.070588, 0.082353, 0.14902, 0.8)
+mouse_filter = 1
+color = Color(0.0392157, 0.0392157, 0.101961, 0.95)
 
-[node name="VBoxContainer" type="VBoxContainer" parent="ColorRect"]
+[node name="VBox" type="VBoxContainer" parent="Background"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 0
 
-[node name="HeaderLabel" type="Label" parent="ColorRect/VBoxContainer"]
+[node name="Header" type="PanelContainer" parent="Background/VBox"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
-text = "Ticket Queue"
+theme_override_styles/panel = SubResource("StyleBoxFlat_Header")
+
+[node name="HeaderLabel" type="Label" parent="Background/VBox/Header"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 1, 0.2, 1)
+theme_override_font_sizes/font_size = 18
+text = "INCIDENT MANAGEMENT QUEUE"
 vertical_alignment = 1
 
-[node name="HSeparator" type="HSeparator" parent="ColorRect/VBoxContainer"]
-layout_mode = 2
-
-[node name="HBoxContainer" type="HBoxContainer" parent="ColorRect/VBoxContainer"]
+[node name="Content" type="HSplitContainer" parent="Background/VBox"]
 layout_mode = 2
 size_flags_vertical = 3
+split_offset = 350
 
-[node name="ScrollContainer" type="ScrollContainer" parent="ColorRect/VBoxContainer/HBoxContainer"]
+[node name="QueuePanel" type="PanelContainer" parent="Background/VBox/Content"]
 layout_mode = 2
-size_flags_horizontal = 3
-size_flags_stretch_ratio = 0.4
-horizontal_scroll_mode = 0
-vertical_scroll_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_List")
 
-[node name="TicketList" type="VBoxContainer" parent="ColorRect/VBoxContainer/HBoxContainer/ScrollContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="VSeparator" type="VSeparator" parent="ColorRect/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-
-[node name="DetailPanel" type="PanelContainer" parent="ColorRect/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_stretch_ratio = 0.6
-
-[node name="MarginContainer" type="MarginContainer" parent="ColorRect/VBoxContainer/HBoxContainer/DetailPanel"]
+[node name="Margin" type="MarginContainer" parent="Background/VBox/Content/QueuePanel"]
 layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="DetailView" type="VBoxContainer" parent="ColorRect/VBoxContainer/HBoxContainer/DetailPanel/MarginContainer"]
-visible = false
+[node name="ScrollContainer" type="ScrollContainer" parent="Background/VBox/Content/QueuePanel/Margin"]
 layout_mode = 2
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 2
 
-[node name="TitleLabel" type="Label" parent="ColorRect/VBoxContainer/HBoxContainer/DetailPanel/MarginContainer/DetailView"]
+[node name="TicketList" type="VBoxContainer" parent="Background/VBox/Content/QueuePanel/Margin/ScrollContainer"]
+unique_name_in_owner = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 18
-text = "TICKET-ID: Title of the Ticket"
-autowrap_mode = 3
-
-[node name="HSeparator" type="HSeparator" parent="ColorRect/VBoxContainer/HBoxContainer/DetailPanel/MarginContainer/DetailView"]
-layout_mode = 2
-
-[node name="DescriptionLabel" type="RichTextLabel" parent="ColorRect/VBoxContainer/HBoxContainer/DetailPanel/MarginContainer/DetailView"]
-layout_mode = 2
+size_flags_horizontal = 3
 size_flags_vertical = 3
-size_flags_stretch_ratio = 0.6
-bbcode_enabled = true
-text = "This is the full, multi-line description of the ticket. It can be quite long and will wrap as needed."
-fit_content = true
+theme_override_constants/separation = 10
 
-[node name="StepsLabel" type="Label" parent="ColorRect/VBoxContainer/HBoxContainer/DetailPanel/MarginContainer/DetailView"]
+[node name="DetailPanel" type="PanelContainer" parent="Background/VBox/Content"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 16
-text = "Required Steps:"
+theme_override_styles/panel = SubResource("StyleBoxFlat_Detail")
 
-[node name="StepsContainer" type="VBoxContainer" parent="ColorRect/VBoxContainer/HBoxContainer/DetailPanel/MarginContainer/DetailView"]
+[node name="PlaceholderLabel" type="Label" parent="Background/VBox/Content/DetailPanel"]
+unique_name_in_owner = true
 layout_mode = 2
-
-[node name="PlaceholderLabel" type="Label" parent="ColorRect/VBoxContainer/HBoxContainer/DetailPanel/MarginContainer"]
-layout_mode = 2
-text = "Select a ticket to view details."
+theme_override_colors/font_color = Color(0.4, 0.46, 0.6, 1)
+theme_override_font_sizes/font_size = 18
+text = "NO INCIDENT SELECTED
+[ SELECT TICKET FROM QUEUE TO ANALYZE ]"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="DetailView" type="VBoxContainer" parent="Background/VBox/Content/DetailPanel"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="TitleLabel" type="Label" parent="Background/VBox/Content/DetailPanel/DetailView"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 22
+text = "[CRITICAL] TICKET-001: Data Exfiltration Detected"
+autowrap_mode = 3
+
+[node name="HSeparator" type="HSeparator" parent="Background/VBox/Content/DetailPanel/DetailView"]
+layout_mode = 2
+
+[node name="DescriptionLabel" type="RichTextLabel" parent="Background/VBox/Content/DetailPanel/DetailView"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/line_separation = 4
+theme_override_font_sizes/normal_font_size = 16
+bbcode_enabled = true
+text = "A high-volume outbound network connection was detected from workstation 10.0.4.22. Initial analysis indicates potential exfiltration of sensitive organizational assets.
+
+[b]Recommended Action:[/b] Identify target IP and isolate affected host immediately."
+fit_content = true
+
+[node name="ProcedureBox" type="VBoxContainer" parent="Background/VBox/Content/DetailPanel/DetailView"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="StepsLabel" type="Label" parent="Background/VBox/Content/DetailPanel/DetailView/ProcedureBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 1, 0.2, 1)
+theme_override_font_sizes/font_size = 14
+text = ":: REQUIRED RESOLUTION PROTOCOL ::"
+
+[node name="StepsContainer" type="VBoxContainer" parent="Background/VBox/Content/DetailPanel/DetailView/ProcedureBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="CompletionModal" parent="." instance=ExtResource("2_modal")]
+unique_name_in_owner = true
+layout_mode = 1

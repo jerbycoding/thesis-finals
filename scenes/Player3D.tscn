@@ -12,7 +12,21 @@ height = 1.8
 script = ExtResource("1_15gk4")
 
 [node name="InteractionPrompt" parent="." instance=ExtResource("2_lib7b")]
+unique_name_in_owner = true
+offset_top = -145.0
+offset_bottom = -145.0
+metadata/_edit_use_anchors_ = true
+
 [node name="ShiftTimerHUD" parent="." instance=ExtResource("3_st_hud")]
+unique_name_in_owner = true
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 170.0
+offset_right = 170.0
+grow_horizontal = 1
+grow_vertical = 1
+metadata/_edit_use_anchors_ = true
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)

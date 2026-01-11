@@ -5,10 +5,23 @@ var command_history: Array[String] = []
 var history_index: int = -1
 var current_ticket_id: String = ""
 
-@onready var output_text: RichTextLabel = $ColorRect/VBoxContainer/OutputContainer/OutputText
-@onready var command_input: LineEdit = $ColorRect/VBoxContainer/InputContainer/CommandInput
-@onready var prompt_label: Label = $ColorRect/VBoxContainer/InputContainer/PromptLabel
-@onready var ticket_info: Label = $ColorRect/VBoxContainer/TicketInfo
+@onready var output_text: RichTextLabel = %OutputText
+@onready var command_input: LineEdit = %CommandInput
+@onready var prompt_label: Label = %PromptLabel
+@onready var ticket_info: Label = %TicketInfo
+@onready var lockout_overlay: ColorRect = %LockoutOverlay
+@onready var lock_timer_label: Label = %LockTimerLabel
+
+var lock_remaining_time: float = 0.0
+
+func _process(delta):
+	if lockout_overlay and lockout_overlay.visible:
+		lock_remaining_time -= delta
+		if lock_remaining_time <= 0:
+			lock_remaining_time = 0
+		
+		if lock_timer_label:
+			lock_timer_label.text = "Time Remaining: %ds" % int(lock_remaining_time)
 
 func _ready():
 	print("======= App_Terminal._ready() =======")
@@ -22,16 +35,6 @@ func _ready():
 	# Wait a frame for the scene tree to be fully set up
 	await get_tree().process_frame
 	
-	# Get nodes manually (in case @onready didn't work)
-	if not output_text:
-		output_text = get_node_or_null("ColorRect/VBoxContainer/OutputContainer/OutputText")
-	if not command_input:
-		command_input = get_node_or_null("ColorRect/VBoxContainer/InputContainer/CommandInput")
-	if not prompt_label:
-		prompt_label = get_node_or_null("ColorRect/VBoxContainer/InputContainer/PromptLabel")
-	if not ticket_info:
-		ticket_info = get_node_or_null("ColorRect/VBoxContainer/TicketInfo")
-	
 	# Connect input
 	if command_input:
 		# Disconnect first if already connected to avoid duplicates
@@ -43,8 +46,6 @@ func _ready():
 		command_input.text_submitted.connect(_on_command_submitted)
 		command_input.gui_input.connect(_on_input_gui_input)
 		print("DEBUG: Command input connected")
-	else:
-		print("ERROR: Command input not found!")
 	
 	# Connect to TerminalSystem
 	if TerminalSystem:
@@ -65,14 +66,8 @@ func _ready():
 	if command_input:
 		command_input.grab_focus()
 		print("DEBUG: Command input focused")
-	else:
-		print("ERROR: Cannot focus command input - node not found!")
 	
 	print("======= App_Terminal Ready Complete =======")
-	print("  - output_text: ", output_text != null)
-	print("  - command_input: ", command_input != null)
-	print("  - prompt_label: ", prompt_label != null)
-	print("  - ticket_info: ", ticket_info != null)
 
 func _on_command_submitted(command: String):
 	if command.strip_edges().is_empty():
@@ -133,6 +128,10 @@ func _on_terminal_locked(seconds: float):
 	_append_output("[color=red]🔒 TERMINAL LOCKED for " + str(int(seconds)) + " seconds[/color]\n")
 	command_input.editable = false
 	command_input.placeholder_text = "Terminal locked..."
+	
+	if lockout_overlay:
+		lockout_overlay.visible = true
+		lock_remaining_time = seconds
 
 func _on_terminal_unlocked():
 	if AudioManager:
@@ -140,6 +139,9 @@ func _on_terminal_unlocked():
 	_append_output("[color=green]🔓 Terminal unlocked[/color]\n")
 	command_input.editable = true
 	command_input.placeholder_text = "Enter command..."
+	
+	if lockout_overlay:
+		lockout_overlay.visible = false
 
 func _on_ticket_added(ticket: TicketResource):
 	# Auto-select first ticket if none selected
@@ -164,10 +166,6 @@ func _update_ticket_info():
 			ticket_info.text = "Active Ticket: " + current_ticket_id
 
 func _append_output(text: String):
-	# Get output_text if not already set
-	if not output_text:
-		output_text = get_node_or_null("ColorRect/VBoxContainer/OutputContainer/OutputText")
-	
 	if output_text:
 		output_text.append_text(text)
 		# Auto-scroll to bottom

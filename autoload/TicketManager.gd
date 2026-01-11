@@ -5,31 +5,33 @@ extends Node
 signal ticket_added(ticket: TicketResource)
 signal ticket_completed(ticket: TicketResource, completion_type: String, time_taken: float)
 signal ticket_timeout(ticket_id: String)
+signal ticket_ignored(ticket: TicketResource)
 signal log_attached(ticket_id: String, log_id: String)
 
 var active_tickets: Array[TicketResource] = []
 var completed_tickets: Array[TicketResource] = []
+var active_timers: Dictionary = {} # ticket_id: Timer
 
-# Ticket library - paths to ticket scripts
-var ticket_library: Array[Script] = [
-	preload("res://resources/tickets/TicketPhishing01.gd"),
-	preload("res://resources/tickets/TicketSpearPhish.gd"),
-	preload("res://resources/tickets/TicketMalwareContainment.gd"),
-	preload("res://resources/tickets/TicketDataExfiltration.gd"),
-	preload("res://resources/tickets/TicketRansomware01.gd"),
-	preload("res://resources/tickets/TicketInsiderThreat01.gd"),
-	preload("res://resources/tickets/TicketSocialEng01.gd"),
+# Ticket library - preloaded .tres resources
+var ticket_library: Array[TicketResource] = [
+	preload("res://resources/tickets/TicketPhishing01.tres"),
+	preload("res://resources/tickets/TicketSpearPhish.tres"),
+	preload("res://resources/tickets/TicketMalwareContainment.tres"),
+	preload("res://resources/tickets/TicketDataExfiltration.tres"),
+	preload("res://resources/tickets/TicketRansomware01.tres"),
+	preload("res://resources/tickets/TicketInsiderThreat01.tres"),
+	preload("res://resources/tickets/TicketSocialEng01.tres"),
 ]
 
-# A mapping from simple narrative IDs to full resource paths
+# A mapping from simple narrative IDs to full resources
 var ticket_id_map: Dictionary = {
-	"phishing_intro": preload("res://resources/tickets/TicketSpearPhish.gd"),
-	"spear_phishing": preload("res://resources/tickets/TicketSpearPhish.gd"),
-	"malware_response": preload("res://resources/tickets/TicketMalwareContainment.gd"),
-	"data_exfil": preload("res://resources/tickets/TicketDataExfiltration.gd"),
-	"ransom_001": preload("res://resources/tickets/TicketRansomware01.gd"),
-	"insider_001": preload("res://resources/tickets/TicketInsiderThreat01.gd"),
-	"social_001": preload("res://resources/tickets/TicketSocialEng01.gd"),
+	"phishing_intro": preload("res://resources/tickets/TicketSpearPhish.tres"),
+	"spear_phishing": preload("res://resources/tickets/TicketSpearPhish.tres"),
+	"malware_response": preload("res://resources/tickets/TicketMalwareContainment.tres"),
+	"data_exfil": preload("res://resources/tickets/TicketDataExfiltration.tres"),
+	"ransom_001": preload("res://resources/tickets/TicketRansomware01.tres"),
+	"insider_001": preload("res://resources/tickets/TicketInsiderThreat01.tres"),
+	"social_001": preload("res://resources/tickets/TicketSocialEng01.tres"),
 }
 
 func _ready():
@@ -73,38 +75,62 @@ func _on_email_decision_processed(email: EmailResource, decision: String, inspec
 
 func load_state(active_ids: Array, completed_ids: Array):
 	active_tickets.clear()
+	# Clean up any existing timers before loading
+	for timer in active_timers.values():
+		timer.queue_free()
+	active_timers.clear()
+	
 	completed_tickets.clear()
 	
 	for ticket_id in active_ids:
 		var ticket_path = _get_ticket_path_by_id(ticket_id)
 		if not ticket_path.is_empty():
-			var ticket_script = load(ticket_path)
-			if ticket_script:
-				var ticket_instance = ticket_script.new()
-				# Use a quiet add, since we don't want to trigger "new ticket" notifications
-				active_tickets.append(ticket_instance)
+			var ticket_res = load(ticket_path)
+			if ticket_res and ticket_res is TicketResource:
+				var ticket_instance = ticket_res.duplicate()
+				if ticket_instance.validate():
+					# Use a quiet add, since we don't want to trigger "new ticket" notifications
+					active_tickets.append(ticket_instance)
+					_create_ticket_timer(ticket_instance)
 	
 	for ticket_id in completed_ids:
 		var ticket_path = _get_ticket_path_by_id(ticket_id)
 		if not ticket_path.is_empty():
-			var ticket_script = load(ticket_path)
-			if ticket_script:
-				var ticket_instance = ticket_script.new()
-				completed_tickets.append(ticket_instance)
+			var ticket_res = load(ticket_path)
+			if ticket_res and ticket_res is TicketResource:
+				var ticket_instance = ticket_res.duplicate()
+				if ticket_instance.validate():
+					completed_tickets.append(ticket_instance)
 	
 	print("TicketManager state loaded. Active: ", active_tickets.size(), ", Completed: ", completed_tickets.size())
+
+func _create_ticket_timer(ticket: TicketResource):
+	# Cleanup existing timer for this ID if it somehow exists
+	if active_timers.has(ticket.ticket_id):
+		var old_timer = active_timers[ticket.ticket_id]
+		if is_instance_valid(old_timer):
+			old_timer.queue_free()
+	
+	var timer = Timer.new()
+	timer.one_shot = true
+	timer.wait_time = max(0.1, ticket.base_time)
+	timer.timeout.connect(_on_ticket_timeout_timer.bind(ticket.ticket_id))
+	add_child(timer)
+	timer.start()
+	
+	active_timers[ticket.ticket_id] = timer
 
 func _get_ticket_path_by_id(ticket_id: String) -> String:
 	# First, check the narrative map
 	for key in ticket_id_map:
-		var ticket_script = ticket_id_map[key] # Now holds a preloaded script
-		if ticket_script and ticket_script.new().ticket_id == ticket_id:
-			return ticket_script.resource_path
+		var ticket_res = ticket_id_map[key]
+		if ticket_res and ticket_res.ticket_id == ticket_id:
+			return ticket_res.resource_path
 			
 	# If not in the map, search the full library
-	for ticket_script in ticket_library:
-		if ticket_script and ticket_script.new().ticket_id == ticket_id:
-			return ticket_script.resource_path
+	for ticket_res in ticket_library:
+		if ticket_res and ticket_res.ticket_id == ticket_id:
+			return ticket_res.resource_path
 			
 	print("ERROR: Could not find ticket path for ID: ", ticket_id)
 	return ""
@@ -114,21 +140,20 @@ func spawn_ticket_by_id(ticket_id: String):
 		print(CorporateVoice.get_formatted_phrase("ticket_id_not_found_map", {"ticket_id": ticket_id}))
 		return
 
-	var TicketScript = ticket_id_map[ticket_id]
-	if TicketScript:
-		var ticket = TicketScript.new()
+	var ticket_res = ticket_id_map[ticket_id]
+	if ticket_res:
+		var ticket = ticket_res.duplicate()
 		add_ticket(ticket)
 	else:
-		# This case should ideally not happen now, since preload would have failed on game start
-		print(CorporateVoice.get_formatted_phrase("ticket_script_load_failed", {"path": ""}))
+		print(CorporateVoice.get_formatted_phrase("ticket_script_load_failed", {"path": "id_map"}))
 
 func _load_initial_tickets():
 	print("📋 Loading initial tickets...")
 	
 	# Load all tickets from the library
-	for TicketScript in ticket_library:
-		if TicketScript:
-			var ticket = TicketScript.new()
+	for ticket_res in ticket_library:
+		if ticket_res:
+			var ticket = ticket_res.duplicate()
 			
 			print("  - Ticket ID: ", ticket.ticket_id)
 			print("  - Title: ", ticket.title)
@@ -137,7 +162,7 @@ func _load_initial_tickets():
 			
 			add_ticket(ticket)
 		else:
-			print("  ❌ ERROR: Failed to load ticket script from library")
+			print("  ❌ ERROR: Failed to load ticket resource from library")
 
 	print("📋 Total tickets loaded: ", active_tickets.size())
 
@@ -145,6 +170,17 @@ func _load_initial_tickets():
 func add_ticket(ticket: TicketResource):
 	if not ticket:
 		print(CorporateVoice.get_phrase("adding_null_ticket_error"))
+		return
+	
+	if not ticket.validate():
+		if ticket.ticket_id.is_empty():
+			push_error("TicketManager: Rejected ticket with missing ID.")
+		elif ticket.steps.size() > 3:
+			push_error("TicketManager: Rejected ticket %s (Too many steps: %d)." % [ticket.ticket_id, ticket.steps.size()])
+		elif ticket.base_time <= 0:
+			push_error("TicketManager: Rejected ticket %s (Invalid time: %.1f)." % [ticket.ticket_id, ticket.base_time])
+		else:
+			push_error("TicketManager: Rejected invalid ticket: " + str(ticket.ticket_id))
 		return
 	
 	# Check if already in queue
@@ -155,6 +191,8 @@ func add_ticket(ticket: TicketResource):
 	
 	# Set spawn time for metrics
 	ticket.spawn_timestamp = Time.get_ticks_msec()
+	# Set expiry timestamp for UI display
+	ticket.expiry_timestamp = ticket.spawn_timestamp + (ticket.base_time * 1000.0)
 	
 	# Add to active tickets
 	active_tickets.append(ticket)
@@ -169,18 +207,43 @@ func add_ticket(ticket: TicketResource):
 	print("  Steps: ", ticket.steps.size())
 	print("========================================")
 	
+	# Create and start the node-based timer
+	_create_ticket_timer(ticket)
+	
 	# Emit signal for UI to update
 	ticket_added.emit(ticket)
 
+func _on_ticket_timeout_timer(ticket_id: String):
+	var active_ticket = get_ticket_by_id(ticket_id)
+	if active_ticket:
+		print(CorporateVoice.get_formatted_phrase("ticket_timeout", {"ticket_id": ticket_id}))
+		ticket_timeout.emit(ticket_id)
+		ticket_ignored.emit(active_ticket)
+		complete_ticket(ticket_id, "timeout")
+
 func complete_ticket(ticket_id: String, completion_type: String = "compliant"):
 	# Valid completion types: "compliant", "efficient", "emergency"
-	if completion_type not in ["compliant", "efficient", "emergency"]:
+	if completion_type not in ["compliant", "efficient", "emergency", "timeout"]:
 		print(CorporateVoice.get_phrase("invalid_completion_type_warning"))
 		completion_type = "compliant"
 	
+	# Cleanup the timer if it exists
+	if active_timers.has(ticket_id):
+		var timer = active_timers[ticket_id]
+		if is_instance_valid(timer):
+			timer.stop()
+			timer.queue_free()
+		active_timers.erase(ticket_id)
+
 	for i in range(active_tickets.size()):
 		var ticket = active_tickets[i]
 		if ticket.ticket_id == ticket_id:
+			# --- VALIDATION STEP ---
+			# Use central ValidationManager
+			if completion_type == "compliant" and not ValidationManager.can_complete_compliant(ticket):
+				push_warning("TicketManager: %s attempted compliant completion without evidence. Downgrading." % ticket_id)
+				completion_type = "efficient"
+
 			# Calculate time taken
 			var time_taken = (Time.get_ticks_msec() - ticket.spawn_timestamp) / 1000.0
 			
@@ -230,10 +293,10 @@ func spawn_random_ticket():
 		print(CorporateVoice.get_phrase("no_tickets_in_library_warning"))
 		return
 	
-	var TicketScript = ticket_library.pick_random()
+	var ticket_res = ticket_library.pick_random()
 	
-	if TicketScript:
-		var ticket = TicketScript.new()
+	if ticket_res:
+		var ticket = ticket_res.duplicate()
 		add_ticket(ticket)
 	else:
 		# This case should not happen if the library is populated correctly
@@ -261,18 +324,6 @@ func get_ticket_evidence(ticket_id: String) -> Dictionary:
 	if not ticket:
 		return {"attached": 0, "required": 0}
 	return ticket.get_evidence_count()
-
-# Process ticket timers
-func _process(delta):
-	for ticket in active_tickets:
-		if ticket.base_time > 0:
-			ticket.base_time -= delta
-			
-			if ticket.base_time <= 0:
-				print(CorporateVoice.get_formatted_phrase("ticket_timeout", {"ticket_id": ticket.ticket_id}))
-				ticket_timeout.emit(ticket.ticket_id)
-				complete_ticket(ticket.ticket_id, "timeout")
-				break  # Exit loop since we modified the array
 
 func _on_terminal_command_run(command_name: String, args: Array):
 	if command_name == "isolate" and not args.is_empty():

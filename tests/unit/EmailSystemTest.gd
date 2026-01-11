@@ -31,10 +31,10 @@ func test_make_decision():
 	reset_email_system_state()
 	
 	# Ensure the email has not been processed
-	assert_array(EmailSystem.processed_emails).not_contains("EMAIL-PHISH-001")
+	assert_bool("EMAIL-PHISH-001" in EmailSystem.processed_emails).is_false()
 	
 	# Make a decision
 	EmailSystem.make_decision("EMAIL-PHISH-001", "quarantine")
 	
 	# Verify the email is now in the processed list
-	assert_array(EmailSystem.processed_emails).contains("EMAIL-PHISH-001")
+	assert_bool("EMAIL-PHISH-001" in EmailSystem.processed_emails).is_true()

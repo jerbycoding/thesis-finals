@@ -13,9 +13,8 @@ func reset_ticket_manager_state():
 func test_add_ticket():
 	reset_ticket_manager_state()
 	
-	# Preload a ticket resource for testing
-	var phishing_ticket_script = load("res://resources/tickets/ticket_phishing_01.gd")
-	var ticket_resource = phishing_ticket_script.new()
+	# Load a ticket resource for testing
+	var ticket_resource = load("res://resources/tickets/TicketPhishing01.tres")
 	
 	# Initially, there should be no active tickets
 	assert_int(TicketManager.get_active_tickets().size()).is_equal(0)
@@ -31,17 +30,16 @@ func test_add_ticket():
 func test_complete_ticket():
 	reset_ticket_manager_state()
 	
-	# Preload a ticket resource for testing
-	var phishing_ticket_script = load("res://resources/tickets/ticket_phishing_01.gd")
-	var ticket_resource = phishing_ticket_script.new()
+	# Load a ticket resource for testing
+	var ticket_resource = load("res://resources/tickets/TicketPhishing01.tres")
 	
 	# Add the ticket first
 	TicketManager.add_ticket(ticket_resource)
 	assert_int(TicketManager.get_active_tickets().size()).is_equal(1)
 	assert_int(TicketManager.completed_tickets.size()).is_equal(0)
 	
-	# Complete the ticket
-	TicketManager.complete_ticket("PHISH-001", "compliant")
+	# Complete the ticket (using efficient because it won't have evidence)
+	TicketManager.complete_ticket("PHISH-001", "efficient")
 	
 	# Verify the ticket was moved from active to completed
 	assert_int(TicketManager.get_active_tickets().size()).is_equal(0)
@@ -51,10 +49,7 @@ func test_complete_ticket():
 func test_spawn_ticket_by_id():
 	reset_ticket_manager_state()
 	
-	# The spawn_ticket_by_id function is connected to the NarrativeDirector singleton.
-	# We can call the function directly to ensure it adds a ticket.
-	
-	# Ensure the map is populated (it should be by default)
+	# Ensure the map is populated
 	assert_bool(TicketManager.ticket_id_map.has("phishing_intro")).is_true()
 	
 	# Call the function
@@ -62,5 +57,4 @@ func test_spawn_ticket_by_id():
 	
 	# Verify a ticket was added
 	assert_int(TicketManager.get_active_tickets().size()).is_equal(1)
-	# The ID in the map 'phishing_intro' points to 'ticket_spear_phish.gd' which has the ID 'SPEAR-PHISH-001'
 	assert_str(TicketManager.get_active_tickets()[0].ticket_id).is_equal("SPEAR-PHISH-001")

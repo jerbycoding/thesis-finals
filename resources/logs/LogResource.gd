@@ -33,4 +33,9 @@ func get_severity_text() -> String:
 		5: return "CRITICAL"
 		_: return "UNKNOWN"
 
-
+func validate() -> bool:
+	if log_id.is_empty():
+		return false
+	if severity < 1 or severity > 5:
+		return false
+	return true

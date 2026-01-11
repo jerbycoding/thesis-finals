@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://bcx8wdcxdgkhk"]
 
-[ext_resource type="Script" uid="uid://bm4x5fwbxpet7" path="res://scripts/ui/TransitionOverlay.gd" id="1_j6cvf"]
+[ext_resource type="Script" uid="uid://dhf4o8owy3mry" path="res://scripts/ui/TransitionOverlay.gd" id="1_j6cvf"]
 
 [sub_resource type="Animation" id="Animation_fade_in"]
 length = 0.5

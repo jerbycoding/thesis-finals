@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="LogResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/logs/LogResource.gd" id="1_log"]
+
+[resource]
+script = ExtResource("1_log")
+log_id = "LOG-AUTH-003"
+timestamp = "14:15:33"
+source = "Authentication"
+category = "Security"
+message = "Multiple failed login attempts from 10.0.0.45"
+severity = 4
+related_ticket = ""
+ip_address = "10.0.0.45"
+hostname = "workstation-12"

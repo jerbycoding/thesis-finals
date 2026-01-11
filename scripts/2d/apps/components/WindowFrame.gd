@@ -53,30 +53,61 @@ func _ready():
 	# Make window draggable via title bar
 	if title_bar:
 		title_bar.gui_input.connect(_on_title_bar_gui_input)
-		title_bar.mouse_filter = Control.MOUSE_FILTER_PASS
+		title_bar.mouse_filter = Control.MOUSE_FILTER_STOP
 	else:
 		print("ERROR: title_bar is null!")
 	
-	# Focus when clicked anywhere
-	gui_input.connect(_on_window_gui_input)
+	# Focus when clicked anywhere (using Border to ensure it catches input)
+	var border = get_node_or_null("Border")
+	if border:
+		border.gui_input.connect(_on_window_gui_input)
 	
 	print("DEBUG: Window setup complete at position: ", position)
+
+const SNAP_MARGIN: float = 20.0
 
 func _on_title_bar_gui_input(event):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.pressed:
 			# Start dragging
 			is_dragging = true
-			drag_offset = get_global_mouse_position() - global_position
 			bring_to_front()
 			emit_signal("window_focused", self)
 			get_viewport().set_input_as_handled()
 		else:
 			# Stop dragging
 			is_dragging = false
+			_apply_snapping()
 	elif event is InputEventMouseMotion and is_dragging:
-		# Drag window
-		global_position = get_global_mouse_position() - drag_offset
+		# Drag window using relative motion
+		global_position += event.relative
+		get_viewport().set_input_as_handled()
+
+func _apply_snapping():
+	var viewport_rect = get_viewport().get_visible_rect()
+	var new_pos = global_position
+	
+	# Snap to Left
+	if abs(new_pos.x) < SNAP_MARGIN:
+		new_pos.x = 0
+	
+	# Snap to Top
+	if abs(new_pos.y) < SNAP_MARGIN:
+		new_pos.y = 0
+		
+	# Snap to Right
+	if abs(new_pos.x + size.x - viewport_rect.size.x) < SNAP_MARGIN:
+		new_pos.x = viewport_rect.size.x - size.x
+		
+	# Snap to Bottom (considering taskbar area approx 40px)
+	if abs(new_pos.y + size.y - (viewport_rect.size.y - 40)) < SNAP_MARGIN:
+		new_pos.y = viewport_rect.size.y - 40 - size.y
+	elif abs(new_pos.y + size.y - viewport_rect.size.y) < SNAP_MARGIN:
+		new_pos.y = viewport_rect.size.y - size.y
+		
+	if new_pos != global_position:
+		var tween = create_tween()
+		tween.tween_property(self, "global_position", new_pos, 0.1).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 
 func _on_window_gui_input(event):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:

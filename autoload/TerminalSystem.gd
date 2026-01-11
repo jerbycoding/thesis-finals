@@ -131,6 +131,9 @@ func _cmd_scan(args: Array) -> Dictionary:
 	if host_info.is_empty():
 		return {"success": false, "output": CorporateVoice.get_phrase("unknown_host")}
 
+	# Update scanned status in NetworkState
+	NetworkState.update_host_state(hostname, {"scanned": true})
+
 	var output = "[b]" + CorporateVoice.get_formatted_phrase("scanning_host", {"hostname": hostname}) + "[/b]\n"
 	output += "Analyzing...\n\n"
 	
@@ -153,6 +156,9 @@ func _cmd_isolate(args: Array) -> Dictionary:
 	if host_info.is_empty():
 		return {"success": false, "output": CorporateVoice.get_phrase("unknown_host")}
 	
+	if not ValidationManager.can_isolate_host(hostname):
+		return {"success": false, "output": "ERROR: Host %s must be scanned and confirmed as a threat before isolation sequence can be authorized." % hostname}
+
 	if host_info.get("isolated", false):
 		return {"success": true, "output": CorporateVoice.get_formatted_phrase("host_already_isolated", {"hostname": hostname})}
 

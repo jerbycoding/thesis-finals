@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="EmailResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/EmailResource.gd" id="1_email"]
+
+[resource]
+script = ExtResource("1_email")
+email_id = "EMAIL-SPEAR-001"
+sender = "CEO"
+subject = "Confidential: Q4 Financial Review"
+body = "Hi,\n\nI need you to review the attached Q4 financial report. This is confidential and should not be shared.\n\nPlease review and let me know your thoughts.\n\nThanks,\nCEO"
+attachments = ["financial_report.exe"]
+headers = {"status": {"spf": "PASS", "dkim": "PASS", "dmarc": "PASS"}, "from_domain": "company.internal", "reply_to": "ceo@company.internal"}
+is_malicious = true
+is_urgent = false
+clues = ["bad_attachment", "spoofed_sender"]
+related_ticket = "SPEAR-PHISH-001"
+suspicious_ip = "203.0.113.42"
+suspicious_domain = ""

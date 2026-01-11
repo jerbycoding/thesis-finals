@@ -25,6 +25,11 @@ func start_dialogue(requesting_npc: Node, dialogue_resource: DialogueDataResourc
 		print("ERROR: DialogueManager started with a null dialogue resource.")
 		return
 
+	# Validation Step: Ensure the dialogue data is safe to run
+	if not validate_dialogue(dialogue_resource):
+		push_error("DialogueManager: Refused to start invalid dialogue for %s" % requesting_npc.npc_name)
+		return
+
 	current_npc = requesting_npc
 	
 	# Construct the dialogue_data dictionary from the resource
@@ -39,6 +44,25 @@ func start_dialogue(requesting_npc: Node, dialogue_resource: DialogueDataResourc
 	
 	# Set game mode to Dialogue
 	GameState.set_game_mode(GameState.GameMode.MODE_DIALOGUE)
+
+func validate_dialogue(resource: DialogueDataResource) -> bool:
+	var lines = resource.lines
+	var line_count = lines.size()
+	
+	for i in range(line_count):
+		var line = lines[i]
+		if not line.has("text"):
+			push_error("Dialogue Resource Error: Line %d is missing 'text' key." % i)
+			return false
+			
+		if line.has("choices"):
+			for choice in line["choices"]:
+				if choice.has("next_line"):
+					var target = choice["next_line"]
+					if target < 0 or target >= line_count:
+						push_error("Dialogue Resource Error: Line %d has choice with invalid next_line: %d" % [i, target])
+						return false
+	return true
 
 func _on_dialogue_choice_selected(choice: Dictionary):
 	if is_instance_valid(current_npc) and current_npc.has_method("_on_dialogue_choice_selected"):

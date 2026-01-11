@@ -5,19 +5,20 @@ var email_list: VBoxContainer = null
 var selected_email: EmailResource = null
 var inspection_state: Dictionary = {}
 
-@onready var placeholder_label: Label = $ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer/PlaceholderLabel
-@onready var email_detail_view: VBoxContainer = $ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer/EmailDetailView
-@onready var subject_label: Label = $ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer/EmailDetailView/SubjectLabel
-@onready var sender_label: Label = $ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer/EmailDetailView/SenderLabel
-@onready var body_label: Label = $ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer/EmailDetailView/BodyLabel
-@onready var attachments_label: Label = $ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer/EmailDetailView/AttachmentsLabel
-@onready var view_headers_button: Button = $ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer/EmailDetailView/InspectionTools/HBoxContainer/ViewHeadersButton
-@onready var scan_attachments_button: Button = $ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer/EmailDetailView/InspectionTools/HBoxContainer/ScanAttachmentsButton
-@onready var check_links_button: Button = $ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer/EmailDetailView/InspectionTools/HBoxContainer/CheckLinksButton
-@onready var inspection_results_label: RichTextLabel = $ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer/EmailDetailView/InspectionTools/InspectionResultsContainer/InspectionResults
-@onready var approve_button: Button = $ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer/EmailDetailView/DecisionButtons/ApproveButton
-@onready var quarantine_button: Button = $ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer/EmailDetailView/DecisionButtons/QuarantineButton
-@onready var escalate_button: Button = $ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer/EmailDetailView/DecisionButtons/EscalateButton
+@onready var placeholder_label: Label = %PlaceholderLabel
+@onready var email_detail_view: VBoxContainer = %EmailDetailView
+@onready var subject_label: Label = %SubjectLabel
+@onready var sender_label: Label = %SenderLabel
+@onready var body_label: Label = %BodyLabel
+@onready var attachments_label: Label = %AttachmentsLabel
+@onready var view_headers_button: Button = %ViewHeadersButton
+@onready var scan_attachments_button: Button = %ScanAttachmentsButton
+@onready var check_links_button: Button = %CheckLinksButton
+@onready var inspection_results_label: RichTextLabel = %InspectionResults
+@onready var decision_buttons: HBoxContainer = %DecisionButtons
+@onready var approve_button: Button = %ApproveButton
+@onready var quarantine_button: Button = %QuarantineButton
+@onready var escalate_button: Button = %EscalateButton
 
 func _ready():
 	print("======= App_EmailAnalyzer._ready() =======")
@@ -30,7 +31,7 @@ func _ready():
 	await get_tree().process_frame
 	
 	# Get email_list node safely
-	email_list = get_node_or_null("ColorRect/VBoxContainer/EmailViewContainer/InboxPanel/MarginContainer/VBoxContainer/ScrollContainer/EmailList")
+	email_list = %EmailList
 	if not email_list:
 		print("ERROR: EmailList node not found!")
 		push_error("EmailList node missing in App_EmailAnalyzer")
@@ -40,70 +41,42 @@ func _ready():
 		email_list.mouse_filter = Control.MOUSE_FILTER_PASS
 		email_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	
-	# Get button nodes manually (in case @onready didn't work)
-	if not view_headers_button:
-		view_headers_button = get_node_or_null("ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer/EmailDetailView/InspectionTools/HBoxContainer/ViewHeadersButton")
-	if not scan_attachments_button:
-		scan_attachments_button = get_node_or_null("ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer/EmailDetailView/InspectionTools/HBoxContainer/ScanAttachmentsButton")
-	if not check_links_button:
-		check_links_button = get_node_or_null("ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer/EmailDetailView/InspectionTools/HBoxContainer/CheckLinksButton")
-	if not approve_button:
-		approve_button = get_node_or_null("ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer/EmailDetailView/DecisionButtons/ApproveButton")
-	if not quarantine_button:
-		quarantine_button = get_node_or_null("ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer/EmailDetailView/DecisionButtons/QuarantineButton")
-	if not escalate_button:
-		escalate_button = get_node_or_null("ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer/EmailDetailView/DecisionButtons/EscalateButton")
-	if not inspection_results_label:
-		inspection_results_label = get_node_or_null("ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer/EmailDetailView/InspectionTools/InspectionResults")
-	
-	# Connect buttons (disconnect first if already connected to avoid duplicates)
+	# Connect buttons
 	if view_headers_button:
 		if view_headers_button.pressed.is_connected(_on_view_headers_pressed):
 			view_headers_button.pressed.disconnect(_on_view_headers_pressed)
 		view_headers_button.pressed.connect(_on_view_headers_pressed)
 		print("DEBUG: View Headers button connected")
-	else:
-		print("ERROR: View Headers button not found!")
 	
 	if scan_attachments_button:
 		if scan_attachments_button.pressed.is_connected(_on_scan_attachments_pressed):
 			scan_attachments_button.pressed.disconnect(_on_scan_attachments_pressed)
 		scan_attachments_button.pressed.connect(_on_scan_attachments_pressed)
 		print("DEBUG: Scan Attachments button connected")
-	else:
-		print("ERROR: Scan Attachments button not found!")
 	
 	if check_links_button:
 		if check_links_button.pressed.is_connected(_on_check_links_pressed):
 			check_links_button.pressed.disconnect(_on_check_links_pressed)
 		check_links_button.pressed.connect(_on_check_links_pressed)
 		print("DEBUG: Check Links button connected")
-	else:
-		print("ERROR: Check Links button not found!")
 	
 	if approve_button:
 		if approve_button.pressed.is_connected(_on_approve_pressed):
 			approve_button.pressed.disconnect(_on_approve_pressed)
 		approve_button.pressed.connect(_on_approve_pressed)
 		print("DEBUG: Approve button connected")
-	else:
-		print("ERROR: Approve button not found!")
 	
 	if quarantine_button:
 		if quarantine_button.pressed.is_connected(_on_quarantine_pressed):
 			quarantine_button.pressed.disconnect(_on_quarantine_pressed)
 		quarantine_button.pressed.connect(_on_quarantine_pressed)
 		print("DEBUG: Quarantine button connected")
-	else:
-		print("ERROR: Quarantine button not found!")
 	
 	if escalate_button:
 		if escalate_button.pressed.is_connected(_on_escalate_pressed):
 			escalate_button.pressed.disconnect(_on_escalate_pressed)
 		escalate_button.pressed.connect(_on_escalate_pressed)
 		print("DEBUG: Escalate button connected")
-	else:
-		print("ERROR: Escalate button not found!")
 	
 	# Connect to EmailSystem
 	if EmailSystem:
@@ -234,6 +207,9 @@ func _show_email_details(email: EmailResource):
 	# Reset inspection state for the new email
 	inspection_state = {"headers": false, "attachments": false, "links": false}
 	
+	# Update decision buttons state
+	_update_decision_visibility()
+	
 	# Update labels
 	subject_label.text = "Subject: " + email.subject
 	sender_label.text = "From: " + email.sender
@@ -253,6 +229,24 @@ func _show_email_details(email: EmailResource):
 	view_headers_button.disabled = false
 	scan_attachments_button.disabled = false
 	check_links_button.disabled = false
+
+func _update_decision_visibility():
+	# Check if any tool has been used
+	var tools_used = ValidationManager.can_action_email(inspection_state)
+	
+	if decision_buttons:
+		decision_buttons.visible = true # Always show them now
+		
+		# Update individual buttons
+		for btn in [approve_button, quarantine_button, escalate_button]:
+			if btn:
+				btn.disabled = not tools_used
+				if btn.disabled:
+					btn.modulate = Color(0.5, 0.5, 0.5, 0.7) # Grayscale/Dimmed look
+					btn.tooltip_text = "Investigation required: Use tools above before making a decision."
+				else:
+					btn.modulate = Color.WHITE
+					btn.tooltip_text = "Authorize action for this email."
 
 func _on_view_headers_pressed():
 	if not selected_email:
@@ -279,6 +273,7 @@ func _on_view_headers_pressed():
 	inspection_results_label.text = result_text
 	
 	view_headers_button.disabled = false
+	_update_decision_visibility()
 
 func _on_scan_attachments_pressed():
 	if not selected_email:
@@ -317,6 +312,7 @@ func _on_scan_attachments_pressed():
 	inspection_results_label.text = result_text
 	
 	scan_attachments_button.disabled = false
+	_update_decision_visibility()
 
 func _on_check_links_pressed():
 	if not selected_email:
@@ -347,6 +343,7 @@ func _on_check_links_pressed():
 	inspection_results_label.text = result_text
 	
 	check_links_button.disabled = false
+	_update_decision_visibility()
 
 func _on_approve_pressed():
 	if not selected_email:

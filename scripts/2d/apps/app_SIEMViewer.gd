@@ -1,15 +1,18 @@
 # app_SIEMViewer.gd
 extends Control
 
-var log_list: VBoxContainer = null
+@onready var log_list: VBoxContainer = %LogList
+@onready var attach_section: PanelContainer = %AttachSection
+@onready var ticket_dropdown: OptionButton = %TicketDropdown
+@onready var attach_button: Button = %AttachButton
+@onready var log_detail_section: PanelContainer = %LogDetailSection
+@onready var log_detail_label: RichTextLabel = %LogDetailLabel
+@onready var filter_all: Button = %FilterAll
+@onready var filter_security: Button = %FilterSecurity
+@onready var filter_high_severity: Button = %FilterHighSeverity
+
 var current_filter: String = "all"  # "all", "security", "high"
 var selected_log: LogResource = null
-
-@onready var attach_section: PanelContainer = $ColorRect/VBoxContainer/AttachSection
-@onready var ticket_dropdown: OptionButton = $ColorRect/VBoxContainer/AttachSection/MarginContainer/VBoxContainer/HBoxContainer/TicketDropdown
-@onready var attach_button: Button = $ColorRect/VBoxContainer/AttachSection/MarginContainer/VBoxContainer/HBoxContainer/AttachButton
-@onready var log_detail_section: PanelContainer = $ColorRect/VBoxContainer/LogDetailSection
-@onready var log_detail_label: RichTextLabel = $ColorRect/VBoxContainer/LogDetailSection/MarginContainer/VBoxContainer/LogDetailLabel
 
 func _ready():
 	print("======= App_SIEMViewer._ready() =======")
@@ -20,17 +23,6 @@ func _ready():
 	
 	# Wait a frame for the scene tree to be fully set up
 	await get_tree().process_frame
-	
-	# Get log_list node safely
-	log_list = get_node_or_null("ColorRect/VBoxContainer/ScrollContainer/LogList")
-	if not log_list:
-		print("ERROR: LogList node not found! Attempting alternate path...")
-		if has_node("ColorRect"):
-			var vbox = get_node_or_null("ColorRect/VBoxContainer")
-			if vbox:
-				var scroll = vbox.get_node_or_null("ScrollContainer")
-				if scroll:
-					log_list = scroll.get_node_or_null("LogList")
 	
 	if not log_list:
 		print("ERROR: Could not find LogList node! App may not display correctly.")
@@ -67,16 +59,12 @@ func _ready():
 	print("======= App_SIEMViewer Ready Complete =======")
 
 func _setup_filters():
-	var filter_all = get_node_or_null("ColorRect/VBoxContainer/FilterContainer/FilterAll")
-	var filter_security = get_node_or_null("ColorRect/VBoxContainer/FilterContainer/FilterSecurity")
-	var filter_high = get_node_or_null("ColorRect/VBoxContainer/FilterContainer/FilterHighSeverity")
-	
 	if filter_all:
 		filter_all.pressed.connect(_on_filter_all)
 	if filter_security:
 		filter_security.pressed.connect(_on_filter_security)
-	if filter_high:
-		filter_high.pressed.connect(_on_filter_high)
+	if filter_high_severity:
+		filter_high_severity.pressed.connect(_on_filter_high)
 
 func _on_filter_all():
 	current_filter = "all"
@@ -149,52 +137,61 @@ func _add_log_entry(log: LogResource):
 func _create_log_entry(log: LogResource) -> Control:
 	# Create a container for the log entry
 	var container = PanelContainer.new()
-	container.custom_minimum_size = Vector2(550, 60)
+	container.custom_minimum_size = Vector2(0, 45) # Reduced height for higher density
 	container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	
 	# Set background color based on severity
 	var style = StyleBoxFlat.new()
 	style.bg_color = Color(0.1, 0.12, 0.18, 0.8)
-	style.border_width_left = 3
+	style.border_width_left = 4 # Slightly thicker border for better visibility
 	style.border_color = log.get_severity_color()
 	container.add_theme_stylebox_override("panel", style)
 	
 	# Create horizontal layout
 	var hbox = HBoxContainer.new()
+	hbox.add_theme_constant_override("separation", 10)
 	container.add_child(hbox)
 	
 	# Timestamp
 	var time_label = Label.new()
-	time_label.text = log.timestamp
+	time_label.text = " " + log.timestamp # Add leading space for alignment
 	time_label.custom_minimum_size = Vector2(80, 0)
-	time_label.add_theme_font_size_override("font_size", 12)
+	time_label.add_theme_font_size_override("font_size", 11)
+	time_label.tooltip_text = "Recorded: " + log.timestamp
+	time_label.mouse_filter = Control.MOUSE_FILTER_PASS
 	hbox.add_child(time_label)
 	
 	# Source
 	var source_label = Label.new()
 	source_label.text = log.source
 	source_label.custom_minimum_size = Vector2(120, 0)
-	source_label.add_theme_font_size_override("font_size", 12)
+	source_label.add_theme_font_size_override("font_size", 11)
+	source_label.tooltip_text = "Origin: " + log.source
+	source_label.mouse_filter = Control.MOUSE_FILTER_PASS
 	hbox.add_child(source_label)
 	
 	# Severity badge
 	var severity_label = Label.new()
 	severity_label.text = log.get_severity_text()
 	severity_label.custom_minimum_size = Vector2(70, 0)
-	severity_label.add_theme_font_size_override("font_size", 11)
+	severity_label.add_theme_font_size_override("font_size", 10)
 	severity_label.add_theme_color_override("font_color", log.get_severity_color())
 	severity_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	severity_label.tooltip_text = "Severity Level: " + str(log.severity)
+	severity_label.mouse_filter = Control.MOUSE_FILTER_PASS
 	hbox.add_child(severity_label)
 	
 	# Message (truncated)
 	var message_label = Label.new()
 	var message_text = log.message
-	if message_text.length() > 50:
-		message_text = message_text.substr(0, 47) + "..."
+	if message_text.length() > 60:
+		message_text = message_text.substr(0, 57) + "..."
 	message_label.text = message_text
 	message_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	message_label.add_theme_font_size_override("font_size", 12)
+	message_label.add_theme_font_size_override("font_size", 11)
 	message_label.autowrap_mode = TextServer.AUTOWRAP_OFF
+	message_label.tooltip_text = log.message # Show full message on hover
+	message_label.mouse_filter = Control.MOUSE_FILTER_PASS
 	hbox.add_child(message_label)
 	
 	# Make clickable

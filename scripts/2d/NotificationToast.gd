@@ -1,5 +1,5 @@
 # NotificationToast.gd
-extends PanelContainer
+extends Control
 
 signal notification_finished
 
@@ -7,8 +7,9 @@ var notification_text: String = ""
 var notification_type: String = "info"  # "info", "success", "warning", "error"
 var display_duration: float = 4.0
 
-@onready var label: Label = $MarginContainer/HBoxContainer/Label
-@onready var icon_label: Label = $MarginContainer/HBoxContainer/IconLabel
+@onready var main_panel: PanelContainer = %MainPanel
+@onready var label: Label = %Label
+@onready var icon_label: Label = %IconLabel
 
 func _ready():
 	# All properties have been set by NotificationManager before this point.
@@ -49,7 +50,8 @@ func _setup_style():
 	style.corner_radius_top_left = 4
 	style.corner_radius_bottom_left = 4
 	
-	add_theme_stylebox_override("panel", style)
+	if main_panel:
+		main_panel.add_theme_stylebox_override("panel", style)
 
 func fade_in():
 	# Animate opacity for a smooth fade-in effect
@@ -73,7 +75,9 @@ func fade_out():
 	queue_free()
 
 func shake_animation():
-	var original_position = position
+	if not main_panel: return
+	
+	var original_panel_pos = Vector2.ZERO # Since it's anchored to fill
 	var shake_strength = 5
 	var shake_duration = 0.2
 	var tween = create_tween()
@@ -81,11 +85,11 @@ func shake_animation():
 	tween.set_trans(Tween.TRANS_ELASTIC)
 	tween.set_ease(Tween.EASE_OUT)
 	
-	# Shake horizontally
-	tween.tween_property(self, "position", original_position + Vector2(shake_strength, 0), shake_duration / 4.0)
-	tween.tween_property(self, "position", original_position - Vector2(shake_strength * 0.8, 0), shake_duration / 4.0)
-	tween.tween_property(self, "position", original_position + Vector2(shake_strength * 0.4, 0), shake_duration / 4.0)
-	tween.tween_property(self, "position", original_position, shake_duration / 4.0)
+	# Shake the PANEL relative to its parent (the Control root)
+	tween.tween_property(main_panel, "position", original_panel_pos + Vector2(shake_strength, 0), shake_duration / 4.0)
+	tween.tween_property(main_panel, "position", original_panel_pos - Vector2(shake_strength * 0.8, 0), shake_duration / 4.0)
+	tween.tween_property(main_panel, "position", original_panel_pos + Vector2(shake_strength * 0.4, 0), shake_duration / 4.0)
+	tween.tween_property(main_panel, "position", original_panel_pos, shake_duration / 4.0)
 	
 
 func set_notification(text: String, type: String = "info", duration: float = 4.0):

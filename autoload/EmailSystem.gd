@@ -10,11 +10,11 @@ var all_emails: Array[EmailResource] = []
 var processed_emails: Array[String] = []  # Email IDs that have been processed
 
 
-# Email library - paths to email scripts
-var email_library: Array[String] = [
-	"res://resources/emails/EmailPhishing01.gd",
-	"res://resources/emails/EmailLegitUrgent.gd",
-	"res://resources/emails/EmailSpearPhish.gd",
+# Email library - preloaded .tres resources
+var email_library: Array[EmailResource] = [
+	preload("res://resources/emails/EmailPhishing01.tres"),
+	preload("res://resources/emails/EmailLegitUrgent.tres"),
+	preload("res://resources/emails/EmailSpearPhish.tres"),
 ]
 
 func _ready():
@@ -31,23 +31,23 @@ func _ready():
 func _load_initial_emails():
 	print("📧 Loading initial emails...")
 	
-	for email_path in email_library:
-		if ResourceLoader.exists(email_path):
-			var EmailScript = load(email_path)
-			if EmailScript:
-				var email = EmailScript.new()
-				add_email(email)
-				print("  ✓ Loaded email: ", email.email_id)
-			else:
-				print("  ❌ ERROR: Failed to load email script: ", email_path)
+	for email_res in email_library:
+		if email_res:
+			var email = email_res.duplicate()
+			add_email(email)
+			print("  ✓ Loaded email: ", email.email_id)
 		else:
-			print("  ❌ ERROR: Email script not found: ", email_path)
+			print("  ❌ ERROR: Failed to load email resource from library")
 	
 	print("📧 Total emails loaded: ", all_emails.size())
 
 func add_email(email: EmailResource):
 	if not email:
 		print("❌ ERROR: Trying to add null email")
+		return
+	
+	if not email.validate():
+		push_error("EmailSystem: Rejected invalid email: " + str(email.email_id))
 		return
 	
 	# Check if already exists

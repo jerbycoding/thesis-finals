@@ -1,15 +1,16 @@
 # Updated App_TicketQueue.gd
 extends Control
 
-var ticket_list: VBoxContainer = null
 var selected_ticket: TicketResource = null
 
-# Detail Panel Elements
-@onready var detail_view: VBoxContainer = $ColorRect/VBoxContainer/HBoxContainer/DetailPanel/MarginContainer/DetailView
-@onready var placeholder_label: Label = $ColorRect/VBoxContainer/HBoxContainer/DetailPanel/MarginContainer/PlaceholderLabel
-@onready var title_label: Label = $ColorRect/VBoxContainer/HBoxContainer/DetailPanel/MarginContainer/DetailView/TitleLabel
-@onready var description_label: RichTextLabel = $ColorRect/VBoxContainer/HBoxContainer/DetailPanel/MarginContainer/DetailView/DescriptionLabel
-@onready var steps_container: VBoxContainer = $ColorRect/VBoxContainer/HBoxContainer/DetailPanel/MarginContainer/DetailView/StepsContainer
+# UI Elements
+@onready var ticket_list: VBoxContainer = %TicketList
+@onready var detail_view: VBoxContainer = %DetailView
+@onready var placeholder_label: Label = %PlaceholderLabel
+@onready var title_label: Label = %TitleLabel
+@onready var description_label: RichTextLabel = %DescriptionLabel
+@onready var steps_container: VBoxContainer = %StepsContainer
+@onready var completion_modal: Control = %CompletionModal
 
 
 func _ready():
@@ -19,12 +20,13 @@ func _ready():
 	visible = true
 	modulate = Color.WHITE
 
+	# Initialize modal
+	if completion_modal:
+		completion_modal.completion_selected.connect(_on_completion_selected)
 	
 	# Wait a frame for the scene tree to be fully set up
 	await get_tree().process_frame
 	
-	# Get ticket_list node safely
-	ticket_list = get_node_or_null("ColorRect/VBoxContainer/HBoxContainer/ScrollContainer/TicketList")
 	if not ticket_list:
 		print("ERROR: Could not find TicketList node! App may not display correctly.")
 		push_error("TicketList node missing in App_TicketQueue")
@@ -36,21 +38,6 @@ func _ready():
 		# Set size flags - horizontal expand, vertical shrink (so it can scroll)
 		ticket_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		ticket_list.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-		print("DEBUG: TicketList configured - visible: ", ticket_list.visible, " size flags: ", ticket_list.size_flags_horizontal, "/", ticket_list.size_flags_vertical)
-	
-	if has_node("ColorRect"):
-		$ColorRect.color = Color(0.07, 0.08, 0.15, 0.95)
-	
-	# Ensure ScrollContainer is properly sized
-	var scroll_container = get_node_or_null("ColorRect/VBoxContainer/HBoxContainer/ScrollContainer")
-	if scroll_container:
-		scroll_container.visible = true
-		scroll_container.mouse_filter = Control.MOUSE_FILTER_PASS
-		scroll_container.size_flags_vertical = Control.SIZE_EXPAND_FILL
-		# Enable scrolling
-		scroll_container.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-		scroll_container.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
-		print("DEBUG: ScrollContainer configured")
 	
 	# Connect signals
 	if TicketManager:
@@ -125,6 +112,7 @@ func _on_ticket_added(ticket: TicketResource):
 		return
 		
 	card.card_selected.connect(_on_ticket_card_selected)
+	card.completion_requested.connect(_on_ticket_completion_requested)
 	
 	# Add to list
 	ticket_list.add_child(card)
@@ -160,24 +148,35 @@ func _on_ticket_card_selected(ticket: TicketResource, card_instance: Control):
 	_update_detail_view(ticket)
 	_highlight_card(card_instance)
 
+func _on_ticket_completion_requested(ticket: TicketResource):
+	if completion_modal:
+		completion_modal.show_for_ticket(ticket)
+
+func _on_completion_selected(completion_type: String):
+	if completion_modal and completion_modal.current_ticket:
+		var ticket_id = completion_modal.current_ticket.ticket_id
+		print("DEBUG: Finalizing completion for ticket: ", ticket_id, " Type: ", completion_type)
+		if TicketManager:
+			TicketManager.complete_ticket(ticket_id, completion_type)
+
 func _highlight_card(selected_card: Control):
 	# Reset all cards to default style
 	for child in ticket_list.get_children():
-		if child is PanelContainer: # TicketCard is a PanelContainer
+		if child is PanelContainer:
 			var style = child.get_theme_stylebox("panel")
 			if style:
-				style = style.duplicate() # Duplicate the style to make it unique for this instance
-				style.bg_color = Color(0.1, 0.12, 0.18, 1) # Default color from TicketCard.tscn
-				style.border_color = Color(0.2, 0.22, 0.3, 1) # Default border color
+				style = style.duplicate()
+				style.bg_color = Color(0.07, 0.08, 0.15, 0.8) # Default
+				style.border_color = Color(0.2, 0.22, 0.3, 1) # Default border
 				child.add_theme_stylebox_override("panel", style)
 	
 	# Highlight the selected card
 	if selected_card:
 		var style = selected_card.get_theme_stylebox("panel")
 		if style:
-			style = style.duplicate() # Duplicate the style to make it unique for this instance
-			style.bg_color = Color(0.2, 0.25, 0.35, 1) # Highlighted background
-			style.border_color = Color(0.8, 0.8, 0.2, 1) # Yellow border for highlight
+			style = style.duplicate()
+			style.bg_color = Color(0.1, 0.15, 0.25, 0.9) # Highlighted
+			style.border_color = Color(0.2, 1.0, 0.2, 1) # Cyber Green border
 			selected_card.add_theme_stylebox_override("panel", style)
 
 func _refresh_list():

@@ -8,18 +8,18 @@ signal log_reviewed(log_id: String)
 var all_logs: Array[LogResource] = []
 var reviewed_logs: Array[String] = []
 
-# Log library - paths to log scripts
-var log_library: Array[String] = [
-	"res://resources/logs/LogPhishingAttempt.gd",
-	"res://resources/logs/LogEmailBlocked.gd",
-	"res://resources/logs/LogAuthFailure.gd",
-	"res://resources/logs/LogSystemNormal.gd",
-	"res://resources/logs/LogNetworkScan.gd",
-	"res://resources/logs/LogMalwareBeacon.gd",
-	"res://resources/logs/LogUserClicked.gd",
-	"res://resources/logs/LogMalware001.gd",
-	"res://resources/logs/LogExfil001.gd",
-	"res://resources/logs/LogNetwork001.gd",
+# Log library - preloaded .tres resources
+var log_library: Array[LogResource] = [
+	preload("res://resources/logs/LogPhishingAttempt.tres"),
+	preload("res://resources/logs/LogEmailBlocked.tres"),
+	preload("res://resources/logs/LogAuthFailure.tres"),
+	preload("res://resources/logs/LogSystemNormal.tres"),
+	preload("res://resources/logs/LogNetworkScan.tres"),
+	preload("res://resources/logs/LogMalwareBeacon.tres"),
+	preload("res://resources/logs/LogUserClicked.tres"),
+	preload("res://resources/logs/LogMalware001.tres"),
+	preload("res://resources/logs/LogExfil001.tres"),
+	preload("res://resources/logs/LogNetwork001.tres"),
 ]
 
 func _ready():
@@ -36,23 +36,23 @@ func _ready():
 func _load_initial_logs():
 	print("📋 Loading initial logs...")
 	
-	for log_path in log_library:
-		if ResourceLoader.exists(log_path):
-			var LogScript = load(log_path)
-			if LogScript:
-				var log = LogScript.new()
-				add_log(log)
-				print("  ✓ Loaded log: ", log.log_id)
-			else:
-				print("  ❌ ERROR: Failed to load log script: ", log_path)
+	for log_res in log_library:
+		if log_res:
+			var log = log_res.duplicate()
+			add_log(log)
+			print("  ✓ Loaded log: ", log.log_id)
 		else:
-			print("  ❌ ERROR: Log script not found: ", log_path)
+			print("  ❌ ERROR: Failed to load log resource from library")
 	
 	print("📋 Total logs loaded: ", all_logs.size())
 
 func add_log(log: LogResource):
 	if not log:
 		print("❌ ERROR: Trying to add null log")
+		return
+	
+	if not log.validate():
+		push_error("LogSystem: Rejected invalid log: " + str(log.log_id))
 		return
 	
 	# Check if already exists

@@ -6,6 +6,7 @@ extends Control
 @onready var archetype_description: Label = %ArchetypeDescription
 @onready var archetype_feedback: Label = %ArchetypeFeedback
 @onready var tickets_completed_value: Label = %TicketsCompletedValue
+@onready var tickets_ignored_value: Label = %TicketsIgnoredValue
 @onready var avg_time_value: Label = %AvgTimeValue
 @onready var risks_taken_value: Label = %RisksTakenValue
 @onready var consequences_value: Label = %ConsequencesValue
@@ -29,6 +30,7 @@ func show_report(results: Dictionary):
 	archetype_feedback.text = archetype_data.get("feedback", "No specific feedback available.")
 	
 	tickets_completed_value.text = str(results.get("tickets_completed", 0))
+	tickets_ignored_value.text = str(results.get("tickets_ignored", 0))
 	avg_time_value.text = "%.1fs" % results.get("avg_completion_time", 0.0)
 	risks_taken_value.text = str(results.get("risks_taken", 0))
 	consequences_value.text = str(results.get("consequences_triggered", 0))

@@ -52,6 +52,10 @@ func enter_desktop_mode(computer_node):
 	GameState.desktop_instance = desktop_scene.instantiate()
 	get_tree().root.add_child(GameState.desktop_instance)
 
+	# Show persistent windows
+	if DesktopWindowManager:
+		DesktopWindowManager.show_all_windows()
+
 # Show mouse cursor
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 
@@ -83,8 +87,12 @@ func exit_desktop_mode():
 	overlay_instance.fade_in()
 	await overlay_instance.fade_finished
 
-	print("EXIT DESKTOP: Step 2 - Remove desktop")
-	# Remove desktop
+	print("EXIT DESKTOP: Step 2 - Hide windows and remove desktop background")
+	# Hide persistent windows instead of closing them
+	if DesktopWindowManager:
+		DesktopWindowManager.hide_all_windows()
+		
+	# Remove desktop background
 	if GameState.desktop_instance:
 		GameState.desktop_instance.queue_free()
 		GameState.desktop_instance = null

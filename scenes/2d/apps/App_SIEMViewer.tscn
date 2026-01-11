@@ -12,7 +12,8 @@ script = ExtResource("1_siem")
 layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
-color = Color(0.070588, 0.082353, 0.14902, 0.8)
+mouse_filter = 1
+color = Color(0.0392157, 0.0392157, 0.101961, 0.9)
 
 [node name="VBoxContainer" type="VBoxContainer" parent="ColorRect"]
 layout_mode = 0
@@ -29,16 +30,19 @@ vertical_alignment = 1
 layout_mode = 2
 
 [node name="FilterAll" type="Button" parent="ColorRect/VBoxContainer/FilterContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 0
 text = "All"
 
 [node name="FilterSecurity" type="Button" parent="ColorRect/VBoxContainer/FilterContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Security Only"
 
 [node name="FilterHighSeverity" type="Button" parent="ColorRect/VBoxContainer/FilterContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 0
 text = "High Severity"
@@ -51,6 +55,7 @@ size_flags_horizontal = 3
 layout_mode = 2
 
 [node name="AttachSection" type="PanelContainer" parent="ColorRect/VBoxContainer"]
+unique_name_in_owner = true
 visible = false
 layout_mode = 2
 
@@ -69,15 +74,18 @@ text = "Attach to Ticket:"
 layout_mode = 2
 
 [node name="TicketDropdown" type="OptionButton" parent="ColorRect/VBoxContainer/AttachSection/MarginContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="AttachButton" type="Button" parent="ColorRect/VBoxContainer/AttachSection/MarginContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Attach"
 
 [node name="LogDetailSection" type="PanelContainer" parent="ColorRect/VBoxContainer"]
+unique_name_in_owner = true
 visible = false
 layout_mode = 2
 
@@ -97,16 +105,63 @@ theme_override_font_sizes/font_size = 14
 text = "Log Details:"
 
 [node name="LogDetailLabel" type="RichTextLabel" parent="ColorRect/VBoxContainer/LogDetailSection/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 bbcode_enabled = true
 text = "Log details will be shown here."
 fit_content = true
 
+[node name="LogHeader" type="HBoxContainer" parent="ColorRect/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="TimeHeader" type="Label" parent="ColorRect/VBoxContainer/LogHeader"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.7, 0.7, 1)
+theme_override_font_sizes/font_size = 12
+text = " TIMESTAMP"
+tooltip_text = "The exact system time when the event was recorded."
+mouse_filter = 0
+
+[node name="SourceHeader" type="Label" parent="ColorRect/VBoxContainer/LogHeader"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.7, 0.7, 1)
+theme_override_font_sizes/font_size = 12
+text = "SOURCE"
+tooltip_text = "The application or service that generated the log entry."
+mouse_filter = 0
+
+[node name="SeverityHeader" type="Label" parent="ColorRect/VBoxContainer/LogHeader"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.7, 0.7, 1)
+theme_override_font_sizes/font_size = 12
+text = "SEVERITY"
+tooltip_text = "The impact level: Info (1), Warning (2), High (3), Critical (4)."
+mouse_filter = 0
+horizontal_alignment = 1
+
+[node name="MessageHeader" type="Label" parent="ColorRect/VBoxContainer/LogHeader"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.7, 0.7, 0.7, 1)
+theme_override_font_sizes/font_size = 12
+text = "MESSAGE SUMMARY"
+tooltip_text = "Brief description of the recorded event."
+mouse_filter = 0
+
 [node name="ScrollContainer" type="ScrollContainer" parent="ColorRect/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 
 [node name="LogList" type="VBoxContainer" parent="ColorRect/VBoxContainer/ScrollContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3

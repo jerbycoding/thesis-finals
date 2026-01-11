@@ -7,20 +7,20 @@ signal app_closed(app_name: String, window_id: String)
 
 var shift_report_scene = preload("res://scenes/2d/apps/App_ShiftReport.tscn")
 
+@onready var app_launcher: GridContainer = %AppLauncher
+@onready var exit_button: Button = %ExitButton
+@onready var app_window_container: Control = %AppWindowContainer
+
 func _ready():
-	# Set as top layer
-	z_index = 10
+	# Set as background layer
+	z_index = 0
 	visible = true
 	
-	# Verify window container exists
-	var container = get_node_or_null("ColorRect/AppWindowContainer")
-	if not container:
+	if not app_window_container:
 		print("ERROR: AppWindowContainer node not found in scene tree!")
 		push_error("AppWindowContainer is missing - windows cannot be created")
 	else:
-		print("DesktopManager ready - Window container found: ", container.name)
-		# Ensure container is set up correctly
-		container.mouse_filter = Control.MOUSE_FILTER_IGNORE  # Allow clicks to pass through to windows
+		app_window_container.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	
 	# Connect app icons
 	_setup_app_connections()
@@ -36,38 +36,28 @@ func _ready():
 	
 	print("DesktopManager ready - Window system active")
 
-func close_all_windows():
-	if DesktopWindowManager:
-		DesktopWindowManager.close_all_windows()
-
 func _setup_app_connections():
-	print("Setting up app connections...")
+	if not app_launcher: return
 	
-	# Connect all icon buttons
-	var icons = [
-		"SIEM_Icon",
-		"Email_Icon", 
-		"Terminal_Icon",
-		"Tickets_Icon"
-	]
-	
-	for icon_name in icons:
-		var button = get_node("ColorRect/AppLauncher/" + icon_name)
-		if button:
-			button.mouse_filter = Control.MOUSE_FILTER_PASS
+	for child in app_launcher.get_children():
+		if child is Button:
+			var app_name = child.name.to_lower().replace("_icon", "")
 			
-			# Get app name from icon name
-			var app_name = icon_name.to_lower().replace("_icon", "")
+			# Disconnect if needed
+			if child.pressed.is_connected(_on_app_icon_pressed):
+				child.pressed.disconnect(_on_app_icon_pressed)
 			
-			# Connect signal (disconnect first if already connected)
-			if button.pressed.is_connected(_on_app_icon_pressed):
-				button.pressed.disconnect(_on_app_icon_pressed)
+			child.pressed.connect(_on_app_icon_pressed.bind(app_name))
+			child.mouse_entered.connect(_on_app_icon_hover)
 			
-			button.pressed.connect(_on_app_icon_pressed.bind(app_name))
-			print("Connected icon: ", icon_name, " -> ", app_name)
+			print("Connected icon: ", child.name, " -> ", app_name)
+
+func _on_app_icon_hover():
+	if AudioManager:
+		# Using a subtle click or hover sound if available
+		AudioManager.play_sfx(AudioManager.SFX.button_click)
 
 func _on_app_icon_pressed(app_name: String):
-	print("DEBUG: App icon pressed: ", app_name)
 	if DesktopWindowManager:
 		DesktopWindowManager.open_app(app_name)
 

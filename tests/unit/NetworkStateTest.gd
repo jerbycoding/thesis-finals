@@ -5,10 +5,16 @@ extends "res://addons/gdUnit4/src/GdUnitTestSuite.gd"
 
 func reset_network_state():
 	# The NetworkState discovers hosts in its _ready() function.
-	# For a clean state, we clear the dictionary and re-discover.
+	# For a clean state, we clear the dictionary and restore the defaults.
 	NetworkState.host_states.clear()
-	# Re-add the initial infected host that is normally in the dictionary by default
-	NetworkState.host_states["WORKSTATION-45"] = {"status": "INFECTED", "critical": false, "isolated": false}
+	
+	# Restore pre-defined critical servers
+	NetworkState.host_states["FINANCE-SRV-01"] = {"status": "CLEAN", "critical": true, "isolated": false, "scanned": false}
+	NetworkState.host_states["WEB-SRV-01"] = {"status": "CLEAN", "critical": true, "isolated": false, "scanned": false}
+	NetworkState.host_states["DB-SRV-01"] = {"status": "CLEAN", "critical": true, "isolated": false, "scanned": false}
+	# Restore initial infected host
+	NetworkState.host_states["WORKSTATION-45"] = {"status": "INFECTED", "critical": false, "isolated": false, "scanned": false}
+	
 	NetworkState._discover_hosts_from_resources()
 
 func test_get_host_state():

@@ -6,6 +6,7 @@ extends Node
 # Metrics to track during the shift
 var metrics: Dictionary = {
 	"tickets_completed": 0,
+	"tickets_ignored": 0,
 	"total_completion_time": 0.0,
 	"avg_completion_time": 0.0,
 	"risks_taken": 0,          # e.g., approving malicious emails, missing steps
@@ -16,10 +17,15 @@ var metrics: Dictionary = {
 
 # Definitions for the archetypes
 var ARCHETYPE_DEFINITIONS = {
+	"Negligent": {
+		"description": "You have failed to address critical security alerts. Your lack of action has left the organization vulnerable to multiple breaches and data loss. This level of passivity is unacceptable in a security environment.",
+		"feedback": "IMMEDIATE REVIEW REQUIRED. You are currently a liability to the SOC. Security is a proactive role; doing nothing is a choice with consequences.",
+		"condition": func(m): return m.tickets_ignored > 0 and (m.tickets_completed == 0 or m.tickets_ignored > m.tickets_completed)
+	},
 	"By-the-Book": {
 		"description": "You are a meticulous and thorough analyst. You follow procedure to the letter, ensuring every detail is checked. This results in very few mistakes, but can be slow.",
 		"feedback": "Your meticulousness is a strong asset, though consider efficiency in less critical situations.",
-		"condition": func(m): return m.risks_taken <= 1 and m.avg_completion_time > 150.0
+		"condition": func(m): return m.risks_taken <= 1 and m.avg_completion_time > 150.0 and m.tickets_ignored == 0
 	},
 	"Pragmatic": {
 		"description": "You are a balanced and efficient analyst. You know when to follow the rules and when to cut corners for the sake of speed, making you effective but occasionally prone to risk.",
@@ -40,12 +46,14 @@ func _ready():
 	# Connect to signals from other systems to gather data
 	if TicketManager:
 		TicketManager.ticket_completed.connect(_on_ticket_completed)
+		TicketManager.ticket_ignored.connect(_on_ticket_ignored)
 	if ConsequenceEngine:
 		ConsequenceEngine.consequence_triggered.connect(_on_consequence_triggered)
 
 func reset_metrics():
 	metrics = {
 		"tickets_completed": 0,
+		"tickets_ignored": 0,
 		"total_completion_time": 0.0,
 		"avg_completion_time": 0.0,
 		"risks_taken": 0,
@@ -67,6 +75,10 @@ func _on_ticket_completed(ticket: TicketResource, completion_type: String, time_
 		metrics.risks_taken += 1
 	
 	print("ArchetypeAnalyzer: Logged ticket completion. Time: %.1fs, Risks: %d" % [time_taken, metrics.risks_taken])
+
+func _on_ticket_ignored(ticket: TicketResource):
+	metrics.tickets_ignored += 1
+	print("ArchetypeAnalyzer: Logged ignored ticket. Total: ", metrics.tickets_ignored)
 
 func _on_consequence_triggered(consequence_type: String, details: Dictionary):
 	metrics.consequences_triggered += 1

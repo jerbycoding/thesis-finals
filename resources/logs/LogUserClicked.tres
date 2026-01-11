@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="LogResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/logs/LogResource.gd" id="1_log"]
+
+[resource]
+script = ExtResource("1_log")
+log_id = "LOG-USER-007"
+timestamp = "14:30:10"
+source = "Email Gateway"
+category = "Security"
+message = "User clicked suspicious link in phishing email"
+severity = 4
+related_ticket = "PHISH-001"
+ip_address = ""
+hostname = "workstation-12"

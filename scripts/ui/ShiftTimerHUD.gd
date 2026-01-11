@@ -1,7 +1,7 @@
 # shift_timer_hud.gd
 extends Control
 
-@onready var timer_label: Label = $TimerLabel
+@onready var timer_label: Label = %TimerLabel
 
 const SHIFT_DURATION = 60.0 # 1 minute for testing
 

@@ -12,7 +12,8 @@ script = ExtResource("1_email")
 layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
-color = Color(0.070588, 0.082353, 0.14902, 0.8)
+mouse_filter = 1
+color = Color(0.0392157, 0.0392157, 0.101961, 0.9)
 
 [node name="VBoxContainer" type="VBoxContainer" parent="ColorRect"]
 layout_mode = 0
@@ -53,6 +54,7 @@ layout_mode = 2
 size_flags_vertical = 3
 
 [node name="EmailList" type="VBoxContainer" parent="ColorRect/VBoxContainer/EmailViewContainer/InboxPanel/MarginContainer/VBoxContainer/ScrollContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 
@@ -68,21 +70,25 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="PlaceholderLabel" type="Label" parent="ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "Select an email to view details"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="EmailDetailView" type="VBoxContainer" parent="ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
 visible = false
 layout_mode = 2
 
 [node name="SubjectLabel" type="Label" parent="ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer/EmailDetailView"]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 18
 text = "Subject: [No Subject]"
 
 [node name="SenderLabel" type="Label" parent="ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer/EmailDetailView"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "From: [No Sender]"
 
@@ -90,11 +96,13 @@ text = "From: [No Sender]"
 layout_mode = 2
 
 [node name="BodyLabel" type="Label" parent="ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer/EmailDetailView"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "[Email body will appear here]"
 autowrap_mode = 3
 
 [node name="AttachmentsLabel" type="Label" parent="ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer/EmailDetailView"]
+unique_name_in_owner = true
 visible = false
 layout_mode = 2
 text = "Attachments: None"
@@ -115,16 +123,19 @@ text = "Inspection Tools:"
 layout_mode = 2
 
 [node name="ViewHeadersButton" type="Button" parent="ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer/EmailDetailView/InspectionTools/HBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "View Headers"
 
 [node name="ScanAttachmentsButton" type="Button" parent="ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer/EmailDetailView/InspectionTools/HBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Scan Attachments"
 
 [node name="CheckLinksButton" type="Button" parent="ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer/EmailDetailView/InspectionTools/HBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Check Links"
@@ -135,6 +146,7 @@ layout_mode = 2
 size_flags_vertical = 3
 
 [node name="InspectionResults" type="RichTextLabel" parent="ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer/EmailDetailView/InspectionTools/InspectionResultsContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -145,19 +157,23 @@ fit_content = true
 layout_mode = 2
 
 [node name="DecisionButtons" type="HBoxContainer" parent="ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer/EmailDetailView"]
+unique_name_in_owner = true
 layout_mode = 2
 
 [node name="ApproveButton" type="Button" parent="ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer/EmailDetailView/DecisionButtons"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Approve (Deliver)"
 
 [node name="QuarantineButton" type="Button" parent="ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer/EmailDetailView/DecisionButtons"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Quarantine"
 
 [node name="EscalateButton" type="Button" parent="ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer/EmailDetailView/DecisionButtons"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Escalate"

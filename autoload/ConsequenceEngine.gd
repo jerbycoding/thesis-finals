@@ -17,20 +17,22 @@ var npc_relationships: Dictionary = {}
 
 
 # Consequence types
-
 enum ConsequenceType {
-
 	FOLLOWUP_TICKET,
-
 	SECURITY_BREACH,
-
 	TOOL_DISABLED,
-
 	REPUTATION_LOSS
-
 }
 
-
+# Standardized ID Templates to avoid Magic Strings
+const CONSEQUENCE_IDS = {
+	"MAJOR_BREACH": "MAJOR-BREACH-FOLLOWUP",
+	"INCIDENT_ESCALATION": "INCIDENT-ESCALATION-FOLLOWUP",
+	"USER_COMPLAINT": "USER-COMPLAINT-FOLLOWUP",
+	"SERVICE_OUTAGE": "SERVICE-OUTAGE-FOLLOWUP",
+	"MALWARE_CLEANUP": "MALWARE-CLEANUP-FOLLOWUP",
+	"DATA_BREACH": "DATA-BREACH-CRITICAL"
+}
 
 func update_npc_relationship(npc_id: String, change: float):
 	if not npc_relationships.has(npc_id):
@@ -66,6 +68,7 @@ func _ready():
 	# Connect to TicketManager to listen for ticket completion events
 	if TicketManager:
 		TicketManager.ticket_completed.connect(_on_ticket_completed_by_manager)
+		TicketManager.ticket_ignored.connect(_on_ticket_ignored)
 
 	# Connect to EmailSystem for email decisions
 	if EmailSystem:
@@ -82,7 +85,38 @@ func _ready():
 
 func _on_critical_host_isolated(hostname: String):
 	# This new handler creates a consequence when the terminal isolates a critical host.
-	_schedule_followup_ticket("SERVICE-OUTAGE", 20.0, "Service outage on " + hostname + " due to network isolation.")
+	_schedule_followup_ticket(CONSEQUENCE_IDS.SERVICE_OUTAGE, 20.0, "Service outage on " + hostname + " due to network isolation.")
+
+func _on_ticket_ignored(ticket: TicketResource):
+	print("🚨 ConsequenceEngine: Ticket IGNORED (Timed out): ", ticket.ticket_id)
+	
+	# Log the inaction as a choice for archetype analysis
+	var choice_data = {
+		"type": "ticket_ignored",
+		"ticket_id": ticket.ticket_id,
+		"severity": ticket.severity,
+		"category": ticket.category,
+		"timestamp": Time.get_ticks_msec()
+	}
+	choice_log.append(choice_data)
+	
+	# Penalize NPC relationships based on severity
+	match ticket.severity:
+		"Critical":
+			update_npc_relationship("ciso", -0.5)
+			_schedule_followup_ticket(CONSEQUENCE_IDS.MAJOR_BREACH, 15.0, "Major security breach due to ignored critical alert: " + ticket.title)
+		"High":
+			update_npc_relationship("ciso", -0.3)
+			update_npc_relationship("senior_analyst", -0.2)
+			_schedule_followup_ticket(CONSEQUENCE_IDS.INCIDENT_ESCALATION, 30.0, "Security incident escalated due to ignored high-priority alert.")
+		"Medium":
+			update_npc_relationship("senior_analyst", -0.1)
+			_schedule_followup_ticket(CONSEQUENCE_IDS.USER_COMPLAINT, 45.0, "Users reporting issues related to unaddressed alert.")
+		_:
+			# Low severity ignored might just be a small trust hit
+			update_npc_relationship("it_support", -0.05)
+
+	consequence_triggered.emit("ticket_ignored", {"ticket_id": ticket.ticket_id, "severity": ticket.severity})
 
 
 func _on_email_decision_processed(email: EmailResource, decision: String, inspection_state: Dictionary):
@@ -99,14 +133,14 @@ func _on_email_decision_processed(email: EmailResource, decision: String, inspec
 		# Spear phishing has more severe consequences (data breach)
 		if is_spear_phishing:
 			print("🚨 SPEAR PHISHING DETECTED: Approved spear phishing email!")
-			_schedule_followup_ticket("DATA-BREACH", 120.0, "Data breach from approved spear phishing email - delayed detection")
+			_schedule_followup_ticket(CONSEQUENCE_IDS.DATA_BREACH, 120.0, "Data breach from approved spear phishing email - delayed detection")
 		else:
-			_schedule_followup_ticket("MALWARE-OUTBREAK", 30.0, "Malware outbreak from approved malicious email")
+			_schedule_followup_ticket(CONSEQUENCE_IDS.MALWARE_CLEANUP, 30.0, "Malware outbreak from approved malicious email")
 	
 	elif not email.is_malicious and decision == "quarantine":
 		# Quarantined legitimate email - spawn user complaint
 		print("⚠ CONSEQUENCE: Quarantined legitimate email!")
-		_schedule_followup_ticket("USER-COMPLAINT", 60.0, "User complaint: legitimate email quarantined")
+		_schedule_followup_ticket(CONSEQUENCE_IDS.USER_COMPLAINT, 60.0, "User complaint: legitimate email quarantined")
 	
 	elif email.is_malicious and decision == "quarantine":
 		# Check for hidden risks on the associated ticket

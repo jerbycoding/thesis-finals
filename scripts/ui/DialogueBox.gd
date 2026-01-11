@@ -10,40 +10,16 @@ var current_line_index: int = 0
 var npc_id: String = ""
 
 
-var portrait_label: Label = null
-var name_label: Label = null
-var text_label: Label = null
-var choices_container: VBoxContainer = null
+@onready var portrait_label: Label = %PortraitLabel
+@onready var name_label: Label = %NameLabel
+@onready var text_label: RichTextLabel = %TextLabel
+@onready var choices_container: VBoxContainer = %ChoicesContainer
+@onready var main_panel: PanelContainer = %MainPanel
 
 func _ready():
+	# Start hidden
 	hide()
-	
-	# Wait for scene tree to be ready before finding nodes
-	await get_tree().process_frame
-	
-	# Find nodes manually (more reliable for dynamically instantiated scenes)
-	portrait_label = get_node_or_null("PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/PortraitLabel")
-	name_label = get_node_or_null("PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/NameLabel")
-	text_label = get_node_or_null("PanelContainer/MarginContainer/VBoxContainer/TextLabel")
-	choices_container = get_node_or_null("PanelContainer/MarginContainer/VBoxContainer/ChoicesContainer")
-	
-	# Fallback: use find_child if path-based lookup fails
-	if not portrait_label:
-		portrait_label = find_child("PortraitLabel", true, false)
-	if not name_label:
-		name_label = find_child("NameLabel", true, false)
-	if not text_label:
-		text_label = find_child("TextLabel", true, false)
-	if not choices_container:
-		choices_container = find_child("ChoicesContainer", true, false)
-	
-	# Debug: Check if nodes were found
-	if not portrait_label or not name_label or not text_label or not choices_container:
-		print("⚠ WARNING: Some dialogue nodes not found!")
-		print("  - portrait_label: ", portrait_label != null)
-		print("  - name_label: ", name_label != null)
-		print("  - text_label: ", text_label != null)
-		print("  - choices_container: ", choices_container != null)
+	modulate.a = 0
 
 func show_dialogue(dialogue_data: Dictionary, npc: String = ""):
 	npc_id = npc
@@ -53,30 +29,12 @@ func show_dialogue(dialogue_data: Dictionary, npc: String = ""):
 	# Release mouse cursor for dialogue interaction
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	
-	# The await here was causing issues during scene transitions.
-	# Since the DialogueBox is now a persistent singleton, its nodes are
-	# guaranteed to be ready after its own _ready() function has completed.
-	# await get_tree().process_frame
+	# Initial state for animation
+	show()
+	modulate.a = 0
 	
-	# Ensure nodes are ready - find them if not already found
-	if not portrait_label:
-		portrait_label = get_node_or_null("PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/PortraitLabel")
-	if not name_label:
-		name_label = get_node_or_null("PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/NameLabel")
-	if not text_label:
-		text_label = get_node_or_null("PanelContainer/MarginContainer/VBoxContainer/TextLabel")
-	if not choices_container:
-		choices_container = get_node_or_null("PanelContainer/MarginContainer/VBoxContainer/ChoicesContainer")
-	
-	# Final check - if still null, try find_child (searches recursively)
-	if not portrait_label:
-		portrait_label = find_child("PortraitLabel", true, false)
-	if not name_label:
-		name_label = find_child("NameLabel", true, false)
-	if not text_label:
-		text_label = find_child("TextLabel", true, false)
-	if not choices_container:
-		choices_container = find_child("ChoicesContainer", true, false)
+	# Ensure nodes are ready
+	_ensure_nodes_ready()
 	
 	# Set NPC name (with null check)
 	if name_label:
@@ -94,7 +52,22 @@ func show_dialogue(dialogue_data: Dictionary, npc: String = ""):
 	
 	# Show first line
 	_show_current_line()
-	show()
+	
+	# Animate in (Alpha fade only to avoid position conflicts)
+	var tween = create_tween()
+	tween.tween_property(self, "modulate:a", 1.0, 0.3)
+
+func _ensure_nodes_ready():
+	if not portrait_label:
+		portrait_label = %PortraitLabel
+	if not name_label:
+		name_label = %NameLabel
+	if not text_label:
+		text_label = %TextLabel
+	if not choices_container:
+		choices_container = %ChoicesContainer
+	if not main_panel:
+		main_panel = %MainPanel
 
 func _show_current_line():
 	if not current_dialogue.has("lines"):
@@ -124,9 +97,10 @@ func _show_current_line():
 		# Show hint text instead of button (keyboard only)
 		if choices_container:
 			var hint_label = Label.new()
-			hint_label.text = "Press Enter or Space to continue..."
-			hint_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-			hint_label.add_theme_color_override("font_color", Color(0.7, 0.7, 0.7))
+			hint_label.text = " [ PRESS ENTER TO CONTINUE ] "
+			hint_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+			hint_label.add_theme_color_override("font_color", Color(0.2, 1.0, 0.2, 0.6))
+			hint_label.add_theme_font_size_override("font_size", 14)
 			choices_container.add_child(hint_label)
 
 func _show_choices(choices: Array):
@@ -178,7 +152,13 @@ func _on_choice_selected(choice_index: int):
 			
 			# Move to next line or close
 			if choice.has("next_line"):
-				current_line_index = choice["next_line"]
+				var next_idx = choice["next_line"]
+				if next_idx >= 0 and next_idx < lines.size():
+					current_line_index = next_idx
+				else:
+					push_error("Dialogue Error: Choice 'next_line' index %d is out of bounds (Size: %d)" % [next_idx, lines.size()])
+					_close_dialogue()
+					return
 			else:
 				current_line_index += 1
 			

@@ -6,6 +6,7 @@ var open_windows: Dictionary = {}  # window_id: WindowFrame
 var next_window_position: Vector2 = Vector2(50, 50)
 var window_z_index_base: int = 10
 var focused_window: Control = null
+var window_container: CanvasLayer = null
 
 # App configuration dictionaries (moved from computer_desktop.gd)
 const APP_PATHS: Dictionary = {
@@ -32,6 +33,11 @@ const APP_SIZES: Dictionary = {
 var window_frame_scene = preload("res://scenes/2d/apps/components/WindowFrame.tscn")
 
 func _ready():
+	# Create a persistent CanvasLayer for windows to ensure they stay on top
+	window_container = CanvasLayer.new()
+	window_container.name = "DesktopWindowLayer"
+	window_container.layer = 10 # Higher than main scene and desktop background
+	get_tree().root.call_deferred("add_child", window_container)
 	print("DesktopWindowManager ready.")
 
 func open_app(app_name: String, force_new: bool = false):
@@ -47,6 +53,8 @@ func open_app(app_name: String, force_new: bool = false):
 		var existing_window = _find_window_by_app(app_name)
 		if existing_window and is_instance_valid(existing_window):
 			print("DesktopWindowManager: App already open, focusing and bringing to front")
+			window_container.visible = true # Ensure the whole layer is visible
+			existing_window.visible = true 
 			_focus_window(existing_window)
 			existing_window.bring_to_front()
 			return
@@ -73,9 +81,12 @@ func open_app(app_name: String, force_new: bool = false):
 	window.window_focused.connect(_on_window_focused)
 	window.window_closed.connect(_on_window_closed)
 	
-	# Add to root viewport
-	get_tree().root.add_child(window)
-	print("DesktopWindowManager: Window added to root: ", window.name)
+	# Ensure the layer is visible before adding
+	window_container.visible = true
+	
+	# Add to layer
+	window_container.add_child(window)
+	print("DesktopWindowManager: Window added to layer: ", window.name)
 	
 	# Wait for window to be ready
 	await get_tree().process_frame
@@ -165,6 +176,20 @@ func close_all_windows():
 			window.queue_free()
 	open_windows.clear()
 	next_window_position = Vector2(50, 50) # Reset position when all closed
+
+func hide_all_windows():
+	# Hide the entire window layer and pause its processing
+	if is_instance_valid(window_container):
+		window_container.visible = false
+		window_container.process_mode = Node.PROCESS_MODE_DISABLED
+	print("DesktopWindowManager: All windows hidden and paused.")
+
+func show_all_windows():
+	# Show the window layer and resume its processing
+	if is_instance_valid(window_container):
+		window_container.visible = true
+		window_container.process_mode = Node.PROCESS_MODE_INHERIT
+	print("DesktopWindowManager: All windows shown and resumed.")
 
 func _find_window_by_app(app_name: String) -> Control:
 	for window_id in open_windows:

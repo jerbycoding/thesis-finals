@@ -1,7 +1,9 @@
 # Godot 4+ specific ignores
 .godot/
 /android/
-.sprint/
-.addons/
-.refactorsprint/
+sprint/
+addons/
+refactorsprint/
 commands.txt
+GEMINI.mdg
+reports/

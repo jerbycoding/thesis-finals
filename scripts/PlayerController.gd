@@ -5,33 +5,28 @@ extends CharacterBody3D
 @export var mouse_sensitivity = 0.002
 
 var camera_rotation = Vector2.ZERO
-var interaction_prompt = null
 var near_computer = null
 var near_npc = null
 var movement_enabled = true
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	call_deferred("_setup_interaction_prompt")
-
+	
+	if %InteractionPrompt:
+		%InteractionPrompt.hide()
+		%InteractionPrompt.modulate.a = 0
 
 # Connect to GameState signals
 	if GameState:
 		GameState.game_mode_changed.connect(_on_game_mode_changed)
-func _setup_interaction_prompt():
-	print("Setting up interaction prompt")
-	interaction_prompt = preload("res://scenes/ui/InteractionPrompt.tscn").instantiate()
-	add_child(interaction_prompt)
-	interaction_prompt.hide_prompt()
-	print("Prompt instantiated: ", interaction_prompt != null)
 
 func _on_game_mode_changed(mode):
 	print("Game mode changed to: ", mode)
 	if mode == GameState.GameMode.MODE_2D or mode == GameState.GameMode.MODE_DIALOGUE:
 		movement_enabled = false
 		print("Movement disabled")
-		if interaction_prompt:
-			interaction_prompt.hide_prompt()
+		if %InteractionPrompt:
+			%InteractionPrompt.hide_prompt()
 	else:
 		movement_enabled = true
 		print("Movement enabled")
@@ -84,11 +79,14 @@ func set_near_computer(computer_node, is_near):
 	
 	if is_near:
 		near_computer = computer_node
-		interaction_prompt.show_prompt()
+		if %InteractionPrompt:
+			%InteractionPrompt.set_text("Use Workstation")
+			%InteractionPrompt.show_prompt()
 	else:
 		if near_computer == computer_node:
 			near_computer = null
-		interaction_prompt.hide_prompt()
+		if %InteractionPrompt:
+			%InteractionPrompt.hide_prompt()
 
 func set_near_npc(npc_node, is_near):
 	if not movement_enabled:
@@ -96,8 +94,12 @@ func set_near_npc(npc_node, is_near):
 	
 	if is_near:
 		near_npc = npc_node
-		interaction_prompt.show_prompt()
+		if %InteractionPrompt:
+			var npc_name = near_npc.npc_name if "npc_name" in near_npc else "NPC"
+			%InteractionPrompt.set_text("Talk to " + npc_name)
+			%InteractionPrompt.show_prompt()
 	else:
 		if near_npc == npc_node:
 			near_npc = null
-		interaction_prompt.hide_prompt()
+		if %InteractionPrompt:
+			%InteractionPrompt.hide_prompt()

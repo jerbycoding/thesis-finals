@@ -1,38 +1,40 @@
 extends PanelContainer
 
 signal card_selected(ticket: TicketResource, card_instance: Control)
+signal completion_requested(ticket: TicketResource)
 
-@onready var title_label: Label = $MarginContainer/VBoxContainer/TitleLabel
-@onready var severity_label: Label = $MarginContainer/VBoxContainer/HBoxContainer/SeverityLabel
-@onready var time_label: Label = $MarginContainer/VBoxContainer/HBoxContainer/TimeLabel
-@onready var evidence_label: Label = $MarginContainer/VBoxContainer/HBoxContainer/EvidenceLabel
-@onready var complete_button: Button = $MarginContainer/VBoxContainer/HBoxContainer/CompleteButton
+@onready var title_label: Label = %TitleLabel
+@onready var severity_label: Label = %SeverityLabel
+@onready var time_label: Label = %TimeLabel
+@onready var evidence_label: Label = %EvidenceLabel
+@onready var complete_button: Button = %CompleteButton
 
 var ticket: TicketResource
-# var time_node: Label = null # REMOVED
-var completion_modal: AcceptDialog = null
+var update_timer: Timer
 
 func _ready():
 	# Ensure card is visible
 	visible = true
 	modulate = Color.WHITE
-	custom_minimum_size = Vector2(400, 80)
 	
 	# Setup completion button
 	if complete_button:
 		complete_button.pressed.connect(_on_complete_pressed)
 	
-	# Load completion modal
-	var modal_scene = preload("res://scenes/2d/apps/components/CompletionModal.tscn")
-	if modal_scene:
-		completion_modal = modal_scene.instantiate()
-		add_child(completion_modal)
-		completion_modal.completion_selected.connect(_on_completion_selected)
-	
 	# Ensure the card is clickable
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	
-	print("DEBUG: TicketCard _ready() - visible: ", visible, " size: ", size)
+	# Optimization: Use a timer instead of _process
+	update_timer = Timer.new()
+	update_timer.wait_time = 1.0
+	update_timer.timeout.connect(_on_update_timer_timeout)
+	add_child(update_timer)
+	update_timer.start()
+
+func _on_update_timer_timeout():
+	if ticket and is_instance_valid(ticket):
+		_update_time_display()
+		_update_evidence_display()
 
 func _gui_input(event: InputEvent):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
@@ -75,27 +77,17 @@ func set_ticket(t: TicketResource):
 	
 	print("DEBUG: TicketCard set_ticket complete - Title: ", title_label.text, " Visible: ", visible)
 
-func _process(delta):
-	if ticket and time_label and is_instance_valid(ticket):
-		# Update ticket time from TicketManager if available
-		if TicketManager:
-			var active_ticket = TicketManager.get_ticket_by_id(ticket.ticket_id)
-			if active_ticket:
-				ticket.base_time = active_ticket.base_time
-			else:
-				# Ticket is no longer active, stop processing to prevent warnings.
-				set_process(false)
-				return
-		_update_time_display()
-		_update_evidence_display()
-
 func _update_time_display():
 	if not ticket or not time_label:
 		return
 		
-	var remaining_time = max(0, ticket.base_time)
+	# Calculate remaining time from expiry timestamp
+	var current_time = Time.get_ticks_msec()
+	var remaining_msec = max(0, ticket.expiry_timestamp - current_time)
+	var remaining_time = remaining_msec / 1000.0
+	
 	var total_seconds = int(remaining_time)
-	var minutes = total_seconds / 60  # In GDScript 4.x, use // for integer division, but / works with int
+	var minutes = total_seconds / 60
 	var seconds = total_seconds % 60
 	
 	# Format: "MM:SS" or "X min Y sec" or just "X sec"
@@ -137,14 +129,6 @@ func _on_complete_pressed():
 	print("DEBUG: Complete button pressed for ticket: ", ticket.ticket_id)
 	if AudioManager:
 		AudioManager.play_sfx(AudioManager.SFX.button_click)
-	if completion_modal and ticket:
-		completion_modal.show_for_ticket(ticket)
-	else:
-		print("ERROR: Cannot show completion modal - modal or ticket is null")
-
-func _on_completion_selected(completion_type: String):
-	print("DEBUG: Completion type selected: ", completion_type, " for ticket: ", ticket.ticket_id)
-	if TicketManager and ticket:
-		TicketManager.complete_ticket(ticket.ticket_id, completion_type)
-		# The ticket will be removed from the queue by TicketManager
-		# The card will be cleaned up when the ticket list refreshes
+	
+	# Instead of showing a local modal, we tell the app to show it
+	completion_requested.emit(ticket)

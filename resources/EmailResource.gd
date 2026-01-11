@@ -51,4 +51,9 @@ func get_header_status() -> Dictionary:
 		"dmarc": "PASS"
 	})
 
-
+func validate() -> bool:
+	if email_id.is_empty():
+		return false
+	if sender.is_empty():
+		return false
+	return true
