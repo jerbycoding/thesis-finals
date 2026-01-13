@@ -29,7 +29,7 @@ The core concept places the player in the role of a Security Operations Center (
 *   **Scene-Based Tools:** The 2D analysis tools (SIEM, Email Analyzer, Terminal) are built as individual scenes (`.tscn`) with corresponding GDScript files for their logic, located in `scenes/2d/apps/` and `scripts/2d/apps/`.
 
 ## 2. Building and Running
-
+##
 This is a standard Godot project. There are no external build scripts or package managers required.
 
 ### Running the Game:
