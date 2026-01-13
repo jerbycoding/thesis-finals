@@ -112,7 +112,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5.71847)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.53351, 0, 0)
 
 [node name="NPC_SeniorAnalyst" parent="." instance=ExtResource("3_senior")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.18293, 0, -6.20226)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.18293, 0, -7.13687)
 
 [node name="NPC_ITSupport" parent="." instance=ExtResource("4_it")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.59343, 0, 6.57912)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.58184, 0, -7.15327)

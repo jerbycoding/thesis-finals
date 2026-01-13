@@ -20,22 +20,22 @@ var ARCHETYPE_DEFINITIONS = {
 	"Negligent": {
 		"description": "You have failed to address critical security alerts. Your lack of action has left the organization vulnerable to multiple breaches and data loss. This level of passivity is unacceptable in a security environment.",
 		"feedback": "IMMEDIATE REVIEW REQUIRED. You are currently a liability to the SOC. Security is a proactive role; doing nothing is a choice with consequences.",
-		"condition": func(m): return m.tickets_ignored > 0 and (m.tickets_completed == 0 or m.tickets_ignored > m.tickets_completed)
+		"condition": func(m): return m.tickets_ignored > 0 and m.tickets_completed <= m.tickets_ignored
 	},
 	"By-the-Book": {
 		"description": "You are a meticulous and thorough analyst. You follow procedure to the letter, ensuring every detail is checked. This results in very few mistakes, but can be slow.",
 		"feedback": "Your meticulousness is a strong asset, though consider efficiency in less critical situations.",
-		"condition": func(m): return m.risks_taken <= 1 and m.avg_completion_time > 150.0 and m.tickets_ignored == 0
-	},
-	"Pragmatic": {
-		"description": "You are a balanced and efficient analyst. You know when to follow the rules and when to cut corners for the sake of speed, making you effective but occasionally prone to risk.",
-		"feedback": "Your balanced approach is effective. Continue to refine your risk assessment skills.",
-		"condition": func(m): return m.risks_taken > 1 and m.risks_taken < 4 and m.avg_completion_time <= 150.0 and m.avg_completion_time >= 90.0 # More specific condition
+		"condition": func(m): return m.tickets_completed > 0 and m.risks_taken == 0 and m.tickets_ignored == 0
 	},
 	"Cowboy": {
 		"description": "You are a fast and decisive analyst, prioritizing speed above all else. You close tickets at a record pace, but your methods often invite unnecessary risk and consequences.",
 		"feedback": "Your speed is impressive, but carefully consider the long-term consequences of rapid resolutions.",
-		"condition": func(m): return m.risks_taken >= 4 or m.avg_completion_time < 90.0
+		"condition": func(m): return m.tickets_completed > 0 and (m.risks_taken >= 3 or (m.risks_taken > 0 and m.avg_completion_time < 60.0))
+	},
+	"Pragmatic": {
+		"description": "You are a balanced and efficient analyst. You know when to follow the rules and when to cut corners for the sake of speed, making you effective but occasionally prone to risk.",
+		"feedback": "Your balanced approach is effective. Continue to refine your risk assessment skills.",
+		"condition": func(m): return m.tickets_completed > 0
 	}
 }
 
@@ -66,6 +66,10 @@ func reset_metrics():
 # --- Data Collection Functions ---
 
 func _on_ticket_completed(ticket: TicketResource, completion_type: String, time_taken: float):
+	# Ignore timeouts - they are handled by _on_ticket_ignored
+	if completion_type == "timeout":
+		return
+
 	metrics.tickets_completed += 1
 	metrics.total_completion_time += time_taken
 	metrics.avg_completion_time = metrics.total_completion_time / metrics.tickets_completed

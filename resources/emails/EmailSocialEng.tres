@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="EmailResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/EmailResource.gd" id="1_email"]
+
+[resource]
+script = ExtResource("1_email")
+email_id = "EMAIL-SOCIAL-001"
+sender = "IT Support (Internal)"
+subject = "Urgent: Mandatory Password Reset"
+body = "Hello, our systems indicate your password will expire in 2 hours. Please visit http://company-portal-auth.com to reset it immediately to avoid lockout.\n\nRegards,\nIT Helpdesk"
+attachments = Array[String]([])
+headers = {
+"status": {
+"dkim": "FAIL",
+"dmarc": "FAIL",
+"spf": "SOFTFAIL"
+}
+}
+is_malicious = true
+is_urgent = true
+clues = Array[String](["suspicious_link", "spoofed_sender", "suspicious_domain"])
+related_ticket = "SOCIAL-001"
+suspicious_ip = "192.168.50.12"
+suspicious_domain = "company-portal-auth.com"
+

@@ -7,13 +7,17 @@ var notification_text: String = ""
 var notification_type: String = "info"  # "info", "success", "warning", "error"
 var display_duration: float = 4.0
 
-@onready var main_panel: PanelContainer = %MainPanel
-@onready var label: Label = %Label
-@onready var icon_label: Label = %IconLabel
+@onready var main_panel: PanelContainer = get_node_or_null("%MainPanel") if has_node("%MainPanel") else get_node_or_null("MainPanel")
+@onready var label: Label = get_node_or_null("%Label") if has_node("%Label") else get_node_or_null("MainPanel/MarginContainer/HBoxContainer/Label")
+@onready var icon_label: Label = get_node_or_null("%IconLabel") if has_node("%IconLabel") else get_node_or_null("MainPanel/MarginContainer/HBoxContainer/IconLabel")
 
 func _ready():
 	# All properties have been set by NotificationManager before this point.
 	# Now, apply them to the UI nodes.
+	
+	if not label or not icon_label or not main_panel:
+		print("DEBUG NotificationToast: Hierarchy check:")
+		_print_hierarchy(self, 0)
 	
 	if label:
 		label.text = notification_text
@@ -27,6 +31,13 @@ func _ready():
 	timer.timeout.connect(fade_out)
 	
 	fade_in()
+
+func _print_hierarchy(node: Node, indent: int):
+	var prefix = ""
+	for i in range(indent): prefix += "  "
+	print(prefix + "- " + node.name + " (" + node.get_class() + ")")
+	for child in node.get_children():
+		_print_hierarchy(child, indent + 1)
 
 func _setup_style():
 	var style = StyleBoxFlat.new()

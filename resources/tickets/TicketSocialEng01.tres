@@ -1,6 +1,6 @@
-[gd_resource type="Resource" script_class="TicketResource" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="TicketResource" load_steps=2 format=3 uid="uid://2ltfldpyw2po"]
 
-[ext_resource type="Script" path="res://resources/tickets/TicketResource.gd" id="1_ticket"]
+[ext_resource type="Script" uid="uid://ccptkdfdnunvq" path="res://resources/tickets/TicketResource.gd" id="1_ticket"]
 
 [resource]
 script = ExtResource("1_ticket")
@@ -9,8 +9,8 @@ title = "Social Engineering Attempt Reported"
 description = "A user reported a call from someone impersonating IT Support, asking for their password. Investigate if similar calls were made and alert users."
 severity = "Medium"
 category = "Social Engineering"
-steps = ["Check call logs for similar suspicious calls (SIEM)", "Draft a company-wide security alert (Email)", "Inform Corporate Voice to update security awareness"]
+steps = Array[String](["Check call logs for similar suspicious calls (SIEM)", "Draft a company-wide security alert (Email)", "Inform Corporate Voice to update security awareness"])
 required_tool = "none"
-base_time = 180.0
-hidden_risks = ["Ignoring user report", "Misidentifying legitimate IT calls"]
-required_log_ids = []
+base_time = 60.0
+hidden_risks = Array[String](["Ignoring user report", "Misidentifying legitimate IT calls"])
+required_log_ids = Array[String](["LOG-EMAIL-002"])

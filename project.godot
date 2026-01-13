@@ -25,7 +25,6 @@ LogSystem="*res://autoload/LogSystem.gd"
 EmailSystem="*res://autoload/EmailSystem.gd"
 TerminalSystem="*res://autoload/TerminalSystem.gd"
 ConsequenceEngine="*res://autoload/ConsequenceEngine.gd"
-NotificationManager="*res://scripts/2d/NotificationManager.gd"
 NarrativeDirector="*res://autoload/NarrativeDirector.gd"
 NetworkState="*res://autoload/NetworkState.gd"
 ArchetypeAnalyzer="*res://autoload/ArchetypeAnalyzer.gd"
@@ -36,12 +35,12 @@ DialogueManager="*res://autoload/DialogueManager.gd"
 DesktopWindowManager="*res://autoload/DesktopWindowManager.gd"
 ValidationManager="*res://autoload/ValidationManager.gd"
 FPSManager="*res://autoload/FPSManager.gd"
+NotificationManager="*res://autoload/NotificationManager.gd"
 
 [display]
 
 window/size/mode=3
 window/stretch/aspect="expand"
-window/vsync/vsync_mode=0
 
 [editor]
 

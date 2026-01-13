@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="LogResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/logs/LogResource.gd" id="1_log"]
+
+[resource]
+script = ExtResource("1_log")
+log_id = "LOG-EXFIL-JANE-DOE"
+timestamp = "14:45:30"
+source = "Network"
+category = "Security"
+message = "Unusual data transfer: 5.2GB from 10.0.5.42 to external IP 203.0.113.88."
+severity = 4
+related_ticket = "INSIDER-001"
+ip_address = "10.0.5.42"
+hostname = "WORKSTATION-55"

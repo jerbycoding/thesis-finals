@@ -29,9 +29,10 @@ var ticket_id_map: Dictionary = {
 	"spear_phishing": preload("res://resources/tickets/TicketSpearPhish.tres"),
 	"malware_response": preload("res://resources/tickets/TicketMalwareContainment.tres"),
 	"data_exfil": preload("res://resources/tickets/TicketDataExfiltration.tres"),
-	"ransom_001": preload("res://resources/tickets/TicketRansomware01.tres"),
+	"phishing_campaign": preload("res://resources/tickets/TicketPhishing01.tres"),
 	"insider_001": preload("res://resources/tickets/TicketInsiderThreat01.tres"),
 	"social_001": preload("res://resources/tickets/TicketSocialEng01.tres"),
+	"ransom_001": preload("res://resources/tickets/TicketRansomware01.tres"),
 }
 
 func _ready():
@@ -64,13 +65,11 @@ func _ready():
 	# _load_initial_tickets()
 
 func _on_email_decision_processed(email: EmailResource, decision: String, inspection_state: Dictionary):
-	# Handles completing a ticket when an associated email is correctly actioned.
+	# Handles logging or updating state when an email is processed.
 	if email.is_malicious and decision == "quarantine":
 		if not email.related_ticket.is_empty():
-			# Check if the ticket is still active before completing
-			if get_ticket_by_id(email.related_ticket) != null:
-				print("TicketManager: Completing ticket %s due to correct email quarantine." % email.related_ticket)
-				complete_ticket(email.related_ticket, "compliant")
+			print("TicketManager: Task for ticket %s completed (Email Quarantined). Manual resolution required." % email.related_ticket)
+			# We no longer auto-complete here to allow player strategy choice.
 
 
 func load_state(active_ids: Array, completed_ids: Array):
@@ -136,11 +135,12 @@ func _get_ticket_path_by_id(ticket_id: String) -> String:
 	return ""
 
 func spawn_ticket_by_id(ticket_id: String):
-	if not ticket_id_map.has(ticket_id):
+	var lookup_id = ticket_id.to_lower()
+	if not ticket_id_map.has(lookup_id):
 		print(CorporateVoice.get_formatted_phrase("ticket_id_not_found_map", {"ticket_id": ticket_id}))
 		return
 
-	var ticket_res = ticket_id_map[ticket_id]
+	var ticket_res = ticket_id_map[lookup_id]
 	if ticket_res:
 		var ticket = ticket_res.duplicate()
 		add_ticket(ticket)
@@ -212,6 +212,13 @@ func add_ticket(ticket: TicketResource):
 	
 	# Emit signal for UI to update
 	ticket_added.emit(ticket)
+	
+	# Automatically reveal related emails and logs
+	if EmailSystem and EmailSystem.has_method("reveal_emails_for_ticket"):
+		EmailSystem.reveal_emails_for_ticket(ticket.ticket_id)
+	
+	if LogSystem and LogSystem.has_method("reveal_logs_for_ticket"):
+		LogSystem.reveal_logs_for_ticket(ticket.ticket_id)
 
 func _on_ticket_timeout_timer(ticket_id: String):
 	var active_ticket = get_ticket_by_id(ticket_id)
@@ -340,6 +347,5 @@ func _on_terminal_command_run(command_name: String, args: Array):
 		
 		if ticket_to_complete:
 			print(CorporateVoice.get_phrase("ticket_update_host_isolated"))
-			# Complete the ticket as compliant for now. 
-			# A more advanced system could check if other steps were completed.
-			complete_ticket(ticket_to_complete.ticket_id, "compliant")
+			print("TicketManager: Task for ticket %s completed (Host Isolated). Manual resolution required." % ticket_to_complete.ticket_id)
+			# We no longer auto-complete here to allow player strategy choice.

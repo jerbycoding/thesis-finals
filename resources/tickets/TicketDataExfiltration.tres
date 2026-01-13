@@ -1,6 +1,6 @@
-[gd_resource type="Resource" script_class="TicketResource" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="TicketResource" load_steps=2 format=3 uid="uid://i7o40b562opl"]
 
-[ext_resource type="Script" path="res://resources/tickets/TicketResource.gd" id="1_ticket"]
+[ext_resource type="Script" uid="uid://ccptkdfdnunvq" path="res://resources/tickets/TicketResource.gd" id="1_ticket"]
 
 [resource]
 script = ExtResource("1_ticket")
@@ -9,8 +9,8 @@ title = "Data Exfiltration Alert"
 description = "Suspicious outbound traffic detected. Email contains external IP address. Cross-reference email and SIEM logs to identify data breach."
 severity = "Critical"
 category = "Data Breach"
-steps = ["Check email for suspicious IP address", "Search IP in SIEM logs", "Use Terminal to check host status if needed"]
+steps = Array[String](["Check email for suspicious IP address", "Search IP in SIEM logs", "Use Terminal to check host status if needed"])
 required_tool = "none"
-base_time = 360.0
-hidden_risks = ["Data already exfiltrated → breach confirmed"]
-required_log_ids = ["LOG-EXFIL-001", "LOG-NETWORK-001"]
+base_time = 110.0
+hidden_risks = Array[String](["Data already exfiltrated → breach confirmed"])
+required_log_ids = Array[String](["LOG-EXFIL-001", "LOG-NETWORK-001"])

@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="EmailResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/EmailResource.gd" id="1_email"]
+
+[resource]
+script = ExtResource("1_email")
+email_id = "EMAIL-DATA-EXFIL-WARNING"
+sender = "Security Team"
+subject = "Internal Alert: High Network Traffic"
+body = "Automated monitoring has flagged WORKSTATION-88 for unusual outbound traffic patterns. Please investigate the logs for potential data exfiltration."
+attachments = Array[String]([])
+headers = {
+"status": {
+"dkim": "PASS",
+"dmarc": "PASS",
+"spf": "PASS"
+}
+}
+is_malicious = false
+is_urgent = true
+clues = Array[String]([])
+related_ticket = "DATA-EXFIL-001"
+suspicious_ip = "198.51.100.22"
+suspicious_domain = ""

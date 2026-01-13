@@ -6,6 +6,7 @@ extends Node
 signal npc_interaction_requested(npc_id, dialogue_id)
 signal spawn_ticket_requested(ticket_id)
 signal spawn_consequence_requested(consequence_id)
+signal world_event(event_id: String, active: bool, duration: float)
 signal shift_started
 signal shift_ended(results: Dictionary)
 
@@ -13,23 +14,31 @@ signal shift_ended(results: Dictionary)
 # Events are triggered by time or player actions.
 var first_shift_arc = [
 	{"time": 4, "event": "spawn_phishing_ticket", "type": "spawn_ticket", "ticket_id": "phishing_intro"},
+	{"time": 15, "event": "siem_instability", "type": "system_event", "event_id": "SIEM_LAG", "duration": 20.0},
 	# {"time": 240, "event": "senior_analyst_checkin_mid", "type": "npc_interaction", "npc_id": "senior_analyst", "dialogue_id": "checkin_01"}, # Now triggered by event
 	{"time": 24, "event": "spawn_malware_ticket", "type": "spawn_ticket", "ticket_id": "malware_response"},
 	{"time": 36, "event": "ciso_followup", "type": "npc_interaction", "npc_id": "ciso", "dialogue_id": "default"},
-	{"time": 42, "event": "it_support_checkin", "type": "npc_interaction", "npc_id": "it_support", "dialogue_id": "default"},
-	{"time": 54, "event": "final_ciso_briefing", "type": "npc_interaction", "npc_id": "ciso", "dialogue_id": "shift_end"},
-	{"time": 60, "event": "shift_end_report", "type": "shift_end"}
+	{"time": 120, "event": "it_support_checkin", "type": "npc_interaction", "npc_id": "it_support", "dialogue_id": "default"},
+	{"time": 150, "event": "final_ciso_briefing", "type": "npc_interaction", "npc_id": "ciso", "dialogue_id": "shift_end"},
+	{"time": 180, "event": "shift_end_report", "type": "shift_end"}
 ]
 
 var second_shift_arc = [
-	{"time": 60, "event": "spawn_ticket", "type": "spawn_ticket", "ticket_id": "RANSOM-001"},
-	{"time": 180, "event": "npc_interaction", "type": "npc_interaction", "npc_id": "senior_analyst", "dialogue_id": "checkin_second_shift"},
-	{"time": 240, "event": "spawn_ticket", "type": "spawn_ticket", "ticket_id": "INSIDER-001"},
-	{"time": 360, "event": "spawn_ticket", "type": "spawn_ticket", "ticket_id": "SOCIAL-001"},
-	{"time": 480, "event": "shift_end_report", "type": "shift_end"}
+	{"time": 20, "event": "spawn_ticket", "type": "spawn_ticket", "ticket_id": "ransom_001"},
+	{"time": 60, "event": "npc_interaction", "type": "npc_interaction", "npc_id": "senior_analyst", "dialogue_id": "checkin_second_shift"},
+	{"time": 80, "event": "spawn_ticket", "type": "spawn_ticket", "ticket_id": "insider_001"},
+	{"time": 120, "event": "spawn_ticket", "type": "spawn_ticket", "ticket_id": "social_001"},
+	{"time": 180, "event": "shift_end_report", "type": "shift_end"}
+]
+
+var third_shift_arc = [
+	{"time": 15, "event": "spawn_ticket", "type": "spawn_ticket", "ticket_id": "data_exfil"},
+	{"time": 60, "event": "spawn_ticket", "type": "spawn_ticket", "ticket_id": "phishing_campaign"},
+	{"time": 180, "event": "shift_end_report", "type": "shift_end"}
 ]
 
 var current_active_arc: Array = []
+var current_shift_name: String = "first_shift"
 var shift_report_scene = preload("res://scenes/2d/apps/App_ShiftReport.tscn")
 
 var shift_start_time: float = 0.0
@@ -51,12 +60,15 @@ func _ready():
 
 func start_shift(shift_name: String = "first_shift"):
 	print("NarrativeDirector: Starting shift: ", shift_name)
+	current_shift_name = shift_name
 	
 	match shift_name:
 		"first_shift":
 			current_active_arc = first_shift_arc
 		"second_shift":
 			current_active_arc = second_shift_arc
+		"third_shift":
+			current_active_arc = third_shift_arc
 		_:
 			push_error("NarrativeDirector: Unknown shift name: ", shift_name)
 			return
@@ -104,6 +116,16 @@ func get_shift_timer() -> float:
 func is_shift_active() -> bool:
 	return _is_shift_active
 
+func get_current_shift_duration() -> float:
+	if current_active_arc.is_empty():
+		return 0.0
+	
+	# The last event in the arc should be the shift_end
+	var last_event = current_active_arc.back()
+	if last_event.has("time"):
+		return last_event.time
+	return 0.0
+
 func _trigger_event(event_data: Dictionary):
 	print("NarrativeDirector: Triggering event - ", event_data.get("event", "N/A"))
 	match event_data.type:
@@ -113,6 +135,12 @@ func _trigger_event(event_data: Dictionary):
 			emit_signal("spawn_ticket_requested", event_data.ticket_id)
 		"spawn_consequence":
 			emit_signal("spawn_consequence_requested", event_data.consequence_id)
+		"system_event":
+			emit_signal("world_event", event_data.event_id, true, event_data.get("duration", 10.0))
+			# Auto-clear after duration
+			get_tree().create_timer(event_data.get("duration", 10.0)).timeout.connect(
+				func(): emit_signal("world_event", event_data.event_id, false, 0.0)
+			)
 		"shift_end":
 			stop_shift()
 			if ArchetypeAnalyzer:
@@ -185,3 +213,14 @@ func start_second_shift_briefing():
 	print("NarrativeDirector: Briefing room loaded for second shift. Triggering CISO dialogue.")
 	emit_signal("npc_interaction_requested", "ciso", "briefing_second_shift")
 	# The CISO's dialogue will then trigger start_shift("second_shift")
+
+func start_third_shift_briefing():
+	print("NarrativeDirector: Starting third shift briefing sequence.")
+	if _is_shift_active: return
+	
+	TransitionManager.change_scene_to("res://scenes/3d/BriefingRoom.tscn")
+	await TransitionManager.transition_completed
+	
+	print("NarrativeDirector: Briefing room loaded for third shift. Triggering CISO dialogue.")
+	emit_signal("npc_interaction_requested", "ciso", "briefing_third_shift")
+	# The CISO's dialogue will then trigger start_shift("third_shift")

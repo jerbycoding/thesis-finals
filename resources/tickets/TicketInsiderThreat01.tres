@@ -1,6 +1,6 @@
-[gd_resource type="Resource" script_class="TicketResource" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="TicketResource" load_steps=2 format=3 uid="uid://baydndvxdr4nk"]
 
-[ext_resource type="Script" path="res://resources/tickets/TicketResource.gd" id="1_ticket"]
+[ext_resource type="Script" uid="uid://ccptkdfdnunvq" path="res://resources/tickets/TicketResource.gd" id="1_ticket"]
 
 [resource]
 script = ExtResource("1_ticket")
@@ -9,8 +9,8 @@ title = "Suspicious Data Access: Ex-Employee"
 description = "Former employee, 'Jane Doe', accessed sensitive project files an hour after her termination. Investigate her workstation logs for suspicious activity."
 severity = "High"
 category = "Insider Threat"
-steps = ["Search SIEM logs for 'Jane Doe' activity on her workstation (WORKSTATION-52)", "Identify unusual file access or outbound connections", "Report findings to Senior Analyst"]
+steps = Array[String](["Search SIEM logs for 'Jane Doe' activity on her workstation (WORKSTATION-52)", "Identify unusual file access or outbound connections", "Report findings to Senior Analyst"])
 required_tool = "siem"
-base_time = 300.0
-hidden_risks = ["Dismissing legitimate access", "Alerting insider before evidence collected"]
-required_log_ids = ["LOG-JANE-DOE-ACCESS", "LOG-EXFIL-JANE-DOE"]
+base_time = 90.0
+hidden_risks = Array[String](["Dismissing legitimate access", "Alerting insider before evidence collected"])
+required_log_ids = Array[String](["LOG-JANE-DOE-ACCESS", "LOG-EXFIL-JANE-DOE"])

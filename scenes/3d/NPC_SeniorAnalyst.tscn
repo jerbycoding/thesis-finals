@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://d1p8yg2i867ip"]
+[gd_scene load_steps=5 format=3 uid="uid://d1p8yg2i867ip"]
 
 [ext_resource type="Script" uid="uid://cpmyqjpoeam4k" path="res://scripts/3d/NPC_SeniorAnalyst.gd" id="1_npc"]
+[ext_resource type="PackedScene" uid="uid://c67sml5y1uxgf" path="res://assets/npc/Man.glb" id="2_vwxg8"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_senior"]
 radius = 0.4
@@ -25,3 +26,6 @@ shape = SubResource("CapsuleShape3D_senior")
 
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="InteractionArea"]
 shape = SubResource("BoxShape3D_interact")
+
+[node name="Root Scene" parent="." instance=ExtResource("2_vwxg8")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -0.00872552, -0.0580707, 0.00501299)

@@ -7,5 +7,6 @@ func _ready():
 	
 	dialogue_resources = {
 		"checkin_01": load("res://resources/dialogue/senior_analyst_checkin_01.tres"),
+		"checkin_second_shift": load("res://resources/dialogue/senior_analyst_default.tres"),
 		"default": load("res://resources/dialogue/senior_analyst_default.tres")
 	}

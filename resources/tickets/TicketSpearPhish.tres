@@ -1,6 +1,6 @@
-[gd_resource type="Resource" script_class="TicketResource" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="TicketResource" load_steps=2 format=3 uid="uid://ck50exx3x0bg5"]
 
-[ext_resource type="Script" path="res://resources/tickets/TicketResource.gd" id="1_ticket"]
+[ext_resource type="Script" uid="uid://ccptkdfdnunvq" path="res://resources/tickets/TicketResource.gd" id="1_ticket"]
 
 [resource]
 script = ExtResource("1_ticket")
@@ -9,8 +9,8 @@ title = "Spear Phishing Investigation"
 description = "CEO reports receiving suspicious email claiming to be from finance department. Email contains executable attachment. Investigate using Email Analyzer."
 severity = "High"
 category = "Phishing"
-steps = ["Inspect email headers for spoofing", "Scan attachment for malware", "Check sender domain reputation"]
+steps = Array[String](["Inspect email headers for spoofing", "Scan attachment for malware", "Check sender domain reputation"])
 required_tool = "email"
-base_time = 300.0
-hidden_risks = ["missed_attachment_scan"]
-required_log_ids = []
+base_time = 90.0
+hidden_risks = Array[String](["missed_attachment_scan"])
+required_log_ids = Array[String]([])

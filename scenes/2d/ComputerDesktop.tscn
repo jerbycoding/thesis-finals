@@ -183,6 +183,64 @@ theme_override_font_sizes/font_size = 12
 text = "TICKETS"
 horizontal_alignment = 1
 
+[node name="Handbook_Icon" type="Button" parent="AppLauncher"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(80, 100)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_icon")
+flat = true
+
+[node name="VBox" type="VBoxContainer" parent="AppLauncher/Handbook_Icon"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+alignment = 1
+
+[node name="IconText" type="Label" parent="AppLauncher/Handbook_Icon/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "📘"
+horizontal_alignment = 1
+
+[node name="Label" type="Label" parent="AppLauncher/Handbook_Icon/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "HANDBOOK"
+horizontal_alignment = 1
+
+[node name="TaskManager_Icon" type="Button" parent="AppLauncher"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(80, 100)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_icon")
+flat = true
+
+[node name="VBox" type="VBoxContainer" parent="AppLauncher/TaskManager_Icon"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+alignment = 1
+
+[node name="IconText" type="Label" parent="AppLauncher/TaskManager_Icon/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "📈"
+horizontal_alignment = 1
+
+[node name="Label" type="Label" parent="AppLauncher/TaskManager_Icon/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "TASK MGR"
+horizontal_alignment = 1
+
 [node name="SystemTray" type="Panel" parent="."]
 unique_name_in_owner = true
 layout_mode = 1

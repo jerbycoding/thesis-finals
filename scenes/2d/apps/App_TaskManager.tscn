@@ -1,0 +1,138 @@
+[gd_scene load_steps=2 format=3 uid="uid://dg3mxl8q2k4l1"]
+
+[ext_resource type="Script" path="res://scripts/2d/apps/App_TaskManager.gd" id="1_taskmgr"]
+
+[node name="AppTaskManager" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_taskmgr")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Header" type="Panel" parent="Panel/VBox"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="Title" type="Label" parent="Panel/VBox/Header"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 15.0
+offset_top = -11.5
+offset_right = 155.0
+offset_bottom = 11.5
+grow_vertical = 2
+text = "📈 Resource Monitor"
+vertical_alignment = 1
+
+[node name="Content" type="MarginContainer" parent="Panel/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="VBox" type="VBoxContainer" parent="Panel/VBox/Content"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="CPU_Section" type="VBoxContainer" parent="Panel/VBox/Content/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="HBox" type="HBoxContainer" parent="Panel/VBox/Content/VBox/CPU_Section"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/VBox/Content/VBox/CPU_Section/HBox"]
+layout_mode = 2
+text = "CPU Usage (Process Load)"
+
+[node name="Spacer" type="Control" parent="Panel/VBox/Content/VBox/CPU_Section/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CPU_Value" type="Label" parent="Panel/VBox/Content/VBox/CPU_Section/HBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "0%"
+horizontal_alignment = 2
+
+[node name="CPU_Graph" type="Control" parent="Panel/VBox/Content/VBox/CPU_Section"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ColorRect" type="ColorRect" parent="Panel/VBox/Content/VBox/CPU_Section/CPU_Graph"]
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.05, 0.05, 0.1, 1)
+
+[node name="Network_Section" type="VBoxContainer" parent="Panel/VBox/Content/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="HBox" type="HBoxContainer" parent="Panel/VBox/Content/VBox/Network_Section"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/VBox/Content/VBox/Network_Section/HBox"]
+layout_mode = 2
+text = "Network Traffic (SIEM Latency)"
+
+[node name="Spacer" type="Control" parent="Panel/VBox/Content/VBox/Network_Section/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Net_Value" type="Label" parent="Panel/VBox/Content/VBox/Network_Section/HBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "0 Mbps"
+horizontal_alignment = 2
+
+[node name="Net_Graph" type="Control" parent="Panel/VBox/Content/VBox/Network_Section"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ColorRect" type="ColorRect" parent="Panel/VBox/Content/VBox/Network_Section/Net_Graph"]
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.05, 0.1, 0.05, 1)
+
+[node name="Status_Bar" type="HBoxContainer" parent="Panel/VBox/Content/VBox"]
+layout_mode = 2
+
+[node name="Event_Label" type="Label" parent="Panel/VBox/Content/VBox/Status_Bar"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 1, 0, 1)
+text = "SYSTEM STATUS: NOMINAL"

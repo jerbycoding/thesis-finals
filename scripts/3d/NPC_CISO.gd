@@ -12,5 +12,6 @@ func _ready():
 		"briefing_01": load("res://resources/dialogue/ciso_briefing_01.tres"),
 		"default": load("res://resources/dialogue/ciso_default.tres"),
 		"shift_end": load("res://resources/dialogue/ciso_shift_end.tres"),
-		"briefing_second_shift": load("res://resources/dialogue/ciso_briefing_second_shift.tres")
+		"briefing_second_shift": load("res://resources/dialogue/ciso_briefing_second_shift.tres"),
+		"briefing_third_shift": load("res://resources/dialogue/ciso_briefing_third_shift.tres")
 	}

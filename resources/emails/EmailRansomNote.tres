@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="EmailResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/EmailResource.gd" id="1_email"]
+
+[resource]
+script = ExtResource("1_email")
+email_id = "EMAIL-RANSOM-001"
+sender = "External"
+subject = "ALL YOUR FILES ARE ENCRYPTED"
+body = "We have encrypted all your corporate data. To recover your files, follow the instructions in the attached 'README_RECOVERY.txt'. You have 48 hours before the key is deleted.
+
+Do not contact the police."
+attachments = Array[String](["README_RECOVERY.txt"])
+headers = {
+"status": {
+"dkim": "PASS",
+"dmarc": "PASS",
+"spf": "PASS"
+}
+}
+is_malicious = true
+is_urgent = true
+clues = Array[String](["bad_attachment"])
+related_ticket = "RANSOM-001"
+suspicious_ip = "45.77.12.189"
+suspicious_domain = "ransom-pay.bit"

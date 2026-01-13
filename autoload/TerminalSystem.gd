@@ -119,6 +119,8 @@ func _cmd_help() -> Dictionary:
 		output += "[color=green]" + cmd_name + "[/color] - " + cmd.description + "\n"
 		output += "  Syntax: " + cmd.syntax + "\n"
 		output += "  Risk Level: " + str(cmd.risk_level) + "/5\n\n"
+	
+	output += "[i]Tip: For detailed guides on all SOC tools, open the [color=cyan]SOC Handbook[/color] on your desktop.[/i]\n"
 	return {"success": true, "output": output}
 
 func _cmd_scan(args: Array) -> Dictionary:

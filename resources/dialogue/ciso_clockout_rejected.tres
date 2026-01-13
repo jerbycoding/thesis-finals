@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="DialogueDataResource" load_steps=2]
+
+[ext_resource type="Script" path="res://resources/dialogue/DialogueDataResource.gd" id="1_dialogue_data"]
+
+[resource]
+script = ExtResource("1_dialogue_data")
+npc_name = "CISO"
+portrait = "👔"
+lines = [
+    {"choices": [], "text": "Clock out early? Let me look at your station... Negative, analyst. My monitor shows active alerts or pending investigations in your queue."},
+    {"choices": [], "text": "We don't leave until the job is done. Return to your terminal and clear those tickets. Security is a 24/7 commitment."}
+]

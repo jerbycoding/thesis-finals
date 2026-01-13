@@ -104,14 +104,14 @@ func _on_ticket_ignored(ticket: TicketResource):
 	match ticket.severity:
 		"Critical":
 			update_npc_relationship("ciso", -0.5)
-			_schedule_followup_ticket(CONSEQUENCE_IDS.MAJOR_BREACH, 15.0, "Major security breach due to ignored critical alert: " + ticket.title)
+			_schedule_followup_ticket(CONSEQUENCE_IDS.MAJOR_BREACH, 15.0, "Major security breach due to ignored critical alert: " + ticket.title, ticket.ticket_id)
 		"High":
 			update_npc_relationship("ciso", -0.3)
 			update_npc_relationship("senior_analyst", -0.2)
-			_schedule_followup_ticket(CONSEQUENCE_IDS.INCIDENT_ESCALATION, 30.0, "Security incident escalated due to ignored high-priority alert.")
+			_schedule_followup_ticket(CONSEQUENCE_IDS.INCIDENT_ESCALATION, 30.0, "Security incident escalated due to ignored high-priority alert.", ticket.ticket_id)
 		"Medium":
 			update_npc_relationship("senior_analyst", -0.1)
-			_schedule_followup_ticket(CONSEQUENCE_IDS.USER_COMPLAINT, 45.0, "Users reporting issues related to unaddressed alert.")
+			_schedule_followup_ticket(CONSEQUENCE_IDS.USER_COMPLAINT, 45.0, "Users reporting issues related to unaddressed alert.", ticket.ticket_id)
 		_:
 			# Low severity ignored might just be a small trust hit
 			update_npc_relationship("it_support", -0.05)
@@ -221,13 +221,13 @@ func _trigger_hidden_risk_consequence(ticket: TicketResource, risk: String, comp
 	# Parse risk description to determine consequence
 	if "malware" in risk.to_lower() or "clicked" in risk.to_lower():
 		# Spawn malware cleanup ticket
-		_schedule_followup_ticket("MALWARE-CLEANUP", 60.0, "Malware cleanup required after missed detection")
+		_schedule_followup_ticket("MALWARE-CLEANUP", 60.0, "Malware cleanup required after missed detection", ticket.ticket_id)
 	elif "breach" in risk.to_lower() or "data" in risk.to_lower():
 		# Spawn data breach report
-		_schedule_followup_ticket("BREACH-REPORT", 30.0, "Data breach report required")
+		_schedule_followup_ticket("BREACH-REPORT", 30.0, "Data breach report required", ticket.ticket_id)
 	else:
 		# Generic followup
-		_schedule_followup_ticket("FOLLOWUP-001", 90.0, "Follow-up investigation required")
+		_schedule_followup_ticket("FOLLOWUP-001", 90.0, "Follow-up investigation required", ticket.ticket_id)
 func _schedule_consequences(ticket: TicketResource, completion_type: String, time_remaining: float):
 	match completion_type:
 		"compliant":
@@ -239,7 +239,7 @@ func _schedule_consequences(ticket: TicketResource, completion_type: String, tim
 			# Efficient completion - moderate risk
 			if time_remaining < ticket.base_time * 0.3:  # Used less than 30% of time
 				print("⚠ Efficient completion with very little time used - High risk")
-				_schedule_followup_ticket("EFFICIENT-RISK", 60.0, "Rushed resolution may have missed critical checks")
+				_schedule_followup_ticket("EFFICIENT-RISK", 60.0, "Rushed resolution may have missed critical checks", ticket.ticket_id)
 			else:
 
 				print("✓ Efficient completion - Moderate risk accepted")
@@ -250,218 +250,126 @@ func _schedule_consequences(ticket: TicketResource, completion_type: String, tim
 
 			print("🚨 Emergency completion - Immediate consequences")
 
-			_schedule_followup_ticket("EMERGENCY-FOLLOWUP", 10.0, "Emergency resolution requires immediate follow-up")
+			_schedule_followup_ticket("EMERGENCY-FOLLOWUP", 10.0, "Emergency resolution requires immediate follow-up", ticket.ticket_id)
 
 
 
-func _schedule_followup_ticket(ticket_id: String, delay_seconds: float, reason: String):
-
+func _schedule_followup_ticket(ticket_id: String, delay_seconds: float, reason: String, original_id: String = "N/A"):
 	print("📅 Scheduling follow-up ticket: ", ticket_id, " in ", delay_seconds, " seconds")
-
-	print("  Reason: ", reason)
-
 	
-
 	var consequence_data = {
-
 		"ticket_id": ticket_id,
-
 		"delay": delay_seconds,
-
 		"reason": reason,
-
+		"original_id": original_id,
 		"trigger_time": Time.get_ticks_msec() + (delay_seconds * 1000)
-
 	}
-
 	
-
 	scheduled_consequences.append(consequence_data)
-
 	followup_ticket_scheduled.emit(ticket_id, delay_seconds)
 
-	
+	# Start timer to spawn ticket
+	get_tree().create_timer(delay_seconds).timeout.connect(_spawn_followup_ticket.bind(ticket_id, reason, original_id))
 
-	# Start timer to spawn ticket (don't await here, use call_deferred)
-
-	get_tree().create_timer(delay_seconds).timeout.connect(_spawn_followup_ticket.bind(ticket_id, reason))
-
-
-
-func _spawn_followup_ticket(ticket_id: String, reason: String):
-
-	print("🚨 Spawning follow-up ticket: ", ticket_id)
-
-	
-
-	# For now, create a simple follow-up ticket
-
-	# TODO: Load from ticket library or create dynamically
+func _spawn_followup_ticket(ticket_id: String, reason: String, original_id: String = "N/A"):
+	print("🚨 Spawning follow-up ticket: ", ticket_id, " related to: ", original_id)
 
 	var followup_ticket = TicketResource.new()
-
-	followup_ticket.ticket_id = ticket_id
-
-	followup_ticket.title = "Follow-up Investigation Required"
-
-	followup_ticket.description = reason
+	followup_ticket.ticket_id = ticket_id + "-" + str(randi() % 999) # Unique ID
+	
+	# IMPROVED: Dynamic context-aware information
+	if original_id != "N/A":
+		followup_ticket.title = "AUDIT: Re: " + original_id
+		followup_ticket.description = "URGENT AUDIT REQUIRED.\n\nOriginal Incident: " + original_id + "\n\nReason: " + reason + "\n\nBecause this incident was resolved via non-standard procedures (Emergency/Efficient), we must re-verify the state of the network. Review the original logs and ensure no secondary persistence exists."
+	else:
+		followup_ticket.title = "Follow-up Investigation"
+		followup_ticket.description = reason
 
 	followup_ticket.severity = "High"
-
 	followup_ticket.category = "Follow-up"
-
 	
-
-	# Initialize arrays properly for Resource (use append to avoid type issues)
-
 	followup_ticket.steps.clear()
-
-	followup_ticket.steps.append("Review previous incident")
-
-	followup_ticket.steps.append("Complete additional checks")
-
-	followup_ticket.hidden_risks.clear()
-
-	followup_ticket.required_log_ids.clear()
-
+	followup_ticket.steps.append("Re-examine original logs")
+	followup_ticket.steps.append("Verify host integrity")
 	
-
 	followup_ticket.required_tool = "siem"
-
-	followup_ticket.base_time = 180.0
-
+	followup_ticket.base_time = 120.0
 	
-
 	if TicketManager:
-
+		# Tell TicketManager to reveal logs for the ORIGINAL ticket again
+		if LogSystem and original_id != "N/A":
+			LogSystem.reveal_logs_for_ticket(original_id)
+			
 		followup_ticket_creation_requested.emit(followup_ticket)
-
 		consequence_triggered.emit("followup_ticket", {"ticket_id": ticket_id, "reason": reason})
 
 
-
 func log_player_choice(choice_type: String, choice_data: Dictionary):
-
 	# Generic choice logger
-
 	print("📝 Logging player choice: ", choice_type)
-
 	
-
 	var log_entry = choice_data.duplicate()
-
 	log_entry["type"] = choice_type
-
 	log_entry["timestamp"] = Time.get_ticks_msec()
-
 	
-
 	choice_log.append(log_entry)
 
 
-
 func log_email_decision(email_id: String, decision: String, email: EmailResource):
-
 	# Log email decision for consequence tracking
-
 	print("📝 Logging email decision: ", email_id, " - ", decision)
-
 	
-
 	var choice_data = {
-
 		"type": "email_decision",
-
 		"email_id": email_id,
-
 		"decision": decision,
-
 		"timestamp": Time.get_ticks_msec(),
-
 		"is_malicious": email.is_malicious,
-
 		"related_ticket": email.related_ticket
-
 	}
-
 	
-
 	choice_log.append(choice_data)
-
 	
-
 	# Email consequences are handled in EmailSystem, but we track them here
-
 	# for overall player archetype analysis
 
 
 
 func get_choice_history() -> Array:
-
 	return choice_log.duplicate()
 
 
-
 func get_recent_choices(count: int = 5) -> Array[Dictionary]:
-
 	var recent = []
-
 	var start = max(0, choice_log.size() - count)
-
 	for i in range(start, choice_log.size()):
-
 		recent.append(choice_log[i])
-
 	return recent
 
 
 
 # Debug helper - print current state
-
 func show_consequence_info():
-
 	print("========================================")
-
 	print("CONSEQUENCE ENGINE STATE")
-
 	print("========================================")
-
 	print("Choice History: ", choice_log.size(), " entries")
-
 	print("Scheduled Consequences: ", scheduled_consequences.size())
-
 	
-
 	if scheduled_consequences.size() > 0:
-
 		print("\nScheduled Consequences:")
-
 		for i in range(scheduled_consequences.size()):
-
 			var cons = scheduled_consequences[i]
-
 			var time_left = (cons.trigger_time - Time.get_ticks_msec()) / 1000.0
-
 			print("  [", i, "] ", cons.ticket_id)
-
 			print("      Delay: ", cons.delay, "s")
-
 			print("      Time Left: ", int(time_left), "s")
-
 			print("      Reason: ", cons.reason)
-
 	
-
 	if choice_log.size() > 0:
-
 		print("\nRecent Choices (last 3):")
-
 		var recent = get_recent_choices(3)
-
 		for choice in recent:
-
 			print("  - ", choice.ticket_id, " (", choice.completion_type, ")")
-
 	
-
 	print("========================================")

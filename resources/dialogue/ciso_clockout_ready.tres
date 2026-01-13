@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="DialogueDataResource" load_steps=2]
+
+[ext_resource type="Script" path="res://resources/dialogue/DialogueDataResource.gd" id="1_dialogue_data"]
+
+[resource]
+script = ExtResource("1_dialogue_data")
+npc_name = "CISO"
+portrait = "👔"
+lines = [
+    {"choices": [], "text": "Let me check the live dashboard... Yes, all alerts are cleared and the network state is nominal. Exceptional work today, analyst."},
+    {"choices": [
+        {"text": "Clock Out (End Shift)", "effect": {"trigger_shift_end": true}},
+        {"text": "Stay (Continue Monitoring)", "effect": {}}
+    ], "text": "Since you've cleared the queue and all scheduled assessments are complete, I'm authorized to dismiss you early. Would you like to clock out now?"}
+]

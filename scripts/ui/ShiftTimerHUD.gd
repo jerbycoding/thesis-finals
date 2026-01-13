@@ -3,8 +3,6 @@ extends Control
 
 @onready var timer_label: Label = %TimerLabel
 
-const SHIFT_DURATION = 60.0 # 1 minute for testing
-
 func _ready():
 	hide() # Hidden by default
 	
@@ -28,7 +26,8 @@ func _process(delta):
 	
 	if NarrativeDirector:
 		var time_elapsed = NarrativeDirector.get_shift_timer()
-		var time_remaining = max(0, SHIFT_DURATION - time_elapsed)
+		var shift_duration = NarrativeDirector.get_current_shift_duration()
+		var time_remaining = max(0, shift_duration - time_elapsed)
 		
 		var minutes = int(time_remaining) / 60
 		var seconds = int(time_remaining) % 60

@@ -13,21 +13,27 @@ const APP_PATHS: Dictionary = {
 	"tickets": "res://scenes/2d/apps/App_TicketQueue.tscn",
 	"siem": "res://scenes/2d/apps/App_SIEMViewer.tscn",
 	"email": "res://scenes/2d/apps/App_EmailAnalyzer.tscn",
-	"terminal": "res://scenes/2d/apps/App_Terminal.tscn"
+	"terminal": "res://scenes/2d/apps/App_Terminal.tscn",
+	"handbook": "res://scenes/2d/apps/App_Handbook.tscn",
+	"taskmanager": "res://scenes/2d/apps/App_TaskManager.tscn"
 }
 
 const APP_TITLES: Dictionary = {
 	"tickets": "Ticket Queue",
 	"siem": "SIEM Log Viewer", 
 	"email": "Email Analyzer",
-	"terminal": "Terminal"
+	"terminal": "Terminal",
+	"handbook": "SOC Handbook",
+	"taskmanager": "Task Manager"
 }
 
 const APP_SIZES: Dictionary = {
 	"tickets": Vector2(500, 600),
 	"siem": Vector2(750, 550),
 	"email": Vector2(900, 700),
-	"terminal": Vector2(650, 450)
+	"terminal": Vector2(650, 450),
+	"handbook": Vector2(700, 500),
+	"taskmanager": Vector2(600, 400)
 }
 
 var window_frame_scene = preload("res://scenes/2d/apps/components/WindowFrame.tscn")

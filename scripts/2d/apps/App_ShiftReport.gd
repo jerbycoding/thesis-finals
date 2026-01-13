@@ -44,8 +44,20 @@ func show_report(results: Dictionary):
 	move_to_front()
 
 func _on_continue_pressed():
-	print("ShiftReport: Continue pressed. Starting second shift briefing.")
+	print("ShiftReport: Continue pressed.")
 	hide() # Hide the report itself
 	
 	if NarrativeDirector:
-		NarrativeDirector.start_second_shift_briefing()
+		match NarrativeDirector.current_shift_name:
+			"first_shift":
+				print("ShiftReport: Transitioning from first to second shift.")
+				NarrativeDirector.start_second_shift_briefing()
+			"second_shift":
+				print("ShiftReport: Transitioning from second to third shift.")
+				NarrativeDirector.start_third_shift_briefing()
+			"third_shift":
+				print("ShiftReport: Final shift completed. Returning to title.")
+				TransitionManager.change_scene_to("res://scenes/ui/TitleScreen.tscn")
+			_:
+				print("ShiftReport: Unknown shift state. Returning to title.")
+				TransitionManager.change_scene_to("res://scenes/ui/TitleScreen.tscn")

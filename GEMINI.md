@@ -42,6 +42,8 @@ This is a standard Godot project. There are no external build scripts or package
 
 The project now integrates the **GdUnit4** testing framework for automated unit and integration tests.
 
+**NOTE:** To prevent excessive token consumption and potential execution loops, the AI is instructed **not** to run these tests. The user should execute test commands manually in their own terminal.
+
 ### Running Tests:
 1.  Ensure you have GdUnit4 installed as an addon in your project.
 2.  Open your project in the Godot Engine (version 4.3+).

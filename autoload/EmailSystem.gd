@@ -7,6 +7,7 @@ signal email_decision_made(email_id: String, decision: String)  # "approve", "qu
 signal email_decision_processed(email: EmailResource, decision: String, inspection_state: Dictionary)
 
 var all_emails: Array[EmailResource] = []
+var active_emails: Array[EmailResource] = [] # Only these are shown in the app
 var processed_emails: Array[String] = []  # Email IDs that have been processed
 
 
@@ -15,6 +16,9 @@ var email_library: Array[EmailResource] = [
 	preload("res://resources/emails/EmailPhishing01.tres"),
 	preload("res://resources/emails/EmailLegitUrgent.tres"),
 	preload("res://resources/emails/EmailSpearPhish.tres"),
+	preload("res://resources/emails/EmailSocialEng.tres"),
+	preload("res://resources/emails/EmailRansomNote.tres"),
+	preload("res://resources/emails/EmailExfilWarning.tres"),
 ]
 
 func _ready():
@@ -25,60 +29,62 @@ func _ready():
 	# Wait a moment for other systems to initialize
 	await get_tree().create_timer(0.5).timeout
 	
-	# Load initial emails for testing
-	_load_initial_emails()
-
-func _load_initial_emails():
-	print("📧 Loading initial emails...")
+	# Load all emails into the background library, but don't activate them yet
+	_prepare_library()
 	
+	# Load some initial generic emails that don't need a ticket
+	reveal_emails_for_ticket("") 
+
+func _prepare_library():
+	print("📧 Preparing email library...")
 	for email_res in email_library:
 		if email_res:
-			var email = email_res.duplicate()
-			add_email(email)
-			print("  ✓ Loaded email: ", email.email_id)
-		else:
-			print("  ❌ ERROR: Failed to load email resource from library")
+			all_emails.append(email_res.duplicate())
+	print("📧 Library ready: ", all_emails.size(), " emails")
+
+func reveal_emails_for_ticket(ticket_id: String):
+	print("📧 Revealing emails for ticket: ", ticket_id if not ticket_id.is_empty() else "GENERIC")
+	var count = 0
+	for email in all_emails:
+		if email.related_ticket == ticket_id:
+			if email not in active_emails:
+				active_emails.append(email)
+				email_added.emit(email)
+				count += 1
 	
-	print("📧 Total emails loaded: ", all_emails.size())
+	if count > 0:
+		print("📧 Revealed ", count, " new emails for ", ticket_id)
 
 func add_email(email: EmailResource):
 	if not email:
-		print("❌ ERROR: Trying to add null email")
 		return
 	
-	if not email.validate():
-		push_error("EmailSystem: Rejected invalid email: " + str(email.email_id))
-		return
+	if email not in all_emails:
+		all_emails.append(email)
 	
-	# Check if already exists
-	for existing_email in all_emails:
-		if existing_email.email_id == email.email_id:
-			print("⚠ Email already exists: ", email.email_id)
-			return
-	
-	all_emails.append(email)
-	email_added.emit(email)
-	print("📧 Email added: ", email.email_id, " - ", email.subject)
+	if email not in active_emails:
+		active_emails.append(email)
+		email_added.emit(email)
 
 func get_all_emails() -> Array[EmailResource]:
-	return all_emails.duplicate()
+	return active_emails.duplicate()
 
 func get_emails_for_ticket(ticket_id: String) -> Array[EmailResource]:
 	var filtered: Array[EmailResource] = []
-	for email in all_emails:
+	for email in active_emails:
 		if email.related_ticket == ticket_id:
 			filtered.append(email)
 	return filtered
 
 func get_email_by_id(email_id: String) -> EmailResource:
-	for email in all_emails:
+	for email in active_emails:
 		if email.email_id == email_id:
 			return email
 	return null
 
 func get_unprocessed_emails() -> Array[EmailResource]:
 	var filtered: Array[EmailResource] = []
-	for email in all_emails:
+	for email in active_emails:
 		if email.email_id not in processed_emails:
 			filtered.append(email)
 	return filtered
@@ -105,4 +111,3 @@ func make_decision(email_id: String, decision: String, inspection_state: Diction
 	
 	# Emit a signal with all context. Other systems will listen for this.
 	email_decision_processed.emit(email, decision, inspection_state)
-

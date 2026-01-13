@@ -6,6 +6,7 @@ signal log_added(log: LogResource)
 signal log_reviewed(log_id: String)
 
 var all_logs: Array[LogResource] = []
+var active_logs: Array[LogResource] = [] # Only these are shown in the app
 var reviewed_logs: Array[String] = []
 
 # Log library - preloaded .tres resources
@@ -20,6 +21,9 @@ var log_library: Array[LogResource] = [
 	preload("res://resources/logs/LogMalware001.tres"),
 	preload("res://resources/logs/LogExfil001.tres"),
 	preload("res://resources/logs/LogNetwork001.tres"),
+	preload("res://resources/logs/LogInsiderAccess.tres"),
+	preload("res://resources/logs/LogInsiderExfil.tres"),
+	preload("res://resources/logs/LogRansomFileActivity.tres"),
 ]
 
 func _ready():
@@ -30,61 +34,63 @@ func _ready():
 	# Wait a moment for other systems to initialize
 	await get_tree().create_timer(0.5).timeout
 	
-	# Load initial logs for testing
-	_load_initial_logs()
-
-func _load_initial_logs():
-	print("📋 Loading initial logs...")
+	# Prepare the background library
+	_prepare_library()
 	
+	# Show initial generic logs
+	reveal_logs_for_ticket("")
+
+func _prepare_library():
+	print("📋 Preparing log library...")
 	for log_res in log_library:
 		if log_res:
-			var log = log_res.duplicate()
-			add_log(log)
-			print("  ✓ Loaded log: ", log.log_id)
-		else:
-			print("  ❌ ERROR: Failed to load log resource from library")
+			all_logs.append(log_res.duplicate())
+	print("📋 Library ready: ", all_logs.size(), " logs")
+
+func reveal_logs_for_ticket(ticket_id: String):
+	print("📋 Revealing logs for ticket: ", ticket_id if not ticket_id.is_empty() else "GENERIC")
+	var count = 0
+	for log in all_logs:
+		if log.related_ticket == ticket_id:
+			if log not in active_logs:
+				active_logs.append(log)
+				log_added.emit(log)
+				count += 1
 	
-	print("📋 Total logs loaded: ", all_logs.size())
+	if count > 0:
+		print("📋 Revealed ", count, " new logs for ", ticket_id)
 
 func add_log(log: LogResource):
 	if not log:
-		print("❌ ERROR: Trying to add null log")
 		return
 	
-	if not log.validate():
-		push_error("LogSystem: Rejected invalid log: " + str(log.log_id))
-		return
+	if log not in all_logs:
+		all_logs.append(log)
 	
-	# Check if already exists
-	for existing_log in all_logs:
-		if existing_log.log_id == log.log_id:
-			print("⚠ Log already exists: ", log.log_id)
-			return
-	
-	all_logs.append(log)
-	log_added.emit(log)
-	print("📋 Log added: ", log.log_id, " - ", log.message.substr(0, 40))
+	if log not in active_logs:
+		active_logs.append(log)
+		log_added.emit(log)
 
 func get_all_logs() -> Array[LogResource]:
-	return all_logs.duplicate()
+	return active_logs.duplicate()
 
 func get_logs_by_category(category: String) -> Array[LogResource]:
 	var filtered: Array[LogResource] = []
-	for log in all_logs:
+	for log in active_logs:
 		if log.category == category:
 			filtered.append(log)
 	return filtered
 
 func get_logs_by_severity(min_severity: int) -> Array[LogResource]:
 	var filtered: Array[LogResource] = []
-	for log in all_logs:
+	for log in active_logs:
 		if log.severity >= min_severity:
 			filtered.append(log)
 	return filtered
 
 func get_logs_for_ticket(ticket_id: String) -> Array[LogResource]:
 	var filtered: Array[LogResource] = []
-	for log in all_logs:
+	for log in active_logs:
 		if log.related_ticket == ticket_id:
 			filtered.append(log)
 	return filtered
