@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ShiftResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/ShiftResource.gd" id="1_shift"]
+
+[resource]
+script = ExtResource("1_shift")
+shift_name = "Shift 3: Impact"
+shift_id = "third_shift"
+event_sequence = [
+	{"time": 30, "event": "spawn_ticket", "type": "spawn_ticket", "ticket_id": "DATA-EXFIL-001"},
+	{"time": 180, "event": "spawn_ticket", "type": "spawn_ticket", "ticket_id": "PHISH-001"},
+	{"time": 600, "event": "shift_end_report", "type": "shift_end"}
+]
+random_event_pool = []

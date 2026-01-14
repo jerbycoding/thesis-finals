@@ -11,6 +11,7 @@ var selected_ticket: TicketResource = null
 @onready var description_label: RichTextLabel = %DescriptionLabel
 @onready var steps_container: VBoxContainer = %StepsContainer
 @onready var completion_modal: Control = %CompletionModal
+@onready var required_tool_label: Label = %RequiredToolLabel
 
 
 func _ready():
@@ -67,6 +68,14 @@ func _update_detail_view(ticket: TicketResource):
 		# Hide placeholder, show details
 		placeholder_label.visible = false
 		detail_view.visible = true
+		
+		# Update tool label visibility
+		if required_tool_label:
+			if selected_ticket.required_tool != "none" and selected_ticket.required_tool != "":
+				required_tool_label.text = "REQUIRED TOOL: " + selected_ticket.required_tool.to_upper()
+				required_tool_label.visible = true
+			else:
+				required_tool_label.visible = false
 		
 		# Populate labels
 		title_label.text = "[%s] %s: %s" % [selected_ticket.severity.to_upper(), selected_ticket.ticket_id, selected_ticket.title]

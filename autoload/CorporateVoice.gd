@@ -66,7 +66,19 @@ static var corporate_phrases = {
 	"log_attached_success": "CONFIRMATION: Log {log_id} successfully appended to incident report {ticket_id}.",
 	"log_already_attached_warning": "WARNING: Log {log_id} is already associated with incident report {ticket_id}.",
 	"ticket_timeout": "INCIDENT TIMEOUT: Report {ticket_id} exceeded allocated resolution time.",
-	"ticket_update_host_isolated": "INCIDENT UPDATE: Target host isolation for malware containment confirmed. Initiating incident closure procedure."
+	"ticket_update_host_isolated": "INCIDENT UPDATE: Target host isolation for malware containment confirmed. Initiating incident closure procedure.",
+	"kill_chain_escalation": "CRITICAL ALERT: Threat escalation detected in path: {path}. Transitioning to Stage {stage}.",
+	
+	# --- SIEM Templates ---
+	"siem_inspector_header": "[color=cyan][b]EVENT IDENTITY[/b][/color]\n",
+	"siem_inspector_metadata": "\n[color=cyan][b]NETWORK METADATA[/b][/color]\n",
+	"siem_inspector_technical": "\n[color=cyan][b]TECHNICAL MESSAGE[/b][/color]\n",
+	"siem_inspector_body": "[b]EVENT IDENTITY[/b]\n[code]ID: {id}[/code]\n[code]TIME: {time}[/code]\nRISK: [color={color}]{risk}[/color]\n\n[b]NETWORK METADATA[/b]\nSOURCE: {source}\n[code]IP ADDR: {ip}[/code]\n[code]HOST: {host}[/code]\n\n[b]TECHNICAL MESSAGE[/b]\n[font_size=12][i]{message}[/i][/font_size]\n",
+	
+	# --- Terminal Templates ---
+	"terminal_welcome": "[color=green]SOC Terminal v2.1[/color]\n[color=green]Type 'help' for available commands[/color]\n\n",
+	"terminal_prompt": "soc@terminal:~$ ",
+	"terminal_command_echo": "[color=cyan]$ {command}[/color]\n"
 }
 static func get_phrase(key: String) -> String:
 	if corporate_phrases.has(key):

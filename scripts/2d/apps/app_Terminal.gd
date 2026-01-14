@@ -60,7 +60,7 @@ func _ready():
 		TicketManager.ticket_completed.connect(_on_ticket_completed)
 	
 	# Set initial output
-	_append_output("[color=green]SOC Terminal v2.1[/color]\n[color=green]Type 'help' for available commands[/color]\n\n")
+	_append_output(CorporateVoice.get_phrase("terminal_welcome"))
 	
 	# Focus input
 	if command_input:
@@ -84,11 +84,11 @@ func _on_command_submitted(command: String):
 	command_input.text = ""
 	
 	# Show command in output
-	_append_output("[color=cyan]$ " + command + "[/color]\n")
+	_append_output(CorporateVoice.get_formatted_phrase("terminal_command_echo", {"command": command}))
 	
 	# Execute command
 	if TerminalSystem:
-		var result = TerminalSystem.execute_command(command)
+		var result = await TerminalSystem.execute_command(command)
 		_append_output(result.output + "\n")
 		
 		# If command failed critically, lock terminal

@@ -21,3 +21,20 @@ extends Resource
 #   ]
 # }
 @export var lines: Array[Dictionary] = []
+
+func validate() -> bool:
+	if lines.is_empty():
+		return false
+	
+	for i in range(lines.size()):
+		var line = lines[i]
+		if not line.has("text") or line["text"].is_empty():
+			return false
+			
+		if line.has("choices"):
+			for choice in line["choices"]:
+				if choice.has("next_line"):
+					var target = choice["next_line"]
+					if target < 0 or target >= lines.size():
+						return false
+	return true

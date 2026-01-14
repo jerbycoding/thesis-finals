@@ -10,6 +10,7 @@ signal critical_host_isolated(hostname: String)
 
 var is_locked: bool = false
 var lock_timer: Timer
+var scan_multiplier: float = 1.0 # Multiplier for scan time (affected by ZERO_DAY)
 
 # Available commands
 var commands: Dictionary = {
@@ -57,6 +58,14 @@ func _ready():
 	add_child(lock_timer)
 	lock_timer.one_shot = true
 	lock_timer.timeout.connect(_unlock_terminal)
+	
+	if NarrativeDirector:
+		NarrativeDirector.world_event.connect(_on_world_event)
+
+func _on_world_event(event_id: String, active: bool, _duration: float):
+	if event_id == "ZERO_DAY":
+		scan_multiplier = 1.5 if active else 1.0
+		print("TerminalSystem: ZERO_DAY event ", "ACTIVE" if active else "CLEARED", ". Scan multiplier: ", scan_multiplier)
 
 
 func execute_command(command_line: String) -> Dictionary:
@@ -84,7 +93,7 @@ func execute_command(command_line: String) -> Dictionary:
 		}
 	
 	# Execute command
-	return _execute_command_internal(command_name, args)
+	return await _execute_command_internal(command_name, args)
 
 func _execute_command_internal(command_name: String, args: Array) -> Dictionary:
 	var result: Dictionary
@@ -92,7 +101,7 @@ func _execute_command_internal(command_name: String, args: Array) -> Dictionary:
 		"help":
 			result = _cmd_help()
 		"scan":
-			result = _cmd_scan(args)
+			result = await _cmd_scan(args)
 		"isolate":
 			result = _cmd_isolate(args)
 		"status":
@@ -133,11 +142,18 @@ func _cmd_scan(args: Array) -> Dictionary:
 	if host_info.is_empty():
 		return {"success": false, "output": CorporateVoice.get_phrase("unknown_host")}
 
+	# Calculate scan time
+	var base_scan_time = 3.0
+	var total_scan_time = base_scan_time * scan_multiplier
+	
+	# Wait for scan to complete
+	await get_tree().create_timer(total_scan_time).timeout
+
 	# Update scanned status in NetworkState
 	NetworkState.update_host_state(hostname, {"scanned": true})
 
 	var output = "[b]" + CorporateVoice.get_formatted_phrase("scanning_host", {"hostname": hostname}) + "[/b]\n"
-	output += "Analyzing...\n\n"
+	output += "Analysis Complete (%.1fs)...\n\n" % total_scan_time
 	
 	if host_info.get("status") == "INFECTED":
 		output += "[color=red]⚠ " + CorporateVoice.get_phrase("malware_detected") + "[/color]\n"

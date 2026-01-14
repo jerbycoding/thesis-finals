@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="TicketResource" load_steps=2 format=3 uid="uid://cm7j8lal0m1n2"]
+
+[ext_resource type="Script" uid="uid://ccptkdfdnunvq" path="res://resources/tickets/TicketResource.gd" id="1_ticket"]
+
+[resource]
+script = ExtResource("1_ticket")
+ticket_id = "AUTH-FAIL-GENERIC"
+title = "Multiple Authentication Failures"
+description = "System logs indicate multiple failed login attempts for user 'jsmith'. Likely a forgotten password or minor misconfiguration."
+severity = "Low"
+category = "Authentication"
+steps = Array[String](["Verify user 'jsmith' identity", "Reset password if requested", "Monitor for further failures"])
+required_tool = "siem"
+base_time = 240.0
+hidden_risks = Array[String]([])
+required_log_ids = Array[String](["LOG-AUTH-FAILURE"])
+kill_chain_path = ""
+kill_chain_stage = 0

@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="EmailResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/EmailResource.gd" id="1_email"]
+
+[resource]
+script = ExtResource("1_email")
+email_id = "EMAIL-JSMITH-001"
+sender = "jsmith@corporate.com"
+subject = "Locked out of my account again"
+body = "Hi SOC Team, I've managed to lock myself out of the system again. I think I was using my old password. Could you please reset it for me? Thanks, John Smith."
+is_malicious = false
+is_urgent = true
+clues = Array[String](["Legitimate internal domain", "Standard signature"])
+related_ticket = "GENERIC"
+suspicious_domain = ""
+suspicious_ip = ""
+headers = {
+"dkim": "PASS",
+"dmarc": "PASS",
+"spf": "PASS"
+}

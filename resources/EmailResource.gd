@@ -19,13 +19,10 @@ func _to_string() -> String:
 	return "[Email: %s - %s]" % [email_id, subject]
 
 func get_sender_color() -> Color:
-	match sender:
-		"CEO", "IT Dept", "Security Team":
-			return Color(0.2, 0.8, 0.2)  # Green - Internal
-		"External":
-			return Color(1.0, 0.5, 0.0)  # Orange - External
-		_:
-			return Color.WHITE
+	var s = sender.to_lower()
+	if "@corporate.com" in s or "ceo" in s or "it dept" in s or "security team" in s:
+		return Color(0.2, 0.8, 0.2)  # Green - Internal
+	return Color(1.0, 0.5, 0.0)  # Orange - External
 
 func get_urgency_icon() -> String:
 	if is_urgent:
@@ -45,11 +42,10 @@ func has_suspicious_attachment() -> bool:
 
 func get_header_status() -> Dictionary:
 	# Returns SPF, DKIM, DMARC status
-	return headers.get("status", {
-		"spf": "PASS",
-		"dkim": "PASS",
-		"dmarc": "PASS"
-	})
+	# Check for nested 'status' or just return the dict itself
+	if headers.has("status"):
+		return headers["status"]
+	return headers
 
 func validate() -> bool:
 	if email_id.is_empty():

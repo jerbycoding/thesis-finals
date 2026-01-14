@@ -12,57 +12,147 @@ var active_tickets: Array[TicketResource] = []
 var completed_tickets: Array[TicketResource] = []
 var active_timers: Dictionary = {} # ticket_id: Timer
 
-# Ticket library - preloaded .tres resources
-var ticket_library: Array[TicketResource] = [
-	preload("res://resources/tickets/TicketPhishing01.tres"),
-	preload("res://resources/tickets/TicketSpearPhish.tres"),
-	preload("res://resources/tickets/TicketMalwareContainment.tres"),
-	preload("res://resources/tickets/TicketDataExfiltration.tres"),
-	preload("res://resources/tickets/TicketRansomware01.tres"),
-	preload("res://resources/tickets/TicketInsiderThreat01.tres"),
-	preload("res://resources/tickets/TicketSocialEng01.tres"),
-]
+const TICKET_DIR = "res://resources/tickets/"
 
-# A mapping from simple narrative IDs to full resources
-var ticket_id_map: Dictionary = {
-	"phishing_intro": preload("res://resources/tickets/TicketSpearPhish.tres"),
-	"spear_phishing": preload("res://resources/tickets/TicketSpearPhish.tres"),
-	"malware_response": preload("res://resources/tickets/TicketMalwareContainment.tres"),
-	"data_exfil": preload("res://resources/tickets/TicketDataExfiltration.tres"),
-	"phishing_campaign": preload("res://resources/tickets/TicketPhishing01.tres"),
-	"insider_001": preload("res://resources/tickets/TicketInsiderThreat01.tres"),
-	"social_001": preload("res://resources/tickets/TicketSocialEng01.tres"),
-	"ransom_001": preload("res://resources/tickets/TicketRansomware01.tres"),
-}
+# --- Ambient Noise Configuration ---
+var noise_library: Array[TicketResource] = []
+var ticket_library: Array[TicketResource] = [] # Unique list of all discovered tickets
+var ambient_spawn_timer: Timer
+var ambient_spawn_interval: float = 45.0 # Seconds between noise tickets
+var max_active_tickets: int = 5
+var is_ambient_spawning_enabled: bool = false
+# ----------------------------------
+
+var ticket_id_map: Dictionary = {} # Narrative ID -> Resource
 
 func _ready():
 	print("========================================")
 	print("TicketManager initialized")
 	print("========================================")
 	
-	# Wait a moment for other systems to initialize
-	await get_tree().create_timer(0.1).timeout
+	# Setup Ambient Spawner
+	ambient_spawn_timer = Timer.new()
+	ambient_spawn_timer.wait_time = ambient_spawn_interval
+	ambient_spawn_timer.timeout.connect(_on_ambient_spawn_timeout)
+	add_child(ambient_spawn_timer)
 	
+	# Discover all tickets (Internal logic is safe)
+	_prepare_library()
+	
+	# Connect to other systems safely after they've had a chance to initialize
+	_setup_system_connections.call_deferred()
+
+func _setup_system_connections():
 	# Connect to signals from other systems
-	if TerminalSystem:
+	if is_instance_valid(TerminalSystem):
 		TerminalSystem.command_run.connect(_on_terminal_command_run)
 		print("TicketManager connected to TerminalSystem")
 
-	# Connect to the NarrativeDirector for scripted ticket spawning
-	if NarrativeDirector:
+	if is_instance_valid(NarrativeDirector):
 		NarrativeDirector.spawn_ticket_requested.connect(spawn_ticket_by_id)
+		NarrativeDirector.shift_started.connect(start_ambient_spawning)
+		NarrativeDirector.shift_ended.connect(func(_r): stop_ambient_spawning())
 		print("TicketManager connected to NarrativeDirector")
 
-	if EmailSystem:
+	if is_instance_valid(EmailSystem):
 		EmailSystem.email_decision_processed.connect(_on_email_decision_processed)
 		print("TicketManager connected to EmailSystem")
 
-	if ConsequenceEngine:
+	if is_instance_valid(ConsequenceEngine):
 		ConsequenceEngine.followup_ticket_creation_requested.connect(add_ticket)
 		print("TicketManager connected to ConsequenceEngine")
 	
+	if is_instance_valid(DesktopWindowManager):
+		# We check if the signal exists before connecting
+		if DesktopWindowManager.has_signal("app_opened"):
+			DesktopWindowManager.app_opened.connect(_on_app_opened)
+
+func _on_app_opened(app_name: String, _window_id: String):
+	print("TicketManager: App %s opened. Refreshing evidence visibility." % app_name)
+	# Re-reveal data for ALL active tickets to ensure the newly opened app has them
+	for ticket in active_tickets:
+		if app_name == "siem" and LogSystem:
+			LogSystem.reveal_logs_for_ticket(ticket.ticket_id)
+		elif app_name == "email" and EmailSystem:
+			EmailSystem.reveal_emails_for_ticket(ticket.ticket_id)
+	
 	# Load initial tickets for testing - DISABLED in favor of narrative control
 	# _load_initial_tickets()
+
+func start_ambient_spawning():
+	print("TicketManager: Ambient noise spawning STARTED.")
+	is_ambient_spawning_enabled = true
+	if is_instance_valid(ambient_spawn_timer):
+		ambient_spawn_timer.start()
+
+func stop_ambient_spawning():
+	print("TicketManager: Ambient noise spawning STOPPED.")
+	is_ambient_spawning_enabled = false
+	if is_instance_valid(ambient_spawn_timer):
+		ambient_spawn_timer.stop()
+
+func pause_ambient_spawning(duration: float):
+	print("TicketManager: Ambient noise spawning PAUSED for ", duration, "s")
+	if is_instance_valid(ambient_spawn_timer):
+		ambient_spawn_timer.stop()
+	get_tree().create_timer(duration).timeout.connect(
+		func(): 
+			if is_ambient_spawning_enabled and is_instance_valid(ambient_spawn_timer): 
+				ambient_spawn_timer.start()
+	)
+
+func _on_ambient_spawn_timeout():
+	if active_tickets.size() < max_active_tickets:
+		_spawn_noise_ticket()
+
+func _spawn_noise_ticket():
+	if noise_library.is_empty(): return
+	
+	var ticket_res = noise_library.pick_random().duplicate()
+	# Randomize ID to avoid collision
+	ticket_res.ticket_id += "-" + str(randi() % 999)
+	
+	print("TicketManager: Spawning noise ticket: ", ticket_res.ticket_id)
+	add_ticket(ticket_res)
+
+func _prepare_library():
+	print("🎫 TICKET_DEBUG: Discovering tickets in %s..." % TICKET_DIR)
+	ticket_id_map.clear()
+	noise_library.clear()
+	ticket_library.clear()
+	
+	var paths = FileUtil.get_resource_paths(TICKET_DIR)
+	for path in paths:
+		var res = load(path)
+		if res and res is TicketResource:
+			# Safety check: Skip if resource fails internal validation
+			if not res.validate():
+				print("  - ❌ TICKET_DEBUG: Skipping malformed resource: %s" % path)
+				continue
+
+			# Add to master library
+			
+			# 1. Map by Ticket ID (e.g. PHISH-001)
+			var tid = res.ticket_id.to_lower()
+			ticket_id_map[tid] = res
+			# Also map with underscores replaced (fuzzy match for ransom_001)
+			ticket_id_map[tid.replace("-", "_")] = res
+			
+			# 2. Map by File Name (narrative ID fallback, e.g. phishing_intro)
+			var file_id = path.get_file().get_basename().replace("Ticket", "").to_lower()
+			ticket_id_map[file_id] = res
+			# Also fuzzy match file name
+			ticket_id_map[file_id.replace("_", "-")] = res
+			ticket_id_map[file_id.replace("-", "_")] = res
+			
+			# 3. Add to noise pool if generic
+			if "GENERIC" in res.ticket_id:
+				noise_library.append(res)
+				print("  - Added to Noise Pool: %s" % res.ticket_id)
+			
+			print("  - Registered Ticket: %s" % res.ticket_id)
+			
+	print("🎫 TICKET_DEBUG: Registered %d map entries and %d noise tickets." % [ticket_id_map.size(), noise_library.size()])
 
 func _on_email_decision_processed(email: EmailResource, decision: String, inspection_state: Dictionary):
 	# Handles logging or updating state when an email is processed.
@@ -120,13 +210,12 @@ func _create_ticket_timer(ticket: TicketResource):
 	active_timers[ticket.ticket_id] = timer
 
 func _get_ticket_path_by_id(ticket_id: String) -> String:
-	# First, check the narrative map
-	for key in ticket_id_map:
-		var ticket_res = ticket_id_map[key]
-		if ticket_res and ticket_res.ticket_id == ticket_id:
-			return ticket_res.resource_path
+	# First, check the map (case-insensitive)
+	var lookup = ticket_id.to_lower()
+	if ticket_id_map.has(lookup):
+		return ticket_id_map[lookup].resource_path
 			
-	# If not in the map, search the full library
+	# If not in the map, search the full library explicitly
 	for ticket_res in ticket_library:
 		if ticket_res and ticket_res.ticket_id == ticket_id:
 			return ticket_res.resource_path
@@ -268,9 +357,16 @@ func complete_ticket(ticket_id: String, completion_type: String = "compliant"):
 			# Emit signal with completion type and time
 			ticket_completed.emit(ticket, completion_type, time_taken)
 			
-			# Trigger consequence engine if it exists
-			# ConsequenceEngine will listen for the ticket_completed signal directly.
-			# The direct call has been removed to decouple the singletons.
+			# --- Response Buffer Rewards ---
+			if completion_type == "efficient":
+				print("TicketManager: Efficient reward - Pausing noise for 60s.")
+				pause_ambient_spawning(60.0)
+			elif completion_type == "emergency":
+				print("TicketManager: Emergency reward - System Lockdown for 120s.")
+				# Lockdown pauses ambient noise AND blocks narrative spawns (if we add a check)
+				pause_ambient_spawning(120.0)
+				# We could add a 'lockdown' flag here if we want to block NarrativeDirector
+			
 			return
 	
 	print(CorporateVoice.get_formatted_phrase("ticket_not_found_for_completion_warning", {"ticket_id": ticket_id}))

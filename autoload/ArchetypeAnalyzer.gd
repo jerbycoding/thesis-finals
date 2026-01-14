@@ -61,7 +61,8 @@ func reset_metrics():
 		"npc_approval": 0.0,
 		"tools_used": {}
 	}
-	print("ArchetypeAnalyzer: Metrics reset.")
+	# Explicitly clear internal state to prevent memory ghosting
+	print("ArchetypeAnalyzer: Metrics hard reset.")
 
 # --- Data Collection Functions ---
 
@@ -72,7 +73,11 @@ func _on_ticket_completed(ticket: TicketResource, completion_type: String, time_
 
 	metrics.tickets_completed += 1
 	metrics.total_completion_time += time_taken
-	metrics.avg_completion_time = metrics.total_completion_time / metrics.tickets_completed
+	
+	if metrics.tickets_completed > 0:
+		metrics.avg_completion_time = metrics.total_completion_time / metrics.tickets_completed
+	else:
+		metrics.avg_completion_time = 0.0
 	
 	# Associate completion types with risk
 	if completion_type in ["efficient", "emergency"]:
@@ -92,6 +97,18 @@ func log_tool_used(tool_name: String):
 	if not metrics.tools_used.has(tool_name):
 		metrics.tools_used[tool_name] = 0
 	metrics.tools_used[tool_name] += 1
+
+func perform_career_reset():
+	# Payoff for the Black Ticket
+	print("ArchetypeAnalyzer: PERFORMING CAREER RESET.")
+	metrics.risks_taken = max(0, metrics.risks_taken - 2)
+	metrics.npc_approval = 0.0 # Reset to neutral
+	
+	if ConsequenceEngine:
+		# Reset CISO relationship to neutral
+		ConsequenceEngine.npc_relationships["ciso"] = 0.0
+	
+	print("ArchetypeAnalyzer: Career reset successful. Risks remaining: ", metrics.risks_taken)
 
 func load_state(data: Dictionary):
 	if data:

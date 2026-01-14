@@ -17,9 +17,7 @@ func _ready():
 	print("DialogueManager ready.")
 
 func start_dialogue(requesting_npc: Node, dialogue_resource: DialogueDataResource):
-	if not is_instance_valid(requesting_npc):
-		print("ERROR: DialogueManager started with an invalid NPC.")
-		return
+	# requesting_npc can be null for 'remote' terminal calls
 	
 	if dialogue_resource == null:
 		print("ERROR: DialogueManager started with a null dialogue resource.")
@@ -27,7 +25,8 @@ func start_dialogue(requesting_npc: Node, dialogue_resource: DialogueDataResourc
 
 	# Validation Step: Ensure the dialogue data is safe to run
 	if not validate_dialogue(dialogue_resource):
-		push_error("DialogueManager: Refused to start invalid dialogue for %s" % requesting_npc.npc_name)
+		var npc_name = requesting_npc.npc_name if is_instance_valid(requesting_npc) else "Unknown"
+		push_error("DialogueManager: Refused to start invalid dialogue for %s" % npc_name)
 		return
 
 	current_npc = requesting_npc
@@ -40,7 +39,11 @@ func start_dialogue(requesting_npc: Node, dialogue_resource: DialogueDataResourc
 	}
 	
 	# Show the dialogue
-	dialogue_box_instance.show_dialogue(dialogue_data, current_npc.npc_name)
+	var display_name = dialogue_resource.npc_name
+	if is_instance_valid(current_npc):
+		display_name = current_npc.npc_name
+		
+	dialogue_box_instance.show_dialogue(dialogue_data, display_name)
 	
 	# Set game mode to Dialogue
 	GameState.set_game_mode(GameState.GameMode.MODE_DIALOGUE)
@@ -69,7 +72,22 @@ func _on_dialogue_choice_selected(choice: Dictionary):
 		# Forward the choice to the NPC that started the dialogue
 		current_npc._on_dialogue_choice_selected(choice)
 	else:
-		print("ERROR: current_npc is not valid or does not have _on_dialogue_choice_selected method.")
+		# If it was a remote call (no NPC node), we can still apply effects directly here
+		if choice.has("effect"):
+			_apply_remote_choice_effect(choice["effect"])
+
+func _apply_remote_choice_effect(effect: Dictionary):
+	if effect.has("relationship_change"):
+		var npc_id = effect.get("npc", "ciso")
+		var change = effect.get("relationship_change", 0.0)
+		if ConsequenceEngine:
+			ConsequenceEngine.update_npc_relationship(npc_id, change)
+	
+	if effect.has("change_scene"):
+		var scene_path = effect.get("change_scene", "")
+		var narrative = effect.get("then_start_narrative", "")
+		if TransitionManager:
+			TransitionManager.change_scene_to(scene_path, narrative)
 
 func _on_dialogue_closed():
 	_close_dialogue_session()

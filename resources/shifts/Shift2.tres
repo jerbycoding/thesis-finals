@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ShiftResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/ShiftResource.gd" id="1_shift"]
+
+[resource]
+script = ExtResource("1_shift")
+shift_name = "Shift 2: Escalation"
+shift_id = "second_shift"
+event_sequence = [
+	{"time": 30, "event": "spawn_ticket", "type": "spawn_ticket", "ticket_id": "RANSOM-001"},
+	{"time": 120, "event": "npc_interaction", "type": "npc_interaction", "npc_id": "senior_analyst", "dialogue_id": "checkin_second_shift"},
+	{"time": 240, "event": "spawn_ticket", "type": "spawn_ticket", "ticket_id": "INSIDER-001"},
+	{"time": 360, "event": "spawn_ticket", "type": "spawn_ticket", "ticket_id": "SOCIAL-001"},
+	{"time": 480, "event": "shift_end_report", "type": "shift_end"}
+]
+random_event_pool = []

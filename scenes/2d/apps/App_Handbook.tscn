@@ -123,3 +123,78 @@ Your performance determines your reputation:
 • [b]Cowboy:[/b] High efficiency, fast but dangerous.
 • [b]Negligent:[/b] Letting alerts time out."
 metadata/_tab_index = 3
+
+[node name="Examples" type="RichTextLabel" parent="Panel/VBox/Content/TabContainer"]
+visible = false
+layout_mode = 2
+bbcode_enabled = true
+text = "[b][color=cyan]WALKTHROUGH: RESOLVING AN INCIDENT[/color][/b]
+
+[b]Example Ticket:[/b] [i]Scheduled System Maintenance[/i]
+[b]Goal:[/b] Verify that the backup service finished successfully.
+
+[b]Step 1: Investigation[/b]
+Open the [color=yellow]SIEM Log Viewer[/color]. You are looking for a \"Success\" message. 
+[i]Hint: Look for Source: \"System\" and Severity: \"Info\".[/i]
+
+[b]Step 2: Attaching Evidence[/b]
+1. Click the log: [color=green]\"Scheduled backup completed successfully\"[/color].
+2. At the bottom, click the dropdown and select the maintenance ticket.
+3. Click [b]Attach[/b].
+
+[b]Step 3: Closing the Loop[/b]
+1. Open the [color=yellow]Ticket Queue[/color].
+2. Select the ticket. You will see [color=green]Evidence: 1/1[/color].
+3. Click [b]Resolve Incident[/b].
+4. Choose [b]Compliant Resolution[/b].
+
+[b][color=orange]WHY COMPLIANT?[/color][/b]
+If you skip Step 2 and choose [b]Efficient[/b], you close the ticket faster but risk missing \"Hidden Risks.\" For example, if a malware beacon was hidden in those logs and you didn't check them, the attack will [color=red]Escalate[/color] later in your shift!"
+metadata/_tab_index = 4
+
+[node name="Incidents" type="RichTextLabel" parent="Panel/VBox/Content/TabContainer"]
+visible = false
+layout_mode = 2
+bbcode_enabled = true
+text = "[b][color=cyan]INCIDENT CATALOG & PROCEDURES[/color][/b]
+
+[b]1. PHISH-001: Phishing Campaign Alert[/b]
+• [b]Tool:[/b] SIEM / Email
+• [b]Steps:[/b] Check SIEM alerts, review email headers, verify clicks.
+
+[b]2. SPEAR-PHISH-001: Spear Phishing Investigation[/b]
+• [b]Tool:[/b] Email
+• [b]Steps:[/b] Inspect headers for spoofing, scan attachments, check domain reputation.
+
+[b]3. MALWARE-CONTAIN-001: Malware Containment[/b]
+• [b]Tool:[/b] Terminal
+• [b]Steps:[/b] Scan host WORKSTATION-45, isolate host if infected, verify isolation.
+
+[b]4. RANSOM-001: Ransomware Alert[/b]
+• [b]Tool:[/b] Terminal
+• [b]Steps:[/b] Check FINANCE-SRV-01 status, isolate server, report to CISO.
+
+[b]5. SOCIAL-001: Social Engineering Attempt[/b]
+• [b]Tool:[/b] Email / SIEM
+• [b]Steps:[/b] Check call logs, draft security alert, update security awareness.
+
+[b]6. INSIDER-001: Suspicious Data Access[/b]
+• [b]Tool:[/b] SIEM
+• [b]Steps:[/b] Search Jane Doe logs, identify unusual file access, report to Senior Analyst.
+
+[b]7. DATA-EXFIL-001: Data Exfiltration Alert[/b]
+• [b]Tool:[/b] SIEM / Email
+• [b]Steps:[/b] Check email for suspicious IP, search IP in SIEM, check host status.
+
+[b]8. AUTH-FAIL-GENERIC: Multiple Auth Failures[/b]
+• [b]Tool:[/b] SIEM / Email
+• [b]Steps:[/b] Verify jsmith identity, reset password if requested, monitor failures.
+
+[b]9. SYS-MAINT-GENERIC: Scheduled Maintenance[/b]
+• [b]Tool:[/b] SIEM
+• [b]Steps:[/b] Monitor patch logs, verify 'smbd' service, confirm connectivity.
+
+[b]10. BLACK-TICKET-REDEMPTION: Forensic Post-Mortem[/b]
+• [b]Tool:[/b] SIEM / Email / Terminal
+• [b]Steps:[/b] Identify delivery vector, trace lateral movement, verify recovery."
+metadata/_tab_index = 5

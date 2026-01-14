@@ -30,6 +30,9 @@ func _ready():
 		TicketManager.ticket_added.connect(_on_ticket_added)
 		TicketManager.ticket_completed.connect(_on_ticket_completed)
 	
+	if ConsequenceEngine:
+		ConsequenceEngine.consequence_triggered.connect(_on_consequence_triggered)
+	
 	# Set desktop instance for NotificationManager
 	if NotificationManager:
 		NotificationManager.set_desktop(self)
@@ -60,17 +63,58 @@ func _on_app_icon_hover():
 func _on_app_icon_pressed(app_name: String):
 	if DesktopWindowManager:
 		DesktopWindowManager.open_app(app_name)
+		# Clear glow when app is opened
+		_set_icon_glow(app_name, false)
 
 func _on_ticket_added(ticket_data: TicketResource):
 	print("New ticket in queue: ", ticket_data.title)
 	
-	# Auto-open tickets app if not open
-	if DesktopWindowManager and not DesktopWindowManager._find_window_by_app("tickets"):
-		print("Auto-opening Ticket Queue for new ticket")
-		DesktopWindowManager.open_app("tickets")
+	if DesktopWindowManager:
+		# Auto-open tickets app if not open
+		if not DesktopWindowManager._find_window_by_app("tickets"):
+			print("Auto-opening Ticket Queue for new ticket")
+			DesktopWindowManager.open_app("tickets")
+		
+		# AUTO-POP: If ticket is Critical, open the required tool immediately
+		if ticket_data.severity == "Critical" and ticket_data.required_tool != "none":
+			print("CRITICAL Incident: Auto-popping tool ", ticket_data.required_tool)
+			DesktopWindowManager.open_app(ticket_data.required_tool)
+		
+		# ICON GLOW: Apply glow to relevant tool icon
+		if ticket_data.required_tool != "none":
+			_set_icon_glow(ticket_data.required_tool, true)
+
+func _set_icon_glow(app_name: String, active: bool):
+	var icon_name = app_name.capitalize() + "_Icon"
+	# Handle cases like SIEM (all caps)
+	if app_name == "siem": icon_name = "SIEM_Icon"
+	
+	var icon_btn = app_launcher.get_node_or_null(icon_name)
+	if not icon_btn: return
+	
+	if active:
+		# Create pulsing animation
+		var tween = create_tween().set_loops()
+		tween.tween_property(icon_btn, "modulate", Color(1.5, 0.5, 1.5, 1.0), 0.8).set_trans(Tween.TRANS_SINE)
+		tween.tween_property(icon_btn, "modulate", Color.WHITE, 0.8).set_trans(Tween.TRANS_SINE)
+		icon_btn.set_meta("glow_tween", tween)
+	else:
+		if icon_btn.has_meta("glow_tween"):
+			var tween = icon_btn.get_meta("glow_tween")
+			if tween: tween.kill()
+			icon_btn.modulate = Color.WHITE
+			icon_btn.remove_meta("glow_tween")
+
+func _on_consequence_triggered(consequence_type: String, _details: Dictionary):
+	if consequence_type == "escalation":
+		print("Desktop: Escalation detected. Activating SIEM glow.")
+		_set_icon_glow("siem", true)
 
 func _on_ticket_completed(ticket: TicketResource, completion_type: String, time_taken: float):
 	print("Ticket completed: ", ticket.ticket_id, " as ", completion_type)
+	# Remove glow when ticket is solved
+	if ticket.required_tool != "none":
+		_set_icon_glow(ticket.required_tool, false)
 
 func _input(event):
 	# Close focused window with Escape

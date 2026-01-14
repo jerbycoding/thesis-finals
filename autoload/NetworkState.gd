@@ -15,32 +15,16 @@ var host_states: Dictionary = {
 func _ready():
 	print("========================================")
 	print("NetworkState initialized")
-	_discover_hosts_from_resources()
+	_discover_hosts_from_resources.call_deferred()
 	print("========================================")
 
 func _discover_hosts_from_resources():
 	print("🌐 Discovering hosts from resource files...")
-	var resource_files = [
-		# Tickets
-		"res://resources/tickets/TicketDataExfiltration.tres",
-		"res://resources/tickets/TicketMalwareContainment.tres",
-		"res://resources/tickets/TicketPhishing01.tres",
-		"res://resources/tickets/TicketSpearPhish.tres",
-		"res://resources/tickets/TicketRansomware01.tres",
-		"res://resources/tickets/TicketInsiderThreat01.tres",
-		"res://resources/tickets/TicketSocialEng01.tres",
-		# Logs
-		"res://resources/logs/LogAuthFailure.tres",
-		"res://resources/logs/LogEmailBlocked.tres",
-		"res://resources/logs/LogExfil001.tres",
-		"res://resources/logs/LogMalware001.tres",
-		"res://resources/logs/LogMalwareBeacon.tres",
-		"res://resources/logs/LogNetwork001.tres",
-		"res://resources/logs/LogNetworkScan.tres",
-		"res://resources/logs/LogPhishingAttempt.tres",
-		"res://resources/logs/LogSystemNormal.tres",
-		"res://resources/logs/LogUserClicked.tres"
-	]
+	
+	var ticket_paths = FileUtil.get_resource_paths("res://resources/tickets/", ".tres")
+	var log_paths = FileUtil.get_resource_paths("res://resources/logs/", ".tres")
+	
+	var resource_files = ticket_paths + log_paths
 	
 	var regex = RegEx.new()
 	# This regex finds words that look like hostnames (e.g., WORD-WORD-123)
@@ -48,7 +32,6 @@ func _discover_hosts_from_resources():
 
 	for file_path in resource_files:
 		if not ResourceLoader.exists(file_path):
-			print("  - WARNING: Resource file not found: ", file_path)
 			continue
 			
 		var resource_instance = load(file_path)

@@ -12,6 +12,14 @@ class_name TicketResource
 @export var base_time: float = 180.0 # seconds
 @export var hidden_risks: Array[String] = []
 @export var required_log_ids: Array[String] = [] # Log IDs that should be attached for compliant completion
+
+# --- Kill Chain Properties ---
+@export_group("Kill Chain")
+@export var kill_chain_path: String = "" # e.g., "Malware Outbreak"
+@export var kill_chain_stage: int = 0 # 1, 2, or 3
+@export var escalation_ticket: Resource = null # The TicketResource for the next stage
+# ----------------------------
+
 var attached_log_ids: Array[String] = [] # Log IDs that player has attached
 var spawn_timestamp: float = 0.0
 var expiry_timestamp: float = 0.0

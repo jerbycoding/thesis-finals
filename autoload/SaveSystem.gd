@@ -15,6 +15,20 @@ func save_game():
 	# For now, we assume saving at the end of shift 1 always means shift 2 is next.
 	# A more robust system would get the next shift from NarrativeDirector.
 	var next_shift = "second_shift"
+	
+	# Defensive checks for singletons
+	if not is_instance_valid(ArchetypeAnalyzer):
+		push_error("SaveSystem: ArchetypeAnalyzer is invalid/freed. Aborting save.")
+		return
+	if not is_instance_valid(ConsequenceEngine):
+		push_error("SaveSystem: ConsequenceEngine is invalid/freed. Aborting save.")
+		return
+	if not is_instance_valid(NetworkState):
+		push_error("SaveSystem: NetworkState is invalid/freed. Aborting save.")
+		return
+	if not is_instance_valid(TicketManager):
+		push_error("SaveSystem: TicketManager is invalid/freed. Aborting save.")
+		return
 
 	var save_data = {
 		# --- Player State ---

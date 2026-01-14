@@ -10,36 +10,14 @@ signal world_event(event_id: String, active: bool, duration: float)
 signal shift_started
 signal shift_ended(results: Dictionary)
 
-# The scripted sequence of events for the first shift.
-# Events are triggered by time or player actions.
-var first_shift_arc = [
-	{"time": 4, "event": "spawn_phishing_ticket", "type": "spawn_ticket", "ticket_id": "phishing_intro"},
-	{"time": 15, "event": "siem_instability", "type": "system_event", "event_id": "SIEM_LAG", "duration": 20.0},
-	# {"time": 240, "event": "senior_analyst_checkin_mid", "type": "npc_interaction", "npc_id": "senior_analyst", "dialogue_id": "checkin_01"}, # Now triggered by event
-	{"time": 24, "event": "spawn_malware_ticket", "type": "spawn_ticket", "ticket_id": "malware_response"},
-	{"time": 36, "event": "ciso_followup", "type": "npc_interaction", "npc_id": "ciso", "dialogue_id": "default"},
-	{"time": 120, "event": "it_support_checkin", "type": "npc_interaction", "npc_id": "it_support", "dialogue_id": "default"},
-	{"time": 150, "event": "final_ciso_briefing", "type": "npc_interaction", "npc_id": "ciso", "dialogue_id": "shift_end"},
-	{"time": 180, "event": "shift_end_report", "type": "shift_end"}
-]
-
-var second_shift_arc = [
-	{"time": 20, "event": "spawn_ticket", "type": "spawn_ticket", "ticket_id": "ransom_001"},
-	{"time": 60, "event": "npc_interaction", "type": "npc_interaction", "npc_id": "senior_analyst", "dialogue_id": "checkin_second_shift"},
-	{"time": 80, "event": "spawn_ticket", "type": "spawn_ticket", "ticket_id": "insider_001"},
-	{"time": 120, "event": "spawn_ticket", "type": "spawn_ticket", "ticket_id": "social_001"},
-	{"time": 180, "event": "shift_end_report", "type": "shift_end"}
-]
-
-var third_shift_arc = [
-	{"time": 15, "event": "spawn_ticket", "type": "spawn_ticket", "ticket_id": "data_exfil"},
-	{"time": 60, "event": "spawn_ticket", "type": "spawn_ticket", "ticket_id": "phishing_campaign"},
-	{"time": 180, "event": "shift_end_report", "type": "shift_end"}
-]
-
-var current_active_arc: Array = []
 var current_shift_name: String = "first_shift"
 var shift_report_scene = preload("res://scenes/2d/apps/App_ShiftReport.tscn")
+
+var shift_library: Dictionary = {} # shift_id -> Resource
+var current_shift_resource: Resource = null
+var current_active_arc: Array = []
+
+const SHIFT_DIR = "res://resources/shifts/"
 
 var shift_start_time: float = 0.0
 var current_event_index: int = 0
@@ -48,6 +26,9 @@ var is_first_ticket_completed: bool = false # State to prevent re-triggering
 var event_timer: Timer
 
 func _ready():
+	# Discover all shifts in the folder
+	_discover_shifts()
+	
 	# Connect to TicketManager to handle event-driven narrative beats
 	if TicketManager:
 		TicketManager.ticket_completed.connect(_on_ticket_completed)
@@ -58,20 +39,31 @@ func _ready():
 	event_timer.one_shot = true
 	event_timer.timeout.connect(_on_event_timer_timeout)
 
-func start_shift(shift_name: String = "first_shift"):
-	print("NarrativeDirector: Starting shift: ", shift_name)
-	current_shift_name = shift_name
+func _discover_shifts():
+	print("🎬 NARRATIVE_DEBUG: Discovering shifts in %s..." % SHIFT_DIR)
+	shift_library.clear()
+	var paths = FileUtil.get_resource_paths(SHIFT_DIR)
+	for path in paths:
+		var res = load(path)
+		if res and res is ShiftResource:
+			if not res.validate():
+				print("  - ❌ NARRATIVE_DEBUG: Skipping malformed resource: %s" % path)
+				continue
+				
+			shift_library[res.shift_id] = res
+			print("  - Registered Shift: %s" % res.shift_id)
+	print("🎬 NARRATIVE_DEBUG: Library ready: %d shifts." % shift_library.size())
+
+func start_shift(shift_id: String = "first_shift"):
+	print("NarrativeDirector: Attempting to start shift: ", shift_id)
 	
-	match shift_name:
-		"first_shift":
-			current_active_arc = first_shift_arc
-		"second_shift":
-			current_active_arc = second_shift_arc
-		"third_shift":
-			current_active_arc = third_shift_arc
-		_:
-			push_error("NarrativeDirector: Unknown shift name: ", shift_name)
-			return
+	if not shift_library.has(shift_id):
+		push_error("NarrativeDirector: Shift ID '%s' not found in library!" % shift_id)
+		return
+		
+	current_shift_resource = shift_library[shift_id]
+	current_shift_name = shift_id
+	current_active_arc = current_shift_resource.event_sequence
 
 	_is_shift_active = true
 	is_first_ticket_completed = false
@@ -130,6 +122,23 @@ func _trigger_event(event_data: Dictionary):
 	print("NarrativeDirector: Triggering event - ", event_data.get("event", "N/A"))
 	match event_data.type:
 		"npc_interaction":
+			if GameState.is_in_2d_mode():
+				print("NarrativeDirector: NPC interaction triggered. Transitioning to 3D for dialogue.")
+				TransitionManager.exit_desktop_mode()
+				await TransitionManager.transition_completed
+				# Wait a moment for the camera to settle
+				await get_tree().create_timer(0.5).timeout
+			
+			# Fallback for remote NPCs (like CISO who is no longer in the office)
+			if event_data.npc_id == "ciso" and DialogueManager:
+				var path = "res://resources/dialogue/ciso_" + event_data.dialogue_id + ".tres"
+				if ResourceLoader.exists(path):
+					var res = load(path)
+					if res:
+						print("NarrativeDirector: Starting remote CISO dialogue.")
+						DialogueManager.start_dialogue(null, res)
+						return # Skip the signal emission since we started it manually
+			
 			emit_signal("npc_interaction_requested", event_data.npc_id, event_data.dialogue_id)
 		"spawn_ticket":
 			emit_signal("spawn_ticket_requested", event_data.ticket_id)
@@ -163,13 +172,13 @@ func _trigger_event(event_data: Dictionary):
 				emit_signal("shift_ended", {})
 
 
-func _on_ticket_completed(ticket: TicketResource, completion_type: String, time_taken: float):
+func _on_ticket_completed(ticket: TicketResource, completion_type: String, _time_taken: float):
 	# Check if the first ticket was just completed
 	if ticket.ticket_id == "SPEAR-PHISH-001" and not is_first_ticket_completed:
 		is_first_ticket_completed = true
 		print("NarrativeDirector: First ticket completed. Triggering Senior Analyst check-in.")
 		
-		# Define the event to be triggered
+		# Define the event
 		var analyst_event = {
 			"event": "senior_analyst_checkin_mid", 
 			"type": "npc_interaction", 
@@ -177,16 +186,13 @@ func _on_ticket_completed(ticket: TicketResource, completion_type: String, time_
 			"dialogue_id": "checkin_01"
 		}
 		
-		# If player is in 2D mode, exit to 3D first, then trigger dialogue
+		# Transition if needed
 		if GameState.is_in_2d_mode():
-			print("NarrativeDirector: Player is in 2D mode. Exiting to 3D before starting dialogue.")
 			TransitionManager.exit_desktop_mode()
 			await TransitionManager.transition_completed
-			print("NarrativeDirector: 3D transition complete. Triggering dialogue.")
-			_trigger_event(analyst_event)
-		else:
-			# If already in 3D, trigger immediately
-			_trigger_event(analyst_event)
+			await get_tree().create_timer(0.5).timeout
+		
+		_trigger_event(analyst_event)
 
 
 func start_briefing():

@@ -10,6 +10,6 @@ source = "Authentication"
 category = "Security"
 message = "Multiple failed login attempts from 10.0.0.45"
 severity = 4
-related_ticket = ""
+related_ticket = "GENERIC"
 ip_address = "10.0.0.45"
 hostname = "workstation-12"

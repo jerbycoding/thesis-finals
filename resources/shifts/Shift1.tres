@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="ShiftResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/ShiftResource.gd" id="1_shift"]
+
+[resource]
+script = ExtResource("1_shift")
+shift_name = "Shift 1: Onboarding"
+shift_id = "first_shift"
+event_sequence = [
+	{"time": 10, "event": "spawn_phishing_ticket", "type": "spawn_ticket", "ticket_id": "SPEAR-PHISH-001"},
+	{"time": 45, "event": "siem_instability", "type": "system_event", "event_id": "SIEM_LAG", "duration": 40.0},
+	{"time": 80, "event": "spawn_malware_ticket", "type": "spawn_ticket", "ticket_id": "MALWARE-CONTAIN-001"},
+	{"time": 120, "event": "ciso_followup", "type": "npc_interaction", "npc_id": "ciso", "dialogue_id": "default"},
+	{"time": 360, "event": "final_ciso_briefing", "type": "npc_interaction", "npc_id": "ciso", "dialogue_id": "shift_end"},
+	{"time": 420, "event": "shift_end_report", "type": "shift_end"}
+]
+random_event_pool = []

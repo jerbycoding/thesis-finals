@@ -24,6 +24,14 @@ enum ConsequenceType {
 	REPUTATION_LOSS
 }
 
+# Kill Chain Escalation Probabilities (0.0 to 1.0)
+const ESCALATION_RISKS = {
+	"compliant": 0.0,
+	"efficient": 0.5,
+	"emergency": 0.75,
+	"timeout": 1.0
+}
+
 # Standardized ID Templates to avoid Magic Strings
 const CONSEQUENCE_IDS = {
 	"MAJOR_BREACH": "MAJOR-BREACH-FOLLOWUP",
@@ -61,25 +69,27 @@ func trigger_consequence(consequence_id: String):
 			print("⚠ Unknown consequence ID received: ", consequence_id)
 
 func _ready():
+	_initialize_engine.call_deferred()
+
+func _initialize_engine():
 	# Connect to the NarrativeDirector to listen for scripted consequence events
-	if NarrativeDirector:
+	if is_instance_valid(NarrativeDirector):
 		NarrativeDirector.spawn_consequence_requested.connect(trigger_consequence)
 
 	# Connect to TicketManager to listen for ticket completion events
-	if TicketManager:
+	if is_instance_valid(TicketManager):
 		TicketManager.ticket_completed.connect(_on_ticket_completed_by_manager)
 		TicketManager.ticket_ignored.connect(_on_ticket_ignored)
 
 	# Connect to EmailSystem for email decisions
-	if EmailSystem:
+	if is_instance_valid(EmailSystem):
 		EmailSystem.email_decision_processed.connect(_on_email_decision_processed)
 
 	# Connect to TerminalSystem for critical actions
-	if TerminalSystem:
+	if is_instance_valid(TerminalSystem):
 		TerminalSystem.critical_host_isolated.connect(_on_critical_host_isolated)
 
 	# Start a timer to periodically evaluate for emergent consequences
-
 	var consequence_timer = get_tree().create_timer(CONSEQUENCE_EVAL_INTERVAL, false)
 	consequence_timer.timeout.connect(_evaluate_consequences)
 
@@ -194,9 +204,74 @@ func _on_ticket_completed_by_manager(ticket: TicketResource, completion_type: St
 
 	# Schedule consequences based on completion type
 	_schedule_consequences(ticket, completion_type, time_taken) # Pass time_taken instead of time_remaining
+	
+	# Kill Chain Escalation Logic
+	if ticket.kill_chain_path != "":
+		_evaluate_kill_chain_escalation(ticket, completion_type)
 
+func _evaluate_kill_chain_escalation(ticket: TicketResource, completion_type: String):
+	var risk = ESCALATION_RISKS.get(completion_type, 0.0)
+	var roll = randf()
+	
+	print("⛓ Kill Chain Evaluation: %s (Path: %s, Stage: %d)" % [ticket.ticket_id, ticket.kill_chain_path, ticket.kill_chain_stage])
+	print("  Risk: %.2f | Roll: %.2f" % [risk, roll])
+	
+	if roll < risk:
+		print("  🚨 ESCALATION TRIGGERED!")
+		if ticket.kill_chain_stage >= 3:
+			print("  💀 Impact Stage failure. Offering Redemption (Black Ticket).")
+			_spawn_black_ticket()
+		else:
+			_trigger_kill_chain_escalation(ticket)
+	else:
+		print("  ✓ Threat contained. No escalation.")
+		# Check if this was the Black Ticket itself being completed correctly
+		if ticket.ticket_id == "BLACK-TICKET-REDEMPTION" and completion_type == "compliant":
+			if ArchetypeAnalyzer:
+				ArchetypeAnalyzer.perform_career_reset()
 
+func _spawn_black_ticket():
+	var black_ticket_res = load("res://resources/tickets/TicketBlackRedemption.tres")
+	if black_ticket_res:
+		var black_ticket = black_ticket_res.duplicate()
+		print("  🎫 Spawning Black Ticket...")
+		if TicketManager:
+			TicketManager.add_ticket(black_ticket)
+			consequence_triggered.emit("black_ticket", {"ticket_id": black_ticket.ticket_id})
+	else:
+		print("  ❌ ERROR: Could not load Black Ticket resource")
 
+func _trigger_kill_chain_escalation(ticket: TicketResource):
+	if ticket.escalation_ticket == null:
+		print("  ⚠ No escalation ticket defined for ", ticket.ticket_id)
+		return
+	
+	var next_ticket = ticket.escalation_ticket.duplicate()
+	var delay = 15.0 # Standard delay for escalation
+	
+	# Mark the original logs as revealed so the player can see what they missed
+	if LogSystem:
+		for log_id in ticket.required_log_ids:
+			var log = LogSystem.get_log_by_id(log_id)
+			if log:
+				log.is_revealed = true
+				print("  🔍 Log revealed: ", log_id)
+	
+	print("  📅 Scheduling escalation ticket: ", next_ticket.ticket_id, " in ", delay, "s")
+	
+	# Emit signal for NotificationManager or UI
+	consequence_triggered.emit("escalation", {
+		"path": ticket.kill_chain_path,
+		"stage": ticket.kill_chain_stage + 1,
+		"original_id": ticket.ticket_id
+	})
+	
+	# Start timer to spawn ticket
+	get_tree().create_timer(delay).timeout.connect(
+		func(): 
+			if TicketManager:
+				TicketManager.add_ticket(next_ticket)
+	)
 
 func _check_hidden_risks(ticket: TicketResource, completion_type: String):
 	# Check if player triggered any hidden risks

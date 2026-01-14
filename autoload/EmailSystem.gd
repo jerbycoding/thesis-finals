@@ -10,54 +10,66 @@ var all_emails: Array[EmailResource] = []
 var active_emails: Array[EmailResource] = [] # Only these are shown in the app
 var processed_emails: Array[String] = []  # Email IDs that have been processed
 
-
-# Email library - preloaded .tres resources
-var email_library: Array[EmailResource] = [
-	preload("res://resources/emails/EmailPhishing01.tres"),
-	preload("res://resources/emails/EmailLegitUrgent.tres"),
-	preload("res://resources/emails/EmailSpearPhish.tres"),
-	preload("res://resources/emails/EmailSocialEng.tres"),
-	preload("res://resources/emails/EmailRansomNote.tres"),
-	preload("res://resources/emails/EmailExfilWarning.tres"),
-]
+const EMAIL_DIR = "res://resources/emails/"
 
 func _ready():
 	print("========================================")
 	print("EmailSystem initialized")
 	print("========================================")
 	
-	# Wait a moment for other systems to initialize
-	await get_tree().create_timer(0.5).timeout
-	
-	# Load all emails into the background library, but don't activate them yet
+	_initialize_system.call_deferred()
+
+func _initialize_system():
+	# Load all emails into the background library
 	_prepare_library()
 	
 	# Load some initial generic emails that don't need a ticket
 	reveal_emails_for_ticket("") 
 
 func _prepare_library():
-	print("📧 Preparing email library...")
-	for email_res in email_library:
-		if email_res:
-			all_emails.append(email_res.duplicate())
-	print("📧 Library ready: ", all_emails.size(), " emails")
+	print("📧 EMAIL_DEBUG: Discovering emails in %s..." % EMAIL_DIR)
+	all_emails.clear()
+	
+	var paths = FileUtil.get_resource_paths(EMAIL_DIR)
+	for path in paths:
+		var res = load(path)
+		if res and res is EmailResource:
+			if not res.validate():
+				print("  - ❌ EMAIL_DEBUG: Skipping malformed resource: %s" % path)
+				continue
+				
+			all_emails.append(res)
+			print("  - Discovered Email: ID=%s" % res.email_id)
+		else:
+			print("  - ❌ EMAIL_DEBUG: Skipping invalid resource: %s" % path)
+			
+	print("📧 EMAIL_DEBUG: Library ready: ", all_emails.size(), " emails")
 
 func reveal_emails_for_ticket(ticket_id: String):
-	print("📧 Revealing emails for ticket: ", ticket_id if not ticket_id.is_empty() else "GENERIC")
+	print("📧 EMAIL_DEBUG: reveal_emails_for_ticket(%s)" % (ticket_id if not ticket_id.is_empty() else "GENERIC"))
 	var count = 0
 	for email in all_emails:
-		if email.related_ticket == ticket_id:
+		# Match if:
+		# 1. Exact ticket ID match
+		# 2. Or ticket is GENERIC and email is GENERIC
+		# 3. Or email has no ticket assigned
+		var is_exact_match = email.related_ticket == ticket_id
+		var is_generic_match = (ticket_id.contains("GENERIC") and email.related_ticket == "GENERIC")
+		var email_is_orphaned = (email.related_ticket == "" or email.related_ticket == "NONE")
+		
+		if is_exact_match or is_generic_match or (ticket_id == "" and email_is_orphaned):
 			if email not in active_emails:
 				active_emails.append(email)
 				email_added.emit(email)
 				count += 1
+				print("  - Revealed Email: ID=%s | Subject=%s" % [email.email_id, email.subject])
 	
 	if count > 0:
-		print("📧 Revealed ", count, " new emails for ", ticket_id)
+		print("📧 EMAIL_DEBUG: Revealed ", count, " new emails")
 
 func add_email(email: EmailResource):
-	if not email:
-		return
+	if not email: return
+	print("📧 EMAIL_DEBUG: add_email() called for ID=%s" % email.email_id)
 	
 	if email not in all_emails:
 		all_emails.append(email)
@@ -77,6 +89,9 @@ func get_emails_for_ticket(ticket_id: String) -> Array[EmailResource]:
 	return filtered
 
 func get_email_by_id(email_id: String) -> EmailResource:
+	for email in all_emails:
+		if email.email_id == email_id:
+			return email
 	for email in active_emails:
 		if email.email_id == email_id:
 			return email

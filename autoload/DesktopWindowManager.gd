@@ -2,6 +2,9 @@
 # Autoload singleton to manage desktop application windows.
 extends Node
 
+signal app_opened(app_name: String, window_id: String)
+signal app_closed(app_name: String, window_id: String)
+
 var open_windows: Dictionary = {}  # window_id: WindowFrame
 var next_window_position: Vector2 = Vector2(50, 50)
 var window_z_index_base: int = 10
@@ -154,6 +157,7 @@ func open_app(app_name: String, force_new: bool = false):
 	_focus_window(window)
 	window.bring_to_front()
 	
+	app_opened.emit(app_name, window_id)
 	print("DesktopWindowManager: Opened app: ", app_name, " at position: ", window.position)
 
 func close_app(app_name: String, window_id: String = ""):
@@ -231,6 +235,9 @@ func _on_window_closed(window: Control):
 	# Remove from tracking
 	if window_id in open_windows:
 		open_windows.erase(window_id)
+		# Extract app_name from window_id (format: appname_timestamp)
+		var app_name = window_id.split("_")[0]
+		app_closed.emit(app_name, window_id)
 		print("DesktopWindowManager: Removed window from tracking: ", window_id)
 	
 	# Update focused window

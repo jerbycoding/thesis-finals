@@ -1,5 +1,6 @@
-[gd_resource type="Resource" script_class="TicketResource" load_steps=2 format=3 uid="uid://baydndvxdr4nk"]
+[gd_resource type="Resource" script_class="TicketResource" load_steps=3 format=3 uid="uid://baydndvxdr4nk"]
 
+[ext_resource type="Resource" uid="uid://i7o40b562opl" path="res://resources/tickets/TicketDataExfiltration.tres" id="1_exfil"]
 [ext_resource type="Script" uid="uid://ccptkdfdnunvq" path="res://resources/tickets/TicketResource.gd" id="1_ticket"]
 
 [resource]
@@ -11,6 +12,9 @@ severity = "High"
 category = "Insider Threat"
 steps = Array[String](["Search SIEM logs for 'Jane Doe' activity on her workstation (WORKSTATION-52)", "Identify unusual file access or outbound connections", "Report findings to Senior Analyst"])
 required_tool = "siem"
-base_time = 90.0
+base_time = 240.0
 hidden_risks = Array[String](["Dismissing legitimate access", "Alerting insider before evidence collected"])
 required_log_ids = Array[String](["LOG-JANE-DOE-ACCESS", "LOG-EXFIL-JANE-DOE"])
+kill_chain_path = "The Data Breach"
+kill_chain_stage = 2
+escalation_ticket = ExtResource("1_exfil")

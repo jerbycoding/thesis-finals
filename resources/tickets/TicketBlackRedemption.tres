@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="TicketResource" load_steps=2 format=3 uid="uid://bt1ck2rd3mpt"]
+
+[ext_resource type="Script" uid="uid://ccptkdfdnunvq" path="res://resources/tickets/TicketResource.gd" id="1_ticket"]
+
+[resource]
+script = ExtResource("1_ticket")
+ticket_id = "BLACK-TICKET-REDEMPTION"
+title = "REDEMPTION: Full Forensic Post-Mortem"
+description = "CRITICAL FAILURE RECOVERY. Adhere to zero-trust forensics. You must identify the full scope of the breach by cross-referencing all missing logs and artifacts. Successful completion will purge your record of past procedural deviations."
+severity = "Critical"
+category = "Forensics"
+steps = Array[String](["Identify initial delivery vector", "Trace lateral movement logs", "Verify data recovery integrity"])
+required_tool = "siem"
+base_time = 9999.0 # Effectively no timer for the Black Ticket
+hidden_risks = Array[String]([])
+required_log_ids = Array[String](["LOG-PHISH-001", "LOG-MALWARE-001", "LOG-EXFIL-001", "LOG-AUTH-FAILURE", "LOG-NETWORK-001"])
+kill_chain_path = "Redemption"
+kill_chain_stage = 99
+escalation_ticket = null

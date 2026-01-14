@@ -10,6 +10,6 @@ source = "System"
 category = "System"
 message = "Scheduled backup completed successfully"
 severity = 1
-related_ticket = ""
+related_ticket = "GENERIC"
 ip_address = ""
 hostname = "backup-server-01"

@@ -67,6 +67,11 @@ func _on_update_tick():
 		status_text = "STATUS: HIGH RESOURCE DEMAND"
 		status_color = Color.ORANGE
 	
+	if active_events.has("FALSE_FLAG"):
+		target_cpu += 20.0 + randf_range(0, 10)
+		status_text = "STATUS: HIGH BACKGROUND PROCESS VOLUME"
+		status_color = Color.YELLOW
+	
 	# If we have a lot of active tickets, CPU goes up
 	if TicketManager:
 		target_cpu += TicketManager.get_active_tickets().size() * 5.0

@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="TicketResource" load_steps=2 format=3 uid="uid://dm8lal0m1n2p3"]
+
+[ext_resource type="Script" uid="uid://ccptkdfdnunvq" path="res://resources/tickets/TicketResource.gd" id="1_ticket"]
+
+[resource]
+script = ExtResource("1_ticket")
+ticket_id = "SYS-MAINT-GENERIC"
+title = "Scheduled System Maintenance"
+description = "Regular patch management window for internal file server. Verify system availability after update cycle completes."
+severity = "Low"
+category = "Maintenance"
+steps = Array[String](["Monitor patch progress logs", "Verify service 'smbd' is operational", "Confirm connectivity from test workstation"])
+required_tool = "siem"
+base_time = 300.0
+hidden_risks = Array[String]([])
+required_log_ids = Array[String](["LOG-SYS-004"])
+kill_chain_path = ""
+kill_chain_stage = 0

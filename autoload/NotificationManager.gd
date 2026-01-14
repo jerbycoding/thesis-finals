@@ -148,6 +148,14 @@ func _on_consequence_triggered(consequence_type: String, details: Dictionary):
 			var reason = details.get("reason", "Follow-up required")
 			message = CorporateVoice.get_formatted_phrase("followup_ticket_triggered", {"reason": reason}) # Assuming a new phrase for this
 			notif_type = "warning"
+		"escalation":
+			var path = details.get("path", "Unknown")
+			var stage = str(details.get("stage", 0))
+			message = CorporateVoice.get_formatted_phrase("kill_chain_escalation", {"path": path, "stage": stage})
+			notif_type = "error"
+		"black_ticket":
+			message = "CRITICAL RECOVERY INITIATED: Forensic post-mortem required."
+			notif_type = "warning"
 		"malware_outbreak":
 			message = CorporateVoice.get_phrase("malware_outbreak")
 			notif_type = "error"

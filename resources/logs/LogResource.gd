@@ -11,6 +11,7 @@ class_name LogResource
 @export var related_ticket: String = "" # Optional ticket_id this log relates to
 @export var ip_address: String = "" # Optional IP address mentioned in log
 @export var hostname: String = "" # Optional hostname mentioned in log
+@export var is_revealed: bool = false # If true, log was missed in a previous stage and is now surfaced
 
 func _to_string() -> String:
 	return "[Log: %s - %s - %s]" % [timestamp, source, message.substr(0, 30)]
