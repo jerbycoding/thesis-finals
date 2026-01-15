@@ -79,11 +79,15 @@ func set_near_computer(computer_node, is_near):
 	
 	if is_near:
 		near_computer = computer_node
+		if near_computer.has_method("set_highlight"):
+			near_computer.set_highlight(true)
 		if %InteractionPrompt:
 			%InteractionPrompt.set_text("Use Workstation")
 			%InteractionPrompt.show_prompt()
 	else:
 		if near_computer == computer_node:
+			if near_computer.has_method("set_highlight"):
+				near_computer.set_highlight(false)
 			near_computer = null
 		if %InteractionPrompt:
 			%InteractionPrompt.hide_prompt()
@@ -94,12 +98,16 @@ func set_near_npc(npc_node, is_near):
 	
 	if is_near:
 		near_npc = npc_node
+		if near_npc.has_method("set_highlight"):
+			near_npc.set_highlight(true)
 		if %InteractionPrompt:
 			var npc_name = near_npc.npc_name if "npc_name" in near_npc else "NPC"
 			%InteractionPrompt.set_text("Talk to " + npc_name)
 			%InteractionPrompt.show_prompt()
 	else:
 		if near_npc == npc_node:
+			if near_npc.has_method("set_highlight"):
+				near_npc.set_highlight(false)
 			near_npc = null
 		if %InteractionPrompt:
 			%InteractionPrompt.hide_prompt()

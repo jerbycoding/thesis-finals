@@ -2,6 +2,8 @@
 
 [ext_resource type="PackedScene" uid="uid://ceta2wna3gome" path="res://scenes/3d/NPC_CISO.tscn" id="1_ciso"]
 [ext_resource type="PackedScene" uid="uid://b2d35yngg7u75" path="res://scenes/Player3D.tscn" id="2_player"]
+[ext_resource type="Script" path="res://scripts/3d/RoomTeleporter.gd" id="3_teleport"]
+[ext_resource type="Script" path="res://scripts/3d/SlidingDoor.gd" id="4_door"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_briefing"]
 sky_top_color = Color(0.15, 0.2, 0.35, 1)
@@ -45,6 +47,18 @@ albedo_color = Color(0.6, 0.6, 0.65, 1)
 material = SubResource("StandardMaterial3D_ceiling")
 size = Vector2(20, 20)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_elevator"]
+size = Vector3(4, 4, 4)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_door"]
+albedo_color = Color(0.2, 0.25, 0.3, 1)
+metallic = 0.9
+roughness = 0.3
+
+[sub_resource type="BoxMesh" id="BoxMesh_door_panel"]
+material = SubResource("StandardMaterial3D_door")
+size = Vector3(2, 4, 0.2)
+
 [node name="BriefingRoom" type="Node3D"]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
@@ -77,6 +91,28 @@ mesh = SubResource("BoxMesh_wall")
 [node name="Ceiling" type="MeshInstance3D" parent="Room"]
 transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 5, 0)
 mesh = SubResource("PlaneMesh_ceiling")
+
+[node name="ElevatorTeleport" type="Area3D" parent="Room"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 8)
+script = ExtResource("3_teleport")
+target_scene_path = "res://scenes/SOC_Office.tscn"
+interaction_text = "Return to SOC"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Room/ElevatorTeleport"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+shape = SubResource("BoxShape3D_elevator")
+
+[node name="ElevatorDoor" type="Node3D" parent="Room/ElevatorTeleport"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+script = ExtResource("4_door")
+
+[node name="LeftPanel" type="MeshInstance3D" parent="Room/ElevatorTeleport/ElevatorDoor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 2, 0)
+mesh = SubResource("BoxMesh_door_panel")
+
+[node name="RightPanel" type="MeshInstance3D" parent="Room/ElevatorTeleport/ElevatorDoor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 2, 0)
+mesh = SubResource("BoxMesh_door_panel")
 
 [node name="Lights" type="Node3D" parent="."]
 visible = false

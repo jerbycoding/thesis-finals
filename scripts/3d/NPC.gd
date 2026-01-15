@@ -8,6 +8,37 @@ extends CharacterBody3D
 
 var player_nearby: bool = false
 var interaction_area: Area3D = null
+var is_highlighted: bool = false
+var highlight_tween: Tween
+
+func set_highlight(active: bool):
+	is_highlighted = active
+	
+	# Find mesh to highlight
+	var mesh = get_node_or_null("MeshInstance3D")
+	if not mesh:
+		# Try to find any MeshInstance3D in children (e.g. from imported GLB)
+		for child in get_children():
+			if child is MeshInstance3D:
+				mesh = child
+				break
+			elif child.get_child_count() > 0:
+				for gchild in child.get_children():
+					if gchild is MeshInstance3D:
+						mesh = gchild
+						break
+	
+	if not mesh: return
+
+	if highlight_tween:
+		highlight_tween.kill()
+	
+	if active:
+		highlight_tween = create_tween().set_loops()
+		highlight_tween.tween_property(mesh, "transparency", 0.3, 0.5)
+		highlight_tween.tween_property(mesh, "transparency", 0.0, 0.5)
+	else:
+		mesh.transparency = 0.0
 
 func _ready():
 
