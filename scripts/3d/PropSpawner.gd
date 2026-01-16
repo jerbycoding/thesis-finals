@@ -75,11 +75,11 @@ func spawn_props():
 		print("PropSpawner: Population complete. Please save the scene to bake props.")
 
 func _populate_desk_row(desk: MeshInstance3D):
-	var desk_width = 30.0
-	var spacing = 4.0
-	var start_x = -(desk_width / 2.0) + 2.0
+	var desk_width = 16.0
+	var spacing = 3.5
+	var start_x = -(desk_width / 2.0) + 2.75
 	
-	for i in range(8):
+	for i in range(4):
 		var local_x = start_x + (i * spacing)
 		
 		# 1. Spawn Monitor

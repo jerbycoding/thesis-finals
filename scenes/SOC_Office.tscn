@@ -1,90 +1,36 @@
-[gd_scene load_steps=45 format=3 uid="uid://vte6dvnhq611"]
+[gd_scene load_steps=14 format=3 uid="uid://vte6dvnhq611"]
 
 [ext_resource type="PackedScene" uid="uid://b2d35yngg7u75" path="res://scenes/Player3D.tscn" id="1_i5f3e"]
-[ext_resource type="PackedScene" uid="uid://b78xk57l146ve" path="res://scenes/InteractableComputer.tscn" id="2_yjcy5"]
+[ext_resource type="Script" uid="uid://dle1ege05xfd6" path="res://scripts/CollisionGenerator.gd" id="11_collision"]
 [ext_resource type="PackedScene" uid="uid://d1p8yg2i867ip" path="res://scenes/3d/NPC_SeniorAnalyst.tscn" id="3_senior"]
 [ext_resource type="PackedScene" uid="uid://bckc0uyxlcl5a" path="res://scenes/3d/NPC_ITSupport.tscn" id="4_it"]
-[ext_resource type="Script" uid="uid://dh3hcvpwq0ufa" path="res://scripts/3d/RoomTeleporter.gd" id="5_teleport"]
-[ext_resource type="Script" uid="uid://dy166yjkmbgmk" path="res://scripts/3d/WarWall.gd" id="6_warwall"]
-[ext_resource type="Script" uid="uid://cw8wvj6b5bg13" path="res://scripts/3d/SlidingDoor.gd" id="7_door"]
-[ext_resource type="Script" uid="uid://beqt242eyg8b8" path="res://scripts/3d/HostStatusMonitor.gd" id="8_monitor"]
-[ext_resource type="Script" uid="uid://bwhrm0wd8loed" path="res://scripts/3d/GuidingLights.gd" id="9_guidelights"]
-[ext_resource type="Script" uid="uid://jcjbs5bfnmg5" path="res://scripts/3d/AutoDoor.gd" id="10_autodoor"]
-[ext_resource type="Script" uid="uid://dle1ege05xfd6" path="res://scripts/CollisionGenerator.gd" id="11_collision"]
-[ext_resource type="Script" uid="uid://dtuwv2uhqoaeg" path="res://scripts/3d/PropSpawner.gd" id="12_props"]
-[ext_resource type="PackedScene" path="res://scenes/3d/props/Prop_Chair.tscn" id="13_chair"]
-[ext_resource type="PackedScene" path="res://scenes/3d/props/Prop_Monitor.tscn" id="14_monitor"]
-[ext_resource type="PackedScene" path="res://scenes/3d/props/Prop_Plant.tscn" id="15_plant"]
-[ext_resource type="PackedScene" path="res://scenes/3d/props/Prop_Mug.tscn" id="16_mug"]
+[ext_resource type="PackedScene" uid="uid://b78xk57l146ve" path="res://scenes/InteractableComputer.tscn" id="6_computer"]
+[ext_resource type="Script" uid="uid://dh3hcvpwq0ufa" path="res://scripts/3d/RoomTeleporter.gd" id="7_teleport"]
+[ext_resource type="Script" uid="uid://cw8wvj6b5bg13" path="res://scripts/3d/SlidingDoor.gd" id="8_door"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_floor"]
-albedo_color = Color(0.1, 0.1, 0.12, 1)
-roughness = 0.7
+albedo_color = Color(0.15, 0.15, 0.18, 1)
+roughness = 0.6
 
-[sub_resource type="PlaneMesh" id="PlaneMesh_bullpen"]
+[sub_resource type="PlaneMesh" id="PlaneMesh_main"]
 material = SubResource("StandardMaterial3D_floor")
-size = Vector2(40, 25)
-
-[sub_resource type="PlaneMesh" id="PlaneMesh_wing"]
-material = SubResource("StandardMaterial3D_floor")
-size = Vector2(15, 35)
+size = Vector2(24, 20)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wall"]
-albedo_color = Color(0.2, 0.22, 0.25, 1)
+albedo_color = Color(0.3, 0.32, 0.35, 1)
 roughness = 0.5
 
-[sub_resource type="BoxMesh" id="BoxMesh_wall_40m"]
+[sub_resource type="BoxMesh" id="BoxMesh_wall_outer_long"]
 material = SubResource("StandardMaterial3D_wall")
-size = Vector3(40, 10, 0.5)
+size = Vector3(24, 4, 0.5)
 
-[sub_resource type="BoxMesh" id="BoxMesh_wall_25m"]
+[sub_resource type="BoxMesh" id="BoxMesh_wall_outer_short"]
 material = SubResource("StandardMaterial3D_wall")
-size = Vector3(25, 10, 0.5)
+size = Vector3(20, 4, 0.5)
 
-[sub_resource type="BoxMesh" id="BoxMesh_wall_15m"]
+[sub_resource type="BoxMesh" id="BoxMesh_wall_segment"]
 material = SubResource("StandardMaterial3D_wall")
-size = Vector3(15, 10, 0.5)
-
-[sub_resource type="BoxMesh" id="BoxMesh_wall_35m"]
-material = SubResource("StandardMaterial3D_wall")
-size = Vector3(35, 10, 0.5)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_glass"]
-transparency = 1
-albedo_color = Color(0.4, 0.6, 0.8, 0.2)
-roughness = 0.1
-
-[sub_resource type="BoxMesh" id="BoxMesh_glass_half"]
-material = SubResource("StandardMaterial3D_glass")
-size = Vector3(10, 10, 0.1)
-
-[sub_resource type="BoxMesh" id="BoxMesh_wall_5m"]
-material = SubResource("StandardMaterial3D_wall")
-size = Vector3(5, 10, 0.5)
-
-[sub_resource type="BoxMesh" id="BoxMesh_glass_header"]
-material = SubResource("StandardMaterial3D_glass")
-size = Vector3(0.1, 6, 5)
-
-[sub_resource type="BoxMesh" id="BoxMesh_wall_header"]
-material = SubResource("StandardMaterial3D_wall")
-size = Vector3(5, 6, 0.5)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_elevator"]
-size = Vector3(4, 4, 4)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_glass_door"]
-transparency = 1
-albedo_color = Color(0.2, 0.8, 1, 0.3)
-metallic = 0.5
-roughness = 0.1
-
-[sub_resource type="BoxMesh" id="BoxMesh_door_glass_panel"]
-material = SubResource("StandardMaterial3D_glass_door")
-size = Vector3(2, 4, 0.05)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_door"]
-size = Vector3(2, 4, 0.2)
+size = Vector3(1, 4, 0.2)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_door"]
 albedo_color = Color(0.2, 0.25, 0.3, 1)
@@ -95,379 +41,241 @@ roughness = 0.3
 material = SubResource("StandardMaterial3D_door")
 size = Vector3(2, 4, 0.2)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_warwall"]
-albedo_color = Color(0.1, 0.4, 0.8, 1)
-emission_enabled = true
-emission = Color(0, 0.2, 0.5, 1)
-emission_energy_multiplier = 2.0
+[sub_resource type="BoxShape3D" id="BoxShape3D_elevator"]
+size = Vector3(4, 4, 4)
 
-[sub_resource type="BoxMesh" id="BoxMesh_warwall"]
-material = SubResource("StandardMaterial3D_warwall")
-size = Vector3(12, 6, 0.2)
+[sub_resource type="BoxShape3D" id="BoxShape3D_door"]
+size = Vector3(2, 4, 0.2)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_desk"]
-albedo_color = Color(0, 0.3, 0.6, 1)
-
-[sub_resource type="BoxMesh" id="BoxMesh_desk_long"]
-material = SubResource("StandardMaterial3D_desk")
-size = Vector3(30, 0.8, 1.5)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_server_rack"]
-albedo_color = Color(0.05, 0.05, 0.05, 1)
-metallic = 0.8
-roughness = 0.2
-
-[sub_resource type="BoxMesh" id="BoxMesh_server_rack"]
-material = SubResource("StandardMaterial3D_server_rack")
-size = Vector3(1.5, 8, 1.5)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_guidelight"]
-albedo_color = Color(0, 0.5, 1, 1)
-emission_enabled = true
-emission = Color(0, 0.4, 1, 1)
-emission_energy_multiplier = 2.0
-
-[sub_resource type="BoxMesh" id="BoxMesh_guidelight_strip"]
-material = SubResource("StandardMaterial3D_guidelight")
-size = Vector3(0.2, 0.05, 10)
-
-[sub_resource type="Environment" id="Environment_mission_control"]
+[sub_resource type="Environment" id="Environment_corporate"]
 background_mode = 1
-background_color = Color(0.01, 0.01, 0.02, 1)
+background_color = Color(0.02, 0.02, 0.03, 1)
 ambient_light_source = 2
-ambient_light_color = Color(0.4, 0.45, 0.5, 1)
-ambient_light_energy = 0.5
+ambient_light_color = Color(0.6, 0.6, 0.6, 1)
+ambient_light_energy = 0.8
 tonemap_mode = 2
-glow_enabled = true
-glow_bloom = 0.3
+ssao_enabled = true
 
 [node name="SOC_Office" type="Node3D"]
 
-[node name="PropSpawner" type="Node" parent="."]
-script = ExtResource("12_props")
-chair_scene = ExtResource("13_chair")
-monitor_scene = ExtResource("14_monitor")
-plant_scene = ExtResource("15_plant")
-clutter_scenes = Array[PackedScene]([ExtResource("16_mug")])
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_corporate")
 
-[node name="Room" type="Node3D" parent="."]
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.707107, -0.5, 0.5, 0, 0.707107, 0.707107, -0.707107, -0.5, 0.5, 0, 10, 0)
+light_energy = 0.5
+shadow_enabled = true
 
-[node name="CollisionGenerator" type="Node" parent="Room"]
-script = ExtResource("11_collision")
+[node name="Player3D" parent="." instance=ExtResource("1_i5f3e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 0)
 
-[node name="Floor_Bullpen" type="MeshInstance3D" parent="Room"]
-mesh = SubResource("PlaneMesh_bullpen")
+[node name="NPC_SeniorAnalyst" parent="." instance=ExtResource("3_senior")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -8, 0, 7)
 
-[node name="Floor_Wing" type="MeshInstance3D" parent="Room"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 27.5, 0, 5)
-mesh = SubResource("PlaneMesh_wing")
+[node name="NPC_ITSupport" parent="." instance=ExtResource("4_it")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 0, -5)
 
-[node name="Walls" type="Node3D" parent="Room"]
+[node name="NPC_JuniorAnalyst" parent="." instance=ExtResource("3_senior")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 0)
 
-[node name="Wall_Back" type="MeshInstance3D" parent="Room/Walls"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, -12.5)
-mesh = SubResource("BoxMesh_wall_40m")
+[node name="InteractableComputer" parent="." instance=ExtResource("6_computer")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 8, 0, 9)
 
-[node name="Wall_Left" type="MeshInstance3D" parent="Room/Walls"]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -20, 5, 0)
-mesh = SubResource("BoxMesh_wall_25m")
-
-[node name="Wall_Front" type="MeshInstance3D" parent="Room/Walls"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 12.5)
-mesh = SubResource("BoxMesh_wall_40m")
-
-[node name="Wall_Wing_North" type="MeshInstance3D" parent="Room/Walls"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 27.5, 5, -12.5)
-mesh = SubResource("BoxMesh_wall_15m")
-
-[node name="Wall_Wing_Right" type="MeshInstance3D" parent="Room/Walls"]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 35, 5, 5)
-mesh = SubResource("BoxMesh_wall_35m")
-
-[node name="Wall_Wing_Back" type="MeshInstance3D" parent="Room/Walls"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 27.5, 5, 22.5)
-mesh = SubResource("BoxMesh_wall_15m")
-
-[node name="Partition_Lab_North" type="MeshInstance3D" parent="Room/Walls"]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 20, 5, -7.5)
-mesh = SubResource("BoxMesh_glass_half")
-
-[node name="Partition_Lab_South" type="MeshInstance3D" parent="Room/Walls"]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 20, 5, 7.5)
-mesh = SubResource("BoxMesh_glass_half")
-
-[node name="Partition_Storage_Left" type="MeshInstance3D" parent="Room/Walls"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.5, 5, 2.5)
-mesh = SubResource("BoxMesh_wall_5m")
-
-[node name="Partition_Storage_Right" type="MeshInstance3D" parent="Room/Walls"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32.5, 5, 2.5)
-mesh = SubResource("BoxMesh_wall_5m")
-
-[node name="Header_Lab" type="MeshInstance3D" parent="Room/Walls"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 7, 0)
-mesh = SubResource("BoxMesh_glass_header")
-
-[node name="Header_Storage" type="MeshInstance3D" parent="Room/Walls"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 27.5, 7, 2.5)
-mesh = SubResource("BoxMesh_wall_header")
-
-[node name="LabDoor" type="Area3D" parent="Room"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0, 0)
-script = ExtResource("10_autodoor")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Room/LabDoor"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
-shape = SubResource("BoxShape3D_elevator")
-
-[node name="SlidingDoor" type="Node3D" parent="Room/LabDoor"]
-script = ExtResource("7_door")
-open_distance = 2.0
-slide_axis = "Z"
-
-[node name="LeftPanel" type="AnimatableBody3D" parent="Room/LabDoor/SlidingDoor"]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 2, -1)
-
-[node name="Mesh" type="MeshInstance3D" parent="Room/LabDoor/SlidingDoor/LeftPanel"]
-mesh = SubResource("BoxMesh_door_glass_panel")
-
-[node name="Collision" type="CollisionShape3D" parent="Room/LabDoor/SlidingDoor/LeftPanel"]
-shape = SubResource("BoxShape3D_door")
-
-[node name="RightPanel" type="AnimatableBody3D" parent="Room/LabDoor/SlidingDoor"]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 2, 1)
-
-[node name="Mesh" type="MeshInstance3D" parent="Room/LabDoor/SlidingDoor/RightPanel"]
-mesh = SubResource("BoxMesh_door_glass_panel")
-
-[node name="Collision" type="CollisionShape3D" parent="Room/LabDoor/SlidingDoor/RightPanel"]
-shape = SubResource("BoxShape3D_door")
-
-[node name="StorageDoor" type="Area3D" parent="Room"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 27.5, 0, 2.5)
-script = ExtResource("10_autodoor")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Room/StorageDoor"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
-shape = SubResource("BoxShape3D_elevator")
-
-[node name="SlidingDoor" type="Node3D" parent="Room/StorageDoor"]
-script = ExtResource("7_door")
-open_distance = 2.0
-
-[node name="LeftPanel" type="AnimatableBody3D" parent="Room/StorageDoor/SlidingDoor"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 2, 0)
-
-[node name="Mesh" type="MeshInstance3D" parent="Room/StorageDoor/SlidingDoor/LeftPanel"]
-mesh = SubResource("BoxMesh_door_panel")
-
-[node name="Collision" type="CollisionShape3D" parent="Room/StorageDoor/SlidingDoor/LeftPanel"]
-shape = SubResource("BoxShape3D_door")
-
-[node name="RightPanel" type="AnimatableBody3D" parent="Room/StorageDoor/SlidingDoor"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 2, 0)
-
-[node name="Mesh" type="MeshInstance3D" parent="Room/StorageDoor/SlidingDoor/RightPanel"]
-mesh = SubResource("BoxMesh_door_panel")
-
-[node name="Collision" type="CollisionShape3D" parent="Room/StorageDoor/SlidingDoor/RightPanel"]
-shape = SubResource("BoxShape3D_door")
-
-[node name="ElevatorTeleport" type="Area3D" parent="Room"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 27.5, 0, 20)
-script = ExtResource("5_teleport")
+[node name="ElevatorTeleport" type="Area3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -11.5, 0, 0)
+script = ExtResource("7_teleport")
 target_scene_path = "res://scenes/3d/BriefingRoom.tscn"
 interaction_text = "Use Elevator"
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Room/ElevatorTeleport"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ElevatorTeleport"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 shape = SubResource("BoxShape3D_elevator")
 
-[node name="ElevatorDoor" type="Node3D" parent="Room/ElevatorTeleport"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.4)
-script = ExtResource("7_door")
-open_distance = 2.0
+[node name="ElevatorDoor" type="Node3D" parent="ElevatorTeleport"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.5)
+script = ExtResource("8_door")
+open_distance = 1.0
 
-[node name="LeftPanel" type="AnimatableBody3D" parent="Room/ElevatorTeleport/ElevatorDoor"]
+[node name="LeftPanel" type="AnimatableBody3D" parent="ElevatorTeleport/ElevatorDoor"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 2, 0)
 
-[node name="Mesh" type="MeshInstance3D" parent="Room/ElevatorTeleport/ElevatorDoor/LeftPanel"]
+[node name="Mesh" type="MeshInstance3D" parent="ElevatorTeleport/ElevatorDoor/LeftPanel"]
 mesh = SubResource("BoxMesh_door_panel")
 
-[node name="Collision" type="CollisionShape3D" parent="Room/ElevatorTeleport/ElevatorDoor/LeftPanel"]
+[node name="Collision" type="CollisionShape3D" parent="ElevatorTeleport/ElevatorDoor/LeftPanel"]
 shape = SubResource("BoxShape3D_door")
 
-[node name="RightPanel" type="AnimatableBody3D" parent="Room/ElevatorTeleport/ElevatorDoor"]
+[node name="RightPanel" type="AnimatableBody3D" parent="ElevatorTeleport/ElevatorDoor"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 2, 0)
 
-[node name="Mesh" type="MeshInstance3D" parent="Room/ElevatorTeleport/ElevatorDoor/RightPanel"]
+[node name="Mesh" type="MeshInstance3D" parent="ElevatorTeleport/ElevatorDoor/RightPanel"]
 mesh = SubResource("BoxMesh_door_panel")
 
-[node name="Collision" type="CollisionShape3D" parent="Room/ElevatorTeleport/ElevatorDoor/RightPanel"]
+[node name="Collision" type="CollisionShape3D" parent="ElevatorTeleport/ElevatorDoor/RightPanel"]
 shape = SubResource("BoxShape3D_door")
 
-[node name="Placeholders" type="Node3D" parent="."]
+[node name="RoomGeometry" type="Node3D" parent="."]
 
-[node name="CollisionGenerator" type="Node" parent="Placeholders"]
+[node name="CollisionGenerator" type="Node" parent="RoomGeometry"]
 script = ExtResource("11_collision")
 
-[node name="WarWall_Center" type="MeshInstance3D" parent="Placeholders"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, -12.3)
-mesh = SubResource("BoxMesh_warwall")
-script = ExtResource("6_warwall")
+[node name="Floor" type="MeshInstance3D" parent="RoomGeometry"]
+mesh = SubResource("PlaneMesh_main")
 
-[node name="WarWall_Left" type="MeshInstance3D" parent="Placeholders"]
-transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, -13, 5, -11)
-mesh = SubResource("BoxMesh_warwall")
-script = ExtResource("6_warwall")
+[node name="OuterWalls" type="Node3D" parent="RoomGeometry"]
 
-[node name="WarWall_Right" type="MeshInstance3D" parent="Placeholders"]
-transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 13, 5, -11)
-mesh = SubResource("BoxMesh_warwall")
-script = ExtResource("6_warwall")
+[node name="NorthWall" type="MeshInstance3D" parent="RoomGeometry/OuterWalls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -10)
+mesh = SubResource("BoxMesh_wall_outer_long")
 
-[node name="Desk_Row1" type="MeshInstance3D" parent="Placeholders"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, -6)
-mesh = SubResource("BoxMesh_desk_long")
+[node name="SouthWall" type="MeshInstance3D" parent="RoomGeometry/OuterWalls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 10)
+mesh = SubResource("BoxMesh_wall_outer_long")
 
-[node name="Desk_Row2" type="MeshInstance3D" parent="Placeholders"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
-mesh = SubResource("BoxMesh_desk_long")
+[node name="EastWall" type="MeshInstance3D" parent="RoomGeometry/OuterWalls"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 12, 2, 0)
+mesh = SubResource("BoxMesh_wall_outer_short")
 
-[node name="Desk_Row3" type="MeshInstance3D" parent="Placeholders"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 6)
-mesh = SubResource("BoxMesh_desk_long")
+[node name="WestWall" type="MeshInstance3D" parent="RoomGeometry/OuterWalls"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -12, 2, 0)
+mesh = SubResource("BoxMesh_wall_outer_short")
 
-[node name="ServerRacks" type="Node3D" parent="Placeholders"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 27.5, 4, 10)
+[node name="InternalWalls" type="Node3D" parent="RoomGeometry"]
 
-[node name="Rack1" type="MeshInstance3D" parent="Placeholders/ServerRacks"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, -5)
-mesh = SubResource("BoxMesh_server_rack")
+[node name="CISO_Office" type="Node3D" parent="RoomGeometry/InternalWalls"]
 
-[node name="Rack2" type="MeshInstance3D" parent="Placeholders/ServerRacks"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, -5)
-mesh = SubResource("BoxMesh_server_rack")
+[node name="Wall_East" type="MeshInstance3D" parent="RoomGeometry/InternalWalls/CISO_Office"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -4, 2, -6)
+mesh = SubResource("BoxMesh_wall_segment")
+skeleton = NodePath("")
+scale = Vector3(8, 1, 1)
 
-[node name="Rack3" type="MeshInstance3D" parent="Placeholders/ServerRacks"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, 0)
-mesh = SubResource("BoxMesh_server_rack")
+[node name="Wall_South_Left" type="MeshInstance3D" parent="RoomGeometry/InternalWalls/CISO_Office"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 2, -2)
+mesh = SubResource("BoxMesh_wall_segment")
+skeleton = NodePath("")
+scale = Vector3(4, 1, 1)
 
-[node name="Rack4" type="MeshInstance3D" parent="Placeholders/ServerRacks"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 0)
-mesh = SubResource("BoxMesh_server_rack")
+[node name="Wall_South_Right" type="MeshInstance3D" parent="RoomGeometry/InternalWalls/CISO_Office"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 2, -2)
+mesh = SubResource("BoxMesh_wall_segment")
+skeleton = NodePath("")
+scale = Vector3(2, 1, 1)
 
-[node name="Rack5" type="MeshInstance3D" parent="Placeholders/ServerRacks"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, 5)
-mesh = SubResource("BoxMesh_server_rack")
+[node name="Analyst_Room_1" type="Node3D" parent="RoomGeometry/InternalWalls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0, 6)
 
-[node name="Rack6" type="MeshInstance3D" parent="Placeholders/ServerRacks"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 5)
-mesh = SubResource("BoxMesh_server_rack")
+[node name="Wall_North_Left" type="MeshInstance3D" parent="RoomGeometry/InternalWalls/Analyst_Room_1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 2, -1)
+mesh = SubResource("BoxMesh_wall_segment")
+scale = Vector3(4, 1, 1)
 
-[node name="StorageLights" type="Node3D" parent="Placeholders"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 27.5, 8, 10)
+[node name="Wall_North_Right" type="MeshInstance3D" parent="RoomGeometry/InternalWalls/Analyst_Room_1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 2, -1)
+mesh = SubResource("BoxMesh_wall_segment")
+scale = Vector3(2, 1, 1)
 
-[node name="OmniLight3D" type="OmniLight3D" parent="Placeholders/StorageLights"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
-light_color = Color(1, 0.5, 0, 1)
-light_energy = 2.0
-omni_range = 15.0
+[node name="Wall_East" type="MeshInstance3D" parent="RoomGeometry/InternalWalls/Analyst_Room_1"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 4, 2, 2)
+mesh = SubResource("BoxMesh_wall_segment")
+scale = Vector3(6, 1, 1)
 
-[node name="OmniLight3D2" type="OmniLight3D" parent="Placeholders/StorageLights"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5)
-light_color = Color(1, 0.5, 0, 1)
-light_energy = 2.0
-omni_range = 15.0
+[node name="Analyst_Room_2" type="Node3D" parent="RoomGeometry/InternalWalls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 6)
 
-[node name="Labels" type="Node3D" parent="Placeholders"]
+[node name="Wall_North_Left" type="MeshInstance3D" parent="RoomGeometry/InternalWalls/Analyst_Room_2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 2, -1)
+mesh = SubResource("BoxMesh_wall_segment")
+scale = Vector3(4, 1, 1)
 
-[node name="Label_WarWall_Header" type="Label3D" parent="Placeholders/Labels"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.5, -12.2)
-pixel_size = 0.01
-modulate = Color(0.4, 1, 1, 1)
-text = "GLOBAL INCIDENT MONITORING :: ZONE A"
-font_size = 80
-outline_size = 20
+[node name="Wall_North_Right" type="MeshInstance3D" parent="RoomGeometry/InternalWalls/Analyst_Room_2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 2, -1)
+mesh = SubResource("BoxMesh_wall_segment")
+scale = Vector3(2, 1, 1)
 
-[node name="Label_ZoneB_Door" type="Label3D" parent="Placeholders/Labels"]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 19.8, 5.2, 0)
-modulate = Color(0.4, 1, 1, 1)
-text = "ZONE B :: SECURE FORENSICS LAB"
+[node name="Wall_East" type="MeshInstance3D" parent="RoomGeometry/InternalWalls/Analyst_Room_2"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 4, 2, 2)
+mesh = SubResource("BoxMesh_wall_segment")
+scale = Vector3(6, 1, 1)
+
+[node name="Analyst_Room_3" type="Node3D" parent="RoomGeometry/InternalWalls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, 6)
+
+[node name="Wall_North_Left" type="MeshInstance3D" parent="RoomGeometry/InternalWalls/Analyst_Room_3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 2, -1)
+mesh = SubResource("BoxMesh_wall_segment")
+scale = Vector3(4, 1, 1)
+
+[node name="Wall_North_Right" type="MeshInstance3D" parent="RoomGeometry/InternalWalls/Analyst_Room_3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 2, -1)
+mesh = SubResource("BoxMesh_wall_segment")
+scale = Vector3(2, 1, 1)
+
+[node name="Server_Room" type="Node3D" parent="RoomGeometry/InternalWalls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, -4)
+
+[node name="Wall_West_Top" type="MeshInstance3D" parent="RoomGeometry/InternalWalls/Server_Room"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -2, 2, -4)
+mesh = SubResource("BoxMesh_wall_segment")
+scale = Vector3(4, 1, 1)
+
+[node name="Wall_West_Bottom" type="MeshInstance3D" parent="RoomGeometry/InternalWalls/Server_Room"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -2, 2, 2)
+mesh = SubResource("BoxMesh_wall_segment")
+scale = Vector3(4, 1, 1)
+
+[node name="Wall_South" type="MeshInstance3D" parent="RoomGeometry/InternalWalls/Server_Room"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 4)
+mesh = SubResource("BoxMesh_wall_segment")
+scale = Vector3(4, 1, 1)
+
+[node name="Labels" type="Node3D" parent="RoomGeometry"]
+
+[node name="Label_CISO" type="Label3D" parent="RoomGeometry/Labels"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 2.5, -6)
+billboard = 1
+text = "ZONE 1: CISO EXECUTIVE SUITE"
 font_size = 42
-outline_size = 10
+outline_size = 12
 
-[node name="Label_ZoneB_Door_Back" type="Label3D" parent="Placeholders/Labels"]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 20.2, 5.2, 0)
-modulate = Color(0.4, 1, 1, 1)
-text = "ZONE B :: SECURE FORENSICS LAB"
+[node name="Label_Bullpen" type="Label3D" parent="RoomGeometry/Labels"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+billboard = 1
+text = "ZONE 2: ANALYST BULLPEN (OPEN FLOOR)"
 font_size = 42
+outline_size = 12
+
+[node name="Label_Analyst_A" type="Label3D" parent="RoomGeometry/Labels"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 2.5, 8)
+billboard = 1
+text = "ZONE 3: SENIOR ANALYST OFFICE A"
+font_size = 32
 outline_size = 10
 
-[node name="Label_Storage_Door" type="Label3D" parent="Placeholders/Labels"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 27.5, 5.2, 2.3)
-modulate = Color(1, 0.6, 0.2, 1)
-text = "ZONE C :: SECURE STORAGE"
-font_size = 36
+[node name="Label_Analyst_B" type="Label3D" parent="RoomGeometry/Labels"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 8)
+billboard = 1
+text = "ZONE 4: SENIOR ANALYST OFFICE B"
+font_size = 32
 outline_size = 10
 
-[node name="Label_Storage_Door_Back" type="Label3D" parent="Placeholders/Labels"]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 27.5, 5.2, 2.7)
-modulate = Color(1, 0.6, 0.2, 1)
-text = "ZONE C :: SECURE STORAGE"
-font_size = 36
+[node name="Label_Analyst_C" type="Label3D" parent="RoomGeometry/Labels"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 2.5, 8)
+billboard = 1
+text = "ZONE 5: SENIOR ANALYST OFFICE C"
+font_size = 32
 outline_size = 10
 
-[node name="StatusMonitor" type="Label3D" parent="Placeholders/Labels"]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 19.7, 3, -2)
-text = "NETWORK STATUS
---------------
-ACTIVE HOSTS: 0
-ISOLATED: 0"
-font_size = 48
-outline_size = 8
-horizontal_alignment = 0
-script = ExtResource("8_monitor")
+[node name="Label_Server" type="Label3D" parent="RoomGeometry/Labels"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 2.5, -4)
+billboard = 1
+text = "ZONE 6: SECURE SERVER VAULT"
+font_size = 32
+outline_size = 10
 
-[node name="MonitorLight" type="SpotLight3D" parent="Placeholders/Labels/StatusMonitor"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
-light_energy = 0.5
-spot_angle = 30.0
-
-[node name="GuidingLights" type="Node3D" parent="Placeholders"]
-
-[node name="Segment1" type="MeshInstance3D" parent="Placeholders/GuidingLights"]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 10, 0.05, 0)
-mesh = SubResource("BoxMesh_guidelight_strip")
-script = ExtResource("9_guidelights")
-
-[node name="Segment2" type="MeshInstance3D" parent="Placeholders/GuidingLights"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0.05, 0)
-mesh = SubResource("BoxMesh_guidelight_strip")
-script = ExtResource("9_guidelights")
-
-[node name="Segment3" type="MeshInstance3D" parent="Placeholders/GuidingLights"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25, 0.05, 10)
-mesh = SubResource("BoxMesh_guidelight_strip")
-script = ExtResource("9_guidelights")
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_mission_control")
-
-[node name="Player3D" parent="." instance=ExtResource("1_i5f3e")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
-
-[node name="InteractableComputer" parent="." instance=ExtResource("2_yjcy5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
-
-[node name="NPC_SeniorAnalyst" parent="." instance=ExtResource("3_senior")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 10, 0, -10)
-
-[node name="NPC_Analyst_1" parent="." instance=ExtResource("3_senior")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -5, 0, -6)
-
-[node name="NPC_Analyst_2" parent="." instance=ExtResource("3_senior")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 5, 0, -6)
-
-[node name="NPC_ITSupport" parent="." instance=ExtResource("4_it")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 27, 0, -5)
+[node name="Label_Lounge" type="Label3D" parent="RoomGeometry/Labels"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 2.5, -6)
+billboard = 1
+text = "ZONE 7: STAFF BREAK AREA"
+font_size = 32
+outline_size = 10
