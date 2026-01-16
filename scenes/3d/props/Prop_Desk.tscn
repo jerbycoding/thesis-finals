@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_desk"]
+albedo_color = Color(0.2, 0.25, 0.3, 1)
+roughness = 0.8
+
+[sub_resource type="BoxMesh" id="BoxMesh_desk"]
+material = SubResource("StandardMaterial3D_desk")
+size = Vector3(2, 0.8, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_desk"]
+size = Vector3(2, 0.8, 1)
+
+[node name="Prop_Desk" type="StaticBody3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
+mesh = SubResource("BoxMesh_desk")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
+shape = SubResource("BoxShape3D_desk")
