@@ -13,6 +13,9 @@ class_name TicketResource
 @export var hidden_risks: Array[String] = []
 @export var required_log_ids: Array[String] = [] # Log IDs that should be attached for compliant completion
 
+## The event ID to trigger in NarrativeDirector when this ticket is completed
+@export var on_complete_event: String = ""
+
 # --- Kill Chain Properties ---
 @export_group("Kill Chain")
 @export var kill_chain_path: String = "" # e.g., "Malware Outbreak"

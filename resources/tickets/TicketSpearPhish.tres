@@ -1,5 +1,6 @@
-[gd_resource type="Resource" script_class="TicketResource" load_steps=2 format=3 uid="uid://ck50exx3x0bg5"]
+[gd_resource type="Resource" script_class="TicketResource" load_steps=3 format=3 uid="uid://ck50exx3x0bg5"]
 
+[ext_resource type="Resource" uid="uid://dp0lxogkjh74a" path="res://resources/tickets/TicketMalwareContainment.tres" id="1_malware"]
 [ext_resource type="Script" uid="uid://ccptkdfdnunvq" path="res://resources/tickets/TicketResource.gd" id="1_ticket"]
 
 [resource]
@@ -14,5 +15,6 @@ required_tool = "email"
 base_time = 240.0
 hidden_risks = Array[String](["missed_attachment_scan"])
 required_log_ids = Array[String](["LOG-SPEAR-001"])
-kill_chain_path = ""
-kill_chain_stage = 0
+kill_chain_path = "Malware Outbreak"
+kill_chain_stage = 1
+escalation_ticket = ExtResource("1_malware")

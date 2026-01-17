@@ -4,15 +4,13 @@
 
 [resource]
 script = ExtResource("1_shift")
-shift_name = "Shift 1: Onboarding"
-shift_id = "first_shift"
+shift_name = "Shift 1: Monday (Onboarding)"
+shift_id = "shift_monday"
 event_sequence = [
-	{"time": 10, "event": "spawn_phishing_ticket", "type": "spawn_ticket", "ticket_id": "SPEAR-PHISH-001"},
-	{"time": 45, "event": "siem_instability", "type": "system_event", "event_id": "SIEM_LAG", "duration": 40.0},
-	{"time": 80, "event": "spawn_malware_ticket", "type": "spawn_ticket", "ticket_id": "MALWARE-CONTAIN-001"},
-	{"time": 120, "event": "ciso_followup", "type": "npc_interaction", "npc_id": "ciso", "dialogue_id": "default"},
-	{"time": 200, "event": "spawn_auth_fail", "type": "spawn_ticket", "ticket_id": "AUTH-FAIL-GENERIC"},
-	{"time": 360, "event": "final_ciso_briefing", "type": "npc_interaction", "npc_id": "ciso", "dialogue_id": "shift_end"},
-	{"time": 420, "event": "shift_end_report", "type": "shift_end"}
+	{"time": 30, "event": "spawn_maint", "type": "spawn_ticket", "ticket_id": "SYS-MAINT-GENERIC"},
+	{"time": 90, "event": "spawn_phish", "type": "spawn_ticket", "ticket_id": "PHISH-001"},
+	{"time": 180, "event": "spawn_auth", "type": "spawn_ticket", "ticket_id": "AUTH-FAIL-GENERIC"},
+	{"time": 300, "event": "ciso_end", "type": "npc_interaction", "npc_id": "ciso", "dialogue_id": "shift_end"},
+	{"time": 320, "event": "shift_end", "type": "shift_end"}
 ]
 random_event_pool = []

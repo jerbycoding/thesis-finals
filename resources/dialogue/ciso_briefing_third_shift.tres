@@ -8,5 +8,5 @@ npc_name = "CISO"
 portrait = "👔"
 lines = [
     {"choices": [], "text": "This is it. Your final shift. The network is under heavy fire and we're seeing signs of a major data exfiltration attempt."},
-    {"choices": [{"effect": {"change_scene": "res://scenes/SOC_Office.tscn", "then_start_narrative": "third_shift"}, "text": "I'll handle it. Let's finish this."}], "text": "This is where we see what you're truly made of. If we lose this data, the company's reputation is gone. Get to your station."}
+    {"choices": [{"effect": {"change_scene": "res://scenes/SOC_Office.tscn", "then_start_narrative": "shift_wednesday"}, "text": "I'll handle it. Let's finish this."}], "text": "This is where we see what you're truly made of. If we lose this data, the company's reputation is gone. Get to your station."}
 ]

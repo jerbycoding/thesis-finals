@@ -8,5 +8,5 @@ npc_name = "CISO"
 portrait = "👔"
 lines = [
     {"choices": [], "text": "Welcome back. Based on your previous performance, we're increasing your responsibilities. Expect more complex threats. The training wheels are off."},
-    {"choices": [{"effect": {"change_scene": "res://scenes/SOC_Office.tscn", "then_start_narrative": "second_shift"}, "text": "I understand. I'm ready for the challenge."}], "text": "We've detected a potential ransomware attack and there are rumors of an insider threat. Stay vigilant. Don't let me down."}
+    {"choices": [{"effect": {"change_scene": "res://scenes/SOC_Office.tscn", "then_start_narrative": "shift_tuesday"}, "text": "I understand. I'm ready for the challenge."}], "text": "We've detected a potential ransomware attack and there are rumors of an insider threat. Stay vigilant. Don't let me down."}
 ]

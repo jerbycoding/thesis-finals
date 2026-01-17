@@ -49,15 +49,18 @@ func _on_continue_pressed():
 	
 	if NarrativeDirector:
 		match NarrativeDirector.current_shift_name:
-			"first_shift":
-				print("ShiftReport: Transitioning from first to second shift.")
-				NarrativeDirector.start_second_shift_briefing()
-			"second_shift":
-				print("ShiftReport: Transitioning from second to third shift.")
-				NarrativeDirector.start_third_shift_briefing()
-			"third_shift":
+			"shift_monday":
+				NarrativeDirector.start_tuesday_briefing()
+			"shift_tuesday":
+				NarrativeDirector.start_wednesday_briefing()
+			"shift_wednesday":
+				NarrativeDirector.start_thursday_briefing()
+			"shift_thursday":
+				NarrativeDirector.start_friday_briefing()
+			"shift_friday":
 				print("ShiftReport: Final shift completed. Returning to title.")
 				TransitionManager.change_scene_to("res://scenes/ui/TitleScreen.tscn")
 			_:
+				# Fallback for old saves or errors
 				print("ShiftReport: Unknown shift state. Returning to title.")
 				TransitionManager.change_scene_to("res://scenes/ui/TitleScreen.tscn")

@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ShiftResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/ShiftResource.gd" id="1_shift"]
+
+[resource]
+script = ExtResource("1_shift")
+shift_name = "Shift 5: Friday (Zero Day)"
+shift_id = "shift_friday"
+event_sequence = [
+	{"time": 10, "event": "spawn_exfil", "type": "spawn_ticket", "ticket_id": "DATA-EXFIL-001"},
+	{"time": 45, "event": "spawn_ransom", "type": "spawn_ticket", "ticket_id": "RANSOM-001"},
+	{"time": 90, "event": "spawn_malware", "type": "spawn_ticket", "ticket_id": "MALWARE-CONTAIN-001"},
+	{"time": 120, "event": "maybe_spawn_redemption", "type": "spawn_ticket", "ticket_id": "BLACK-TICKET-REDEMPTION"},
+	{"time": 300, "event": "final_end", "type": "shift_end"}
+]
+random_event_pool = []

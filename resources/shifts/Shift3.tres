@@ -4,11 +4,12 @@
 
 [resource]
 script = ExtResource("1_shift")
-shift_name = "Shift 3: Impact"
-shift_id = "third_shift"
+shift_name = "Shift 3: Wednesday (Outbreak)"
+shift_id = "shift_wednesday"
 event_sequence = [
-	{"time": 30, "event": "spawn_ticket", "type": "spawn_ticket", "ticket_id": "DATA-EXFIL-001"},
-	{"time": 180, "event": "spawn_ticket", "type": "spawn_ticket", "ticket_id": "PHISH-001"},
-	{"time": 600, "event": "shift_end_report", "type": "shift_end"}
+	{"time": 15, "event": "spawn_malware", "type": "spawn_ticket", "ticket_id": "MALWARE-CONTAIN-001"},
+	{"time": 60, "event": "spawn_phish_wave", "type": "spawn_ticket", "ticket_id": "PHISH-001"},
+	{"time": 180, "event": "spawn_ransom", "type": "spawn_ticket", "ticket_id": "RANSOM-001"},
+	{"time": 300, "event": "shift_end", "type": "shift_end"}
 ]
 random_event_pool = []
