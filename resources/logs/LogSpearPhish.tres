@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="LogResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/logs/LogResource.gd" id="1_log"]
+
+[resource]
+script = ExtResource("1_log")
+log_id = "LOG-SPEAR-001"
+timestamp = "09:15:22"
+source = "Email Gateway"
+category = "Security"
+message = "Attachment 'financial_report.exe' flagged: Known malware signature."
+severity = 4
+related_ticket = "SPEAR-PHISH-001"
+ip_address = "203.0.113.42"
+hostname = "MAIL-GATEWAY"

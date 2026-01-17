@@ -13,6 +13,6 @@ steps = Array[String](["Verify user 'jsmith' identity", "Reset password if reque
 required_tool = "siem"
 base_time = 240.0
 hidden_risks = Array[String]([])
-required_log_ids = Array[String](["LOG-AUTH-FAILURE"])
+required_log_ids = Array[String](["LOG-AUTH-003"])
 kill_chain_path = ""
 kill_chain_stage = 0
