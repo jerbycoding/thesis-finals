@@ -15,10 +15,12 @@ All tickets are Godot Resources (`.tres`) based on `TicketResource.gd`.
 | `description` | String | Detailed narrative. Use `\n` for line breaks. |
 | `severity` | String | `Low`, `Medium`, `High`, or `Critical`. |
 | `category` | String | Descriptive category (e.g., `Phishing`, `Forensics`). |
-| `steps` | Array[String]| Step-by-step instructions (Max 3 recommended). |
+| `steps` | Array[String]| Step-by-step instructions (**MAX 3** for UI layout consistency). |
 | `required_tool` | String | `siem`, `email`, `terminal`, `network`, `decryption`, or `none`. |
 | `base_time` | Float | Timer duration in seconds (Default: 180.0). |
 | `required_log_ids`| Array[String]| List of specific **Log IDs** (not ticket IDs) needed for **Compliant** resolution. |
+| `on_complete_event`| String | (Optional) Narrative Event ID to trigger upon successful resolution. |
+| `hidden_risks` | Array[String]| Technical indicators missed if the player rushes. Used for consequence generation. |
 
 ### **Kill Chain Metadata**
 Used by the `ConsequenceEngine` to handle attack progression.
@@ -40,9 +42,6 @@ For a ticket to be "solvable" with a **Compliant** rating, you must create logs 
 *   **Discovery Link:** In your `LogResource` or `EmailResource`, set `related_ticket` to match the `ticket_id` of your ticket. This ensures the logs appear when the ticket is active.
 *   **Resolution Link:** In your `TicketResource`, add the `log_id` of your evidence logs to the `required_log_ids` array. This ensures the "Attach Evidence" logic works.
 
-### **Step 3: Automatic Registration**
-**No manual code changes required.** The `TicketManager` automatically scans the `resources/tickets/` directory on startup. As long as your file is a valid `.tres` in that folder, it will be registered.
-
 ---
 
 ## 3. Mandatory Rule: Resource Validation
@@ -51,16 +50,15 @@ The engine performs a safety check on all resources during discovery. If your ti
 **Checklist for a valid ticket:**
 1. `ticket_id` is not empty.
 2. `base_time` is greater than 0.
-3. `steps` array contains 3 or fewer items.
+3. `steps` array contains **exactly 3 or fewer** items.
 
 ---
 
-## 4. Implementation Example (Kill Chain)
-
-### **Stage 1 Ticket (`PHISH-001`)**
-*   **Kill Chain Path:** "Malware Outbreak" | **Stage:** 1
-*   **Escalation Ticket:** `res://resources/tickets/TicketMalware001.tres`
-*   **Logic:** If resolved via **Efficient/Emergency** mode, the `ConsequenceEngine` rolls for escalation. On failure, Stage 2 spawns automatically.
+## 4. Advanced Logic: Hidden Risks & Consequences
+If a ticket is resolved via **Efficient** or **Emergency** mode, the `ConsequenceEngine` checks the `hidden_risks` array to determine the "Price of Speed."
+*   **Malware Logic:** If the risk text contains `"malware"` or `"clicked"`, a `MALWARE-CLEANUP` follow-up is scheduled.
+*   **Breach Logic:** If the risk text contains `"breach"` or `"data"`, a `BREACH-REPORT` follow-up is scheduled.
+*   **Fallback:** If no keywords are found, it defaults to a standard `FOLLOWUP-001`.
 
 ---
 
@@ -69,4 +67,4 @@ The engine performs a safety check on all resources during discovery. If your ti
 | :--- | :--- | :--- |
 | **`siem`** | `LogResource` files. | Log `related_ticket` = Ticket `ticket_id`. |
 | **`email`** | `EmailResource` files. | Email `related_ticket` = Ticket `ticket_id`. |
-| **`terminal`** | Network Host state. | Hostname must exist in `NetworkState.gd` (or be discovered in ticket description). |
+| **`terminal`** | Network Host state. | Hostname must exist in `NetworkState.gd` or individual `HostResource` files. |

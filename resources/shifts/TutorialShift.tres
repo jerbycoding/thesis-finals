@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ShiftResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/ShiftResource.gd" id="1_shift"]
+
+[resource]
+script = ExtResource("1_shift")
+shift_name = "Tutorial: Basic Training"
+shift_id = "shift_tutorial"
+briefing_dialogue_id = "tutorial_intro"
+event_sequence = [
+	{"time": 10, "event": "spawn_maint", "type": "spawn_ticket", "ticket_id": "SYS-MAINT-GENERIC"},
+	{"time": 180, "event": "ciso_end", "type": "npc_interaction", "npc_id": "ciso", "dialogue_id": "shift_end"},
+	{"time": 200, "event": "shift_end", "type": "shift_end"}
+]
+random_event_pool = []

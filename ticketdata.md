@@ -94,12 +94,13 @@ This document details the specific outcomes for every resolution strategy ("Comp
 ## 📅 Shift Schedule Breakdown (Baseline)
 *This is the standard ticket schedule for the 5-Day Campaign. If you trigger consequences, **EXTRA** tickets will spawn on top of these.*
 
-### Shift 1: Monday (Onboarding)
+### Shift 1: Monday (Active Monitoring)
 | Time | Ticket ID | Type | Note |
 | :--- | :--- | :--- | :--- |
-| **00:30** | `SYS-MAINT-GENERIC` | **Low** | Tutorial: Compliant Resolution. |
-| **01:30** | `PHISH-001` | **Medium** | First Real Threat. |
-| **03:00** | `AUTH-FAIL-GENERIC` | **Low** | Log Analysis Intro. |
+| **00:15** | `PHISH-001` | **Medium** | High-Intensity Start. |
+| **01:00** | `AUTH-FAIL-GENERIC` | **Low** | Log Analysis. |
+| **02:00** | `SYS-MAINT-GENERIC` | **Low** | Routine Maintenance. |
+| **03:00** | `SPEAR-PHISH-001` | **High** | Targeted Threat Intro. |
 
 ### Shift 2: Tuesday (Noise)
 | Time | Ticket ID | Type | Note |

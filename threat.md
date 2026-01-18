@@ -17,6 +17,9 @@ This document details the "Kill Chain" mechanics: how simple, low-severity threa
 | **INSIDER-001**         | 🟠 High     | **Ignore / Bypass**     | ➡️ **DATA-EXFIL-001**      | 🔴 Critical   | Attacker found the files. Now uploading them to the dark web.  |
 | **SPEAR-PHISH-001**     | 🟠 High     | **Ignore / Bypass**     | ➡️ **MALWARE-CONTAIN-001** | 🔴 Critical   | CEO compromised. "Fast Track" to malware infection.            |
 | **AUTH-FAIL-GENERIC**   | 🟢 Low      | **Ignore / Bypass**     | ➡️ **INSIDER-001**         | 🟠 High       | Brute force succeeded. "Fast Track" to intruder access.        |
+| **DDoS-PING-001**       | 🟡 Medium   | **Ignore / Bypass**     | ➡️ **DDoS-FLOOD-001**      | 🔴 Critical   | Botnet activated after successful reconnaissance.              |
+| **FRAUD-001**           | 🟠 High     | **Ignore / Bypass**     | ➡️ **LOG-DELETION-001**    | 🟠 High       | Money wired to thief; attacker deletes logs to hide trail.    |
+| **WEB-ERROR-001**       | 🟡 Medium   | **Ignore / Bypass**     | ➡️ **DB-LEAK-001**         | 🔴 Critical   | SQL injection probe succeeded. Database exfiltration started.  |
 
 ---
 

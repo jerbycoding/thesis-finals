@@ -27,11 +27,10 @@ func _ready():
 	# Discover all shifts in the folder
 	_discover_shifts()
 	
-	# Connect to EventBus for event-driven narrative beats
-	EventBus.ticket_completed.connect(_on_ticket_completed)
-	
 	# Connect to EventBus for critical failures
 	EventBus.narrative_spawn_consequence.connect(func(id): _trigger_event({"type": "spawn_consequence", "consequence_id": id}))
+	EventBus.consequence_triggered.connect(_on_consequence_triggered)
+	EventBus.shift_end_requested.connect(func(): _trigger_event({"type": "shift_end"}))
 	
 	EventBus.campaign_ended.connect(_on_campaign_ended)
 	
@@ -145,6 +144,11 @@ func _on_critical_consequence(consequence_id: String, _details: Dictionary):
 		print("NarrativeDirector: CRITICAL FAILURE detected. Terminating shift.")
 		_trigger_event({"type": "shift_end", "failure_type": "bankrupt"})
 
+func _on_consequence_triggered(consequence_id: String, _details: Dictionary):
+	if consequence_id == "data_loss":
+		print("NarrativeDirector: CRITICAL FAILURE detected. Terminating shift.")
+		_trigger_event({"type": "shift_end", "failure_type": "bankrupt"})
+
 func _on_campaign_ended(type: String):
 	print("NarrativeDirector: Campaign ended with result: ", type)
 	var scene_path = ENDING_SCENES.get(type, "res://scenes/ui/TitleScreen.tscn")
@@ -208,9 +212,14 @@ func _trigger_event(event_data: Dictionary):
 					EventBus.campaign_ended.emit("fired")
 					return
 
-				# Check if this was the final shift (Friday)
+				# Best ending check (Friday)
 				if current_shift_name == "shift_friday":
-					EventBus.campaign_ended.emit("victory")
+					if results.get("archetype") == "By-the-Book":
+						EventBus.campaign_ended.emit("victory")
+					else:
+						# Standard completion ending? For now, we use victory as catch-all 
+						# but could add a "Standard" victory later.
+						EventBus.campaign_ended.emit("victory")
 					return
 
 				# Normal shift end - show report

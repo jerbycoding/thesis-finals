@@ -1,6 +1,7 @@
 extends Control
 
 @onready var start_button: Button = %StartButton
+@onready var training_button: Button = %TrainingButton
 @onready var continue_button: Button = %ContinueButton
 @onready var quit_button: Button = %QuitButton
 @onready var main_container: VBoxContainer = %MainContainer
@@ -13,11 +14,12 @@ func _ready():
 	
 	# Connect signals
 	start_button.pressed.connect(_on_start_button_pressed)
+	training_button.pressed.connect(_on_training_pressed)
 	continue_button.pressed.connect(_on_continue_pressed)
 	quit_button.pressed.connect(_on_quit_pressed)
 	
 	# Connect hover sounds
-	for btn in [start_button, continue_button, quit_button]:
+	for btn in [start_button, training_button, continue_button, quit_button]:
 		btn.mouse_entered.connect(_on_button_hover)
 	
 	# Check for save file and update Continue button's visibility
@@ -44,20 +46,31 @@ func _animate_intro():
 
 func _on_button_hover():
 	if AudioManager:
-		# Use a subtle beep or click for hover
 		AudioManager.play_sfx(AudioManager.SFX.button_click)
 
 func _on_start_button_pressed():
 	if AudioManager:
 		AudioManager.play_sfx(AudioManager.SFX.notification_info)
 	
-	# Visual feedback for transition
 	var tween = create_tween()
 	tween.tween_property(main_container, "modulate:a", 0.0, 0.5)
 	await tween.finished
 	
 	if NarrativeDirector:
 		NarrativeDirector.start_briefing()
+
+func _on_training_pressed():
+	if AudioManager:
+		AudioManager.play_sfx(AudioManager.SFX.notification_info)
+	
+	var tween = create_tween()
+	tween.tween_property(main_container, "modulate:a", 0.0, 0.5)
+	await tween.finished
+	
+	# Manually start the tutorial intro dialogue
+	var res = load("res://resources/dialogue/tutorial_intro.tres")
+	if res:
+		DialogueManager.start_dialogue(null, res)
 
 func _on_continue_pressed():
 	if AudioManager:
@@ -70,15 +83,11 @@ func _on_quit_pressed():
 	if AudioManager:
 		AudioManager.play_sfx(AudioManager.SFX.button_click)
 	
-	# Fade out before quitting
 	var tween = create_tween()
 	tween.tween_property(self, "modulate:a", 0.0, 0.5)
 	await tween.finished
 	get_tree().quit()
 
 func _on_game_loaded():
-	# This function is called via a signal from SaveSystem after data is loaded.
-	# Now we can safely transition to the main game scene.
-	# We go directly to the office, bypassing the initial briefing.
 	if TransitionManager:
 		TransitionManager.change_scene_to("res://scenes/SOC_Office.tscn")

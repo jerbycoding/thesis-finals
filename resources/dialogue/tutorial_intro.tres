@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="DialogueDataResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/dialogue/DialogueDataResource.gd" id="1_dialogue_data"]
+
+[resource]
+script = ExtResource("1_dialogue_data")
+npc_name = "CISO"
+portrait = "👔"
+lines = [
+    {"choices": [], "text": "Analyst, welcome to your first day. This is a non-live training simulation. We're going to walk through the basic incident response loop."},
+    {"choices": [], "text": "On your desk is a workstation. Use it to access the Ticket Queue, the SIEM Log Viewer, and your Email client."},
+    {"choices": [{"effect": {"change_scene": "res://scenes/SOC_Office.tscn", "then_start_narrative": "shift_tutorial"}, "text": "I'm ready to begin the training."}], "text": "Follow the prompts. Do not deviate from the sequence. Efficiency is important, but accuracy is paramount. Get to work."}
+]

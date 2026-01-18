@@ -101,6 +101,10 @@ func _apply_remote_choice_effect(effect: Dictionary):
 		var narrative = effect.get("then_start_narrative", "")
 		if TransitionManager:
 			TransitionManager.change_scene_to(scene_path, narrative)
+			
+	if effect.get("trigger_shift_end", false):
+		print("DialogueManager: trigger_shift_end detected. Broadcasting request.")
+		EventBus.shift_end_requested.emit()
 
 func _on_dialogue_closed():
 	_close_dialogue_session()

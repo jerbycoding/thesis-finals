@@ -28,6 +28,7 @@ signal critical_host_isolated(hostname: String)
 # --- Narrative & Shift Signals ---
 signal shift_started(shift_id: String)
 signal shift_ended(results: Dictionary)
+signal shift_end_requested()
 signal narrative_spawn_ticket(ticket_id: String)
 signal narrative_spawn_consequence(consequence_id: String)
 signal consequence_triggered(type: String, details: Dictionary)
