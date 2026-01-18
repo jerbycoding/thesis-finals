@@ -1,15 +1,19 @@
-[gd_resource type="Resource" script_class="ShiftResource" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="ShiftResource" load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://resources/ShiftResource.gd" id="1_shift"]
+[ext_resource type="Resource" path="res://resources/shifts/Shift4.tres" id="2_next_shift"]
 
 [resource]
 script = ExtResource("1_shift")
 shift_name = "Shift 3: Wednesday (Outbreak)"
 shift_id = "shift_wednesday"
+briefing_dialogue_id = "briefing_third_shift"
 event_sequence = [
-	{"time": 15, "event": "spawn_malware", "type": "spawn_ticket", "ticket_id": "MALWARE-CONTAIN-001"},
-	{"time": 60, "event": "spawn_phish_wave", "type": "spawn_ticket", "ticket_id": "PHISH-001"},
-	{"time": 180, "event": "spawn_ransom", "type": "spawn_ticket", "ticket_id": "RANSOM-001"},
-	{"time": 300, "event": "shift_end", "type": "shift_end"}
+	{"time": 45, "event": "spawn_malware", "type": "spawn_ticket", "ticket_id": "MALWARE-CONTAIN-001"},
+	{"time": 180, "event": "spawn_phish_1", "type": "spawn_ticket", "ticket_id": "PHISH-001"},
+	{"time": 240, "event": "spawn_phish_2", "type": "spawn_ticket", "ticket_id": "PHISH-001"},
+	{"time": 360, "event": "spawn_ransom", "type": "spawn_ticket", "ticket_id": "RANSOM-001"},
+	{"time": 600, "event": "shift_end", "type": "shift_end"}
 ]
 random_event_pool = []
+next_shift = ExtResource("2_next_shift")

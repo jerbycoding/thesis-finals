@@ -9,12 +9,8 @@ signal followup_ticket_scheduled(ticket_id: String, delay: float)
 signal followup_ticket_creation_requested(ticket_data: TicketResource)
 
 var choice_log: Array = []
-
 var scheduled_consequences: Array[Dictionary] = []
-
 var npc_relationships: Dictionary = {}
-
-
 
 # Consequence types
 enum ConsequenceType {
@@ -57,6 +53,8 @@ func load_state(relationships: Dictionary, choices: Array):
 	
 	# Clear any consequences that were scheduled from the previous session
 	scheduled_consequences.clear()
+	if TimeManager:
+		TimeManager.clear_all_timers()
 	
 	print("ConsequenceEngine state loaded.")
 
@@ -89,9 +87,15 @@ func _initialize_engine():
 	if is_instance_valid(TerminalSystem):
 		TerminalSystem.critical_host_isolated.connect(_on_critical_host_isolated)
 
-	# Start a timer to periodically evaluate for emergent consequences
-	var consequence_timer = get_tree().create_timer(CONSEQUENCE_EVAL_INTERVAL, false)
-	consequence_timer.timeout.connect(_evaluate_consequences)
+	# Start the periodic evaluation loop
+	_start_evaluation_loop()
+
+func _start_evaluation_loop():
+	if TimeManager:
+		TimeManager.register_timer("consequence_eval", CONSEQUENCE_EVAL_INTERVAL, func():
+			_evaluate_consequences()
+			_start_evaluation_loop() # Restart loop
+		)
 
 func _on_critical_host_isolated(hostname: String):
 	# This new handler creates a consequence when the terminal isolates a critical host.
@@ -191,7 +195,7 @@ func _on_ticket_completed_by_manager(ticket: TicketResource, completion_type: St
 	var choice_data = {
 		"ticket_id": ticket.ticket_id,
 		"completion_type": completion_type,
-		"time_taken": time_taken, # Changed from time_remaining to time_taken
+		"time_taken": time_taken, 
 		"timestamp": Time.get_ticks_msec(),
 		"ticket_category": ticket.category,
 		"ticket_severity": ticket.severity
@@ -203,7 +207,7 @@ func _on_ticket_completed_by_manager(ticket: TicketResource, completion_type: St
 	_check_hidden_risks(ticket, completion_type)
 
 	# Schedule consequences based on completion type
-	_schedule_consequences(ticket, completion_type, time_taken) # Pass time_taken instead of time_remaining
+	_schedule_consequences(ticket, completion_type, time_taken) 
 	
 	# Kill Chain Escalation Logic
 	if ticket.kill_chain_path != "":
@@ -266,23 +270,20 @@ func _trigger_kill_chain_escalation(ticket: TicketResource):
 		"original_id": ticket.ticket_id
 	})
 	
-	# Start timer to spawn ticket
-	get_tree().create_timer(delay).timeout.connect(
-		func(): 
+	# Start timer to spawn ticket via TimeManager
+	if TimeManager:
+		TimeManager.register_timer("escalation_" + next_ticket.ticket_id, delay, func():
 			if TicketManager:
 				TicketManager.add_ticket(next_ticket)
-	)
+		)
 
 func _check_hidden_risks(ticket: TicketResource, completion_type: String):
 	# Check if player triggered any hidden risks
 	if ticket.hidden_risks.is_empty():
-
 		return
 
 	# Check if player has sufficient evidence (all required logs attached)
-
 	var has_sufficient = ticket.has_sufficient_evidence()
-
 
 	# For efficient/emergency completion, check if they missed required logs
 	if completion_type == "efficient" or completion_type == "emergency":
@@ -292,6 +293,7 @@ func _check_hidden_risks(ticket: TicketResource, completion_type: String):
 				print("⚠ Hidden risk detected: ", risk)
 				# Schedule consequence based on risk
 				_trigger_hidden_risk_consequence(ticket, risk, completion_type)
+
 func _trigger_hidden_risk_consequence(ticket: TicketResource, risk: String, completion_type: String):
 	# Parse risk description to determine consequence
 	if "malware" in risk.to_lower() or "clicked" in risk.to_lower():
@@ -303,31 +305,22 @@ func _trigger_hidden_risk_consequence(ticket: TicketResource, risk: String, comp
 	else:
 		# Generic followup
 		_schedule_followup_ticket("FOLLOWUP-001", 90.0, "Follow-up investigation required", ticket.ticket_id)
+
 func _schedule_consequences(ticket: TicketResource, completion_type: String, time_remaining: float):
 	match completion_type:
 		"compliant":
-			# Compliant completion - usually no negative consequences
 			print("✓ Compliant completion - No negative consequences")
-			# Could add positive consequences (bonus time, reputation gain)
 		
 		"efficient":
-			# Efficient completion - moderate risk
 			if time_remaining < ticket.base_time * 0.3:  # Used less than 30% of time
 				print("⚠ Efficient completion with very little time used - High risk")
 				_schedule_followup_ticket("EFFICIENT-RISK", 60.0, "Rushed resolution may have missed critical checks", ticket.ticket_id)
 			else:
-
 				print("✓ Efficient completion - Moderate risk accepted")
 
 		"emergency":
-
-			# Emergency completion - high risk, immediate consequences
-
 			print("🚨 Emergency completion - Immediate consequences")
-
 			_schedule_followup_ticket("EMERGENCY-FOLLOWUP", 10.0, "Emergency resolution requires immediate follow-up", ticket.ticket_id)
-
-
 
 func _schedule_followup_ticket(ticket_id: String, delay_seconds: float, reason: String, original_id: String = "N/A"):
 	print("📅 Scheduling follow-up ticket: ", ticket_id, " in ", delay_seconds, " seconds")
@@ -343,8 +336,10 @@ func _schedule_followup_ticket(ticket_id: String, delay_seconds: float, reason: 
 	scheduled_consequences.append(consequence_data)
 	followup_ticket_scheduled.emit(ticket_id, delay_seconds)
 
-	# Start timer to spawn ticket
-	get_tree().create_timer(delay_seconds).timeout.connect(_spawn_followup_ticket.bind(ticket_id, reason, original_id))
+	# Start timer to spawn ticket via TimeManager
+	if TimeManager:
+		var timer_id = "followup_" + ticket_id + "_" + original_id + "_" + str(Time.get_ticks_msec())
+		TimeManager.register_timer(timer_id, delay_seconds, _spawn_followup_ticket.bind(ticket_id, reason, original_id))
 
 func _spawn_followup_ticket(ticket_id: String, reason: String, original_id: String = "N/A"):
 	print("🚨 Spawning follow-up ticket: ", ticket_id, " related to: ", original_id)
@@ -352,7 +347,6 @@ func _spawn_followup_ticket(ticket_id: String, reason: String, original_id: Stri
 	var followup_ticket = TicketResource.new()
 	followup_ticket.ticket_id = ticket_id + "-" + str(randi() % 999) # Unique ID
 	
-	# IMPROVED: Dynamic context-aware information
 	if original_id != "N/A":
 		followup_ticket.title = "AUDIT: Re: " + original_id
 		followup_ticket.description = "URGENT AUDIT REQUIRED.\n\nOriginal Incident: " + original_id + "\n\nReason: " + reason + "\n\nBecause this incident was resolved via non-standard procedures (Emergency/Efficient), we must re-verify the state of the network. Review the original logs and ensure no secondary persistence exists."
@@ -404,15 +398,9 @@ func log_email_decision(email_id: String, decision: String, email: EmailResource
 	}
 	
 	choice_log.append(choice_data)
-	
-	# Email consequences are handled in EmailSystem, but we track them here
-	# for overall player archetype analysis
-
-
 
 func get_choice_history() -> Array:
 	return choice_log.duplicate()
-
 
 func get_recent_choices(count: int = 5) -> Array[Dictionary]:
 	var recent = []
@@ -420,8 +408,6 @@ func get_recent_choices(count: int = 5) -> Array[Dictionary]:
 	for i in range(start, choice_log.size()):
 		recent.append(choice_log[i])
 	return recent
-
-
 
 # Debug helper - print current state
 func show_consequence_info():

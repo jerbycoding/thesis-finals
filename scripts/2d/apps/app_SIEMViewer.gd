@@ -2,10 +2,8 @@
 extends Control
 
 @onready var log_list: VBoxContainer = %LogList
-@onready var attach_section: Control = %AttachSection
 @onready var ticket_dropdown: OptionButton = %TicketDropdown
 @onready var attach_button: Button = %AttachButton
-@onready var log_detail_section: Control = %LogDetailSection
 @onready var log_detail_label: RichTextLabel = %LogDetailLabel
 @onready var close_inspector_button: Button = %CloseInspectorButton
 @onready var inspector_pane: Control = %InspectorPane
@@ -16,6 +14,8 @@ extends Control
 @onready var source_header: Label = %SourceHeader
 @onready var severity_header: Label = %SeverityHeader
 @onready var message_header: Label = %MessageHeader
+
+var log_entry_scene = preload("res://scenes/2d/apps/components/LogEntry.tscn")
 
 var current_filter: String = "all"  # "all", "security", "high"
 var selected_log: LogResource = null
@@ -39,7 +39,7 @@ func _ready():
 	if close_inspector_button:
 		close_inspector_button.pressed.connect(_on_close_inspector_pressed)
 	
-	# Initialize header widths
+	# Initialize header widths to match LogEntry.tscn
 	if time_header: time_header.custom_minimum_size = Vector2(100, 0)
 	if source_header: source_header.custom_minimum_size = Vector2(120, 0)
 	if severity_header: severity_header.custom_minimum_size = Vector2(70, 0)
@@ -118,14 +118,15 @@ func _on_log_added(log: LogResource):
 func _add_log_entry(log: LogResource, prepend: bool = false):
 	if not log or not log_list: return
 	
-	var entry = _create_log_entry(log)
+	var entry = log_entry_scene.instantiate()
 	if prepend:
 		log_list.add_child(entry)
 		log_list.move_child(entry, 0)
 	else:
 		log_list.add_child(entry)
 	
-	entry.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	entry.set_log_data(log)
+	entry.log_selected.connect(_on_log_selected)
 	
 	# Performance Cap: Remove oldest logs if over limit
 	if log_list.get_child_count() > MAX_VISIBLE_LOGS:
@@ -133,77 +134,15 @@ func _add_log_entry(log: LogResource, prepend: bool = false):
 		log_list.remove_child(oldest)
 		oldest.queue_free()
 
-func _create_log_entry(log: LogResource) -> Control:
-	var container = PanelContainer.new()
-	container.custom_minimum_size = Vector2(0, 32)
-	container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	
-	var style = StyleBoxFlat.new()
-	style.bg_color = Color(0.05, 0.05, 0.1, 0.5)
-	style.border_width_left = 3
-	
-	if log.is_revealed:
-		style.border_color = Color.MAGENTA
-		style.shadow_color = Color(1.0, 0.0, 1.0, 0.2)
-		style.shadow_size = 2
-	else:
-		style.border_color = log.get_severity_color()
-		
-	container.add_theme_stylebox_override("panel", style)
-	
-	var hbox = HBoxContainer.new()
-	hbox.add_theme_constant_override("separation", 10)
-	container.add_child(hbox)
-	
-	# Data Labels
-	var t = _create_label(log.timestamp, 100, Color(0.6, 0.6, 0.6))
-	var s = _create_label(log.source.to_upper(), 120)
-	var v = _create_label(log.get_severity_text(), 70, log.get_severity_color(), true)
-	var m = _create_label(log.message, 0, Color(0.9, 0.9, 0.9), false, log.message)
-	m.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	m.clip_text = true
-	
-	hbox.add_child(t)
-	hbox.add_child(s)
-	hbox.add_child(v)
-	hbox.add_child(m)
-	
-	container.mouse_filter = Control.MOUSE_FILTER_STOP
-	container.set_meta("log_data", log)
-	container.gui_input.connect(_on_log_entry_clicked.bind(container))
-	
-	return container
+func _on_log_selected(log: LogResource, instance: Control):
+	selected_log = log
+	_highlight_selected_log(instance)
+	_show_log_details(log)
 
-func _create_label(txt: String, width: int, color: Color = Color.WHITE, center: bool = false, tooltip: String = "") -> Label:
-	var l = Label.new()
-	l.text = " " + txt if not center else txt
-	if width > 0: l.custom_minimum_size = Vector2(width, 0)
-	l.add_theme_font_size_override("font_size", 10)
-	l.add_theme_color_override("font_color", color)
-	if center: l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	if tooltip != "": l.tooltip_text = tooltip
-	l.mouse_filter = Control.MOUSE_FILTER_PASS
-	return l
-
-func _on_log_entry_clicked(event: InputEvent, container: Control):
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-		var log = container.get_meta("log_data")
-		if log:
-			selected_log = log
-			_highlight_selected_log(container)
-			_show_log_details(log)
-
-func _highlight_selected_log(selected_container: Control):
+func _highlight_selected_log(selected_instance: Control):
 	for child in log_list.get_children():
-		if child is PanelContainer:
-			var style = child.get_theme_stylebox("panel").duplicate()
-			style.bg_color = Color(0.05, 0.05, 0.1, 0.5)
-			child.add_theme_stylebox_override("panel", style)
-	
-	if selected_container:
-		var style = selected_container.get_theme_stylebox("panel").duplicate()
-		style.bg_color = Color(0.1, 0.2, 0.3, 0.8)
-		selected_container.add_theme_stylebox_override("panel", style)
+		if child.has_method("set_highlight"):
+			child.set_highlight(child == selected_instance)
 
 func _setup_attach_section():
 	if attach_button: attach_button.pressed.connect(_on_attach_button_pressed)
@@ -212,6 +151,7 @@ func _on_close_inspector_pressed():
 	if inspector_pane:
 		inspector_pane.visible = false
 	selected_log = null
+	_highlight_selected_log(null)
 
 func _show_log_details(log: LogResource):
 	if inspector_pane:
@@ -252,6 +192,9 @@ func _on_attach_button_pressed():
 	if TicketManager.attach_log_to_ticket(ticket.ticket_id, selected_log.log_id):
 		if NotificationManager: NotificationManager.show_notification("Evidence attached to " + ticket.ticket_id, "success")
 		selected_log = null
+		_highlight_selected_log(null)
+		if inspector_pane:
+			inspector_pane.visible = false
 
 func _on_ticket_added(_ticket: TicketResource): _refresh_ticket_dropdown()
 func _on_log_attached(_t_id, _l_id): pass

@@ -10,11 +10,11 @@ signal world_event(event_id: String, active: bool, duration: float)
 signal shift_started
 signal shift_ended(results: Dictionary)
 
-var current_shift_name: String = "shift_monday"
+var current_shift_name: String = ""
 var shift_report_scene = preload("res://scenes/2d/apps/App_ShiftReport.tscn")
 
 var shift_library: Dictionary = {} # shift_id -> Resource
-var current_shift_resource: Resource = null
+var current_shift_resource: ShiftResource = null
 var current_active_arc: Array = []
 
 const SHIFT_DIR = "res://resources/shifts/"
@@ -22,7 +22,6 @@ const SHIFT_DIR = "res://resources/shifts/"
 var shift_start_time: float = 0.0
 var current_event_index: int = 0
 var _is_shift_active: bool = false
-var is_first_ticket_completed: bool = false # State to prevent re-triggering
 var event_timer: Timer
 
 func _ready():
@@ -54,7 +53,7 @@ func _discover_shifts():
 			print("  - Registered Shift: %s" % res.shift_id)
 	print("🎬 NARRATIVE_DEBUG: Library ready: %d shifts." % shift_library.size())
 
-func start_shift(shift_id: String = "shift_monday"):
+func start_shift(shift_id: String):
 	print("NarrativeDirector: Attempting to start shift: ", shift_id)
 	
 	if not shift_library.has(shift_id):
@@ -66,12 +65,31 @@ func start_shift(shift_id: String = "shift_monday"):
 	current_active_arc = current_shift_resource.event_sequence
 
 	_is_shift_active = true
-	is_first_ticket_completed = false
 	shift_start_time = Time.get_ticks_msec()
 	current_event_index = 0
 	shift_started.emit()
 	
 	_schedule_next_event()
+
+func trigger_briefing(shift_id: String):
+	if _is_shift_active: 
+		print("NarrativeDirector: Briefing blocked - shift already active.")
+		return
+		
+	if not shift_library.has(shift_id):
+		push_error("NarrativeDirector: Cannot trigger briefing - Shift ID '%s' unknown." % shift_id)
+		return
+		
+	var shift_res = shift_library[shift_id]
+	print("NarrativeDirector: Starting briefing for: ", shift_id)
+	
+	# Transition to Briefing Room if not already there
+	if get_tree().current_scene.name != "BriefingRoom":
+		TransitionManager.change_scene_to("res://scenes/3d/BriefingRoom.tscn")
+		await TransitionManager.transition_completed
+	
+	# Trigger the dialogue via signal (CISO is usually the one speaking)
+	emit_signal("npc_interaction_requested", "ciso", shift_res.briefing_dialogue_id)
 
 func _on_event_timer_timeout():
 	if current_event_index < current_active_arc.size():
@@ -159,7 +177,6 @@ func _trigger_event(event_data: Dictionary):
 				if GameState.is_in_2d_mode():
 					TransitionManager.exit_desktop_mode()
 					await TransitionManager.transition_completed
-					# The await ensures we don't continue until the transition is done.
 
 				# Now that we are guaranteed to be in 3D, show the report.
 				var report_instance = shift_report_scene.instantiate()
@@ -173,42 +190,21 @@ func _trigger_event(event_data: Dictionary):
 
 
 func _on_ticket_completed(ticket: TicketResource, completion_type: String, _time_taken: float):
-	# Logic removed: No longer interrupting player after Spear Phishing completion.
 	pass
 
+# --- Deprecated specific briefing methods - Use trigger_briefing(id) instead ---
 
 func start_briefing():
-	print("NarrativeDirector: Starting Monday (Onboarding) briefing.")
-	if _is_shift_active: return
-	TransitionManager.change_scene_to("res://scenes/3d/BriefingRoom.tscn")
-	await TransitionManager.transition_completed
-	emit_signal("npc_interaction_requested", "ciso", "briefing_01")
+	trigger_briefing("shift_monday")
 
 func start_tuesday_briefing():
-	print("NarrativeDirector: Starting Tuesday (Noise) briefing.")
-	if _is_shift_active: return
-	TransitionManager.change_scene_to("res://scenes/3d/BriefingRoom.tscn")
-	await TransitionManager.transition_completed
-	emit_signal("npc_interaction_requested", "ciso", "briefing_second_shift")
+	trigger_briefing("shift_tuesday")
 
 func start_wednesday_briefing():
-	print("NarrativeDirector: Starting Wednesday (Outbreak) briefing.")
-	if _is_shift_active: return
-	TransitionManager.change_scene_to("res://scenes/3d/BriefingRoom.tscn")
-	await TransitionManager.transition_completed
-	emit_signal("npc_interaction_requested", "ciso", "briefing_third_shift")
+	trigger_briefing("shift_wednesday")
 
 func start_thursday_briefing():
-	print("NarrativeDirector: Starting Thursday (Betrayal) briefing.")
-	if _is_shift_active: return
-	TransitionManager.change_scene_to("res://scenes/3d/BriefingRoom.tscn")
-	await TransitionManager.transition_completed
-	# TODO: Create a specific dialogue for this, for now reuse default or create a generic one
-	emit_signal("npc_interaction_requested", "ciso", "default") 
+	trigger_briefing("shift_thursday")
 
 func start_friday_briefing():
-	print("NarrativeDirector: Starting Friday (Zero Day) briefing.")
-	if _is_shift_active: return
-	TransitionManager.change_scene_to("res://scenes/3d/BriefingRoom.tscn")
-	await TransitionManager.transition_completed
-	emit_signal("npc_interaction_requested", "ciso", "shift_end") # Placeholder for now
+	trigger_briefing("shift_friday")

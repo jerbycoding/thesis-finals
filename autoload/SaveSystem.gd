@@ -12,9 +12,17 @@ signal game_loaded
 
 # Collects data from all managers and writes it to the save file.
 func save_game():
-	# For now, we assume saving at the end of shift 1 always means shift 2 is next.
-	# A more robust system would get the next shift from NarrativeDirector.
-	var next_shift = "second_shift"
+	# Data-driven shift progression: determine next shift from NarrativeDirector
+	var next_shift = "shift_monday" # Default fallback
+	
+	if NarrativeDirector and NarrativeDirector.current_shift_resource:
+		var current_shift = NarrativeDirector.current_shift_resource
+		if current_shift.next_shift:
+			next_shift = current_shift.next_shift.shift_id
+		else:
+			# If no next shift is defined, we'll reload the current one
+			# (or could mark game as completed)
+			next_shift = current_shift.shift_id
 	
 	# Defensive checks for singletons
 	if not is_instance_valid(ArchetypeAnalyzer):

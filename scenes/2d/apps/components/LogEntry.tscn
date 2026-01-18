@@ -1,0 +1,62 @@
+[gd_scene load_steps=3 format=3 uid="uid://c8x6y708bab0c"]
+
+[ext_resource type="Script" path="res://scripts/2d/apps/components/LogEntry.gd" id="1_log"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Log"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.05, 0.05, 0.1, 0.5)
+border_width_left = 3
+border_color = Color(0.2, 0.8, 0.2, 1)
+
+[node name="LogEntry" type="PanelContainer"]
+custom_minimum_size = Vector2(0, 32)
+offset_right = 1000.0
+offset_bottom = 32.0
+size_flags_horizontal = 3
+mouse_filter = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_Log")
+script = ExtResource("1_log")
+
+[node name="HBox" type="HBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="TimeLabel" type="Label" parent="HBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1)
+theme_override_font_sizes/font_size = 10
+text = " 00:00:00"
+vertical_alignment = 1
+
+[node name="SourceLabel" type="Label" parent="HBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+text = "SOURCE"
+vertical_alignment = 1
+uppercase = true
+
+[node name="SeverityLabel" type="Label" parent="HBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+text = "SEVERITY"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MessageLabel" type="Label" parent="HBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.9, 0.9, 0.9, 1)
+theme_override_font_sizes/font_size = 10
+text = "Raw log message content goes here..."
+vertical_alignment = 1
+clip_text = true

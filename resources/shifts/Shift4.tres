@@ -1,15 +1,18 @@
-[gd_resource type="Resource" script_class="ShiftResource" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="ShiftResource" load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://resources/ShiftResource.gd" id="1_shift"]
+[ext_resource type="Resource" path="res://resources/shifts/Shift5.tres" id="2_next_shift"]
 
 [resource]
 script = ExtResource("1_shift")
 shift_name = "Shift 4: Thursday (Betrayal)"
 shift_id = "shift_thursday"
+briefing_dialogue_id = "default"
 event_sequence = [
-	{"time": 30, "event": "spawn_auth", "type": "spawn_ticket", "ticket_id": "AUTH-FAIL-GENERIC"},
-	{"time": 120, "event": "spawn_insider", "type": "spawn_ticket", "ticket_id": "INSIDER-001"},
-	{"time": 210, "event": "spawn_spear", "type": "spawn_ticket", "ticket_id": "SPEAR-PHISH-001"},
-	{"time": 360, "event": "shift_end", "type": "shift_end"}
+	{"time": 60, "event": "spawn_auth", "type": "spawn_ticket", "ticket_id": "AUTH-FAIL-GENERIC"},
+	{"time": 240, "event": "spawn_insider", "type": "spawn_ticket", "ticket_id": "INSIDER-001"},
+	{"time": 480, "event": "spawn_exfil", "type": "spawn_ticket", "ticket_id": "DATA-EXFIL-001"},
+	{"time": 900, "event": "shift_end", "type": "shift_end"}
 ]
 random_event_pool = []
+next_shift = ExtResource("2_next_shift")

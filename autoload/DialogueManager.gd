@@ -68,6 +68,19 @@ func validate_dialogue(resource: DialogueDataResource) -> bool:
 	return true
 
 func _on_dialogue_choice_selected(choice: Dictionary):
+	# CRITICAL FIX: Handle scene changes centrally. 
+	# This ensures the player is teleported even if the NPC logic fails or the instance is unstable.
+	if choice.has("effect"):
+		var effect = choice["effect"]
+		if effect.has("change_scene"):
+			print("DialogueManager: Intercepted change_scene effect. Executing transition.")
+			if TransitionManager:
+				TransitionManager.change_scene_to(effect["change_scene"], effect.get("then_start_narrative", ""))
+			# Automatically close the dialogue UI and restore 3D movement mode
+			_close_dialogue_session()
+			if dialogue_box_instance:
+				dialogue_box_instance.hide()
+
 	if is_instance_valid(current_npc) and current_npc.has_method("_on_dialogue_choice_selected"):
 		# Forward the choice to the NPC that started the dialogue
 		current_npc._on_dialogue_choice_selected(choice)

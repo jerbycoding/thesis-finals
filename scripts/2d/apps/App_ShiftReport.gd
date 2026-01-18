@@ -48,19 +48,11 @@ func _on_continue_pressed():
 	hide() # Hide the report itself
 	
 	if NarrativeDirector:
-		match NarrativeDirector.current_shift_name:
-			"shift_monday":
-				NarrativeDirector.start_tuesday_briefing()
-			"shift_tuesday":
-				NarrativeDirector.start_wednesday_briefing()
-			"shift_wednesday":
-				NarrativeDirector.start_thursday_briefing()
-			"shift_thursday":
-				NarrativeDirector.start_friday_briefing()
-			"shift_friday":
-				print("ShiftReport: Final shift completed. Returning to title.")
-				TransitionManager.change_scene_to("res://scenes/ui/TitleScreen.tscn")
-			_:
-				# Fallback for old saves or errors
-				print("ShiftReport: Unknown shift state. Returning to title.")
-				TransitionManager.change_scene_to("res://scenes/ui/TitleScreen.tscn")
+		var current_shift = NarrativeDirector.current_shift_resource
+		if current_shift and current_shift.next_shift:
+			var next_shift_id = current_shift.next_shift.shift_id
+			print("ShiftReport: Moving to next shift: ", next_shift_id)
+			NarrativeDirector.trigger_briefing(next_shift_id)
+		else:
+			print("ShiftReport: Final shift completed or no next shift defined. Returning to title.")
+			TransitionManager.change_scene_to("res://scenes/ui/TitleScreen.tscn")

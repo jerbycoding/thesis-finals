@@ -6,11 +6,12 @@
 script = ExtResource("1_shift")
 shift_name = "Shift 5: Friday (Zero Day)"
 shift_id = "shift_friday"
+briefing_dialogue_id = "default"
 event_sequence = [
-	{"time": 10, "event": "spawn_exfil", "type": "spawn_ticket", "ticket_id": "DATA-EXFIL-001"},
-	{"time": 45, "event": "spawn_ransom", "type": "spawn_ticket", "ticket_id": "RANSOM-001"},
-	{"time": 90, "event": "spawn_malware", "type": "spawn_ticket", "ticket_id": "MALWARE-CONTAIN-001"},
-	{"time": 120, "event": "maybe_spawn_redemption", "type": "spawn_ticket", "ticket_id": "BLACK-TICKET-REDEMPTION"},
-	{"time": 300, "event": "final_end", "type": "shift_end"}
+	{"time": 10, "event": "zero_day_start", "type": "system_event", "event_id": "ZERO_DAY", "duration": 120.0},
+	{"time": 30, "event": "spawn_ransom", "type": "spawn_ticket", "ticket_id": "RANSOM-001"},
+	{"time": 45, "event": "spawn_malware", "type": "spawn_ticket", "ticket_id": "MALWARE-CONTAIN-001"},
+	{"time": 240, "event": "maybe_spawn_redemption", "type": "spawn_ticket", "ticket_id": "BLACK-TICKET-REDEMPTION"},
+	{"time": 600, "event": "final_end", "type": "shift_end"}
 ]
 random_event_pool = []
