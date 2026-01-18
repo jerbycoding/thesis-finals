@@ -2,10 +2,6 @@
 # Autoload singleton that manages all emails
 extends Node
 
-signal email_added(email: EmailResource)
-signal email_decision_made(email_id: String, decision: String)  # "approve", "quarantine", "escalate"
-signal email_decision_processed(email: EmailResource, decision: String, inspection_state: Dictionary)
-
 var all_emails: Array[EmailResource] = []
 var active_emails: Array[EmailResource] = [] # Only these are shown in the app
 var processed_emails: Array[String] = []  # Email IDs that have been processed
@@ -27,7 +23,7 @@ func _initialize_system():
 	reveal_emails_for_ticket("") 
 
 func _prepare_library():
-	print("📧 EMAIL_DEBUG: Discovering emails in %s..." % EMAIL_DIR)
+	print("📧 EmailSystem: Discovering emails in %s..." % EMAIL_DIR)
 	all_emails.clear()
 	
 	var paths = FileUtil.get_resource_paths(EMAIL_DIR)
@@ -35,18 +31,18 @@ func _prepare_library():
 		var res = load(path)
 		if res and res is EmailResource:
 			if not res.validate():
-				print("  - ❌ EMAIL_DEBUG: Skipping malformed resource: %s" % path)
+				print("  - ❌ EmailSystem: Skipping malformed resource: %s" % path)
 				continue
 				
 			all_emails.append(res)
 			print("  - Discovered Email: ID=%s" % res.email_id)
 		else:
-			print("  - ❌ EMAIL_DEBUG: Skipping invalid resource: %s" % path)
+			print("  - ❌ EmailSystem: Skipping invalid resource: %s" % path)
 			
-	print("📧 EMAIL_DEBUG: Library ready: ", all_emails.size(), " emails")
+	print("📧 EmailSystem: Library ready: ", all_emails.size(), " emails")
 
 func reveal_emails_for_ticket(ticket_id: String):
-	print("📧 EMAIL_DEBUG: reveal_emails_for_ticket(%s)" % (ticket_id if not ticket_id.is_empty() else "GENERIC"))
+	print("📧 EmailSystem: reveal_emails_for_ticket(%s)" % (ticket_id if not ticket_id.is_empty() else "GENERIC"))
 	var count = 0
 	for email in all_emails:
 		# Match if:
@@ -60,23 +56,23 @@ func reveal_emails_for_ticket(ticket_id: String):
 		if is_exact_match or is_generic_match or (ticket_id == "" and email_is_orphaned):
 			if email not in active_emails:
 				active_emails.append(email)
-				email_added.emit(email)
+				EventBus.email_added.emit(email)
 				count += 1
 				print("  - Revealed Email: ID=%s | Subject=%s" % [email.email_id, email.subject])
 	
 	if count > 0:
-		print("📧 EMAIL_DEBUG: Revealed ", count, " new emails")
+		print("📧 EmailSystem: Revealed ", count, " new emails")
 
 func add_email(email: EmailResource):
 	if not email: return
-	print("📧 EMAIL_DEBUG: add_email() called for ID=%s" % email.email_id)
+	print("📧 EmailSystem: add_email() called for ID=%s" % email.email_id)
 	
 	if email not in all_emails:
 		all_emails.append(email)
 	
 	if email not in active_emails:
 		active_emails.append(email)
-		email_added.emit(email)
+		EventBus.email_added.emit(email)
 
 func get_all_emails() -> Array[EmailResource]:
 	return active_emails.duplicate()
@@ -120,9 +116,8 @@ func make_decision(email_id: String, decision: String, inspection_state: Diction
 		return
 	
 	processed_emails.append(email.email_id)
-	email_decision_made.emit(email_id, decision)
 	
 	print("📧 Decision made on email ", email_id, ": ", decision)
 	
-	# Emit a signal with all context. Other systems will listen for this.
-	email_decision_processed.emit(email, decision, inspection_state)
+	# GLOBAL EMIT
+	EventBus.email_decision_processed.emit(email, decision, inspection_state)

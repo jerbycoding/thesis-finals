@@ -2,12 +2,6 @@
 # Autoload singleton that manages all tickets in the game
 extends Node
 
-signal ticket_added(ticket: TicketResource)
-signal ticket_completed(ticket: TicketResource, completion_type: String, time_taken: float)
-signal ticket_timeout(ticket_id: String)
-signal ticket_ignored(ticket: TicketResource)
-signal log_attached(ticket_id: String, log_id: String)
-
 var active_tickets: Array[TicketResource] = []
 var completed_tickets: Array[TicketResource] = []
 var active_timers: Dictionary = {} # ticket_id: Timer
@@ -40,32 +34,19 @@ func _ready():
 	_prepare_library()
 	
 	# Connect to other systems safely after they've had a chance to initialize
-	_setup_system_connections.call_deferred()
+	call_deferred("_setup_system_connections")
 
 func _setup_system_connections():
-	# Connect to signals from other systems
-	if is_instance_valid(TerminalSystem):
-		TerminalSystem.command_run.connect(_on_terminal_command_run)
-		print("TicketManager connected to TerminalSystem")
-
-	if is_instance_valid(NarrativeDirector):
-		NarrativeDirector.spawn_ticket_requested.connect(spawn_ticket_by_id)
-		NarrativeDirector.shift_started.connect(start_ambient_spawning)
-		NarrativeDirector.shift_ended.connect(func(_r): stop_ambient_spawning())
-		print("TicketManager connected to NarrativeDirector")
-
-	if is_instance_valid(EmailSystem):
-		EmailSystem.email_decision_processed.connect(_on_email_decision_processed)
-		print("TicketManager connected to EmailSystem")
-
-	if is_instance_valid(ConsequenceEngine):
-		ConsequenceEngine.followup_ticket_creation_requested.connect(add_ticket)
-		print("TicketManager connected to ConsequenceEngine")
+	# Use EventBus for decoupled communication
+	EventBus.terminal_command_run.connect(_on_terminal_command_run)
+	EventBus.narrative_spawn_ticket.connect(spawn_ticket_by_id)
+	EventBus.shift_started.connect(func(_id): start_ambient_spawning())
+	EventBus.shift_ended.connect(func(_r): stop_ambient_spawning())
+	EventBus.email_decision_processed.connect(_on_email_decision_processed)
+	EventBus.app_opened.connect(_on_app_opened)
 	
-	if is_instance_valid(DesktopWindowManager):
-		# We check if the signal exists before connecting
-		if DesktopWindowManager.has_signal("app_opened"):
-			DesktopWindowManager.app_opened.connect(_on_app_opened)
+	# Listen for followup requests (from ConsequenceEngine)
+	EventBus.followup_ticket_creation_requested.connect(add_ticket)
 
 func _on_app_opened(app_name: String, _window_id: String):
 	print("TicketManager: App %s opened. Refreshing evidence visibility." % app_name)
@@ -75,9 +56,6 @@ func _on_app_opened(app_name: String, _window_id: String):
 			LogSystem.reveal_logs_for_ticket(ticket.ticket_id)
 		elif app_name == "email" and EmailSystem:
 			EmailSystem.reveal_emails_for_ticket(ticket.ticket_id)
-	
-	# Load initial tickets for testing - DISABLED in favor of narrative control
-	# _load_initial_tickets()
 
 func start_ambient_spawning():
 	print("TicketManager: Ambient noise spawning STARTED.")
@@ -226,7 +204,8 @@ func _get_ticket_path_by_id(ticket_id: String) -> String:
 func spawn_ticket_by_id(ticket_id: String):
 	var lookup_id = ticket_id.to_lower()
 	if not ticket_id_map.has(lookup_id):
-		print(CorporateVoice.get_formatted_phrase("ticket_id_not_found_map", {"ticket_id": ticket_id}))
+		push_error("TicketManager: Ticket ID '%s' not found. Spawning emergency fallback." % ticket_id)
+		_spawn_fallback_error_ticket(ticket_id)
 		return
 
 	var ticket_res = ticket_id_map[lookup_id]
@@ -234,7 +213,19 @@ func spawn_ticket_by_id(ticket_id: String):
 		var ticket = ticket_res.duplicate()
 		add_ticket(ticket)
 	else:
-		print(CorporateVoice.get_formatted_phrase("ticket_script_load_failed", {"path": "id_map"}))
+		_spawn_fallback_error_ticket(ticket_id)
+
+func _spawn_fallback_error_ticket(original_id: String):
+	var fallback = TicketResource.new()
+	fallback.ticket_id = "SYS-ERR-" + str(randi() % 999)
+	fallback.title = "CRITICAL: Narrative Sequence Error"
+	fallback.description = "URGENT: The SOC Narrative Director requested a ticket that does not exist: [" + original_id + "].\n\nThis is a system-level anomaly. Resolve this ticket immediately using 'Emergency' protocol to bypass and resume normal operations."
+	fallback.severity = "Critical"
+	fallback.category = "System"
+	fallback.base_time = 60.0
+	fallback.steps = ["Acknowledge Narrative Failure", "Perform Emergency Override"]
+	fallback.required_tool = "none"
+	add_ticket(fallback)
 
 func _load_initial_tickets():
 	print("📋 Loading initial tickets...")
@@ -299,8 +290,8 @@ func add_ticket(ticket: TicketResource):
 	# Create and start the node-based timer
 	_create_ticket_timer(ticket)
 	
-	# Emit signal for UI to update
-	ticket_added.emit(ticket)
+	# GLOBAL EMIT
+	EventBus.ticket_added.emit(ticket)
 	
 	# Automatically reveal related emails and logs
 	if EmailSystem and EmailSystem.has_method("reveal_emails_for_ticket"):
@@ -313,8 +304,8 @@ func _on_ticket_timeout_timer(ticket_id: String):
 	var active_ticket = get_ticket_by_id(ticket_id)
 	if active_ticket:
 		print(CorporateVoice.get_formatted_phrase("ticket_timeout", {"ticket_id": ticket_id}))
-		ticket_timeout.emit(ticket_id)
-		ticket_ignored.emit(active_ticket)
+		EventBus.ticket_timeout.emit(ticket_id)
+		EventBus.ticket_ignored.emit(active_ticket)
 		complete_ticket(ticket_id, "timeout")
 
 func complete_ticket(ticket_id: String, completion_type: String = "compliant"):
@@ -354,8 +345,8 @@ func complete_ticket(ticket_id: String, completion_type: String = "compliant"):
 			print("  Time Taken: %.1fs" % time_taken)
 			print("========================================")
 			
-			# Emit signal with completion type and time
-			ticket_completed.emit(ticket, completion_type, time_taken)
+			# GLOBAL EMIT
+			EventBus.ticket_completed.emit(ticket, completion_type, time_taken)
 			
 			# --- Response Buffer Rewards ---
 			if completion_type == "efficient":
@@ -414,8 +405,13 @@ func attach_log_to_ticket(ticket_id: String, log_id: String) -> bool:
 		return false
 	
 	if ticket.attach_log(log_id):
+		# Concise notification
 		print(CorporateVoice.get_formatted_phrase("log_attached_success", {"log_id": log_id, "ticket_id": ticket_id}))
-		log_attached.emit(ticket_id, log_id)
+		if NotificationManager:
+			NotificationManager.show_notification(CorporateVoice.get_notification("log_attached") + " to " + ticket_id, "success")
+		
+		# GLOBAL EMIT
+		EventBus.log_attached_to_ticket.emit(ticket_id, log_id)
 		return true
 	else:
 		print(CorporateVoice.get_formatted_phrase("log_already_attached_warning", {"log_id": log_id, "ticket_id": ticket_id}))
@@ -436,8 +432,8 @@ func _on_terminal_command_run(command_name: String, args: Array):
 		var ticket_to_complete = null
 		for ticket in active_tickets:
 			if ticket.ticket_id == "MALWARE-CONTAIN-001":
-				# This ticket is solved by isolating WORKSTATION-45
-				if isolated_host == "WORKSTATION-45":
+				# This ticket is solved by isolating the defined source host
+				if isolated_host == NetworkState.HOSTS.MALWARE_SOURCE:
 					ticket_to_complete = ticket
 					break
 		

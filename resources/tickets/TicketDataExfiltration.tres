@@ -6,11 +6,11 @@
 script = ExtResource("1_ticket")
 ticket_id = "DATA-EXFIL-001"
 title = "Data Exfiltration Alert"
-description = "Suspicious outbound traffic detected. Email contains external IP address. Cross-reference email and SIEM logs to identify data breach."
+description = "Suspicious outbound traffic detected. Email contains external IP address. Use the Terminal 'trace' command to identify the internal origin host and block the connection via SIEM firewall."
 severity = "Critical"
 category = "Data Breach"
-steps = Array[String](["Check email for suspicious IP address", "Search IP in SIEM logs", "Use Terminal to check host status if needed"])
-required_tool = "siem"
+steps = Array[String](["Check email for suspicious IP address", "Use Terminal 'trace' to find origin host", "Block connection at firewall (SIEM)"])
+required_tool = "terminal"
 base_time = 300.0
 hidden_risks = Array[String](["Data already exfiltrated → breach confirmed"])
 required_log_ids = Array[String](["LOG-EXFIL-001", "LOG-NETWORK-001"])

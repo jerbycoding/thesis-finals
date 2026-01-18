@@ -53,3 +53,64 @@ func validate() -> bool:
 	if sender.is_empty():
 		return false
 	return true
+
+# --- Risk Analysis Methods (Task 2: Resource-Driven Risk Logic) ---
+
+func get_header_analysis() -> Dictionary:
+	var status = get_header_status()
+	var report = {
+		"text": "[b]Email Headers Analysis:[/b]\n\n",
+		"is_malicious": false
+	}
+	
+	report.text += "SPF: %s\n" % status.get("spf", "UNKNOWN")
+	report.text += "DKIM: %s\n" % status.get("dkim", "UNKNOWN")
+	report.text += "DMARC: %s\n" % status.get("dmarc", "UNKNOWN")
+	
+	if status.get("spf") == "FAIL" or status.get("dkim") == "FAIL":
+		report.text += "\n[color=red]⚠ WARNING: Email authentication failed![/color]"
+		report.is_malicious = true
+		
+	return report
+
+func get_attachment_analysis() -> Dictionary:
+	var report = {
+		"text": "[b]Attachment Scan Results:[/b]\n\n",
+		"has_malware": false
+	}
+	
+	if attachments.is_empty():
+		report.text += "No attachments detected.\n"
+		return report
+		
+	for attachment in attachments:
+		var ext = attachment.get_extension().to_lower()
+		if ext in ["exe", "bat", "scr", "vbs", "js"]:
+			report.text += "[color=red]⚠ %s - CRITICAL: Executable payload detected![/color]\n" % attachment
+			report.has_malware = true
+		elif ext in ["pdf", "doc", "docx", "zip"]:
+			report.text += "[color=yellow]⚠ %s - Potential macro/container risk.[/color]\n" % attachment
+		else:
+			report.text += "✓ %s - Analysis clean.\n" % attachment
+			
+	return report
+
+func get_link_analysis() -> Dictionary:
+	var report = {
+		"text": "[b]Link Analysis Results:[/b]\n\n",
+		"is_suspicious": false
+	}
+	
+	if not suspicious_domain.is_empty():
+		report.text += "[color=red]⚠ Suspicious domain detected: %s[/color]\n" % suspicious_domain
+		report.text += "Reputation: [color=red]BLACKLISTED[/color]\n"
+		report.text += "Pattern: Known phishing landing page.\n"
+		report.is_suspicious = true
+	else:
+		report.text += "No suspicious external links identified.\n"
+		
+	if not suspicious_ip.is_empty():
+		report.text += "\n[color=yellow]Embedded IP: %s[/color]\n" % suspicious_ip
+		report.text += "Action: Cross-reference with SIEM logs for lateral movement.\n"
+		
+	return report

@@ -6,15 +6,14 @@ extends Control
 func _ready():
 	hide() # Hidden by default
 	
-	if NarrativeDirector:
-		NarrativeDirector.shift_started.connect(_on_shift_started)
-		NarrativeDirector.shift_ended.connect(_on_shift_ended)
-		
-		# If the shift has already started when this HUD is created, show it immediately.
-		if NarrativeDirector.is_shift_active():
-			_on_shift_started()
+	EventBus.shift_started.connect(_on_shift_started)
+	EventBus.shift_ended.connect(_on_shift_ended)
+	
+	# Check if shift already active
+	if NarrativeDirector and NarrativeDirector.is_shift_active():
+		_on_shift_started()
 
-func _on_shift_started():
+func _on_shift_started(_id = ""):
 	show()
 
 func _on_shift_ended(results: Dictionary):

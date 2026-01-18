@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="TicketResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/tickets/TicketResource.gd" id="1_ticket"]
+
+[resource]
+script = ExtResource("1_ticket")
+ticket_id = "TICKET-NOISE-002"
+title = "New Hardware Request: Monitor"
+description = "User 'a.smith' is requesting a secondary monitor for their workstation. Forward to procurement for approval."
+severity = "Low"
+category = "General Request"
+steps = ["Acknowledge request", "Forward to Procurement", "Close ticket"]
+required_tool = "email"
+base_time = 300.0
+hidden_risks = []
+required_log_ids = []
+on_complete_event = ""
+kill_chain_path = ""
+kill_chain_stage = 0

@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="TicketResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/tickets/TicketResource.gd" id="1_ticket"]
+
+[resource]
+script = ExtResource("1_ticket")
+ticket_id = "TICKET-NOISE-001"
+title = "Account Lockout: Forgotten Password"
+description = "User 'j.doe' reports they have forgotten their password and locked their account after 5 attempts. Verify identity and reset if necessary."
+severity = "Low"
+category = "Authentication"
+steps = ["Verify user identity", "Reset password in AD", "Close ticket"]
+required_tool = "siem"
+base_time = 180.0
+hidden_risks = []
+required_log_ids = ["LOG-NOISE-102"]
+on_complete_event = ""
+kill_chain_path = ""
+kill_chain_stage = 0

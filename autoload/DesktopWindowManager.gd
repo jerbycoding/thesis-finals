@@ -2,9 +2,6 @@
 # Autoload singleton to manage desktop application windows.
 extends Node
 
-signal app_opened(app_name: String, window_id: String)
-signal app_closed(app_name: String, window_id: String)
-
 var open_windows: Dictionary = {}  # window_id: WindowFrame
 var next_window_position: Vector2 = Vector2(50, 50)
 var window_z_index_base: int = 10
@@ -18,7 +15,9 @@ const APP_PATHS: Dictionary = {
 	"email": "res://scenes/2d/apps/App_EmailAnalyzer.tscn",
 	"terminal": "res://scenes/2d/apps/App_Terminal.tscn",
 	"handbook": "res://scenes/2d/apps/App_Handbook.tscn",
-	"taskmanager": "res://scenes/2d/apps/App_TaskManager.tscn"
+	"taskmanager": "res://scenes/2d/apps/App_TaskManager.tscn",
+	"network": "res://scenes/2d/apps/App_NetworkMapper.tscn",
+	"decryption": "res://scenes/2d/apps/App_Decryption.tscn"
 }
 
 const APP_TITLES: Dictionary = {
@@ -27,7 +26,9 @@ const APP_TITLES: Dictionary = {
 	"email": "Email Analyzer",
 	"terminal": "Terminal",
 	"handbook": "SOC Handbook",
-	"taskmanager": "Task Manager"
+	"taskmanager": "Task Manager",
+	"network": "Network Topology",
+	"decryption": "Decryption Tool"
 }
 
 const APP_SIZES: Dictionary = {
@@ -36,7 +37,9 @@ const APP_SIZES: Dictionary = {
 	"email": Vector2(900, 700),
 	"terminal": Vector2(650, 450),
 	"handbook": Vector2(700, 500),
-	"taskmanager": Vector2(600, 400)
+	"taskmanager": Vector2(600, 400),
+	"network": Vector2(800, 600),
+	"decryption": Vector2(700, 500)
 }
 
 var window_frame_scene = preload("res://scenes/2d/apps/components/WindowFrame.tscn")
@@ -47,6 +50,11 @@ func _ready():
 	window_container.name = "DesktopWindowLayer"
 	window_container.layer = 10 # Higher than main scene and desktop background
 	get_tree().root.call_deferred("add_child", window_container)
+	
+	# Connect to EventBus for global window management
+	EventBus.window_focused.connect(_on_window_focused)
+	EventBus.window_closed.connect(_on_window_closed)
+	
 	print("DesktopWindowManager ready.")
 
 func open_app(app_name: String, force_new: bool = false):
@@ -82,15 +90,6 @@ func open_app(app_name: String, force_new: bool = false):
 	window.position = _get_next_window_position()
 	
 	# Set window size based on app type
-	var app_size = APP_SIZES.get(app_name, Vector2(600, 400)) # Default size
-	window.custom_minimum_size = app_size
-	window.size = app_size
-	
-	# Connect window signals
-	window.window_focused.connect(_on_window_focused)
-	window.window_closed.connect(_on_window_closed)
-	
-	# Ensure the layer is visible before adding
 	window_container.visible = true
 	
 	# Add to layer
@@ -157,7 +156,7 @@ func open_app(app_name: String, force_new: bool = false):
 	_focus_window(window)
 	window.bring_to_front()
 	
-	app_opened.emit(app_name, window_id)
+	EventBus.app_opened.emit(app_name, window_id)
 	print("DesktopWindowManager: Opened app: ", app_name, " at position: ", window.position)
 
 func close_app(app_name: String, window_id: String = ""):
@@ -237,7 +236,7 @@ func _on_window_closed(window: Control):
 		open_windows.erase(window_id)
 		# Extract app_name from window_id (format: appname_timestamp)
 		var app_name = window_id.split("_")[0]
-		app_closed.emit(app_name, window_id)
+		EventBus.app_closed.emit(app_name, window_id)
 		print("DesktopWindowManager: Removed window from tracking: ", window_id)
 	
 	# Update focused window

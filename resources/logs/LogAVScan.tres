@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="LogResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/logs/LogResource.gd" id="1_log"]
+
+[resource]
+script = ExtResource("1_log")
+log_id = "LOG-NOISE-105"
+timestamp = "13:20:15"
+source = "AV-Agent"
+category = "Security"
+message = "Scheduled quick scan completed. No threats found."
+severity = 1
+related_ticket = "GENERIC"
+ip_address = "10.0.1.22"
+hostname = "WORKSTATION-22"
+is_revealed = false

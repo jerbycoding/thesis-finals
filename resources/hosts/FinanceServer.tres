@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="HostResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/HostResource.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+hostname = "FINANCE-SRV-01"
+ip_address = "10.0.10.5"
+is_critical = true
+os_type = "Linux"
+initial_status = "CLEAN"

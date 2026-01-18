@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="EmailResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/EmailResource.gd" id="1_email"]
+
+[resource]
+script = ExtResource("1_email")
+email_id = "EMAIL-LOUD-FAN"
+sender = "User"
+subject = "My computer fan is really loud"
+body = "Hi,\n\nMy computer sounds like a jet engine even though I only have Outlook open. Also it's really hot. Can I get a replacement?"
+attachments = []
+headers = {"status": {"dkim": "PASS", "dmarc": "PASS", "spf": "PASS"}}
+is_malicious = false
+is_urgent = false
+clues = []
+related_ticket = "CRYPTOMINER-HUNT-001"
+suspicious_ip = ""
+suspicious_domain = ""

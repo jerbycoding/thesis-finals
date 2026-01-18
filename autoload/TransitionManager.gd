@@ -1,8 +1,5 @@
 extends Node
 
-signal transition_started
-signal transition_completed
-
 var transition_overlay = preload("res://scenes/ui/TransitionOverlay.tscn")
 var overlay_instance = null
 var is_transitioning = false
@@ -21,7 +18,7 @@ func enter_desktop_mode(computer_node):
 
 	is_transitioning = true
 	print("ENTER DESKTOP: Step 1 - Set mode")
-	transition_started.emit()
+	EventBus.transition_started.emit()
 
 # Set mode FIRST (disables movement)
 	GameState.set_mode(GameState.GameMode.MODE_2D)
@@ -53,8 +50,7 @@ func enter_desktop_mode(computer_node):
 	get_tree().root.add_child(GameState.desktop_instance)
 
 	# Show persistent windows
-	if DesktopWindowManager:
-		DesktopWindowManager.show_all_windows()
+	DesktopWindowManager.show_all_windows()
 
 # Show mouse cursor
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
@@ -65,7 +61,7 @@ func enter_desktop_mode(computer_node):
 
 	print("ENTER DESKTOP: Complete")
 	is_transitioning = false
-	transition_completed.emit()
+	EventBus.transition_completed.emit()
 	
 	if AudioManager:
 		AudioManager.play_music(AudioManager.SFX.music_ambient_desktop, -10.0) # Play ambient desktop music, lower volume
@@ -81,7 +77,7 @@ func exit_desktop_mode():
 
 	is_transitioning = true
 	print("EXIT DESKTOP: Step 1 - Fade in")
-	transition_started.emit()
+	EventBus.transition_started.emit()
 
 # Fade to black
 	overlay_instance.fade_in()
@@ -89,8 +85,7 @@ func exit_desktop_mode():
 
 	print("EXIT DESKTOP: Step 2 - Hide windows and remove desktop background")
 	# Hide persistent windows instead of closing them
-	if DesktopWindowManager:
-		DesktopWindowManager.hide_all_windows()
+	DesktopWindowManager.hide_all_windows()
 		
 	# Remove desktop background
 	if GameState.desktop_instance:
@@ -109,7 +104,7 @@ func exit_desktop_mode():
 
 	print("EXIT DESKTOP: Complete")
 	is_transitioning = false
-	transition_completed.emit()
+	EventBus.transition_completed.emit()
 
 func change_scene_to(path: String, narrative_to_start_after: String = ""):
 	if not overlay_instance:
@@ -121,7 +116,7 @@ func change_scene_to(path: String, narrative_to_start_after: String = ""):
 	
 	print(">>> TRANSITION START: To '", path, "'")
 	is_transitioning = true
-	transition_started.emit()
+	EventBus.transition_started.emit()
 	
 	overlay_instance.fade_in()
 	print(">>> TRANSITION FADE_IN: Waiting for fade-in to complete...")
@@ -140,7 +135,7 @@ func change_scene_to(path: String, narrative_to_start_after: String = ""):
 	print(">>> TRANSITION FADE_OUT: Complete.")
 	
 	is_transitioning = false
-	transition_completed.emit()
+	EventBus.transition_completed.emit()
 	print(">>> TRANSITION END: To '", path, "'")
 	
 	# After everything is done, check if there's a follow-up narrative action

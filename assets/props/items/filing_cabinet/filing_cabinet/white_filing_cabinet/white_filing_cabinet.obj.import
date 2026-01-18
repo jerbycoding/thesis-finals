@@ -1,0 +1,25 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://cvc47qjmij4ls"
+path="res://.godot/imported/white_filing_cabinet.obj-0a34839c530f13df4dd9525d0f1357dc.mesh"
+
+[deps]
+
+files=["res://.godot/imported/white_filing_cabinet.obj-0a34839c530f13df4dd9525d0f1357dc.mesh"]
+
+source_file="res://assets/models/filing_cabinet/filing_cabinet/white_filing_cabinet/white_filing_cabinet.obj"
+dest_files=["res://.godot/imported/white_filing_cabinet.obj-0a34839c530f13df4dd9525d0f1357dc.mesh", "res://.godot/imported/white_filing_cabinet.obj-0a34839c530f13df4dd9525d0f1357dc.mesh"]
+
+[params]
+
+generate_tangents=true
+generate_lods=true
+generate_shadow_mesh=true
+generate_lightmap_uv2=false
+generate_lightmap_uv2_texel_size=0.2
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+force_disable_mesh_compression=false

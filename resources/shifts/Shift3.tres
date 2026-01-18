@@ -9,11 +9,12 @@ shift_name = "Shift 3: Wednesday (Outbreak)"
 shift_id = "shift_wednesday"
 briefing_dialogue_id = "briefing_third_shift"
 event_sequence = [
-	{"time": 45, "event": "spawn_malware", "type": "spawn_ticket", "ticket_id": "MALWARE-CONTAIN-001"},
+	{"time": 15, "event": "spawn_malware", "type": "spawn_ticket", "ticket_id": "MALWARE-CONTAIN-001"},
+	{"time": 90, "event": "start_lateral", "type": "system_event", "event_id": "LATERAL_MOVEMENT", "duration": 120.0},
 	{"time": 180, "event": "spawn_phish_1", "type": "spawn_ticket", "ticket_id": "PHISH-001"},
-	{"time": 240, "event": "spawn_phish_2", "type": "spawn_ticket", "ticket_id": "PHISH-001"},
-	{"time": 360, "event": "spawn_ransom", "type": "spawn_ticket", "ticket_id": "RANSOM-001"},
-	{"time": 600, "event": "shift_end", "type": "shift_end"}
+	{"time": 270, "event": "spawn_ransom", "type": "spawn_ticket", "ticket_id": "RANSOM-001"},
+	{"time": 360, "event": "spawn_miner", "type": "spawn_ticket", "ticket_id": "CRYPTOMINER-HUNT-001"},
+	{"time": 420, "event": "shift_end", "type": "shift_end"}
 ]
 random_event_pool = []
 next_shift = ExtResource("2_next_shift")

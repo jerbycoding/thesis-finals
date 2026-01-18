@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="EmailResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/EmailResource.gd" id="1_email"]
+
+[resource]
+script = ExtResource("1_email")
+email_id = "EMAIL-NOISE-006"
+sender = "HR Dept"
+subject = "Update your employee profile"
+body = "Please ensure your emergency contact information is up to date in the HR portal. This is a mandatory semi-annual review."
+attachments = []
+headers = {"status": {"dkim": "PASS", "dmarc": "PASS", "spf": "PASS"}}
+is_malicious = false
+is_urgent = false
+clues = []
+related_ticket = "GENERIC"
+suspicious_ip = ""
+suspicious_domain = ""

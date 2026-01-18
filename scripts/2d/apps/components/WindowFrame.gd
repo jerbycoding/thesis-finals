@@ -1,9 +1,6 @@
 # WindowFrame.gd
 extends Control
 
-signal window_focused(window)
-signal window_closed(window)
-
 var is_dragging: bool = false
 var drag_offset: Vector2 = Vector2.ZERO
 var window_id: String = ""
@@ -72,7 +69,7 @@ func _on_title_bar_gui_input(event):
 			# Start dragging
 			is_dragging = true
 			bring_to_front()
-			emit_signal("window_focused", self)
+			EventBus.window_focused.emit(self)
 			get_viewport().set_input_as_handled()
 		else:
 			# Stop dragging
@@ -113,11 +110,11 @@ func _on_window_gui_input(event):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.pressed:
 			bring_to_front()
-			emit_signal("window_focused", self)
+			EventBus.window_focused.emit(self)
 
 func _on_close_pressed():
 	print("DEBUG: Closing window: ", window_id)
-	emit_signal("window_closed", self)
+	EventBus.window_closed.emit(self)
 	queue_free()
 
 func load_content(scene: PackedScene):

@@ -3,8 +3,6 @@
 # This prevents fire-and-forget timers from causing issues across scene/shift changes.
 extends Node
 
-signal timer_finished(timer_id: String)
-
 var _timers: Dictionary = {} # id: Timer
 
 func _ready():
@@ -61,7 +59,7 @@ func _on_timer_timeout(id: String, callback: Callable, timer_node: Timer):
 	if callback.is_valid():
 		callback.call()
 	
-	timer_finished.emit(id)
+	EventBus.timer_finished.emit(id)
 	
 	# Node cleanup
 	if is_instance_valid(timer_node):

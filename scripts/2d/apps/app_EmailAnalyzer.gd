@@ -78,10 +78,9 @@ func _ready():
 		escalate_button.pressed.connect(_on_escalate_pressed)
 		print("DEBUG: Escalate button connected")
 	
-	# Connect to EmailSystem
-	if EmailSystem:
-		EmailSystem.email_added.connect(_on_email_added)
-		print("DEBUG: Connected to EmailSystem")
+	# Connect to EventBus
+	EventBus.email_added.connect(_on_email_added)
+	print("DEBUG: Connected to EventBus")
 	
 	# Load existing emails
 	await get_tree().process_frame
@@ -257,20 +256,11 @@ func _on_view_headers_pressed():
 	if ArchetypeAnalyzer:
 		ArchetypeAnalyzer.log_tool_used("email")
 	
-	# Simulate time cost (10 seconds)
 	view_headers_button.disabled = true
-	await get_tree().create_timer(0.1).timeout  # Short delay for demo
+	await get_tree().create_timer(0.1).timeout
 	
-	var header_status = selected_email.get_header_status()
-	var result_text = "[b]Email Headers Analysis:[/b]\n\n"
-	result_text += "SPF: " + header_status.get("spf", "UNKNOWN") + "\n"
-	result_text += "DKIM: " + header_status.get("dkim", "UNKNOWN") + "\n"
-	result_text += "DMARC: " + header_status.get("dmarc", "UNKNOWN") + "\n"
-	
-	if header_status.get("spf") == "FAIL" or header_status.get("dkim") == "FAIL":
-		result_text += "\n[color=red]⚠ WARNING: Email authentication failed![/color]"
-	
-	inspection_results_label.text = result_text
+	var analysis = selected_email.get_header_analysis()
+	inspection_results_label.text = analysis.text
 	
 	view_headers_button.disabled = false
 	_update_decision_visibility()
@@ -284,32 +274,11 @@ func _on_scan_attachments_pressed():
 	if ArchetypeAnalyzer:
 		ArchetypeAnalyzer.log_tool_used("email")
 	
-	# Simulate time cost (15 seconds)
 	scan_attachments_button.disabled = true
-	await get_tree().create_timer(0.1).timeout  # Short delay for demo
+	await get_tree().create_timer(0.1).timeout
 	
-	var result_text = "[b]Attachment Scan Results:[/b]\n\n"
-	
-	if selected_email.attachments.size() == 0:
-		result_text += "No attachments found.\n"
-	else:
-		for attachment in selected_email.attachments:
-			# Extract extension from filename string
-			var ext = ""
-			var dot_index = attachment.rfind(".")
-			if dot_index >= 0:
-				ext = attachment.substr(dot_index).to_lower()
-			else:
-				ext = ""
-			
-			if ext in [".exe", ".bat", ".scr", ".vbs", ".js"]:
-				result_text += "[color=red]⚠ " + attachment + " - HIGH RISK executable file![/color]\n"
-			elif ext in [".pdf", ".doc", ".docx"]:
-				result_text += "[color=yellow]⚠ " + attachment + " - Potentially risky document[/color]\n"
-			else:
-				result_text += "✓ " + attachment + " - Safe\n"
-	
-	inspection_results_label.text = result_text
+	var analysis = selected_email.get_attachment_analysis()
+	inspection_results_label.text = analysis.text
 	
 	scan_attachments_button.disabled = false
 	_update_decision_visibility()
@@ -323,24 +292,11 @@ func _on_check_links_pressed():
 	if ArchetypeAnalyzer:
 		ArchetypeAnalyzer.log_tool_used("email")
 	
-	# Simulate time cost (20 seconds)
 	check_links_button.disabled = true
-	await get_tree().create_timer(0.1).timeout  # Short delay for demo
+	await get_tree().create_timer(0.1).timeout
 	
-	var result_text = "[b]Link Analysis Results:[/b]\n\n"
-	
-	if selected_email.suspicious_domain:
-		result_text += "[color=red]⚠ Suspicious domain detected: " + selected_email.suspicious_domain + "[/color]\n"
-		result_text += "Domain reputation: [color=red]BLACKLISTED[/color]\n"
-		result_text += "This domain is known for phishing campaigns.\n"
-	else:
-		result_text += "No suspicious links detected.\n"
-	
-	if selected_email.suspicious_ip:
-		result_text += "\n[color=yellow]IP Address found: " + selected_email.suspicious_ip + "[/color]\n"
-		result_text += "Consider checking this IP in SIEM logs.\n"
-	
-	inspection_results_label.text = result_text
+	var analysis = selected_email.get_link_analysis()
+	inspection_results_label.text = analysis.text
 	
 	check_links_button.disabled = false
 	_update_decision_visibility()
@@ -376,30 +332,15 @@ func _make_decision(decision: String):
 	if EmailSystem:
 		EmailSystem.make_decision(selected_email.email_id, decision, inspection_state)
 		
-		# Determine which sound to play
-		if AudioManager:
-			if decision == "approve":
-				if selected_email.is_malicious:
-					AudioManager.play_sfx(AudioManager.SFX.notification_error) # Approved malicious email
-				else:
-					AudioManager.play_sfx(AudioManager.SFX.notification_success) # Approved legitimate email
-			elif decision == "quarantine":
-				if selected_email.is_malicious:
-					AudioManager.play_sfx(AudioManager.SFX.notification_success) # Quarantined malicious email
-				else:
-					AudioManager.play_sfx(AudioManager.SFX.notification_warning) # Quarantined legitimate email
-			elif decision == "escalate":
-				AudioManager.play_sfx(AudioManager.SFX.notification_info) # Escalation is generally neutral/info
-		
-		# Show feedback (will now use CorporateVoice)
+		# Feedback (NotificationManager will also use EventBus eventually, but for now we keep it descriptive)
 		var message = ""
 		match decision:
 			"approve":
-				message = CorporateVoice.get_phrase("email_approved")
+				message = CorporateVoice.get_notification("email_approved")
 			"quarantine":
-				message = CorporateVoice.get_phrase("email_quarantined")
+				message = CorporateVoice.get_notification("email_quarantined")
 			"escalate":
-				message = CorporateVoice.get_phrase("email_escalated")
+				message = CorporateVoice.get_notification("email_escalated")
 		
 		if NotificationManager:
 			NotificationManager.show_notification(message, "info", 3.0)

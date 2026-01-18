@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="TicketResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/tickets/TicketResource.gd" id="1_ticket"]
+
+[resource]
+script = ExtResource("1_ticket")
+ticket_id = "VPN-ANOMALY-001"
+title = "Impossible Travel Alert"
+description = "User 'j.doe' logged in from New York, and then 5 minutes later from Tokyo. This is physically impossible.\n\nDetermine which login is malicious and lock the account."
+severity = "High"
+category = "Authentication"
+steps = ["Compare login timestamps in SIEM", "Identify the malicious IP", "Flag account for review"]
+required_tool = "siem"
+base_time = 200.0
+hidden_risks = ["Locking account while CEO is traveling"]
+required_log_ids = ["LOG-VPN-001", "LOG-VPN-002"]
+on_complete_event = ""
+kill_chain_path = "Account Takeover"
+kill_chain_stage = 1

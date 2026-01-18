@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="EmailResource" format=3]
+
+[ext_resource type="Script" path="res://resources/EmailResource.gd" id="1_email"]
+
+[resource]
+script = ExtResource("1_email")
+email_id = "EMAIL-NOISE-004"
+sender = "Security"
+subject = "Lost Badge Found"
+body = "Hello,\n\nA staff security badge was found in the parking garage this morning. If you are missing yours, please visit the security desk at the main entrance to identify and claim it."
+attachments = []
+headers = {"status": {"dkim": "PASS", "dmarc": "PASS", "spf": "PASS"}}
+is_malicious = false
+is_urgent = false
+clues = []
+related_ticket = "GENERIC"
+suspicious_ip = ""
+suspicious_domain = ""

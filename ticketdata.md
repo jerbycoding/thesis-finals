@@ -27,7 +27,7 @@ This document details the specific outcomes for every resolution strategy ("Comp
 
 ### Stage 3: Ransomware (`RANSOM-001`)
 *   **Scenario:** Critical Finance Server is encrypted.
-*   **Compliant:** You isolate the server immediately, preventing data loss. **Crisis Averted.**
+*   **Compliant:** You isolate the server and run the **Decryption Tool** to recover files. **Crisis Averted.**
 *   **Efficient/Emergency:** You panic. The ransomware encrypts backups. **GAME OVER / Massive Reputation Loss.**
 
 ---
@@ -47,7 +47,7 @@ This document details the specific outcomes for every resolution strategy ("Comp
 
 ### Stage 3: Data Exfiltration (`DATA-EXFIL-001`)
 *   **Scenario:** Massive data upload detected.
-*   **Compliant:** You block the IP and stop the transfer. **Crisis Averted.**
+*   **Compliant:** You **Trace** the IP source and block the transfer. **Crisis Averted.**
 *   **Efficient/Emergency:** You hesitate. Customer data is leaked online. **Major Reputation Loss.**
 
 ---
@@ -80,11 +80,11 @@ This document details the specific outcomes for every resolution strategy ("Comp
 | Ticket ID | Required Tool | Required Logs (Evidence) |
 | :--- | :--- | :--- |
 | **AUTH-FAIL-GENERIC** | `siem` | `LOG-AUTH-003` |
-| **DATA-EXFIL-001** | `siem` | `LOG-EXFIL-001`, `LOG-NETWORK-001` |
+| **DATA-EXFIL-001** | `terminal` | `LOG-EXFIL-001`, `LOG-NETWORK-001` |
 | **INSIDER-001** | `siem` | `LOG-JANE-DOE-ACCESS`, `LOG-EXFIL-JANE-DOE` |
 | **MALWARE-CONTAIN-001** | `terminal` | `LOG-MALWARE-001` |
 | **PHISH-001** | `siem` | `LOG-PHISH-001`, `LOG-EMAIL-002` |
-| **RANSOM-001** | `terminal` | `LOG-RANSOM-FILE-ACTIVITY` |
+| **RANSOM-001** | `decryption` | `LOG-RANSOM-FILE-ACTIVITY` |
 | **SOCIAL-001** | `none` | `LOG-VOIP-001` |
 | **SPEAR-PHISH-001** | `email` | `LOG-SPEAR-001` |
 | **SYS-MAINT-GENERIC** | `siem` | `LOG-SYS-004` |

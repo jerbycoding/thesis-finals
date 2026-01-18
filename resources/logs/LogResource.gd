@@ -40,3 +40,19 @@ func validate() -> bool:
 	if severity < 1 or severity > 5:
 		return false
 	return true
+
+# --- Forensic Formatting (Task 2: Resource-Driven Risk Logic) ---
+
+func get_forensic_report() -> String:
+	var params = {
+		"id": log_id,
+		"time": timestamp,
+		"color": get_severity_color().to_html(),
+		"risk": get_severity_text(),
+		"source": source,
+		"ip": ip_address if ip_address != "" else "N/A",
+		"host": hostname if hostname != "" else "N/A",
+		"message": message
+	}
+	
+	return CorporateVoice.get_formatted_phrase("siem_inspector_body", params)

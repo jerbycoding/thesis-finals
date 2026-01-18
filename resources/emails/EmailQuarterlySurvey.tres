@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="EmailResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/EmailResource.gd" id="1_email"]
+
+[resource]
+script = ExtResource("1_email")
+email_id = "EMAIL-NOISE-003"
+sender = "Admin"
+subject = "Quarterly Employee Survey"
+body = "Dear Employee,\n\nWe value your feedback. Please take 5 minutes to fill out our quarterly engagement survey. Your responses are anonymous.\n\n[Link: internal-survey.corporate.com/q3]\n\nThank you!"
+attachments = []
+headers = {"status": {"dkim": "PASS", "dmarc": "PASS", "spf": "PASS"}}
+is_malicious = false
+is_urgent = false
+clues = []
+related_ticket = "GENERIC"
+suspicious_ip = ""
+suspicious_domain = ""

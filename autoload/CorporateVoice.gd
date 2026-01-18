@@ -80,11 +80,51 @@ static var corporate_phrases = {
 	"terminal_prompt": "soc@terminal:~$ ",
 	"terminal_command_echo": "[color=cyan]$ {command}[/color]\n"
 }
+
+# Concise phrases specifically for NotificationToast (max 40 chars)
+static var notifications = {
+	"ticket_completed_compliant": "Ticket Closed: COMPLIANT",
+	"ticket_completed_efficient": "Ticket Closed: EFFICIENT (Risk Accepted)",
+	"ticket_completed_emergency": "Ticket Closed: EMERGENCY PROTOCOL",
+	"log_attached": "Evidence Attached",
+	"email_approved": "Email Approved",
+	"email_quarantined": "Email Quarantined",
+	"email_escalated": "Email Escalated to Tier 2",
+	"terminal_locked": "TERMINAL LOCKED",
+	"terminal_unlocked": "Terminal Access Restored",
+	"malware_outbreak": "ALERT: Malware Outbreak Detected",
+	"data_breach": "CRITICAL: Data Exfiltration Active",
+	"user_complaint": "Feedback: User Complaint Received",
+	"email_approved_malicious": "FAILURE: Malware Approved!",
+	"email_approved_malicious_spear_phishing": "CRITICAL FAILURE: CEO Compromised!",
+	"email_quarantined_legitimate": "Warning: Legitimate Email Blocked",
+	"email_quarantined_malicious": "Success: Threat Neutralized",
+	"email_escalated_malicious": "Success: Threat Escalated",
+	"hidden_risk_attachment_scan_missed": "FAILURE: Attachment Scan Skipped",
+	"kill_chain_escalation": "ESCALATION: {path} -> Stage {stage}",
+	"followup_ticket_triggered": "Follow-up Investigation Opened",
+	"followup_ticket_scheduled": "Follow-up scheduled in {delay}s"
+}
+
 static func get_phrase(key: String) -> String:
 	if corporate_phrases.has(key):
 		return corporate_phrases[key]
 	push_warning("CorporateVoice: Phrase key '%s' not found." % key)
 	return "UNKNOWN CORPORATE PHRASE"
+
+static func get_notification(key: String) -> String:
+	if notifications.has(key):
+		return notifications[key]
+	# Fallback to verbose phrase if no short version exists
+	if corporate_phrases.has(key):
+		return corporate_phrases[key]
+	return "NOTIFICATION: " + key
+
+static func get_formatted_notification(key: String, params: Dictionary = {}) -> String:
+	var phrase = get_notification(key)
+	for p_key in params:
+		phrase = phrase.replace("{" + p_key + "}", str(params[p_key]))
+	return phrase
 
 static func get_formatted_phrase(key: String, params: Dictionary = {}) -> String:
 	var phrase = get_phrase(key)

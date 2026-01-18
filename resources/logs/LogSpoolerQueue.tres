@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="LogResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/logs/LogResource.gd" id="1_log"]
+
+[resource]
+script = ExtResource("1_log")
+log_id = "LOG-NOISE-108"
+timestamp = "17:40:12"
+source = "Spooler"
+category = "System"
+message = "Print job 'Invoice_2025.xlsx' queued for USER-82."
+severity = 1
+related_ticket = "GENERIC"
+ip_address = "10.0.2.5"
+hostname = "PRINT-SRV-01"
+is_revealed = false

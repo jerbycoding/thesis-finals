@@ -27,8 +27,7 @@ func _ready():
 		continue_button.visible = false
 	
 	# When a game is loaded, we need to transition to the main scene
-	if SaveSystem:
-		SaveSystem.game_loaded.connect(_on_game_loaded)
+	EventBus.game_loaded.connect(_on_game_loaded)
 	
 	# Start intro animation
 	_animate_intro()

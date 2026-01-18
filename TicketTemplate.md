@@ -16,7 +16,7 @@ All tickets are Godot Resources (`.tres`) based on `TicketResource.gd`.
 | `severity` | String | `Low`, `Medium`, `High`, or `Critical`. |
 | `category` | String | Descriptive category (e.g., `Phishing`, `Forensics`). |
 | `steps` | Array[String]| Step-by-step instructions (Max 3 recommended). |
-| `required_tool` | String | `siem`, `email`, `terminal`, or `none`. |
+| `required_tool` | String | `siem`, `email`, `terminal`, `network`, `decryption`, or `none`. |
 | `base_time` | Float | Timer duration in seconds (Default: 180.0). |
 | `required_log_ids`| Array[String]| List of specific **Log IDs** (not ticket IDs) needed for **Compliant** resolution. |
 

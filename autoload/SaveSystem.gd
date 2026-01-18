@@ -7,11 +7,9 @@ extends Node
 # The path to the save file in the user's data directory.
 const SAVE_PATH = "user://savegame.json"
 
-# Emitted after data has been successfully loaded and distributed to all managers.
-signal game_loaded
-
 # Collects data from all managers and writes it to the save file.
 func save_game():
+# ... (save logic)
 	# Data-driven shift progression: determine next shift from NarrativeDirector
 	var next_shift = "shift_monday" # Default fallback
 	
@@ -79,7 +77,7 @@ func load_game() -> bool:
 			var save_data = json_parser.get_data()
 			_distribute_loaded_data(save_data)
 			print("Game state loaded successfully.")
-			game_loaded.emit()
+			EventBus.game_loaded.emit()
 			return true
 		else:
 			print("ERROR: Failed to parse save file: ", json_parser.get_error_message())

@@ -48,9 +48,8 @@ func _ready():
 		interaction_area.body_entered.connect(_on_body_entered)
 		interaction_area.body_exited.connect(_on_body_exited)
 	
-	# Connect to NarrativeDirector
-	if NarrativeDirector:
-		NarrativeDirector.npc_interaction_requested.connect(_on_narrative_interaction_requested)
+	# Connect to EventBus
+	EventBus.npc_interaction_requested.connect(_on_narrative_interaction_requested)
 
 func _on_body_entered(body):
 	if body.name == "Player3D":

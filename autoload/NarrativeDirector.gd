@@ -3,15 +3,14 @@
 # coordinating NPC interactions, ticket spawns, and consequences.
 extends Node
 
-signal npc_interaction_requested(npc_id, dialogue_id)
-signal spawn_ticket_requested(ticket_id)
-signal spawn_consequence_requested(consequence_id)
-signal world_event(event_id: String, active: bool, duration: float)
-signal shift_started
-signal shift_ended(results: Dictionary)
-
 var current_shift_name: String = ""
 var shift_report_scene = preload("res://scenes/2d/apps/App_ShiftReport.tscn")
+
+const ENDING_SCENES = {
+	"fired": "res://scenes/ui/endings/Ending_Fired.tscn",
+	"bankrupt": "res://scenes/ui/endings/Ending_Bankrupt.tscn",
+	"victory": "res://scenes/ui/endings/Ending_Promotion.tscn"
+}
 
 var shift_library: Dictionary = {} # shift_id -> Resource
 var current_shift_resource: ShiftResource = null
@@ -28,9 +27,13 @@ func _ready():
 	# Discover all shifts in the folder
 	_discover_shifts()
 	
-	# Connect to TicketManager to handle event-driven narrative beats
-	if TicketManager:
-		TicketManager.ticket_completed.connect(_on_ticket_completed)
+	# Connect to EventBus for event-driven narrative beats
+	EventBus.ticket_completed.connect(_on_ticket_completed)
+	
+	# Connect to EventBus for critical failures
+	EventBus.narrative_spawn_consequence.connect(func(id): _trigger_event({"type": "spawn_consequence", "consequence_id": id}))
+	
+	EventBus.campaign_ended.connect(_on_campaign_ended)
 	
 	# Initialize event timer
 	event_timer = Timer.new()
@@ -67,7 +70,8 @@ func start_shift(shift_id: String):
 	_is_shift_active = true
 	shift_start_time = Time.get_ticks_msec()
 	current_event_index = 0
-	shift_started.emit()
+	
+	EventBus.shift_started.emit(shift_id)
 	
 	_schedule_next_event()
 
@@ -86,10 +90,10 @@ func trigger_briefing(shift_id: String):
 	# Transition to Briefing Room if not already there
 	if get_tree().current_scene.name != "BriefingRoom":
 		TransitionManager.change_scene_to("res://scenes/3d/BriefingRoom.tscn")
-		await TransitionManager.transition_completed
+		await EventBus.transition_completed
 	
 	# Trigger the dialogue via signal (CISO is usually the one speaking)
-	emit_signal("npc_interaction_requested", "ciso", shift_res.briefing_dialogue_id)
+	EventBus.npc_interaction_requested.emit("ciso", shift_res.briefing_dialogue_id)
 
 func _on_event_timer_timeout():
 	if current_event_index < current_active_arc.size():
@@ -136,6 +140,20 @@ func get_current_shift_duration() -> float:
 		return last_event.time
 	return 0.0
 
+func _on_critical_consequence(consequence_id: String, _details: Dictionary):
+	if consequence_id == "data_loss":
+		print("NarrativeDirector: CRITICAL FAILURE detected. Terminating shift.")
+		_trigger_event({"type": "shift_end", "failure_type": "bankrupt"})
+
+func _on_campaign_ended(type: String):
+	print("NarrativeDirector: Campaign ended with result: ", type)
+	var scene_path = ENDING_SCENES.get(type, "res://scenes/ui/TitleScreen.tscn")
+	
+	if TransitionManager:
+		TransitionManager.change_scene_to(scene_path)
+	else:
+		get_tree().change_scene_to_file(scene_path)
+
 func _trigger_event(event_data: Dictionary):
 	print("NarrativeDirector: Triggering event - ", event_data.get("event", "N/A"))
 	match event_data.type:
@@ -143,7 +161,7 @@ func _trigger_event(event_data: Dictionary):
 			if GameState.is_in_2d_mode():
 				print("NarrativeDirector: NPC interaction triggered. Transitioning to 3D for dialogue.")
 				TransitionManager.exit_desktop_mode()
-				await TransitionManager.transition_completed
+				await EventBus.transition_completed
 				# Wait a moment for the camera to settle
 				await get_tree().create_timer(0.5).timeout
 			
@@ -157,36 +175,53 @@ func _trigger_event(event_data: Dictionary):
 						DialogueManager.start_dialogue(null, res)
 						return # Skip the signal emission since we started it manually
 			
-			emit_signal("npc_interaction_requested", event_data.npc_id, event_data.dialogue_id)
+			EventBus.npc_interaction_requested.emit(event_data.npc_id, event_data.dialogue_id)
 		"spawn_ticket":
-			emit_signal("spawn_ticket_requested", event_data.ticket_id)
+			EventBus.narrative_spawn_ticket.emit(event_data.ticket_id)
 		"spawn_consequence":
-			emit_signal("spawn_consequence_requested", event_data.consequence_id)
+			EventBus.narrative_spawn_consequence.emit(event_data.consequence_id)
 		"system_event":
-			emit_signal("world_event", event_data.event_id, true, event_data.get("duration", 10.0))
+			EventBus.world_event_triggered.emit(event_data.event_id, true, event_data.get("duration", 10.0))
 			# Auto-clear after duration
 			get_tree().create_timer(event_data.get("duration", 10.0)).timeout.connect(
-				func(): emit_signal("world_event", event_data.event_id, false, 0.0)
+				func(): EventBus.world_event_triggered.emit(event_data.event_id, false, 0.0)
 			)
 		"shift_end":
 			stop_shift()
+			var failure_type = event_data.get("failure_type", "")
+			
 			if ArchetypeAnalyzer:
 				var results = ArchetypeAnalyzer.get_analysis_results()
 
 				# If in 2D mode, exit to 3D first.
 				if GameState.is_in_2d_mode():
 					TransitionManager.exit_desktop_mode()
-					await TransitionManager.transition_completed
+					await EventBus.transition_completed
 
-				# Now that we are guaranteed to be in 3D, show the report.
+				# Handle Instant Failures (Bankrupt/Fired)
+				if failure_type != "":
+					EventBus.campaign_ended.emit(failure_type)
+					return
+				
+				# Check for 'Fired' via archetype
+				if results.get("archetype") == "Negligent":
+					EventBus.campaign_ended.emit("fired")
+					return
+
+				# Check if this was the final shift (Friday)
+				if current_shift_name == "shift_friday":
+					EventBus.campaign_ended.emit("victory")
+					return
+
+				# Normal shift end - show report
 				var report_instance = shift_report_scene.instantiate()
 				get_tree().root.add_child(report_instance)
 				report_instance.show_report(results)
 				
-				emit_signal("shift_ended", results)
+				EventBus.shift_ended.emit(results)
 			else:
 				print("ERROR: ArchetypeAnalyzer not found!")
-				emit_signal("shift_ended", {})
+				EventBus.shift_ended.emit({})
 
 
 func _on_ticket_completed(ticket: TicketResource, completion_type: String, _time_taken: float):

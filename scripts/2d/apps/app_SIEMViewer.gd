@@ -16,6 +16,7 @@ extends Control
 @onready var message_header: Label = %MessageHeader
 
 var log_entry_scene = preload("res://scenes/2d/apps/components/LogEntry.tscn")
+var pool: UIObjectPool
 
 var current_filter: String = "all"  # "all", "security", "high"
 var selected_log: LogResource = null
@@ -25,6 +26,10 @@ const MAX_VISIBLE_LOGS = 50
 
 func _ready():
 	print("======= App_SIEMViewer (Bottom Drawer) Ready =======")
+	
+	# Initialize Pool
+	pool = UIObjectPool.new()
+	add_child(pool)
 	
 	visible = true
 	modulate = Color.WHITE
@@ -44,18 +49,11 @@ func _ready():
 	if source_header: source_header.custom_minimum_size = Vector2(120, 0)
 	if severity_header: severity_header.custom_minimum_size = Vector2(70, 0)
 	
-	# Connect to LogSystem
-	if LogSystem:
-		LogSystem.log_added.connect(_on_log_added)
-	
-	# Connect to TicketManager
-	if TicketManager:
-		TicketManager.ticket_added.connect(_on_ticket_added)
-		TicketManager.log_attached.connect(_on_log_attached)
-	
-	# Connect to NarrativeDirector for events
-	if NarrativeDirector:
-		NarrativeDirector.world_event.connect(_on_world_event)
+	# Connect to EventBus
+	EventBus.log_added.connect(_on_log_added)
+	EventBus.ticket_added.connect(_on_ticket_added)
+	EventBus.log_attached_to_ticket.connect(_on_log_attached)
+	EventBus.world_event_triggered.connect(_on_world_event)
 	
 	# Load existing logs
 	_refresh_logs()
@@ -88,8 +86,8 @@ func _refresh_logs():
 		log_detail_label.clear()
 		log_detail_label.append_text("[i]Select an entry from the stream to begin forensic analysis...[/i]")
 	
-	for child in log_list.get_children():
-		child.queue_free()
+	# Use Pool to release old nodes
+	pool.release_all(log_entry_scene.resource_path)
 	
 	var logs_to_show: Array[LogResource] = []
 	if LogSystem:
@@ -100,6 +98,10 @@ func _refresh_logs():
 			_: logs_to_show = LogSystem.get_all_logs()
 	
 	logs_to_show.sort_custom(func(a, b): return a.timestamp > b.timestamp)
+	
+	# Cap visible logs for performance
+	if logs_to_show.size() > MAX_VISIBLE_LOGS:
+		logs_to_show = logs_to_show.slice(0, MAX_VISIBLE_LOGS)
 	
 	for log in logs_to_show:
 		_add_log_entry(log)
@@ -118,7 +120,9 @@ func _on_log_added(log: LogResource):
 func _add_log_entry(log: LogResource, prepend: bool = false):
 	if not log or not log_list: return
 	
-	var entry = log_entry_scene.instantiate()
+	# Use Pool to acquire instance
+	var entry = pool.acquire(log_entry_scene)
+	
 	if prepend:
 		log_list.add_child(entry)
 		log_list.move_child(entry, 0)
@@ -126,13 +130,13 @@ func _add_log_entry(log: LogResource, prepend: bool = false):
 		log_list.add_child(entry)
 	
 	entry.set_log_data(log)
-	entry.log_selected.connect(_on_log_selected)
+	if not entry.log_selected.is_connected(_on_log_selected):
+		entry.log_selected.connect(_on_log_selected)
 	
 	# Performance Cap: Remove oldest logs if over limit
 	if log_list.get_child_count() > MAX_VISIBLE_LOGS:
 		var oldest = log_list.get_child(log_list.get_child_count() - 1)
-		log_list.remove_child(oldest)
-		oldest.queue_free()
+		pool.release(oldest, log_entry_scene.resource_path)
 
 func _on_log_selected(log: LogResource, instance: Control):
 	selected_log = log
@@ -160,20 +164,7 @@ func _show_log_details(log: LogResource):
 	_refresh_ticket_dropdown()
 	if log_detail_label:
 		log_detail_label.clear()
-		
-		var params = {
-			"id": log.log_id,
-			"time": log.timestamp,
-			"color": log.get_severity_color().to_html(),
-			"risk": log.get_severity_text(),
-			"source": log.source,
-			"ip": log.ip_address if log.ip_address != "" else "N/A",
-			"host": log.hostname if log.hostname != "" else "N/A",
-			"message": log.message
-		}
-		
-		var body = CorporateVoice.get_formatted_phrase("siem_inspector_body", params)
-		log_detail_label.append_text(body)
+		log_detail_label.append_text(log.get_forensic_report())
 
 func _refresh_ticket_dropdown():
 	if not ticket_dropdown: return

@@ -1,7 +1,9 @@
-# Updated App_TicketQueue.gd
+# App_TicketQueue.gd
 extends Control
 
 var selected_ticket: TicketResource = null
+var pool: UIObjectPool
+var card_scene = preload("res://scenes/2d/apps/components/TicketCard.tscn")
 
 # UI Elements
 @onready var ticket_list: VBoxContainer = %TicketList
@@ -16,6 +18,10 @@ var selected_ticket: TicketResource = null
 
 func _ready():
 	print("======= App_TicketQueue._ready() =======")
+	
+	# Initialize Pool
+	pool = UIObjectPool.new()
+	add_child(pool)
 	
 	# Force visibility
 	visible = true
@@ -41,11 +47,10 @@ func _ready():
 		ticket_list.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	
 	# Connect signals
-	if TicketManager:
-		TicketManager.ticket_added.connect(_on_ticket_added)
-		TicketManager.ticket_completed.connect(_on_ticket_completed)
-		TicketManager.log_attached.connect(_on_log_attached)
-		print("DEBUG: Connected to TicketManager")
+	EventBus.ticket_added.connect(_on_ticket_added)
+	EventBus.ticket_completed.connect(_on_ticket_completed)
+	EventBus.log_attached_to_ticket.connect(_on_log_attached)
+	print("DEBUG: Connected to EventBus")
 	
 	# Load existing tickets
 	await get_tree().process_frame
@@ -105,23 +110,13 @@ func _on_ticket_added(ticket: TicketResource):
 		
 	print("Adding ticket to queue: ", ticket.title)
 	
-	var card_scene = preload("res://scenes/2d/apps/components/TicketCard.tscn")
-	if not card_scene:
-		print("ERROR: Cannot load TicketCard.tscn")
-		return
-		
-	var card = card_scene.instantiate()
-	if not card:
-		print("ERROR: Failed to instantiate TicketCard")
-		return
-		
-	if not card.has_method("set_ticket"):
-		print("ERROR: TicketCard missing set_ticket method")
-		card.queue_free()
-		return
-		
-	card.card_selected.connect(_on_ticket_card_selected)
-	card.completion_requested.connect(_on_ticket_completion_requested)
+	# Use Pool to acquire instance
+	var card = pool.acquire(card_scene)
+	
+	if not card.card_selected.is_connected(_on_ticket_card_selected):
+		card.card_selected.connect(_on_ticket_card_selected)
+	if not card.completion_requested.is_connected(_on_ticket_completion_requested):
+		card.completion_requested.connect(_on_ticket_completion_requested)
 	
 	# Add to list
 	ticket_list.add_child(card)
@@ -143,15 +138,6 @@ func _on_ticket_added(ticket: TicketResource):
 		print("ERROR: Card is NOT in scene tree!")
 	
 	print("TicketCard added to list: ", ticket.title)
-	print("DEBUG: Card visible: ", card.visible, " size: ", card.size, " position: ", card.position)
-	print("DEBUG: TicketList children count: ", ticket_list.get_child_count())
-	print("DEBUG: TicketList size: ", ticket_list.size)
-	
-	# Check ScrollContainer
-	var scroll_container = ticket_list.get_parent()
-	if scroll_container:
-		print("DEBUG: ScrollContainer size: ", scroll_container.size)
-		print("DEBUG: ScrollContainer visible: ", scroll_container.visible)
 
 func _on_ticket_card_selected(ticket: TicketResource, card_instance: Control):
 	_update_detail_view(ticket)
@@ -197,9 +183,8 @@ func _refresh_list():
 	selected_ticket = null
 	_update_detail_view(null) # Clear detail view and show placeholder
 		
-	# Clear existing tickets
-	for child in ticket_list.get_children():
-		child.queue_free()
+	# Release all cards to pool
+	pool.release_all(card_scene.resource_path)
 	
 	# Load active tickets from TicketManager
 	if TicketManager and TicketManager.has_method("get_active_tickets"):
@@ -210,15 +195,12 @@ func _refresh_list():
 	else:
 		print("WARNING: TicketManager not available or missing get_active_tickets method")
 
-func _on_ticket_completed(ticket: TicketResource, completion_type: String, time_taken: float):
-	print("Ticket completed: ", ticket.ticket_id, " - Type: ", completion_type)
+func _on_ticket_completed(_ticket: TicketResource, _completion_type: String, _time_taken: float):
 	# Refresh the list to remove completed ticket
 	_refresh_list()
 
-func _on_log_attached(ticket_id: String, log_id: String):
-	print("Log attached to ticket: ", ticket_id, " - Log: ", log_id)
+func _on_log_attached(_ticket_id: String, _log_id: String):
 	# Refresh evidence display on ticket cards
-	# Find the ticket card and update its evidence display
 	if ticket_list:
 		for child in ticket_list.get_children():
 			if child.has_method("_update_evidence_display"):

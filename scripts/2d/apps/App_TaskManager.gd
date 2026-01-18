@@ -20,9 +20,8 @@ func _ready():
 	visible = true
 	modulate = Color.WHITE
 	
-	# Connect to NarrativeDirector for world events
-	if NarrativeDirector:
-		NarrativeDirector.world_event.connect(_on_world_event)
+	# Connect to EventBus for world events
+	EventBus.world_event_triggered.connect(_on_world_event)
 	
 	# Initialize history with base values
 	for i in range(max_history):

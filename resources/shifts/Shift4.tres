@@ -9,10 +9,11 @@ shift_name = "Shift 4: Thursday (Betrayal)"
 shift_id = "shift_thursday"
 briefing_dialogue_id = "default"
 event_sequence = [
-	{"time": 60, "event": "spawn_auth", "type": "spawn_ticket", "ticket_id": "AUTH-FAIL-GENERIC"},
-	{"time": 240, "event": "spawn_insider", "type": "spawn_ticket", "ticket_id": "INSIDER-001"},
-	{"time": 480, "event": "spawn_exfil", "type": "spawn_ticket", "ticket_id": "DATA-EXFIL-001"},
-	{"time": 900, "event": "shift_end", "type": "shift_end"}
+	{"time": 30, "event": "spawn_auth", "type": "spawn_ticket", "ticket_id": "AUTH-FAIL-GENERIC"},
+	{"time": 120, "event": "spawn_insider", "type": "spawn_ticket", "ticket_id": "INSIDER-001"},
+	{"time": 210, "event": "spawn_vpn", "type": "spawn_ticket", "ticket_id": "VPN-ANOMALY-001"},
+	{"time": 300, "event": "spawn_spear", "type": "spawn_ticket", "ticket_id": "SPEAR-PHISH-001"},
+	{"time": 420, "event": "shift_end", "type": "shift_end"}
 ]
 random_event_pool = []
 next_shift = ExtResource("2_next_shift")

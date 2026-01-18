@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="LogResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/logs/LogResource.gd" id="1_log"]
+
+[resource]
+script = ExtResource("1_log")
+log_id = "LOG-VPN-002"
+timestamp = "09:05:00"
+source = "VPN-Gateway"
+category = "Authentication"
+message = "User 'j.doe' connected from IP 103.20.15.1 (Tokyo, JP)."
+severity = 5
+related_ticket = "VPN-ANOMALY-001"
+ip_address = "103.20.15.1"
+hostname = ""
+is_revealed = false

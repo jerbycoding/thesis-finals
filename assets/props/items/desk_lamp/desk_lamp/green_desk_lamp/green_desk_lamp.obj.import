@@ -1,0 +1,25 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://kb3jpy3j65hp"
+path="res://.godot/imported/green_desk_lamp.obj-077c380be3f61d50f64b04b6a69976db.mesh"
+
+[deps]
+
+files=["res://.godot/imported/green_desk_lamp.obj-077c380be3f61d50f64b04b6a69976db.mesh"]
+
+source_file="res://assets/models/desk_lamp/desk_lamp/green_desk_lamp/green_desk_lamp.obj"
+dest_files=["res://.godot/imported/green_desk_lamp.obj-077c380be3f61d50f64b04b6a69976db.mesh", "res://.godot/imported/green_desk_lamp.obj-077c380be3f61d50f64b04b6a69976db.mesh"]
+
+[params]
+
+generate_tangents=true
+generate_lods=true
+generate_shadow_mesh=true
+generate_lightmap_uv2=false
+generate_lightmap_uv2_texel_size=0.2
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+force_disable_mesh_compression=false

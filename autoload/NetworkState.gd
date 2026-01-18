@@ -2,67 +2,107 @@
 # Autoload singleton to manage the state of all hosts in the simulated network.
 extends Node
 
-# The single source of truth for host information.
-var host_states: Dictionary = {
-	# Pre-defined critical servers
-	"FINANCE-SRV-01": {"status": "CLEAN", "critical": true, "isolated": false, "scanned": false},
-	"WEB-SRV-01": {"status": "CLEAN", "critical": true, "isolated": false, "scanned": false},
-	"DB-SRV-01": {"status": "CLEAN", "critical": true, "isolated": false, "scanned": false},
-	# Initial infected host from TerminalSystem
-	"WORKSTATION-45": {"status": "INFECTED", "critical": false, "isolated": false, "scanned": false}
+# Centralized constants for critical system hosts (used for code logic)
+const HOSTS = {
+	"FINANCE": "FINANCE-SRV-01",
+	"WEB": "WEB-SRV-01",
+	"DATABASE": "DB-SRV-01",
+	"MALWARE_SOURCE": "WORKSTATION-45"
 }
+
+# The single source of truth for host information.
+var host_states: Dictionary = {}
+
+const HOST_DIR = "res://resources/hosts/"
 
 func _ready():
 	print("========================================")
 	print("NetworkState initialized")
-	_discover_hosts_from_resources.call_deferred()
+	
+	_register_hosts_from_folder.call_deferred()
+	
+	# Use EventBus for world events
+	EventBus.world_event_triggered.connect(_on_world_event)
+		
+	# Start simulation timer
+	var timer = Timer.new()
+	timer.wait_time = 10.0
+	timer.timeout.connect(_on_simulation_tick)
+	add_child(timer)
+	timer.start()
+	
 	print("========================================")
 
-func _discover_hosts_from_resources():
-	print("🌐 Discovering hosts from resource files...")
+func _register_hosts_from_folder():
+	print("🌐 NetworkState: Discovering hosts from %s..." % HOST_DIR)
 	
-	var ticket_paths = FileUtil.get_resource_paths("res://resources/tickets/", ".tres")
-	var log_paths = FileUtil.get_resource_paths("res://resources/logs/", ".tres")
-	
-	var resource_files = ticket_paths + log_paths
-	
-	var regex = RegEx.new()
-	# This regex finds words that look like hostnames (e.g., WORD-WORD-123)
-	regex.compile("([A-Z0-9]+-[A-Z0-9-]+)")
-
-	for file_path in resource_files:
-		if not ResourceLoader.exists(file_path):
-			continue
-			
-		var resource_instance = load(file_path)
-		if not resource_instance:
-			continue
-			
-		# Handle Ticket Resources
-		if resource_instance is TicketResource:
-			# Search in description
-			var results = regex.search_all(resource_instance.description)
-			for result in results:
-				register_host(result.get_string().to_upper())
+	var paths = FileUtil.get_resource_paths(HOST_DIR)
+	for path in paths:
+		var res = load(path)
+		if res and res is HostResource:
+			if not res.validate():
+				print("  - ❌ NetworkState: Skipping malformed host: %s" % path)
+				continue
 				
-			# Search in steps
-			for step in resource_instance.steps:
-				results = regex.search_all(step)
-				for result in results:
-					register_host(result.get_string().to_upper())
-		
-		# Handle Log Resources
-		elif resource_instance is LogResource:
-			if not resource_instance.hostname.is_empty():
-				register_host(resource_instance.hostname.to_upper())
+			# Register host using resource data
+			var initial_state = {
+				"status": res.initial_status,
+				"critical": res.is_critical,
+				"isolated": false,
+				"scanned": false,
+				"ip": res.ip_address,
+				"os": res.os_type
+			}
+			host_states[res.hostname] = initial_state
+			print("  ✓ Registered Host: %s [%s]" % [res.hostname, res.ip_address])
+		else:
+			print("  - ❌ NetworkState: Invalid host resource: %s" % path)
+	
+	print("🌐 NetworkState: Library ready: %d hosts." % host_states.size())
 
+var lateral_movement_active: bool = false
 
+func _on_world_event(event_id: String, active: bool, _duration: float):
+	if event_id == "LATERAL_MOVEMENT":
+		lateral_movement_active = active
+		if active: print("NetworkState: Lateral movement simulation STARTED")
 
-# Registers a host if it's not already known.
-func register_host(hostname: String, initial_state: Dictionary = {"status": "CLEAN", "critical": false, "isolated": false, "scanned": false}):
-	if not host_states.has(hostname):
-		host_states[hostname] = initial_state
-		print("  ✓ Registered new host: ", hostname)
+func _on_simulation_tick():
+	if lateral_movement_active:
+		_process_lateral_movement()
+
+func _process_lateral_movement():
+	# Find infected hosts
+	var infected_hosts = []
+	var clean_hosts = []
+	
+	for hostname in host_states:
+		var state = host_states[hostname]
+		if state.get("status") == "INFECTED" and not state.get("isolated", false):
+			infected_hosts.append(hostname)
+		elif state.get("status") == "CLEAN":
+			clean_hosts.append(hostname)
+	
+	# If we have infected hosts, try to spread to a random clean host
+	if not infected_hosts.is_empty() and not clean_hosts.is_empty():
+		# 30% chance to spread per tick
+		if randf() < 0.3:
+			var target = clean_hosts.pick_random()
+			update_host_state(target, {"status": "INFECTED"})
+			print("NetworkState: ALERT! Infection spread to ", target)
+			
+			if NotificationManager:
+				NotificationManager.show_notification("CRITICAL ALERT: Lateral Movement Detected on " + target, "error", 6.0)
+			
+			if AudioManager:
+				AudioManager.play_sfx(AudioManager.SFX.consequence_alert)
+
+# Returns the hostname for a given IP, or empty string if not found.
+func get_host_by_ip(ip: String) -> String:
+	for hostname in host_states:
+		if host_states[hostname].get("ip") == ip:
+			return hostname
+	return ""
 
 # Returns the state dictionary for a given host.
 func get_host_state(hostname: String) -> Dictionary:

@@ -25,13 +25,10 @@ func _ready():
 	# Connect app icons
 	_setup_app_connections()
 	
-	# Connect to game systems
-	if TicketManager:
-		TicketManager.ticket_added.connect(_on_ticket_added)
-		TicketManager.ticket_completed.connect(_on_ticket_completed)
-	
-	if ConsequenceEngine:
-		ConsequenceEngine.consequence_triggered.connect(_on_consequence_triggered)
+	# Connect to EventBus for gameplay events
+	EventBus.ticket_added.connect(_on_ticket_added)
+	EventBus.ticket_completed.connect(_on_ticket_completed)
+	EventBus.consequence_triggered.connect(_on_consequence_triggered)
 	
 	# Set desktop instance for NotificationManager
 	if NotificationManager:
@@ -57,10 +54,11 @@ func _setup_app_connections():
 
 func _on_app_icon_hover():
 	if AudioManager:
-		# Using a subtle click or hover sound if available
-		AudioManager.play_sfx(AudioManager.SFX.button_click)
+		AudioManager.play_ui_hover()
 
 func _on_app_icon_pressed(app_name: String):
+	if AudioManager:
+		AudioManager.play_ui_click()
 	if DesktopWindowManager:
 		DesktopWindowManager.open_app(app_name)
 		# Clear glow when app is opened

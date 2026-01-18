@@ -9,11 +9,12 @@ shift_name = "Shift 2: Tuesday (Noise)"
 shift_id = "shift_tuesday"
 briefing_dialogue_id = "briefing_second_shift"
 event_sequence = [
-	{"time": 60, "event": "spawn_social", "type": "spawn_ticket", "ticket_id": "SOCIAL-001"},
-	{"time": 210, "event": "log_flood", "type": "system_event", "event_id": "FALSE_FLAG", "duration": 90.0},
-	{"time": 240, "event": "spawn_spear", "type": "spawn_ticket", "ticket_id": "SPEAR-PHISH-001"},
-	{"time": 480, "event": "spawn_maint", "type": "spawn_ticket", "ticket_id": "SYS-MAINT-GENERIC"},
-	{"time": 720, "event": "shift_end", "type": "shift_end"}
+	{"time": 30, "event": "spawn_social", "type": "spawn_ticket", "ticket_id": "SOCIAL-001"},
+	{"time": 90, "event": "spawn_noise_hw", "type": "spawn_ticket", "ticket_id": "TICKET-NOISE-002"},
+	{"time": 120, "event": "log_flood", "type": "system_event", "event_id": "FALSE_FLAG", "duration": 90.0},
+	{"time": 150, "event": "spawn_spear", "type": "spawn_ticket", "ticket_id": "SPEAR-PHISH-001"},
+	{"time": 270, "event": "spawn_maint", "type": "spawn_ticket", "ticket_id": "SYS-MAINT-GENERIC"},
+	{"time": 330, "event": "shift_end", "type": "shift_end"}
 ]
 random_event_pool = []
 next_shift = ExtResource("2_next_shift")

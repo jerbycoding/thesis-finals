@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="TicketResource" format=3]
+
+[ext_resource type="Script" path="res://resources/tickets/TicketResource.gd" id="1_ticket"]
+
+[resource]
+script = ExtResource("1_ticket")
+ticket_id = "DDOS-MITIGATION-001"
+title = "DDoS Attack in Progress"
+description = "Network monitoring detects a massive UDP flood originating from INSIDE the network. An internal host has been compromised and is part of a botnet.\n\nUse the Terminal to TRACE the traffic source and ISOLATE the infected host immediately."
+severity = "Critical"
+category = "Network"
+steps = ["Open Terminal", "Run 'trace [attacker_ip]' (See logs)", "Run 'isolate [hostname]'"]
+required_tool = "terminal"
+base_time = 180.0
+hidden_risks = ["Isolating gateway instead of host"]
+required_log_ids = ["LOG-DDOS-002"]
+on_complete_event = ""
+kill_chain_path = "Botnet"
+kill_chain_stage = 1

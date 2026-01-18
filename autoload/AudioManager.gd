@@ -9,6 +9,33 @@ func _ready():
 	add_child(sfx_player)
 	add_child(music_player)
 	print("AudioManager initialized.")
+	
+	# Connect to EventBus for automated feedback
+	EventBus.ticket_added.connect(func(_t): play_sfx(SFX.ticket_spawn))
+	EventBus.terminal_locked.connect(func(_s): play_alert())
+	EventBus.terminal_unlocked.connect(func(): play_notification("info"))
+	EventBus.terminal_command_executed.connect(_on_terminal_command_executed)
+	EventBus.email_decision_processed.connect(_on_email_decision_processed)
+
+func _on_email_decision_processed(email: EmailResource, decision: String, _state: Dictionary):
+	if decision == "approve":
+		if email.is_malicious:
+			play_notification("error") # Approved malicious email
+		else:
+			play_notification("success") # Approved legitimate email
+	elif decision == "quarantine":
+		if email.is_malicious:
+			play_notification("success") # Quarantined malicious email
+		else:
+			play_notification("warning") # Quarantined legitimate email
+	elif decision == "escalate":
+		play_notification("info")
+
+func _on_terminal_command_executed(_cmd, success, _out):
+	if success:
+		play_terminal_beep()
+	else:
+		play_notification("error")
 
 func play_sfx(sfx_path: String, volume_db: float = 0.0):
 	if ResourceLoader.exists(sfx_path):
@@ -36,6 +63,28 @@ func play_music(music_path: String, volume_db: float = 0.0, loop: bool = true):
 
 func stop_music():
 	music_player.stop()
+
+# --- Semantic Audio Helpers (Technical Debt Refactor) ---
+
+func play_ui_click():
+	play_sfx(SFX.button_click, -5.0)
+
+func play_ui_hover():
+	# Subtle hover
+	play_sfx(SFX.button_click, -15.0)
+
+func play_notification(type: String = "info"):
+	match type:
+		"success": play_sfx(SFX.notification_success)
+		"warning": play_sfx(SFX.notification_warning)
+		"error": play_sfx(SFX.notification_error)
+		_: play_sfx(SFX.notification_info)
+
+func play_alert():
+	play_sfx(SFX.consequence_alert)
+
+func play_terminal_beep():
+	play_sfx(SFX.terminal_beep)
 
 # Predefined SFX paths (example)
 var SFX = {

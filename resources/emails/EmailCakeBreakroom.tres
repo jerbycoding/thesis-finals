@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="EmailResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/EmailResource.gd" id="1_email"]
+
+[resource]
+script = ExtResource("1_email")
+email_id = "EMAIL-NOISE-001"
+sender = "HR Dept"
+subject = "Cake in the breakroom!"
+body = "Hi Team,\n\nThere is some leftover cake in the 2nd floor breakroom from Sarah's birthday party. Help yourselves!\n\nBest,\nHR"
+attachments = []
+headers = {"status": {"dkim": "PASS", "dmarc": "PASS", "spf": "PASS"}}
+is_malicious = false
+is_urgent = false
+clues = []
+related_ticket = "GENERIC"
+suspicious_ip = ""
+suspicious_domain = ""

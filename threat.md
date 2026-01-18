@@ -37,7 +37,7 @@ This document details the "Kill Chain" mechanics: how simple, low-severity threa
 
 3.  **Stage 3: Action (`RANSOM-001`)**
     *   **The Threat:** The Finance Server locks up. Red screen.
-    *   **The Fix:** Panic isolation (Survival mode).
+    *   **The Fix:** Isolate Server + Solve Decryption Puzzle.
     *   **If Failed:** All backups are lost. **Game Over.**
 
 ### 2. The Data Breach Chain (The Silent Path)
@@ -55,7 +55,7 @@ This document details the "Kill Chain" mechanics: how simple, low-severity threa
 
 3.  **Stage 3: Exfiltration (`DATA-EXFIL-001`)**
     *   **The Threat:** A massive file upload starts.
-    *   **The Fix:** Block the IP address.
+    *   **The Fix:** Trace IP origin + Block address.
     *   **If Failed:** Secrets leaked. Stock price crashes. **Reputation -50.**
 
 ---

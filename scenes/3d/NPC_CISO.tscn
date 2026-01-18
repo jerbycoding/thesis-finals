@@ -1,10 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://ceta2wna3gome"]
+[gd_scene load_steps=5 format=3 uid="uid://ceta2wna3gome"]
 
 [ext_resource type="Script" uid="uid://c04nuo4vx3swt" path="res://scripts/3d/NPC_CISO.gd" id="1_npc"]
-[ext_resource type="ArrayMesh" uid="uid://40h60phr053w" path="res://assets/npc/tripo_convert_8e65d924-bdd4-4d7e-b30c-c389a3afd29f.obj" id="2_qoc3a"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qoc3a"]
-albedo_color = Color(0.784314, 0.337255, 0.305882, 1)
+[ext_resource type="PackedScene" uid="uid://bqolf7hkp3cmm" path="res://assets/npc/Stylized Character.glb" id="2_ciso_model"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ciso"]
 radius = 0.4
@@ -18,13 +15,8 @@ script = ExtResource("1_npc")
 npc_id = "ciso"
 npc_name = "CISO"
 
-[node name="TripoConvert8e65d924-bdd4-4d7e-b30c-c389a3Afd29f" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0379351, 0.397602, -0.00582689)
-material_override = SubResource("StandardMaterial3D_qoc3a")
-mesh = ExtResource("2_qoc3a")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+[node name="CISO_Model" parent="." instance=ExtResource("2_ciso_model")]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)

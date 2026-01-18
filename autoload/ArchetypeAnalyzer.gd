@@ -43,12 +43,10 @@ func _ready():
 	# Reset metrics at the start of a new game/shift
 	reset_metrics()
 	
-	# Connect to signals from other systems to gather data
-	if TicketManager:
-		TicketManager.ticket_completed.connect(_on_ticket_completed)
-		TicketManager.ticket_ignored.connect(_on_ticket_ignored)
-	if ConsequenceEngine:
-		ConsequenceEngine.consequence_triggered.connect(_on_consequence_triggered)
+	# Use EventBus for decoupled data collection
+	EventBus.ticket_completed.connect(_on_ticket_completed)
+	EventBus.ticket_ignored.connect(_on_ticket_ignored)
+	EventBus.consequence_triggered.connect(_on_consequence_triggered)
 
 func reset_metrics():
 	metrics = {
@@ -118,19 +116,55 @@ func load_state(data: Dictionary):
 # --- Analysis Function ---
 
 func get_analysis_results() -> Dictionary:
-	# In a real game, you'd pull final NPC approval from ConsequenceEngine
-	# For now, we'll use a placeholder.
-	if ConsequenceEngine and ConsequenceEngine.has_method("get_average_npc_approval"):
-		metrics.npc_approval = ConsequenceEngine.get_average_npc_approval()
+	# DERIVE metrics from ConsequenceEngine rather than tracking them locally.
+	# This is the "Source of Truth" refactor (Task 5).
+	var source_metrics = _calculate_metrics_from_history()
 	
-	var results = metrics.duplicate(true)
-	results["archetype"] = _calculate_archetype()
+	if ConsequenceEngine and ConsequenceEngine.has_method("get_average_npc_approval"):
+		source_metrics.npc_approval = ConsequenceEngine.get_average_npc_approval()
+	
+	var results = source_metrics.duplicate(true)
+	results["archetype"] = _calculate_archetype(source_metrics)
 	
 	return results
 
-func _calculate_archetype() -> String:
+func _calculate_metrics_from_history() -> Dictionary:
+	var m = {
+		"tickets_completed": 0,
+		"tickets_ignored": 0,
+		"total_completion_time": 0.0,
+		"avg_completion_time": 0.0,
+		"risks_taken": 0,
+		"consequences_triggered": 0,
+		"npc_approval": 0.0,
+		"tools_used": metrics.tools_used # We still track tool usage counts locally
+	}
+	
+	if not ConsequenceEngine: return m
+	
+	var history = ConsequenceEngine.get_choice_history()
+	
+	for entry in history:
+		match entry.get("type", ""):
+			"ticket_completed":
+				m.tickets_completed += 1
+				m.total_completion_time += entry.get("time_taken", 0.0)
+				var c_type = entry.get("completion_type", "")
+				if c_type in ["efficient", "emergency"]:
+					m.risks_taken += 1
+			"ticket_ignored":
+				m.tickets_ignored += 1
+			"consequence_triggered":
+				m.consequences_triggered += 1
+				
+	if m.tickets_completed > 0:
+		m.avg_completion_time = m.total_completion_time / m.tickets_completed
+		
+	return m
+
+func _calculate_archetype(m: Dictionary) -> String:
 	# Pass a struct-like object to the lambda for easier access
-	var m_struct = OpenStruct.new(metrics)
+	var m_struct = OpenStruct.new(m)
 	
 	for archetype_name in ARCHETYPE_DEFINITIONS:
 		var definition = ARCHETYPE_DEFINITIONS[archetype_name]

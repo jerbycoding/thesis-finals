@@ -13,38 +13,33 @@ var desktop_instance: Control = null
 func _ready():
 	print("NotificationManager initialized")
 	
-	# Connect to game systems
-	if TicketManager:
-		TicketManager.ticket_completed.connect(_on_ticket_completed)
-	
-	if ConsequenceEngine:
-		ConsequenceEngine.consequence_triggered.connect(_on_consequence_triggered)
-		ConsequenceEngine.followup_ticket_scheduled.connect(_on_followup_ticket_scheduled)
-
-	if EmailSystem:
-		EmailSystem.email_decision_processed.connect(_on_email_decision_processed)
+	# Use EventBus for decoupled communication
+	EventBus.ticket_completed.connect(_on_ticket_completed)
+	EventBus.consequence_triggered.connect(_on_consequence_triggered)
+	EventBus.followup_ticket_scheduled.connect(_on_followup_ticket_scheduled)
+	EventBus.email_decision_processed.connect(_on_email_decision_processed)
 
 func _on_email_decision_processed(email: EmailResource, decision: String, inspection_state: Dictionary):
 	# This new handler shows notifications based on the email decision event.
 	if email.is_malicious and decision == "approve":
 		var is_spear_phishing = "spear" in email.email_id.to_lower() or (email.related_ticket and "spear" in email.related_ticket.to_lower())
 		if is_spear_phishing:
-			show_notification(CorporateVoice.get_phrase("email_approved_malicious_spear_phishing"), "error", 6.0)
+			show_notification(CorporateVoice.get_notification("email_approved_malicious_spear_phishing"), "error", 6.0)
 		else:
-			show_notification(CorporateVoice.get_phrase("email_approved_malicious"), "error", 5.0)
+			show_notification(CorporateVoice.get_notification("email_approved_malicious"), "error", 5.0)
 
 	elif not email.is_malicious and decision == "quarantine":
-		show_notification(CorporateVoice.get_phrase("email_quarantined_legitimate"), "warning", 4.0)
+		show_notification(CorporateVoice.get_notification("email_quarantined_legitimate"), "warning", 4.0)
 
 	elif email.is_malicious and decision == "quarantine":
 		# Check for the hidden risk of not scanning attachments
 		if email.related_ticket == "SPEAR-PHISH-001" and not inspection_state.get("attachments", false):
-			show_notification(CorporateVoice.get_phrase("hidden_risk_attachment_scan_missed"), "error", 6.0)
+			show_notification(CorporateVoice.get_notification("hidden_risk_attachment_scan_missed"), "error", 6.0)
 		else:
-			show_notification(CorporateVoice.get_phrase("email_quarantined_malicious"), "success", 3.0)
+			show_notification(CorporateVoice.get_notification("email_quarantined_malicious"), "success", 3.0)
 	
 	elif email.is_malicious and decision == "escalate":
-		show_notification(CorporateVoice.get_phrase("email_escalated_malicious"), "info", 3.0)
+		show_notification(CorporateVoice.get_notification("email_escalated_malicious"), "info", 3.0)
 
 
 func set_desktop(desktop: Control):
@@ -130,13 +125,13 @@ func _on_ticket_completed(ticket: TicketResource, completion_type: String, time_
 	var completion_text = ""
 	match completion_type:
 		"compliant":
-			completion_text = CorporateVoice.get_phrase("ticket_completed_compliant")
+			completion_text = CorporateVoice.get_notification("ticket_completed_compliant")
 			show_notification(completion_text, "success", 4.0)
 		"efficient":
-			completion_text = CorporateVoice.get_phrase("ticket_completed_efficient")
+			completion_text = CorporateVoice.get_notification("ticket_completed_efficient")
 			show_notification(completion_text, "warning", 4.0)
 		"emergency":
-			completion_text = CorporateVoice.get_phrase("ticket_completed_emergency")
+			completion_text = CorporateVoice.get_notification("ticket_completed_emergency")
 			show_notification(completion_text, "error", 4.0)
 
 func _on_consequence_triggered(consequence_type: String, details: Dictionary):
@@ -146,31 +141,33 @@ func _on_consequence_triggered(consequence_type: String, details: Dictionary):
 	match consequence_type:
 		"followup_ticket":
 			var reason = details.get("reason", "Follow-up required")
-			message = CorporateVoice.get_formatted_phrase("followup_ticket_triggered", {"reason": reason}) # Assuming a new phrase for this
+			# For this one, the phrase might still be constructed dynamically, 
+			# but we use the concise formatted getter
+			message = CorporateVoice.get_formatted_notification("followup_ticket_triggered", {"reason": "Reason: " + reason.substr(0, 20) + "..."}) 
 			notif_type = "warning"
 		"escalation":
 			var path = details.get("path", "Unknown")
 			var stage = str(details.get("stage", 0))
-			message = CorporateVoice.get_formatted_phrase("kill_chain_escalation", {"path": path, "stage": stage})
+			message = CorporateVoice.get_formatted_notification("kill_chain_escalation", {"path": path, "stage": stage})
 			notif_type = "error"
 		"black_ticket":
-			message = "CRITICAL RECOVERY INITIATED: Forensic post-mortem required."
+			message = "CRITICAL RECOVERY INITIATED"
 			notif_type = "warning"
 		"malware_outbreak":
-			message = CorporateVoice.get_phrase("malware_outbreak")
+			message = CorporateVoice.get_notification("malware_outbreak")
 			notif_type = "error"
 		"data_breach":
-			message = CorporateVoice.get_phrase("data_breach")
+			message = CorporateVoice.get_notification("data_breach")
 			notif_type = "error"
 		"user_complaint":
-			message = CorporateVoice.get_phrase("user_complaint")
+			message = CorporateVoice.get_notification("user_complaint")
 			notif_type = "warning"
 		_:
-			message = "⚠ Consequence Triggered\n" + consequence_type # Fallback for unhandled types
+			message = "⚠ Consequence: " + consequence_type
 			notif_type = "error"
 	
 	show_notification(message, notif_type, 5.0)
 
 func _on_followup_ticket_scheduled(ticket_id: String, delay: float):
-	var message = CorporateVoice.get_formatted_phrase("followup_ticket_scheduled", {"delay": str(int(delay))})
+	var message = CorporateVoice.get_formatted_notification("followup_ticket_scheduled", {"delay": str(int(delay))})
 	show_notification(message, "info", 3.0)

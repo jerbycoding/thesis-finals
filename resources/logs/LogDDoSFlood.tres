@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="LogResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/logs/LogResource.gd" id="1_log"]
+
+[resource]
+script = ExtResource("1_log")
+log_id = "LOG-DDOS-001"
+timestamp = "14:00:01"
+source = "Firewall"
+category = "Network"
+message = "High inbound traffic volume detected (UDP Flood)."
+severity = 4
+related_ticket = "DDOS-MITIGATION-001"
+ip_address = ""
+hostname = "GATEWAY-01"
+is_revealed = false

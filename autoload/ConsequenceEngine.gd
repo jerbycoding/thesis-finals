@@ -4,10 +4,6 @@ extends Node
 
 const CONSEQUENCE_EVAL_INTERVAL: float = 15.0 # Evaluate every 15 seconds
 
-signal consequence_triggered(consequence_type: String, details: Dictionary)
-signal followup_ticket_scheduled(ticket_id: String, delay: float)
-signal followup_ticket_creation_requested(ticket_data: TicketResource)
-
 var choice_log: Array = []
 var scheduled_consequences: Array[Dictionary] = []
 var npc_relationships: Dictionary = {}
@@ -60,6 +56,13 @@ func load_state(relationships: Dictionary, choices: Array):
 
 func trigger_consequence(consequence_id: String):
 	print("🚨 CONSECUTIVE TRIGGERED by NarrativeDirector: ", consequence_id)
+	
+	choice_log.append({
+		"type": "consequence_triggered",
+		"consequence_type": consequence_id,
+		"timestamp": Time.get_ticks_msec()
+	})
+	
 	match consequence_id:
 		"missed_attachment_scan":
 			_schedule_followup_ticket("MALWARE-CLEANUP-NARRATIVE", 30.0, "Narrative-driven malware cleanup due to missed attachment scan")
@@ -70,22 +73,12 @@ func _ready():
 	_initialize_engine.call_deferred()
 
 func _initialize_engine():
-	# Connect to the NarrativeDirector to listen for scripted consequence events
-	if is_instance_valid(NarrativeDirector):
-		NarrativeDirector.spawn_consequence_requested.connect(trigger_consequence)
-
-	# Connect to TicketManager to listen for ticket completion events
-	if is_instance_valid(TicketManager):
-		TicketManager.ticket_completed.connect(_on_ticket_completed_by_manager)
-		TicketManager.ticket_ignored.connect(_on_ticket_ignored)
-
-	# Connect to EmailSystem for email decisions
-	if is_instance_valid(EmailSystem):
-		EmailSystem.email_decision_processed.connect(_on_email_decision_processed)
-
-	# Connect to TerminalSystem for critical actions
-	if is_instance_valid(TerminalSystem):
-		TerminalSystem.critical_host_isolated.connect(_on_critical_host_isolated)
+	# Use EventBus for decoupled communication
+	EventBus.narrative_spawn_consequence.connect(trigger_consequence)
+	EventBus.ticket_completed.connect(_on_ticket_completed_by_manager)
+	EventBus.ticket_ignored.connect(_on_ticket_ignored)
+	EventBus.email_decision_processed.connect(_on_email_decision_processed)
+	EventBus.critical_host_isolated.connect(_on_critical_host_isolated)
 
 	# Start the periodic evaluation loop
 	_start_evaluation_loop()
@@ -130,7 +123,14 @@ func _on_ticket_ignored(ticket: TicketResource):
 			# Low severity ignored might just be a small trust hit
 			update_npc_relationship("it_support", -0.05)
 
-	consequence_triggered.emit("ticket_ignored", {"ticket_id": ticket.ticket_id, "severity": ticket.severity})
+	EventBus.consequence_triggered.emit("ticket_ignored", {"ticket_id": ticket.ticket_id, "severity": ticket.severity})
+	
+	# Log the consequence itself
+	choice_log.append({
+		"type": "consequence_triggered",
+		"consequence_type": "ticket_ignored",
+		"timestamp": Time.get_ticks_msec()
+	})
 
 
 func _on_email_decision_processed(email: EmailResource, decision: String, inspection_state: Dictionary):
@@ -193,6 +193,7 @@ func _on_ticket_completed_by_manager(ticket: TicketResource, completion_type: St
 	print("📝 ConsequenceEngine: Logged ticket completion: ", ticket.ticket_id, " - ", completion_type)
 
 	var choice_data = {
+		"type": "ticket_completed",
 		"ticket_id": ticket.ticket_id,
 		"completion_type": completion_type,
 		"time_taken": time_taken, 
@@ -241,7 +242,7 @@ func _spawn_black_ticket():
 		print("  🎫 Spawning Black Ticket...")
 		if TicketManager:
 			TicketManager.add_ticket(black_ticket)
-			consequence_triggered.emit("black_ticket", {"ticket_id": black_ticket.ticket_id})
+			EventBus.consequence_triggered.emit("black_ticket", {"ticket_id": black_ticket.ticket_id})
 	else:
 		print("  ❌ ERROR: Could not load Black Ticket resource")
 
@@ -264,7 +265,7 @@ func _trigger_kill_chain_escalation(ticket: TicketResource):
 	print("  📅 Scheduling escalation ticket: ", next_ticket.ticket_id, " in ", delay, "s")
 	
 	# Emit signal for NotificationManager or UI
-	consequence_triggered.emit("escalation", {
+	EventBus.consequence_triggered.emit("escalation", {
 		"path": ticket.kill_chain_path,
 		"stage": ticket.kill_chain_stage + 1,
 		"original_id": ticket.ticket_id
@@ -334,7 +335,7 @@ func _schedule_followup_ticket(ticket_id: String, delay_seconds: float, reason: 
 	}
 	
 	scheduled_consequences.append(consequence_data)
-	followup_ticket_scheduled.emit(ticket_id, delay_seconds)
+	EventBus.followup_ticket_scheduled.emit(ticket_id, delay_seconds)
 
 	# Start timer to spawn ticket via TimeManager
 	if TimeManager:
@@ -369,8 +370,8 @@ func _spawn_followup_ticket(ticket_id: String, reason: String, original_id: Stri
 		if LogSystem and original_id != "N/A":
 			LogSystem.reveal_logs_for_ticket(original_id)
 			
-		followup_ticket_creation_requested.emit(followup_ticket)
-		consequence_triggered.emit("followup_ticket", {"ticket_id": ticket_id, "reason": reason})
+		EventBus.followup_ticket_creation_requested.emit(followup_ticket)
+		EventBus.consequence_triggered.emit("followup_ticket", {"ticket_id": ticket_id, "reason": reason})
 
 
 func log_player_choice(choice_type: String, choice_data: Dictionary):

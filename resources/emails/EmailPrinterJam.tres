@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="EmailResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/EmailResource.gd" id="1_email"]
+
+[resource]
+script = ExtResource("1_email")
+email_id = "EMAIL-NOISE-002"
+sender = "Facilities"
+subject = "Printer Jammed: Floor 2"
+body = "Attention:\n\nThe printer near the elevator on Floor 2 is currently out of service due to a major paper jam. A technician has been called. Please use the printer in the west wing until further notice."
+attachments = []
+headers = {"status": {"dkim": "PASS", "dmarc": "PASS", "spf": "PASS"}}
+is_malicious = false
+is_urgent = false
+clues = []
+related_ticket = "GENERIC"
+suspicious_ip = ""
+suspicious_domain = ""
+

@@ -9,12 +9,12 @@ shift_name = "Shift 1: Monday (Onboarding)"
 shift_id = "shift_monday"
 briefing_dialogue_id = "briefing_01"
 event_sequence = [
-	{"time": 90, "event": "spawn_maint", "type": "spawn_ticket", "ticket_id": "SYS-MAINT-GENERIC"},
-	{"time": 240, "event": "spawn_phish", "type": "spawn_ticket", "ticket_id": "PHISH-001"},
-	{"time": 390, "event": "log_flood", "type": "system_event", "event_id": "FALSE_FLAG", "duration": 60.0},
-	{"time": 480, "event": "spawn_auth", "type": "spawn_ticket", "ticket_id": "AUTH-FAIL-GENERIC"},
-	{"time": 570, "event": "ciso_end", "type": "npc_interaction", "npc_id": "ciso", "dialogue_id": "shift_end"},
-	{"time": 600, "event": "shift_end", "type": "shift_end"}
+	{"time": 30, "event": "spawn_maint", "type": "spawn_ticket", "ticket_id": "SYS-MAINT-GENERIC"},
+	{"time": 90, "event": "spawn_noise_lock", "type": "spawn_ticket", "ticket_id": "TICKET-NOISE-001"},
+	{"time": 150, "event": "spawn_phish", "type": "spawn_ticket", "ticket_id": "PHISH-001"},
+	{"time": 240, "event": "spawn_auth", "type": "spawn_ticket", "ticket_id": "AUTH-FAIL-GENERIC"},
+	{"time": 300, "event": "ciso_end", "type": "npc_interaction", "npc_id": "ciso", "dialogue_id": "shift_end"},
+	{"time": 330, "event": "shift_end", "type": "shift_end"}
 ]
 random_event_pool = []
 next_shift = ExtResource("2_next_shift")

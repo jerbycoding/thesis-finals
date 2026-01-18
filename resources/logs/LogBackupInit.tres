@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="LogResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/logs/LogResource.gd" id="1_log"]
+
+[resource]
+script = ExtResource("1_log")
+log_id = "LOG-NOISE-106"
+timestamp = "14:55:33"
+source = "BackupMgr"
+category = "System"
+message = "Incremental backup task initiated for FileServer-01."
+severity = 1
+related_ticket = "GENERIC"
+ip_address = "10.0.3.10"
+hostname = "FILE-SRV-01"
+is_revealed = false

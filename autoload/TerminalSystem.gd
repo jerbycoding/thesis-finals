@@ -2,15 +2,10 @@
 # Autoload singleton that manages terminal commands and their effects
 extends Node
 
-signal command_run(command_name: String, args: Array) # Emitted when a command is successfully run
-signal command_executed(command: String, success: bool, output: String) # For UI feedback
-signal terminal_locked(seconds: float)
-signal terminal_unlocked()
-signal critical_host_isolated(hostname: String)
-
 var is_locked: bool = false
 var lock_timer: Timer
 var scan_multiplier: float = 1.0 # Multiplier for scan time (affected by ZERO_DAY)
+var ddos_multiplier: float = 1.0 # Multiplier for network ops (affected by DDOS_ATTACK)
 
 # Available commands
 var commands: Dictionary = {
@@ -22,6 +17,11 @@ var commands: Dictionary = {
 	"scan": {
 		"description": "Scan host for malware",
 		"syntax": "scan [hostname]",
+		"risk_level": 1
+	},
+	"trace": {
+		"description": "Trace IP to origin host",
+		"syntax": "trace [ip_address]",
 		"risk_level": 1
 	},
 	"isolate": {
@@ -46,10 +46,6 @@ var commands: Dictionary = {
 	}
 }
 
-# -------------------------
-
-
-
 func _ready():
 	print("========================================")
 	print("TerminalSystem initialized")
@@ -59,13 +55,15 @@ func _ready():
 	lock_timer.one_shot = true
 	lock_timer.timeout.connect(_unlock_terminal)
 	
-	if NarrativeDirector:
-		NarrativeDirector.world_event.connect(_on_world_event)
+	EventBus.world_event_triggered.connect(_on_world_event)
 
 func _on_world_event(event_id: String, active: bool, _duration: float):
 	if event_id == "ZERO_DAY":
 		scan_multiplier = 1.5 if active else 1.0
 		print("TerminalSystem: ZERO_DAY event ", "ACTIVE" if active else "CLEARED", ". Scan multiplier: ", scan_multiplier)
+	elif event_id == "DDOS_ATTACK":
+		ddos_multiplier = 3.0 if active else 1.0
+		print("TerminalSystem: DDOS_ATTACK event ", "ACTIVE" if active else "CLEARED", ". Network multiplier: ", ddos_multiplier)
 
 
 func execute_command(command_line: String) -> Dictionary:
@@ -102,6 +100,8 @@ func _execute_command_internal(command_name: String, args: Array) -> Dictionary:
 			result = _cmd_help()
 		"scan":
 			result = await _cmd_scan(args)
+		"trace":
+			result = await _cmd_trace(args)
 		"isolate":
 			result = _cmd_isolate(args)
 		"status":
@@ -113,10 +113,11 @@ func _execute_command_internal(command_name: String, args: Array) -> Dictionary:
 		_:
 			result = {"success": false, "output": "Error: Command not implemented"}
 			
-	# Emit signals on successful command execution
+	# GLOBAL EMIT
 	if result.get("success", false):
-		command_run.emit(command_name, args)
-		command_executed.emit(command_name, true, result.get("output", ""))
+		EventBus.terminal_command_run.emit(command_name, args)
+		
+	EventBus.terminal_command_executed.emit(command_name, result.get("success", false), result.get("output", ""))
 		
 	return result
 
@@ -190,7 +191,7 @@ func _cmd_isolate(args: Array) -> Dictionary:
 	# If host was critical, trigger a service outage.
 	if host_info.get("critical", false):
 		output += "\n[color=red]" + CorporateVoice.get_formatted_phrase("critical_server_offline", {"hostname": hostname}) + "[/color]"
-		critical_host_isolated.emit(hostname)
+		EventBus.critical_host_isolated.emit(hostname)
 
 	
 	return {"success": true, "output": output}
@@ -225,13 +226,28 @@ func _cmd_logs(args: Array) -> Dictionary:
 		
 	var output = "[b]" + CorporateVoice.get_formatted_phrase("fetching_logs_for_host", {"hostname": hostname}) + "[/b]\n\n"
 	
-	# This is mock data. A real implementation would query LogSystem
-	if host_info.get("status") == "INFECTED":
-		output += "20:10:15 - WARNING: Unusual process 'svch0st.exe' started.\n"
-		output += "20:10:18 - WARNING: Outbound connection to suspicious IP 145.23.1.88.\n"
-		output += "20:11:05 - ERROR: Anti-virus service terminated unexpectedly."
-	else:
+	# Fetch actual historical logs from LogSystem
+	var historical_logs: Array[LogResource] = []
+	if LogSystem:
+		for log in LogSystem.get_all_logs():
+			if log.hostname.to_upper() == hostname:
+				historical_logs.append(log)
+	
+	if historical_logs.is_empty():
 		output += CorporateVoice.get_phrase("no_security_events")
+	else:
+		# Sort by timestamp descending (newest first)
+		historical_logs.sort_custom(func(a, b): return a.timestamp > b.timestamp)
+		
+		# Show last 5 logs for brevity
+		var display_count = min(5, historical_logs.size())
+		for i in range(display_count):
+			var log = historical_logs[i]
+			var color = log.get_severity_color().to_html()
+			output += "[color=#%s]%s[/color] - %s: %s\n" % [color, log.timestamp, log.source, log.message]
+			
+		if historical_logs.size() > 5:
+			output += "\n[i](Showing 5 of %d events. Use SIEM for full forensic history.)[/i]" % historical_logs.size()
 		
 	return {"success": true, "output": output}
 
@@ -250,18 +266,54 @@ func _cmd_list() -> Dictionary:
 				status_text = " ([color=orange]ISOLATED[/color])" # Use orange for isolated status
 				
 			output += "- " + hostname + status_text + "\n"
-			
+		
+	return {"success": true, "output": output}
+
+func _cmd_trace(args: Array) -> Dictionary:
+	if args.is_empty():
+		return {"success": false, "output": "Syntax Error: trace [ip_address] required."}
+	
+	var target_ip = args[0]
+	var output = "Tracing route to %s...\n\n" % target_ip
+	
+	# Simulate hop delay (affected by DDOS)
+	var hop_delay = 0.8 * ddos_multiplier
+	var max_hops = 4
+	
+	# Generate fake intermediate hops
+	for i in range(1, max_hops):
+		if ddos_multiplier > 1.0:
+			output += "[color=orange][!] PACKET LOSS DETECTED... RETRYING...[/color]\n"
+		await get_tree().create_timer(hop_delay).timeout
+		var fake_ip = "192.168.%d.%d" % [randi()%255, randi()%255]
+		output += "  %d    %d ms    %s\n" % [i, randi_range(10, 50) * ddos_multiplier, fake_ip]
+		
+		# If traceroute is executed via command_run/command_executed signal, we might want to update partial output
+		# But since this function returns the final output, we just wait.
+	
+	await get_tree().create_timer(hop_delay).timeout
+	
+	# Resolve final hop
+	var resolved_host = NetworkState.get_host_by_ip(target_ip)
+	
+	if resolved_host != "":
+		output += "  %d    %d ms    %s [%s]\n" % [max_hops, randi_range(10, 40) * ddos_multiplier, target_ip, resolved_host]
+		output += "\n[color=green]Trace complete. Origin identified: " + resolved_host + "[/color]"
+	else:
+		output += "  %d    %d ms    %s [EXTERNAL]\n" % [max_hops, randi_range(50, 150) * ddos_multiplier, target_ip]
+		output += "\n[color=yellow]Trace complete. Origin is outside local network.[/color]"
+		
 	return {"success": true, "output": output}
 
 
 func lock_terminal(seconds: float):
 	is_locked = true
 	lock_timer.start(seconds)
-	terminal_locked.emit(seconds)
+	EventBus.terminal_locked.emit(seconds)
 
 func _unlock_terminal():
 	is_locked = false
-	terminal_unlocked.emit()
+	EventBus.terminal_unlocked.emit()
 
 func is_terminal_locked() -> bool:
 	return is_locked

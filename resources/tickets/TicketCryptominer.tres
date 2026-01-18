@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="TicketResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/tickets/TicketResource.gd" id="1_ticket"]
+
+[resource]
+script = ExtResource("1_ticket")
+ticket_id = "CRYPTOMINER-HUNT-001"
+title = "High CPU Anomaly: Cryptominer Suspected"
+description = "Task Manager reports abnormal CPU load across the subnet. A user also reported their fan spinning loudly.
+
+Investigate logs to identify the process and host."
+severity = "High"
+category = "Malware"
+steps = ["Check Task Manager for CPU spikes", "Find host in SIEM logs (xmr-stak.exe)", "Scan and Isolate host"]
+required_tool = "siem"
+base_time = 240.0
+hidden_risks = []
+required_log_ids = ["LOG-MINER-001", "LOG-MINER-002"]
+on_complete_event = ""
+kill_chain_path = "Malware"
+kill_chain_stage = 1
+

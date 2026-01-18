@@ -47,17 +47,13 @@ func _ready():
 		command_input.gui_input.connect(_on_input_gui_input)
 		print("DEBUG: Command input connected")
 	
-	# Connect to TerminalSystem
-	if TerminalSystem:
-		TerminalSystem.command_executed.connect(_on_command_executed)
-		TerminalSystem.terminal_locked.connect(_on_terminal_locked)
-		TerminalSystem.terminal_unlocked.connect(_on_terminal_unlocked)
-		print("DEBUG: Connected to TerminalSystem")
-	
-	# Connect to TicketManager to track active ticket
-	if TicketManager:
-		TicketManager.ticket_added.connect(_on_ticket_added)
-		TicketManager.ticket_completed.connect(_on_ticket_completed)
+	# Connect to EventBus
+	EventBus.terminal_command_executed.connect(_on_command_executed)
+	EventBus.terminal_locked.connect(_on_terminal_locked)
+	EventBus.terminal_unlocked.connect(_on_terminal_unlocked)
+	EventBus.ticket_added.connect(_on_ticket_added)
+	EventBus.ticket_completed.connect(_on_ticket_completed)
+	print("DEBUG: Connected to EventBus")
 	
 	# Set initial output
 	_append_output(CorporateVoice.get_phrase("terminal_welcome"))
@@ -74,7 +70,7 @@ func _on_command_submitted(command: String):
 		return
 	
 	if AudioManager:
-		AudioManager.play_sfx(AudioManager.SFX.terminal_beep)
+		AudioManager.play_terminal_beep()
 	
 	# Add to history
 	command_history.append(command)
@@ -114,17 +110,10 @@ func _on_input_gui_input(event: InputEvent):
 					command_input.text = command_history[history_index]
 			get_viewport().set_input_as_handled()
 
-func _on_command_executed(command: String, success: bool, output: String):
-	if AudioManager:
-		if success:
-			AudioManager.play_sfx(AudioManager.SFX.notification_success) # Generic success for commands
-		else:
-			AudioManager.play_sfx(AudioManager.SFX.notification_error) # Generic error for commands
+func _on_command_executed(_command: String, _success: bool, _output: String):
 	pass
 
 func _on_terminal_locked(seconds: float):
-	if AudioManager:
-		AudioManager.play_sfx(AudioManager.SFX.notification_error)
 	_append_output("[color=red]🔒 TERMINAL LOCKED for " + str(int(seconds)) + " seconds[/color]\n")
 	command_input.editable = false
 	command_input.placeholder_text = "Terminal locked..."
@@ -134,8 +123,6 @@ func _on_terminal_locked(seconds: float):
 		lock_remaining_time = seconds
 
 func _on_terminal_unlocked():
-	if AudioManager:
-		AudioManager.play_sfx(AudioManager.SFX.notification_info)
 	_append_output("[color=green]🔓 Terminal unlocked[/color]\n")
 	command_input.editable = true
 	command_input.placeholder_text = "Enter command..."

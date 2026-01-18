@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="LogResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/logs/LogResource.gd" id="1_log"]
+
+[resource]
+script = ExtResource("1_log")
+log_id = "LOG-NOISE-104"
+timestamp = "11:45:00"
+source = "DHCP"
+category = "Network"
+message = "Lease renewed for client 10.0.5.88 (WORKSTATION-88)."
+severity = 1
+related_ticket = "GENERIC"
+ip_address = "10.0.5.88"
+hostname = "WORKSTATION-88"
+is_revealed = false

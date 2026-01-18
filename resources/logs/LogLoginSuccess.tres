@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="LogResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/logs/LogResource.gd" id="1_log"]
+
+[resource]
+script = ExtResource("1_log")
+log_id = "LOG-NOISE-102"
+timestamp = "09:02:45"
+source = "Auth"
+category = "Security"
+message = "User 'm.smith' login success from 10.0.4.12."
+severity = 1
+related_ticket = "GENERIC"
+ip_address = "10.0.4.12"
+hostname = "WORKSTATION-12"
+is_revealed = false
