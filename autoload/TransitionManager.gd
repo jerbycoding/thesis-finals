@@ -45,7 +45,7 @@ func enter_desktop_mode(computer_node):
 		GameState.desktop_instance = null
 	
 	# Create desktop instance
-	var desktop_scene = preload("res://scenes/2d/ComputerDesktop.tscn")
+	var desktop_scene = load("res://scenes/2d/ComputerDesktop.tscn")
 	GameState.desktop_instance = desktop_scene.instantiate()
 	get_tree().root.add_child(GameState.desktop_instance)
 
@@ -106,7 +106,7 @@ func exit_desktop_mode():
 	is_transitioning = false
 	EventBus.transition_completed.emit()
 
-func change_scene_to(path: String, narrative_to_start_after: String = ""):
+func change_scene_to(path: String, narrative_to_start_after: String = "", title_card: String = ""):
 	if not overlay_instance:
 		print(">>> TRANSITION ERROR: Overlay instance is null!")
 		return
@@ -118,6 +118,12 @@ func change_scene_to(path: String, narrative_to_start_after: String = ""):
 	is_transitioning = true
 	EventBus.transition_started.emit()
 	
+	# TITLE CARD LOGIC
+	if not title_card.is_empty():
+		overlay_instance.set_title_card(title_card)
+	else:
+		overlay_instance.set_title_card("")
+
 	overlay_instance.fade_in()
 	print(">>> TRANSITION FADE_IN: Waiting for fade-in to complete...")
 	await overlay_instance.fade_finished

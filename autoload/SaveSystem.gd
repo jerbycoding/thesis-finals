@@ -35,6 +35,9 @@ func save_game():
 	if not is_instance_valid(TicketManager):
 		push_error("SaveSystem: TicketManager is invalid/freed. Aborting save.")
 		return
+	if not is_instance_valid(IntegrityManager):
+		push_error("SaveSystem: IntegrityManager is invalid/freed. Aborting save.")
+		return
 
 	var save_data = {
 		# --- Player State ---
@@ -45,6 +48,9 @@ func save_game():
 		"next_shift_name": next_shift,
 		"npc_relationships": ConsequenceEngine.npc_relationships,
 		"network_state": NetworkState.host_states,
+		"integrity_score": IntegrityManager.current_integrity,
+		"heat_multiplier": HeatManager.heat_multiplier,
+		"vulnerability_buffer": HeatManager.vulnerability_buffer,
 		
 		# --- Progress State ---
 		"active_tickets": _get_ticket_ids_from_array(TicketManager.get_active_tickets()),
@@ -101,6 +107,15 @@ func _distribute_loaded_data(data: Dictionary):
 		
 	if TicketManager and data.has("active_tickets"):
 		TicketManager.load_state(data.active_tickets, data.get("completed_tickets", []))
+	
+	if IntegrityManager and data.has("integrity_score"):
+		IntegrityManager.load_state({"current_integrity": data.integrity_score})
+	
+	if HeatManager and data.has("heat_multiplier"):
+		HeatManager.load_state({
+			"heat_multiplier": data.heat_multiplier,
+			"vulnerability_buffer": data.get("vulnerability_buffer", [])
+		})
 	
 	print("Save data distributed to all managers.")
 

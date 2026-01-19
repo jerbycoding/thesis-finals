@@ -23,6 +23,14 @@ var current_event_index: int = 0
 var _is_shift_active: bool = false
 var event_timer: Timer
 
+func is_weekend() -> bool:
+	return current_shift_name == "shift_saturday" or current_shift_name == "shift_sunday"
+
+func get_current_floor_requirement() -> int:
+	if current_shift_name == "shift_saturday": return -2
+	if current_shift_name == "shift_sunday": return -1
+	return 1 # Default to SOC
+
 func _ready():
 	# Discover all shifts in the folder
 	_discover_shifts()
@@ -49,6 +57,10 @@ func _discover_shifts():
 		if res and res is ShiftResource:
 			if not res.validate():
 				print("  - ❌ NARRATIVE_DEBUG: Skipping malformed resource: %s" % path)
+				continue
+			
+			if shift_library.has(res.shift_id):
+				print("  - ⚠ NARRATIVE_DEBUG: Duplicate Shift ID '%s' found in %s. Skipping." % [res.shift_id, path])
 				continue
 				
 			shift_library[res.shift_id] = res
@@ -226,6 +238,10 @@ func _trigger_event(event_data: Dictionary):
 				var report_instance = shift_report_scene.instantiate()
 				get_tree().root.add_child(report_instance)
 				report_instance.show_report(results)
+				
+				# Pass the next shift ID to the report for continuation
+				if current_shift_resource and not current_shift_resource.next_shift_id.is_empty():
+					report_instance.set_next_shift(current_shift_resource.next_shift_id)
 				
 				EventBus.shift_ended.emit(results)
 			else:

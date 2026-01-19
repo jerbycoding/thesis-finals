@@ -178,9 +178,16 @@ func _create_ticket_timer(ticket: TicketResource):
 		if is_instance_valid(old_timer):
 			old_timer.queue_free()
 	
+	var base_time = max(0.1, ticket.base_time)
+	var final_time = base_time
+	
+	# HEAT SCALING: Reduce time allowed based on week
+	if HeatManager:
+		final_time = HeatManager.get_scaled_time(base_time)
+	
 	var timer = Timer.new()
 	timer.one_shot = true
-	timer.wait_time = max(0.1, ticket.base_time)
+	timer.wait_time = final_time
 	timer.timeout.connect(_on_ticket_timeout_timer.bind(ticket.ticket_id))
 	add_child(timer)
 	timer.start()
@@ -274,6 +281,23 @@ func add_ticket(ticket: TicketResource):
 	# Set expiry timestamp for UI display
 	ticket.expiry_timestamp = ticket.spawn_timestamp + (ticket.base_time * 1000.0)
 	
+	# PROCEDURAL TRUTH: Generate packet if empty
+	if VariableRegistry and ticket.truth_packet.is_empty():
+		# INHERITANCE CHECK: If this is an escalation-type ticket, try to pull from the buffer
+		var inherited_context = {}
+		if ticket.category in ["Malware", "Data Breach", "Ransomware"] and HeatManager:
+			inherited_context = HeatManager.pop_vulnerability()
+		
+		if not inherited_context.is_empty():
+			# Reuse attacker and victim host from previous mistake
+			ticket.truth_packet = VariableRegistry.generate_truth_packet(ticket.ticket_id)
+			ticket.truth_packet["attacker_ip"] = inherited_context.attacker_ip
+			ticket.truth_packet["victim_host"] = inherited_context.victim_host
+			ticket.truth_packet["inherited_from"] = inherited_context.original_id
+			print("⛓ INHERITANCE: Ticket %s inherited threat data from %s" % [ticket.ticket_id, inherited_context.original_id])
+		else:
+			ticket.truth_packet = VariableRegistry.generate_truth_packet(ticket.ticket_id)
+	
 	# Add to active tickets
 	active_tickets.append(ticket)
 	
@@ -296,9 +320,14 @@ func add_ticket(ticket: TicketResource):
 	# Automatically reveal related emails and logs
 	if EmailSystem and EmailSystem.has_method("reveal_emails_for_ticket"):
 		EmailSystem.reveal_emails_for_ticket(ticket.ticket_id)
+		# PROCEDURAL TRUTH: Inject context into the tools' backend resources
+		for email in EmailSystem.get_emails_for_ticket(ticket.ticket_id):
+			email.truth_packet = ticket.truth_packet
 	
 	if LogSystem and LogSystem.has_method("reveal_logs_for_ticket"):
 		LogSystem.reveal_logs_for_ticket(ticket.ticket_id)
+		for log in LogSystem.get_logs_for_ticket(ticket.ticket_id):
+			log.truth_packet = ticket.truth_packet
 
 func _on_ticket_timeout_timer(ticket_id: String):
 	var active_ticket = get_ticket_by_id(ticket_id)

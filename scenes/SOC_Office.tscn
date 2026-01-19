@@ -107,6 +107,7 @@ transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -11.5,
 script = ExtResource("7_teleport")
 target_scene_path = "res://scenes/3d/BriefingRoom.tscn"
 interaction_text = "Use Elevator"
+is_elevator = true
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="ElevatorTeleport"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)

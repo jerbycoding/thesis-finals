@@ -15,8 +15,20 @@ class_name EmailResource
 @export var suspicious_ip: String = "" # IP address found in headers (for cross-tool integration)
 @export var suspicious_domain: String = "" # Domain from links (for cross-tool integration)
 
+var truth_packet: Dictionary = {} # Procedural data inherited from parent ticket
+
 func _to_string() -> String:
 	return "[Email: %s - %s]" % [email_id, subject]
+
+func get_formatted_subject() -> String:
+	if truth_packet.is_empty():
+		return subject
+	return subject.format(truth_packet)
+
+func get_formatted_body() -> String:
+	if truth_packet.is_empty():
+		return body
+	return body.format(truth_packet)
 
 func get_sender_color() -> Color:
 	var s = sender.to_lower()

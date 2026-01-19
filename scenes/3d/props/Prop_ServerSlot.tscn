@@ -1,0 +1,26 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/3d/HardwareSocket.gd" id="1_socket"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_slot"]
+albedo_color = Color(0.1, 0.1, 0.1, 1)
+emission_enabled = true
+emission = Color(1, 0.5, 0, 1)
+emission_energy_multiplier = 0.5
+
+[sub_resource type="BoxMesh" id="BoxMesh_slot"]
+material = SubResource("StandardMaterial3D_slot")
+size = Vector3(0.3, 0.1, 0.4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_slot"]
+size = Vector3(0.3, 0.1, 0.4)
+
+[node name="Prop_ServerSlot" type="CharacterBody3D"]
+script = ExtResource("1_socket")
+accepted_hardware_type = "hard_drive"
+
+[node name="Mesh" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_slot")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_slot")

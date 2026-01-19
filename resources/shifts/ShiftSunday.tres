@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ShiftResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/ShiftResource.gd" id="1_shift"]
+
+[resource]
+script = ExtResource("1_shift")
+shift_name = "Shift 7: Sunday (Hardware Recovery)"
+shift_id = "shift_sunday"
+briefing_dialogue_id = "default"
+event_sequence = [
+	{"time": 10, "event": "recovery_start", "type": "system_event", "event_id": "RECOVERY_WINDOW", "duration": 300.0},
+	{"time": 300, "event": "shift_end", "type": "shift_end"}
+]
+random_event_pool = []
+next_shift_id = "shift_monday"

@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://c3humlfk5uhg8"]
+[gd_scene load_steps=6 format=3 uid="uid://c3humlfk5uhg8"]
 
-[ext_resource type="Script" uid="uid://5j6lxa236ajd" path="res://scripts/2d/ComputerDesktop.gd" id="1_0kbkv"]
+[ext_resource type="Script" uid="uid://b22xof43jxemv" path="res://scripts/2d/ComputerDesktop.gd" id="1_0kbkv"]
 [ext_resource type="Script" uid="uid://c28t6vqktfrln" path="res://scripts/2d/DesktopClock.gd" id="1_0l3ag"]
 [ext_resource type="Script" uid="uid://cbi6smmdpx4yu" path="res://scripts/2d/ExitButton.gd" id="2_0kbkv"]
+[ext_resource type="PackedScene" path="res://scenes/ui/IntegrityHUD.tscn" id="3_integrity"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_icon"]
 bg_color = Color(0.117647, 0.164706, 0.227451, 1)
@@ -351,3 +352,9 @@ layout_mode = 2
 size_flags_vertical = 4
 text = "EXIT"
 script = ExtResource("2_0kbkv")
+
+[node name="IntegrityHUD" parent="." instance=ExtResource("3_integrity")]
+layout_mode = 1
+offset_top = 40.0
+offset_bottom = 80.0
+metadata/_edit_use_anchors_ = true

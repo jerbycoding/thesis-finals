@@ -50,7 +50,7 @@ func set_ticket(t: TicketResource):
 	ticket = t
 	
 	# Set text content using @onready variables
-	title_label.text = t.title
+	title_label.text = t.get_formatted_title()
 	severity_label.text = t.severity
 	_update_time_display()
 	_update_evidence_display()

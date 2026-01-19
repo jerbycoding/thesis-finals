@@ -24,6 +24,7 @@ class_name TicketResource
 # ----------------------------
 
 var attached_log_ids: Array[String] = [] # Log IDs that player has attached
+var truth_packet: Dictionary = {} # Procedural data generated at spawn
 var spawn_timestamp: float = 0.0
 var expiry_timestamp: float = 0.0
 
@@ -62,3 +63,15 @@ func validate() -> bool:
 	if base_time <= 0:
 		return false
 	return true
+
+# --- Procedural Formatting ---
+
+func get_formatted_description() -> String:
+	if truth_packet.is_empty():
+		return description
+	return description.format(truth_packet)
+
+func get_formatted_title() -> String:
+	if truth_packet.is_empty():
+		return title
+	return title.format(truth_packet)

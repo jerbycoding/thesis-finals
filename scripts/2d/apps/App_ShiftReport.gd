@@ -12,9 +12,14 @@ extends Control
 @onready var consequences_value: Label = %ConsequencesValue
 @onready var continue_button: Button = %ContinueButton
 
+var next_shift_id: String = ""
+
 func _ready():
 	hide() # Hidden by default
 	continue_button.pressed.connect(_on_continue_pressed)
+
+func set_next_shift(shift_id: String):
+	next_shift_id = shift_id
 
 func show_report(results: Dictionary):
 	print("ShiftReport: Showing report with results: ", results)
@@ -47,12 +52,10 @@ func _on_continue_pressed():
 	print("ShiftReport: Continue pressed.")
 	hide() # Hide the report itself
 	
-	if NarrativeDirector:
-		var current_shift = NarrativeDirector.current_shift_resource
-		if current_shift and current_shift.next_shift:
-			var next_shift_id = current_shift.next_shift.shift_id
-			print("ShiftReport: Moving to next shift: ", next_shift_id)
+	if not next_shift_id.is_empty():
+		print("ShiftReport: Moving to next shift: ", next_shift_id)
+		if NarrativeDirector:
 			NarrativeDirector.trigger_briefing(next_shift_id)
-		else:
-			print("ShiftReport: Final shift completed or no next shift defined. Returning to title.")
-			TransitionManager.change_scene_to("res://scenes/ui/TitleScreen.tscn")
+	else:
+		print("ShiftReport: Final shift completed or no next shift defined. Returning to title.")
+		TransitionManager.change_scene_to("res://scenes/ui/TitleScreen.tscn")

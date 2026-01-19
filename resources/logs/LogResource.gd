@@ -12,6 +12,7 @@ class_name LogResource
 @export var ip_address: String = "" # Optional IP address mentioned in log
 @export var hostname: String = "" # Optional hostname mentioned in log
 @export var is_revealed: bool = false # If true, log was missed in a previous stage and is now surfaced
+var truth_packet: Dictionary = {} # Procedural data inherited from parent ticket
 
 func _to_string() -> String:
 	return "[Log: %s - %s - %s]" % [timestamp, source, message.substr(0, 30)]
@@ -34,6 +35,11 @@ func get_severity_text() -> String:
 		5: return "CRITICAL"
 		_: return "UNKNOWN"
 
+func get_formatted_message() -> String:
+	if truth_packet.is_empty():
+		return message
+	return message.format(truth_packet)
+
 func validate() -> bool:
 	if log_id.is_empty():
 		return false
@@ -50,9 +56,9 @@ func get_forensic_report() -> String:
 		"color": get_severity_color().to_html(),
 		"risk": get_severity_text(),
 		"source": source,
-		"ip": ip_address if ip_address != "" else "N/A",
-		"host": hostname if hostname != "" else "N/A",
-		"message": message
+		"ip": truth_packet.get("attacker_ip", ip_address) if not truth_packet.is_empty() else (ip_address if ip_address != "" else "N/A"),
+		"host": truth_packet.get("victim_host", hostname) if not truth_packet.is_empty() else (hostname if hostname != "" else "N/A"),
+		"message": get_formatted_message()
 	}
 	
 	return CorporateVoice.get_formatted_phrase("siem_inspector_body", params)

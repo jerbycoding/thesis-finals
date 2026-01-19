@@ -83,8 +83,8 @@ func _update_detail_view(ticket: TicketResource):
 				required_tool_label.visible = false
 		
 		# Populate labels
-		title_label.text = "[%s] %s: %s" % [selected_ticket.severity.to_upper(), selected_ticket.ticket_id, selected_ticket.title]
-		description_label.text = selected_ticket.description
+		title_label.text = "[%s] %s: %s" % [selected_ticket.severity.to_upper(), selected_ticket.ticket_id, selected_ticket.get_formatted_title()]
+		description_label.text = selected_ticket.get_formatted_description()
 		
 		# Clear old steps
 		for child in steps_container.get_children():

@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<testsuites id="2026-01-18" name="report_5" tests="2" failures="0" skipped="0" flaky="0" time="0.000">
-	<testsuite id="0" name="test_shift_transition" package="tests/integration" timestamp="2026-01-18T11:40:06" hostname="localhost" tests="2" failures="0" errors="0" skipped="0" flaky="0" time="0.173">
-		<testcase name="test_shift_1_links_to_shift_2" classname="test_shift_transition" time="0.041">
-		</testcase>
-		<testcase name="test_narrative_director_transition_logic" classname="test_shift_transition" time="0.027">
-		</testcase>
-	</testsuite>
-</testsuites>

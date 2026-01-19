@@ -8,6 +8,9 @@ var camera_rotation = Vector2.ZERO
 var near_computer = null
 var near_npc = null
 var movement_enabled = true
+var carried_object: Node3D = null
+
+@onready var carry_marker: Marker3D = %CarryMarker3D
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -62,8 +65,13 @@ func _physics_process(delta):
 
 	move_and_slide()
 func _process(delta):
-	if movement_enabled and Input.is_action_just_pressed("interact"):
-		if near_computer:
+	if not movement_enabled:
+		return
+
+	if Input.is_action_just_pressed("interact"):
+		if carried_object:
+			_drop_object()
+		elif near_computer:
 			print("E pressed at computer")
 			if TransitionManager:
 				TransitionManager.enter_desktop_mode(near_computer)
@@ -71,6 +79,82 @@ func _process(delta):
 			print("E pressed at NPC")
 			if near_npc.has_method("start_dialogue"):
 				near_npc.start_dialogue("default")
+		elif _is_near_carryable():
+			_pickup_object()
+
+func _is_near_carryable() -> bool:
+	# Simplified: We check if the player is near a node in the 'carryable' group
+	# In a full game, we'd use a RayCast3D, but for this architecture, 
+	# we'll reuse the area-based detection logic if possible or check current 'near' state.
+	return near_npc != null and near_npc.is_in_group("carryable")
+
+func _pickup_object():
+	if not near_npc or carried_object: return
+	
+	carried_object = near_npc
+	print("Picking up: ", carried_object.name)
+	
+	# Reparent to camera marker
+	carried_object.get_parent().remove_child(carried_object)
+	carry_marker.add_child(carried_object)
+	
+	# Reset local transform
+	carried_object.position = Vector3.ZERO
+	carried_object.rotation = Vector3.ZERO
+	
+	# Disable collision while held
+	if carried_object.has_node("CollisionShape3D"):
+		carried_object.get_node("CollisionShape3D").disabled = true
+	
+	# Reduce speed while carrying (FULLGAME.md requirement)
+	speed *= 0.75
+	
+	if %InteractionPrompt:
+		%InteractionPrompt.set_text("Drop " + carried_object.name)
+
+func _drop_object():
+	if not carried_object: return
+	
+	print("Dropping: ", carried_object.name)
+	
+	# Check if we are near a 'socket'
+	var socket = _get_nearby_socket()
+	
+	# Reparent back to world (the current scene root)
+	var world = get_tree().current_scene
+	carried_object.get_parent().remove_child(carried_object)
+	world.add_child(carried_object)
+	
+	# Set position to where the marker is in world space
+	carried_object.global_transform = carry_marker.global_transform
+	
+	# Re-enable collision
+	if carried_object.has_node("CollisionShape3D"):
+		carried_object.get_node("CollisionShape3D").disabled = false
+	
+	# Restore speed
+	speed /= 0.75
+	
+	# If dropped in a socket, trigger logic
+	if socket:
+		_plug_into_socket(carried_object, socket)
+	
+	carried_object = null
+	
+	if %InteractionPrompt:
+		%InteractionPrompt.hide_prompt()
+
+func _get_nearby_socket() -> Node3D:
+	# Find a node in 'socket' group that player is currently 'near'
+	# We'll treat sockets like NPCs/Computers for detection
+	if near_npc and near_npc.is_in_group("socket"):
+		return near_npc
+	return null
+
+func _plug_into_socket(obj: Node3D, socket: Node3D):
+	print("Object ", obj.name, " plugged into ", socket.name)
+	if socket.has_method("on_object_inserted"):
+		socket.on_object_inserted(obj)
 
 func set_near_computer(computer_node, is_near):
 	if not movement_enabled:

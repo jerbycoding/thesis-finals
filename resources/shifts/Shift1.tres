@@ -1,7 +1,6 @@
-[gd_resource type="Resource" script_class="ShiftResource" load_steps=3 format=3]
+[gd_resource type="Resource" script_class="ShiftResource" load_steps=2 format=3]
 
 [ext_resource type="Script" path="res://resources/ShiftResource.gd" id="1_shift"]
-[ext_resource type="Resource" path="res://resources/shifts/Shift2.tres" id="2_next_shift"]
 
 [resource]
 script = ExtResource("1_shift")
@@ -17,4 +16,4 @@ event_sequence = [
 	{"time": 330, "event": "shift_end", "type": "shift_end"}
 ]
 random_event_pool = []
-next_shift = ExtResource("2_next_shift")
+next_shift_id = "shift_tuesday"

@@ -1,0 +1,79 @@
+[gd_scene load_steps=9 format=3 uid="uid://bot2u23kyxdxc"]
+
+[ext_resource type="PackedScene" uid="uid://b2d35yngg7u75" path="res://scenes/Player3D.tscn" id="1_player"]
+[ext_resource type="Script" uid="uid://dh3hcvpwq0ufa" path="res://scripts/3d/RoomTeleporter.gd" id="2_teleport"]
+[ext_resource type="Script" uid="uid://cw8wvj6b5bg13" path="res://scripts/3d/SlidingDoor.gd" id="3_door"]
+
+[sub_resource type="Environment" id="Environment_hub"]
+background_mode = 1
+background_color = Color(0.05, 0.02, 0.02, 1)
+ambient_light_source = 2
+ambient_light_color = Color(1, 0.4, 0.2, 1)
+ambient_light_energy = 0.3
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_dark"]
+size = Vector2(15, 15)
+
+[sub_resource type="BoxMesh" id="BoxMesh_router"]
+size = Vector3(1.5, 2, 0.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape_elevator"]
+size = Vector3(4, 4, 4)
+
+[sub_resource type="BoxMesh" id="BoxMesh_door"]
+size = Vector3(2, 4, 0.2)
+
+[node name="NetworkHub" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_hub")
+
+[node name="Floor" type="MeshInstance3D" parent="."]
+mesh = SubResource("PlaneMesh_dark")
+
+[node name="Routers" type="Node3D" parent="."]
+
+[node name="Router1" type="MeshInstance3D" parent="Routers"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 1, -4)
+mesh = SubResource("BoxMesh_router")
+
+[node name="Router2" type="MeshInstance3D" parent="Routers"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -4)
+mesh = SubResource("BoxMesh_router")
+
+[node name="SpotLight3D" type="SpotLight3D" parent="Routers/Router2"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 3, 0)
+light_color = Color(1, 0.5, 0.2, 1)
+light_energy = 2.0
+spot_range = 8.0
+
+[node name="Router3" type="MeshInstance3D" parent="Routers"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 1, -4)
+mesh = SubResource("BoxMesh_router")
+
+[node name="Elevator" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 6)
+script = ExtResource("2_teleport")
+is_elevator = true
+current_floor = -2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Elevator"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+shape = SubResource("BoxShape_elevator")
+
+[node name="ElevatorDoor" type="Node3D" parent="Elevator"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+script = ExtResource("3_door")
+
+[node name="LeftPanel" type="MeshInstance3D" parent="Elevator/ElevatorDoor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 2, 0)
+mesh = SubResource("BoxMesh_door")
+
+[node name="RightPanel" type="MeshInstance3D" parent="Elevator/ElevatorDoor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 2, 0)
+mesh = SubResource("BoxMesh_door")
+
+[node name="Player3D" parent="." instance=ExtResource("1_player")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4)

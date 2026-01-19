@@ -210,9 +210,9 @@ func _show_email_details(email: EmailResource):
 	_update_decision_visibility()
 	
 	# Update labels
-	subject_label.text = "Subject: " + email.subject
+	subject_label.text = "Subject: " + email.get_formatted_subject()
 	sender_label.text = "From: " + email.sender
-	body_label.text = email.body
+	body_label.text = email.get_formatted_body()
 	
 	# Show attachments if any
 	if email.attachments.size() > 0:

@@ -1,0 +1,53 @@
+[gd_scene load_steps=3 format=3 uid="uid://c333tmh0f8q6h"]
+
+[ext_resource type="Script" uid="uid://blsqfcskdfjpr" path="res://scripts/ui/IntegrityHUD.gd" id="1_integrity"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Fill"]
+bg_color = Color(0.2, 0.8, 0.2, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[node name="IntegrityHUD" type="Control"]
+layout_mode = 3
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 40.0
+grow_horizontal = 2
+mouse_filter = 2
+script = ExtResource("1_integrity")
+
+[node name="Panel" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -150.0
+offset_top = 10.0
+offset_right = 150.0
+offset_bottom = 45.0
+grow_horizontal = 2
+
+[node name="VBox" type="VBoxContainer" parent="Panel"]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="Panel/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "SYS_INTEGRITY: 100%"
+horizontal_alignment = 1
+
+[node name="ProgressBar" type="ProgressBar" parent="Panel/VBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 6)
+layout_mode = 2
+theme_override_styles/fill = SubResource("StyleBoxFlat_Fill")
+value = 100.0
+show_percentage = false
+
+[node name="BlinkTimer" type="Timer" parent="."]
+unique_name_in_owner = true
+one_shot = true

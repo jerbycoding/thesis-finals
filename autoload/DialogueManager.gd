@@ -8,10 +8,16 @@ var dialogue_box_instance: Control = null
 var current_npc: Node = null
 
 func _ready():
-	# Instantiate the dialogue box and add it to the root of the tree
-	# so it persists across scene changes.
+	# Create a persistent CanvasLayer for dialogue to ensure it stays on top
+	var layer = CanvasLayer.new()
+	layer.layer = 110 # Above desktop windows (10) and notifications (100)
+	layer.name = "DialogueLayer"
+	get_tree().root.call_deferred("add_child", layer)
+	
+	# Instantiate the dialogue box and add it to the layer
 	dialogue_box_instance = dialogue_box_scene.instantiate()
-	get_tree().root.call_deferred("add_child", dialogue_box_instance)
+	layer.call_deferred("add_child", dialogue_box_instance)
+	
 	dialogue_box_instance.dialogue_choice_selected.connect(_on_dialogue_choice_selected)
 	dialogue_box_instance.dialogue_closed.connect(_on_dialogue_closed)
 	print("DialogueManager ready.")

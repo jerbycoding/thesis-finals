@@ -17,3 +17,4 @@ event_sequence = [
 	{"time": 300, "event": "final_end", "type": "shift_end"}
 ]
 random_event_pool = []
+next_shift_id = "shift_saturday"

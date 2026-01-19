@@ -1,0 +1,47 @@
+[gd_scene load_steps=3 format=3 uid="uid://dotgpl1o3q8uw"]
+
+[ext_resource type="Script" uid="uid://c8yet1rl7afa0" path="res://scripts/ui/MaintenanceHUD.gd" id="1_maint"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Checklist"]
+content_margin_left = 15.0
+content_margin_top = 10.0
+content_margin_right = 15.0
+content_margin_bottom = 10.0
+bg_color = Color(0.05, 0.05, 0.1, 0.8)
+border_width_left = 3
+border_color = Color(0.2, 0.8, 0.2, 1)
+corner_radius_bottom_right = 10
+
+[node name="MaintenanceHUD" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 300.0
+offset_bottom = 200.0
+mouse_filter = 2
+script = ExtResource("1_maint")
+
+[node name="Panel" type="PanelContainer" parent="."]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 100.0
+offset_right = 320.0
+offset_bottom = 250.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_Checklist")
+
+[node name="VBox" type="VBoxContainer" parent="Panel"]
+layout_mode = 2
+
+[node name="Header" type="Label" parent="Panel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 1, 0.2, 1)
+theme_override_font_sizes/font_size = 16
+text = "AUDITOR CHECKLIST"
+
+[node name="HSeparator" type="HSeparator" parent="Panel/VBox"]
+layout_mode = 2
+
+[node name="TaskContainer" type="VBoxContainer" parent="Panel/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 8

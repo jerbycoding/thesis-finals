@@ -16,8 +16,8 @@ class_name ShiftResource
 ## Optional pool for procedural/random events during this shift
 @export var random_event_pool: Array[Dictionary] = []
 
-## The next shift to load after this one is completed.
-@export var next_shift: ShiftResource
+## The ID of the next shift to load after this one is completed.
+@export var next_shift_id: String = ""
 
 func _to_string() -> String:
 	return "[Shift: %s (%d events)]" % [shift_name, event_sequence.size()]
