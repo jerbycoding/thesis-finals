@@ -2,9 +2,17 @@
 # Hotkey jumps for internal testing. (Not active in release builds)
 extends Node
 
+func _ready():
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	print("DebugManager initialized (F1-F10 enabled)")
+
 func _input(event):
 	if not event is InputEventKey or not event.pressed:
 		return
+	
+	# Check if keycode is one of our F-keys to avoid spamming output for every key
+	if event.keycode >= KEY_F1 and event.keycode <= KEY_F12:
+		print("DEBUG: Key pressed: ", OS.get_keycode_string(event.keycode))
 		
 	# Shift Jumps (F1-F5 Weekdays, F6 Saturday, F7 Sunday)
 	match event.keycode:

@@ -129,6 +129,16 @@ func get_analysis_results() -> Dictionary:
 	return results
 
 func _calculate_metrics_from_history() -> Dictionary:
+	if not ConsequenceEngine:
+		return metrics.duplicate(true)
+		
+	var history = ConsequenceEngine.get_choice_history()
+	
+	# If no history exists (e.g. start of game or unit test), 
+	# fall back to the locally tracked metrics.
+	if history.is_empty():
+		return metrics.duplicate(true)
+		
 	var m = {
 		"tickets_completed": 0,
 		"tickets_ignored": 0,
@@ -139,10 +149,6 @@ func _calculate_metrics_from_history() -> Dictionary:
 		"npc_approval": 0.0,
 		"tools_used": metrics.tools_used # We still track tool usage counts locally
 	}
-	
-	if not ConsequenceEngine: return m
-	
-	var history = ConsequenceEngine.get_choice_history()
 	
 	for entry in history:
 		match entry.get("type", ""):

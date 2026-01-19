@@ -123,6 +123,9 @@ func _prepare_library():
 			ticket_id_map[file_id.replace("_", "-")] = res
 			ticket_id_map[file_id.replace("-", "_")] = res
 			
+			# ADD TO LIBRARY (Fix for F9 spawn)
+			ticket_library.append(res)
+			
 			# 3. Add to noise pool if generic
 			if "GENERIC" in res.ticket_id:
 				noise_library.append(res)
@@ -328,6 +331,15 @@ func add_ticket(ticket: TicketResource):
 		LogSystem.reveal_logs_for_ticket(ticket.ticket_id)
 		for log in LogSystem.get_logs_for_ticket(ticket.ticket_id):
 			log.truth_packet = ticket.truth_packet
+			
+	# PROCEDURAL TRUTH: Update NetworkState if host is specified
+	if NetworkState and not ticket.truth_packet.is_empty():
+		var victim_host = ticket.truth_packet.get("victim_host", "")
+		if not victim_host.is_empty() and victim_host != "WS-UNKNOWN":
+			# If it's a malware/ransomware ticket, ensure the host is actually infected
+			if ticket.category in ["Malware", "Ransomware"]:
+				print("📋 TicketManager: Infecting procedural host: ", victim_host)
+				NetworkState.update_host_state(victim_host, {"status": "INFECTED"})
 
 func _on_ticket_timeout_timer(ticket_id: String):
 	var active_ticket = get_ticket_by_id(ticket_id)

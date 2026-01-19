@@ -41,7 +41,7 @@ func test_manager_injects_packet_on_add():
 	var ticket = TicketResourceScript.new()
 	ticket.ticket_id = "PROC-TEST-99"
 	ticket.base_time = 100.0
-	ticket.steps = ["Step 1"]
+	ticket.steps.append("Step 1")
 	
 	# Verify packet is empty initially
 	assert_bool(ticket.truth_packet.is_empty()).is_true()

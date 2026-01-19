@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites id="2026-01-19" name="report_3" tests="18" failures="1" skipped="0" flaky="0" time="0.000">
+	<testsuite id="0" name="test_archetype_analyzer" package="tests/unit" timestamp="2026-01-19T15:28:49" hostname="localhost" tests="4" failures="1" errors="0" skipped="0" flaky="0" time="0.136">
+		<testcase name="test_calculate_archetype_negligent" classname="test_archetype_analyzer" time="0.046">
+			<failure message="FAILED: res://tests/unit/test_archetype_analyzer.gd:32" type="FAILURE">
+<![CDATA[
+Expecting:
+ 'Negligent'
+ but was
+ 'NePraglmatigentc'
+]]>
+			</failure>
+		</testcase>
+	</testsuite>
+	<testsuite id="1" name="test_integrity_manager" package="tests/unit" timestamp="2026-01-19T15:28:49" hostname="localhost" tests="9" failures="0" errors="0" skipped="0" flaky="0" time="0.854">
+		<testcase name="test_initial_state" classname="test_integrity_manager" time="0.049">
+		</testcase>
+		<testcase name="test_apply_change_positive" classname="test_integrity_manager" time="0.031">
+		</testcase>
+		<testcase name="test_apply_change_negative" classname="test_integrity_manager" time="0.032">
+		</testcase>
+		<testcase name="test_apply_change_clamp_max" classname="test_integrity_manager" time="0.031">
+		</testcase>
+		<testcase name="test_apply_change_clamp_min" classname="test_integrity_manager" time="0.059">
+		</testcase>
+		<testcase name="test_decay_logic" classname="test_integrity_manager" time="0.034">
+		</testcase>
+		<testcase name="test_ticket_completion_deltas" classname="test_integrity_manager" time="0.059">
+		</testcase>
+		<testcase name="test_breach_consequence" classname="test_integrity_manager" time="0.061">
+		</testcase>
+		<testcase name="test_restore_integrity" classname="test_integrity_manager" time="0.057">
+		</testcase>
+	</testsuite>
+	<testsuite id="2" name="test_procedural_generation" package="tests/unit" timestamp="2026-01-19T15:28:50" hostname="localhost" tests="5" failures="0" errors="0" skipped="0" flaky="0" time="0.467">
+		<testcase name="test_truth_packet_generation" classname="test_procedural_generation" time="0.092">
+		</testcase>
+		<testcase name="test_ticket_description_formatting" classname="test_procedural_generation" time="0.056">
+		</testcase>
+		<testcase name="test_ticket_title_formatting" classname="test_procedural_generation" time="0.035">
+		</testcase>
+		<testcase name="test_manager_injects_packet_on_add" classname="test_procedural_generation" time="0.056">
+		</testcase>
+		<testcase name="test_randomness_variety" classname="test_procedural_generation" time="0.058">
+		</testcase>
+	</testsuite>
+</testsuites>
