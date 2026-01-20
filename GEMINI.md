@@ -17,6 +17,7 @@ The core concept places the player in the role of a Security Operations Center (
     *   `ConfigManager`: Manages persistent user settings (Volume, Display) saved in `user://settings.cfg`.
     *   `ConsequenceEngine`: The source of truth for player choices; logs history and triggers delayed, cascading consequences, including "Kill Chain" escalations.
     *   `CorporateVoice`: Provides a library of corporate-toned phrases and templates for consistent narrative style.
+    *   `DebugManager`: Provides hotkey jumps (F1-F10) for shift testing and manual state manipulation.
     *   `DesktopWindowManager`: Manages the lifecycle, Z-ordering, and snapping of desktop application windows.
     *   `DialogueManager`: Centralized system for NPC dialogue flow, display, and choice-based scene transitions.
     *   `EmailSystem`: Backend manager for the email client tool, including discovery and threat processing.
@@ -24,8 +25,10 @@ The core concept places the player in the role of a Security Operations Center (
     *   `FPSManager`: Persistent overlay for real-time performance tracking.
     *   `GameState`: Manages the current game mode (3D, 2D, or Dialogue) and pause state.
     *   `GlobalConstants`: Central authority for shared constants, event IDs, and severity enums.
+    *   `HeatManager`: Manages difficulty scaling and "Vulnerability Inheritance," where unresolved risks from previous tickets impact future ones.
+    *   `IntegrityManager`: Manages organizational "HP" (Stability), handling decay rates and integrity-based failure states.
     *   `LogSystem`: Backend manager for the SIEM log viewer, featuring a ring-buffer-style history to manage memory.
-    *   `NarrativeDirector`: Manages scripted story flow (Shifts 1-5), NPC interactions, and shift report generation.
+    *   `NarrativeDirector`: Manages scripted story flow (Shifts 1-5 + Weekends), NPC interactions, and shift report generation.
     *   `NetworkState`: Single source of truth for host information (IPs, Status, Criticality) utilizing a resource-driven registry.
     *   `NotificationManager`: Handles display and queuing of notification toasts on the desktop.
     *   `SaveSystem`: Manages JSON-based serialization of player metrics, world state, and ticket progress.
@@ -35,6 +38,7 @@ The core concept places the player in the role of a Security Operations Center (
     *   `TransitionManager`: Manages visual fades and state transitions between 3D world and 2D desktop.
     *   `TutorialManager`: Manages the guided onboarding experience for the "Training Simulation."
     *   `ValidationManager`: Central authority for gameplay rules (e.g., verifying evidence before a compliant closure).
+    *   `VariableRegistry`: The engine for "Procedural Truth," generating consistent technical context (IPs, Hostnames, Victim names) across all tools for each incident.
 
 ### Data Types (Resources):
 
@@ -55,6 +59,14 @@ The core concept places the player in the role of a Security Operations Center (
 *   **SOC Handbook**: Central documentation resource for the player.
 *   **Resource Monitor (Task Manager)**: For monitoring system load and event-driven performance impacts.
 *   **Ticket Queue**: For managing and resolving active security incidents.
+*   **Shift Report**: Post-shift analysis UI displaying metrics and archetype derivation.
+*   **Field Tablet (Forensic Tablet)**: Handheld 3D tool used during maintenance shifts for network topology audits and hardware synchronization.
+
+### Narrative Structure & Weekend Shifts:
+
+The game follows a 7-day narrative arc. While weekdays (Mon-Fri) focus on the 2D desktop workstation loop, weekend shifts introduce physical 3D objectives:
+*   **Saturday (Infrastructure Audit)**: Requires physical inspection of router nodes and technical handshake minigames.
+*   **Sunday (Hardware Recovery)**: Focuses on physical hardware maintenance, including carrying and replacing server drives.
 
 ## 2. Building and Running
 
@@ -78,13 +90,13 @@ The project integrates the **GdUnit4** testing framework for automated unit and 
 addons\gdUnit4\runtest.cmd --godot_bin "C:\Godot 4\Godot 4.exe" -a "tests/unit/"
 ```
 
-**Latest Test Results (Report 6):**
+**Latest Test Results (Report 5):**
 *   **Status:** PASSED (100% Success Rate)
 *   **Suites:** 1 (Integration)
 *   **Tests:** 2
 *   **Duration:** 175ms
 *   **Key Coverage:** 
-    *   `test_full_shift_chain_progression`: Verified linear progression from Monday through Friday.
+    *   `test_full_shift_chain_progression`: Verified linear progression from Monday through Sunday.
     *   `test_briefing_ids_are_assigned`: Verified all shift resources have associated briefing dialogues.
 
 ### Key File Locations:

@@ -6,7 +6,7 @@
 script = ExtResource("1_shift")
 shift_name = "Shift 5: Friday (Zero Day)"
 shift_id = "shift_friday"
-briefing_dialogue_id = "default"
+briefing_dialogue_id = "briefing_friday"
 event_sequence = [
 	{"time": 10, "event": "zero_day_start", "type": "system_event", "event_id": "ZERO_DAY", "duration": 180.0},
 	{"time": 30, "event": "spawn_exfil", "type": "spawn_ticket", "ticket_id": "DATA-EXFIL-001"},

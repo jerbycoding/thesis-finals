@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="DialogueDataResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/dialogue/DialogueDataResource.gd" id="1_dialogue_data"]
+
+[resource]
+script = ExtResource("1_dialogue_data")
+npc_name = "CISO"
+portrait = "👔"
+lines = [
+    {"choices": [], "text": "This is it. Global infrastructure is being hit by a zero-day exploit, and our production servers are in the crosshairs. This is not a drill."},
+    {"choices": [{"effect": {"change_scene": "res://scenes/SOC_Office.tscn", "then_start_narrative": "shift_friday"}, "text": "Understood. I won't let the network fall."}], "text": "Systems will lag. The noise from the firewall will be deafening. But if you blink, we lose everything. This is your final test, analyst. Don't let the chaos distract you from the truth."}
+]

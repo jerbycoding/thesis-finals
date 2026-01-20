@@ -9,6 +9,7 @@ shift_id = "shift_wednesday"
 briefing_dialogue_id = "briefing_third_shift"
 event_sequence = [
 	{"time": 15, "event": "spawn_malware", "type": "spawn_ticket", "ticket_id": "MALWARE-CONTAIN-001"},
+	{"time": 45, "event": "analyst_checkin", "type": "npc_interaction", "npc_id": "senior_analyst", "dialogue_id": "checkin_malware"},
 	{"time": 90, "event": "start_lateral", "type": "system_event", "event_id": "LATERAL_MOVEMENT", "duration": 120.0},
 	{"time": 180, "event": "spawn_phish_1", "type": "spawn_ticket", "ticket_id": "PHISH-001"},
 	{"time": 270, "event": "spawn_ransom", "type": "spawn_ticket", "ticket_id": "RANSOM-001"},
