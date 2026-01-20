@@ -35,9 +35,14 @@ func _ready():
 
 func _process(delta):
 	if is_decay_active:
+		# Scaling Decay: Multiply base rate by Heat Multiplier (Week 2+)
+		var multiplier = 1.0
+		if HeatManager:
+			multiplier = HeatManager.heat_multiplier
+			
 		# Convert delta (seconds) to hours for the rate calculation
 		# 1 Hour of gameplay = 3600 seconds
-		var hourly_decay = (decay_rate_per_hour / 3600.0) * delta
+		var hourly_decay = (decay_rate_per_hour * multiplier / 3600.0) * delta
 		_apply_change(-hourly_decay, true)
 
 func _apply_change(delta: float, silent: bool = false):

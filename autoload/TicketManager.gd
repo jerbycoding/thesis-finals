@@ -40,7 +40,12 @@ func _setup_system_connections():
 	# Use EventBus for decoupled communication
 	EventBus.terminal_command_run.connect(_on_terminal_command_run)
 	EventBus.narrative_spawn_ticket.connect(spawn_ticket_by_id)
-	EventBus.shift_started.connect(func(_id): start_ambient_spawning())
+	EventBus.shift_started.connect(func(id): 
+		if id != "shift_saturday" and id != "shift_sunday":
+			start_ambient_spawning()
+		else:
+			stop_ambient_spawning()
+	)
 	EventBus.shift_ended.connect(func(_r): stop_ambient_spawning())
 	EventBus.email_decision_processed.connect(_on_email_decision_processed)
 	EventBus.app_opened.connect(_on_app_opened)

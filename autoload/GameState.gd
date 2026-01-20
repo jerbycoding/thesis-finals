@@ -1,6 +1,6 @@
 extends Node
 
-enum GameMode { MODE_3D, MODE_2D, MODE_DIALOGUE }
+enum GameMode { MODE_3D, MODE_2D, MODE_DIALOGUE, MODE_MINIGAME }
 
 var current_mode = GameMode.MODE_3D
 var current_computer = null

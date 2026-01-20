@@ -31,7 +31,24 @@ func _input(event):
 func _jump_to_shift(shift_id: String):
 	print("DEBUG: Force jumping to shift: ", shift_id)
 	
-	# Determine destination floor
+	# Check if the shift has a specific briefing dialogue
+	var has_briefing = false
+	if NarrativeDirector and NarrativeDirector.shift_library.has(shift_id):
+		var shift_res = NarrativeDirector.shift_library[shift_id]
+		# "default" usually implies generic chatter, not a scene-transitioning briefing
+		if shift_res.briefing_dialogue_id != "" and shift_res.briefing_dialogue_id != "default":
+			has_briefing = true
+	
+	if has_briefing:
+		print("DEBUG: Shift has briefing. Routing through NarrativeDirector.")
+		# Force stop any active shift so the briefing isn't blocked
+		if NarrativeDirector.is_shift_active():
+			NarrativeDirector.stop_shift()
+		
+		NarrativeDirector.trigger_briefing(shift_id)
+		return
+
+	# Fallback: Direct Jump (No Briefing or 'default' dialogue)
 	var floor_path = "res://scenes/SOC_Office.tscn"
 	var title = "[ DEBUG SHIFT OVERRIDE ]"
 	

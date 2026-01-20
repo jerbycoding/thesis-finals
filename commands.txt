@@ -1,1 +1,0 @@
-addons\gdUnit4\runtest.cmd --godot_bin "C:\Godot 4\Godot 4.exe" -a "tests/unit/"

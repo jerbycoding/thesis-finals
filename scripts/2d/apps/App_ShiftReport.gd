@@ -45,17 +45,30 @@ func show_report(results: Dictionary):
 		SaveSystem.save_game()
 	
 	show()
-	# Bring to front to ensure it's on top of other UI
+	# Bring to front to ensure it's on top of other UI in the same layer
 	move_to_front()
+	
+	# AUTO-FOCUS: Enable immediate Space/Enter continuation
+	if continue_button:
+		continue_button.grab_focus()
 
 func _on_continue_pressed():
 	print("ShiftReport: Continue pressed.")
 	hide() # Hide the report itself
 	
-	if not next_shift_id.is_empty():
-		print("ShiftReport: Moving to next shift: ", next_shift_id)
+	var next_shift = next_shift_id
+	
+	# CLEANUP: Remove the CanvasLayer added by NarrativeDirector
+	var parent = get_parent()
+	if parent is CanvasLayer:
+		parent.queue_free()
+	else:
+		queue_free()
+	
+	if not next_shift.is_empty():
+		print("ShiftReport: Moving to next shift: ", next_shift)
 		if NarrativeDirector:
-			NarrativeDirector.trigger_briefing(next_shift_id)
+			NarrativeDirector.trigger_briefing(next_shift)
 	else:
 		print("ShiftReport: Final shift completed or no next shift defined. Returning to title.")
 		TransitionManager.change_scene_to("res://scenes/ui/TitleScreen.tscn")

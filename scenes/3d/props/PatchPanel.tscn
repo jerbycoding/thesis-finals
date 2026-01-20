@@ -1,0 +1,64 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://scripts/3d/PatchPanel.gd" id="1_panel"]
+[ext_resource type="PackedScene" path="res://scenes/3d/props/Prop_ServerSlot.tscn" id="2_socket"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_base"]
+size = Vector3(1, 0.5, 0.2)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_res"]
+albedo_color = Color(0.5, 0, 0, 1)
+emission_enabled = true
+emission = Color(1, 0, 0, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ind"]
+material = SubResource("StandardMaterial3D_res")
+size = Vector3(0.1, 0.1, 0.05)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mon"]
+albedo_color = Color(0, 0, 0.5, 1)
+emission_enabled = true
+emission = Color(0, 0.5, 1, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ind_blue"]
+material = SubResource("StandardMaterial3D_mon")
+size = Vector3(0.1, 0.1, 0.05)
+
+[node name="PatchPanel" type="Node3D"]
+script = ExtResource("1_panel")
+
+[node name="PanelMesh" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_base")
+
+[node name="Socket_Restricted" parent="." instance=ExtResource("2_socket")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.3, 0, 0.1)
+accepted_hardware_type = "patch_cable"
+
+[node name="Label" type="Label3D" parent="Socket_Restricted"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15, 0)
+text = "RESTRICTED"
+font_size = 12
+outline_modulate = Color(1, 0, 0, 1)
+
+[node name="Indicator" type="MeshInstance3D" parent="Socket_Restricted"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.08, 0)
+mesh = SubResource("BoxMesh_ind")
+
+[node name="Socket_Monitor" parent="." instance=ExtResource("2_socket")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, 0, 0.1)
+accepted_hardware_type = "patch_cable"
+
+[node name="Label" type="Label3D" parent="Socket_Monitor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15, 0)
+text = "MONITOR"
+font_size = 12
+outline_modulate = Color(0, 0.5, 1, 1)
+
+[node name="Indicator" type="MeshInstance3D" parent="Socket_Monitor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.08, 0)
+mesh = SubResource("BoxMesh_ind_blue")
+
+[node name="Label3D" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
+text = "NETWORK PATCH PANEL v4"
+font_size = 18

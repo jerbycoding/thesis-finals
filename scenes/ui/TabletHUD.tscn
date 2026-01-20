@@ -1,0 +1,150 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/TabletHUD.gd" id="1_tablet"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tablet"]
+bg_color = Color(0.05, 0.06, 0.1, 0.95)
+border_width_left = 10
+border_width_top = 10
+border_width_right = 10
+border_width_bottom = 10
+border_color = Color(0.2, 0.2, 0.25, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+
+[sub_resource type="Animation" id="Animation_slide"]
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Panel:position:y")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(0.5, 1),
+"update": 0,
+"values": [720.0, 350.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_tablet"]
+_data = {
+"slide_up": SubResource("Animation_slide")
+}
+
+[node name="TabletHUD" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_tablet")
+
+[node name="Panel" type="PanelContainer" parent="."]
+custom_minimum_size = Vector2(500, 400)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -250.0
+offset_top = -370.0
+offset_right = 250.0
+offset_bottom = 30.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_tablet")
+
+[node name="Margin" type="MarginContainer" parent="Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 40
+
+[node name="VBox" type="VBoxContainer" parent="Panel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="Header" type="HBoxContainer" parent="Panel/Margin/VBox"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="Panel/Margin/VBox/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0, 1, 0.8, 1)
+theme_override_font_sizes/font_size = 18
+text = "FIELD_COMM_UNIT v4.0"
+
+[node name="Battery" type="Label" parent="Panel/Margin/VBox/Header"]
+layout_mode = 2
+text = "🔋 88%"
+
+[node name="HSeparator" type="HSeparator" parent="Panel/Margin/VBox"]
+layout_mode = 2
+
+[node name="Content" type="HBoxContainer" parent="Panel/Margin/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 20
+
+[node name="Topology" type="VBoxContainer" parent="Panel/Margin/VBox/Content"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 1.5
+
+[node name="Label" type="Label" parent="Panel/Margin/VBox/Content/Topology"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 1, 1, 1)
+text = "LIVE MESH TOPOLOGY"
+horizontal_alignment = 1
+
+[node name="TopologyMap" type="Control" parent="Panel/Margin/VBox/Content/Topology"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Grid" type="ColorRect" parent="Panel/Margin/VBox/Content/Topology/TopologyMap"]
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(1, 1, 1, 0.03)
+
+[node name="RadarSweep" type="ColorRect" parent="Panel/Margin/VBox/Content/Topology/TopologyMap"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 1, 0.8, 0.05)
+
+[node name="VSeparator" type="VSeparator" parent="Panel/Margin/VBox/Content"]
+layout_mode = 2
+
+[node name="Checklist" type="VBoxContainer" parent="Panel/Margin/VBox/Content"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="Panel/Margin/VBox/Content/Checklist"]
+layout_mode = 2
+text = "SYSTEM CHECKLIST"
+horizontal_alignment = 1
+
+[node name="ChecklistContainer" type="VBoxContainer" parent="Panel/Margin/VBox/Content/Checklist"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_tablet")
+}

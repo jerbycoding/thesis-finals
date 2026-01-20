@@ -6,7 +6,7 @@
 script = ExtResource("1_shift")
 shift_name = "Shift 7: Sunday (Hardware Recovery)"
 shift_id = "shift_sunday"
-briefing_dialogue_id = "default"
+briefing_dialogue_id = "briefing_sunday"
 event_sequence = [
 	{"time": 10, "event": "recovery_start", "type": "system_event", "event_id": "RECOVERY_WINDOW", "duration": 300.0},
 	{"time": 300, "event": "shift_end", "type": "shift_end"}

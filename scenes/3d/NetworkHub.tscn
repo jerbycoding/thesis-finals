@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://b2d35yngg7u75" path="res://scenes/Player3D.tscn" id="1_player"]
 [ext_resource type="Script" uid="uid://dh3hcvpwq0ufa" path="res://scripts/3d/RoomTeleporter.gd" id="2_teleport"]
 [ext_resource type="Script" uid="uid://cw8wvj6b5bg13" path="res://scripts/3d/SlidingDoor.gd" id="3_door"]
+[ext_resource type="PackedScene" path="res://scenes/3d/props/Prop_AuditRouter.tscn" id="4_audit"]
 
 [sub_resource type="Environment" id="Environment_hub"]
 background_mode = 1
@@ -35,23 +36,29 @@ mesh = SubResource("PlaneMesh_dark")
 
 [node name="Routers" type="Node3D" parent="."]
 
-[node name="Router1" type="MeshInstance3D" parent="Routers"]
+[node name="Router1" parent="Routers" instance=ExtResource("4_audit")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 1, -4)
-mesh = SubResource("BoxMesh_router")
+audit_id = "audit_1"
 
-[node name="Router2" type="MeshInstance3D" parent="Routers"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -4)
-mesh = SubResource("BoxMesh_router")
-
-[node name="SpotLight3D" type="SpotLight3D" parent="Routers/Router2"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 3, 0)
-light_color = Color(1, 0.5, 0.2, 1)
-light_energy = 2.0
-spot_range = 8.0
-
-[node name="Router3" type="MeshInstance3D" parent="Routers"]
+[node name="Router2" parent="Routers" instance=ExtResource("4_audit")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 1, -4)
-mesh = SubResource("BoxMesh_router")
+audit_id = "audit_2"
+
+[node name="Router3" parent="Routers" instance=ExtResource("4_audit")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -4)
+audit_id = "audit_3"
+
+[node name="Router4" parent="Routers" instance=ExtResource("4_audit")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 1, 4)
+audit_id = "audit_4"
+
+[node name="Router5" parent="Routers" instance=ExtResource("4_audit")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 4)
+audit_id = "audit_5"
+
+[node name="Router6" parent="Routers" instance=ExtResource("4_audit")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 1, 4)
+audit_id = "audit_6"
 
 [node name="Elevator" type="Area3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 6)

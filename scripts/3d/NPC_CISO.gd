@@ -66,9 +66,13 @@ func _ready():
 
 		"briefing_second_shift": load("res://resources/dialogue/ciso_briefing_second_shift.tres"),
 
-		"briefing_third_shift": load("res://resources/dialogue/ciso_briefing_third_shift.tres"),
+				"briefing_third_shift": load("res://resources/dialogue/ciso_briefing_third_shift.tres"),
 
-		"clockout_ready": load("res://resources/dialogue/ciso_clockout_ready.tres"),
+				"briefing_saturday": load("res://resources/dialogue/ciso_briefing_saturday.tres"),
+
+				"briefing_sunday": load("res://resources/dialogue/ciso_briefing_sunday.tres"),
+
+				"clockout_ready": load("res://resources/dialogue/ciso_clockout_ready.tres"),
 
 		"clockout_rejected": load("res://resources/dialogue/ciso_clockout_rejected.tres")
 

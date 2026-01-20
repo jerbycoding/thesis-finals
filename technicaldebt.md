@@ -1,39 +1,39 @@
-# Technical Debt Analysis: VERIFY.EXE (Post-Sprint 9)
+# VERIFY.EXE: Technical Debt & Refactoring Roadmap
 
-## 1. Architectural Improvements (Resolved)
-
-### ✅ Event Bus Implementation (Sprint 9 Task 4)
-- **Resolved:** All singletons, UI components, and gameplay systems are decoupled via `EventBus.gd`.
-- **Benefit:** Eliminated brittle manager-to-manager connections and resolved initialization race conditions.
-
-### ✅ Structured Host Registry (Sprint 9 Task 1)
-- **Resolved:** Host metadata is now resource-driven (`HostResource.gd`) and loaded from `res://resources/hosts/`.
-- **Benefit:** Type-safe host data and IP management.
-
-### ✅ Logic Migration: Resources vs UI (Sprint 9 Task 2)
-- **Resolved:** Email and Log analysis logic moved to their respective Resource classes.
-- **Benefit:** Centralized business logic and clean "display-only" UI scripts.
-
-### ✅ UI Object Pooling (Sprint 9 Task 3)
-- **Resolved:** Implemented `UIObjectPool.gd` for SIEM logs and Ticket cards.
-- **Benefit:** Smooth performance during high-volume log floods and queue updates.
-
-### ✅ Mock Logic Replacement (Sprint 9 Task 5)
-- **Resolved:** Terminal `logs` command now queries actual `LogSystem` data. `ArchetypeAnalyzer` derives results from `ConsequenceEngine` history.
-- **Benefit:** High-fidelity simulation logic with a single source of truth.
+This document tracks "Static" logic patterns that need to be refactored into "Dynamic" systems to improve maintainability and scalability.
 
 ---
 
-## 2. Current Priority Roadmap (Remaining Debt)
+## 1. Static Objective Management (Priority: HIGH)
+**Location:** `MaintenanceHUD.gd`, `TabletHUD.gd`
+**The Debt:** The list of tasks (e.g., `audit_1` through `audit_6` and `rep_1` through `rep_4`) is manually typed into the code. Adding or removing a physical object in the 3D scene requires manual code updates.
+**The Fix:** 
+- Implement **Scene Discovery**. On `_ready()`, the HUD should scan the "socket" or "audit_nodes" groups.
+- Automatically generate the checklist based on the nodes found in the current scene.
 
-### Fragile UI Synchronization (High Priority)
-- **Issue:** `TicketCard.gd` and `App_Decryption.gd` still use local `Timer` nodes or `_process` to poll system state.
-- **Recommendation:** Implement a `timer_sync` signal on `EventBus` to push authoritative timestamps to the UI.
+## 2. Hardcoded Hardware Requirements
+**Location:** `TabletHUD.gd`, `HardwareSocket.gd`
+**The Debt:** The Tablet "knows" that RACK_1 needs an NVMe drive because it is written in a Dictionary in the script.
+**The Fix:** 
+- The Tablet should query the 3D Socket node directly: `socket.get_required_type()`.
+- This allows designers to change requirements inside the Godot Inspector without touching GDScript.
 
-### Magic Strings & App Registry (Medium Priority)
-- **Issue:** `DesktopWindowManager.gd` uses a hardcoded dictionary for app paths.
-- **Recommendation:** Create a `SystemRegistry.tres` to define app metadata and scene paths.
+## 3. Manual Signal Mapping
+**Location:** `MaintenanceHUD.gd` (the `_on_event` function)
+**The Debt:** We use `if rack == "RACK_1": _complete_task("rep_1")`. This mapping is fragile.
+**The Fix:**
+- Standardize the IDs. If a 3D node has `audit_id = "alpha"`, the task ID in the HUD should also be `"alpha"`.
+- Use a generic event handler: `_complete_task(details.id)`.
 
-### Automated Testing Coverage (Medium Priority)
-- **Issue:** Significant architectural changes have been made without corresponding unit test updates.
-- **Recommendation:** Update `tests/unit/` to use the `EventBus` for mocking interactions.
+## 4. Shift Progression Logic
+**Location:** `SaveSystem.gd`, `NarrativeDirector.gd`
+**The Debt:** Determining the "Next Shift" relies on string lookups and manual property checks.
+**The Fix:**
+- Move all shift transition logic into the `ShiftResource`.
+- The SaveSystem should simply save the `current_shift_id` and let the `NarrativeDirector` handle the rest.
+
+---
+
+## Tomorrow's "Payoff" Goal:
+Move to a **"Zero-Code Level Design"** model. 
+*Goal:* You should be able to drag-and-drop a new Server Rack into the 3D vault, and the game should automatically add it to the HUD, Tablet, and Win-Conditions without you opening a single script.

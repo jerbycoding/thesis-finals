@@ -106,6 +106,10 @@ func _show_choices(choices: Array):
 			btn.mouse_entered.connect(_on_hover)
 			
 			choices_container.add_child(btn)
+			
+			# AUTO-FOCUS: Grab focus on the very first button so Space/Enter works
+			if i == 0:
+				btn.grab_focus()
 
 func _add_continue_button():
 	if not choices_container: return

@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="DialogueDataResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/dialogue/DialogueDataResource.gd" id="1_dialogue_data"]
+
+[resource]
+script = ExtResource("1_dialogue_data")
+npc_name = "CISO"
+portrait = "👔"
+lines = [
+    {"choices": [], "text": "Sunday shift. We have a critical hardware fault in the Server Vault on Floor -1. It seems the high load from Friday burnt out a drive."},
+    {"choices": [{"effect": {"change_scene": "res://scenes/SOC_Office.tscn", "then_start_narrative": "shift_sunday"}, "text": "I'll handle the replacement."}], "text": "This is a manual repair job. Locate the defective hardware in the rack and replace it. Access has been granted."}
+]

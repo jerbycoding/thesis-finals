@@ -1,0 +1,25 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/3d/CarryableHardware.gd" id="1_carry"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_nvme"]
+albedo_color = Color(1, 0.5, 0, 1) # Orange
+metallic = 1.0
+roughness = 0.2
+
+[sub_resource type="BoxMesh" id="BoxMesh_nvme"]
+material = SubResource("StandardMaterial3D_nvme")
+size = Vector3(0.1, 0.02, 0.4)
+
+[sub_resource type="BoxShape3D" id="BoxShape_nvme"]
+size = Vector3(0.1, 0.05, 0.4)
+
+[node name="Prop_NVMe_Drive" type="CharacterBody3D"]
+script = ExtResource("1_carry")
+hardware_type = "nvme_drive"
+
+[node name="Mesh" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_nvme")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape_nvme")

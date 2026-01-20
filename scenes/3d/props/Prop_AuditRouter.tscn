@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/3d/InteractableAuditNode.gd" id="1_audit"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_router"]
+size = Vector3(1.5, 2, 0.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_router"]
+size = Vector3(1.5, 2, 0.5)
+
+[node name="Prop_AuditRouter" type="StaticBody3D"]
+script = ExtResource("1_audit")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_router")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_router")

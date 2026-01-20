@@ -1,11 +1,13 @@
-[gd_scene load_steps=11 format=3 uid="uid://dryl8qn0omosa"]
+[gd_scene load_steps=13 format=3 uid="uid://dryl8qn0omosa"]
 
 [ext_resource type="PackedScene" uid="uid://b2d35yngg7u75" path="res://scenes/Player3D.tscn" id="1_player"]
 [ext_resource type="PackedScene" path="res://scenes/3d/props/Prop_ServerRack.tscn" id="2_rack"]
-[ext_resource type="PackedScene" path="res://scenes/3d/props/Prop_HardDrive.tscn" id="3_hdd"]
-[ext_resource type="PackedScene" path="res://scenes/3d/props/Prop_ServerSlot.tscn" id="4_slot"]
-[ext_resource type="Script" uid="uid://dh3hcvpwq0ufa" path="res://scripts/3d/RoomTeleporter.gd" id="5_teleport"]
-[ext_resource type="Script" uid="uid://cw8wvj6b5bg13" path="res://scripts/3d/SlidingDoor.gd" id="6_door"]
+[ext_resource type="PackedScene" path="res://scenes/3d/props/Prop_NVMe_Drive.tscn" id="3_nvme"]
+[ext_resource type="PackedScene" path="res://scenes/3d/props/Prop_SATA_Drive.tscn" id="4_sata"]
+[ext_resource type="PackedScene" path="res://scenes/3d/props/Prop_ServerSlot.tscn" id="5_slot"]
+[ext_resource type="Script" uid="uid://dh3hcvpwq0ufa" path="res://scripts/3d/RoomTeleporter.gd" id="6_teleport"]
+[ext_resource type="Script" uid="uid://cw8wvj6b5bg13" path="res://scripts/3d/SlidingDoor.gd" id="7_door"]
+[ext_resource type="Script" path="res://scripts/3d/HardwareSpawner.gd" id="8_spawner"]
 
 [sub_resource type="Environment" id="Environment_vault"]
 background_mode = 1
@@ -35,8 +37,18 @@ environment = SubResource("Environment_vault")
 [node name="Rack1" parent="Racks" instance=ExtResource("2_rack")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, -5)
 
+[node name="Slot1" parent="Racks/Rack1" instance=ExtResource("5_slot")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0.5)
+socket_id = "RACK_1"
+accepted_hardware_type = "nvme_drive"
+
 [node name="Rack2" parent="Racks" instance=ExtResource("2_rack")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+
+[node name="Slot2" parent="Racks/Rack2" instance=ExtResource("5_slot")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0.5)
+socket_id = "RACK_2"
+accepted_hardware_type = "nvme_drive"
 
 [node name="Rack3" parent="Racks" instance=ExtResource("2_rack")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, -5)
@@ -44,8 +56,18 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, -5)
 [node name="Rack4" parent="Racks" instance=ExtResource("2_rack")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, 5)
 
+[node name="Slot4" parent="Racks/Rack4" instance=ExtResource("5_slot")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, -0.5)
+socket_id = "RACK_4"
+accepted_hardware_type = "sata_drive"
+
 [node name="Rack5" parent="Racks" instance=ExtResource("2_rack")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5)
+
+[node name="Slot5" parent="Racks/Rack5" instance=ExtResource("5_slot")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, -0.5)
+socket_id = "RACK_5"
+accepted_hardware_type = "sata_drive"
 
 [node name="Rack6" parent="Racks" instance=ExtResource("2_rack")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 5)
@@ -59,23 +81,35 @@ omni_range = 10.0
 [node name="Floor" type="MeshInstance3D" parent="."]
 mesh = SubResource("PlaneMesh_grate")
 
-[node name="InteractiveItems" type="Node3D" parent="."]
+[node name="HardwareSpawner" type="Node3D" parent="."]
+script = ExtResource("8_spawner")
 
-[node name="Prop_HardDrive" parent="InteractiveItems" instance=ExtResource("3_hdd")]
+[node name="Point1" type="Marker3D" parent="HardwareSpawner"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0.5, 0)
 
-[node name="Prop_HardDrive2" parent="InteractiveItems" instance=ExtResource("3_hdd")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0.5, 1)
+[node name="Point2" type="Marker3D" parent="HardwareSpawner"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0.2, -2)
 
-[node name="Prop_ServerSlot" parent="InteractiveItems" instance=ExtResource("4_slot")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 1.2, 5)
+[node name="Point3" type="Marker3D" parent="HardwareSpawner"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0.2, 4)
 
-[node name="Prop_ServerSlot2" parent="InteractiveItems" instance=ExtResource("4_slot")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 1.5, 5)
+[node name="Point4" type="Marker3D" parent="HardwareSpawner"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 2)
+
+[node name="Point5" type="Marker3D" parent="HardwareSpawner"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0.5, 8)
+
+[node name="Point6" type="Marker3D" parent="HardwareSpawner"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 1.0, -8)
+
+[node name="Point7" type="Marker3D" parent="HardwareSpawner"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0.2, -6)
+
+[node name="InteractiveItems" type="Node3D" parent="."]
 
 [node name="Elevator" type="Area3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 8)
-script = ExtResource("5_teleport")
+script = ExtResource("6_teleport")
 is_elevator = true
 current_floor = -1
 
@@ -85,7 +119,7 @@ shape = SubResource("BoxShape_elevator")
 
 [node name="ElevatorDoor" type="Node3D" parent="Elevator"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
-script = ExtResource("6_door")
+script = ExtResource("7_door")
 
 [node name="LeftPanel" type="MeshInstance3D" parent="Elevator/ElevatorDoor"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 2, 0)

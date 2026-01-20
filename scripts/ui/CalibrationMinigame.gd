@@ -1,0 +1,229 @@
+# CalibrationMinigame.gd
+extends Control
+
+signal minigame_success
+signal minigame_failed
+signal minigame_closed
+
+@onready var needle = %Needle
+@onready var zone = %TargetZone
+@onready var bar = %BarBackground
+@onready var label = %Label
+@onready var typing_area = %TypingArea
+@onready var code_display = %CodeDisplay
+@onready var player_input_label = %PlayerInput
+@onready var handshake_timer_bar = %HandshakeTimer
+@onready var game_area = %GameArea
+
+enum GamePhase { SIGNAL_LOCK, HANDSHAKE }
+var current_phase = GamePhase.SIGNAL_LOCK
+
+var difficulty_speed: float = 300.0
+var direction: int = 1
+var is_active: bool = false
+var input_locked: bool = false # Debounce flag
+
+# Typing logic
+var target_code: String = ""
+var current_input: String = ""
+var handshake_time_left: float = 5.0
+var max_handshake_time: float = 5.0
+
+const CODES = [
+	"INIT_LINK_0x4F", "SYNC_PROTOCOL_A", "SECURE_TUNNEL", 
+	"GATEWAY_REBOOT", "NODE_HANDSHAKE", "ENCRYPT_STREAM"
+]
+
+func _ready():
+	visible = false
+	set_process(false)
+
+var is_sunday: bool = false
+var sunday_heat: float = 100.0 # Starts hot
+
+func start_game(difficulty_modifier: float = 1.0):
+	# Detect shift
+	is_sunday = NarrativeDirector.current_shift_name == "shift_sunday" if NarrativeDirector else false
+	
+	# Reset state
+	is_active = true
+	input_locked = false
+	visible = true
+	set_process(true)
+	current_phase = GamePhase.SIGNAL_LOCK
+	
+	if game_area: game_area.visible = true
+	if typing_area: typing_area.visible = false
+	
+	current_input = ""
+	
+	if is_sunday:
+		_setup_sunday_game()
+	else:
+		_setup_saturday_game(difficulty_modifier)
+	
+	if GameState: GameState.set_mode(GameState.GameMode.MODE_MINIGAME)
+
+func _setup_saturday_game(difficulty_modifier):
+	# Randomize zone
+	zone.position.x = randf_range(0, bar.size.x - zone.size.x)
+	needle.position.x = randf_range(0, bar.size.x - needle.size.x)
+	needle.color = Color(1, 0.8, 0.2)
+	difficulty_speed = 300.0 * difficulty_modifier
+	label.text = "PHASE 1: LOCK SIGNAL [SPACE]"
+	label.add_theme_color_override("font_color", Color.WHITE)
+
+func _setup_sunday_game():
+	sunday_heat = 100.0 # Start at max (far right)
+	zone.position.x = 20.0 # Target is cool (far left)
+	needle.position.x = bar.size.x - needle.size.x
+	needle.color = Color.RED
+	label.text = "PHASE 1: TAP [SPACE] TO COOL SYSTEM"
+	label.add_theme_color_override("font_color", Color.ORANGE)
+
+func _process(delta):
+	if not is_active: return
+	
+	if current_phase == GamePhase.SIGNAL_LOCK:
+		if is_sunday:
+			_process_thermal_reset(delta)
+		else:
+			_process_signal_lock(delta)
+	elif current_phase == GamePhase.HANDSHAKE:
+		_process_handshake(delta)
+
+func _process_signal_lock(delta):
+	needle.position.x += difficulty_speed * direction * delta
+	var max_pos = bar.size.x - needle.size.x
+	if needle.position.x >= max_pos or needle.position.x <= 0:
+		direction *= -1
+		needle.position.x = clamp(needle.position.x, 0, max_pos)
+
+func _process_handshake(delta):
+	handshake_time_left -= delta
+	handshake_timer_bar.value = (handshake_time_left / max_handshake_time) * 100.0
+	
+	if handshake_time_left <= 0:
+		_fail("HANDSHAKE TIMEOUT")
+
+func _process_thermal_reset(delta):
+	# Heat naturally rises (moves right)
+	sunday_heat = min(100.0, sunday_heat + (delta * 25.0))
+	
+	# Update needle pos based on heat %
+	var max_x = bar.size.x - needle.size.x
+	needle.position.x = (sunday_heat / 100.0) * max_x
+	
+	# Visual feedback: Red when hot, Yellow when cooling
+	needle.color = Color.RED if sunday_heat > 50 else Color.YELLOW
+	
+	# Win condition: If in zone
+	var z_left = zone.position.x
+	var z_right = zone.position.x + zone.size.x
+	if needle.position.x >= z_left and needle.position.x + needle.size.x <= z_right:
+		_on_lock_success()
+
+func _input(event):
+	if not is_active or input_locked: return
+	
+	if event.is_action_pressed("ui_cancel"):
+		_close_game()
+		return
+	
+	if current_phase == GamePhase.SIGNAL_LOCK:
+		if event.is_action_pressed("ui_accept") or event.is_action_pressed("interact"):
+			if is_sunday:
+				# Tapping lowers heat
+				sunday_heat = max(0.0, sunday_heat - 8.0)
+			else:
+				input_locked = true # Prevent double-firing
+				_try_lock()
+	elif current_phase == GamePhase.HANDSHAKE:
+		if event is InputEventKey and event.pressed:
+			_handle_typing(event)
+
+
+func _try_lock():
+	# Check if any part of needle is in zone
+	var n_left = needle.position.x
+	var n_right = needle.position.x + needle.size.x
+	var z_left = zone.position.x
+	var z_right = zone.position.x + zone.size.x
+	
+	if n_right >= z_left and n_left <= z_right:
+		_on_lock_success()
+	else:
+		_fail("SIGNAL MISMATCH")
+
+func _on_lock_success():
+	is_active = false
+	needle.color = Color.GREEN
+	label.text = "SIGNAL LOCKED"
+	if AudioManager: AudioManager.play_sfx(AudioManager.SFX.button_click)
+	
+	await get_tree().create_timer(0.5).timeout
+	
+	if is_instance_valid(self):
+		input_locked = false # Release input for typing
+		is_active = true
+		_start_handshake_phase()
+
+func _start_handshake_phase():
+	current_phase = GamePhase.HANDSHAKE
+	label.text = "PHASE 2: PROTOCOL HANDSHAKE"
+	
+	target_code = CODES.pick_random()
+	code_display.text = target_code
+	current_input = ""
+	_update_input_display()
+	
+	typing_area.visible = true
+	handshake_time_left = max_handshake_time
+	if AudioManager: AudioManager.play_terminal_beep()
+
+func _handle_typing(event: InputEventKey):
+	if event.keycode == KEY_BACKSPACE:
+		current_input = current_input.left(current_input.length() - 1)
+		_update_input_display()
+		return
+
+	var character = char(event.unicode)
+	if character.length() > 0 and character.unicode_at(0) > 31:
+		current_input += character.to_upper()
+		_update_input_display()
+		
+		if current_input == target_code:
+			_success()
+		elif not target_code.begins_with(current_input):
+			handshake_time_left -= 0.5
+			if AudioManager: AudioManager.play_notification("warning")
+
+func _update_input_display():
+	player_input_label.text = "> " + current_input + "_"
+
+func _success():
+	is_active = false
+	label.text = "CALIBRATION COMPLETE"
+	label.add_theme_color_override("font_color", Color.GREEN)
+	if AudioManager: AudioManager.play_sfx(AudioManager.SFX.notification_success)
+	
+	await get_tree().create_timer(0.8).timeout
+	minigame_success.emit()
+	_close_game()
+
+func _fail(reason: String):
+	is_active = false
+	label.text = reason
+	label.add_theme_color_override("font_color", Color.RED)
+	if AudioManager: AudioManager.play_sfx(AudioManager.SFX.notification_error)
+	
+	await get_tree().create_timer(1.0).timeout
+	if is_instance_valid(self) and not is_queued_for_deletion():
+		start_game(1.0) 
+
+func _close_game():
+	is_active = false
+	visible = false
+	if GameState: GameState.set_mode(GameState.GameMode.MODE_3D)
+	minigame_closed.emit()
+	queue_free()

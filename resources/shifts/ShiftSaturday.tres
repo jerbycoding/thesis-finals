@@ -6,7 +6,7 @@
 script = ExtResource("1_shift")
 shift_name = "Shift 6: Saturday (Infrastructure Audit)"
 shift_id = "shift_saturday"
-briefing_dialogue_id = "default"
+briefing_dialogue_id = "briefing_saturday"
 event_sequence = [
 	{"time": 10, "event": "audit_start", "type": "system_event", "event_id": "MAINTENANCE_WINDOW", "duration": 300.0},
 	{"time": 300, "event": "shift_end", "type": "shift_end"}

@@ -24,7 +24,7 @@ func _ready():
 
 func _on_game_mode_changed(mode):
 	print("Game mode changed to: ", mode)
-	if mode == GameState.GameMode.MODE_2D or mode == GameState.GameMode.MODE_DIALOGUE:
+	if mode == GameState.GameMode.MODE_2D or mode == GameState.GameMode.MODE_DIALOGUE or mode == GameState.GameMode.MODE_MINIGAME:
 		movement_enabled = false
 		print("Movement disabled")
 		if %InteractionPrompt:
@@ -33,10 +33,35 @@ func _on_game_mode_changed(mode):
 		movement_enabled = true
 		print("Movement enabled")
 
+func _try_toggle_tablet():
+	# Validation: Only available on Weekend Shifts
+	var is_weekend = false
+	if NarrativeDirector:
+		var shift = NarrativeDirector.current_shift_name
+		if shift == "shift_saturday" or shift == "shift_sunday":
+			is_weekend = true
+	
+	if not is_weekend:
+		print("Tablet: Access denied - Field unit only authorized for maintenance shifts.")
+		return
+
+	tablet_active = !tablet_active
+	
+	if %TabletHUD:
+		if tablet_active:
+			%TabletHUD.open()
+			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+		else:
+			%TabletHUD.close()
+			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+
 func _input(event):
 	if not movement_enabled:
 		return
 
+	# Disable camera rotation if tablet is open (mouse is for UI)
+	if tablet_active:
+		return
 
 	if event is InputEventMouseMotion:
 		camera_rotation.y -= event.relative.x * mouse_sensitivity
@@ -64,9 +89,15 @@ func _physics_process(delta):
 		velocity.z = move_toward(velocity.z, 0, current_speed)
 
 	move_and_slide()
+var tablet_active: bool = false
+
 func _process(delta):
 	if not movement_enabled:
 		return
+
+	# TABLET TOGGLE [TAB]
+	if Input.is_action_just_pressed("ui_focus_next"): # Tab is ui_focus_next by default
+		_try_toggle_tablet()
 
 	if Input.is_action_just_pressed("interact"):
 		if carried_object:
@@ -76,9 +107,11 @@ func _process(delta):
 			if TransitionManager:
 				TransitionManager.enter_desktop_mode(near_computer)
 		elif near_npc:
-			print("E pressed at NPC")
 			if near_npc.has_method("start_dialogue"):
+				print("E pressed at NPC")
 				near_npc.start_dialogue("default")
+			elif near_npc.is_in_group("carryable"):
+				_pickup_object()
 		elif _is_near_carryable():
 			_pickup_object()
 
@@ -106,6 +139,11 @@ func _pickup_object():
 	if carried_object.has_node("CollisionShape3D"):
 		carried_object.get_node("CollisionShape3D").disabled = true
 	
+	# Disable interaction area to prevent self-detection while carrying
+	if carried_object.has_node("InteractionArea"):
+		carried_object.get_node("InteractionArea").monitorable = false
+		carried_object.get_node("InteractionArea").monitoring = false
+	
 	# Reduce speed while carrying (FULLGAME.md requirement)
 	speed *= 0.75
 	
@@ -115,10 +153,31 @@ func _pickup_object():
 func _drop_object():
 	if not carried_object: return
 	
-	print("Dropping: ", carried_object.name)
+	# Precise check using RayCast
+	var socket = _get_targeted_socket()
 	
-	# Check if we are near a 'socket'
-	var socket = _get_nearby_socket()
+	# VALIDATION: On Day 7 (Maintenance), don't allow dropping drives on the floor
+	# This prevents the 'stuck in collision' bug and forces proper gameplay.
+	var is_maintenance = false
+	if NarrativeDirector:
+		var s = NarrativeDirector.current_shift_name
+		if s == "shift_saturday" or s == "shift_sunday":
+			is_maintenance = true
+			
+	if is_maintenance and not socket:
+		if NotificationManager:
+			NotificationManager.show_notification("INSTRUCTION: Do not drop hardware on floor. Locate target rack.", "warning")
+		return
+
+	# SAFETY CHECK: If there is a socket, ask if it fits first
+	if socket and socket.has_method("can_accept_object"):
+		if not socket.can_accept_object(carried_object):
+			print("Drop blocked: Incompatible hardware")
+			if socket.has_method("_show_rejection_feedback"):
+				socket._show_rejection_feedback()
+			return # ABORT DROP: Player keeps holding the item
+
+	print("Dropping: ", carried_object.name)
 	
 	# Reparent back to world (the current scene root)
 	var world = get_tree().current_scene
@@ -132,6 +191,11 @@ func _drop_object():
 	if carried_object.has_node("CollisionShape3D"):
 		carried_object.get_node("CollisionShape3D").disabled = false
 	
+	# Re-enable interaction area
+	if carried_object.has_node("InteractionArea"):
+		carried_object.get_node("InteractionArea").monitorable = true
+		carried_object.get_node("InteractionArea").monitoring = true
+	
 	# Restore speed
 	speed /= 0.75
 	
@@ -144,12 +208,25 @@ func _drop_object():
 	if %InteractionPrompt:
 		%InteractionPrompt.hide_prompt()
 
-func _get_nearby_socket() -> Node3D:
-	# Find a node in 'socket' group that player is currently 'near'
-	# We'll treat sockets like NPCs/Computers for detection
+func _get_targeted_socket() -> Node3D:
+	if not %InteractionRay: return null
+	
+	if %InteractionRay.is_colliding():
+		var collider = %InteractionRay.get_collider()
+		# Check the collider itself or its parent
+		if collider.is_in_group("socket"):
+			return collider
+		if collider.get_parent() and collider.get_parent().is_in_group("socket"):
+			return collider.get_parent()
+			
+	# Fallback to Area3D if ray misses but player is close
 	if near_npc and near_npc.is_in_group("socket"):
 		return near_npc
+		
 	return null
+
+func _get_nearby_socket() -> Node3D:
+	return _get_targeted_socket()
 
 func _plug_into_socket(obj: Node3D, socket: Node3D):
 	print("Object ", obj.name, " plugged into ", socket.name)

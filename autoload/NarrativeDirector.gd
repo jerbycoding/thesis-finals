@@ -203,47 +203,56 @@ func _trigger_event(event_data: Dictionary):
 				func(): EventBus.world_event_triggered.emit(event_data.event_id, false, 0.0)
 			)
 		"shift_end":
+			print("NarrativeDirector: Executing shift_end sequence...")
 			stop_shift()
 			var failure_type = event_data.get("failure_type", "")
 			
 			if ArchetypeAnalyzer:
+				print("NarrativeDirector: Fetching analyst results...")
 				var results = ArchetypeAnalyzer.get_analysis_results()
+				print("NarrativeDirector: Results calculated. Archetype: ", results.get("archetype", "Unknown"))
 
 				# If in 2D mode, exit to 3D first.
 				if GameState.is_in_2d_mode():
+					print("NarrativeDirector: Exiting desktop mode before report.")
 					TransitionManager.exit_desktop_mode()
 					await EventBus.transition_completed
 
 				# Handle Instant Failures (Bankrupt/Fired)
 				if failure_type != "":
+					print("NarrativeDirector: Campaign ended via failure: ", failure_type)
 					EventBus.campaign_ended.emit(failure_type)
 					return
 				
 				# Check for 'Fired' via archetype
 				if results.get("archetype") == "Negligent":
+					print("NarrativeDirector: Player fired for negligence.")
 					EventBus.campaign_ended.emit("fired")
 					return
 
 				# Best ending check (Friday)
 				if current_shift_name == "shift_friday":
-					if results.get("archetype") == "By-the-Book":
-						EventBus.campaign_ended.emit("victory")
-					else:
-						# Standard completion ending? For now, we use victory as catch-all 
-						# but could add a "Standard" victory later.
-						EventBus.campaign_ended.emit("victory")
+					print("NarrativeDirector: Week 1 complete. Promotion check.")
+					EventBus.campaign_ended.emit("victory")
 					return
 
 				# Normal shift end - show report
+				print("NarrativeDirector: Showing shift report overlay...")
+				var report_layer = CanvasLayer.new()
+				report_layer.layer = 125 # Top priority
+				get_tree().root.add_child(report_layer)
+				
 				var report_instance = shift_report_scene.instantiate()
-				get_tree().root.add_child(report_instance)
+				report_layer.add_child(report_instance)
 				report_instance.show_report(results)
 				
 				# Pass the next shift ID to the report for continuation
 				if current_shift_resource and not current_shift_resource.next_shift_id.is_empty():
+					print("NarrativeDirector: Next shift defined: ", current_shift_resource.next_shift_id)
 					report_instance.set_next_shift(current_shift_resource.next_shift_id)
 				
 				EventBus.shift_ended.emit(results)
+				print("NarrativeDirector: Shift report sequence complete.")
 			else:
 				print("ERROR: ArchetypeAnalyzer not found!")
 				EventBus.shift_ended.emit({})

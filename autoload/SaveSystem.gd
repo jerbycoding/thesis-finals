@@ -15,8 +15,8 @@ func save_game():
 	
 	if NarrativeDirector and NarrativeDirector.current_shift_resource:
 		var current_shift = NarrativeDirector.current_shift_resource
-		if current_shift.next_shift:
-			next_shift = current_shift.next_shift.shift_id
+		if not current_shift.next_shift_id.is_empty():
+			next_shift = current_shift.next_shift_id
 		else:
 			# If no next shift is defined, we'll reload the current one
 			# (or could mark game as completed)

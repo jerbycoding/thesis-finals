@@ -1,0 +1,105 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/CalibrationMinigame.gd" id="1_calib"]
+
+[node name="CalibrationMinigame" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_calib")
+
+[node name="Dimmer" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.5)
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="CenterContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Label" type="Label" parent="CenterContainer/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 24
+text = "CALIBRATING SIGNAL..."
+horizontal_alignment = 1
+
+[node name="GameArea" type="Control" parent="CenterContainer/VBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(400, 40)
+layout_mode = 2
+
+[node name="BarBackground" type="ColorRect" parent="CenterContainer/VBox/GameArea"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.2, 0.2, 0.2, 1)
+
+[node name="TargetZone" type="ColorRect" parent="CenterContainer/VBox/GameArea/BarBackground"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 100.0
+offset_right = 160.0
+offset_bottom = 40.0
+color = Color(0.2, 0.8, 0.2, 0.5)
+
+[node name="Needle" type="ColorRect" parent="CenterContainer/VBox/GameArea/BarBackground"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 10.0
+offset_top = -5.0
+offset_right = 15.0
+offset_bottom = 45.0
+color = Color(1, 0.8, 0.2, 1)
+
+[node name="TypingArea" type="VBoxContainer" parent="CenterContainer/VBox"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="HSeparator" type="HSeparator" parent="CenterContainer/VBox/TypingArea"]
+layout_mode = 2
+
+[node name="CodeDisplay" type="Label" parent="CenterContainer/VBox/TypingArea"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 1, 1, 1)
+theme_override_font_sizes/font_size = 32
+text = "INIT_HANDSHAKE_0x4F"
+horizontal_alignment = 1
+
+[node name="PlayerInput" type="Label" parent="CenterContainer/VBox/TypingArea"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 24
+text = "> _"
+horizontal_alignment = 1
+
+[node name="HandshakeTimer" type="ProgressBar" parent="CenterContainer/VBox/TypingArea"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 5)
+layout_mode = 2
+value = 100.0
+show_percentage = false
