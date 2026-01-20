@@ -12,8 +12,12 @@ event_sequence = [
 	{"time": 90, "event": "spawn_noise_hw", "type": "spawn_ticket", "ticket_id": "TICKET-NOISE-002"},
 	{"time": 120, "event": "log_flood", "type": "system_event", "event_id": "FALSE_FLAG", "duration": 90.0},
 	{"time": 150, "event": "spawn_spear", "type": "spawn_ticket", "ticket_id": "SPEAR-PHISH-001"},
-	{"time": 270, "event": "spawn_maint", "type": "spawn_ticket", "ticket_id": "SYS-MAINT-GENERIC"},
+	{"time": 300, "event": "shift_end_talk", "type": "npc_interaction", "npc_id": "ciso", "dialogue_id": "shift_end"},
 	{"time": 330, "event": "shift_end", "type": "shift_end"}
 ]
-random_event_pool = []
+random_event_pool = [
+	{"event": "routine_patching", "type": "spawn_ticket", "ticket_id": "SYS-MAINT-GENERIC"},
+	{"event": "siem_bottleneck", "type": "system_event", "event_id": "SIEM_LAG", "duration": 30.0},
+	{"event": "it_complaint", "type": "npc_interaction", "npc_id": "it_support", "dialogue_id": "default"}
+]
 next_shift_id = "shift_wednesday"

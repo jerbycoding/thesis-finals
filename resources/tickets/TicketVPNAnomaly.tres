@@ -1,5 +1,6 @@
-[gd_resource type="Resource" script_class="TicketResource" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="TicketResource" load_steps=3 format=3]
 
+[ext_resource type="Resource" path="res://resources/tickets/TicketDataExfiltration.tres" id="1_exfil"]
 [ext_resource type="Script" path="res://resources/tickets/TicketResource.gd" id="1_ticket"]
 
 [resource]
@@ -16,4 +17,5 @@ hidden_risks = ["Locking account while CEO is traveling"]
 required_log_ids = ["LOG-VPN-001", "LOG-VPN-002"]
 on_complete_event = ""
 kill_chain_path = "Account Takeover"
-kill_chain_stage = 1
+kill_chain_stage = 2
+escalation_ticket = ExtResource("1_exfil")

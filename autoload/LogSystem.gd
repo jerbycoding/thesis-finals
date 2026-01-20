@@ -66,18 +66,9 @@ func _prepare_library():
 	print("📋 LogSystem: Discovering logs in %s..." % LOG_DIR)
 	all_logs.clear()
 	
-	var paths = FileUtil.get_resource_paths(LOG_DIR)
-	for path in paths:
-		var res = load(path)
-		if res and res is LogResource:
-			if not res.validate():
-				print("  - ❌ LogSystem: Skipping malformed resource: %s" % path)
-				continue
-				
-			all_logs.append(res)
-			print("  - Discovered Log: ID=%s" % res.email_id if "email_id" in res else res.log_id)
-		else:
-			print("  - ❌ LogSystem: Skipping invalid resource: %s" % path)
+	all_logs = FileUtil.load_and_validate_resources(LOG_DIR, "LogResource")
+	for res in all_logs:
+		print("  - Discovered Log: ID=%s" % res.log_id)
 			
 	print("📋 LogSystem: Library ready: ", all_logs.size(), " logs")
 

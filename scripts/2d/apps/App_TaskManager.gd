@@ -66,6 +66,11 @@ func _on_update_tick():
 		status_text = "STATUS: HIGH RESOURCE DEMAND"
 		status_color = Color.ORANGE
 	
+	if active_events.has("CRYPTO_SPIKE"):
+		target_cpu += 60.0 + randf_range(0, 15)
+		status_text = "CRITICAL: ABNORMAL CPU LOAD"
+		status_color = Color.RED
+	
 	if active_events.has("FALSE_FLAG"):
 		target_cpu += 20.0 + randf_range(0, 10)
 		status_text = "STATUS: HIGH BACKGROUND PROCESS VOLUME"

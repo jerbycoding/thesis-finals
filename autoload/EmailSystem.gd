@@ -26,18 +26,9 @@ func _prepare_library():
 	print("📧 EmailSystem: Discovering emails in %s..." % EMAIL_DIR)
 	all_emails.clear()
 	
-	var paths = FileUtil.get_resource_paths(EMAIL_DIR)
-	for path in paths:
-		var res = load(path)
-		if res and res is EmailResource:
-			if not res.validate():
-				print("  - ❌ EmailSystem: Skipping malformed resource: %s" % path)
-				continue
-				
-			all_emails.append(res)
-			print("  - Discovered Email: ID=%s" % res.email_id)
-		else:
-			print("  - ❌ EmailSystem: Skipping invalid resource: %s" % path)
+	all_emails = FileUtil.load_and_validate_resources(EMAIL_DIR, "EmailResource")
+	for res in all_emails:
+		print("  - Discovered Email: ID=%s" % res.email_id)
 			
 	print("📧 EmailSystem: Library ready: ", all_emails.size(), " emails")
 
@@ -102,7 +93,7 @@ func get_unprocessed_emails() -> Array[EmailResource]:
 
 func make_decision(email_id: String, decision: String, inspection_state: Dictionary = {}):
 	# decision: "approve", "quarantine", "escalate"
-	if decision not in ["approve", "quarantine", "escalate"]:
+	if decision not in [GlobalConstants.EMAIL_DECISION.APPROVE, GlobalConstants.EMAIL_DECISION.QUARANTINE, GlobalConstants.EMAIL_DECISION.ESCALATE]:
 		print("⚠ Invalid decision: ", decision)
 		return
 	

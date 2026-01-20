@@ -14,5 +14,5 @@ required_tool = "terminal"
 base_time = 300.0
 hidden_risks = Array[String](["Data already exfiltrated → breach confirmed"])
 required_log_ids = Array[String](["LOG-EXFIL-001", "LOG-NETWORK-001"])
-kill_chain_path = "The Data Breach"
+kill_chain_path = "Account Takeover"
 kill_chain_stage = 3

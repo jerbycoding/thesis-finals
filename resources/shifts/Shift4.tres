@@ -15,5 +15,9 @@ event_sequence = [
 	{"time": 300, "event": "spawn_spear", "type": "spawn_ticket", "ticket_id": "SPEAR-PHISH-001"},
 	{"time": 420, "event": "shift_end", "type": "shift_end"}
 ]
-random_event_pool = []
+random_event_pool = [
+	{"event": "credentials_leak_noise", "type": "spawn_ticket", "ticket_id": "TICKET-NOISE-001"},
+	{"event": "log_obfuscation", "type": "system_event", "event_id": "FALSE_FLAG", "duration": 45.0},
+	{"event": "senior_analyst_suspicion", "type": "npc_interaction", "npc_id": "senior_analyst", "dialogue_id": "default"}
+]
 next_shift_id = "shift_friday"

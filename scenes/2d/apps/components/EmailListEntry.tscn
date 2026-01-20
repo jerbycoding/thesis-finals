@@ -1,0 +1,51 @@
+[gd_scene load_steps=3 format=3 uid="uid://bl81gxshfy21t"]
+
+[ext_resource type="Script" path="res://scripts/2d/apps/components/EmailListEntry.gd" id="1_email_entry"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Email"]
+content_margin_left = 10.0
+content_margin_top = 5.0
+content_margin_right = 10.0
+content_margin_bottom = 5.0
+bg_color = Color(0.1, 0.12, 0.18, 0.8)
+border_width_left = 3
+border_color = Color(0.2, 0.8, 0.2, 1)
+
+[node name="EmailListEntry" type="PanelContainer"]
+custom_minimum_size = Vector2(200, 60)
+offset_right = 200.0
+offset_bottom = 60.0
+size_flags_horizontal = 3
+mouse_filter = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_Email")
+script = ExtResource("1_email_entry")
+
+[node name="HBox" type="HBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="IconLabel" type="Label" parent="HBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+text = "⚠️"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SenderLabel" type="Label" parent="HBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Sender Name"
+vertical_alignment = 1
+clip_text = true
+
+[node name="SubjectLabel" type="Label" parent="HBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 12
+text = "Email Subject Line Goes Here..."
+vertical_alignment = 1
+clip_text = true

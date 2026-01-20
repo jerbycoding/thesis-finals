@@ -18,20 +18,10 @@ enum ConsequenceType {
 
 # Kill Chain Escalation Probabilities (0.0 to 1.0)
 const ESCALATION_RISKS = {
-	"compliant": 0.0,
-	"efficient": 0.5,
-	"emergency": 0.75,
-	"timeout": 1.0
-}
-
-# Standardized ID Templates to avoid Magic Strings
-const CONSEQUENCE_IDS = {
-	"MAJOR_BREACH": "MAJOR-BREACH-FOLLOWUP",
-	"INCIDENT_ESCALATION": "INCIDENT-ESCALATION-FOLLOWUP",
-	"USER_COMPLAINT": "USER-COMPLAINT-FOLLOWUP",
-	"SERVICE_OUTAGE": "SERVICE-OUTAGE-FOLLOWUP",
-	"MALWARE_CLEANUP": "MALWARE-CLEANUP-FOLLOWUP",
-	"DATA_BREACH": "DATA-BREACH-CRITICAL"
+	GlobalConstants.COMPLETION_TYPE.COMPLIANT: 0.0,
+	GlobalConstants.COMPLETION_TYPE.EFFICIENT: 0.5,
+	GlobalConstants.COMPLETION_TYPE.EMERGENCY: 0.75,
+	GlobalConstants.COMPLETION_TYPE.TIMEOUT: 1.0
 }
 
 func update_npc_relationship(npc_id: String, change: float):
@@ -64,7 +54,7 @@ func trigger_consequence(consequence_id: String):
 	})
 	
 	match consequence_id:
-		"missed_attachment_scan":
+		GlobalConstants.CONSEQUENCE_ID.MISSED_ATTACHMENT_SCAN:
 			_schedule_followup_ticket("MALWARE-CLEANUP-NARRATIVE", 30.0, "Narrative-driven malware cleanup due to missed attachment scan")
 		_:
 			print("⚠ Unknown consequence ID received: ", consequence_id)
@@ -92,7 +82,7 @@ func _start_evaluation_loop():
 
 func _on_critical_host_isolated(hostname: String):
 	# This new handler creates a consequence when the terminal isolates a critical host.
-	_schedule_followup_ticket(CONSEQUENCE_IDS.SERVICE_OUTAGE, 20.0, "Service outage on " + hostname + " due to network isolation.")
+	_schedule_followup_ticket(GlobalConstants.CONSEQUENCE_ID.SERVICE_OUTAGE, 20.0, "Service outage on " + hostname + " due to network isolation.")
 
 func _on_ticket_ignored(ticket: TicketResource):
 	print("🚨 ConsequenceEngine: Ticket IGNORED (Timed out): ", ticket.ticket_id)
@@ -110,18 +100,18 @@ func _on_ticket_ignored(ticket: TicketResource):
 	# Penalize NPC relationships based on severity
 	match ticket.severity:
 		"Critical":
-			update_npc_relationship("ciso", -0.5)
-			_schedule_followup_ticket(CONSEQUENCE_IDS.MAJOR_BREACH, 15.0, "Major security breach due to ignored critical alert: " + ticket.title, ticket.ticket_id)
+			update_npc_relationship(GlobalConstants.NPC_ID.CISO, -0.5)
+			_schedule_followup_ticket(GlobalConstants.CONSEQUENCE_ID.MAJOR_BREACH, 15.0, "Major security breach due to ignored critical alert: " + ticket.title, ticket.ticket_id)
 		"High":
-			update_npc_relationship("ciso", -0.3)
-			update_npc_relationship("senior_analyst", -0.2)
-			_schedule_followup_ticket(CONSEQUENCE_IDS.INCIDENT_ESCALATION, 30.0, "Security incident escalated due to ignored high-priority alert.", ticket.ticket_id)
+			update_npc_relationship(GlobalConstants.NPC_ID.CISO, -0.3)
+			update_npc_relationship(GlobalConstants.NPC_ID.SENIOR_ANALYST, -0.2)
+			_schedule_followup_ticket(GlobalConstants.CONSEQUENCE_ID.INCIDENT_ESCALATION, 30.0, "Security incident escalated due to ignored high-priority alert.", ticket.ticket_id)
 		"Medium":
-			update_npc_relationship("senior_analyst", -0.1)
-			_schedule_followup_ticket(CONSEQUENCE_IDS.USER_COMPLAINT, 45.0, "Users reporting issues related to unaddressed alert.", ticket.ticket_id)
+			update_npc_relationship(GlobalConstants.NPC_ID.SENIOR_ANALYST, -0.1)
+			_schedule_followup_ticket(GlobalConstants.CONSEQUENCE_ID.USER_COMPLAINT, 45.0, "Users reporting issues related to unaddressed alert.", ticket.ticket_id)
 		_:
 			# Low severity ignored might just be a small trust hit
-			update_npc_relationship("it_support", -0.05)
+			update_npc_relationship(GlobalConstants.NPC_ID.IT_SUPPORT, -0.05)
 
 	EventBus.consequence_triggered.emit("ticket_ignored", {"ticket_id": ticket.ticket_id, "severity": ticket.severity})
 	
@@ -140,28 +130,28 @@ func _on_email_decision_processed(email: EmailResource, decision: String, inspec
 	var is_spear_phishing = _is_spear_phishing_email(email)
 	
 	# Wrong decisions trigger consequences
-	if email.is_malicious and decision == "approve":
+	if email.is_malicious and decision == GlobalConstants.EMAIL_DECISION.APPROVE:
 		# Approved malicious email - spawn malware ticket
 		print("🚨 CONSEQUENCE: Approved malicious email!")
 		
 		# Spear phishing has more severe consequences (data breach)
 		if is_spear_phishing:
 			print("🚨 SPEAR PHISHING DETECTED: Approved spear phishing email!")
-			_schedule_followup_ticket(CONSEQUENCE_IDS.DATA_BREACH, 120.0, "Data breach from approved spear phishing email - delayed detection")
+			_schedule_followup_ticket(GlobalConstants.CONSEQUENCE_ID.DATA_BREACH, 120.0, "Data breach from approved spear phishing email - delayed detection")
 		else:
-			_schedule_followup_ticket(CONSEQUENCE_IDS.MALWARE_CLEANUP, 30.0, "Malware outbreak from approved malicious email")
+			_schedule_followup_ticket(GlobalConstants.CONSEQUENCE_ID.MALWARE_CLEANUP, 30.0, "Malware outbreak from approved malicious email")
 	
-	elif not email.is_malicious and decision == "quarantine":
+	elif not email.is_malicious and decision == GlobalConstants.EMAIL_DECISION.QUARANTINE:
 		# Quarantined legitimate email - spawn user complaint
 		print("⚠ CONSEQUENCE: Quarantined legitimate email!")
-		_schedule_followup_ticket(CONSEQUENCE_IDS.USER_COMPLAINT, 60.0, "User complaint: legitimate email quarantined")
+		_schedule_followup_ticket(GlobalConstants.CONSEQUENCE_ID.USER_COMPLAINT, 60.0, "User complaint: legitimate email quarantined")
 	
-	elif email.is_malicious and decision == "quarantine":
+	elif email.is_malicious and decision == GlobalConstants.EMAIL_DECISION.QUARANTINE:
 		# Check for hidden risks on the associated ticket
 		if email.related_ticket == "SPEAR-PHISH-001":
 			if not inspection_state.get("attachments", false):
 				print("🚨 HIDDEN RISK TRIGGERED: Player quarantined email without scanning attachments!")
-				trigger_consequence("missed_attachment_scan")
+				trigger_consequence(GlobalConstants.RISK_TYPE.ATTACHMENT_SCAN_MISSED)
 
 func _is_spear_phishing_email(email: EmailResource) -> bool:
 	# This helper is moved from EmailSystem to make ConsequenceEngine self-contained.
@@ -231,7 +221,7 @@ func _evaluate_kill_chain_escalation(ticket: TicketResource, completion_type: St
 	else:
 		print("  ✓ Threat contained. No escalation.")
 		# Check if this was the Black Ticket itself being completed correctly
-		if ticket.ticket_id == "BLACK-TICKET-REDEMPTION" and completion_type == "compliant":
+		if ticket.ticket_id == "BLACK-TICKET-REDEMPTION" and completion_type == GlobalConstants.COMPLETION_TYPE.COMPLIANT:
 			if ArchetypeAnalyzer:
 				ArchetypeAnalyzer.perform_career_reset()
 
@@ -242,7 +232,7 @@ func _spawn_black_ticket():
 		print("  🎫 Spawning Black Ticket...")
 		if TicketManager:
 			TicketManager.add_ticket(black_ticket)
-			EventBus.consequence_triggered.emit("black_ticket", {"ticket_id": black_ticket.ticket_id})
+			EventBus.consequence_triggered.emit(GlobalConstants.CONSEQUENCE_ID.BLACK_TICKET, {"ticket_id": black_ticket.ticket_id})
 	else:
 		print("  ❌ ERROR: Could not load Black Ticket resource")
 
@@ -265,7 +255,7 @@ func _trigger_kill_chain_escalation(ticket: TicketResource):
 	print("  📅 Scheduling escalation ticket: ", next_ticket.ticket_id, " in ", delay, "s")
 	
 	# Emit signal for NotificationManager or UI
-	EventBus.consequence_triggered.emit("escalation", {
+	EventBus.consequence_triggered.emit(GlobalConstants.CONSEQUENCE_ID.ESCALATION, {
 		"path": ticket.kill_chain_path,
 		"stage": ticket.kill_chain_stage + 1,
 		"original_id": ticket.ticket_id
@@ -287,7 +277,7 @@ func _check_hidden_risks(ticket: TicketResource, completion_type: String):
 	var has_sufficient = ticket.has_sufficient_evidence()
 
 	# For efficient/emergency completion, check if they missed required logs
-	if completion_type == "efficient" or completion_type == "emergency":
+	if completion_type == GlobalConstants.COMPLETION_TYPE.EFFICIENT or completion_type == GlobalConstants.COMPLETION_TYPE.EMERGENCY:
 		if not has_sufficient:
 			# Player rushed completion without all required evidence
 			for risk in ticket.hidden_risks:
@@ -297,10 +287,10 @@ func _check_hidden_risks(ticket: TicketResource, completion_type: String):
 
 func _trigger_hidden_risk_consequence(ticket: TicketResource, risk: String, completion_type: String):
 	# Parse risk description to determine consequence
-	if "malware" in risk.to_lower() or "clicked" in risk.to_lower():
+	if GlobalConstants.RISK_TYPE.MALWARE in risk.to_lower() or "clicked" in risk.to_lower():
 		# Spawn malware cleanup ticket
 		_schedule_followup_ticket("MALWARE-CLEANUP", 60.0, "Malware cleanup required after missed detection", ticket.ticket_id)
-	elif "breach" in risk.to_lower() or "data" in risk.to_lower():
+	elif GlobalConstants.RISK_TYPE.DATA_BREACH in risk.to_lower() or "data" in risk.to_lower():
 		# Spawn data breach report
 		_schedule_followup_ticket("BREACH-REPORT", 30.0, "Data breach report required", ticket.ticket_id)
 	else:
@@ -309,17 +299,17 @@ func _trigger_hidden_risk_consequence(ticket: TicketResource, risk: String, comp
 
 func _schedule_consequences(ticket: TicketResource, completion_type: String, time_remaining: float):
 	match completion_type:
-		"compliant":
+		GlobalConstants.COMPLETION_TYPE.COMPLIANT:
 			print("✓ Compliant completion - No negative consequences")
 		
-		"efficient":
+		GlobalConstants.COMPLETION_TYPE.EFFICIENT:
 			if time_remaining < ticket.base_time * 0.3:  # Used less than 30% of time
 				print("⚠ Efficient completion with very little time used - High risk")
 				_schedule_followup_ticket("EFFICIENT-RISK", 60.0, "Rushed resolution may have missed critical checks", ticket.ticket_id)
 			else:
 				print("✓ Efficient completion - Moderate risk accepted")
 
-		"emergency":
+		GlobalConstants.COMPLETION_TYPE.EMERGENCY:
 			print("🚨 Emergency completion - Immediate consequences")
 			_schedule_followup_ticket("EMERGENCY-FOLLOWUP", 10.0, "Emergency resolution requires immediate follow-up", ticket.ticket_id)
 

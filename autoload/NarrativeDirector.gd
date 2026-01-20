@@ -22,6 +22,7 @@ var shift_start_time: float = 0.0
 var current_event_index: int = 0
 var _is_shift_active: bool = false
 var event_timer: Timer
+var chaos_timer: Timer
 
 func is_weekend() -> bool:
 	return current_shift_name == "shift_saturday" or current_shift_name == "shift_sunday"
@@ -48,23 +49,38 @@ func _ready():
 	event_timer.one_shot = true
 	event_timer.timeout.connect(_on_event_timer_timeout)
 
+	# Initialize chaos timer
+	chaos_timer = Timer.new()
+	add_child(chaos_timer)
+	chaos_timer.timeout.connect(_on_chaos_tick)
+
+func _on_chaos_tick():
+	if not _is_shift_active or not current_shift_resource:
+		return
+		
+	if current_shift_resource.random_event_pool.is_empty():
+		return
+		
+	# 35% chance to trigger a random event every tick
+	if randf() < 0.35:
+		var event = current_shift_resource.random_event_pool.pick_random()
+		print("🎲 CHAOS ENGINE: Triggering random event: ", event.get("event", "Unnamed"))
+		_trigger_event(event)
+
 func _discover_shifts():
 	print("🎬 NARRATIVE_DEBUG: Discovering shifts in %s..." % SHIFT_DIR)
 	shift_library.clear()
-	var paths = FileUtil.get_resource_paths(SHIFT_DIR)
-	for path in paths:
-		var res = load(path)
-		if res and res is ShiftResource:
-			if not res.validate():
-				print("  - ❌ NARRATIVE_DEBUG: Skipping malformed resource: %s" % path)
-				continue
+	
+	var loaded_shifts = FileUtil.load_and_validate_resources(SHIFT_DIR, "ShiftResource")
+	
+	for res in loaded_shifts:
+		if shift_library.has(res.shift_id):
+			print("  - ⚠ NARRATIVE_DEBUG: Duplicate Shift ID '%s' found in %s. Skipping." % [res.shift_id, res.resource_path])
+			continue
 			
-			if shift_library.has(res.shift_id):
-				print("  - ⚠ NARRATIVE_DEBUG: Duplicate Shift ID '%s' found in %s. Skipping." % [res.shift_id, path])
-				continue
-				
-			shift_library[res.shift_id] = res
-			print("  - Registered Shift: %s" % res.shift_id)
+		shift_library[res.shift_id] = res
+		print("  - Registered Shift: %s" % res.shift_id)
+		
 	print("🎬 NARRATIVE_DEBUG: Library ready: %d shifts." % shift_library.size())
 
 func start_shift(shift_id: String):
@@ -85,6 +101,9 @@ func start_shift(shift_id: String):
 	EventBus.shift_started.emit(shift_id)
 	
 	_schedule_next_event()
+	
+	# Start chaos engine (check every 45 seconds)
+	chaos_timer.start(45.0)
 
 func trigger_briefing(shift_id: String):
 	if _is_shift_active: 
@@ -104,7 +123,7 @@ func trigger_briefing(shift_id: String):
 		await EventBus.transition_completed
 	
 	# Trigger the dialogue via signal (CISO is usually the one speaking)
-	EventBus.npc_interaction_requested.emit("ciso", shift_res.briefing_dialogue_id)
+	EventBus.npc_interaction_requested.emit(GlobalConstants.NPC_ID.CISO, shift_res.briefing_dialogue_id)
 
 func _on_event_timer_timeout():
 	if current_event_index < current_active_arc.size():
@@ -132,6 +151,7 @@ func stop_shift():
 	print("NarrativeDirector: Shift has ended.")
 	_is_shift_active = false
 	event_timer.stop()
+	chaos_timer.stop()
 
 func get_shift_timer() -> float:
 	if not _is_shift_active:
@@ -152,14 +172,14 @@ func get_current_shift_duration() -> float:
 	return 0.0
 
 func _on_critical_consequence(consequence_id: String, _details: Dictionary):
-	if consequence_id == "data_loss":
+	if consequence_id == GlobalConstants.CONSEQUENCE_ID.DATA_LOSS:
 		print("NarrativeDirector: CRITICAL FAILURE detected. Terminating shift.")
-		_trigger_event({"type": "shift_end", "failure_type": "bankrupt"})
+		_trigger_event({"type": GlobalConstants.NARRATIVE_EVENT_TYPE.SHIFT_END, "failure_type": "bankrupt"})
 
 func _on_consequence_triggered(consequence_id: String, _details: Dictionary):
-	if consequence_id == "data_loss":
+	if consequence_id == GlobalConstants.CONSEQUENCE_ID.DATA_LOSS:
 		print("NarrativeDirector: CRITICAL FAILURE detected. Terminating shift.")
-		_trigger_event({"type": "shift_end", "failure_type": "bankrupt"})
+		_trigger_event({"type": GlobalConstants.NARRATIVE_EVENT_TYPE.SHIFT_END, "failure_type": "bankrupt"})
 
 func _on_campaign_ended(type: String):
 	print("NarrativeDirector: Campaign ended with result: ", type)
@@ -173,7 +193,7 @@ func _on_campaign_ended(type: String):
 func _trigger_event(event_data: Dictionary):
 	print("NarrativeDirector: Triggering event - ", event_data.get("event", "N/A"))
 	match event_data.type:
-		"npc_interaction":
+		GlobalConstants.NARRATIVE_EVENT_TYPE.NPC_INTERACTION:
 			if GameState.is_in_2d_mode():
 				print("NarrativeDirector: NPC interaction triggered. Transitioning to 3D for dialogue.")
 				TransitionManager.exit_desktop_mode()
@@ -182,7 +202,7 @@ func _trigger_event(event_data: Dictionary):
 				await get_tree().create_timer(0.5).timeout
 			
 			# Fallback for remote NPCs (like CISO who is no longer in the office)
-			if event_data.npc_id == "ciso" and DialogueManager:
+			if event_data.npc_id == GlobalConstants.NPC_ID.CISO and DialogueManager:
 				var path = "res://resources/dialogue/ciso_" + event_data.dialogue_id + ".tres"
 				if ResourceLoader.exists(path):
 					var res = load(path)
@@ -192,17 +212,17 @@ func _trigger_event(event_data: Dictionary):
 						return # Skip the signal emission since we started it manually
 			
 			EventBus.npc_interaction_requested.emit(event_data.npc_id, event_data.dialogue_id)
-		"spawn_ticket":
+		GlobalConstants.NARRATIVE_EVENT_TYPE.SPAWN_TICKET:
 			EventBus.narrative_spawn_ticket.emit(event_data.ticket_id)
-		"spawn_consequence":
+		GlobalConstants.NARRATIVE_EVENT_TYPE.SPAWN_CONSEQUENCE:
 			EventBus.narrative_spawn_consequence.emit(event_data.consequence_id)
-		"system_event":
+		GlobalConstants.NARRATIVE_EVENT_TYPE.SYSTEM_EVENT:
 			EventBus.world_event_triggered.emit(event_data.event_id, true, event_data.get("duration", 10.0))
 			# Auto-clear after duration
 			get_tree().create_timer(event_data.get("duration", 10.0)).timeout.connect(
 				func(): EventBus.world_event_triggered.emit(event_data.event_id, false, 0.0)
 			)
-		"shift_end":
+		GlobalConstants.NARRATIVE_EVENT_TYPE.SHIFT_END:
 			print("NarrativeDirector: Executing shift_end sequence...")
 			stop_shift()
 			var failure_type = event_data.get("failure_type", "")
@@ -225,7 +245,7 @@ func _trigger_event(event_data: Dictionary):
 					return
 				
 				# Check for 'Fired' via archetype
-				if results.get("archetype") == "Negligent":
+				if results.get("archetype") == GlobalConstants.ARCHETYPE.NEGLIGENT:
 					print("NarrativeDirector: Player fired for negligence.")
 					EventBus.campaign_ended.emit("fired")
 					return

@@ -35,28 +35,22 @@ func _ready():
 
 func _register_hosts_from_folder():
 	print("🌐 NetworkState: Discovering hosts from %s..." % HOST_DIR)
+	host_states.clear()
 	
-	var paths = FileUtil.get_resource_paths(HOST_DIR)
-	for path in paths:
-		var res = load(path)
-		if res and res is HostResource:
-			if not res.validate():
-				print("  - ❌ NetworkState: Skipping malformed host: %s" % path)
-				continue
-				
-			# Register host using resource data
-			var initial_state = {
-				"status": res.initial_status,
-				"critical": res.is_critical,
-				"isolated": false,
-				"scanned": false,
-				"ip": res.ip_address,
-				"os": res.os_type
-			}
-			host_states[res.hostname] = initial_state
-			print("  ✓ Registered Host: %s [%s]" % [res.hostname, res.ip_address])
-		else:
-			print("  - ❌ NetworkState: Invalid host resource: %s" % path)
+	var loaded_hosts = FileUtil.load_and_validate_resources(HOST_DIR, "HostResource")
+	
+	for res in loaded_hosts:
+		# Register host using resource data
+		var initial_state = {
+			"status": res.initial_status,
+			"critical": res.is_critical,
+			"isolated": false,
+			"scanned": false,
+			"ip": res.ip_address,
+			"os": res.os_type
+		}
+		host_states[res.hostname] = initial_state
+		print("  ✓ Registered Host: %s [%s]" % [res.hostname, res.ip_address])
 	
 	print("🌐 NetworkState: Library ready: %d hosts." % host_states.size())
 

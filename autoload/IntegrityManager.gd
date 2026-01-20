@@ -72,10 +72,10 @@ func _apply_change(delta: float, silent: bool = false):
 func _on_ticket_completed(_ticket: Resource, completion_type: String, _time_taken: float):
 	var delta = 0.0
 	match completion_type:
-		"compliant": delta = DELTA_COMPLIANT
-		"efficient": delta = DELTA_EFFICIENT
-		"emergency": delta = DELTA_EMERGENCY
-		"timeout": delta = DELTA_TIMEOUT
+		GlobalConstants.COMPLETION_TYPE.COMPLIANT: delta = DELTA_COMPLIANT
+		GlobalConstants.COMPLETION_TYPE.EFFICIENT: delta = DELTA_EFFICIENT
+		GlobalConstants.COMPLETION_TYPE.EMERGENCY: delta = DELTA_EMERGENCY
+		GlobalConstants.COMPLETION_TYPE.TIMEOUT: delta = DELTA_TIMEOUT
 	
 	if delta != 0.0:
 		print("IntegrityManager: Ticket Resolved (%s) -> Delta: %+.1f" % [completion_type, delta])
@@ -86,7 +86,7 @@ func _on_ticket_ignored(_ticket: Resource):
 	_apply_change(DELTA_TIMEOUT)
 
 func _on_consequence_triggered(type: String, _details: Dictionary):
-	if type == "data_loss" or type == "major_breach":
+	if type == GlobalConstants.CONSEQUENCE_ID.DATA_LOSS or type == GlobalConstants.CONSEQUENCE_ID.MAJOR_BREACH:
 		print("IntegrityManager: Major Breach -> Delta: %+.1f" % DELTA_BREACH)
 		_apply_change(DELTA_BREACH)
 

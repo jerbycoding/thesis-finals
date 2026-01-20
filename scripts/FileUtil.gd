@@ -20,3 +20,22 @@ static func get_resource_paths(dir_path: String, extension: String = ".tres") ->
 		push_error("FileUtil: Failed to open directory: " + dir_path)
 		
 	return paths
+
+## Scans a directory, loads all `.tres` resources, and validates them against an expected class name.
+static func load_and_validate_resources(dir_path: String, expected_class: String) -> Array[Resource]:
+	var resources: Array[Resource] = []
+	var paths = get_resource_paths(dir_path)
+	
+	for path in paths:
+		var res = load(path)
+		if res and res.is_class(expected_class):
+			if res.has_method("validate") and not res.validate():
+				push_warning("FileUtil: Skipping malformed resource '%s' in %s" % [path.get_file(), dir_path])
+				continue
+			resources.append(res)
+		elif res:
+			push_warning("FileUtil: Skipping resource '%s' with incorrect type in %s. Expected '%s', got '%s'." % [path.get_file(), dir_path, expected_class, res.get_class()])
+		else:
+			push_warning("FileUtil: Failed to load resource at path %s" % path)
+			
+	return resources

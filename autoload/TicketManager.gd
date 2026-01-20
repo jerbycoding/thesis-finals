@@ -104,45 +104,38 @@ func _prepare_library():
 	noise_library.clear()
 	ticket_library.clear()
 	
-	var paths = FileUtil.get_resource_paths(TICKET_DIR)
-	for path in paths:
-		var res = load(path)
-		if res and res is TicketResource:
-			# Safety check: Skip if resource fails internal validation
-			if not res.validate():
-				print("  - ❌ TICKET_DEBUG: Skipping malformed resource: %s" % path)
-				continue
-
-			# Add to master library
-			
-			# 1. Map by Ticket ID (e.g. PHISH-001)
-			var tid = res.ticket_id.to_lower()
-			ticket_id_map[tid] = res
-			# Also map with underscores replaced (fuzzy match for ransom_001)
-			ticket_id_map[tid.replace("-", "_")] = res
-			
-			# 2. Map by File Name (narrative ID fallback, e.g. phishing_intro)
-			var file_id = path.get_file().get_basename().replace("Ticket", "").to_lower()
-			ticket_id_map[file_id] = res
-			# Also fuzzy match file name
-			ticket_id_map[file_id.replace("_", "-")] = res
-			ticket_id_map[file_id.replace("-", "_")] = res
-			
-			# ADD TO LIBRARY (Fix for F9 spawn)
-			ticket_library.append(res)
-			
-			# 3. Add to noise pool if generic
-			if "GENERIC" in res.ticket_id:
-				noise_library.append(res)
-				print("  - Added to Noise Pool: %s" % res.ticket_id)
-			
-			print("  - Registered Ticket: %s" % res.ticket_id)
+	var loaded_tickets = FileUtil.load_and_validate_resources(TICKET_DIR, "TicketResource")
+	
+	for res in loaded_tickets:
+		# The resource is already a validated TicketResource, so we can proceed.
+		# 1. Map by Ticket ID (e.g. PHISH-001)
+		var tid = res.ticket_id.to_lower()
+		ticket_id_map[tid] = res
+		# Also map with underscores replaced (fuzzy match for ransom_001)
+		ticket_id_map[tid.replace("-", "_")] = res
+		
+		# 2. Map by File Name (narrative ID fallback, e.g. phishing_intro)
+		var file_id = res.resource_path.get_file().get_basename().replace("Ticket", "").to_lower()
+		ticket_id_map[file_id] = res
+		# Also fuzzy match file name
+		ticket_id_map[file_id.replace("_", "-")] = res
+		ticket_id_map[file_id.replace("-", "_")] = res
+		
+		# ADD TO LIBRARY (Fix for F9 spawn)
+		ticket_library.append(res)
+		
+		# 3. Add to noise pool if generic
+		if "GENERIC" in res.ticket_id:
+			noise_library.append(res)
+			print("  - Added to Noise Pool: %s" % res.ticket_id)
+		
+		print("  - Registered Ticket: %s" % res.ticket_id)
 			
 	print("🎫 TICKET_DEBUG: Registered %d map entries and %d noise tickets." % [ticket_id_map.size(), noise_library.size()])
 
 func _on_email_decision_processed(email: EmailResource, decision: String, inspection_state: Dictionary):
 	# Handles logging or updating state when an email is processed.
-	if email.is_malicious and decision == "quarantine":
+	if email.is_malicious and decision == GlobalConstants.EMAIL_DECISION.QUARANTINE:
 		if not email.related_ticket.is_empty():
 			print("TicketManager: Task for ticket %s completed (Email Quarantined). Manual resolution required." % email.related_ticket)
 			# We no longer auto-complete here to allow player strategy choice.
@@ -352,13 +345,13 @@ func _on_ticket_timeout_timer(ticket_id: String):
 		print(CorporateVoice.get_formatted_phrase("ticket_timeout", {"ticket_id": ticket_id}))
 		EventBus.ticket_timeout.emit(ticket_id)
 		EventBus.ticket_ignored.emit(active_ticket)
-		complete_ticket(ticket_id, "timeout")
+		complete_ticket(ticket_id, GlobalConstants.COMPLETION_TYPE.TIMEOUT)
 
 func complete_ticket(ticket_id: String, completion_type: String = "compliant"):
 	# Valid completion types: "compliant", "efficient", "emergency"
-	if completion_type not in ["compliant", "efficient", "emergency", "timeout"]:
+	if completion_type not in [GlobalConstants.COMPLETION_TYPE.COMPLIANT, GlobalConstants.COMPLETION_TYPE.EFFICIENT, GlobalConstants.COMPLETION_TYPE.EMERGENCY, GlobalConstants.COMPLETION_TYPE.TIMEOUT]:
 		print(CorporateVoice.get_phrase("invalid_completion_type_warning"))
-		completion_type = "compliant"
+		completion_type = GlobalConstants.COMPLETION_TYPE.COMPLIANT
 	
 	# Cleanup the timer if it exists
 	if active_timers.has(ticket_id):
@@ -373,9 +366,9 @@ func complete_ticket(ticket_id: String, completion_type: String = "compliant"):
 		if ticket.ticket_id == ticket_id:
 			# --- VALIDATION STEP ---
 			# Use central ValidationManager
-			if completion_type == "compliant" and not ValidationManager.can_complete_compliant(ticket):
+			if completion_type == GlobalConstants.COMPLETION_TYPE.COMPLIANT and not ValidationManager.can_complete_compliant(ticket):
 				push_warning("TicketManager: %s attempted compliant completion without evidence. Downgrading." % ticket_id)
-				completion_type = "efficient"
+				completion_type = GlobalConstants.COMPLETION_TYPE.EFFICIENT
 
 			# Calculate time taken
 			var time_taken = (Time.get_ticks_msec() - ticket.spawn_timestamp) / 1000.0
@@ -395,10 +388,10 @@ func complete_ticket(ticket_id: String, completion_type: String = "compliant"):
 			EventBus.ticket_completed.emit(ticket, completion_type, time_taken)
 			
 			# --- Response Buffer Rewards ---
-			if completion_type == "efficient":
+			if completion_type == GlobalConstants.COMPLETION_TYPE.EFFICIENT:
 				print("TicketManager: Efficient reward - Pausing noise for 60s.")
 				pause_ambient_spawning(60.0)
-			elif completion_type == "emergency":
+			elif completion_type == GlobalConstants.COMPLETION_TYPE.EMERGENCY:
 				print("TicketManager: Emergency reward - System Lockdown for 120s.")
 				# Lockdown pauses ambient noise AND blocks narrative spawns (if we add a check)
 				pause_ambient_spawning(120.0)

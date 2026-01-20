@@ -58,10 +58,10 @@ func _ready():
 	EventBus.world_event_triggered.connect(_on_world_event)
 
 func _on_world_event(event_id: String, active: bool, _duration: float):
-	if event_id == "ZERO_DAY":
+	if event_id == GlobalConstants.EVENTS.ZERO_DAY:
 		scan_multiplier = 1.5 if active else 1.0
 		print("TerminalSystem: ZERO_DAY event ", "ACTIVE" if active else "CLEARED", ". Scan multiplier: ", scan_multiplier)
-	elif event_id == "DDOS_ATTACK":
+	elif event_id == GlobalConstants.EVENTS.DDOS_ATTACK:
 		ddos_multiplier = 3.0 if active else 1.0
 		print("TerminalSystem: DDOS_ATTACK event ", "ACTIVE" if active else "CLEARED", ". Network multiplier: ", ddos_multiplier)
 

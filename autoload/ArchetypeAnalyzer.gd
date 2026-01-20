@@ -17,22 +17,22 @@ var metrics: Dictionary = {
 
 # Definitions for the archetypes
 var ARCHETYPE_DEFINITIONS = {
-	"Negligent": {
+	GlobalConstants.ARCHETYPE.NEGLIGENT: {
 		"description": "You have failed to address critical security alerts. Your lack of action has left the organization vulnerable to multiple breaches and data loss. This level of passivity is unacceptable in a security environment.",
 		"feedback": "IMMEDIATE REVIEW REQUIRED. You are currently a liability to the SOC. Security is a proactive role; doing nothing is a choice with consequences.",
 		"condition": func(m): return m.tickets_ignored > 0 and m.tickets_completed <= m.tickets_ignored
 	},
-	"By-the-Book": {
+	GlobalConstants.ARCHETYPE.BY_THE_BOOK: {
 		"description": "You are a meticulous and thorough analyst. You follow procedure to the letter, ensuring every detail is checked. This results in very few mistakes, but can be slow.",
 		"feedback": "Your meticulousness is a strong asset, though consider efficiency in less critical situations.",
 		"condition": func(m): return m.tickets_completed > 0 and m.risks_taken == 0 and m.tickets_ignored == 0
 	},
-	"Cowboy": {
+	GlobalConstants.ARCHETYPE.COWBOY: {
 		"description": "You are a fast and decisive analyst, prioritizing speed above all else. You close tickets at a record pace, but your methods often invite unnecessary risk and consequences.",
 		"feedback": "Your speed is impressive, but carefully consider the long-term consequences of rapid resolutions.",
 		"condition": func(m): return m.tickets_completed > 0 and (m.risks_taken >= 3 or (m.risks_taken > 0 and m.avg_completion_time < 60.0))
 	},
-	"Pragmatic": {
+	GlobalConstants.ARCHETYPE.PRAGMATIC: {
 		"description": "You are a balanced and efficient analyst. You know when to follow the rules and when to cut corners for the sake of speed, making you effective but occasionally prone to risk.",
 		"feedback": "Your balanced approach is effective. Continue to refine your risk assessment skills.",
 		"condition": func(m): return m.tickets_completed > 0
@@ -66,7 +66,7 @@ func reset_metrics():
 
 func _on_ticket_completed(ticket: TicketResource, completion_type: String, time_taken: float):
 	# Ignore timeouts - they are handled by _on_ticket_ignored
-	if completion_type == "timeout":
+	if completion_type == GlobalConstants.COMPLETION_TYPE.TIMEOUT:
 		return
 
 	metrics.tickets_completed += 1
@@ -78,7 +78,7 @@ func _on_ticket_completed(ticket: TicketResource, completion_type: String, time_
 		metrics.avg_completion_time = 0.0
 	
 	# Associate completion types with risk
-	if completion_type in ["efficient", "emergency"]:
+	if completion_type in [GlobalConstants.COMPLETION_TYPE.EFFICIENT, GlobalConstants.COMPLETION_TYPE.EMERGENCY]:
 		metrics.risks_taken += 1
 	
 	print("ArchetypeAnalyzer: Logged ticket completion. Time: %.1fs, Risks: %d" % [time_taken, metrics.risks_taken])
@@ -104,7 +104,7 @@ func perform_career_reset():
 	
 	if ConsequenceEngine:
 		# Reset CISO relationship to neutral
-		ConsequenceEngine.npc_relationships["ciso"] = 0.0
+		ConsequenceEngine.npc_relationships[GlobalConstants.NPC_ID.CISO] = 0.0
 	
 	print("ArchetypeAnalyzer: Career reset successful. Risks remaining: ", metrics.risks_taken)
 
@@ -156,7 +156,7 @@ func _calculate_metrics_from_history() -> Dictionary:
 				m.tickets_completed += 1
 				m.total_completion_time += entry.get("time_taken", 0.0)
 				var c_type = entry.get("completion_type", "")
-				if c_type in ["efficient", "emergency"]:
+				if c_type in [GlobalConstants.COMPLETION_TYPE.EFFICIENT, GlobalConstants.COMPLETION_TYPE.EMERGENCY]:
 					m.risks_taken += 1
 			"ticket_ignored":
 				m.tickets_ignored += 1
@@ -177,7 +177,7 @@ func _calculate_archetype(m: Dictionary) -> String:
 		if definition.condition.call(m_struct):
 			return archetype_name
 			
-	return "Pragmatic" # Default fallback
+	return GlobalConstants.ARCHETYPE.PRAGMATIC # Default fallback
 
 # Helper class to allow dot notation access on the dictionary for cleaner conditions
 class OpenStruct:
