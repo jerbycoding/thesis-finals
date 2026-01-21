@@ -38,13 +38,13 @@ func reveal_emails_for_ticket(ticket_id: String):
 	for email in all_emails:
 		# Match if:
 		# 1. Exact ticket ID match
-		# 2. Or ticket is GENERIC and email is GENERIC
-		# 3. Or email has no ticket assigned
-		var is_exact_match = email.related_ticket == ticket_id
-		var is_generic_match = (ticket_id.contains("GENERIC") and email.related_ticket == "GENERIC")
+		# 2. Email is GENERIC (always show noise)
+		# 3. Request is for GENERIC and email is orphaned
+		var is_exact_match = not ticket_id.is_empty() and email.related_ticket == ticket_id
+		var is_generic_email = email.related_ticket == "GENERIC"
 		var email_is_orphaned = (email.related_ticket == "" or email.related_ticket == "NONE")
 		
-		if is_exact_match or is_generic_match or (ticket_id == "" and email_is_orphaned):
+		if is_exact_match or is_generic_email or (ticket_id == "" and email_is_orphaned):
 			if email not in active_emails:
 				active_emails.append(email)
 				EventBus.email_added.emit(email)

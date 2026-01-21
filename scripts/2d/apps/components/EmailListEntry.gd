@@ -9,6 +9,9 @@ signal email_selected(email: EmailResource, instance: Control)
 
 var email_data: EmailResource
 
+func _ready():
+	mouse_entered.connect(func(): if AudioManager: AudioManager.play_ui_hover())
+
 func set_email_data(email: EmailResource):
 	email_data = email
 	
@@ -34,6 +37,7 @@ func set_email_data(email: EmailResource):
 
 func _gui_input(event: InputEvent):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+		if AudioManager: AudioManager.play_ui_click()
 		if email_data:
 			email_selected.emit(email_data, self)
 		get_viewport().set_input_as_handled()

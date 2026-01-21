@@ -17,7 +17,7 @@ const APP_PATHS: Dictionary = {
 	"handbook": "res://scenes/2d/apps/App_Handbook.tscn",
 	"taskmanager": "res://scenes/2d/apps/App_TaskManager.tscn",
 	"network": "res://scenes/2d/apps/App_NetworkMapper.tscn",
-	"decryption": "res://scenes/2d/apps/App_Decryption.tscn"
+	"decrypt": "res://scenes/2d/apps/App_Decryption.tscn"
 }
 
 const APP_TITLES: Dictionary = {
@@ -28,7 +28,7 @@ const APP_TITLES: Dictionary = {
 	"handbook": "SOC Handbook",
 	"taskmanager": "Task Manager",
 	"network": "Network Topology",
-	"decryption": "Decryption Tool"
+	"decrypt": "Decryption Tool"
 }
 
 const APP_SIZES: Dictionary = {
@@ -39,7 +39,16 @@ const APP_SIZES: Dictionary = {
 	"handbook": Vector2(700, 500),
 	"taskmanager": Vector2(600, 400),
 	"network": Vector2(800, 600),
-	"decryption": Vector2(700, 500)
+	"decrypt": Vector2(700, 500)
+}
+
+# Apps that require specific ticket context to open
+const RESTRICTED_APPS: Dictionary = {
+	"decrypt": {
+		"required_category": "Ransomware",
+		"required_tool": "decrypt",
+		"error_message": "ACCESS DENIED: High-Priority Utility requires active incident context."
+	}
 }
 
 var window_frame_scene = preload("res://scenes/2d/apps/components/WindowFrame.tscn")
@@ -57,12 +66,40 @@ func _ready():
 	
 	print("DesktopWindowManager ready.")
 
+func can_open_app(app_name: String) -> Dictionary:
+	"""Returns {'allowed': bool, 'reason': String}"""
+	if app_name not in RESTRICTED_APPS:
+		return {"allowed": true, "reason": ""}
+		
+	var restriction = RESTRICTED_APPS[app_name]
+	var allowed = false
+	
+	if TicketManager:
+		for ticket in TicketManager.get_active_tickets():
+			if ticket.category == restriction.required_category or ticket.required_tool == restriction.required_tool:
+				allowed = true
+				break
+				
+	return {
+		"allowed": allowed,
+		"reason": restriction.error_message if not allowed else ""
+	}
+
 func open_app(app_name: String, force_new: bool = false):
 	print("DesktopWindowManager: open_app called for: ", app_name, " (force_new: ", force_new, ")")
-	print("DesktopWindowManager: Currently open windows: ", open_windows.keys())
 	
 	if app_name not in APP_PATHS:
 		print("ERROR: DesktopWindowManager: Unknown app: ", app_name)
+		return
+		
+	# Check permissions
+	var permission = can_open_app(app_name)
+	if not permission.allowed:
+		print("DesktopWindowManager: Permission denied for app: ", app_name)
+		if NotificationManager:
+			NotificationManager.show_notification(permission.reason, "warning")
+		if AudioManager:
+			AudioManager.play_notification("error")
 		return
 	
 	# Check if already open (only if not forcing new instance)

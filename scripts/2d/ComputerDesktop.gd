@@ -43,6 +43,12 @@ func _setup_app_connections():
 		if child is Button:
 			var app_name = child.name.to_lower().replace("_icon", "")
 			
+			# Setup initial tooltips for restricted apps
+			if DesktopWindowManager and app_name in DesktopWindowManager.RESTRICTED_APPS:
+				var status = DesktopWindowManager.can_open_app(app_name)
+				if not status.allowed:
+					child.tooltip_text = status.reason
+			
 			# Disconnect if needed
 			if child.pressed.is_connected(_on_app_icon_pressed):
 				child.pressed.disconnect(_on_app_icon_pressed)
@@ -59,10 +65,12 @@ func _on_app_icon_hover():
 func _on_app_icon_pressed(app_name: String):
 	if AudioManager:
 		AudioManager.play_ui_click()
+	
 	if DesktopWindowManager:
 		DesktopWindowManager.open_app(app_name)
-		# Clear glow when app is opened
-		_set_icon_glow(app_name, false)
+		# Clear glow when app is opened (if it was actually opened)
+		if DesktopWindowManager._find_window_by_app(app_name):
+			_set_icon_glow(app_name, false)
 
 func _on_ticket_added(ticket_data: TicketResource):
 	print("New ticket in queue: ", ticket_data.title)
@@ -81,6 +89,18 @@ func _on_ticket_added(ticket_data: TicketResource):
 		# ICON GLOW: Apply glow to relevant tool icon
 		if ticket_data.required_tool != "none":
 			_set_icon_glow(ticket_data.required_tool, true)
+			
+		# DYNAMIC AUTHORIZATION: Grant permission for restricted apps based on data
+		if DesktopWindowManager:
+			for app_name in DesktopWindowManager.RESTRICTED_APPS:
+				var restriction = DesktopWindowManager.RESTRICTED_APPS[app_name]
+				if ticket_data.category == restriction.required_category or ticket_data.required_tool == restriction.required_tool:
+					var icon_name = app_name.capitalize() + "_Icon"
+					if app_name == "siem": icon_name = "SIEM_Icon" # Special case for SIEM caps
+					
+					var btn = app_launcher.get_node_or_null(icon_name)
+					if btn:
+						btn.tooltip_text = "AUTHORIZATION GRANTED: High-Priority Incident in Progress"
 
 func _set_icon_glow(app_name: String, active: bool):
 	var icon_name = app_name.capitalize() + "_Icon"

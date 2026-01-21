@@ -14,6 +14,12 @@ var current_ticket_id: String = ""
 
 var lock_remaining_time: float = 0.0
 
+# --- Typewriter / Queue Logic ---
+var _output_queue: Array[String] = []
+var _is_typing: bool = false
+var _typewriter_speed: float = 0.015 # Seconds per character
+var _current_tween: Tween
+
 func _process(delta):
 	if lockout_overlay and lockout_overlay.visible:
 		lock_remaining_time -= delta
@@ -27,6 +33,10 @@ func _ready():
 	print("======= App_Terminal._ready() =======")
 	size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	size_flags_vertical = Control.SIZE_EXPAND_FILL
+	
+	# Initial UI state
+	if output_text:
+		output_text.visible_characters = -1 # Start with everything visible
 	
 	# Force visibility
 	visible = true
@@ -66,6 +76,10 @@ func _ready():
 	print("======= App_Terminal Ready Complete =======")
 
 func _on_command_submitted(command: String):
+	if _is_typing:
+		_skip_typing()
+		return
+
 	if command.strip_edges().is_empty():
 		return
 	
@@ -153,15 +167,71 @@ func _update_ticket_info():
 			ticket_info.text = "Active Ticket: " + current_ticket_id
 
 func _append_output(text: String):
+	_output_queue.append(text)
+	if not _is_typing:
+		_process_queue()
+
+func _process_queue():
+	if _output_queue.is_empty():
+		_is_typing = false
+		return
+		
+	_is_typing = true
+	var text = _output_queue.pop_front()
+	
 	if output_text:
+		# Get current character count before adding new text
+		var start_chars = output_text.get_total_character_count()
 		output_text.append_text(text)
-		# Auto-scroll to bottom
-		await get_tree().process_frame
-		var scroll_container = output_text.get_parent()
-		if scroll_container is ScrollContainer:
-			scroll_container.scroll_vertical = scroll_container.get_v_scroll_bar().max_value
+		
+		# Total characters after append
+		var total_chars = output_text.get_total_character_count()
+		var new_chars_count = total_chars - start_chars
+		
+		# Animate visible_characters
+		if _current_tween: _current_tween.kill()
+		_current_tween = create_tween()
+		
+		# We set visible_characters to the total count minus new ones, then tween up
+		output_text.visible_characters = start_chars
+		
+		var duration = new_chars_count * _typewriter_speed
+		_current_tween.tween_property(output_text, "visible_characters", total_chars, duration)
+		
+		# Audio Tick logic
+		var audio_ticks = maxi(1, int(new_chars_count / 3)) # Tick every 3 chars to avoid audio spam
+		for i in range(audio_ticks):
+			_current_tween.parallel().tween_callback(func(): 
+				if AudioManager: AudioManager.play_terminal_beep(-20.0) # Very quiet beep as tick
+			).set_delay(i * _typewriter_speed * 3)
+		
+		# Sync scroll
+		_current_tween.parallel().tween_callback(_scroll_to_bottom).set_delay(0.05)
+		
+		_current_tween.finished.connect(func(): _process_queue())
 	else:
 		print("ERROR: output_text is null, cannot append: ", text)
+		_is_typing = false
+
+func _skip_typing():
+	if _current_tween:
+		_current_tween.kill()
+	if output_text:
+		output_text.visible_characters = -1
+	
+	# Process remaining queue instantly
+	while not _output_queue.is_empty():
+		output_text.append_text(_output_queue.pop_front())
+		
+	_scroll_to_bottom()
+	_is_typing = false
+
+func _scroll_to_bottom():
+	if not output_text: return
+	var scroll_container = output_text.get_parent()
+	if scroll_container is ScrollContainer:
+		await get_tree().process_frame # Wait for layout update
+		scroll_container.scroll_vertical = scroll_container.get_v_scroll_bar().max_value
 
 func set_active_ticket(ticket_id: String):
 	current_ticket_id = ticket_id

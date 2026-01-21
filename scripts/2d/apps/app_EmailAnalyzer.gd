@@ -69,6 +69,9 @@ func _ready():
 	# Connect to EventBus
 	EventBus.email_added.connect(_on_email_added)
 	
+	# Refresh on visibility change to catch emails revealed while app was closed
+	visibility_changed.connect(func(): if visible: _refresh_emails())
+	
 	# Load existing emails
 	_refresh_emails()
 	
@@ -175,6 +178,7 @@ func _on_view_headers_pressed():
 	if not selected_email:
 		return
 	
+	if AudioManager: AudioManager.play_ui_click()
 	inspection_state.headers = true
 	
 	if ArchetypeAnalyzer:
@@ -192,7 +196,8 @@ func _on_view_headers_pressed():
 func _on_scan_attachments_pressed():
 	if not selected_email:
 		return
-		
+	
+	if AudioManager: AudioManager.play_ui_click()
 	inspection_state.attachments = true
 	
 	if ArchetypeAnalyzer:
@@ -210,7 +215,8 @@ func _on_scan_attachments_pressed():
 func _on_check_links_pressed():
 	if not selected_email:
 		return
-		
+	
+	if AudioManager: AudioManager.play_ui_click()
 	inspection_state.links = true
 	
 	if ArchetypeAnalyzer:

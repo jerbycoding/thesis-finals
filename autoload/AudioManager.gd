@@ -12,10 +12,22 @@ func _ready():
 	
 	# Connect to EventBus for automated feedback
 	EventBus.ticket_added.connect(func(_t): play_sfx(SFX.ticket_spawn))
+	EventBus.ticket_completed.connect(_on_ticket_completed)
 	EventBus.terminal_locked.connect(func(_s): play_alert())
 	EventBus.terminal_unlocked.connect(func(): play_notification("info"))
 	EventBus.terminal_command_executed.connect(_on_terminal_command_executed)
 	EventBus.email_decision_processed.connect(_on_email_decision_processed)
+
+func _on_ticket_completed(_ticket: TicketResource, completion_type: String, _time: float):
+	match completion_type:
+		"compliant":
+			play_notification("success")
+		"emergency":
+			play_alert()
+		"timeout":
+			play_notification("error")
+		"efficient":
+			play_notification("warning")
 
 func _on_email_decision_processed(email: EmailResource, decision: String, _state: Dictionary):
 	if decision == "approve":
@@ -83,8 +95,8 @@ func play_notification(type: String = "info"):
 func play_alert():
 	play_sfx(SFX.consequence_alert)
 
-func play_terminal_beep():
-	play_sfx(SFX.terminal_beep)
+func play_terminal_beep(volume_db: float = 0.0):
+	play_sfx(SFX.terminal_beep, volume_db)
 
 # Predefined SFX paths (example)
 var SFX = {

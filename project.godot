@@ -45,6 +45,7 @@ DebugManager="*res://autoload/DebugManager.gd"
 IntegrityManager="*res://autoload/IntegrityManager.gd"
 NotificationManager="*res://autoload/NotificationManager.gd"
 TutorialManager="*res://autoload/TutorialManager.gd"
+ResourceAuditManager="*res://autoload/ResourceAuditManager.gd"
 
 [display]
 

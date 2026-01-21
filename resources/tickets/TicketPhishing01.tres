@@ -7,7 +7,12 @@
 script = ExtResource("1_ticket")
 ticket_id = "PHISH-001"
 title = "Phishing Campaign Alert"
-description = "Multiple users report suspicious emails with urgent financial requests. Check if this is a coordinated phishing campaign."
+description = "Multiple users report a suspicious email with the subject 'URGENT: Verify Your Account'. 
+
+[b]Required Action:[/b]
+1. Use the [color=cyan]Email Analyzer[/color] to inspect headers of the 'Verify Your Account' email.
+2. Search [color=cyan]SIEM Logs[/color] for 'LOG-PHISH-001' and 'LOG-EMAIL-002' to verify the campaign scope.
+3. Attach all identified evidence to this ticket."
 severity = "Medium"
 category = "Phishing"
 steps = Array[String](["Check SIEM for phishing campaign alerts", "Review email headers for spoofing indicators", "Determine if any user clicked malicious link"])

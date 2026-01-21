@@ -76,11 +76,15 @@ func reveal_logs_for_ticket(ticket_id: String):
 	print("📋 LogSystem: reveal_logs_for_ticket(%s)" % (ticket_id if not ticket_id.is_empty() else "GENERIC"))
 	var count = 0
 	for log in all_logs:
-		var is_exact_match = log.related_ticket == ticket_id
-		var is_generic_match = (ticket_id.contains("GENERIC") and log.related_ticket == "GENERIC")
+		var is_exact_match = not ticket_id.is_empty() and log.related_ticket == ticket_id
+		var is_generic_log = log.related_ticket == "GENERIC"
 		var log_is_orphaned = (log.related_ticket == "" or log.related_ticket == "NONE")
 		
-		if is_exact_match or is_generic_match or (ticket_id == "" and log_is_orphaned):
+		# Reveal if:
+		# 1. Exact ticket match
+		# 2. Log is GENERIC (always show noise)
+		# 3. Request is for GENERIC and log is orphaned
+		if is_exact_match or is_generic_log or (ticket_id == "" and log_is_orphaned):
 			if log not in active_logs:
 				active_logs.append(log)
 				EventBus.log_added.emit(log)

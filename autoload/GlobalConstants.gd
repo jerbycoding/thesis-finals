@@ -56,6 +56,21 @@ const ARCHETYPE = {
 	"PRAGMATIC": "Pragmatic"
 }
 
+const TICKET_CATEGORY = {
+	"PHISHING": "Phishing",
+	"MALWARE": "Malware",
+	"UNAUTHORIZED_ACCESS": "Unauthorized Access",
+	"RANSOMWARE": "Ransomware",
+	"DDoS": "DDoS",
+	"DATA_BREACH": "Data Breach",
+	"SYSTEM": "System",
+	"AUTHENTICATION": "Authentication",
+	"FORENSICS": "Forensics",
+	"SOCIAL_ENGINEERING": "Social Engineering",
+	"MAINTENANCE": "Maintenance",
+	"GENERAL": "General"
+}
+
 # --- Narrative & Event Identifiers ---
 
 const NARRATIVE_EVENT_TYPE = {

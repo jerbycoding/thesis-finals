@@ -113,6 +113,12 @@ is_elevator = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 shape = SubResource("BoxShape3D_elevator")
 
+[node name="Label_Elevator" type="Label3D" parent="ElevatorTeleport"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.5, 0)
+billboard = 1
+text = "CORPORATE ELEVATOR"
+font_size = 48
+
 [node name="ElevatorDoor" type="Node3D" parent="ElevatorTeleport"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.5)
 script = ExtResource("8_door")

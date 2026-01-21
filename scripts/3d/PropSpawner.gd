@@ -85,6 +85,7 @@ func _populate_desk_row(desk: MeshInstance3D):
 		# 1. Spawn Monitor
 		var monitor = monitor_scene.instantiate()
 		monitor.name = "Generated_Monitor_" + str(i)
+		monitor.add_to_group("office_monitors")
 		desk.add_child(monitor)
 		if Engine.is_editor_hint():
 			monitor.owner = get_tree().edited_scene_root

@@ -10,6 +10,9 @@ signal log_selected(log: LogResource, instance: Control)
 
 var log_data: LogResource
 
+func _ready():
+	mouse_entered.connect(func(): if AudioManager: AudioManager.play_ui_hover())
+
 func set_log_data(log: LogResource):
 	log_data = log
 	
@@ -37,6 +40,7 @@ func set_log_data(log: LogResource):
 
 func _gui_input(event: InputEvent):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+		if AudioManager: AudioManager.play_ui_click()
 		if log_data:
 			log_selected.emit(log_data, self)
 		get_viewport().set_input_as_handled()

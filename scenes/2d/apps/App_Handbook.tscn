@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://scripts/2d/apps/App_Handbook.gd" id="1_handbook"]
 
 [node name="AppHandbook" type="Control"]
+custom_minimum_size = Vector2(700, 500)
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

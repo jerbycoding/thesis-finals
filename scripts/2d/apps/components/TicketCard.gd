@@ -21,6 +21,9 @@ func _ready():
 	if complete_button:
 		complete_button.pressed.connect(_on_complete_pressed)
 	
+	# Audio feedback
+	mouse_entered.connect(func(): if AudioManager: AudioManager.play_ui_hover())
+	
 	# Ensure the card is clickable
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	
@@ -38,6 +41,7 @@ func _on_update_timer_timeout():
 
 func _gui_input(event: InputEvent):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+		if AudioManager: AudioManager.play_ui_click()
 		if ticket:
 			card_selected.emit(ticket, self)
 		get_viewport().set_input_as_handled()

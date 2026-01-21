@@ -22,8 +22,9 @@ anchor_bottom = 1.0
 
 [node name="HeaderLabel" type="Label" parent="ColorRect/VBoxContainer"]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.6, 1, 1)
 theme_override_font_sizes/font_size = 20
-text = "Email Analyzer"
+text = "EMAIL ANALYSER"
 vertical_alignment = 1
 
 [node name="HSeparator" type="HSeparator" parent="ColorRect/VBoxContainer"]

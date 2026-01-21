@@ -1,9 +1,45 @@
-[gd_scene load_steps=2 format=3 uid="uid://d8x8lam2n3p6q"]
+[gd_scene load_steps=5 format=3 uid="uid://ekdy7ps3vufy"]
 
-[ext_resource type="Script" path="res://scripts/2d/apps/App_Decryption.gd" id="1_decrypt"]
+[ext_resource type="Script" uid="uid://7w0tlxraktjy" path="res://scripts/2d/apps/App_Decryption.gd" id="1_decrypt"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1"]
+bg_color = Color(0.8, 0, 0, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 0.2, 0.2, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2"]
+bg_color = Color(0.08, 0, 0, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.4, 0.1, 0.1, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3"]
+content_margin_left = 20.0
+content_margin_top = 20.0
+content_margin_right = 20.0
+content_margin_bottom = 20.0
+bg_color = Color(0.02, 0, 0, 0.5)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 0, 0, 0.2)
 
 [node name="App_Decryption" type="Control"]
-custom_minimum_size = Vector2(700, 500)
+custom_minimum_size = Vector2(750, 750)
 layout_mode = 3
 anchors_preset = 0
 script = ExtResource("1_decrypt")
@@ -15,7 +51,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.05, 0.0, 0.0, 0.95)
+color = Color(0.05, 0, 0, 0.95)
 
 [node name="ScanLines" type="ColorRect" parent="."]
 layout_mode = 1
@@ -24,22 +60,29 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 color = Color(1, 0, 0, 0.03)
 
-[node name="VBox" type="VBoxContainer" parent="."]
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+horizontal_scroll_mode = 0
+
+[node name="VBox" type="VBoxContainer" parent="ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 theme_override_constants/separation = 20
 
-[node name="Header" type="PanelContainer" parent="VBox"]
+[node name="Header" type="PanelContainer" parent="ScrollContainer/VBox"]
 custom_minimum_size = Vector2(0, 60)
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VBox/Header"]
+[node name="Label" type="Label" parent="ScrollContainer/VBox/Header"]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.2, 0.2, 1)
 theme_override_font_sizes/font_size = 24
@@ -47,64 +90,88 @@ text = ":: RANSOMWARE DECRYPTION UTILITY ::"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="StatusContainer" type="VBoxContainer" parent="VBox"]
+[node name="StatusContainer" type="VBoxContainer" parent="ScrollContainer/VBox"]
 layout_mode = 2
 alignment = 1
 
-[node name="StatusLabel" type="Label" parent="VBox/StatusContainer"]
+[node name="StatusLabel" type="Label" parent="ScrollContainer/VBox/StatusContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 18
 text = "STATUS: NO ACTIVE LOCKDOWN DETECTED"
 horizontal_alignment = 1
 
-[node name="TimerLabel" type="Label" parent="VBox/StatusContainer"]
+[node name="TimerContainer" type="VBoxContainer" parent="ScrollContainer/VBox/StatusContainer"]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="TimerLabel" type="Label" parent="ScrollContainer/VBox/StatusContainer/TimerContainer"]
+unique_name_in_owner = true
+layout_mode = 2
 theme_override_colors/font_color = Color(1, 0, 0, 1)
-theme_override_font_sizes/font_size = 32
+theme_override_font_sizes/font_size = 28
 text = "DATA WIPE IN: 60.0s"
 horizontal_alignment = 1
 
-[node name="PuzzleContainer" type="Control" parent="VBox"]
+[node name="TimerBar" type="ProgressBar" parent="ScrollContainer/VBox/StatusContainer/TimerContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(400, 10)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_styles/fill = SubResource("StyleBoxFlat_1")
+value = 100.0
+show_percentage = false
+
+[node name="PuzzleContainer" type="VBoxContainer" parent="ScrollContainer/VBox"]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 size_flags_vertical = 3
+theme_override_constants/separation = 15
 
-[node name="TargetSequence" type="HBoxContainer" parent="VBox/PuzzleContainer"]
-unique_name_in_owner = true
-layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_bottom = 50.0
-grow_horizontal = 2
+[node name="TargetPanel" type="PanelContainer" parent="ScrollContainer/VBox/PuzzleContainer"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_2")
+
+[node name="VBox" type="VBoxContainer" parent="ScrollContainer/VBox/PuzzleContainer/TargetPanel"]
+layout_mode = 2
 alignment = 1
 
-[node name="GridContainer" type="GridContainer" parent="VBox/PuzzleContainer"]
-unique_name_in_owner = true
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -200.0
-offset_top = -100.0
-offset_right = 200.0
-offset_bottom = 150.0
-grow_horizontal = 2
-grow_vertical = 2
-columns = 5
-theme_override_constants/h_separation = 10
-theme_override_constants/v_separation = 10
+[node name="Label" type="Label" parent="ScrollContainer/VBox/PuzzleContainer/TargetPanel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5, 0.5, 0.5, 1)
+theme_override_font_sizes/font_size = 12
+text = "REQUIRED BYPASS SEQUENCE"
+horizontal_alignment = 1
 
-[node name="Footer" type="MarginContainer" parent="VBox"]
+[node name="TargetSequence" type="HBoxContainer" parent="ScrollContainer/VBox/PuzzleContainer/TargetPanel/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="GridPanel" type="PanelContainer" parent="ScrollContainer/VBox/PuzzleContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_3")
+
+[node name="GridContainer" type="GridContainer" parent="ScrollContainer/VBox/PuzzleContainer/GridPanel"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/h_separation = 12
+theme_override_constants/v_separation = 12
+columns = 5
+
+[node name="Footer" type="MarginContainer" parent="ScrollContainer/VBox"]
 layout_mode = 2
 theme_override_constants/margin_bottom = 20
 
-[node name="StartButton" type="Button" parent="VBox/Footer"]
+[node name="StartButton" type="Button" parent="ScrollContainer/VBox/Footer"]
 unique_name_in_owner = true
 visible = false
 custom_minimum_size = Vector2(200, 50)
