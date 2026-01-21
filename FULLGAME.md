@@ -16,7 +16,7 @@ The game follows a strict weekly cycle. Players navigate the facility using the 
 | **Floor -1** | **Server Vault** | 3D (Maintenance) | **Free Roam:** Interactive server racks. Sunday recovery focus. |
 | **Floor -2** | **Network Hub** | 3D (Audit) | **Free Roam:** Patch panels and routers. Saturday audit focus. |
 
----
+---g
 
 ## 3. Meta-Progression: Organization Integrity
 The player's primary goal is to keep the **Integrity Score** above 0%. This score represents the company's financial health and public reputation.
