@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="TicketResource" load_steps=3 format=3]
+
+[ext_resource type="Resource" path="res://resources/tickets/TicketMalwareContainment.tres" id="1_malware"]
+[ext_resource type="Script" path="res://resources/tickets/TicketResource.gd" id="1_ticket"]
+
+[resource]
+script = ExtResource("1_ticket")
+ticket_id = "PHISH-002"
+title = "Credential Harvest Attempt"
+description = "A user has reported a fake security alert email. Early indicators suggest an attempt to harvest employee credentials via a malicious portal. Investigate the email source and verify if any unauthorized logins were attempted."
+severity = "Medium"
+category = "Phishing"
+steps = ["Analyze 'Security Alert' email headers", "Locate user report in SIEM", "Identify and block the malicious login source IP"]
+required_tool = "siem"
+base_time = 200.0
+hidden_risks = ["User already provided credentials → Account compromise"]
+required_log_ids = ["LOG-PHISH-002-A", "LOG-PHISH-002-B"]
+kill_chain_path = "Malware Outbreak"
+kill_chain_stage = 1
+escalation_ticket = ExtResource("1_malware")

@@ -26,7 +26,7 @@ func _prepare_library():
 	print("📧 EmailSystem: Discovering emails in %s..." % EMAIL_DIR)
 	all_emails.clear()
 	
-	all_emails = FileUtil.load_and_validate_resources(EMAIL_DIR, "EmailResource")
+	all_emails.assign(FileUtil.load_and_validate_resources(EMAIL_DIR, "EmailResource"))
 	for res in all_emails:
 		print("  - Discovered Email: ID=%s" % res.email_id)
 			

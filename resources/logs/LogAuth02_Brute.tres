@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="LogResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/logs/LogResource.gd" id="1_log"]
+
+[resource]
+script = ExtResource("1_log")
+log_id = "LOG-AUTH-002-A"
+timestamp = "13:00:45"
+source = "Authentication"
+category = "Security"
+message = "Brute force pattern detected: 20+ failed login attempts for user 'admin' from 103.20.15.1."
+severity = 4
+related_ticket = "AUTH-002"
+ip_address = "103.20.15.1"
+hostname = "DOMAIN-CTRL-01"
+is_revealed = false

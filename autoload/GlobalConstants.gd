@@ -5,65 +5,65 @@ extends Node
 # --- Core Gameplay Identifiers ---
 
 const COMPLETION_TYPE = {
-	COMPLIANT: "compliant",
-	EFFICIENT: "efficient",
-	EMERGENCY: "emergency",
-	TIMEOUT: "timeout"
+	"COMPLIANT": "compliant",
+	"EFFICIENT": "efficient",
+	"EMERGENCY": "emergency",
+	"TIMEOUT": "timeout"
 }
 
 const NPC_ID = {
-	CISO: "ciso",
-	SENIOR_ANALYST: "senior_analyst",
-	IT_SUPPORT: "it_support"
+	"CISO": "ciso",
+	"SENIOR_ANALYST": "senior_analyst",
+	"IT_SUPPORT": "it_support"
 }
 
 const CONSEQUENCE_ID = {
 	# From ConsequenceEngine
-	MAJOR_BREACH: "MAJOR-BREACH-FOLLOWUP",
-	INCIDENT_ESCALATION: "INCIDENT-ESCALATION-FOLLOWUP",
-	USER_COMPLAINT: "USER-COMPLAINT-FOLLOWUP",
-	SERVICE_OUTAGE: "SERVICE-OUTAGE-FOLLOWUP",
-	MALWARE_CLEANUP: "MALWARE-CLEANUP-FOLLOWUP",
-	DATA_BREACH: "DATA-BREACH-CRITICAL",
+	"MAJOR_BREACH": "MAJOR-BREACH-FOLLOWUP",
+	"INCIDENT_ESCALATION": "INCIDENT-ESCALATION-FOLLOWUP",
+	"USER_COMPLAINT": "USER-COMPLAINT-FOLLOWUP",
+	"SERVICE_OUTAGE": "SERVICE-OUTAGE-FOLLOWUP",
+	"MALWARE_CLEANUP": "MALWARE-CLEANUP-FOLLOWUP",
+	"DATA_BREACH": "DATA-BREACH-CRITICAL",
 	
 	# From NarrativeDirector
-	MISSED_ATTACHMENT_SCAN: "missed_attachment_scan",
+	"MISSED_ATTACHMENT_SCAN": "missed_attachment_scan",
 	
 	# Generic
-	DATA_LOSS: "data_loss",
-	ESCALATION: "escalation",
-	BLACK_TICKET: "black_ticket"
+	"DATA_LOSS": "data_loss",
+	"ESCALATION": "escalation",
+	"BLACK_TICKET": "black_ticket"
 }
 
 const RISK_TYPE = {
-	MALWARE: "malware",
-	DATA_BREACH: "data_breach",
-	PHISHING: "phishing",
-	MISCONFIG: "misconfiguration",
-	ATTACHMENT_SCAN_MISSED: "missed_attachment_scan"
+	"MALWARE": "malware",
+	"DATA_BREACH": "data_breach",
+	"PHISHING": "phishing",
+	"MISCONFIG": "misconfiguration",
+	"ATTACHMENT_SCAN_MISSED": "missed_attachment_scan"
 }
 
 const EMAIL_DECISION = {
-	APPROVE: "approve",
-	QUARANTINE: "quarantine",
-	ESCALATE: "escalate"
+	"APPROVE": "approve",
+	"QUARANTINE": "quarantine",
+	"ESCALATE": "escalate"
 }
 
 const ARCHETYPE = {
-	NEGLIGENT: "Negligent",
-	BY_THE_BOOK: "By-the-Book",
-	COWBOY: "Cowboy",
-	PRAGMATIC: "Pragmatic"
+	"NEGLIGENT": "Negligent",
+	"BY_THE_BOOK": "By-the-Book",
+	"COWBOY": "Cowboy",
+	"PRAGMATIC": "Pragmatic"
 }
 
 # --- Narrative & Event Identifiers ---
 
 const NARRATIVE_EVENT_TYPE = {
-	NPC_INTERACTION: "npc_interaction",
-	SPAWN_TICKET: "spawn_ticket",
-	SPAWN_CONSEQUENCE: "spawn_consequence",
-	SYSTEM_EVENT: "system_event",
-	SHIFT_END: "shift_end"
+	"NPC_INTERACTION": "npc_interaction",
+	"SPAWN_TICKET": "spawn_ticket",
+	"SPAWN_CONSEQUENCE": "spawn_consequence",
+	"SYSTEM_EVENT": "system_event",
+	"SHIFT_END": "shift_end"
 }
 
 # Event IDs for the NarrativeDirector and systems

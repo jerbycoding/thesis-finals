@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="LogResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/logs/LogResource.gd" id="1_log"]
+
+[resource]
+resource_name = "LogNoise_TempFilePurge"
+script = ExtResource("1_log")
+log_id = "LOG-NOISE-209"
+timestamp = "16:40:11"
+source = "FileSystem"
+category = "System"
+message = "Cleanup: 1.2GB of temporary application data purged from /var/tmp."
+severity = 1
+related_ticket = "GENERIC"
+ip_address = "10.0.2.15"
+hostname = "DB-SRV-01"
+is_revealed = false

@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="LogResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/logs/LogResource.gd" id="1_log"]
+
+[resource]
+script = ExtResource("1_log")
+log_id = "LOG-NOISE-208"
+timestamp = "15:55:02"
+source = "Kernel"
+category = "System"
+message = "Container 'App-Legacy-XP' initialized in sandbox environment."
+severity = 1
+related_ticket = "GENERIC"
+ip_address = "10.0.8.22"
+hostname = "APP-SRV-05"
+is_revealed = false

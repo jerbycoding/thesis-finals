@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="LogResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/logs/LogResource.gd" id="1_log"]
+
+[resource]
+script = ExtResource("1_log")
+log_id = "LOG-MAL-002-A"
+timestamp = "11:15:00"
+source = "SysMon"
+category = "Security"
+message = "PowerShell.exe executed with suspicious encoded command string on WORKSTATION-12."
+severity = 4
+related_ticket = "MALWARE-002"
+ip_address = ""
+hostname = "WORKSTATION-12"
+is_revealed = false

@@ -28,13 +28,20 @@ static func load_and_validate_resources(dir_path: String, expected_class: String
 	
 	for path in paths:
 		var res = load(path)
-		if res and res.is_class(expected_class):
-			if res.has_method("validate") and not res.validate():
-				push_warning("FileUtil: Skipping malformed resource '%s' in %s" % [path.get_file(), dir_path])
-				continue
-			resources.append(res)
-		elif res:
-			push_warning("FileUtil: Skipping resource '%s' with incorrect type in %s. Expected '%s', got '%s'." % [path.get_file(), dir_path, expected_class, res.get_class()])
+		if res:
+			# Check if it's a built-in class or a custom class_name
+			var matches_class = res.is_class(expected_class)
+			if not matches_class and res.get_script():
+				if res.get_script().get_global_name() == expected_class:
+					matches_class = true
+			
+			if matches_class:
+				if res.has_method("validate") and not res.validate():
+					push_warning("FileUtil: Skipping malformed resource '%s' in %s" % [path.get_file(), dir_path])
+					continue
+				resources.append(res)
+			else:
+				push_warning("FileUtil: Skipping resource '%s' with incorrect type in %s. Expected '%s', got '%s'." % [path.get_file(), dir_path, expected_class, res.get_class()])
 		else:
 			push_warning("FileUtil: Failed to load resource at path %s" % path)
 			

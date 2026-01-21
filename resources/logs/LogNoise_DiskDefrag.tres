@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="LogResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/logs/LogResource.gd" id="1_log"]
+
+[resource]
+script = ExtResource("1_log")
+log_id = "LOG-NOISE-204"
+timestamp = "11:00:22"
+source = "Disk-Utility"
+category = "System"
+message = "Scheduled background disk optimization completed on SRV-FS-02."
+severity = 1
+related_ticket = "GENERIC"
+ip_address = "10.0.2.10"
+hostname = "SRV-FS-02"
+is_revealed = false

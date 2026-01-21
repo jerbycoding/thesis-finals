@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="LogResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/logs/LogResource.gd" id="1_log"]
+
+[resource]
+script = ExtResource("1_log")
+log_id = "LOG-MAL-002-B"
+timestamp = "11:16:05"
+source = "IDS"
+category = "Security"
+message = "Outbound connection to known C2 server IP 185.12.44.11 from WORKSTATION-12."
+severity = 5
+related_ticket = "MALWARE-002"
+ip_address = "185.12.44.11"
+hostname = "WORKSTATION-12"
+is_revealed = false

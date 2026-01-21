@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="EmailResource" format=3]
+
+[ext_resource type="Script" path="res://resources/EmailResource.gd" id="1_email"]
+
+[resource]
+script = ExtResource("1_email")
+email_id = "EMAIL-PHISH-002"
+sender = "Security Alert"
+subject = "UNUSUAL ACTIVITY DETECTED"
+body = "We detected a login to your account from a new device in [UNKNOWN LOCATION]. If this was not you, please click here to secure your account immediately: http://verify-secure.net/recovery\n\nFailure to act may result in account lockout."
+attachments = []
+headers = {"status": {"spf": "FAIL", "dkim": "FAIL", "dmarc": "FAIL"}, "from_domain": "verify-secure.net"}
+is_malicious = true
+is_urgent = true
+clues = ["suspicious_link", "suspicious_domain"]
+related_ticket = "PHISH-002"
+suspicious_ip = ""
+suspicious_domain = "verify-secure.net"

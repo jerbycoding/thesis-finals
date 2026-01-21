@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="LogResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/logs/LogResource.gd" id="1_log"]
+
+[resource]
+script = ExtResource("1_log")
+log_id = "LOG-AUTH-002-B"
+timestamp = "13:05:12"
+source = "Authentication"
+category = "Security"
+message = "Successful login for user 'admin' from 103.20.15.1 (Tokyo, JP) following brute force attempts."
+severity = 5
+related_ticket = "AUTH-002"
+ip_address = "103.20.15.1"
+hostname = "DOMAIN-CTRL-01"
+is_revealed = false

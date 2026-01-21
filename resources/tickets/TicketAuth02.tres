@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="TicketResource" load_steps=3 format=3]
+
+[ext_resource type="Resource" path="res://resources/tickets/TicketDataExfiltration.tres" id="1_exfil"]
+[ext_resource type="Script" path="res://resources/tickets/TicketResource.gd" id="1_ticket"]
+
+[resource]
+script = ExtResource("1_ticket")
+ticket_id = "AUTH-002"
+title = "Account Takeover: Admin Compromise"
+description = "A brute force attack against our primary Domain Controller was successful. An attacker has gained access to the 'admin' account. This is a high-priority breach. Investigate the attacker's origin and verify if any sensitive actions were performed."
+severity = "Critical"
+category = "Authentication"
+steps = ["Analyze brute force pattern in SIEM", "Identify the malicious attacker IP address", "Flag 'admin' account for immediate credential reset"]
+required_tool = "siem"
+base_time = 150.0
+hidden_risks = ["Attacker already elevated privileges → System-wide compromise"]
+required_log_ids = ["LOG-AUTH-002-A", "LOG-AUTH-002-B"]
+kill_chain_path = "Account Takeover"
+kill_chain_stage = 2
+escalation_ticket = ExtResource("1_exfil")

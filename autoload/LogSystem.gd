@@ -66,7 +66,7 @@ func _prepare_library():
 	print("📋 LogSystem: Discovering logs in %s..." % LOG_DIR)
 	all_logs.clear()
 	
-	all_logs = FileUtil.load_and_validate_resources(LOG_DIR, "LogResource")
+	all_logs.assign(FileUtil.load_and_validate_resources(LOG_DIR, "LogResource"))
 	for res in all_logs:
 		print("  - Discovered Log: ID=%s" % res.log_id)
 			

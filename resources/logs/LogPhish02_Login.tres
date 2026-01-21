@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="LogResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/logs/LogResource.gd" id="1_log"]
+
+[resource]
+script = ExtResource("1_log")
+log_id = "LOG-PHISH-002-B"
+timestamp = "09:50:22"
+source = "Firewall"
+category = "Security"
+message = "Unauthorized login attempt blocked from malicious IP to user mailbox."
+severity = 4
+related_ticket = "PHISH-002"
+ip_address = "45.33.22.11"
+hostname = "MAIL-GATEWAY"
+is_revealed = false

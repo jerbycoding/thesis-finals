@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="LogResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/logs/LogResource.gd" id="1_log"]
+
+[resource]
+script = ExtResource("1_log")
+log_id = "LOG-NOISE-205"
+timestamp = "12:05:10"
+source = "VPN-Manager"
+category = "Network"
+message = "Active session audit: 124 authenticated users currently connected."
+severity = 1
+related_ticket = "GENERIC"
+ip_address = "10.0.0.5"
+hostname = "VPN-CON-01"
+is_revealed = false

@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="EmailResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/EmailResource.gd" id="1_email"]
+
+[resource]
+script = ExtResource("1_email")
+email_id = "EMAIL-NOISE-104"
+sender = "Admin"
+subject = "New Gym Discount Program"
+body = "We are excited to announce a new partnership with local fitness centers. Employees now receive 20% off all membership tiers. See the attached flyer for details."
+attachments = ["Gym_Discounts_2026.pdf"]
+headers = {"status": {"dkim": "PASS", "dmarc": "PASS", "spf": "PASS"}}
+is_malicious = false
+is_urgent = false
+clues = []
+related_ticket = "GENERIC"
+suspicious_ip = ""
+suspicious_domain = ""
