@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="CalibrationMinigameConfig" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/minigames/CalibrationMinigameConfig.gd" id="1_config"]
+
+[resource]
+script = ExtResource("1_config")
+difficulty_speed = 300.0
+zone_min_size = 0.1
+zone_max_size = 0.3
+max_handshake_time = 5.0
+typing_time_penalty = 0.5
+codes = Array[String](["INIT_LINK_0x4F", "SYNC_PROTOCOL_A", "SECURE_TUNNEL", "GATEWAY_REBOOT", "NODE_HANDSHAKE", "ENCRYPT_STREAM"])
+is_critical_probability = 0.4

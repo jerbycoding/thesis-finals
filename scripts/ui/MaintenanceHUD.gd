@@ -4,6 +4,7 @@ extends Control
 @onready var task_container: VBoxContainer = %TaskContainer
 
 var active_tasks: Dictionary = {} 
+@export var config: HardwareRecoveryConfig # ADDED THIS LINE
 
 func _ready():
 	hide()
@@ -14,11 +15,14 @@ func _ready():
 	if NarrativeDirector and NarrativeDirector.is_shift_active():
 		_on_shift_started(NarrativeDirector.current_shift_name)
 
-func _on_shift_started(shift_id: String):
-	if shift_id == "shift_saturday":
+func _on_shift_started(_shift_id: String):
+	if not NarrativeDirector or not NarrativeDirector.current_shift_resource: return
+	var type = NarrativeDirector.current_shift_resource.minigame_type
+	
+	if type == "AUDIT":
 		show()
 		_setup_audit_tasks()
-	elif shift_id == "shift_sunday":
+	elif type == "RECOVERY":
 		show()
 		_setup_recovery_tasks()
 	else:
@@ -35,10 +39,12 @@ func _setup_audit_tasks():
 
 func _setup_recovery_tasks():
 	_clear_tasks()
-	_add_task("rep_1", "Rebuild Rack 01 [NVMe]")
-	_add_task("rep_2", "Rebuild Rack 02 [NVMe]")
-	_add_task("rep_3", "Rebuild Rack 04 [SATA]")
-	_add_task("rep_4", "Rebuild Rack 05 [SATA]")
+	if not config: # ADDED check
+		push_error("MaintenanceHUD: No HardwareRecoveryConfig assigned for recovery tasks!")
+		return
+	
+	for task_data in config.tasks:
+		_add_task(task_data.id, task_data.description)
 
 func _clear_tasks():
 	active_tasks.clear()
@@ -59,11 +65,15 @@ func _on_event(type: String, details: Dictionary):
 		var id = details.get("id", "").strip_edges().to_lower()
 		_complete_task(id)
 	elif type == "hardware_repaired":
-		var rack = details.get("rack", "").strip_edges().to_upper()
-		if rack == "RACK_1": _complete_task("rep_1")
-		elif rack == "RACK_2": _complete_task("rep_2")
-		elif rack == "RACK_4": _complete_task("rep_3")
-		elif rack == "RACK_5": _complete_task("rep_4")
+		var socket_id = details.get("rack", "").strip_edges().to_upper() # "rack" is emitted by TabletHUD
+		var hardware_type = details.get("type", "").strip_edges().to_lower() # "type" is emitted by HardwareSocket
+		
+		if not config: return
+		
+		for task_data in config.tasks:
+			if task_data.has("completes_on_socket_id") and task_data.has("completes_on_hardware_type"):
+				if task_data.completes_on_socket_id == socket_id and task_data.completes_on_hardware_type == hardware_type:
+					_complete_task(task_data.id)
 
 func _complete_task(id: String):
 	var normalized_id = id.strip_edges().to_lower()
@@ -80,11 +90,13 @@ func _complete_task(id: String):
 		_apply_weekend_payoff()
 
 func _apply_weekend_payoff():
-	var shift = NarrativeDirector.current_shift_name
-	if shift == "shift_saturday":
+	if not NarrativeDirector or not NarrativeDirector.current_shift_resource: return
+	var type = NarrativeDirector.current_shift_resource.minigame_type
+	
+	if type == "AUDIT":
 		IntegrityManager.stop_decay()
 		NotificationManager.show_notification("AUDIT COMPLETE: INTEGRITY DECAY SUSPENDED", "success")
-	elif shift == "shift_sunday":
+	elif type == "RECOVERY":
 		IntegrityManager.restore_integrity(15.0)
 		NotificationManager.show_notification("RECOVERY COMPLETE: OPERATIONAL INTEGRITY RESTORED", "success")
 	else: return

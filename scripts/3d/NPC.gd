@@ -12,6 +12,7 @@ var is_highlighted: bool = false
 var highlight_tween: Tween
 
 func set_highlight(active: bool):
+# ... existing set_highlight logic ...
 	is_highlighted = active
 	
 	# Find mesh to highlight
@@ -41,7 +42,6 @@ func set_highlight(active: bool):
 		mesh.transparency = 0.0
 
 func _ready():
-
 	# Find interaction area
 	interaction_area = $InteractionArea
 	if interaction_area:

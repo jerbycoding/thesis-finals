@@ -42,7 +42,7 @@ func save_game():
 	var save_data = {
 		# --- Player State ---
 		"player_archetype": ArchetypeAnalyzer.get_analysis_results().get("archetype", "Pragmatic"),
-		"player_metrics": ArchetypeAnalyzer.metrics,
+		"player_metrics": ArchetypeAnalyzer.get_analysis_results(),
 		
 		# --- World State ---
 		"next_shift_name": next_shift,
@@ -96,8 +96,7 @@ func has_save_file() -> bool:
 
 # Calls the 'load_state' function on each manager with its relevant data slice.
 func _distribute_loaded_data(data: Dictionary):
-	if ArchetypeAnalyzer and data.has("player_metrics"):
-		ArchetypeAnalyzer.load_state(data.player_metrics)
+	# ArchetypeAnalyzer is stateless (derived from ConsequenceEngine), no load_state needed.
 	
 	if ConsequenceEngine and data.has("npc_relationships"):
 		ConsequenceEngine.load_state(data.npc_relationships, data.get("choice_log", []))

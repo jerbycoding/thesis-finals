@@ -1,6 +1,7 @@
 [gd_scene load_steps=4 format=3]
 
 [ext_resource type="Script" path="res://scripts/3d/InteractableAuditNode.gd" id="1_audit"]
+[ext_resource type="Resource" path="res://resources/minigames/DefaultCalibrationConfig.tres" id="2_config"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_router"]
 size = Vector3(1.5, 2, 0.5)
@@ -10,6 +11,7 @@ size = Vector3(1.5, 2, 0.5)
 
 [node name="Prop_AuditRouter" type="StaticBody3D"]
 script = ExtResource("1_audit")
+config = ExtResource("2_config")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = SubResource("BoxMesh_router")

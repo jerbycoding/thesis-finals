@@ -19,6 +19,10 @@ class_name ShiftResource
 ## The ID of the next shift to load after this one is completed.
 @export var next_shift_id: String = ""
 
+@export_group("Minigame Configuration")
+@export_enum("NONE", "AUDIT", "RECOVERY") var minigame_type: String = "NONE"
+@export var required_floor: int = 1 # 1=SOC, 2=Exec, -1=Vault, -2=Hub
+
 func _to_string() -> String:
 	return "[Shift: %s (%d events)]" % [shift_name, event_sequence.size()]
 

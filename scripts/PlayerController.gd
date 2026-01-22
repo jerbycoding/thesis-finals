@@ -25,13 +25,11 @@ func _on_game_mode_changed(mode):
 		movement_enabled = true
 
 func _try_toggle_tablet():
-	var is_weekend = false
+	var is_minigame_mode = false
 	if NarrativeDirector:
-		var shift = NarrativeDirector.current_shift_name
-		if shift == "shift_saturday" or shift == "shift_sunday":
-			is_weekend = true
+		is_minigame_mode = NarrativeDirector.is_weekend()
 	
-	if not is_weekend: return
+	if not is_minigame_mode: return
 
 	tablet_active = !tablet_active
 	if tablet_hud:
@@ -90,7 +88,7 @@ func _drop_object():
 	if not carried_object: return
 	var socket = _get_targeted_socket()
 	
-	if NarrativeDirector and (NarrativeDirector.current_shift_name in ["shift_saturday", "shift_sunday"]) and not socket:
+	if NarrativeDirector and NarrativeDirector.is_weekend() and not socket:
 		if NotificationManager: NotificationManager.show_notification("Place part in target rack.", "warning")
 		return
 

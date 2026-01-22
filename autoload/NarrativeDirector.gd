@@ -25,11 +25,13 @@ var event_timer: Timer
 var chaos_timer: Timer
 
 func is_weekend() -> bool:
-	return current_shift_name == "shift_saturday" or current_shift_name == "shift_sunday"
+	if current_shift_resource:
+		return current_shift_resource.minigame_type != "NONE"
+	return false
 
 func get_current_floor_requirement() -> int:
-	if current_shift_name == "shift_saturday": return -2
-	if current_shift_name == "shift_sunday": return -1
+	if current_shift_resource:
+		return current_shift_resource.required_floor
 	return 1 # Default to SOC
 
 func _ready():

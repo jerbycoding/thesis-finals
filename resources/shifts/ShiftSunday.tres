@@ -13,3 +13,5 @@ event_sequence = [
 ]
 random_event_pool = []
 next_shift_id = "shift_monday"
+minigame_type = "RECOVERY"
+required_floor = -1

@@ -2,6 +2,7 @@ extends StaticBody3D
 
 @export var audit_id: String = "audit_1"
 @export var object_name: String = "Network Router"
+@export var config: CalibrationMinigameConfig # ADDED THIS LINE
 
 var is_audited: bool = false
 var diag_ui_scene = preload("res://scenes/ui/DiagnosticUI.tscn")
@@ -11,6 +12,9 @@ var diag_data = {"temp": 40.0, "loss": 0.0, "voltage": 12.0, "is_critical": fals
 
 func _ready():
 	add_to_group("audit_nodes")
+	if not config: # ADDED check
+		push_error("InteractableAuditNode: No CalibrationMinigameConfig assigned!")
+		return
 	_generate_random_stats()
 	
 	# Interaction setup
@@ -28,7 +32,8 @@ func _ready():
 	_update_visuals()
 
 func _generate_random_stats():
-	diag_data.is_critical = randf() < 0.4
+	# Use config.is_critical_probability
+	diag_data.is_critical = randf() < config.is_critical_probability if config else false
 	if diag_data.is_critical:
 		diag_data.temp = randf_range(80.0, 100.0)
 		diag_data.loss = 0.1
@@ -59,7 +64,9 @@ func _on_diagnostic_action(action: String):
 func _start_minigame():
 	var minigame = minigame_scene.instantiate()
 	get_tree().root.add_child(minigame)
-	minigame.start_game(1.0)
+	if config: # Pass the config to the minigame
+		minigame.config = config
+	minigame.start_game(1.0) # difficulty_modifier is still passed, but config handles main params
 	minigame.minigame_success.connect(perform_audit)
 	minigame.minigame_failed.connect(_on_minigame_fail)
 

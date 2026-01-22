@@ -13,3 +13,5 @@ event_sequence = [
 ]
 random_event_pool = []
 next_shift_id = "shift_sunday"
+minigame_type = "AUDIT"
+required_floor = -2
