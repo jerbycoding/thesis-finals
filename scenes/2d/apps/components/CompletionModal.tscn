@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=3 uid="uid://c5x6y708bab0c"]
 
-[ext_resource type="Script" uid="uid://u2mto2lqbji5" path="res://scripts/2d/apps/components/CompletionModal.gd" id="1_comp"]
+[ext_resource type="Script" uid="uid://cqrecl4u4gg7o" path="res://scripts/2d/apps/components/CompletionModal.gd" id="1_comp"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Modal"]
 content_margin_left = 30.0
@@ -54,7 +54,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 0
 script = ExtResource("1_comp")
 
 [node name="Dimmer" type="ColorRect" parent="."]

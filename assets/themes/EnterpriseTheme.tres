@@ -1,0 +1,72 @@
+[gd_resource type="Theme" load_steps=8 format=3 uid="uid://dny3rlbltexc7"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_BtnDisabled"]
+content_margin_left = 15.0
+content_margin_top = 8.0
+content_margin_right = 15.0
+content_margin_bottom = 8.0
+bg_color = Color(0.1, 0.1, 0.1, 0.5)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_BtnHover"]
+content_margin_left = 15.0
+content_margin_top = 8.0
+content_margin_right = 15.0
+content_margin_bottom = 8.0
+bg_color = Color(0.15, 0.15, 0.15, 1)
+border_width_bottom = 2
+border_color = Color(0, 0.423529, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_BtnNormal"]
+content_margin_left = 15.0
+content_margin_top = 8.0
+content_margin_right = 15.0
+content_margin_bottom = 8.0
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_BtnPressed"]
+content_margin_left = 15.0
+content_margin_top = 8.0
+content_margin_right = 15.0
+content_margin_bottom = 8.0
+bg_color = Color(0, 0.423529, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Header"]
+content_margin_left = 15.0
+content_margin_top = 5.0
+content_margin_right = 15.0
+content_margin_bottom = 5.0
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_LineEdit"]
+content_margin_left = 10.0
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Page"]
+bg_color = Color(0.992157, 0.992157, 0.992157, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0, 0, 0, 1)
+
+[resource]
+Button/colors/font_color = Color(1, 1, 1, 1)
+Button/styles/disabled = SubResource("StyleBoxFlat_BtnDisabled")
+Button/styles/hover = SubResource("StyleBoxFlat_BtnHover")
+Button/styles/normal = SubResource("StyleBoxFlat_BtnNormal")
+Button/styles/pressed = SubResource("StyleBoxFlat_BtnPressed")
+HeaderPanel/base_type = &"PanelContainer"
+HeaderPanel/styles/panel = SubResource("StyleBoxFlat_Header")
+Label/colors/font_color = Color(0, 0, 0, 1)
+Label/font_sizes/font_size = 14
+LineEdit/styles/normal = SubResource("StyleBoxFlat_LineEdit")
+PanelContainer/styles/panel = SubResource("StyleBoxFlat_Page")
+RichTextLabel/colors/default_color = Color(0.1, 0.1, 0.1, 1)
+TechnicalHeader/base_type = &"Label"
+TechnicalHeader/colors/font_color = Color(1, 1, 1, 1)
+TechnicalHeader/font_sizes/font_size = 12

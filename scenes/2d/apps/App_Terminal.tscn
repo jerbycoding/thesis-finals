@@ -1,119 +1,107 @@
-[gd_scene load_steps=2 format=3 uid="uid://3la4xx13eaj1"]
+[gd_scene load_steps=3 format=3]
 
-[ext_resource type="Script" uid="uid://1b1t5ow8n8ns" path="res://scripts/2d/apps/App_Terminal.gd" id="1_terminal"]
+[ext_resource type="Script" path="res://scripts/2d/apps/App_Terminal.gd" id="1_terminal"]
+[ext_resource type="Theme" path="res://assets/themes/EnterpriseTheme.tres" id="2_theme"]
 
 [node name="App_Terminal" type="Control"]
-custom_minimum_size = Vector2(650, 450)
+custom_minimum_size = Vector2(800, 550)
 layout_mode = 3
-anchors_preset = 0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_theme")
 script = ExtResource("1_terminal")
 
-[node name="ColorRect" type="ColorRect" parent="."]
-layout_mode = 0
-anchor_right = 1.0
-anchor_bottom = 1.0
-mouse_filter = 1
-color = Color(0.0392157, 0.0392157, 0.101961, 0.95)
-
-[node name="VBoxContainer" type="VBoxContainer" parent="ColorRect"]
-layout_mode = 0
-anchor_right = 1.0
-anchor_bottom = 1.0
-
-[node name="HeaderLabel" type="Label" parent="ColorRect/VBoxContainer"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.2, 1, 0.2, 1)
-theme_override_font_sizes/font_size = 20
-text = "Terminal - SOC Command Interface"
-vertical_alignment = 1
-
-[node name="HSeparator" type="HSeparator" parent="ColorRect/VBoxContainer"]
-layout_mode = 2
-
-[node name="OutputContainer" type="ScrollContainer" parent="ColorRect/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="OutputText" type="RichTextLabel" parent="ColorRect/VBoxContainer/OutputContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-theme_override_colors/default_color = Color(0.2, 1, 0.2, 1)
-bbcode_enabled = true
-text = "[color=green]SOC Terminal v2.1[/color]
-[color=green]Type 'help' for available commands[/color]
-
-"
-
-[node name="HSeparator2" type="HSeparator" parent="ColorRect/VBoxContainer"]
-layout_mode = 2
-
-[node name="InputContainer" type="HBoxContainer" parent="ColorRect/VBoxContainer"]
-layout_mode = 2
-
-[node name="PromptLabel" type="Label" parent="ColorRect/VBoxContainer/InputContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 0
-theme_override_colors/font_color = Color(0.2, 1, 0.2, 1)
-text = "soc@terminal:~$ "
-
-[node name="CommandInput" type="LineEdit" parent="ColorRect/VBoxContainer/InputContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0.2, 1, 0.2, 1)
-placeholder_text = "Enter command..."
-
-[node name="TicketInfo" type="Label" parent="ColorRect/VBoxContainer"]
-unique_name_in_owner = true
-visible = false
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.8, 0.2, 1)
-text = "Active Ticket: None"
-
-[node name="LockoutOverlay" type="ColorRect" parent="ColorRect"]
-unique_name_in_owner = true
-visible = false
+[node name="Background" type="ColorRect" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.4, 0, 0, 0.6)
+color = Color(0.0627451, 0.0627451, 0.0627451, 1)
 
-[node name="VBoxContainer" type="VBoxContainer" parent="ColorRect/LockoutOverlay"]
+[node name="VBox" type="VBoxContainer" parent="."]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -150.0
-offset_top = -50.0
-offset_right = 150.0
-offset_bottom = 50.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-alignment = 1
+theme_override_constants/separation = 0
 
-[node name="LockIcon" type="Label" parent="ColorRect/LockoutOverlay/VBoxContainer"]
+[node name="MainContent" type="MarginContainer" parent="VBox"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 32
-text = "🔒"
-horizontal_alignment = 1
+size_flags_vertical = 3
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 30
+theme_override_constants/margin_right = 30
+theme_override_constants/margin_bottom = 20
 
-[node name="LockLabel" type="Label" parent="ColorRect/LockoutOverlay/VBoxContainer"]
+[node name="Layout" type="VBoxContainer" parent="VBox/MainContent"]
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.2, 0.2, 1)
-theme_override_font_sizes/font_size = 24
-text = "TERMINAL LOCKED"
-horizontal_alignment = 1
+theme_override_constants/separation = 25
 
-[node name="LockTimerLabel" type="Label" parent="ColorRect/LockoutOverlay/VBoxContainer"]
+[node name="OutputText" type="RichTextLabel" parent="VBox/MainContent/Layout"]
 unique_name_in_owner = true
 layout_mode = 2
-text = "Time Remaining: 00s"
+size_flags_vertical = 3
+theme_override_colors/default_color = Color(0.8, 0.8, 0.8, 1)
+theme_override_font_sizes/normal_font_size = 12
+bbcode_enabled = true
+text = "soc@terminal:~$ _"
+
+[node name="MetadataBox" type="PanelContainer" parent="VBox/MainContent/Layout"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(0, 120)
+layout_mode = 2
+
+[node name="Margin" type="MarginContainer" parent="VBox/MainContent/Layout/MetadataBox"]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 10
+
+[node name="MetadataLabel" type="RichTextLabel" parent="VBox/MainContent/Layout/MetadataBox/Margin"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/normal_font_size = 11
+bbcode_enabled = true
+text = "Metadata..."
+
+[node name="Footer" type="PanelContainer" parent="VBox"]
+custom_minimum_size = Vector2(0, 35)
+layout_mode = 2
+theme_type_variation = &"HeaderPanel"
+
+[node name="Legend" type="Label" parent="VBox/Footer"]
+layout_mode = 2
+theme_type_variation = &"TechnicalHeader"
+theme_override_colors/font_color = Color(0.5, 0.5, 0.5, 1)
+theme_override_font_sizes/font_size = 10
+text = " [ENTER] Run Command   [ESC] Exit Utility "
 horizontal_alignment = 1
+
+[node name="InputArea" type="PanelContainer" parent="VBox"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="HBox" type="HBoxContainer" parent="VBox/InputArea"]
+layout_mode = 2
+
+[node name="Prompt" type="Label" parent="VBox/InputArea/HBox"]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+text = " > "
+horizontal_alignment = 1
+
+[node name="CommandInput" type="LineEdit" parent="VBox/InputArea/HBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+flat = true
+caret_blink = true

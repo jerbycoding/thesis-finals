@@ -12,6 +12,7 @@ const HOSTS = {
 
 # The single source of truth for host information.
 var host_states: Dictionary = {}
+var host_resources: Dictionary = {} # hostname -> HostResource
 
 const HOST_DIR = "res://resources/hosts/"
 
@@ -50,6 +51,7 @@ func _register_hosts_from_folder():
 			"os": res.os_type
 		}
 		host_states[res.hostname] = initial_state
+		host_resources[res.hostname] = res
 		print("  ✓ Registered Host: %s [%s]" % [res.hostname, res.ip_address])
 	
 	print("🌐 NetworkState: Library ready: %d hosts." % host_states.size())
@@ -102,6 +104,14 @@ func get_host_by_ip(ip: String) -> String:
 func get_host_state(hostname: String) -> Dictionary:
 	return host_states.get(hostname, {})
 
+# Returns the HostResource for a given hostname.
+func get_host(hostname: String) -> HostResource:
+	return host_resources.get(hostname)
+
+# Returns all HostResource objects.
+func get_all_hosts() -> Array:
+	return host_resources.values()
+
 func load_state(data: Dictionary):
 	if data:
 		host_states = data
@@ -113,6 +123,24 @@ func update_host_state(hostname: String, new_state: Dictionary):
 		# Merge the new state into the existing one to avoid overwriting fields.
 		for key in new_state:
 			host_states[hostname][key] = new_state[key]
+		
+		# Emit signals via EventBus
+		if new_state.has("status"):
+			var status_val = new_state["status"]
+			# Convert string status to int if necessary
+			var status_int = 0
+			if typeof(status_val) == TYPE_STRING:
+				match status_val:
+					"CLEAN": status_int = GlobalConstants.HOST_STATUS.CLEAN
+					"SUSPICIOUS": status_int = GlobalConstants.HOST_STATUS.SUSPICIOUS
+					"INFECTED": status_int = GlobalConstants.HOST_STATUS.INFECTED
+					"ISOLATED": status_int = GlobalConstants.HOST_STATUS.ISOLATED
+			else:
+				status_int = status_val
+				
+			EventBus.host_status_changed.emit(hostname, status_int)
+		
+		EventBus.host_state_changed.emit(hostname, host_states[hostname])
 	else:
 		print("⚠ WARNING: Tried to update non-existent host: ", hostname)
 

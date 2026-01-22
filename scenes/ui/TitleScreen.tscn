@@ -3,13 +3,7 @@
 [ext_resource type="Script" uid="uid://ci87iiygfyeei" path="res://scripts/ui/TitleScreen.gd" id="1_script"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Title"]
-bg_color = Color(0, 0, 0, 0.4)
-border_width_left = 4
-border_color = Color(0.2, 1, 0.2, 1)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
+bg_color = Color(0, 0, 0, 1)
 expand_margin_left = 20.0
 expand_margin_right = 20.0
 
@@ -18,34 +12,14 @@ content_margin_left = 20.0
 content_margin_top = 10.0
 content_margin_right = 20.0
 content_margin_bottom = 10.0
-bg_color = Color(0.137255, 0.160784, 0.294118, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.2, 1, 0.2, 1)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
-shadow_color = Color(0.2, 1, 0.2, 0.1)
-shadow_size = 10
+bg_color = Color(0.2, 0.2, 0.2, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Button"]
 content_margin_left = 20.0
 content_margin_top = 10.0
 content_margin_right = 20.0
 content_margin_bottom = 10.0
-bg_color = Color(0.0705882, 0.0823529, 0.14902, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.258824, 0.352941, 0.470588, 1)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
+bg_color = Color(0, 0, 0, 1)
 
 [node name="TitleScreen" type="Control"]
 layout_mode = 3
@@ -63,16 +37,16 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.0392157, 0.0392157, 0.101961, 1)
+color = Color(0.992157, 0.992157, 0.992157, 1)
 
-[node name="Overlay" type="ColorRect" parent="Background"]
+[node name="GridPattern" type="ColorRect" parent="Background"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0, 0, 0, 0.2)
+color = Color(0, 0, 0, 0.03)
 
 [node name="MainContainer" type="VBoxContainer" parent="."]
 unique_name_in_owner = true
@@ -98,6 +72,7 @@ theme_override_constants/separation = 5
 [node name="TitleLabel" type="Label" parent="MainContainer/TitleSection"]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 72
 theme_override_styles/normal = SubResource("StyleBoxFlat_Title")
 text = "VERIFY. EXE"
@@ -106,7 +81,7 @@ horizontal_alignment = 1
 [node name="SubtitleLabel" type="Label" parent="MainContainer/TitleSection"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_color = Color(0.2, 1, 0.2, 1)
+theme_override_colors/font_color = Color(0.101961, 0.101961, 0.101961, 1)
 theme_override_font_sizes/font_size = 20
 text = ":: A CYBERSECURITY GAME ::"
 horizontal_alignment = 1

@@ -1,0 +1,122 @@
+[gd_scene load_steps=5 format=3 uid="uid://c8x6y708bab0d"]
+
+[ext_resource type="Script" path="res://scripts/2d/apps/components/ForensicReportModal.gd" id="1_script"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Modal"]
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0, 0, 0, 1)
+shadow_color = Color(0, 0, 0, 0.2)
+shadow_size = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Header"]
+bg_color = Color(0, 0, 0, 1)
+content_margin_left = 15.0
+content_margin_right = 15.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Progress"]
+bg_color = Color(0.9, 0.9, 0.9, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0, 0, 0, 1)
+
+[node name="ForensicReportModal" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_script")
+
+[node name="Dimmer" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.4)
+
+[node name="MainPanel" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(600, 450)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -300.0
+offset_top = -225.0
+offset_right = 300.0
+offset_bottom = 225.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_Modal")
+
+[node name="VBox" type="VBoxContainer" parent="MainPanel"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="HeaderPanel" type="PanelContainer" parent="MainPanel/VBox"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_Header")
+
+[node name="TitleLabel" type="Label" parent="MainPanel/VBox/HeaderPanel"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 14
+text = ":: FORENSIC REPORT ::"
+vertical_alignment = 1
+
+[node name="ContentMargin" type="MarginContainer" parent="MainPanel/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 25
+theme_override_constants/margin_top = 25
+theme_override_constants/margin_right = 25
+theme_override_constants/margin_bottom = 20
+
+[node name="VBox" type="VBoxContainer" parent="MainPanel/VBox/ContentMargin"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="ScanProgress" type="ProgressBar" parent="MainPanel/VBox/ContentMargin/VBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_Progress")
+value = 45.0
+show_percentage = false
+
+[node name="ResultsLabel" type="RichTextLabel" parent="MainPanel/VBox/ContentMargin/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/default_color = Color(0.1, 0.1, 0.1, 1)
+theme_override_constants/line_separation = 4
+theme_override_font_sizes/normal_font_size = 13
+bbcode_enabled = true
+text = "Analyzing technical artifacts..."
+
+[node name="FooterMargin" type="MarginContainer" parent="MainPanel/VBox"]
+layout_mode = 2
+theme_override_constants/margin_left = 25
+theme_override_constants/margin_right = 25
+theme_override_constants/margin_bottom = 20
+
+[node name="CloseButton" type="Button" parent="MainPanel/VBox/FooterMargin"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 40)
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_font_sizes/font_size = 12
+text = "ACKNOWLEDGE"

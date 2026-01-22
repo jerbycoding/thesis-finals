@@ -1,11 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://b2d35yngg7u75"]
+[gd_scene load_steps=7 format=3 uid="uid://b2d35yngg7u75"]
 
 [ext_resource type="Script" uid="uid://dx3637o27a75s" path="res://scripts/PlayerController.gd" id="1_15gk4"]
-[ext_resource type="PackedScene" uid="uid://pwr7hj6luthk" path="res://scenes/ui/InteractionPrompt.tscn" id="2_lib7b"]
-[ext_resource type="PackedScene" uid="uid://c5v8gkq0xyt6k" path="res://scenes/ui/ShiftTimerHUD.tscn" id="3_st_hud"]
-[ext_resource type="PackedScene" path="res://scenes/ui/IntegrityHUD.tscn" id="4_integrity"]
-[ext_resource type="PackedScene" path="res://scenes/ui/MaintenanceHUD.tscn" id="5_maint"]
-[ext_resource type="PackedScene" path="res://scenes/ui/TabletHUD.tscn" id="6_tablet"]
+[ext_resource type="PackedScene" uid="uid://c8x6y708bab0e" path="res://scenes/ui/UnifiedHUD.tscn" id="2_unified"]
+[ext_resource type="PackedScene" uid="uid://pwr7hj6luthk" path="res://scenes/ui/InteractionPrompt.tscn" id="3_prompt"]
+[ext_resource type="PackedScene" uid="uid://dotgpl1o3q8uw" path="res://scenes/ui/MaintenanceHUD.tscn" id="4_maint"]
+[ext_resource type="PackedScene" path="res://scenes/ui/TabletHUD.tscn" id="5_tablet"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_jib20"]
 radius = 0.4
@@ -14,37 +13,24 @@ height = 1.8
 [node name="Player3D" type="CharacterBody3D"]
 script = ExtResource("1_15gk4")
 
-[node name="InteractionPrompt" parent="." instance=ExtResource("2_lib7b")]
+[node name="UnifiedHUD" parent="." instance=ExtResource("2_unified")]
 unique_name_in_owner = true
-offset_top = -145.0
-offset_bottom = -145.0
-metadata/_edit_use_anchors_ = true
-
-[node name="ShiftTimerHUD" parent="." instance=ExtResource("3_st_hud")]
-unique_name_in_owner = true
-anchors_preset = 0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = 170.0
-offset_right = 170.0
-grow_horizontal = 1
-grow_vertical = 1
-metadata/_edit_use_anchors_ = true
-
-[node name="IntegrityHUD" parent="." instance=ExtResource("4_integrity")]
-anchors_preset = 0
-anchor_right = 0.0
-offset_top = 50.0
+offset_left = -240.0
 offset_right = 0.0
-offset_bottom = 90.0
-grow_horizontal = 1
 
-[node name="MaintenanceHUD" parent="." instance=ExtResource("5_maint")]
-layout_mode = 1
-
-[node name="TabletHUD" parent="." instance=ExtResource("6_tablet")]
+[node name="InteractionPrompt" parent="." instance=ExtResource("3_prompt")]
 unique_name_in_owner = true
-layout_mode = 1
+offset_top = -136.0
+offset_bottom = -86.0
+
+[node name="MaintenanceHUD" parent="." instance=ExtResource("4_maint")]
+
+[node name="TabletHUD" parent="." instance=ExtResource("5_tablet")]
+unique_name_in_owner = true
+offset_left = 3.0
+offset_top = 1.0
+offset_right = 3.0
+offset_bottom = 1.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
@@ -59,7 +45,6 @@ fov = 70.0
 [node name="InteractionRay" type="RayCast3D" parent="CameraPivot/Camera3D"]
 unique_name_in_owner = true
 target_position = Vector3(0, 0, -2)
-collision_mask = 1
 collide_with_areas = true
 
 [node name="CarryMarker3D" type="Marker3D" parent="CameraPivot/Camera3D"]

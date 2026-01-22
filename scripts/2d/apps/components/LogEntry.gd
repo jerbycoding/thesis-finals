@@ -3,10 +3,9 @@ extends PanelContainer
 
 signal log_selected(log: LogResource, instance: Control)
 
+@onready var status_dot: ColorRect = %StatusDot
 @onready var time_label: Label = %TimeLabel
-@onready var source_label: Label = %SourceLabel
-@onready var severity_label: Label = %SeverityLabel
-@onready var message_label: Label = %MessageLabel
+@onready var message_label: RichTextLabel = %MessageLabel
 
 var log_data: LogResource
 
@@ -16,27 +15,19 @@ func _ready():
 func set_log_data(log: LogResource):
 	log_data = log
 	
-	# Set text content
-	if time_label: time_label.text = log.timestamp
-	if source_label: source_label.text = log.source.to_upper()
-	if severity_label: 
-		severity_label.text = log.get_severity_text()
-		severity_label.add_theme_color_override("font_color", log.get_severity_color())
-	if message_label:
-		message_label.text = log.message
-		message_label.tooltip_text = log.message
-	
-	# Update visual style based on log state
-	var style = get_theme_stylebox("panel").duplicate() as StyleBoxFlat
-	if style:
-		if log.is_revealed:
-			style.border_color = Color.MAGENTA
-			style.shadow_color = Color(1.0, 0.0, 1.0, 0.2)
-			style.shadow_size = 2
-		else:
-			style.border_color = log.get_severity_color()
+	if time_label:
+		time_label.text = log.timestamp
 		
-		add_theme_stylebox_override("panel", style)
+	if message_label:
+		message_label.text = log.get_formatted_message()
+		
+	if status_dot:
+		if log.severity >= 4:
+			status_dot.color = GlobalConstants.UI_COLORS.ERROR_FLAT
+		elif log.severity >= 3:
+			status_dot.color = GlobalConstants.UI_COLORS.WARNING_FLAT
+		else:
+			status_dot.color = GlobalConstants.UI_COLORS.INFO_BLUE
 
 func _gui_input(event: InputEvent):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
@@ -45,11 +36,47 @@ func _gui_input(event: InputEvent):
 			log_selected.emit(log_data, self)
 		get_viewport().set_input_as_handled()
 
+func _get_drag_data(_at_position: Vector2):
+	if not log_data: return null
+	
+	# Create high-visibility forensic drag preview
+	var preview = PanelContainer.new()
+	preview.z_index = 200 # Ensure it stays above all windows (Base is 10)
+	
+	var style = StyleBoxFlat.new()
+	style.bg_color = Color.BLACK
+	style.border_width_left = 1
+	style.border_width_top = 1
+	style.border_width_right = 1
+	style.border_width_bottom = 1
+	style.border_color = GlobalConstants.UI_COLORS.INFO_BLUE
+	style.content_margin_left = 10
+	style.content_margin_right = 10
+	style.content_margin_top = 5
+	style.content_margin_bottom = 5
+	preview.add_theme_stylebox_override("panel", style)
+	
+	var label = Label.new()
+	label.text = "📎 EVIDENCE: " + log_data.log_id
+	label.theme_type_variation = "HeaderSmall"
+	label.add_theme_color_override("font_color", Color.WHITE)
+	label.add_theme_font_size_override("font_size", 11)
+	preview.add_child(label)
+	
+	set_drag_preview(preview)
+	
+	if AudioManager: AudioManager.play_ui_hover()
+	
+	return {
+		"type": "log_evidence",
+		"log_id": log_data.log_id
+	}
+
 func set_highlight(active: bool):
 	var style = get_theme_stylebox("panel").duplicate() as StyleBoxFlat
 	if style:
 		if active:
-			style.bg_color = Color(0.1, 0.2, 0.3, 0.8)
+			style.bg_color = Color(0.15, 0.2, 0.25, 1.0)
 		else:
-			style.bg_color = Color(0.05, 0.05, 0.1, 0.5)
+			style.bg_color = Color(0.05, 0.07, 0.09, 1.0)
 		add_theme_stylebox_override("panel", style)

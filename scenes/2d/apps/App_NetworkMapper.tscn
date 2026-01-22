@@ -1,49 +1,72 @@
-[gd_scene load_steps=2 format=3 uid="uid://c7x8lam2n3p5r"]
+[gd_scene load_steps=3 format=3 uid="uid://clyuw8cc1xkfb"]
 
-[ext_resource type="Script" path="res://scripts/2d/apps/App_NetworkMapper.gd" id="1_netmap"]
+[ext_resource type="Script" uid="uid://dqxaypiaoiy7k" path="res://scripts/2d/apps/App_NetworkMapper.gd" id="1_netmap"]
+[ext_resource type="Theme" uid="uid://dny3rlbltexc7" path="res://assets/themes/EnterpriseTheme.tres" id="2_theme"]
 
 [node name="App_NetworkMapper" type="Control"]
-custom_minimum_size = Vector2(800, 600)
+custom_minimum_size = Vector2(1000, 700)
 layout_mode = 3
-anchors_preset = 0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_theme")
 script = ExtResource("1_netmap")
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="Background" type="ColorRect" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.02, 0.02, 0.05, 0.95)
+color = Color(0.054902, 0.0666667, 0.0901961, 1)
 
-[node name="GridContainer" type="Control" parent="."]
+[node name="MainLayout" type="HBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/separation = 0
 
-[node name="GridPattern" type="ColorRect" parent="GridContainer"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(1, 1, 1, 0.03)
+[node name="CenterArea" type="VBoxContainer" parent="MainLayout"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
 
-[node name="NodesContainer" type="Control" parent="."]
+[node name="TopBar" type="PanelContainer" parent="MainLayout/CenterArea"]
+custom_minimum_size = Vector2(0, 45)
+layout_mode = 2
+theme_type_variation = &"HeaderPanel"
+
+[node name="HBox" type="HBoxContainer" parent="MainLayout/CenterArea/TopBar"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Title" type="Label" parent="MainLayout/CenterArea/TopBar/HBox"]
+layout_mode = 2
+theme_type_variation = &"TechnicalHeader"
+text = ":: NETWORK_TOPOLOGY_VIZ ::"
+
+[node name="StatusLabel" type="Label" parent="MainLayout/CenterArea/TopBar/HBox"]
 unique_name_in_owner = true
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"TechnicalHeader"
+theme_override_colors/font_color = Color(0.4, 0.4, 0.4, 1)
+theme_override_font_sizes/font_size = 10
+text = "ANALYSIS: SYSTEM_NOMINAL"
+horizontal_alignment = 2
 
-[node name="UIOverlay" type="Control" parent="."]
+[node name="MapContainer" type="Control" parent="MainLayout/CenterArea"]
+clip_contents = true
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="GridPattern" type="ColorRect" parent="MainLayout/CenterArea/MapContainer"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -51,34 +74,95 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+color = Color(1, 1, 1, 0.02)
 
-[node name="Header" type="Label" parent="UIOverlay"]
-layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_bottom = 40.0
-grow_horizontal = 2
-theme_override_colors/font_color = Color(0, 1, 1, 1)
-theme_override_font_sizes/font_size = 18
-text = "NETWORK TOPOLOGY MAPPER"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="StatusLabel" type="Label" parent="UIOverlay"]
+[node name="NodesContainer" type="Control" parent="MainLayout/CenterArea/MapContainer"]
 unique_name_in_owner = true
 layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -30.0
 grow_horizontal = 2
-grow_vertical = 0
-theme_override_colors/font_color = Color(0.5, 0.5, 0.5, 1)
-text = "Scanning..."
+grow_vertical = 2
+
+[node name="InspectorPane" type="PanelContainer" parent="MainLayout"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+
+[node name="VBox" type="VBoxContainer" parent="MainLayout/InspectorPane"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="HostHeader" type="VBoxContainer" parent="MainLayout/InspectorPane/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="HostIcon" type="Label" parent="MainLayout/InspectorPane/VBox/HostHeader"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "💻"
 horizontal_alignment = 1
-vertical_alignment = 1
+
+[node name="HostnameLabel" type="Label" parent="MainLayout/InspectorPane/VBox/HostHeader"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "HOST-01"
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="MainLayout/InspectorPane/VBox"]
+layout_mode = 2
+
+[node name="Metadata" type="VBoxContainer" parent="MainLayout/InspectorPane/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="IPGroup" type="VBoxContainer" parent="MainLayout/InspectorPane/VBox/Metadata"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MainLayout/InspectorPane/VBox/Metadata/IPGroup"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.4, 0.4, 0.4, 1)
+theme_override_font_sizes/font_size = 9
+text = "IP_ADDRESS"
+
+[node name="IPLabel" type="Label" parent="MainLayout/InspectorPane/VBox/Metadata/IPGroup"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "192.168.1.10"
+
+[node name="StatusGroup" type="VBoxContainer" parent="MainLayout/InspectorPane/VBox/Metadata"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MainLayout/InspectorPane/VBox/Metadata/StatusGroup"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.4, 0.4, 0.4, 1)
+theme_override_font_sizes/font_size = 9
+text = "NETWORK_STATUS"
+
+[node name="StatusValueLabel" type="Label" parent="MainLayout/InspectorPane/VBox/Metadata/StatusGroup"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "CONNECTED"
+
+[node name="CriticalityGroup" type="VBoxContainer" parent="MainLayout/InspectorPane/VBox/Metadata"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MainLayout/InspectorPane/VBox/Metadata/CriticalityGroup"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.4, 0.4, 0.4, 1)
+theme_override_font_sizes/font_size = 9
+text = "CRITICALity_RATING"
+
+[node name="CriticalityLabel" type="Label" parent="MainLayout/InspectorPane/VBox/Metadata/CriticalityGroup"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "MEDIUM"
 
 [node name="ContextMenu" type="PopupMenu" parent="."]
 unique_name_in_owner = true
-size = Vector2(100, 80)
+size = Vector2i(100, 80)

@@ -1,164 +1,132 @@
+# App_NetworkMapper.gd
 extends Control
 
 @onready var nodes_container: Control = %NodesContainer
 @onready var context_menu: PopupMenu = %ContextMenu
 @onready var status_label: Label = %StatusLabel
 
-var node_scene = preload("res://scenes/2d/apps/components/NetworkNode.tscn") # We need to create this too
-var nodes: Dictionary = {} # hostname: Control
-var selected_host: String = ""
+# Inspector Nodes
+@onready var hostname_label: Label = %HostnameLabel
+@onready var ip_label: Label = %IPLabel
+@onready var status_value_label: Label = %StatusValueLabel
+@onready var criticality_label: Label = %CriticalityLabel
 
-# Layout configuration
-var center_pos: Vector2 = Vector2(400, 300)
-var server_radius: float = 120.0
-var workstation_radius: float = 220.0
-
-var pulse_time: float = 0.0
-
-func _process(delta):
-	pulse_time += delta
-	queue_redraw()
+var node_scene = preload("res://scenes/2d/apps/components/NetworkNode.tscn")
+var node_instances: Dictionary = {} # hostname -> instance
+var selected_host: HostResource = null
 
 func _ready():
-	# Temporary placeholder until we create the node component
-	# node_scene = Button.new() # Just for logic testing if needed, but we'll make the scene next
+	print("======= App_NetworkMapper (Dashboard Redesign) Ready =======")
 	
-	_build_network_map()
+	_initialize_context_menu()
+	EventBus.host_status_changed.connect(_on_host_status_changed)
 	
-	# Connect context menu
-	context_menu.id_pressed.connect(_on_context_menu_action)
+	# Initial Map Generation
+	_generate_map()
 	
-	# Start update timer
-	var timer = Timer.new()
-	timer.wait_time = 0.5
-	timer.timeout.connect(_update_node_status)
-	add_child(timer)
-	timer.start()
+	# Default Inspector State
+	_clear_inspector()
 
-func _build_network_map():
-	if not NetworkState: return
+func _initialize_context_menu():
+	context_menu.clear()
+	context_menu.add_item("Perform Forensic Scan", 0)
+	context_menu.add_item("Trace Network Path", 1)
+	context_menu.add_separator()
+	context_menu.add_item("ISOLATE HOST", 2)
+	context_menu.index_pressed.connect(_on_context_item_pressed)
+
+func _generate_map():
+	for child in nodes_container.get_children(): child.queue_free()
+	node_instances.clear()
 	
-	var all_hosts = NetworkState.get_all_hostnames()
-	var servers = []
-	var workstations = []
+	var hosts = NetworkState.get_all_hosts() if NetworkState else []
+	if hosts.is_empty(): return
 	
-	# Categorize
-	for host in all_hosts:
-		if NetworkState.get_host_state(host).get("critical", false):
-			servers.append(host)
+	var center = nodes_container.size / 2
+	if center == Vector2.ZERO: center = Vector2(350, 300)
+	
+	var radius = 220.0
+	for i in range(hosts.size()):
+		var host = hosts[i]
+		var angle = i * (TAU / hosts.size())
+		var pos = center + Vector2(cos(angle), sin(angle)) * radius
+		
+		var inst = node_scene.instantiate()
+		nodes_container.add_child(inst)
+		inst.position = pos - (inst.size / 2)
+		inst.set_host_data(host)
+		
+		inst.pressed.connect(_on_node_pressed.bind(host))
+		node_instances[host.hostname] = inst
+
+func _on_node_pressed(host: HostResource):
+	if AudioManager: AudioManager.play_ui_click()
+	selected_host = host
+	_update_inspector(host)
+	
+	# Visual selection on map
+	for h in node_instances:
+		var inst = node_instances[h]
+		if inst.has_method("set_highlight"):
+			inst.set_highlight(h == host.hostname)
+
+func _update_inspector(host: HostResource):
+	hostname_label.text = host.hostname.to_upper()
+	ip_label.text = host.ip_address
+	
+	var current_status = GlobalConstants.HOST_STATUS.CLEAN
+	if NetworkState:
+		var state = NetworkState.get_host_state(host.hostname)
+		var s = state.get("status", 0)
+		if typeof(s) == TYPE_INT: current_status = s
 		else:
-			workstations.append(host)
+			match str(s):
+				"CLEAN": current_status = 0
+				"SUSPICIOUS": current_status = 1
+				"INFECTED": current_status = 2
+				"ISOLATED": current_status = 3
 	
-	# Place Servers (Ring 1)
-	var angle_step = TAU / max(1, servers.size())
-	for i in range(servers.size()):
-		var angle = i * angle_step
-		var pos = center_pos + Vector2(cos(angle), sin(angle)) * server_radius
-		_create_node(servers[i], pos, true)
-		
-	# Place Workstations (Ring 2)
-	angle_step = TAU / max(1, workstations.size())
-	for i in range(workstations.size()):
-		var angle = i * angle_step + (PI/servers.size()) # Offset slightly
-		var pos = center_pos + Vector2(cos(angle), sin(angle)) * workstation_radius
-		_create_node(workstations[i], pos, false)
+	status_value_label.text = host.get_status_string().to_upper()
 	
-	queue_redraw()
+	# Color coding status
+	var status_color = Color.WHITE
+	match current_status:
+		GlobalConstants.HOST_STATUS.CLEAN: status_color = GlobalConstants.UI_COLORS.SUCCESS_FLAT
+		GlobalConstants.HOST_STATUS.INFECTED: status_color = GlobalConstants.UI_COLORS.ERROR_FLAT
+		GlobalConstants.HOST_STATUS.SUSPICIOUS: status_color = GlobalConstants.UI_COLORS.WARNING_FLAT
+		GlobalConstants.HOST_STATUS.ISOLATED: status_color = Color.GRAY
+	
+	status_value_label.add_theme_color_override("font_color", status_color)
+	criticality_label.text = host.get_criticality_string().to_upper()
+	
+	status_label.text = "ANALYSIS: MONITORING " + host.hostname
 
-func _create_node(hostname: String, position: Vector2, is_server: bool):
-	var node_btn = node_scene.instantiate()
-	node_btn.position = position - Vector2(30, 30) # Centered (60x60)
-	
-	if node_btn.has_method("set_hostname"):
-		node_btn.set_hostname(hostname, is_server)
-	else:
-		node_btn.text = hostname # Fallback
-		
-	node_btn.gui_input.connect(_on_node_input.bind(hostname))
-	
-	nodes_container.add_child(node_btn)
-	nodes[hostname] = node_btn
-	
-	# Store metadata for drawing lines
-	node_btn.set_meta("is_server", is_server)
-	node_btn.set_meta("center_pos", position)
+func _clear_inspector():
+	hostname_label.text = "NO_SELECTION"
+	ip_label.text = "---.---.---.---"
+	status_value_label.text = "OFFLINE"
+	criticality_label.text = "UNKNOWN"
+	status_label.text = "ANALYSIS: SYSTEM_NOMINAL"
 
-func _update_node_status():
-	if not NetworkState: return
-	
-	for hostname in nodes:
-		var node_btn = nodes[hostname]
-		var state = NetworkState.get_host_state(hostname)
-		var status = state.get("status", "CLEAN")
-		var is_isolated = state.get("isolated", false)
-		
-		var color = Color(0, 1, 1) # Cyan (Clean)
-		
-		if is_isolated:
-			color = Color(0.5, 0.5, 0.5) # Gray
-		elif status == "INFECTED":
-			color = Color(1, 0, 0) # Red
-		elif status == "SUSPICIOUS":
-			color = Color(1, 0.5, 0) # Orange
-			
-		if node_btn.has_method("set_status_color"):
-			node_btn.set_status_color(color)
-		else:
-			node_btn.modulate = color
+func _on_host_status_changed(hostname: String, _new_status: int):
+	if node_instances.has(hostname):
+		var host = NetworkState.get_host(hostname)
+		node_instances[hostname].set_host_data(host)
+		if selected_host and selected_host.hostname == hostname:
+			_update_inspector(host)
+
+func _on_context_item_pressed(index: int):
+	if not selected_host: return
+	# Context menu implementation...
+	pass
 
 func _draw():
-	# Draw lines from center to servers, and servers to nearby workstations?
-	# Simple star topology for now: Center(Gateway) -> All
-	var center = center_pos
-	
-	# Pulse effect for lines
-	var alpha = 0.2 + (sin(pulse_time * 3.0) + 1.0) * 0.15
-	var line_color = Color(0, 0.8, 0.8, alpha)
-	var line_width = 1.5 + (sin(pulse_time * 3.0) + 1.0) * 0.5
-	
-	for hostname in nodes:
-		var node = nodes[hostname]
-		var target = node.get_meta("center_pos")
-		
-		# Check if host is isolated
-		var state = NetworkState.get_host_state(hostname)
-		if state.get("isolated", false):
-			draw_line(center, target, Color(0.3, 0.3, 0.3, 0.2), 1.0)
-		else:
-			# If infected, pulse red
-			if state.get("status") == "INFECTED":
-				var inf_alpha = 0.4 + (sin(pulse_time * 8.0) + 1.0) * 0.3
-				draw_line(center, target, Color(1, 0, 0, inf_alpha), line_width + 1.0)
-			else:
-				draw_line(center, target, line_color, line_width)
-
-func _on_node_input(event: InputEvent, hostname: String):
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
-		selected_host = hostname
-		context_menu.clear()
-		context_menu.add_item("Scan Host", 0)
-		context_menu.add_item("Isolate Host", 1)
-		context_menu.add_item("Trace Connection", 2)
-		context_menu.position = get_global_mouse_position()
-		context_menu.popup()
-
-func _on_context_menu_action(id: int):
-	if selected_host == "": return
-	
-	if ArchetypeAnalyzer:
-		ArchetypeAnalyzer.log_tool_used("network_map")
-	
-	match id:
-		0: # Scan
-			TerminalSystem.execute_command("scan " + selected_host)
-		1: # Isolate
-			TerminalSystem.execute_command("isolate " + selected_host)
-		2: # Trace
-			# Find IP
-			var state = NetworkState.get_host_state(selected_host)
-			var ip = state.get("ip", "")
-			if ip != "":
-				TerminalSystem.execute_command("trace " + ip)
-			else:
-				if NotificationManager:
-					NotificationManager.show_notification("IP not resolved for host", "error")
+	# Procedural connection lines between nodes
+	var hosts = node_instances.keys()
+	for i in range(hosts.size()):
+		var p1 = node_instances[hosts[i]].position + (node_instances[hosts[i]].size / 2)
+		# Draw lines to next 2 nodes to create a mesh look
+		for j in [1, 2]:
+			var target_idx = (i + j) % hosts.size()
+			var p2 = node_instances[hosts[target_idx]].position + (node_instances[hosts[target_idx]].size / 2)
+			draw_line(p1, p2, Color(1, 1, 1, 0.05), 1.0)

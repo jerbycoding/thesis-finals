@@ -71,6 +71,28 @@ const TICKET_CATEGORY = {
 	"GENERAL": "General"
 }
 
+const HOST_STATUS = {
+	"CLEAN": 0,
+	"SUSPICIOUS": 1,
+	"INFECTED": 2,
+	"ISOLATED": 3
+}
+
+# --- Visual Foundation Palette (Enterprise-Clean) ---
+
+const UI_COLORS = {
+	"PAGE_BG": Color("#FDFDFD"),      # Off-white background
+	"DARK_BG": Color("#0E1117"),      # Deep charcoal for dark dashboards
+	"HEADER_BLACK": Color("#000000"), # Absolute black for headers/primary buttons
+	"INFO_BLUE": Color("#006CFF"),    # Modern information blue
+	"TEXT_PRIMARY": Color("#1A1A1A"), # Near-black for readability
+	"TEXT_SECONDARY": Color("#666666"),# Gray for metadata
+	"SUCCESS_FLAT": Color("#2E7D32"), # Forest green (No glow)
+	"ERROR_FLAT": Color("#C62828"),   # Crimson red (No glow)
+	"WARNING_FLAT": Color("#F57C00"), # Sharp orange (No glow)
+	"GRID_LINE": Color("#EEEEEE")     # Subtle grid lines
+}
+
 # --- Narrative & Event Identifiers ---
 
 const NARRATIVE_EVENT_TYPE = {

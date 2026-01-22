@@ -1,23 +1,23 @@
-[gd_scene load_steps=3 format=3 uid="uid://b6jbceybenfgl"]
+[gd_scene load_steps=4 format=3 uid="uid://b6jbceybenfgl"]
 
 [ext_resource type="Script" uid="uid://ce6w23vxxn17o" path="res://scripts/ui/DialogueBox.gd" id="1_dialogue"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Dialogue"]
-content_margin_left = 20.0
-content_margin_top = 15.0
-content_margin_right = 20.0
-content_margin_bottom = 15.0
-bg_color = Color(0.0509804, 0.054902, 0.0901961, 0.980392)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.2, 1, 0.2, 1)
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-corner_radius_bottom_right = 8
-corner_radius_bottom_left = 8
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_DialogueBody"]
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0, 0, 0, 1)
+shadow_color = Color(0, 0, 0, 0.15)
 shadow_size = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_NameHeader"]
+bg_color = Color(0, 0, 0, 1)
+content_margin_left = 15.0
+content_margin_top = 5.0
+content_margin_right = 15.0
+content_margin_bottom = 5.0
 
 [node name="DialogueBox" type="Control"]
 layout_mode = 3
@@ -31,70 +31,96 @@ script = ExtResource("1_dialogue")
 
 [node name="MainPanel" type="PanelContainer" parent="."]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(800, 200)
+custom_minimum_size = Vector2(850, 240)
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -400.0
-offset_top = -230.0
-offset_right = 400.0
+offset_left = -425.0
+offset_top = -270.0
+offset_right = 425.0
 offset_bottom = -30.0
 grow_horizontal = 2
 grow_vertical = 0
-theme_override_styles/panel = SubResource("StyleBoxFlat_Dialogue")
+theme_override_styles/panel = SubResource("StyleBoxFlat_DialogueBody")
 
-[node name="HBox" type="HBoxContainer" parent="MainPanel"]
+[node name="VBox" type="VBoxContainer" parent="MainPanel"]
 layout_mode = 2
-theme_override_constants/separation = 25
+theme_override_constants/separation = 0
 
-[node name="PortraitLabel" type="Label" parent="MainPanel/HBox"]
+[node name="HeaderPanel" type="PanelContainer" parent="MainPanel/VBox"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_NameHeader")
+
+[node name="HBox" type="HBoxContainer" parent="MainPanel/VBox/HeaderPanel"]
+layout_mode = 2
+
+[node name="NameLabel" type="Label" parent="MainPanel/VBox/HeaderPanel/HBox"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 14
+text = "ANALYST_COMM_CHANNEL"
+vertical_alignment = 1
+
+[node name="TechnicalTag" type="Label" parent="MainPanel/VBox/HeaderPanel/HBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.4, 0.4, 0.4, 1)
+theme_override_font_sizes/font_size = 9
+text = "[ PROTOCOL_v4.4 ]"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="ContentMargin" type="MarginContainer" parent="MainPanel/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 25
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 25
+theme_override_constants/margin_bottom = 20
+
+[node name="HBox" type="HBoxContainer" parent="MainPanel/VBox/ContentMargin"]
+layout_mode = 2
+theme_override_constants/separation = 30
+
+[node name="PortraitLabel" type="Label" parent="MainPanel/VBox/ContentMargin/HBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
-theme_override_font_sizes/font_size = 56
+theme_override_font_sizes/font_size = 42
 text = "👤"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="VBox" type="VBoxContainer" parent="MainPanel/HBox"]
+[node name="MainVBox" type="VBoxContainer" parent="MainPanel/VBox/ContentMargin/HBox"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/separation = 10
+theme_override_constants/separation = 15
 
-[node name="NameLabel" type="Label" parent="MainPanel/HBox/VBox"]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_colors/font_color = Color(0.2, 1, 0.2, 1)
-theme_override_font_sizes/font_size = 22
-text = "ANALYST_NAME"
-
-[node name="Scroll" type="ScrollContainer" parent="MainPanel/HBox/VBox"]
+[node name="Scroll" type="ScrollContainer" parent="MainPanel/VBox/ContentMargin/HBox/MainVBox"]
 layout_mode = 2
 size_flags_vertical = 3
 horizontal_scroll_mode = 0
 
-[node name="ScrollVBox" type="VBoxContainer" parent="MainPanel/HBox/VBox/Scroll"]
+[node name="TextLabel" type="RichTextLabel" parent="MainPanel/VBox/ContentMargin/HBox/MainVBox/Scroll"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme_override_constants/separation = 15
-
-[node name="TextLabel" type="RichTextLabel" parent="MainPanel/HBox/VBox/Scroll/ScrollVBox"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_font_sizes/normal_font_size = 18
+theme_override_colors/default_color = Color(0.1, 0.1, 0.1, 1)
+theme_override_constants/line_separation = 4
+theme_override_font_sizes/normal_font_size = 16
 bbcode_enabled = true
-text = "Communication established. Awaiting input..."
+text = "Establishing communication link..."
 fit_content = true
 scroll_active = false
 
-[node name="ChoicesContainer" type="VBoxContainer" parent="MainPanel/HBox/VBox/Scroll/ScrollVBox"]
+[node name="ChoicesContainer" type="VBoxContainer" parent="MainPanel/VBox/ContentMargin/HBox/MainVBox"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 8

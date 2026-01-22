@@ -250,9 +250,10 @@ func _trigger_event(event_data: Dictionary):
 					EventBus.campaign_ended.emit("fired")
 					return
 
-				# Best ending check (Friday)
-				if current_shift_name == "shift_friday":
-					print("NarrativeDirector: Week 1 complete. Promotion check.")
+				# Check for campaign completion (Victory)
+				# Only trigger victory if there is NO next shift defined in the resource.
+				if current_shift_resource and current_shift_resource.next_shift_id == "":
+					print("NarrativeDirector: Final shift in sequence reached. Triggering Victory.")
 					EventBus.campaign_ended.emit("victory")
 					return
 

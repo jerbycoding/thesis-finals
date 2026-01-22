@@ -1,223 +1,129 @@
-[gd_scene load_steps=2 format=3 uid="uid://dp6mxl8q2k4l1"]
+[gd_scene load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://scripts/2d/apps/App_Handbook.gd" id="1_handbook"]
+[ext_resource type="Theme" path="res://assets/themes/EnterpriseTheme.tres" id="2_theme"]
 
 [node name="AppHandbook" type="Control"]
-custom_minimum_size = Vector2(700, 500)
+custom_minimum_size = Vector2(900, 650)
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("2_theme")
 script = ExtResource("1_handbook")
 
-[node name="Panel" type="Panel" parent="."]
+[node name="Background" type="ColorRect" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+color = Color(1, 1, 1, 1)
 
-[node name="VBox" type="VBoxContainer" parent="Panel"]
+[node name="MainLayout" type="HSplitContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+split_offset = 240
 
-[node name="Header" type="Panel" parent="Panel/VBox"]
-custom_minimum_size = Vector2(0, 40)
+[node name="Sidebar" type="PanelContainer" parent="MainLayout"]
 layout_mode = 2
 
-[node name="Title" type="Label" parent="Panel/VBox/Header"]
-layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_left = 15.0
-offset_top = -11.5
-offset_right = 155.0
-offset_bottom = 11.5
-grow_vertical = 2
-text = "📘 SOC Handbook v1.0"
+[node name="Margin" type="MarginContainer" parent="MainLayout/Sidebar"]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 15
+
+[node name="VBox" type="VBoxContainer" parent="MainLayout/Sidebar/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="SectionLabel" type="Label" parent="MainLayout/Sidebar/Margin/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.4, 0.4, 0.4, 1)
+theme_override_font_sizes/font_size = 10
+text = "DOCUMENTATION"
+
+[node name="NavButtons" type="VBoxContainer" parent="MainLayout/Sidebar/Margin/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="Btn_Terminal" type="Button" parent="MainLayout/Sidebar/Margin/VBox/NavButtons"]
+layout_mode = 2
+text = "  🐚 Terminal Guide"
+alignment = 0
+flat = true
+
+[node name="Btn_Network" type="Button" parent="MainLayout/Sidebar/Margin/VBox/NavButtons"]
+layout_mode = 2
+text = "  🕸️ Network Map"
+alignment = 0
+flat = true
+
+[node name="Btn_SIEM" type="Button" parent="MainLayout/Sidebar/Margin/VBox/NavButtons"]
+layout_mode = 2
+text = "  📊 SIEM Forensics"
+alignment = 0
+flat = true
+
+[node name="Btn_Email" type="Button" parent="MainLayout/Sidebar/Margin/VBox/NavButtons"]
+layout_mode = 2
+text = "  ✉ Email Analysis"
+alignment = 0
+flat = true
+
+[node name="HSeparator" type="HSeparator" parent="MainLayout/Sidebar/Margin/VBox"]
+layout_mode = 2
+
+[node name="Btn_Procedures" type="Button" parent="MainLayout/Sidebar/Margin/VBox/NavButtons"]
+layout_mode = 2
+text = "  📜 SOP Procedures"
+alignment = 0
+flat = true
+
+[node name="Btn_Incidents" type="Button" parent="MainLayout/Sidebar/Margin/VBox/NavButtons"]
+layout_mode = 2
+text = "  🎫 Incident Catalog"
+alignment = 0
+flat = true
+
+[node name="ReaderPane" type="VBoxContainer" parent="MainLayout"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+
+[node name="DocHeader" type="PanelContainer" parent="MainLayout/ReaderPane"]
+custom_minimum_size = Vector2(0, 45)
+layout_mode = 2
+theme_type_variation = &"HeaderPanel"
+
+[node name="TitleLabel" type="Label" parent="MainLayout/ReaderPane/DocHeader"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"TechnicalHeader"
+text = ":: SOC_HANDBOOK v4.4 ::"
 vertical_alignment = 1
 
-[node name="Content" type="MarginContainer" parent="Panel/VBox"]
+[node name="ContentMargin" type="MarginContainer" parent="MainLayout/ReaderPane"]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_constants/margin_left = 15
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 15
-theme_override_constants/margin_bottom = 15
+theme_override_constants/margin_left = 40
+theme_override_constants/margin_top = 30
+theme_override_constants/margin_right = 40
+theme_override_constants/margin_bottom = 30
 
-[node name="TabContainer" type="TabContainer" parent="Panel/VBox/Content"]
+[node name="Reader" type="RichTextLabel" parent="MainLayout/ReaderPane/ContentMargin"]
+unique_name_in_owner = true
 layout_mode = 2
-current_tab = 0
-
-[node name="Terminal" type="RichTextLabel" parent="Panel/VBox/Content/TabContainer"]
-layout_mode = 2
+theme_override_constants/line_separation = 6
+theme_override_font_sizes/normal_font_size = 14
 bbcode_enabled = true
-text = "[b][color=cyan]TERMINAL COMMANDS[/color][/b]
-The terminal is your primary tool for network-level response.
-
-[b]Commands:[/b]
-• [color=yellow]help[/color] - Lists all available commands.
-• [color=yellow]scan [hostname][/color] - Performs a security scan on the target host. Required to confirm infection before isolation.
-• [color=yellow]trace [ip_address][/color] - Traces a suspicious IP to its origin host within the network.
-• [color=yellow]isolate [hostname][/color] - Disconnects the target host from the corporate network. Use this to contain active malware or exfiltration.
-• [color=yellow]status[/color] - Displays the current terminal status and active isolated hosts.
-
-[b]Note:[/b] Incorrect use of 'isolate' on critical infrastructure (like Servers) may trigger service outages and lead to a [color=red]Terminal Lockout[/color]."
-metadata/_tab_index = 0
-
-[node name="Network" type="RichTextLabel" parent="Panel/VBox/Content/TabContainer"]
-visible = false
-layout_mode = 2
-bbcode_enabled = true
-text = "[b][color=cyan]NETWORK TOPOLOGY MAP[/color][/b]
-Visualizes the physical and logical state of all corporate assets.
-
-[b]Node Status Indicators:[/b]
-• [color=cyan]Cyan[/color] - Status: CLEAN. Host is operating within nominal parameters.
-• [color=red]Red[/color] - Status: INFECTED. Critical malware detected. Immediate isolation required.
-• [color=orange]Orange[/color] - Status: SUSPICIOUS. Anomalous activity detected.
-• [color=gray]Gray[/color] - Status: ISOLATED. Host disconnected from network.
-
-[b]Interactivity:[/b]
-Right-click any node to access the [b]Context Menu[/b]. This allows you to trigger Scans, Isolation, or Traces directly without typing commands."
-metadata/_tab_index = 1
-
-[node name="SIEM" type="RichTextLabel" parent="Panel/VBox/Content/TabContainer"]
-visible = false
-layout_mode = 2
-bbcode_enabled = true
-text = "[b][color=cyan]SIEM LOG VIEWER[/color][/b]
-The SIEM (Security Information and Event Management) aggregates logs from across the organization.
-
-[b]Usage:[/b]
-• [b]Investigation:[/b] Click on a log entry to view detailed metadata (IPs, Hostnames, Messages).
-• [b]Evidence:[/b] To solve a ticket with 'Compliant' status, you must attach the required logs as evidence.
-• [b]How to Attach:[/b] Select a log, choose the relevant ticket from the dropdown, and click [b]Attach Evidence[/b].
-
-[b]Filtering:[/b]
-Use the filter buttons (Security, High Severity) to narrow down thousands of entries to find the 'smoking gun' for your incident."
-metadata/_tab_index = 2
-
-[node name="Email" type="RichTextLabel" parent="Panel/VBox/Content/TabContainer"]
-visible = false
-layout_mode = 2
-bbcode_enabled = true
-text = "[b][color=cyan]EMAIL ANALYZER[/color][/b]
-Most breaches start with a single email. Analyze carefully before acting.
-
-[b]Key Indicators:[/b]
-• [b]Spoofing:[/b] Check if the 'From' address matches the expected internal domain.
-• [b]Malicious Links:[/b] Hover over or scan links to check for suspicious domains or phishing redirects.
-• [b]Attachments:[/b] Scan all attachments for malware signatures.
-
-[b]Actions:[/b]
-• [color=red]Quarantine[/color]: Use when you are certain the email is malicious.
-• [color=green]Approve[/color]: Use for legitimate business communication.
-
-[i]Warning: Misidentifying a legitimate executive email as phishing will cause reputation loss.[/i]"
-metadata/_tab_index = 3
-
-[node name="Procedures" type="RichTextLabel" parent="Panel/VBox/Content/TabContainer"]
-visible = false
-layout_mode = 2
-bbcode_enabled = true
-text = "[b][color=cyan]INCIDENT RESPONSE PROCEDURES[/color][/b]
-
-[b]Resolution Strategies:[/b]
-• [b]Compliant:[/b] The standard operating procedure. Requires all evidence (logs) to be attached. No risk of missing hidden consequences.
-• [b]Efficient:[/b] Priority is speed. No evidence required, but high risk of missing 'Hidden Risks' that cause later breaches.
-• [b]Emergency:[/b] Immediate resolution for catastrophic events. Use only when time is critical.
-
-[b]Special Recovery Tools:[/b]
-• [b]Decryption Utility:[/b] Used after ransomware containment to restore encrypted assets. Requires active pattern matching.
-• [b]IP Traceroute:[/b] Used during data exfiltration incidents to reveal the true origin host behind a suspicious IP.
-
-[b]Analyst Archetypes:[/b]
-Your performance determines your reputation:
-• [b]By-the-Book:[/b] High compliance, slow but safe.
-• [b]Cowboy:[/b] High efficiency, fast but dangerous.
-• [b]Negligent:[/b] Letting alerts time out."
-metadata/_tab_index = 4
-
-[node name="Examples" type="RichTextLabel" parent="Panel/VBox/Content/TabContainer"]
-visible = false
-layout_mode = 2
-bbcode_enabled = true
-text = "[b][color=cyan]WALKTHROUGH: RESOLVING AN INCIDENT[/color][/b]
-
-[b]Example Ticket:[/b] [i]Scheduled System Maintenance[/i]
-[b]Goal:[/b] Verify that the backup service finished successfully.
-
-[b]Step 1: Investigation[/b]
-Open the [color=yellow]SIEM Log Viewer[/color]. You are looking for a \"Success\" message. 
-[i]Hint: Look for Source: \"System\" and Severity: \"Info\".[/i]
-
-[b]Step 2: Attaching Evidence[/b]
-1. Click the log: [color=green]\"Scheduled backup completed successfully\"[/color].
-2. At the bottom, click the dropdown and select the maintenance ticket.
-3. Click [b]Attach[/b].
-
-[b]Step 3: Closing the Loop[/b]
-1. Open the [color=yellow]Ticket Queue[/color].
-2. Select the ticket. You will see [color=green]Evidence: 1/1[/color].
-3. Click [b]Resolve Incident[/b].
-4. Choose [b]Compliant Resolution[/b].
-
-[b][color=orange]WHY COMPLIANT?[/color][/b]
-If you skip Step 2 and choose [b]Efficient[/b], you close the ticket faster but risk missing \"Hidden Risks.\" For example, if a malware beacon was hidden in those logs and you didn't check them, the attack will [color=red]Escalate[/color] later in your shift!"
-metadata/_tab_index = 5
-
-[node name="Incidents" type="RichTextLabel" parent="Panel/VBox/Content/TabContainer"]
-visible = false
-layout_mode = 2
-bbcode_enabled = true
-text = "[b][color=cyan]INCIDENT CATALOG & PROCEDURES[/color][/b]
-
-[b]1. PHISH-001: Phishing Campaign Alert[/b]
-• [b]Tool:[/b] SIEM / Email
-• [b]Steps:[/b] Check SIEM alerts, review email headers, verify clicks.
-
-[b]2. SPEAR-PHISH-001: Spear Phishing Investigation[/b]
-• [b]Tool:[/b] Email
-• [b]Steps:[/b] Inspect headers for spoofing, scan attachments, check domain reputation.
-
-[b]3. MALWARE-CONTAIN-001: Malware Containment[/b]
-• [b]Tool:[/b] Terminal / Network Map
-• [b]Steps:[/b] Scan host WORKSTATION-45, isolate host if infected, verify isolation.
-
-[b]4. RANSOM-001: Ransomware Alert[/b]
-• [b]Tool:[/b] Network Map / Decryption Utility
-• [b]Steps:[/b] Isolate target server, initiate decryption puzzle, verify recovery.
-
-[b]5. SOCIAL-001: Social Engineering Attempt[/b]
-• [b]Tool:[/b] Email / SIEM
-• [b]Steps:[/b] Check call logs, draft security alert, update security awareness.
-
-[b]6. INSIDER-001: Suspicious Data Access[/b]
-• [b]Tool:[/b] SIEM
-• [b]Steps:[/b] Search Jane Doe logs, identify unusual file access, report to Senior Analyst.
-
-[b]7. DATA-EXFIL-001: Data Exfiltration Alert[/b]
-• [b]Tool:[/b] Terminal (Trace) / SIEM
-• [b]Steps:[/b] Trace suspicious IP to internal host, block connection, verify containment.
-
-[b]8. AUTH-FAIL-GENERIC: Multiple Auth Failures[/b]
-• [b]Tool:[/b] SIEM / Email
-• [b]Steps:[/b] Verify jsmith identity, reset password if requested, monitor failures.
-
-[b]9. SYS-MAINT-GENERIC: Scheduled Maintenance[/b]
-• [b]Tool:[/b] SIEM
-• [b]Steps:[/b] Monitor patch logs, verify 'smbd' service, confirm connectivity.
-
-[b]10. BLACK-TICKET-REDEMPTION: Forensic Post-Mortem[/b]
-• [b]Tool:[/b] SIEM / Email / Terminal
-• [b]Steps:[/b] Identify delivery vector, trace lateral movement, verify recovery."
-metadata/_tab_index = 6
+text = "Select a topic..."

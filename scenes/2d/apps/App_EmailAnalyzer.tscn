@@ -1,180 +1,179 @@
-[gd_scene load_steps=2 format=3 uid="uid://bl81gxshfy21s"]
+[gd_scene load_steps=4 format=3 uid="uid://ciqgjni1uxfau"]
 
 [ext_resource type="Script" uid="uid://cnlitr17gagoc" path="res://scripts/2d/apps/App_EmailAnalyzer.gd" id="1_email"]
+[ext_resource type="PackedScene" path="res://scenes/2d/apps/components/ForensicReportModal.tscn" id="2_modal"]
+[ext_resource type="Theme" uid="uid://dny3rlbltexc7" path="res://assets/themes/EnterpriseTheme.tres" id="3_theme"]
 
 [node name="App_EmailAnalyzer" type="Control"]
-custom_minimum_size = Vector2(900, 700)
+custom_minimum_size = Vector2(1000, 700)
 layout_mode = 3
-anchors_preset = 0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3_theme")
 script = ExtResource("1_email")
 
-[node name="ColorRect" type="ColorRect" parent="."]
-layout_mode = 0
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-mouse_filter = 1
-color = Color(0.0392157, 0.0392157, 0.101961, 0.9)
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="ColorRect"]
-layout_mode = 0
+[node name="MainLayout" type="HSplitContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+split_offset = 380
 
-[node name="HeaderLabel" type="Label" parent="ColorRect/VBoxContainer"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.2, 0.6, 1, 1)
-theme_override_font_sizes/font_size = 20
-text = "EMAIL ANALYSER"
-vertical_alignment = 1
-
-[node name="HSeparator" type="HSeparator" parent="ColorRect/VBoxContainer"]
-layout_mode = 2
-
-[node name="EmailViewContainer" type="HSplitContainer" parent="ColorRect/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="InboxPanel" type="PanelContainer" parent="ColorRect/VBoxContainer/EmailViewContainer"]
+[node name="InboxPanel" type="VBoxContainer" parent="MainLayout"]
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_stretch_ratio = 0.4
+theme_override_constants/separation = 0
 
-[node name="MarginContainer" type="MarginContainer" parent="ColorRect/VBoxContainer/EmailViewContainer/InboxPanel"]
+[node name="InboxHeader" type="MarginContainer" parent="MainLayout/InboxPanel"]
 layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
 
-[node name="VBoxContainer" type="VBoxContainer" parent="ColorRect/VBoxContainer/EmailViewContainer/InboxPanel/MarginContainer"]
+[node name="Label" type="Label" parent="MainLayout/InboxPanel/InboxHeader"]
 layout_mode = 2
+theme_type_variation = &"TechnicalHeader"
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 18
+text = "INVESTIGATIVE INBOX"
 
-[node name="InboxLabel" type="Label" parent="ColorRect/VBoxContainer/EmailViewContainer/InboxPanel/MarginContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 16
-text = "Inbox"
-
-[node name="ScrollContainer" type="ScrollContainer" parent="ColorRect/VBoxContainer/EmailViewContainer/InboxPanel/MarginContainer/VBoxContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="MainLayout/InboxPanel"]
 layout_mode = 2
 size_flags_vertical = 3
+horizontal_scroll_mode = 0
 
-[node name="EmailList" type="VBoxContainer" parent="ColorRect/VBoxContainer/EmailViewContainer/InboxPanel/MarginContainer/VBoxContainer/ScrollContainer"]
+[node name="EmailList" type="VBoxContainer" parent="MainLayout/InboxPanel/ScrollContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_constants/separation = 1
 
-[node name="DetailPanel" type="PanelContainer" parent="ColorRect/VBoxContainer/EmailViewContainer"]
+[node name="DetailPanel" type="PanelContainer" parent="MainLayout"]
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_stretch_ratio = 0.6
 
-[node name="MarginContainer" type="MarginContainer" parent="ColorRect/VBoxContainer/EmailViewContainer/DetailPanel"]
+[node name="Margin" type="MarginContainer" parent="MainLayout/DetailPanel"]
 layout_mode = 2
+theme_override_constants/margin_left = 25
+theme_override_constants/margin_top = 25
+theme_override_constants/margin_right = 25
+theme_override_constants/margin_bottom = 25
 
-[node name="VBoxContainer" type="VBoxContainer" parent="ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer"]
+[node name="VBox" type="VBoxContainer" parent="MainLayout/DetailPanel/Margin"]
 layout_mode = 2
+theme_override_constants/separation = 20
 
-[node name="PlaceholderLabel" type="Label" parent="ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer"]
+[node name="PlaceholderLabel" type="Label" parent="MainLayout/DetailPanel/Margin/VBox"]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0.4, 0.4, 0.4, 1)
 text = "Select an email to view details"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="EmailDetailView" type="VBoxContainer" parent="ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer"]
+[node name="EmailDetailView" type="VBoxContainer" parent="MainLayout/DetailPanel/Margin/VBox"]
 unique_name_in_owner = true
 visible = false
-layout_mode = 2
-
-[node name="SubjectLabel" type="Label" parent="ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer/EmailDetailView"]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_font_sizes/font_size = 18
-text = "Subject: [No Subject]"
-
-[node name="SenderLabel" type="Label" parent="ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer/EmailDetailView"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "From: [No Sender]"
-
-[node name="HSeparator2" type="HSeparator" parent="ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer/EmailDetailView"]
-layout_mode = 2
-
-[node name="BodyLabel" type="Label" parent="ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer/EmailDetailView"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "[Email body will appear here]"
-autowrap_mode = 3
-
-[node name="AttachmentsLabel" type="Label" parent="ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer/EmailDetailView"]
-unique_name_in_owner = true
-visible = false
-layout_mode = 2
-text = "Attachments: None"
-
-[node name="HSeparator3" type="HSeparator" parent="ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer/EmailDetailView"]
-layout_mode = 2
-
-[node name="InspectionTools" type="VBoxContainer" parent="ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer/EmailDetailView"]
 layout_mode = 2
 size_flags_vertical = 3
+theme_override_constants/separation = 15
 
-[node name="InspectionLabel" type="Label" parent="ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer/EmailDetailView/InspectionTools"]
+[node name="Header" type="VBoxContainer" parent="MainLayout/DetailPanel/Margin/VBox/EmailDetailView"]
 layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="SubjectLabel" type="Label" parent="MainLayout/DetailPanel/Margin/VBox/EmailDetailView/Header"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 24
+text = "Subject Line"
+autowrap_mode = 3
+
+[node name="SenderLabel" type="Label" parent="MainLayout/DetailPanel/Margin/VBox/EmailDetailView/Header"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.1, 0.1, 0.1, 1)
 theme_override_font_sizes/font_size = 14
-text = "Inspection Tools:"
+text = "Sender Name"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer/EmailDetailView/InspectionTools"]
+[node name="HSeparator" type="HSeparator" parent="MainLayout/DetailPanel/Margin/VBox/EmailDetailView"]
 layout_mode = 2
 
-[node name="ViewHeadersButton" type="Button" parent="ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer/EmailDetailView/InspectionTools/HBoxContainer"]
+[node name="BodyLabel" type="RichTextLabel" parent="MainLayout/DetailPanel/Margin/VBox/EmailDetailView"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+bbcode_enabled = true
+text = "Body text..."
+
+[node name="AttachmentsLabel" type="Label" parent="MainLayout/DetailPanel/Margin/VBox/EmailDetailView"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.4, 0.4, 0.4, 1)
+theme_override_font_sizes/font_size = 12
+text = "Attachments:"
+
+[node name="InspectionTools" type="HBoxContainer" parent="MainLayout/DetailPanel/Margin/VBox/EmailDetailView"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="ViewHeadersButton" type="Button" parent="MainLayout/DetailPanel/Margin/VBox/EmailDetailView/InspectionTools"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "View Headers"
 
-[node name="ScanAttachmentsButton" type="Button" parent="ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer/EmailDetailView/InspectionTools/HBoxContainer"]
+[node name="ScanAttachmentsButton" type="Button" parent="MainLayout/DetailPanel/Margin/VBox/EmailDetailView/InspectionTools"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Scan Attachments"
 
-[node name="CheckLinksButton" type="Button" parent="ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer/EmailDetailView/InspectionTools/HBoxContainer"]
+[node name="CheckLinksButton" type="Button" parent="MainLayout/DetailPanel/Margin/VBox/EmailDetailView/InspectionTools"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Check Links"
 
-[node name="InspectionResultsContainer" type="ScrollContainer" parent="ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer/EmailDetailView/InspectionTools"]
-custom_minimum_size = Vector2(0, 150)
+[node name="DecisionButtons" type="HBoxContainer" parent="MainLayout/DetailPanel/Margin/VBox/EmailDetailView"]
+unique_name_in_owner = true
 layout_mode = 2
-size_flags_vertical = 3
+theme_override_constants/separation = 15
 
-[node name="InspectionResults" type="RichTextLabel" parent="ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer/EmailDetailView/InspectionTools/InspectionResultsContainer"]
+[node name="ApproveButton" type="Button" parent="MainLayout/DetailPanel/Margin/VBox/EmailDetailView/DecisionButtons"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_vertical = 3
-bbcode_enabled = true
-fit_content = true
+text = "Approve"
 
-[node name="HSeparator4" type="HSeparator" parent="ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer/EmailDetailView"]
-layout_mode = 2
-
-[node name="DecisionButtons" type="HBoxContainer" parent="ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer/EmailDetailView"]
-unique_name_in_owner = true
-layout_mode = 2
-
-[node name="ApproveButton" type="Button" parent="ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer/EmailDetailView/DecisionButtons"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Approve (Deliver)"
-
-[node name="QuarantineButton" type="Button" parent="ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer/EmailDetailView/DecisionButtons"]
+[node name="QuarantineButton" type="Button" parent="MainLayout/DetailPanel/Margin/VBox/EmailDetailView/DecisionButtons"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Quarantine"
 
-[node name="EscalateButton" type="Button" parent="ColorRect/VBoxContainer/EmailViewContainer/DetailPanel/MarginContainer/VBoxContainer/EmailDetailView/DecisionButtons"]
+[node name="EscalateButton" type="Button" parent="MainLayout/DetailPanel/Margin/VBox/EmailDetailView/DecisionButtons"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Escalate"
+
+[node name="ForensicReportModal" parent="." instance=ExtResource("2_modal")]
+unique_name_in_owner = true
+layout_mode = 1

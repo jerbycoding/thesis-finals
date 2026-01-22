@@ -1,51 +1,73 @@
 [gd_scene load_steps=3 format=3 uid="uid://bl81gxshfy21t"]
 
-[ext_resource type="Script" path="res://scripts/2d/apps/components/EmailListEntry.gd" id="1_email_entry"]
+[ext_resource type="Script" uid="uid://e3getwdtdogp" path="res://scripts/2d/apps/components/EmailListEntry.gd" id="1_email_entry"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Email"]
-content_margin_left = 10.0
-content_margin_top = 5.0
-content_margin_right = 10.0
-content_margin_bottom = 5.0
-bg_color = Color(0.1, 0.12, 0.18, 0.8)
-border_width_left = 3
-border_color = Color(0.2, 0.8, 0.2, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Card"]
+bg_color = Color(1, 1, 1, 1)
+border_width_bottom = 1
+border_color = Color(0.921569, 0.921569, 0.921569, 1)
 
 [node name="EmailListEntry" type="PanelContainer"]
-custom_minimum_size = Vector2(200, 60)
-offset_right = 200.0
-offset_bottom = 60.0
+custom_minimum_size = Vector2(0, 100)
+offset_right = 350.0
+offset_bottom = 100.0
 size_flags_horizontal = 3
-mouse_filter = 0
-theme_override_styles/panel = SubResource("StyleBoxFlat_Email")
+theme_override_styles/panel = SubResource("StyleBoxFlat_Card")
 script = ExtResource("1_email_entry")
 
-[node name="HBox" type="HBoxContainer" parent="."]
+[node name="Layout" type="HBoxContainer" parent="."]
 layout_mode = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 0
 
-[node name="IconLabel" type="Label" parent="HBox"]
+[node name="RiskBar" type="ColorRect" parent="Layout"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(30, 0)
+custom_minimum_size = Vector2(4, 0)
 layout_mode = 2
-text = "⚠️"
-horizontal_alignment = 1
-vertical_alignment = 1
+color = Color(0.180392, 0.490196, 0.196078, 1)
 
-[node name="SenderLabel" type="Label" parent="HBox"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(100, 0)
+[node name="Margin" type="MarginContainer" parent="Layout"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 12
-text = "Sender Name"
-vertical_alignment = 1
-clip_text = true
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 12
 
-[node name="SubjectLabel" type="Label" parent="HBox"]
+[node name="Content" type="VBoxContainer" parent="Layout/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Header" type="HBoxContainer" parent="Layout/Margin/Content"]
+layout_mode = 2
+
+[node name="SubjectLabel" type="Label" parent="Layout/Margin/Content/Header"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 12
-text = "Email Subject Line Goes Here..."
-vertical_alignment = 1
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 14
+text = "New app design brief"
 clip_text = true
+
+[node name="TimeLabel" type="Label" parent="Layout/Margin/Content/Header"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1)
+theme_override_font_sizes/font_size = 11
+text = "12 min ago"
+
+[node name="SenderLabel" type="Label" parent="Layout/Margin/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.4, 0.4, 0.4, 1)
+theme_override_font_sizes/font_size = 12
+text = "Mariana Dickey"
+
+[node name="PreviewLabel" type="Label" parent="Layout/Margin/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5, 0.5, 0.5, 1)
+theme_override_font_sizes/font_size = 11
+text = "A design is a plan or specification for the construction..."
+autowrap_mode = 3
+max_lines_visible = 2

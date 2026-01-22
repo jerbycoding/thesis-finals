@@ -7,8 +7,8 @@ signal app_closed(app_name: String, window_id: String)
 
 var shift_report_scene = preload("res://scenes/2d/apps/App_ShiftReport.tscn")
 
-@onready var app_launcher: GridContainer = %AppLauncher
-@onready var exit_button: Button = %ExitButton
+@onready var dock_icons: HBoxContainer = %DockIcons
+@onready var utility_bar: VBoxContainer = %LeftUtilityBar
 @onready var app_window_container: Control = %AppWindowContainer
 
 func _ready():
@@ -22,8 +22,9 @@ func _ready():
 	else:
 		app_window_container.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	
-	# Connect app icons
-	_setup_app_connections()
+	# Connect app icons from all containers
+	_setup_container_connections(dock_icons)
+	_setup_container_connections(utility_bar)
 	
 	# Connect to EventBus for gameplay events
 	EventBus.ticket_added.connect(_on_ticket_added)
@@ -36,12 +37,14 @@ func _ready():
 	
 	print("DesktopManager ready - Window system active")
 
-func _setup_app_connections():
-	if not app_launcher: return
+func _setup_container_connections(container: Control):
+	if not container: return
 	
-	for child in app_launcher.get_children():
+	for child in container.get_children():
 		if child is Button:
 			var app_name = child.name.to_lower().replace("_icon", "")
+			
+			if app_name == "exitbutton": continue # Skip exit
 			
 			# Setup initial tooltips for restricted apps
 			if DesktopWindowManager and app_name in DesktopWindowManager.RESTRICTED_APPS:
@@ -49,14 +52,14 @@ func _setup_app_connections():
 				if not status.allowed:
 					child.tooltip_text = status.reason
 			
-			# Disconnect if needed
-			if child.pressed.is_connected(_on_app_icon_pressed):
-				child.pressed.disconnect(_on_app_icon_pressed)
-			
+			# Connect signals
 			child.pressed.connect(_on_app_icon_pressed.bind(app_name))
 			child.mouse_entered.connect(_on_app_icon_hover)
 			
 			print("Connected icon: ", child.name, " -> ", app_name)
+
+func _setup_app_connections():
+	pass # Deprecated in favor of _setup_container_connections
 
 func _on_app_icon_hover():
 	if AudioManager:
@@ -91,23 +94,26 @@ func _on_ticket_added(ticket_data: TicketResource):
 			_set_icon_glow(ticket_data.required_tool, true)
 			
 		# DYNAMIC AUTHORIZATION: Grant permission for restricted apps based on data
-		if DesktopWindowManager:
-			for app_name in DesktopWindowManager.RESTRICTED_APPS:
-				var restriction = DesktopWindowManager.RESTRICTED_APPS[app_name]
-				if ticket_data.category == restriction.required_category or ticket_data.required_tool == restriction.required_tool:
-					var icon_name = app_name.capitalize() + "_Icon"
-					if app_name == "siem": icon_name = "SIEM_Icon" # Special case for SIEM caps
-					
-					var btn = app_launcher.get_node_or_null(icon_name)
-					if btn:
-						btn.tooltip_text = "AUTHORIZATION GRANTED: High-Priority Incident in Progress"
+		for app_name in DesktopWindowManager.RESTRICTED_APPS:
+			var restriction = DesktopWindowManager.RESTRICTED_APPS[app_name]
+			if ticket_data.category == restriction.required_category or ticket_data.required_tool == restriction.required_tool:
+				var icon_name = app_name.capitalize() + "_Icon"
+				if app_name == "siem": icon_name = "SIEM_Icon" # Special case for SIEM caps
+				
+				var btn = dock_icons.get_node_or_null(icon_name)
+				if not btn: btn = utility_bar.get_node_or_null(icon_name)
+				
+				if btn:
+					btn.tooltip_text = "AUTHORIZATION GRANTED: High-Priority Incident in Progress"
 
 func _set_icon_glow(app_name: String, active: bool):
 	var icon_name = app_name.capitalize() + "_Icon"
 	# Handle cases like SIEM (all caps)
 	if app_name == "siem": icon_name = "SIEM_Icon"
 	
-	var icon_btn = app_launcher.get_node_or_null(icon_name)
+	var icon_btn = dock_icons.get_node_or_null(icon_name)
+	if not icon_btn: icon_btn = utility_bar.get_node_or_null(icon_name)
+	
 	if not icon_btn: return
 	
 	if active:

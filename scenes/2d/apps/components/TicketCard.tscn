@@ -2,100 +2,91 @@
 
 [ext_resource type="Script" uid="uid://p3uitm5au0vw" path="res://scripts/2d/apps/components/TicketCard.gd" id="1_coujv"]
 
-[sub_resource type="StyleBoxFlat" id="PanelStyle"]
-bg_color = Color(0.0705882, 0.0823529, 0.14902, 0.8)
-border_width_left = 3
-border_color = Color(0.2, 0.22, 0.3, 1)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
-shadow_color = Color(0, 0, 0, 0.2)
-shadow_size = 2
-shadow_offset = Vector2(0, 2)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Complete"]
-content_margin_left = 10.0
-content_margin_top = 4.0
-content_margin_right = 10.0
-content_margin_bottom = 4.0
-bg_color = Color(0.1, 0.3, 0.1, 1)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Card"]
+bg_color = Color(1, 1, 1, 1)
 border_width_bottom = 1
-border_color = Color(0.2, 0.6, 0.2, 1)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
+border_color = Color(0.921569, 0.921569, 0.921569, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Action"]
+bg_color = Color(0, 0, 0, 1)
+content_margin_left = 10.0
+content_margin_top = 5.0
+content_margin_right = 10.0
+content_margin_bottom = 5.0
 
 [node name="TicketCard" type="PanelContainer"]
-custom_minimum_size = Vector2(320, 90)
-offset_right = 320.0
-offset_bottom = 90.0
+custom_minimum_size = Vector2(0, 120)
+offset_right = 350.0
+offset_bottom = 120.0
 size_flags_horizontal = 3
-size_flags_vertical = 0
-theme_override_styles/panel = SubResource("PanelStyle")
+mouse_filter = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_Card")
 script = ExtResource("1_coujv")
 
-[node name="Margin" type="MarginContainer" parent="."]
+[node name="Layout" type="HBoxContainer" parent="."]
 layout_mode = 2
-theme_override_constants/margin_left = 12
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 12
-theme_override_constants/margin_bottom = 10
+theme_override_constants/separation = 0
 
-[node name="VBox" type="VBoxContainer" parent="Margin"]
+[node name="SeverityBar" type="ColorRect" parent="Layout"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(4, 0)
 layout_mode = 2
-theme_override_constants/separation = 6
+color = Color(0.827451, 0.156863, 0.156863, 1)
 
-[node name="TitleLabel" type="Label" parent="Margin/VBox"]
+[node name="Margin" type="MarginContainer" parent="Layout"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="Content" type="VBoxContainer" parent="Layout/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Header" type="HBoxContainer" parent="Layout/Margin/Content"]
+layout_mode = 2
+
+[node name="IDLabel" type="Label" parent="Layout/Margin/Content/Header"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_color = Color(0.9, 0.9, 0.95, 1)
-theme_override_font_sizes/font_size = 15
-text = "TICKET-001: System Breach"
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 12
+text = "PHISH-001"
+
+[node name="TimeLabel" type="Label" parent="Layout/Margin/Content/Header"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1)
+theme_override_font_sizes/font_size = 11
+text = "05:00"
+
+[node name="TitleLabel" type="Label" parent="Layout/Margin/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.1, 0.1, 0.1, 1)
+theme_override_font_sizes/font_size = 14
+text = "Data Exfiltration Detected"
 autowrap_mode = 2
 max_lines_visible = 1
 
-[node name="StatusHBox" type="HBoxContainer" parent="Margin/VBox"]
-layout_mode = 2
-theme_override_constants/separation = 10
-
-[node name="SeverityLabel" type="Label" parent="Margin/VBox/StatusHBox"]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_colors/font_color = Color(0.9, 0.2, 0.2, 1)
-theme_override_font_sizes/font_size = 13
-text = "CRITICAL"
-
-[node name="EvidenceLabel" type="Label" parent="Margin/VBox/StatusHBox"]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_colors/font_color = Color(0.6, 0.6, 0.7, 1)
-theme_override_font_sizes/font_size = 12
-text = "EVID: 0/2"
-
-[node name="Spacer" type="Control" parent="Margin/VBox/StatusHBox"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="TimeLabel" type="Label" parent="Margin/VBox/StatusHBox"]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
-theme_override_font_sizes/font_size = 13
-text = "05:00"
-horizontal_alignment = 2
-
-[node name="ActionHBox" type="HBoxContainer" parent="Margin/VBox"]
+[node name="Footer" type="HBoxContainer" parent="Layout/Margin/Content"]
 layout_mode = 2
 
-[node name="CompleteButton" type="Button" parent="Margin/VBox/ActionHBox"]
+[node name="EvidenceLabel" type="Label" parent="Layout/Margin/Content/Footer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 12
-theme_override_styles/normal = SubResource("StyleBoxFlat_Complete")
-text = "RESOLVE INCIDENT"
+theme_override_colors/font_color = Color(0.5, 0.5, 0.5, 1)
+theme_override_font_sizes/font_size = 11
+text = "Evidence: 0/2"
+
+[node name="CompleteButton" type="Button" parent="Layout/Margin/Content/Footer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 10
+theme_override_styles/normal = SubResource("StyleBoxFlat_Action")
+text = "RESOLVE"

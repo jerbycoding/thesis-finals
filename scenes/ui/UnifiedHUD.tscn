@@ -1,0 +1,132 @@
+[gd_scene load_steps=5 format=3 uid="uid://c8x6y708bab0e"]
+
+[ext_resource type="Script" uid="uid://doose6hv773vh" path="res://scripts/ui/UnifiedHUD.gd" id="1_script"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Header"]
+content_margin_left = 10.0
+content_margin_top = 2.0
+content_margin_right = 10.0
+content_margin_bottom = 2.0
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Body"]
+content_margin_left = 15.0
+content_margin_top = 15.0
+content_margin_right = 15.0
+content_margin_bottom = 15.0
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Progress"]
+bg_color = Color(0.9, 0.9, 0.9, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0, 0, 0, 1)
+
+[node name="UnifiedHUD" type="Control"]
+layout_mode = 3
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -280.0
+offset_top = -120.0
+offset_right = -40.0
+offset_bottom = 120.0
+grow_horizontal = 0
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_script")
+
+[node name="ModuleLayout" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -220.0
+offset_top = -75.0
+offset_bottom = 75.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_constants/separation = 0
+
+[node name="Header" type="PanelContainer" parent="ModuleLayout"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_Header")
+
+[node name="Label" type="Label" parent="ModuleLayout/Header"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 9
+text = "SYSTEM_TELEMETRY_v4.4"
+
+[node name="Body" type="PanelContainer" parent="ModuleLayout"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_Body")
+
+[node name="VBox" type="VBoxContainer" parent="ModuleLayout/Body"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="IntegrityGroup" type="VBoxContainer" parent="ModuleLayout/Body/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="HBox" type="HBoxContainer" parent="ModuleLayout/Body/VBox/IntegrityGroup"]
+layout_mode = 2
+
+[node name="IntegrityLabel" type="Label" parent="ModuleLayout/Body/VBox/IntegrityGroup/HBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 10
+text = "INTG_RATING"
+
+[node name="IntegrityValue" type="Label" parent="ModuleLayout/Body/VBox/IntegrityGroup/HBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 10
+text = "100%"
+
+[node name="IntegrityBar" type="ProgressBar" parent="ModuleLayout/Body/VBox/IntegrityGroup"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 6)
+layout_mode = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_Progress")
+value = 100.0
+show_percentage = false
+
+[node name="HSeparator" type="HSeparator" parent="ModuleLayout/Body/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="TemporalGroup" type="VBoxContainer" parent="ModuleLayout/Body/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="StatusLabel" type="Label" parent="ModuleLayout/Body/VBox/TemporalGroup"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.4, 0.4, 0.4, 1)
+theme_override_font_sizes/font_size = 9
+text = "SHIFT_STATUS: STANDBY"
+
+[node name="TimerLabel" type="Label" parent="ModuleLayout/Body/VBox/TemporalGroup"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 24
+text = "00:00"

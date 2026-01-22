@@ -1,15 +1,45 @@
-[gd_scene load_steps=3 format=3 uid="uid://r1r0ofgrecn5"]
+[gd_scene load_steps=6 format=3 uid="uid://r1r0ofgrecn5"]
 
-[ext_resource type="Script" uid="uid://drs7f2kew5x35" path="res://scripts/ui/ElevatorUI.gd" id="1_elevator"]
+[ext_resource type="Script" path="res://scripts/ui/ElevatorUI.gd" id="1_elevator"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Elevator"]
-bg_color = Color(0.05, 0.05, 0.08, 0.95)
-border_width_left = 4
-border_color = Color(0.2, 0.5, 1, 1)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_MetalPlate"]
+bg_color = Color(0.75, 0.75, 0.75, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.4, 0.4, 0.4, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+shadow_color = Color(0, 0, 0, 0.3)
+shadow_size = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Display"]
+bg_color = Color(0.05, 0.05, 0.05, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.2, 0.2, 0.2, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Indicator"]
+bg_color = Color(0.8, 0.8, 0, 0.1)
+draw_center = false
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.8, 0.8, 0, 0.2)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Separator"]
+bg_color = Color(0.4, 0.4, 0.4, 1)
+custom_margin_top = 1.0
 
 [node name="ElevatorUI" type="Control"]
 layout_mode = 3
@@ -29,53 +59,88 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 0.4)
 
-[node name="MainPanel" type="PanelContainer" parent="."]
-custom_minimum_size = Vector2(350, 0)
+[node name="MetalPanel" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(240, 500)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -175.0
-offset_top = -200.0
-offset_right = 175.0
-offset_bottom = 200.0
+offset_left = -120.0
+offset_top = -250.0
+offset_right = 120.0
+offset_bottom = 250.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_Elevator")
+theme_override_styles/panel = SubResource("StyleBoxFlat_MetalPlate")
 
-[node name="Margin" type="MarginContainer" parent="MainPanel"]
+[node name="VBox" type="VBoxContainer" parent="MetalPanel"]
 layout_mode = 2
-theme_override_constants/margin_left = 25
-theme_override_constants/margin_top = 20
-theme_override_constants/margin_right = 25
+theme_override_constants/separation = 0
+
+[node name="DisplayMargin" type="MarginContainer" parent="MetalPanel/VBox"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 25
+theme_override_constants/margin_right = 20
 theme_override_constants/margin_bottom = 20
 
-[node name="VBox" type="VBoxContainer" parent="MainPanel/Margin"]
+[node name="DisplayArea" type="PanelContainer" parent="MetalPanel/VBox/DisplayMargin"]
+custom_minimum_size = Vector2(0, 80)
 layout_mode = 2
-theme_override_constants/separation = 15
+theme_override_styles/panel = SubResource("StyleBoxFlat_Display")
 
-[node name="Title" type="Label" parent="MainPanel/Margin/VBox"]
+[node name="HBox" type="HBoxContainer" parent="MetalPanel/VBox/DisplayMargin/DisplayArea"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.2, 0.6, 1, 1)
-theme_override_font_sizes/font_size = 24
-text = "CORPORATE ELEVATOR"
-horizontal_alignment = 1
+alignment = 1
 
-[node name="StatusLabel" type="Label" parent="MainPanel/Margin/VBox"]
+[node name="DirectionArrow" type="Label" parent="MetalPanel/VBox/DisplayMargin/DisplayArea/HBox"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_color = Color(0.5, 0.5, 0.5, 1)
-text = "CURRENT FLOOR: 1"
+theme_override_colors/font_color = Color(0.8, 0.8, 0, 1)
+theme_override_font_sizes/font_size = 32
+text = "↓"
 horizontal_alignment = 1
 
-[node name="HSeparator" type="HSeparator" parent="MainPanel/Margin/VBox"]
-layout_mode = 2
-
-[node name="ButtonContainer" type="VBoxContainer" parent="MainPanel/Margin/VBox"]
+[node name="StatusLabel" type="Label" parent="MetalPanel/VBox/DisplayMargin/DisplayArea/HBox"]
 unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8, 0.8, 0, 1)
+theme_override_font_sizes/font_size = 42
+text = "01"
+horizontal_alignment = 1
+
+[node name="ControlsMargin" type="MarginContainer" parent="MetalPanel/VBox"]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_constants/separation = 10
-alignment = 1
+theme_override_constants/margin_left = 25
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 25
+theme_override_constants/margin_bottom = 30
+
+[node name="VBox" type="VBoxContainer" parent="MetalPanel/VBox/ControlsMargin"]
+layout_mode = 2
+theme_override_constants/separation = 25
+
+[node name="ButtonGrid" type="GridContainer" parent="MetalPanel/VBox/ControlsMargin/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/h_separation = 20
+theme_override_constants/v_separation = 20
+columns = 2
+
+[node name="Spacer" type="Control" parent="MetalPanel/VBox/ControlsMargin/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="AbortBtn" type="Button" parent="MetalPanel/VBox/ControlsMargin/VBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.2, 0.2, 1)
+text = "CANCEL"
+flat = true

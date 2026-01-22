@@ -1,21 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://c3humlfk5uhg8"]
+[gd_scene load_steps=6 format=3 uid="uid://c4xkfk6xo2ycf"]
 
 [ext_resource type="Script" uid="uid://b22xof43jxemv" path="res://scripts/2d/ComputerDesktop.gd" id="1_0kbkv"]
 [ext_resource type="Script" uid="uid://c28t6vqktfrln" path="res://scripts/2d/DesktopClock.gd" id="1_0l3ag"]
 [ext_resource type="Script" uid="uid://cbi6smmdpx4yu" path="res://scripts/2d/ExitButton.gd" id="2_0kbkv"]
-[ext_resource type="PackedScene" path="res://scenes/ui/IntegrityHUD.tscn" id="3_integrity"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_icon"]
-bg_color = Color(0.117647, 0.164706, 0.227451, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.258824, 0.352941, 0.470588, 1)
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-corner_radius_bottom_right = 8
-corner_radius_bottom_left = 8
+[ext_resource type="PackedScene" uid="uid://c8x6y708bab0e" path="res://scenes/ui/UnifiedHUD.tscn" id="3_unified"]
+[ext_resource type="Theme" uid="uid://dny3rlbltexc7" path="res://assets/themes/EnterpriseTheme.tres" id="4_theme"]
 
 [node name="ComputerDesktop" type="Control"]
 layout_mode = 3
@@ -24,6 +13,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("4_theme")
 script = ExtResource("1_0kbkv")
 
 [node name="Background" type="ColorRect" parent="."]
@@ -34,10 +24,9 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
-color = Color(0.0392157, 0.0392157, 0.101961, 1)
+color = Color(0.0313726, 0.0431373, 0.0705882, 1)
 
 [node name="GridPattern" type="ColorRect" parent="Background"]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -45,7 +34,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-color = Color(1, 1, 1, 0.02)
+color = Color(1, 1, 1, 0.01)
 
 [node name="AppWindowContainer" type="Control" parent="."]
 unique_name_in_owner = true
@@ -57,304 +46,256 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
 
-[node name="AppLauncher" type="GridContainer" parent="."]
-unique_name_in_owner = true
-layout_mode = 0
-offset_left = 40.0
-offset_top = 40.0
-offset_right = 440.0
-offset_bottom = 440.0
-theme_override_constants/h_separation = 25
-theme_override_constants/v_separation = 25
-columns = 4
-
-[node name="SIEM_Icon" type="Button" parent="AppLauncher"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(80, 100)
-layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_icon")
-flat = true
-
-[node name="VBox" type="VBoxContainer" parent="AppLauncher/SIEM_Icon"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-alignment = 1
-
-[node name="IconText" type="Label" parent="AppLauncher/SIEM_Icon/VBox"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 32
-text = "📊"
-horizontal_alignment = 1
-
-[node name="Label" type="Label" parent="AppLauncher/SIEM_Icon/VBox"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 12
-text = "SIEM"
-horizontal_alignment = 1
-
-[node name="Email_Icon" type="Button" parent="AppLauncher"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(80, 100)
-layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_icon")
-flat = true
-
-[node name="VBox" type="VBoxContainer" parent="AppLauncher/Email_Icon"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-alignment = 1
-
-[node name="IconText" type="Label" parent="AppLauncher/Email_Icon/VBox"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 32
-text = "✉"
-horizontal_alignment = 1
-
-[node name="Label" type="Label" parent="AppLauncher/Email_Icon/VBox"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 12
-text = "EMAIL"
-horizontal_alignment = 1
-
-[node name="Terminal_Icon" type="Button" parent="AppLauncher"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(80, 100)
-layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_icon")
-flat = true
-
-[node name="VBox" type="VBoxContainer" parent="AppLauncher/Terminal_Icon"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-alignment = 1
-
-[node name="IconText" type="Label" parent="AppLauncher/Terminal_Icon/VBox"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 32
-text = "🐚"
-horizontal_alignment = 1
-
-[node name="Label" type="Label" parent="AppLauncher/Terminal_Icon/VBox"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 12
-text = "TERMINAL"
-horizontal_alignment = 1
-
-[node name="Tickets_Icon" type="Button" parent="AppLauncher"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(80, 100)
-layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_icon")
-flat = true
-
-[node name="VBox" type="VBoxContainer" parent="AppLauncher/Tickets_Icon"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-alignment = 1
-
-[node name="IconText" type="Label" parent="AppLauncher/Tickets_Icon/VBox"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 32
-text = "🎫"
-horizontal_alignment = 1
-
-[node name="Label" type="Label" parent="AppLauncher/Tickets_Icon/VBox"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 12
-text = "TICKETS"
-horizontal_alignment = 1
-
-[node name="Network_Icon" type="Button" parent="AppLauncher"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(80, 100)
-layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_icon")
-flat = true
-
-[node name="VBox" type="VBoxContainer" parent="AppLauncher/Network_Icon"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-alignment = 1
-
-[node name="IconText" type="Label" parent="AppLauncher/Network_Icon/VBox"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 32
-text = "🕸️"
-horizontal_alignment = 1
-
-[node name="Label" type="Label" parent="AppLauncher/Network_Icon/VBox"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 12
-text = "NETWORK"
-horizontal_alignment = 1
-
-[node name="Decrypt_Icon" type="Button" parent="AppLauncher"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(80, 100)
-layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_icon")
-flat = true
-
-[node name="VBox" type="VBoxContainer" parent="AppLauncher/Decrypt_Icon"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-alignment = 1
-
-[node name="IconText" type="Label" parent="AppLauncher/Decrypt_Icon/VBox"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 32
-text = "🔓"
-horizontal_alignment = 1
-
-[node name="Label" type="Label" parent="AppLauncher/Decrypt_Icon/VBox"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 12
-text = "DECRYPT"
-horizontal_alignment = 1
-
-[node name="Handbook_Icon" type="Button" parent="AppLauncher"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(80, 100)
-layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_icon")
-flat = true
-
-[node name="VBox" type="VBoxContainer" parent="AppLauncher/Handbook_Icon"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-alignment = 1
-
-[node name="IconText" type="Label" parent="AppLauncher/Handbook_Icon/VBox"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 32
-text = "📘"
-horizontal_alignment = 1
-
-[node name="Label" type="Label" parent="AppLauncher/Handbook_Icon/VBox"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 12
-text = "HANDBOOK"
-horizontal_alignment = 1
-
-[node name="TaskManager_Icon" type="Button" parent="AppLauncher"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(80, 100)
-layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_icon")
-flat = true
-
-[node name="VBox" type="VBoxContainer" parent="AppLauncher/TaskManager_Icon"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-alignment = 1
-
-[node name="IconText" type="Label" parent="AppLauncher/TaskManager_Icon/VBox"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 32
-text = "📈"
-horizontal_alignment = 1
-
-[node name="Label" type="Label" parent="AppLauncher/TaskManager_Icon/VBox"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 12
-text = "TASK MGR"
-horizontal_alignment = 1
-
-[node name="SystemTray" type="Panel" parent="."]
+[node name="TopSystemBar" type="PanelContainer" parent="."]
 unique_name_in_owner = true
 layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
+anchors_preset = 10
 anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = -45.0
+offset_bottom = 35.0
 grow_horizontal = 2
-grow_vertical = 0
+theme_type_variation = &"HeaderPanel"
 
-[node name="Margin" type="MarginContainer" parent="SystemTray"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="Margin" type="MarginContainer" parent="TopSystemBar"]
+layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_right = 10
 
-[node name="HBox" type="HBoxContainer" parent="SystemTray/Margin"]
+[node name="HBox" type="HBoxContainer" parent="TopSystemBar/Margin"]
 layout_mode = 2
 
-[node name="StartLabel" type="Label" parent="SystemTray/Margin/HBox"]
+[node name="AppMenuButton" type="Button" parent="TopSystemBar/Margin/HBox"]
+unique_name_in_owner = true
 layout_mode = 2
+theme_type_variation = &"TechnicalHeader"
+text = " APPLICATIONS "
+flat = true
+
+[node name="VSeparator" type="VSeparator" parent="TopSystemBar/Margin/HBox"]
+layout_mode = 2
+
+[node name="StatusLabel" type="Label" parent="TopSystemBar/Margin/HBox"]
+layout_mode = 2
+theme_type_variation = &"TechnicalHeader"
 theme_override_colors/font_color = Color(0.2, 1, 0.2, 1)
-theme_override_font_sizes/font_size = 14
-text = "SYS_CORE v4.4"
+theme_override_font_sizes/font_size = 11
+text = "NETWORK_ONLINE"
 
-[node name="Spacer" type="Control" parent="SystemTray/Margin/HBox"]
+[node name="Spacer" type="Control" parent="TopSystemBar/Margin/HBox"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="DesktopClock" type="Label" parent="SystemTray/Margin/HBox"]
+[node name="UserLabel" type="Label" parent="TopSystemBar/Margin/HBox"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 16
+theme_type_variation = &"TechnicalHeader"
+theme_override_font_sizes/font_size = 11
+text = "ANALYST_ Hammond, B."
+
+[node name="VSeparator2" type="VSeparator" parent="TopSystemBar/Margin/HBox"]
+layout_mode = 2
+
+[node name="DesktopClock" type="Label" parent="TopSystemBar/Margin/HBox"]
+layout_mode = 2
+theme_type_variation = &"TechnicalHeader"
+theme_override_font_sizes/font_size = 13
 text = "12:00"
 horizontal_alignment = 1
 vertical_alignment = 1
 script = ExtResource("1_0l3ag")
 
-[node name="VSeparator" type="VSeparator" parent="SystemTray/Margin/HBox"]
-layout_mode = 2
-
-[node name="ExitButton" type="Button" parent="SystemTray/Margin/HBox"]
+[node name="LeftUtilityBar" type="VBoxContainer" parent="."]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(80, 30)
+layout_mode = 0
+offset_left = 20.0
+offset_top = 55.0
+offset_right = 100.0
+offset_bottom = 455.0
+theme_override_constants/separation = 20
+
+[node name="Handbook_Icon" type="Button" parent="LeftUtilityBar"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+flat = true
+
+[node name="VBox" type="VBoxContainer" parent="LeftUtilityBar/Handbook_Icon"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+alignment = 1
+
+[node name="IconText" type="Label" parent="LeftUtilityBar/Handbook_Icon/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 24
+text = "📘"
+horizontal_alignment = 1
+
+[node name="Label" type="Label" parent="LeftUtilityBar/Handbook_Icon/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 9
+text = "DOCS"
+horizontal_alignment = 1
+
+[node name="Network_Icon" type="Button" parent="LeftUtilityBar"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+flat = true
+
+[node name="VBox" type="VBoxContainer" parent="LeftUtilityBar/Network_Icon"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+alignment = 1
+
+[node name="IconText" type="Label" parent="LeftUtilityBar/Network_Icon/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 24
+text = "🕸️"
+horizontal_alignment = 1
+
+[node name="Label" type="Label" parent="LeftUtilityBar/Network_Icon/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 9
+text = "MAP"
+horizontal_alignment = 1
+
+[node name="Decrypt_Icon" type="Button" parent="LeftUtilityBar"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+flat = true
+
+[node name="VBox" type="VBoxContainer" parent="LeftUtilityBar/Decrypt_Icon"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+alignment = 1
+
+[node name="IconText" type="Label" parent="LeftUtilityBar/Decrypt_Icon/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 24
+text = "🔓"
+horizontal_alignment = 1
+
+[node name="Label" type="Label" parent="LeftUtilityBar/Decrypt_Icon/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 9
+text = "DECRYPT"
+horizontal_alignment = 1
+
+[node name="TaskManager_Icon" type="Button" parent="LeftUtilityBar"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+flat = true
+
+[node name="VBox" type="VBoxContainer" parent="LeftUtilityBar/TaskManager_Icon"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+alignment = 1
+
+[node name="IconText" type="Label" parent="LeftUtilityBar/TaskManager_Icon/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 24
+text = "📈"
+horizontal_alignment = 1
+
+[node name="Label" type="Label" parent="LeftUtilityBar/TaskManager_Icon/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 9
+text = "RESOURCES"
+horizontal_alignment = 1
+
+[node name="BottomDock" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -200.0
+offset_top = -75.0
+offset_right = 200.0
+offset_bottom = -15.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="Margin" type="MarginContainer" parent="BottomDock"]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_right = 15
+
+[node name="DockIcons" type="HBoxContainer" parent="BottomDock/Margin"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="SIEM_Icon" type="Button" parent="BottomDock/Margin/DockIcons"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+text = "📊"
+
+[node name="Email_Icon" type="Button" parent="BottomDock/Margin/DockIcons"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+text = "✉"
+
+[node name="Terminal_Icon" type="Button" parent="BottomDock/Margin/DockIcons"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+text = "🐚"
+
+[node name="Tickets_Icon" type="Button" parent="BottomDock/Margin/DockIcons"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+text = "🎫"
+
+[node name="ExitButton" type="Button" parent="BottomDock/Margin/DockIcons"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(60, 40)
 layout_mode = 2
 size_flags_vertical = 4
 text = "EXIT"
 script = ExtResource("2_0kbkv")
 
-[node name="IntegrityHUD" parent="." instance=ExtResource("3_integrity")]
+[node name="UnifiedHUD" parent="." instance=ExtResource("3_unified")]
 layout_mode = 1
-offset_top = 40.0
-offset_bottom = 80.0
-metadata/_edit_use_anchors_ = true
+anchors_preset = 1
+anchor_top = 0.0
+anchor_bottom = 0.0
+offset_left = -260.0
+offset_top = 50.0
+offset_right = -20.0
+offset_bottom = 200.0
+grow_vertical = 1

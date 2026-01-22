@@ -1,6 +1,18 @@
-[gd_scene load_steps=2 format=3 uid="uid://cy8j1fgu48puc"]
+[gd_scene load_steps=4 format=3 uid="uid://cy8j1fgu48puc"]
 
-[ext_resource type="Script" uid="uid://bcp3ri6ga7mmm" path="res://scripts/2d/apps/App_ShiftReport.gd" id="1_abcde"]
+[ext_resource type="Script" path="res://scripts/2d/apps/App_ShiftReport.gd" id="1_abcde"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Header"]
+bg_color = Color(0, 0, 0, 1)
+content_margin_left = 20.0
+content_margin_right = 20.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Continue"]
+bg_color = Color(0, 0, 0, 1)
+content_margin_left = 25.0
+content_margin_top = 12.0
+content_margin_right = 25.0
+content_margin_bottom = 12.0
 
 [node name="App_ShiftReport" type="Control"]
 layout_mode = 3
@@ -11,128 +23,163 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_abcde")
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="Background" type="ColorRect" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.05, 0.06, 0.09, 1)
+color = Color(1, 1, 1, 1)
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
+[node name="MainContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -400.0
+offset_top = -300.0
+offset_right = 400.0
+offset_bottom = 300.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/separation = 0
+
+[node name="Header" type="PanelContainer" parent="MainContainer"]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_Header")
+
+[node name="TitleLabel" type="Label" parent="MainContainer/Header"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 18
+text = ":: SHIFT PERFORMANCE AUDIT ::"
+vertical_alignment = 1
+
+[node name="Content" type="MarginContainer" parent="MainContainer"]
+layout_mode = 2
+size_flags_vertical = 3
 theme_override_constants/margin_left = 50
-theme_override_constants/margin_top = 50
+theme_override_constants/margin_top = 40
 theme_override_constants/margin_right = 50
-theme_override_constants/margin_bottom = 50
+theme_override_constants/margin_bottom = 40
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+[node name="VBox" type="VBoxContainer" parent="MainContainer/Content"]
 layout_mode = 2
+theme_override_constants/separation = 35
 
-[node name="TitleLabel" type="Label" parent="MarginContainer/VBoxContainer"]
+[node name="Summary" type="VBoxContainer" parent="MainContainer/Content/VBox"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 48
-text = "End of Shift Report"
-horizontal_alignment = 1
+theme_override_constants/separation = 10
 
-[node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_constants/separation = 20
-
-[node name="ArchetypeLabel" type="Label" parent="MarginContainer/VBoxContainer"]
+[node name="ArchetypeLabel" type="Label" parent="MainContainer/Content/VBox/Summary"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 36
-text = "Archetype: [ARCHETYPE]"
-horizontal_alignment = 1
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 28
+text = "Archetype: Pragmatic"
 
-[node name="ArchetypeDescription" type="Label" parent="MarginContainer/VBoxContainer"]
+[node name="ArchetypeDescription" type="Label" parent="MainContainer/Content/VBox/Summary"]
 unique_name_in_owner = true
 layout_mode = 2
-text = "[Archetype Description...]"
-horizontal_alignment = 1
+theme_override_colors/font_color = Color(0.2, 0.2, 0.2, 1)
+theme_override_font_sizes/font_size = 14
+text = "[Analysis data regarding operational style...]"
 autowrap_mode = 2
 
-[node name="ArchetypeFeedback" type="Label" parent="MarginContainer/VBoxContainer"]
+[node name="ArchetypeFeedback" type="Label" parent="MainContainer/Content/VBox/Summary"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
-text = "[Archetype Feedback...]"
-horizontal_alignment = 1
+theme_override_colors/font_color = Color(0.4, 0.4, 0.4, 1)
+theme_override_font_sizes/font_size = 12
+text = "[Managerial feedback...]"
 autowrap_mode = 2
 
-[node name="HSeparator2" type="HSeparator" parent="MarginContainer/VBoxContainer"]
+[node name="HSeparator" type="HSeparator" parent="MainContainer/Content/VBox"]
 layout_mode = 2
-theme_override_constants/separation = 40
 
-[node name="MetricsGrid" type="GridContainer" parent="MarginContainer/VBoxContainer"]
+[node name="MetricsArea" type="VBoxContainer" parent="MainContainer/Content/VBox"]
 layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="Label" type="Label" parent="MainContainer/Content/VBox/MetricsArea"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 12
+text = "QUANTITATIVE DATA"
+
+[node name="MetricsGrid" type="GridContainer" parent="MainContainer/Content/VBox/MetricsArea"]
+layout_mode = 2
+theme_override_constants/h_separation = 40
+theme_override_constants/v_separation = 15
 columns = 2
 
-[node name="TicketsCompletedLabel" type="Label" parent="MarginContainer/VBoxContainer/MetricsGrid"]
+[node name="Label1" type="Label" parent="MainContainer/Content/VBox/MetricsArea/MetricsGrid"]
 layout_mode = 2
-size_flags_horizontal = 3
-text = "Tickets Completed:"
+theme_override_colors/font_color = Color(0.4, 0.4, 0.4, 1)
+text = "Tickets Processed:"
 
-[node name="TicketsCompletedValue" type="Label" parent="MarginContainer/VBoxContainer/MetricsGrid"]
+[node name="TicketsCompletedValue" type="Label" parent="MainContainer/Content/VBox/MetricsArea/MetricsGrid"]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "0"
 
-[node name="TicketsIgnoredLabel" type="Label" parent="MarginContainer/VBoxContainer/MetricsGrid"]
+[node name="Label2" type="Label" parent="MainContainer/Content/VBox/MetricsArea/MetricsGrid"]
 layout_mode = 2
-size_flags_horizontal = 3
-text = "Tickets Ignored:"
+theme_override_colors/font_color = Color(0.4, 0.4, 0.4, 1)
+text = "Tickets Overlooked:"
 
-[node name="TicketsIgnoredValue" type="Label" parent="MarginContainer/VBoxContainer/MetricsGrid"]
+[node name="TicketsIgnoredValue" type="Label" parent="MainContainer/Content/VBox/MetricsArea/MetricsGrid"]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "0"
 
-[node name="AvgTimeLabel" type="Label" parent="MarginContainer/VBoxContainer/MetricsGrid"]
+[node name="Label3" type="Label" parent="MainContainer/Content/VBox/MetricsArea/MetricsGrid"]
 layout_mode = 2
-size_flags_horizontal = 3
-text = "Average Resolution Time:"
+theme_override_colors/font_color = Color(0.4, 0.4, 0.4, 1)
+text = "Avg Resolution Time:"
 
-[node name="AvgTimeValue" type="Label" parent="MarginContainer/VBoxContainer/MetricsGrid"]
+[node name="AvgTimeValue" type="Label" parent="MainContainer/Content/VBox/MetricsArea/MetricsGrid"]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "0s"
 
-[node name="RisksTakenLabel" type="Label" parent="MarginContainer/VBoxContainer/MetricsGrid"]
+[node name="Label4" type="Label" parent="MainContainer/Content/VBox/MetricsArea/MetricsGrid"]
 layout_mode = 2
-size_flags_horizontal = 3
-text = "Risks Taken:"
+theme_override_colors/font_color = Color(0.4, 0.4, 0.4, 1)
+text = "Procedural Deviations:"
 
-[node name="RisksTakenValue" type="Label" parent="MarginContainer/VBoxContainer/MetricsGrid"]
+[node name="RisksTakenValue" type="Label" parent="MainContainer/Content/VBox/MetricsArea/MetricsGrid"]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "0"
 
-[node name="ConsequencesLabel" type="Label" parent="MarginContainer/VBoxContainer/MetricsGrid"]
+[node name="Label5" type="Label" parent="MainContainer/Content/VBox/MetricsArea/MetricsGrid"]
 layout_mode = 2
-size_flags_horizontal = 3
-text = "Consequences Triggered:"
+theme_override_colors/font_color = Color(0.4, 0.4, 0.4, 1)
+text = "Security Consequences:"
 
-[node name="ConsequencesValue" type="Label" parent="MarginContainer/VBoxContainer/MetricsGrid"]
+[node name="ConsequencesValue" type="Label" parent="MainContainer/Content/VBox/MetricsArea/MetricsGrid"]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "0"
 
-[node name="ContinueButton" type="Button" parent="MarginContainer/VBoxContainer"]
+[node name="Footer" type="MarginContainer" parent="MainContainer"]
+layout_mode = 2
+theme_override_constants/margin_bottom = 40
+
+[node name="ContinueButton" type="Button" parent="MainContainer/Footer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
-size_flags_vertical = 8
-text = "Continue to Next Shift (Placeholder)"
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_Continue")
+text = "INITIALIZE NEXT SHIFT"

@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://c8x8lam2n3p7s"]
 
-[ext_resource type="Script" path="res://scripts/2d/apps/components/NetworkNode.gd" id="1_netnode"]
+[ext_resource type="Script" uid="uid://cptn1rl510fq5" path="res://scripts/2d/apps/components/NetworkNode.gd" id="1_netnode"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Node"]
 bg_color = Color(0.1, 0.1, 0.1, 0.8)

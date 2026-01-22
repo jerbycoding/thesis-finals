@@ -38,11 +38,7 @@ func _animate_intro():
 	var tween = create_tween().set_parallel(true)
 	tween.tween_property(main_container, "modulate:a", 1.0, 1.0).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	tween.tween_property(main_container, "position:y", main_container.position.y - 20, 1.0).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-	
-	# Subtle title pulse loop
-	var pulse_tween = create_tween().set_loops()
-	pulse_tween.tween_property(title_label, "modulate:a", 0.8, 2.0).set_trans(Tween.TRANS_SINE)
-	pulse_tween.tween_property(title_label, "modulate:a", 1.0, 2.0).set_trans(Tween.TRANS_SINE)
+
 
 func _on_button_hover():
 	if AudioManager:

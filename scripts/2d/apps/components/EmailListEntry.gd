@@ -3,9 +3,11 @@ extends PanelContainer
 
 signal email_selected(email: EmailResource, instance: Control)
 
-@onready var icon_label: Label = get_node_or_null("%IconLabel")
-@onready var sender_label: Label = get_node_or_null("%SenderLabel")
-@onready var subject_label: Label = get_node_or_null("%SubjectLabel")
+@onready var risk_bar: ColorRect = %RiskBar
+@onready var subject_label: Label = %SubjectLabel
+@onready var time_label: Label = %TimeLabel
+@onready var sender_label: Label = %SenderLabel
+@onready var preview_label: Label = %PreviewLabel
 
 var email_data: EmailResource
 
@@ -15,25 +17,26 @@ func _ready():
 func set_email_data(email: EmailResource):
 	email_data = email
 	
-	if icon_label:
-		icon_label.text = "⚠️" if email.is_urgent else ""
-		icon_label.visible = email.is_urgent
+	if subject_label:
+		subject_label.text = email.get_formatted_subject()
 		
 	if sender_label:
 		sender_label.text = email.sender
-		sender_label.add_theme_color_override("font_color", email.get_sender_color())
 		
-	if subject_label:
-		var subject_text = email.get_formatted_subject()
-		if subject_text.length() > 40:
-			subject_text = subject_text.substr(0, 37) + "..."
-		subject_label.text = subject_text
-
-	# Update visual style based on sender
-	var style = get_theme_stylebox("panel").duplicate() as StyleBoxFlat
-	if style:
-		style.border_color = email.get_sender_color()
-		add_theme_stylebox_override("panel", style)
+	if preview_label:
+		var body = email.get_formatted_body()
+		preview_label.text = body.substr(0, 80) + "..."
+		
+	if time_label:
+		time_label.text = "Just now" # Placeholder logic
+		
+	if risk_bar:
+		if email.is_malicious:
+			risk_bar.color = GlobalConstants.UI_COLORS.ERROR_FLAT
+		elif email.is_urgent:
+			risk_bar.color = GlobalConstants.UI_COLORS.WARNING_FLAT
+		else:
+			risk_bar.color = GlobalConstants.UI_COLORS.SUCCESS_FLAT
 
 func _gui_input(event: InputEvent):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
@@ -46,7 +49,10 @@ func set_highlight(active: bool):
 	var style = get_theme_stylebox("panel").duplicate() as StyleBoxFlat
 	if style:
 		if active:
-			style.bg_color = Color(0.2, 0.25, 0.35, 0.9)
+			style.bg_color = Color(0.95, 0.95, 0.95, 1.0)
+			style.border_width_left = 2
+			style.border_color = GlobalConstants.UI_COLORS.INFO_BLUE
 		else:
-			style.bg_color = Color(0.1, 0.12, 0.18, 0.8)
+			style.bg_color = Color(1, 1, 1, 1)
+			style.border_width_left = 0
 		add_theme_stylebox_override("panel", style)

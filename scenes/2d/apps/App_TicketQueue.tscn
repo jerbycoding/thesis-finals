@@ -1,35 +1,18 @@
-[gd_scene load_steps=5 format=3 uid="uid://bhcyqynotx27e"]
+[gd_scene load_steps=4 format=3]
 
-[ext_resource type="Script" uid="uid://biay8aieuagch" path="res://scripts/2d/apps/App_TicketQueue.gd" id="1_4yihl"]
-[ext_resource type="PackedScene" uid="uid://c5x6y708bab0c" path="res://scenes/2d/apps/components/CompletionModal.tscn" id="2_modal"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Header"]
-content_margin_left = 15.0
-content_margin_top = 10.0
-content_margin_right = 15.0
-content_margin_bottom = 10.0
-bg_color = Color(0.0509804, 0.054902, 0.0901961, 1)
-border_width_bottom = 2
-border_color = Color(0.2, 1, 0.2, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Detail"]
-content_margin_left = 20.0
-content_margin_top = 20.0
-content_margin_right = 20.0
-content_margin_bottom = 20.0
-bg_color = Color(0.0509804, 0.054902, 0.0901961, 0.784314)
-border_width_left = 1
-border_color = Color(0.258824, 0.352941, 0.470588, 0.3)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_List"]
-bg_color = Color(0.0392157, 0.0392157, 0.101961, 0.5)
+[ext_resource type="Script" path="res://scripts/2d/apps/App_TicketQueue.gd" id="1_4yihl"]
+[ext_resource type="PackedScene" path="res://scenes/2d/apps/components/CompletionModal.tscn" id="2_modal"]
+[ext_resource type="Theme" path="res://assets/themes/EnterpriseTheme.tres" id="3_theme"]
 
 [node name="App_TicketQueue" type="Control"]
-custom_minimum_size = Vector2(900, 600)
+custom_minimum_size = Vector2(1000, 700)
 layout_mode = 3
-anchors_preset = 0
-size_flags_horizontal = 3
-size_flags_vertical = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3_theme")
 script = ExtResource("1_4yihl")
 
 [node name="Background" type="ColorRect" parent="."]
@@ -39,8 +22,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 1
-color = Color(0.0392157, 0.0392157, 0.101961, 0.95)
+color = Color(1, 1, 1, 1)
 
 [node name="VBox" type="VBoxContainer" parent="Background"]
 layout_mode = 1
@@ -53,54 +35,59 @@ theme_override_constants/separation = 0
 
 [node name="Header" type="PanelContainer" parent="Background/VBox"]
 layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_Header")
+theme_type_variation = &"HeaderPanel"
 
 [node name="HeaderLabel" type="Label" parent="Background/VBox/Header"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.2, 1, 0.2, 1)
-theme_override_font_sizes/font_size = 18
-text = "INCIDENT MANAGEMENT QUEUE"
+theme_type_variation = &"TechnicalHeader"
+text = "INCIDENT TRIAGE AND MANAGEMENT"
 vertical_alignment = 1
 
 [node name="Content" type="HSplitContainer" parent="Background/VBox"]
 layout_mode = 2
 size_flags_vertical = 3
-split_offset = 350
+split_offset = 380
 
 [node name="QueuePanel" type="PanelContainer" parent="Background/VBox/Content"]
 layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_List")
 
 [node name="Margin" type="MarginContainer" parent="Background/VBox/Content/QueuePanel"]
 layout_mode = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Background/VBox/Content/QueuePanel/Margin"]
+[node name="VBox" type="VBoxContainer" parent="Background/VBox/Content/QueuePanel/Margin"]
 layout_mode = 2
-horizontal_scroll_mode = 0
-vertical_scroll_mode = 2
+theme_override_constants/separation = 15
 
-[node name="TicketList" type="VBoxContainer" parent="Background/VBox/Content/QueuePanel/Margin/ScrollContainer"]
+[node name="QueueTitle" type="Label" parent="Background/VBox/Content/QueuePanel/Margin/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.4, 0.4, 0.4, 1)
+theme_override_font_sizes/font_size = 11
+text = "ACTIVE INCIDENTS"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Background/VBox/Content/QueuePanel/Margin/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="TicketList" type="VBoxContainer" parent="Background/VBox/Content/QueuePanel/Margin/VBox/ScrollContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_vertical = 3
-theme_override_constants/separation = 10
+theme_override_constants/separation = 12
 
 [node name="DetailPanel" type="PanelContainer" parent="Background/VBox/Content"]
 layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_Detail")
 
 [node name="PlaceholderLabel" type="Label" parent="Background/VBox/Content/DetailPanel"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_color = Color(0.4, 0.46, 0.6, 1)
-theme_override_font_sizes/font_size = 18
-text = "NO INCIDENT SELECTED
-[ SELECT TICKET FROM QUEUE TO ANALYZE ]"
+theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1)
+theme_override_font_sizes/font_size = 16
+text = "SELECT INCIDENT FROM QUEUE"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -108,22 +95,26 @@ vertical_alignment = 1
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
-theme_override_constants/separation = 20
+theme_override_constants/separation = 25
 
-[node name="TitleLabel" type="Label" parent="Background/VBox/Content/DetailPanel/DetailView"]
+[node name="Header" type="VBoxContainer" parent="Background/VBox/Content/DetailPanel/DetailView"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="TitleLabel" type="Label" parent="Background/VBox/Content/DetailPanel/DetailView/Header"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 22
-text = "[CRITICAL] TICKET-001: Data Exfiltration Detected"
+text = "Ticket Title"
 autowrap_mode = 3
 
-[node name="RequiredToolLabel" type="Label" parent="Background/VBox/Content/DetailPanel/DetailView"]
+[node name="RequiredToolLabel" type="Label" parent="Background/VBox/Content/DetailPanel/DetailView/Header"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_color = Color(0.2, 1, 1, 1)
-theme_override_font_sizes/font_size = 14
-text = "REQUIRED TOOL: [TOOL_NAME]"
+theme_override_colors/font_color = Color(0.4, 0.4, 0.4, 1)
+theme_override_font_sizes/font_size = 12
+text = "ANALYSIS TOOL: ---"
 
 [node name="HSeparator" type="HSeparator" parent="Background/VBox/Content/DetailPanel/DetailView"]
 layout_mode = 2
@@ -132,28 +123,25 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_constants/line_separation = 4
-theme_override_font_sizes/normal_font_size = 16
+theme_override_constants/line_separation = 6
 bbcode_enabled = true
-text = "A high-volume outbound network connection was detected from workstation 10.0.4.22. Initial analysis indicates potential exfiltration of sensitive organizational assets.
-
-[b]Recommended Action:[/b] Identify target IP and isolate affected host immediately."
+text = "Description text..."
 fit_content = true
 
 [node name="ProcedureBox" type="VBoxContainer" parent="Background/VBox/Content/DetailPanel/DetailView"]
 layout_mode = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 12
 
 [node name="StepsLabel" type="Label" parent="Background/VBox/Content/DetailPanel/DetailView/ProcedureBox"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.2, 1, 0.2, 1)
-theme_override_font_sizes/font_size = 14
-text = ":: REQUIRED RESOLUTION PROTOCOL ::"
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 12
+text = "REQUIRED FORENSIC PROTOCOL"
 
 [node name="StepsContainer" type="VBoxContainer" parent="Background/VBox/Content/DetailPanel/DetailView/ProcedureBox"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_constants/separation = 6
+theme_override_constants/separation = 8
 
 [node name="CompletionModal" parent="." instance=ExtResource("2_modal")]
 unique_name_in_owner = true

@@ -2,127 +2,91 @@
 extends Control
 
 @onready var log_list: VBoxContainer = %LogList
-@onready var ticket_dropdown: OptionButton = %TicketDropdown
-@onready var attach_button: Button = %AttachButton
-@onready var log_detail_label: RichTextLabel = %LogDetailLabel
+@onready var volume_graph: Control = %VolumeGraph
+@onready var stats_label: Label = %StatsLabel
 @onready var close_inspector_button: Button = %CloseInspectorButton
 @onready var inspector_pane: Control = %InspectorPane
-@onready var filter_all: Button = %FilterAll
-@onready var filter_security: Button = %FilterSecurity
-@onready var filter_high_severity: Button = %FilterHighSeverity
-@onready var time_header: Label = %TimeHeader
-@onready var source_header: Label = %SourceHeader
-@onready var severity_header: Label = %SeverityHeader
-@onready var message_header: Label = %MessageHeader
+@onready var log_detail_label: RichTextLabel = %LogDetailLabel
 
 var log_entry_scene = preload("res://scenes/2d/apps/components/LogEntry.tscn")
 var pool: UIObjectPool
 
-var current_filter: String = "all"  # "all", "security", "high"
 var selected_log: LogResource = null
-var is_lagging: bool = false
-
-const MAX_VISIBLE_LOGS = 50
+var log_history_data: Array[int] = [] # For the graph
+const GRAPH_MAX_POINTS = 60
 
 func _ready():
-	print("======= App_SIEMViewer (Bottom Drawer) Ready =======")
+	print("======= App_SIEMViewer (Forensics Redesign) Ready =======")
 	
-	# Initialize Pool
 	pool = UIObjectPool.new()
 	add_child(pool)
 	
-	visible = true
-	modulate = Color.WHITE
-	
-	if inspector_pane:
-		inspector_pane.visible = false
-	
-	# Connect buttons
-	_setup_filters()
-	_setup_attach_section()
-	
-	if close_inspector_button:
-		close_inspector_button.pressed.connect(_on_close_inspector_pressed)
-	
-	# Initialize header widths to match LogEntry.tscn
-	if time_header: time_header.custom_minimum_size = Vector2(100, 0)
-	if source_header: source_header.custom_minimum_size = Vector2(120, 0)
-	if severity_header: severity_header.custom_minimum_size = Vector2(70, 0)
+	volume_graph.draw.connect(_draw_graph)
+	close_inspector_button.pressed.connect(_on_close_inspector_pressed)
 	
 	# Connect to EventBus
 	EventBus.log_added.connect(_on_log_added)
-	EventBus.ticket_added.connect(_on_ticket_added)
-	EventBus.log_attached_to_ticket.connect(_on_log_attached)
-	EventBus.world_event_triggered.connect(_on_world_event)
 	
-	# Load existing logs
+	# Initialize graph data
+	for i in range(GRAPH_MAX_POINTS):
+		log_history_data.append(randi_range(5, 15))
+	
 	_refresh_logs()
-	_refresh_ticket_dropdown()
+	
+	# Graph update timer
+	var timer = Timer.new()
+	timer.wait_time = 1.0
+	timer.timeout.connect(_update_graph_data)
+	add_child(timer)
+	timer.start()
 
-func _process(_delta):
-	if is_lagging:
-		if randf() < 0.1:
-			modulate.a = randf_range(0.5, 0.9)
-		else:
-			modulate.a = 1.0
-	elif modulate.a != 1.0:
-		modulate.a = 1.0
+func _update_graph_data():
+	log_history_data.pop_front()
+	var noise = randi_range(-2, 2)
+	log_history_data.append(clamp(10 + noise, 0, 40))
+	volume_graph.queue_redraw()
 
-func _on_world_event(event_id: String, active: bool, _duration: float):
-	if event_id == "SIEM_LAG":
-		is_lagging = active
-		if not active: modulate.a = 1.0
-
-func _setup_filters():
-	if filter_all: filter_all.pressed.connect(func(): current_filter = "all"; _refresh_logs())
-	if filter_security: filter_security.pressed.connect(func(): current_filter = "security"; _refresh_logs())
-	if filter_high_severity: filter_high_severity.pressed.connect(func(): current_filter = "high"; _refresh_logs())
+func _draw_graph():
+	var size = volume_graph.size
+	var step = size.x / (GRAPH_MAX_POINTS - 1)
+	var max_val = 40.0
+	
+	var points = PackedVector2Array()
+	for i in range(log_history_data.size()):
+		var x = i * step
+		var y = size.y - (log_history_data[i] / max_val * size.y)
+		points.append(Vector2(x, y))
+	
+	volume_graph.draw_polyline(points, GlobalConstants.UI_COLORS.INFO_BLUE, 2.0, true)
+	
+	# Subtle fill
+	var fill_points = PackedVector2Array()
+	fill_points.append(Vector2(0, size.y))
+	for p in points: fill_points.append(p)
+	fill_points.append(Vector2(size.x, size.y))
+	
+	var fill_color = GlobalConstants.UI_COLORS.INFO_BLUE
+	fill_color.a = 0.1
+	volume_graph.draw_colored_polygon(fill_points, fill_color)
 
 func _refresh_logs():
 	if not log_list: return
-	
-	selected_log = null
-	if log_detail_label:
-		log_detail_label.clear()
-		log_detail_label.append_text("[i]Select an entry from the stream to begin forensic analysis...[/i]")
-	
-	# Use Pool to release old nodes
 	pool.release_all(log_entry_scene.resource_path)
 	
-	var logs_to_show: Array[LogResource] = []
-	if LogSystem:
-		match current_filter:
-			"all": logs_to_show = LogSystem.get_all_logs()
-			"security": logs_to_show = LogSystem.get_logs_by_category("Security")
-			"high": logs_to_show = LogSystem.get_logs_by_severity(4)
-			_: logs_to_show = LogSystem.get_all_logs()
+	var logs = LogSystem.get_all_logs() if LogSystem else []
+	stats_label.text = "ANALYSIS: %d events discovered" % logs.size()
 	
-	logs_to_show.sort_custom(func(a, b): return a.timestamp > b.timestamp)
-	
-	# Cap visible logs for performance
-	if logs_to_show.size() > MAX_VISIBLE_LOGS:
-		logs_to_show = logs_to_show.slice(0, MAX_VISIBLE_LOGS)
-	
-	for log in logs_to_show:
+	for log in logs:
 		_add_log_entry(log)
 
 func _on_log_added(log: LogResource):
-	# Incremental Update: Only add if it matches current filter
-	var should_show = false
-	match current_filter:
-		"all": should_show = true
-		"security": should_show = (log.category == "Security")
-		"high": should_show = (log.severity >= 4)
-	
-	if should_show:
-		_add_log_entry(log, true) # Prepend newest
+	_add_log_entry(log, true)
+	# Spike the graph
+	log_history_data[log_history_data.size()-1] += 5
+	volume_graph.queue_redraw()
 
 func _add_log_entry(log: LogResource, prepend: bool = false):
-	if not log or not log_list: return
-	
-	# Use Pool to acquire instance
 	var entry = pool.acquire(log_entry_scene)
-	
 	if prepend:
 		log_list.add_child(entry)
 		log_list.move_child(entry, 0)
@@ -132,60 +96,16 @@ func _add_log_entry(log: LogResource, prepend: bool = false):
 	entry.set_log_data(log)
 	if not entry.log_selected.is_connected(_on_log_selected):
 		entry.log_selected.connect(_on_log_selected)
-	
-	# Performance Cap: Remove oldest logs if over limit
-	if log_list.get_child_count() > MAX_VISIBLE_LOGS:
-		var oldest = log_list.get_child(log_list.get_child_count() - 1)
-		pool.release(oldest, log_entry_scene.resource_path)
 
 func _on_log_selected(log: LogResource, instance: Control):
 	selected_log = log
-	_highlight_selected_log(instance)
-	_show_log_details(log)
-
-func _highlight_selected_log(selected_instance: Control):
+	inspector_pane.visible = true
+	log_detail_label.text = log.get_forensic_report()
+	
 	for child in log_list.get_children():
 		if child.has_method("set_highlight"):
-			child.set_highlight(child == selected_instance)
-
-func _setup_attach_section():
-	if attach_button: attach_button.pressed.connect(_on_attach_button_pressed)
+			child.set_highlight(child == instance)
 
 func _on_close_inspector_pressed():
-	if inspector_pane:
-		inspector_pane.visible = false
+	inspector_pane.visible = false
 	selected_log = null
-	_highlight_selected_log(null)
-
-func _show_log_details(log: LogResource):
-	if inspector_pane:
-		inspector_pane.visible = true
-	
-	_refresh_ticket_dropdown()
-	if log_detail_label:
-		log_detail_label.clear()
-		log_detail_label.append_text(log.get_forensic_report())
-
-func _refresh_ticket_dropdown():
-	if not ticket_dropdown: return
-	ticket_dropdown.clear()
-	ticket_dropdown.add_item("Select Case...")
-	if TicketManager:
-		for ticket in TicketManager.get_active_tickets():
-			var display_text = ticket.ticket_id + ": " + ticket.title
-			if display_text.length() > 30:
-				display_text = display_text.substr(0, 27) + "..."
-			ticket_dropdown.add_item(display_text)
-
-func _on_attach_button_pressed():
-	if not selected_log or ticket_dropdown.selected <= 0: return
-	var ticket = TicketManager.get_active_tickets()[ticket_dropdown.selected - 1]
-	if TicketManager.attach_log_to_ticket(ticket.ticket_id, selected_log.log_id):
-		if NotificationManager: NotificationManager.show_notification("Evidence attached to " + ticket.ticket_id, "success")
-		selected_log = null
-		_highlight_selected_log(null)
-		if inspector_pane:
-			inspector_pane.visible = false
-
-func _on_ticket_added(_ticket: TicketResource): _refresh_ticket_dropdown()
-func _on_log_attached(_t_id, _l_id): pass
