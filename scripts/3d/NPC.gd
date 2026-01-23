@@ -121,7 +121,18 @@ func _on_narrative_interaction_requested(requested_npc_id: String, dialogue_id: 
 		start_dialogue(dialogue_id)
 
 func get_dialogue(dialogue_id: String) -> DialogueDataResource:
-	# Load from the exported dictionary of resources
+	# 1. Check if it's already in the manual overrides dictionary
 	if dialogue_resources.has(dialogue_id):
 		return dialogue_resources[dialogue_id]
+	
+	# 2. Convention-based discovery: res://resources/dialogue/[npc_id]_[dialogue_id].tres
+	var convention_path = "res://resources/dialogue/" + npc_id + "_" + dialogue_id + ".tres"
+	if ResourceLoader.exists(convention_path):
+		var res = load(convention_path)
+		if res is DialogueDataResource:
+			# Cache it
+			dialogue_resources[dialogue_id] = res
+			return res
+			
+	push_warning("No dialogue resource found for ID '%s' on NPC '%s' (Checked: %s)" % [dialogue_id, npc_name, convention_path])
 	return null

@@ -16,3 +16,4 @@ clues = ["bad_attachment", "spoofed_sender"]
 related_ticket = "SPEAR-PHISH-001"
 suspicious_ip = "203.0.113.42"
 suspicious_domain = ""
+quarantine_hidden_risks = {"attachments": "missed_attachment_scan"}

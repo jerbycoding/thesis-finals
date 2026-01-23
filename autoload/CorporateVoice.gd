@@ -70,15 +70,15 @@ static var corporate_phrases = {
 	"kill_chain_escalation": "CRITICAL ALERT: Threat escalation detected in path: {path}. Transitioning to Stage {stage}.",
 	
 	# --- SIEM Templates ---
-	"siem_inspector_header": "[color=cyan][b]EVENT IDENTITY[/b][/color]\n",
-	"siem_inspector_metadata": "\n[color=cyan][b]NETWORK METADATA[/b][/color]\n",
-	"siem_inspector_technical": "\n[color=cyan][b]TECHNICAL MESSAGE[/b][/color]\n",
+	"siem_inspector_header": "[color=#006CFF][b]EVENT IDENTITY[/b][/color]\n",
+	"siem_inspector_metadata": "\n[color=#006CFF][b]NETWORK METADATA[/b][/color]\n",
+	"siem_inspector_technical": "\n[color=#006CFF][b]TECHNICAL MESSAGE[/b][/color]\n",
 	"siem_inspector_body": "[b]EVENT IDENTITY[/b]\n[code]ID: {id}[/code]\n[code]TIME: {time}[/code]\nRISK: [color={color}]{risk}[/color]\n\n[b]NETWORK METADATA[/b]\nSOURCE: {source}\n[code]IP ADDR: {ip}[/code]\n[code]HOST: {host}[/code]\n\n[b]TECHNICAL MESSAGE[/b]\n[font_size=12][i]{message}[/i][/font_size]\n",
 	
 	# --- Terminal Templates ---
 	"terminal_welcome": "[color=green]SOC Terminal v2.1[/color]\n[color=green]Type 'help' for available commands[/color]\n\n",
 	"terminal_prompt": "soc@terminal:~$ ",
-	"terminal_command_echo": "[color=cyan]$ {command}[/color]\n"
+	"terminal_command_echo": "[color=#006CFF]$ {command}[/color]\n"
 }
 
 # Concise phrases specifically for NotificationToast (max 40 chars)

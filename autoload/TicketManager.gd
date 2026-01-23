@@ -468,16 +468,15 @@ func _on_terminal_command_run(command_name: String, args: Array):
 	if command_name == "isolate" and not args.is_empty():
 		var isolated_host = args[0].to_upper()
 		
-		# Specifically check for the malware containment ticket solution
-		var ticket_to_complete = null
+		# Check all active tickets for a matching technical requirement
 		for ticket in active_tickets:
-			if ticket.ticket_id == "MALWARE-CONTAIN-001":
-				# This ticket is solved by isolating the defined source host
-				if isolated_host == NetworkState.HOSTS.MALWARE_SOURCE:
-					ticket_to_complete = ticket
-					break
-		
-		if ticket_to_complete:
-			print(CorporateVoice.get_phrase("ticket_update_host_isolated"))
-			print("TicketManager: Task for ticket %s completed (Host Isolated). Manual resolution required." % ticket_to_complete.ticket_id)
-			# We no longer auto-complete here to allow player strategy choice.
+			if ticket.required_host_isolation != "":
+				# Resolve procedural hostname if it's a variable
+				var target = ticket.required_host_isolation
+				if target.begins_with("{") and not ticket.truth_packet.is_empty():
+					target = target.format(ticket.truth_packet)
+				
+				if isolated_host == target.to_upper():
+					print(CorporateVoice.get_phrase("ticket_update_host_isolated"))
+					print("TicketManager: Technical requirement met for %s (Host Isolated). Manual resolution required." % ticket.ticket_id)
+					# Optionally: set a flag on the ticket or reveal further data

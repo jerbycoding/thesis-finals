@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="HandbookPage" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/HandbookPage.gd" id="1_page"]
+
+[resource]
+script = ExtResource("1_page")
+page_id = "incidents"
+title = "INCIDENT CATALOG"
+content = "[b][color=#006CFF]RECOGNIZED THREATS[/color][/b]\n\n• [b]PHISH-001[/b]: Standard credential harvesting attempt.\n• [b]RANSOM-001[/b]: Host encryption. Requires Decryption module.\n• [b]INSIDER-001[/b]: Unauthorized project data access.\n• [b]DDOS-001[/b]: UDP flood. Requires immediate trace/isolate."
+

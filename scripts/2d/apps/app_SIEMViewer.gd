@@ -94,6 +94,12 @@ func _add_log_entry(log: LogResource, prepend: bool = false):
 		log_list.add_child(entry)
 	
 	entry.set_log_data(log)
+	
+	# Implement Zebra Stripping
+	var is_even = log_list.get_child_count() % 2 == 0
+	if entry.has_method("set_zebra_style"):
+		entry.set_zebra_style(is_even)
+		
 	if not entry.log_selected.is_connected(_on_log_selected):
 		entry.log_selected.connect(_on_log_selected)
 

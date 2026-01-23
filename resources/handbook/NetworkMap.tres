@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="HandbookPage" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/HandbookPage.gd" id="1_page"]
+
+[resource]
+script = ExtResource("1_page")
+page_id = "network"
+title = "NETWORK TOPOLOGY MAPPING"
+content = "[b][color=#006CFF]VISUALIZATION[/color][/b]\nThe map visualizes organizational assets and real-time status.\n\n[b]INDICATORS:[/b]\n• [color=#2E7D32]Green/Cyan[/color]: Nominal status.\n• [color=#C62828]Red[/color]: Malware infection detected.\n• [color=#F57C00]Orange[/color]: Anomalous activity suspected.\n• [color=#666666]Gray[/color]: Host isolated from network."
+

@@ -22,12 +22,23 @@ func set_log_data(log: LogResource):
 		message_label.text = log.get_formatted_message()
 		
 	if status_dot:
+		# Circle style
+		status_dot.custom_minimum_size = Vector2(8, 8)
 		if log.severity >= 4:
 			status_dot.color = GlobalConstants.UI_COLORS.ERROR_FLAT
 		elif log.severity >= 3:
 			status_dot.color = GlobalConstants.UI_COLORS.WARNING_FLAT
 		else:
 			status_dot.color = GlobalConstants.UI_COLORS.INFO_BLUE
+
+func set_zebra_style(is_even: bool):
+	var style = get_theme_stylebox("panel").duplicate() as StyleBoxFlat
+	if style:
+		if is_even:
+			style.bg_color = Color(0.054902, 0.0666667, 0.0901961, 1) # Darker
+		else:
+			style.bg_color = Color(0.08, 0.09, 0.12, 1) # Slightly Lighter
+		add_theme_stylebox_override("panel", style)
 
 func _gui_input(event: InputEvent):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:

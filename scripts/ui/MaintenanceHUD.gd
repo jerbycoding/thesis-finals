@@ -4,7 +4,8 @@ extends Control
 @onready var task_container: VBoxContainer = %TaskContainer
 
 var active_tasks: Dictionary = {} 
-@export var config: HardwareRecoveryConfig # ADDED THIS LINE
+@export var recovery_config: HardwareRecoveryConfig
+@export var audit_config: CalibrationMinigameConfig
 
 func _ready():
 	hide()
@@ -30,20 +31,20 @@ func _on_shift_started(_shift_id: String):
 
 func _setup_audit_tasks():
 	_clear_tasks()
-	_add_task("audit_1", "Audit Router Node A")
-	_add_task("audit_2", "Audit Router Node B")
-	_add_task("audit_3", "Audit Router Node C")
-	_add_task("audit_4", "Audit Router Node D")
-	_add_task("audit_5", "Audit Router Node E")
-	_add_task("audit_6", "Audit Router Node F")
+	if not audit_config:
+		push_error("MaintenanceHUD: No CalibrationMinigameConfig assigned for audit tasks!")
+		return
+		
+	for task_data in audit_config.tasks:
+		_add_task(task_data.id, task_data.description)
 
 func _setup_recovery_tasks():
 	_clear_tasks()
-	if not config: # ADDED check
+	if not recovery_config:
 		push_error("MaintenanceHUD: No HardwareRecoveryConfig assigned for recovery tasks!")
 		return
 	
-	for task_data in config.tasks:
+	for task_data in recovery_config.tasks:
 		_add_task(task_data.id, task_data.description)
 
 func _clear_tasks():
@@ -68,9 +69,9 @@ func _on_event(type: String, details: Dictionary):
 		var socket_id = details.get("rack", "").strip_edges().to_upper() # "rack" is emitted by TabletHUD
 		var hardware_type = details.get("type", "").strip_edges().to_lower() # "type" is emitted by HardwareSocket
 		
-		if not config: return
+		if not recovery_config: return
 		
-		for task_data in config.tasks:
+		for task_data in recovery_config.tasks:
 			if task_data.has("completes_on_socket_id") and task_data.has("completes_on_hardware_type"):
 				if task_data.completes_on_socket_id == socket_id and task_data.completes_on_hardware_type == hardware_type:
 					_complete_task(task_data.id)

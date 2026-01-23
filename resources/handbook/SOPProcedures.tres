@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="HandbookPage" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/HandbookPage.gd" id="1_page"]
+
+[resource]
+script = ExtResource("1_page")
+page_id = "procedures"
+title = "INCIDENT RESPONSE PROCEDURES (SOP)"
+content = "[b][color=#006CFF]RESOLUTION STRATEGIES[/color][/b]\n\n• [b]Compliant[/b]: Procedural verification confirmed. Lowest risk posture.\n• [b]Efficient[/b]: Speed priority. High risk of missing hidden consequences.\n• [b]Emergency[/b]: Crisis override. Use only for catastrophic outbreaks."

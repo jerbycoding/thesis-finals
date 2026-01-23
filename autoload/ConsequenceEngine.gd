@@ -147,11 +147,13 @@ func _on_email_decision_processed(email: EmailResource, decision: String, inspec
 		_schedule_followup_ticket(GlobalConstants.CONSEQUENCE_ID.USER_COMPLAINT, 60.0, "User complaint: legitimate email quarantined")
 	
 	elif email.is_malicious and decision == GlobalConstants.EMAIL_DECISION.QUARANTINE:
-		# Check for hidden risks on the associated ticket
-		if email.related_ticket == "SPEAR-PHISH-001":
-			if not inspection_state.get("attachments", false):
-				print("🚨 HIDDEN RISK TRIGGERED: Player quarantined email without scanning attachments!")
-				trigger_consequence(GlobalConstants.RISK_TYPE.ATTACHMENT_SCAN_MISSED)
+		# Check for data-driven hidden risks defined in the EmailResource
+		if not email.quarantine_hidden_risks.is_empty():
+			for tool in email.quarantine_hidden_risks:
+				if not inspection_state.get(tool, false):
+					var consequence_id = email.quarantine_hidden_risks[tool]
+					print("🚨 HIDDEN RISK TRIGGERED: Quarantined without using ", tool, " | Triggering: ", consequence_id)
+					trigger_consequence(consequence_id)
 
 func _is_spear_phishing_email(email: EmailResource) -> bool:
 	# This helper is moved from EmailSystem to make ConsequenceEngine self-contained.
@@ -335,28 +337,41 @@ func _schedule_followup_ticket(ticket_id: String, delay_seconds: float, reason: 
 func _spawn_followup_ticket(ticket_id: String, reason: String, original_id: String = "N/A"):
 	print("🚨 Spawning follow-up ticket: ", ticket_id, " related to: ", original_id)
 
-	var followup_ticket = TicketResource.new()
-	followup_ticket.ticket_id = ticket_id + "-" + str(randi() % 999) # Unique ID
+	var followup_ticket: TicketResource = null
 	
-	if original_id != "N/A":
-		followup_ticket.title = "AUDIT: Re: " + original_id
-		followup_ticket.description = "URGENT AUDIT REQUIRED.\n\nOriginal Incident: " + original_id + "\n\nReason: " + reason + "\n\nBecause this incident was resolved via non-standard procedures (Emergency/Efficient), we must re-verify the state of the network. Review the original logs and ensure no secondary persistence exists."
+	# Try to load from library first (Data-Driven Priority)
+	if TicketManager and TicketManager.ticket_id_map.has(ticket_id.to_lower()):
+		var template = TicketManager.ticket_id_map[ticket_id.to_lower()]
+		followup_ticket = template.duplicate()
+		followup_ticket.ticket_id = ticket_id + "-" + str(randi() % 999) # Unique ID
+		
+		# Append narrative context if not present in the template's description
+		if original_id != "N/A" and not original_id in followup_ticket.description:
+			followup_ticket.description += "\n\n[ Technical Context ]\nRelated Incident: " + original_id + "\nDetection Reason: " + reason
 	else:
-		followup_ticket.title = "Follow-up Investigation"
-		followup_ticket.description = reason
+		# Fallback: Programmatic Generation (Technical Debt - Phase 4 goal is to move these to .tres)
+		followup_ticket = TicketResource.new()
+		followup_ticket.ticket_id = ticket_id + "-" + str(randi() % 999) # Unique ID
+		
+		if original_id != "N/A":
+			followup_ticket.title = "AUDIT: Re: " + original_id
+			followup_ticket.description = "URGENT AUDIT REQUIRED.\n\nOriginal Incident: " + original_id + "\n\nReason: " + reason + "\n\nBecause this incident was resolved via non-standard procedures (Emergency/Efficient), we must re-verify the state of the network. Review the original logs and ensure no secondary persistence exists."
+		else:
+			followup_ticket.title = "Follow-up Investigation"
+			followup_ticket.description = reason
 
-	followup_ticket.severity = "High"
-	followup_ticket.category = "Follow-up"
+		followup_ticket.severity = "High"
+		followup_ticket.category = "Follow-up"
+		
+		followup_ticket.steps.clear()
+		followup_ticket.steps.append("Re-examine original logs")
+		followup_ticket.steps.append("Verify host integrity")
+		
+		followup_ticket.required_tool = "siem"
+		followup_ticket.base_time = 120.0
 	
-	followup_ticket.steps.clear()
-	followup_ticket.steps.append("Re-examine original logs")
-	followup_ticket.steps.append("Verify host integrity")
-	
-	followup_ticket.required_tool = "siem"
-	followup_ticket.base_time = 120.0
-	
-	if TicketManager:
-		# Tell TicketManager to reveal logs for the ORIGINAL ticket again
+	if TicketManager and followup_ticket:
+		# Tell TicketManager to reveal logs for the ORIGINAL ticket again if applicable
 		if LogSystem and original_id != "N/A":
 			LogSystem.reveal_logs_for_ticket(original_id)
 			

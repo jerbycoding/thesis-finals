@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://b2d35yngg7u75"]
+[gd_scene load_steps=9 format=3 uid="uid://b2d35yngg7u75"]
 
 [ext_resource type="Script" uid="uid://dx3637o27a75s" path="res://scripts/PlayerController.gd" id="1_15gk4"]
 [ext_resource type="PackedScene" uid="uid://c8x6y708bab0e" path="res://scenes/ui/UnifiedHUD.tscn" id="2_unified"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://dotgpl1o3q8uw" path="res://scenes/ui/MaintenanceHUD.tscn" id="4_maint"]
 [ext_resource type="PackedScene" path="res://scenes/ui/TabletHUD.tscn" id="5_tablet"]
 [ext_resource type="Resource" path="res://resources/minigames/DefaultRecoveryConfig.tres" id="6_config"]
+[ext_resource type="Resource" path="res://resources/minigames/DefaultCalibrationConfig.tres" id="7_audit"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_jib20"]
 radius = 0.4
@@ -25,7 +26,8 @@ offset_top = -136.0
 offset_bottom = -86.0
 
 [node name="MaintenanceHUD" parent="." instance=ExtResource("4_maint")]
-config = ExtResource("6_config")
+recovery_config = ExtResource("6_config")
+audit_config = ExtResource("7_audit")
 
 [node name="TabletHUD" parent="." instance=ExtResource("5_tablet")]
 unique_name_in_owner = true

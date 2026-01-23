@@ -7,6 +7,7 @@ signal heat_increased(new_multiplier: float)
 var current_week: int = 1
 var heat_multiplier: float = 1.0 # Increases by 1.15x per week
 var vulnerability_buffer: Array[Dictionary] = [] # FIFO queue of "Efficient" closures
+var week_transition_shift: String = "shift_friday"
 
 const HEAT_INCREMENT = 0.15 # 15% increase per week
 const MAX_BUFFER_SIZE = 10
@@ -22,8 +23,8 @@ func get_scaled_time(base_time: float) -> float:
 	return base_time / heat_multiplier
 
 func _on_shift_ended(_results):
-	# If Friday shift ends, increment week and heat
-	if NarrativeDirector and NarrativeDirector.current_shift_name == "shift_friday":
+	# If designated transition shift ends, increment week and heat
+	if NarrativeDirector and NarrativeDirector.current_shift_name == week_transition_shift:
 		current_week += 1
 		heat_multiplier += HEAT_INCREMENT
 		print("🔥 HEAT INCREASED: Week %d | Multiplier: %.2fx" % [current_week, heat_multiplier])

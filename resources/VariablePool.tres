@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="VariablePool" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/VariablePool.gd" id="1_pool"]
+
+[resource]
+script = ExtResource("1_pool")
+departments = ["Finance", "Human Resources", "Engineering", "Legal", "Marketing", "Sales", "Executive"]
+employees = [
+	{"name": "Alice Vance", "dept": "Finance", "role": "Controller"},
+	{"name": "Bob Henderson", "dept": "Engineering", "role": "Lead Architect"},
+	{"name": "Charlie Day", "dept": "Marketing", "role": "Manager"},
+	{"name": "Diana Prince", "dept": "Legal", "role": "General Counsel"},
+	{"name": "Edward Norton", "dept": "Human Resources", "role": "Specialist"},
+	{"name": "Frank Castle", "dept": "Executive", "role": "CEO"},
+	{"name": "Gwen Stacy", "dept": "Engineering", "role": "Researcher"},
+	{"name": "Harry Osborn", "dept": "Executive", "role": "CFO"},
+	{"name": "Iris West", "dept": "Marketing", "role": "Copywriter"},
+	{"name": "Jack Shephard", "dept": "Finance", "role": "Analyst"}
+]
+attacker_ips = [
+	"203.0.113.42", "198.51.100.12", "192.0.2.88", "45.33.22.11", 
+	"103.20.15.1", "185.12.44.11", "91.200.12.5", "5.101.0.44"
+]
+malicious_domains = [
+	"verify-update.net", "corporate-auth.biz", "secure-login.io", 
+	"cloud-storage-transfer.com", "it-servicedesk.co", "bank-verify.info"
+]

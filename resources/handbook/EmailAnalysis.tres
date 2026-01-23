@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="HandbookPage" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/HandbookPage.gd" id="1_page"]
+
+[resource]
+script = ExtResource("1_page")
+page_id = "email"
+title = "EMAIL THREAT ANALYSIS"
+content = "[b][color=#006CFF]TRIAGE[/color][/b]\nAnalyze communication headers and artifacts for spoofing.\n\n[b]TOOLS:[/b]\n• [b]Headers[/b]: Verification of SPF/DKIM/DMARC status.\n• [b]Attachments[/b]: Sandbox analysis for executable payloads.\n• [b]Links[/b]: Domain reputation and blacklist verification."

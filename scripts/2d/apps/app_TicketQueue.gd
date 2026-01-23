@@ -8,7 +8,7 @@ var card_scene = preload("res://scenes/2d/apps/components/TicketCard.tscn")
 # UI Elements
 @onready var ticket_list: VBoxContainer = %TicketList
 @onready var detail_view: VBoxContainer = %DetailView
-@onready var placeholder_label: Label = %PlaceholderLabel
+@onready var placeholder_view: Control = %PlaceholderView
 @onready var title_label: Label = %TitleLabel
 @onready var description_label: RichTextLabel = %DescriptionLabel
 @onready var steps_container: VBoxContainer = %StepsContainer
@@ -39,10 +39,10 @@ func _update_detail_view(ticket: TicketResource):
 	selected_ticket = ticket
 	
 	if not selected_ticket:
-		placeholder_label.visible = true
+		placeholder_view.visible = true
 		detail_view.visible = false
 	else:
-		placeholder_label.visible = false
+		placeholder_view.visible = false
 		detail_view.visible = true
 		
 		if required_tool_label:

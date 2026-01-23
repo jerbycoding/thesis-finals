@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="HandbookPage" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/HandbookPage.gd" id="1_page"]
+
+[resource]
+script = ExtResource("1_page")
+page_id = "siem"
+title = "SIEM FORENSIC LOG VIEWER"
+content = "[b][color=#006CFF]EVIDENCE COLLECTION[/color][/b]\nThe SIEM aggregates logs for cross-referenced investigation.\n\n[b]PROCEDURE:[/b]\n1. Select log in the main stream.\n2. Review technical report in the Inspector Pane.\n3. [b]Drag log[/b] onto a ticket in the queue to attach evidence.\n\n[i]Note: Compliant resolution requires all listed evidence IDs to be attached.[/i]"

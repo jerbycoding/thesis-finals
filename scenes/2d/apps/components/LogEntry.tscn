@@ -25,7 +25,7 @@ layout_mode = 2
 
 [node name="StatusDot" type="ColorRect" parent="HBox/DotContainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(6, 6)
+custom_minimum_size = Vector2(8, 8)
 layout_mode = 2
 color = Color(0.827451, 0.156863, 0.156863, 1)
 

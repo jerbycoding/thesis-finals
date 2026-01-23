@@ -5,6 +5,7 @@ extends Node
 var all_logs: Array[LogResource] = []
 var active_logs: Array[LogResource] = [] # Only these are shown in the app
 var reviewed_logs: Array[String] = []
+var noise_pool: NoiseLogPool = null
 
 const LOG_DIR = "res://resources/logs/"
 const MAX_LOG_HISTORY = 150 # Performance safeguard
@@ -14,8 +15,17 @@ func _ready():
 	print("LogSystem initialized")
 	print("========================================")
 	
+	_load_noise_pool()
 	# Connect to EventBus for events
 	_initialize_system.call_deferred()
+
+func _load_noise_pool():
+	var path = "res://resources/NoiseLogPool.tres"
+	if ResourceLoader.exists(path):
+		noise_pool = load(path)
+		print("LogSystem: Noise log pool loaded.")
+	else:
+		push_error("LogSystem: Could not find NoiseLogPool.tres at %s" % path)
 
 func _initialize_system():
 	EventBus.world_event_triggered.connect(_on_world_event)
@@ -39,26 +49,17 @@ func _start_false_flag_flood(duration: float):
 		await get_tree().create_timer(randf_range(0.5, 2.0)).timeout
 
 func _spawn_noise_log():
-	var hosts = ["SRV-PATCH-01", "DC-02", "MAIL-GATEWAY", "VPN-CON-01", "BACKUP-NAS", "WORKSTATION-12", "WORKSTATION-88"]
-	var sources = ["System", "Kernel", "UpdateAgent", "AuditD", "WinRM"]
-	var messages = [
-		"Service 'UpdateAgent' reported status: OFFLINE (Scheduled Maintenance)",
-		"User 'admin' logged in from 10.0.0.5 (Internal)",
-		"File integrity check completed on /etc/hosts. No changes.",
-		"Network interface eth0 received 1.2GB in last 60 minutes.",
-		"Automatic system clock synchronization successful.",
-		"DHCP lease renewed for client 10.0.4.55",
-		"Print spooler service restarted automatically."
-	]
-	
+	if not noise_pool:
+		return
+		
 	var log_res = LogResource.new()
 	log_res.log_id = "NOISE-" + str(randi() % 9999)
 	log_res.timestamp = Time.get_time_string_from_system()
-	log_res.source = sources.pick_random()
+	log_res.source = noise_pool.sources.pick_random()
 	log_res.category = "System"
 	log_res.severity = randi_range(1, 2) # Random Info/Low severity
-	log_res.hostname = hosts.pick_random()
-	log_res.message = messages.pick_random()
+	log_res.hostname = noise_pool.hosts.pick_random()
+	log_res.message = noise_pool.messages.pick_random()
 	
 	add_log(log_res)
 

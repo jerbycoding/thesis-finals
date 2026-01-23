@@ -13,6 +13,9 @@ class_name TicketResource
 @export var hidden_risks: Array[String] = []
 @export var required_log_ids: Array[String] = [] # Log IDs that should be attached for compliant completion
 
+## If set, isolating this host will trigger a 'technical verification' for this ticket.
+@export var required_host_isolation: String = ""
+
 ## The event ID to trigger in NarrativeDirector when this ticket is completed
 @export var on_complete_event: String = ""
 
@@ -67,11 +70,16 @@ func validate() -> bool:
 # --- Procedural Formatting ---
 
 func get_formatted_description() -> String:
-	if truth_packet.is_empty():
-		return description
-	return description.format(truth_packet)
+	var text = description
+	if not truth_packet.is_empty():
+		text = description.format(truth_packet)
+	
+	# Global Color Replacement: Swap 'cyan' for professional 'INFO_BLUE'
+	return text.replace("[color=cyan]", "[color=#006CFF]")
 
 func get_formatted_title() -> String:
-	if truth_packet.is_empty():
-		return title
-	return title.format(truth_packet)
+	var text = title
+	if not truth_packet.is_empty():
+		text = title.format(truth_packet)
+	
+	return text.replace("[color=cyan]", "[color=#006CFF]")

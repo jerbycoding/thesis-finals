@@ -3,40 +3,19 @@
 # Ensures semantic consistency across all tools (SIEM, Email, Ticket).
 extends Node
 
-# --- Data Pools ---
-
-const DEPARTMENTS = ["Finance", "Human Resources", "Engineering", "Legal", "Marketing", "Sales", "Executive"]
-
-const EMPLOYEES = [
-	{"name": "Alice Vance", "dept": "Finance", "role": "Controller"},
-	{"name": "Bob Henderson", "dept": "Engineering", "role": "Lead Architect"},
-	{"name": "Charlie Day", "dept": "Marketing", "role": "Manager"},
-	{"name": "Diana Prince", "dept": "Legal", "role": "General Counsel"},
-	{"name": "Edward Norton", "dept": "Human Resources", "role": "Specialist"},
-	{"name": "Frank Castle", "dept": "Executive", "role": "CEO"},
-	{"name": "Gwen Stacy", "dept": "Engineering", "role": "Researcher"},
-	{"name": "Harry Osborn", "dept": "Executive", "role": "CFO"},
-	{"name": "Iris West", "dept": "Marketing", "role": "Copywriter"},
-	{"name": "Jack Shephard", "dept": "Finance", "role": "Analyst"}
-]
-
-const ATTACKER_IPS = [
-	"203.0.113.42", "198.51.100.12", "192.0.2.88", "45.33.22.11", 
-	"103.20.15.1", "185.12.44.11", "91.200.12.5", "5.101.0.44"
-]
-
-const MALICIOUS_DOMAINS = [
-	"verify-update.net", "corporate-auth.biz", "secure-login.io", 
-	"cloud-storage-transfer.com", "it-servicedesk.co", "bank-verify.info"
-]
+var pool: VariablePool = null
 
 # --- Logic ---
 
 ## Generates a new Truth Packet for an incident.
 func generate_truth_packet(ticket_id: String) -> Dictionary:
-	var employee = EMPLOYEES.pick_random()
-	var attacker_ip = ATTACKER_IPS.pick_random()
-	var domain = MALICIOUS_DOMAINS.pick_random()
+	if not pool:
+		push_error("VariableRegistry: VariablePool not loaded!")
+		return {}
+		
+	var employee = pool.employees.pick_random()
+	var attacker_ip = pool.attacker_ips.pick_random()
+	var domain = pool.malicious_domains.pick_random()
 	
 	# Try to get a random host from NetworkState if available
 	var victim_host = "WS-UNKNOWN"
@@ -71,4 +50,13 @@ func generate_truth_packet(ticket_id: String) -> Dictionary:
 	return packet
 
 func _ready():
+	_load_pool()
 	print("VariableRegistry initialized.")
+
+func _load_pool():
+	var path = "res://resources/VariablePool.tres"
+	if ResourceLoader.exists(path):
+		pool = load(path)
+		print("VariableRegistry: Data pool loaded from %s" % path)
+	else:
+		push_error("VariableRegistry: Could not find VariablePool.tres at %s" % path)

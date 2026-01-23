@@ -15,6 +15,10 @@ class_name EmailResource
 @export var suspicious_ip: String = "" # IP address found in headers (for cross-tool integration)
 @export var suspicious_domain: String = "" # Domain from links (for cross-tool integration)
 
+## Map of inspection tool name to consequence ID if tool was NOT used before quarantine.
+## Valid keys: "headers", "attachments", "links"
+@export var quarantine_hidden_risks: Dictionary = {}
+
 var truth_packet: Dictionary = {} # Procedural data inherited from parent ticket
 
 func _to_string() -> String:

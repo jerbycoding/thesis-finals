@@ -18,10 +18,21 @@ func _ready():
 	hide()
 	topology_map.draw.connect(_draw_topology)
 	EventBus.consequence_triggered.connect(_on_global_event)
+	EventBus.shift_started.connect(_on_shift_started)
 	
-	if not config: # ADDED check
+	if not config:
 		push_error("TabletHUD: No HardwareRecoveryConfig assigned!")
 		return
+	
+	# Initial check in case shift already started
+	if NarrativeDirector and NarrativeDirector.current_shift_resource:
+		if NarrativeDirector.current_shift_resource.minigame_type == "RECOVERY":
+			_initialize_dynamic_hardware_data()
+
+func _on_shift_started(_shift_id: String):
+	if NarrativeDirector and NarrativeDirector.current_shift_resource:
+		if NarrativeDirector.current_shift_resource.minigame_type == "RECOVERY":
+			_initialize_dynamic_hardware_data()
 
 func toggle():
 	if is_open: close()
@@ -32,7 +43,6 @@ func open():
 	is_open = true
 	anim.play("slide_up")
 	node_positions.clear() 
-	_initialize_dynamic_hardware_data() # Call this when opening for fresh data
 	_refresh_data()
 	if AudioManager: AudioManager.play_notification("info")
 

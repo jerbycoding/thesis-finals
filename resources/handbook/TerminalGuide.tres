@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="HandbookPage" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/HandbookPage.gd" id="1_page"]
+
+[resource]
+script = ExtResource("1_page")
+page_id = "terminal"
+title = "TERMINAL COMMANDS & NETWORK RESPONSE"
+content = "[b][color=#006CFF]OVERVIEW[/color][/b]\nThe terminal is your primary tool for network-level response.\n\n[b]COMMANDS:[/b]\n• [b]help[/b] - Lists all available forensic modules.\n• [b]scan [hostname][/b] - Performs a host analysis. Required before isolation.\n• [b]trace [ip][/b] - Identifies internal origin host for external traffic.\n• [b]isolate [hostname][/b] - Disconnects host from network.\n\n[b][color=#C62828]WARNING:[/color][/b] Unauthorized isolation of critical servers will trigger a system lockout."
+

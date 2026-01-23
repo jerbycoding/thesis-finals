@@ -4,11 +4,4 @@ extends "res://scripts/3d/NPC.gd"
 
 func _ready():
 	super._ready()
-	
-	dialogue_resources = {
-		"checkin_01": load("res://resources/dialogue/senior_analyst_checkin_01.tres"),
-		"checkin_insider": load("res://resources/dialogue/senior_analyst_checkin_insider.tres"),
-		"checkin_malware": load("res://resources/dialogue/senior_analyst_checkin_malware.tres"),
-		"checkin_second_shift": load("res://resources/dialogue/senior_analyst_default.tres"),
-		"default": load("res://resources/dialogue/senior_analyst_default.tres")
-	}
+	# Dialogues are now loaded dynamically via naming convention in base NPC script.

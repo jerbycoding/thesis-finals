@@ -5,58 +5,72 @@ extends Control
 @onready var title_label: Label = %TitleLabel
 @onready var nav_buttons: VBoxContainer = %NavButtons
 
-const DOCS = {
-	"terminal": {
-		"title": "TERMINAL COMMANDS & NETWORK RESPONSE",
-		"content": "[b][color=#006CFF]OVERVIEW[/color][/b]\nThe terminal is your primary tool for network-level response.\n\n[b]COMMANDS:[/b]\n• [b]help[/b] - Lists all available forensic modules.\n• [b]scan [hostname][/b] - Performs a host analysis. Required before isolation.\n• [b]trace [ip][/b] - Identifies internal origin host for external traffic.\n• [b]isolate [hostname][/b] - Disconnects host from network.\n\n[b][color=#C62828]WARNING:[/color][/b] Unauthorized isolation of critical servers will trigger a system lockout."
-	},
-	"network": {
-		"title": "NETWORK TOPOLOGY MAPPING",
-		"content": "[b][color=#006CFF]VISUALIZATION[/color][/b]\nThe map visualizes organizational assets and real-time status.\n\n[b]INDICATORS:[/b]\n• [color=#2E7D32]Green/Cyan[/color]: Nominal status.\n• [color=#C62828]Red[/color]: Malware infection detected.\n• [color=#F57C00]Orange[/color]: Anomalous activity suspected.\n• [color=#666666]Gray[/color]: Host isolated from network."
-	},
-	"siem": {
-		"title": "SIEM FORENSIC LOG VIEWER",
-		"content": "[b][color=#006CFF]EVIDENCE COLLECTION[/color][/b]\nThe SIEM aggregates logs for cross-referenced investigation.\n\n[b]PROCEDURE:[/b]\n1. Select log in the main stream.\n2. Review technical report in the Inspector Pane.\n3. [b]Drag log[/b] onto a ticket in the queue to attach evidence.\n\n[i]Note: Compliant resolution requires all listed evidence IDs to be attached.[/i]"
-	},
-	"email": {
-		"title": "EMAIL THREAT ANALYSIS",
-		"content": "[b][color=#006CFF]TRIAGE[/color][/b]\nAnalyze communication headers and artifacts for spoofing.\n\n[b]TOOLS:[/b]\n• [b]Headers[/b]: Verification of SPF/DKIM/DMARC status.\n• [b]Attachments[/b]: Sandbox analysis for executable payloads.\n• [b]Links[/b]: Domain reputation and blacklist verification."
-	},
-	"procedures": {
-		"title": "INCIDENT RESPONSE PROCEDURES (SOP)",
-		"content": "[b][color=#006CFF]RESOLUTION STRATEGIES[/color][/b]\n\n• [b]Compliant[/b]: Procedural verification confirmed. Lowest risk posture.\n• [b]Efficient[/b]: Speed priority. High risk of missing hidden consequences.\n• [b]Emergency[/b]: Crisis override. Use only for catastrophic outbreaks."
-	},
-	"incidents": {
-		"title": "INCIDENT CATALOG",
-		"content": "[b][color=#006CFF]RECOGNIZED THREATS[/color][/b]\n\n• [b]PHISH-001[/b]: Standard credential harvesting attempt.\n• [b]RANSOM-001[/b]: Host encryption. Requires Decryption module.\n• [b]INSIDER-001[/b]: Unauthorized project data access.\n• [b]DDOS-001[/b]: UDP flood. Requires immediate trace/isolate."
-	}
-}
+var docs: Dictionary = {} # page_id -> HandbookPage
+const HANDBOOK_DIR = "res://resources/handbook/"
 
 func _ready():
-	# Connect buttons
-	for btn in nav_buttons.get_children():
-		if btn is Button:
-			var doc_id = btn.name.replace("Btn_", "").to_lower()
-			btn.pressed.connect(_show_doc.bind(doc_id))
-			btn.mouse_entered.connect(func(): if AudioManager: AudioManager.play_ui_hover())
+	_discover_pages()
+	_generate_nav_buttons()
 	
 	# Show default doc
-	_show_doc("terminal")
+	if docs.has("terminal"):
+		_show_doc("terminal")
+	elif not docs.is_empty():
+		_show_doc(docs.keys()[0])
+
+func _discover_pages():
+	print("📘 Handbook: Discovering pages in %s..." % HANDBOOK_DIR)
+	docs.clear()
+	
+	var loaded_pages = FileUtil.load_and_validate_resources(HANDBOOK_DIR, "HandbookPage")
+	for res in loaded_pages:
+		docs[res.page_id] = res
+		print("  - Discovered Page: %s" % res.page_id)
+			
+	print("📘 Handbook: Library ready: %d pages" % docs.size())
+
+func _generate_nav_buttons():
+	# Clear existing hardcoded buttons
+	for child in nav_buttons.get_children():
+		child.queue_free()
+	
+	# Create a button for each page
+	for page_id in docs:
+		var page = docs[page_id]
+		var btn = Button.new()
+		
+		# Try to add an icon based on ID
+		var icon = "  📄 "
+		match page_id:
+			"terminal": icon = "  🐚 "
+			"network": icon = "  🕸️ "
+			"siem": icon = "  📊 "
+			"email": icon = "  ✉ "
+			"procedures": icon = "  📜 "
+			"incidents": icon = "  🎫 "
+			
+		btn.text = icon + page.title.capitalize()
+		btn.alignment = HORIZONTAL_ALIGNMENT_LEFT
+		btn.flat = true
+		btn.pressed.connect(_show_doc.bind(page_id))
+		btn.mouse_entered.connect(func(): if AudioManager: AudioManager.play_ui_hover())
+		
+		nav_buttons.add_child(btn)
 
 func _show_doc(id: String):
-	if not DOCS.has(id): return
+	if not docs.has(id): return
 	
 	if AudioManager: AudioManager.play_ui_click()
 	
-	var doc = DOCS[id]
-	title_label.text = ":: " + doc.title + " ::"
-	reader.text = doc.content
+	var page = docs[id]
+	title_label.text = ":: " + page.title.to_upper() + " ::"
+	reader.text = page.content
 	
 	# Highlight active button
-	for btn in nav_buttons.get_children():
-		if btn is Button:
-			var btn_id = btn.name.replace("Btn_", "").to_lower()
-			if btn_id == id:
-				btn.add_theme_color_override("font_color", GlobalConstants.UI_COLORS.INFO_BLUE)
+	for child in nav_buttons.get_children():
+		if child is Button:
+			var is_active = child.text.to_lower().contains(page.title.to_lower())
+			if is_active:
+				child.add_theme_color_override("font_color", GlobalConstants.UI_COLORS.INFO_BLUE)
 			else:
-				btn.add_theme_color_override("font_color", GlobalConstants.UI_COLORS.TEXT_PRIMARY)
+				child.add_theme_color_override("font_color", GlobalConstants.UI_COLORS.TEXT_PRIMARY)

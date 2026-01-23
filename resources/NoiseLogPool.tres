@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="NoiseLogPool" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/NoiseLogPool.gd" id="1_pool"]
+
+[resource]
+script = ExtResource("1_pool")
+hosts = ["SRV-PATCH-01", "DC-02", "MAIL-GATEWAY", "VPN-CON-01", "BACKUP-NAS", "WORKSTATION-12", "WORKSTATION-88"]
+sources = ["System", "Kernel", "UpdateAgent", "AuditD", "WinRM"]
+messages = [
+	"Service 'UpdateAgent' reported status: OFFLINE (Scheduled Maintenance)",
+	"User 'admin' logged in from 10.0.0.5 (Internal)",
+	"File integrity check completed on /etc/hosts. No changes.",
+	"Network interface eth0 received 1.2GB in last 60 minutes.",
+	"Automatic system clock synchronization successful.",
+	"DHCP lease renewed for client 10.0.4.55",
+	"Print spooler service restarted automatically."
+]

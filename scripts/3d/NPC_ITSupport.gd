@@ -3,8 +3,7 @@
 extends "res://scripts/3d/NPC.gd"
 
 func _ready():
+
 	super._ready()
-	
-	dialogue_resources = {
-		"default": load("res://resources/dialogue/it_support_default.tres")
-	}
+
+	# Dialogues are now loaded dynamically via naming convention in base NPC script.

@@ -51,33 +51,5 @@ func _can_player_clock_out() -> bool:
 
 
 func _ready():
-
 	super._ready()
-
-	
-
-	dialogue_resources = {
-
-		"briefing_01": load("res://resources/dialogue/ciso_briefing_01.tres"),
-
-		"default": load("res://resources/dialogue/ciso_default.tres"),
-
-		"shift_end": load("res://resources/dialogue/ciso_shift_end.tres"),
-
-		"briefing_second_shift": load("res://resources/dialogue/ciso_briefing_second_shift.tres"),
-
-								"briefing_third_shift": load("res://resources/dialogue/ciso_briefing_third_shift.tres"),
-
-								"briefing_thursday": load("res://resources/dialogue/ciso_briefing_thursday.tres"),
-
-								"briefing_friday": load("res://resources/dialogue/ciso_briefing_friday.tres"),
-
-								"briefing_saturday": load("res://resources/dialogue/ciso_briefing_saturday.tres"),
-
-				"briefing_sunday": load("res://resources/dialogue/ciso_briefing_sunday.tres"),
-
-				"clockout_ready": load("res://resources/dialogue/ciso_clockout_ready.tres"),
-
-		"clockout_rejected": load("res://resources/dialogue/ciso_clockout_rejected.tres")
-
-	}
+	# Dialogues are now loaded dynamically via naming convention in base NPC script.
