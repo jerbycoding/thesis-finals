@@ -43,10 +43,9 @@ ssao_enabled = true
 [sub_resource type="BoxShape3D" id="102"]
 size = Vector3(4, 4, 4)
 
-[sub_resource type="NavigationMesh" id="103"]
-geometry_parsed_geometry_type = 1
-agent_height = 1.8
-agent_radius = 0.35
+[sub_resource type="NavigationMesh" id="NavigationMesh_12w0d"]
+vertices = PackedVector3Array(-14.75, 4.46841, -12.25, -14.75, 4.46841, 12.25, 14.75, 4.46841, 12.25, 14.75, 4.46841, -12.25, -12.75, 0.468412, -11.5, -13.25, 0.468412, -11.5, -13.5, 0.468412, -10.75, -12.75, 0.468412, -8.25, -10.5, 0.468412, -5.75, -10.25, 0.468412, -5, -9.5, 0.468412, -5, -9.25, 0.468412, -5.75, -10.75, 0.468412, -8.5, -14, 0.468412, -5.75, -8.25, 0.468412, -10.5, -8.75, 0.468412, -11.5, -11, 0.468412, -11.5, -14, 0.468412, -10.75, -5.75, 0.468412, -5.75, -5.75, 0.468412, -10.5, 13.5, 0.468412, 4.25, 13.75, 0.468412, 5, 14.25, 0.468412, 5, 14.25, 0.468412, -11.5, -1.5, 0.468412, 4.25, -1.25, 0.468412, 5, -0.750001, 0.468412, 5.25, -0.250001, 0.468412, 4.25, -4.25, 0.468412, -4.5, 6, 0.468412, 4.25, 7.25, 0.468412, 4.25, 6.25, 0.468412, 5, 6.75, 0.468412, 5.25, -4.75, 0.468412, -4.25, -4.75, 0.468412, 4.25, -4.25, 0.468412, -11.5, -9, 0.468412, 4.25, -8.75, 0.468412, 5, -8.25, 0.468412, 5.25, -7.75, 0.468412, 4.25, -9.25, 0.468412, -4.25, -10.5, 0.468412, -4.25, -14, 0.468412, -4.25, -14, 0.468412, 4.25, -9, 0.468412, 5.75, -8.25, 0.468412, 11.75, -14, 0.468412, 5.75, -14, 0.468412, 11.75, -1.5, 0.468412, 5.75, -0.750001, 0.468412, 11.75, -6.75, 0.468412, 5.75, -6.75, 0.468412, 11.75, 6, 0.468412, 5.75, 6.75, 0.468412, 11.75, 0.749999, 0.468412, 5.75, 0.749999, 0.468412, 11.75, 13.5, 0.468412, 5.75, 14.25, 0.468412, 11.75, 8.25, 0.468412, 5.75, 8.25, 0.468412, 11.75)
+polygons = [PackedInt32Array(3, 2, 0), PackedInt32Array(0, 2, 1), PackedInt32Array(5, 4, 6), PackedInt32Array(6, 4, 7), PackedInt32Array(9, 8, 10), PackedInt32Array(10, 8, 11), PackedInt32Array(11, 8, 12), PackedInt32Array(12, 8, 7), PackedInt32Array(7, 8, 13), PackedInt32Array(15, 14, 16), PackedInt32Array(16, 14, 12), PackedInt32Array(6, 7, 17), PackedInt32Array(17, 7, 13), PackedInt32Array(14, 19, 12), PackedInt32Array(12, 19, 11), PackedInt32Array(11, 19, 18), PackedInt32Array(21, 20, 22), PackedInt32Array(22, 20, 23), PackedInt32Array(25, 24, 26), PackedInt32Array(26, 24, 27), PackedInt32Array(27, 24, 28), PackedInt32Array(30, 29, 28), PackedInt32Array(31, 29, 32), PackedInt32Array(32, 29, 30), PackedInt32Array(29, 27, 28), PackedInt32Array(33, 28, 34), PackedInt32Array(34, 28, 24), PackedInt32Array(20, 30, 23), PackedInt32Array(23, 30, 28), PackedInt32Array(23, 28, 35), PackedInt32Array(37, 36, 38), PackedInt32Array(38, 36, 39), PackedInt32Array(39, 36, 40), PackedInt32Array(40, 36, 41), PackedInt32Array(10, 40, 9), PackedInt32Array(9, 40, 41), PackedInt32Array(34, 39, 33), PackedInt32Array(33, 39, 40), PackedInt32Array(42, 41, 43), PackedInt32Array(43, 41, 36), PackedInt32Array(37, 38, 44), PackedInt32Array(44, 38, 45), PackedInt32Array(46, 44, 47), PackedInt32Array(47, 44, 45), PackedInt32Array(25, 26, 48), PackedInt32Array(48, 26, 49), PackedInt32Array(50, 48, 51), PackedInt32Array(51, 48, 49), PackedInt32Array(31, 32, 52), PackedInt32Array(52, 32, 53), PackedInt32Array(54, 52, 55), PackedInt32Array(55, 52, 53), PackedInt32Array(21, 22, 56), PackedInt32Array(56, 22, 57), PackedInt32Array(58, 56, 59), PackedInt32Array(59, 56, 57)]
 
 [sub_resource type="StandardMaterial3D" id="104"]
 albedo_color = Color(0.15, 0.15, 0.18, 1)
@@ -156,7 +155,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 shape = SubResource("102")
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
-navigation_mesh = SubResource("103")
+navigation_mesh = SubResource("NavigationMesh_12w0d")
 
 [node name="RoomGeometry" type="Node3D" parent="NavigationRegion3D"]
 
@@ -168,7 +167,6 @@ mesh = SubResource("105")
 
 [node name="Ceiling" type="MeshInstance3D" parent="NavigationRegion3D/RoomGeometry"]
 transform = Transform3D(1, 0, 0, 0, -0.00651005, 0.999979, 0, -0.999979, -0.00651005, 0, 4, 0)
-visible = false
 mesh = SubResource("117")
 
 [node name="Lighting_Grid" type="Node3D" parent="NavigationRegion3D/RoomGeometry"]

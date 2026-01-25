@@ -1,0 +1,30 @@
+[gd_scene load_steps=6 format=3 uid="uid://c8n7m6l5k4j32"]
+
+[ext_resource type="Script" path="res://scripts/3d/NPC.gd" id="1_npc"]
+[ext_resource type="Script" path="res://scripts/3d/PlayerAnimator.gd" id="2_animator"]
+[ext_resource type="PackedScene" uid="uid://o4piepg3a5q5" path="res://assets/npc/Hoodie Character.glb" id="3_hoodie"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_npc"]
+radius = 0.4
+height = 1.8
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_interact"]
+size = Vector3(3, 3, 3)
+
+[node name="NPC_NetworkSpecialist" type="CharacterBody3D"]
+script = ExtResource("1_npc")
+npc_id = "network_specialist"
+npc_name = "Network Specialist"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+shape = SubResource("CapsuleShape3D_npc")
+
+[node name="InteractionArea" type="Area3D" parent="."]
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="InteractionArea"]
+shape = SubResource("BoxShape3D_interact")
+
+[node name="Model" parent="." instance=ExtResource("3_hoodie")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+script = ExtResource("2_animator")

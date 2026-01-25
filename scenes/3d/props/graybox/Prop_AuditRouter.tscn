@@ -4,17 +4,30 @@
 [ext_resource type="Resource" path="res://resources/minigames/DefaultCalibrationConfig.tres" id="2_config"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_router"]
-size = Vector3(1.5, 2, 0.5)
+size = Vector3(0.6, 0.3, 0.5)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_router"]
-size = Vector3(1.5, 2, 0.5)
+size = Vector3(0.6, 0.3, 0.5)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_stand"]
+albedo_color = Color(0.1, 0.1, 0.1, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_stand"]
+material = SubResource("StandardMaterial3D_stand")
+size = Vector3(0.2, 1.0, 0.2)
 
 [node name="Prop_AuditRouter" type="StaticBody3D"]
 script = ExtResource("1_audit")
 config = ExtResource("2_config")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+[node name="RouterMesh" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.15, 0)
 mesh = SubResource("BoxMesh_router")
 
+[node name="StandMesh" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+mesh = SubResource("BoxMesh_stand")
+
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, 0)
 shape = SubResource("BoxShape3D_router")
