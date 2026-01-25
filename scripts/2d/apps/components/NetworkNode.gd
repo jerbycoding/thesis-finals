@@ -49,9 +49,9 @@ func _update_visuals():
 	var style = get_theme_stylebox("normal").duplicate()
 	style.border_color = color
 	if is_hovered():
-		style.bg_color = Color(1, 1, 1, 0.1)
+		style.bg_color = Color(0.2, 0.2, 0.2, 1) # Dark grey hover
 	else:
-		style.bg_color = Color(0, 0, 0, 0.5)
+		style.bg_color = Color(0.1, 0.1, 0.1, 1) # Solid near-black normal
 		
 	add_theme_stylebox_override("normal", style)
 

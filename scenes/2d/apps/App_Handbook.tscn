@@ -1,7 +1,16 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=5 format=3 uid="uid://dpkhv2v8v8v8v"]
 
 [ext_resource type="Script" path="res://scripts/2d/apps/App_Handbook.gd" id="1_handbook"]
-[ext_resource type="Theme" path="res://assets/themes/EnterpriseTheme.tres" id="2_theme"]
+[ext_resource type="Theme" uid="uid://dny3rlbltexc7" path="res://assets/themes/EnterpriseTheme.tres" id="2_theme"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Sidebar"]
+bg_color = Color(1, 1, 1, 1)
+border_width_right = 1
+border_color = Color(0.866667, 0.866667, 0.866667, 1)
+content_margin_left = 15.0
+content_margin_top = 20.0
+content_margin_right = 15.0
+content_margin_bottom = 20.0
 
 [node name="AppHandbook" type="Control"]
 custom_minimum_size = Vector2(900, 650)
@@ -21,7 +30,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(1, 1, 1, 1)
+color = Color(0.992157, 0.992157, 0.992157, 1)
 
 [node name="MainLayout" type="HSplitContainer" parent="."]
 layout_mode = 1
@@ -30,67 +39,75 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/separation = 0
 split_offset = 240
 
 [node name="Sidebar" type="PanelContainer" parent="MainLayout"]
 layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_Sidebar")
 
-[node name="Margin" type="MarginContainer" parent="MainLayout/Sidebar"]
-layout_mode = 2
-theme_override_constants/margin_left = 15
-theme_override_constants/margin_top = 20
-theme_override_constants/margin_right = 15
-
-[node name="VBox" type="VBoxContainer" parent="MainLayout/Sidebar/Margin"]
+[node name="VBox" type="VBoxContainer" parent="MainLayout/Sidebar"]
 layout_mode = 2
 theme_override_constants/separation = 20
 
-[node name="SectionLabel" type="Label" parent="MainLayout/Sidebar/Margin/VBox"]
+[node name="SectionLabel" type="Label" parent="MainLayout/Sidebar/VBox"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.4, 0.4, 0.4, 1)
 theme_override_font_sizes/font_size = 10
-text = "DOCUMENTATION"
+text = "TECHNICAL DOCUMENTATION"
 
-[node name="NavButtons" type="VBoxContainer" parent="MainLayout/Sidebar/Margin/VBox"]
+[node name="NavButtons" type="VBoxContainer" parent="MainLayout/Sidebar/VBox"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 5
 
-[node name="Btn_Terminal" type="Button" parent="MainLayout/Sidebar/Margin/VBox/NavButtons"]
+[node name="Btn_Terminal" type="Button" parent="MainLayout/Sidebar/VBox/NavButtons"]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.101961, 0.101961, 0.101961, 1)
+theme_override_font_sizes/font_size = 13
 text = "  🐚 Terminal Guide"
 alignment = 0
 flat = true
 
-[node name="Btn_Network" type="Button" parent="MainLayout/Sidebar/Margin/VBox/NavButtons"]
+[node name="Btn_Network" type="Button" parent="MainLayout/Sidebar/VBox/NavButtons"]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.101961, 0.101961, 0.101961, 1)
+theme_override_font_sizes/font_size = 13
 text = "  🕸️ Network Map"
 alignment = 0
 flat = true
 
-[node name="Btn_SIEM" type="Button" parent="MainLayout/Sidebar/Margin/VBox/NavButtons"]
+[node name="Btn_SIEM" type="Button" parent="MainLayout/Sidebar/VBox/NavButtons"]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.101961, 0.101961, 0.101961, 1)
+theme_override_font_sizes/font_size = 13
 text = "  📊 SIEM Forensics"
 alignment = 0
 flat = true
 
-[node name="Btn_Email" type="Button" parent="MainLayout/Sidebar/Margin/VBox/NavButtons"]
+[node name="Btn_Email" type="Button" parent="MainLayout/Sidebar/VBox/NavButtons"]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.101961, 0.101961, 0.101961, 1)
+theme_override_font_sizes/font_size = 13
 text = "  ✉ Email Analysis"
 alignment = 0
 flat = true
 
-[node name="HSeparator" type="HSeparator" parent="MainLayout/Sidebar/Margin/VBox"]
+[node name="HSeparator" type="HSeparator" parent="MainLayout/Sidebar/VBox"]
 layout_mode = 2
 
-[node name="Btn_Procedures" type="Button" parent="MainLayout/Sidebar/Margin/VBox/NavButtons"]
+[node name="Btn_Procedures" type="Button" parent="MainLayout/Sidebar/VBox/NavButtons"]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.101961, 0.101961, 0.101961, 1)
+theme_override_font_sizes/font_size = 13
 text = "  📜 SOP Procedures"
 alignment = 0
 flat = true
 
-[node name="Btn_Incidents" type="Button" parent="MainLayout/Sidebar/Margin/VBox/NavButtons"]
+[node name="Btn_Incidents" type="Button" parent="MainLayout/Sidebar/VBox/NavButtons"]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.101961, 0.101961, 0.101961, 1)
+theme_override_font_sizes/font_size = 13
 text = "  🎫 Incident Catalog"
 alignment = 0
 flat = true
@@ -123,7 +140,8 @@ theme_override_constants/margin_bottom = 30
 [node name="Reader" type="RichTextLabel" parent="MainLayout/ReaderPane/ContentMargin"]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_colors/default_color = Color(0.101961, 0.101961, 0.101961, 1)
 theme_override_constants/line_separation = 6
 theme_override_font_sizes/normal_font_size = 14
 bbcode_enabled = true
-text = "Select a topic..."
+text = "Select a topic from the sidebar to begin..."

@@ -1,7 +1,16 @@
-[gd_scene load_steps=3 format=3 uid="uid://clyuw8cc1xkfb"]
+[gd_scene load_steps=4 format=3 uid="uid://clyuw8cc1xkfb"]
 
 [ext_resource type="Script" uid="uid://dqxaypiaoiy7k" path="res://scripts/2d/apps/App_NetworkMapper.gd" id="1_netmap"]
 [ext_resource type="Theme" uid="uid://dny3rlbltexc7" path="res://assets/themes/EnterpriseTheme.tres" id="2_theme"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Inspector"]
+content_margin_left = 20.0
+content_margin_top = 20.0
+content_margin_right = 20.0
+content_margin_bottom = 20.0
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 2
+border_color = Color(0, 0, 0, 1)
 
 [node name="App_NetworkMapper" type="Control"]
 custom_minimum_size = Vector2(1000, 700)
@@ -21,7 +30,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.054902, 0.0666667, 0.0901961, 1)
+color = Color(0.992157, 0.992157, 0.992157, 1)
 
 [node name="MainLayout" type="HBoxContainer" parent="."]
 layout_mode = 1
@@ -48,17 +57,17 @@ theme_override_constants/separation = 20
 
 [node name="Title" type="Label" parent="MainLayout/CenterArea/TopBar/HBox"]
 layout_mode = 2
-theme_type_variation = &"TechnicalHeader"
-text = ":: NETWORK_TOPOLOGY_VIZ ::"
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 14
+text = "NETWORK TOPOLOGY VIEWER"
 
 [node name="StatusLabel" type="Label" parent="MainLayout/CenterArea/TopBar/HBox"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-theme_type_variation = &"TechnicalHeader"
-theme_override_colors/font_color = Color(0.4, 0.4, 0.4, 1)
+theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1)
 theme_override_font_sizes/font_size = 10
-text = "ANALYSIS: SYSTEM_NOMINAL"
+text = "SYSTEM STATUS: NOMINAL"
 horizontal_alignment = 2
 
 [node name="MapContainer" type="Control" parent="MainLayout/CenterArea"]
@@ -74,7 +83,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-color = Color(1, 1, 1, 0.02)
+color = Color(0.0728424, 0.0728427, 0.0728425, 1)
 
 [node name="NodesContainer" type="Control" parent="MainLayout/CenterArea/MapContainer"]
 unique_name_in_owner = true
@@ -89,10 +98,11 @@ grow_vertical = 2
 unique_name_in_owner = true
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_Inspector")
 
 [node name="VBox" type="VBoxContainer" parent="MainLayout/InspectorPane"]
 layout_mode = 2
-theme_override_constants/separation = 20
+theme_override_constants/separation = 25
 
 [node name="HostHeader" type="VBoxContainer" parent="MainLayout/InspectorPane/VBox"]
 layout_mode = 2
@@ -100,23 +110,22 @@ theme_override_constants/separation = 5
 
 [node name="HostIcon" type="Label" parent="MainLayout/InspectorPane/VBox/HostHeader"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 32
-text = "💻"
+theme_override_colors/font_color = Color(0.101961, 0.101961, 0.101961, 1)
+theme_override_font_sizes/font_size = 48
+text = "🖥️"
 horizontal_alignment = 1
 
 [node name="HostnameLabel" type="Label" parent="MainLayout/InspectorPane/VBox/HostHeader"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 18
-text = "HOST-01"
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 20
+text = "SELECTED_HOST"
 horizontal_alignment = 1
-
-[node name="HSeparator" type="HSeparator" parent="MainLayout/InspectorPane/VBox"]
-layout_mode = 2
 
 [node name="Metadata" type="VBoxContainer" parent="MainLayout/InspectorPane/VBox"]
 layout_mode = 2
-theme_override_constants/separation = 12
+theme_override_constants/separation = 15
 
 [node name="IPGroup" type="VBoxContainer" parent="MainLayout/InspectorPane/VBox/Metadata"]
 layout_mode = 2
@@ -124,14 +133,15 @@ layout_mode = 2
 [node name="Label" type="Label" parent="MainLayout/InspectorPane/VBox/Metadata/IPGroup"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.4, 0.4, 0.4, 1)
-theme_override_font_sizes/font_size = 9
-text = "IP_ADDRESS"
+theme_override_font_sizes/font_size = 10
+text = "NETWORK IP"
 
 [node name="IPLabel" type="Label" parent="MainLayout/InspectorPane/VBox/Metadata/IPGroup"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 12
-text = "192.168.1.10"
+theme_override_colors/font_color = Color(0.101961, 0.101961, 0.101961, 1)
+theme_override_font_sizes/font_size = 14
+text = "0.0.0.0"
 
 [node name="StatusGroup" type="VBoxContainer" parent="MainLayout/InspectorPane/VBox/Metadata"]
 layout_mode = 2
@@ -139,14 +149,15 @@ layout_mode = 2
 [node name="Label" type="Label" parent="MainLayout/InspectorPane/VBox/Metadata/StatusGroup"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.4, 0.4, 0.4, 1)
-theme_override_font_sizes/font_size = 9
-text = "NETWORK_STATUS"
+theme_override_font_sizes/font_size = 10
+text = "CONNECTIVITY"
 
 [node name="StatusValueLabel" type="Label" parent="MainLayout/InspectorPane/VBox/Metadata/StatusGroup"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 12
-text = "CONNECTED"
+theme_override_colors/font_color = Color(0.101961, 0.101961, 0.101961, 1)
+theme_override_font_sizes/font_size = 14
+text = "UNKNOWN"
 
 [node name="CriticalityGroup" type="VBoxContainer" parent="MainLayout/InspectorPane/VBox/Metadata"]
 layout_mode = 2
@@ -154,14 +165,15 @@ layout_mode = 2
 [node name="Label" type="Label" parent="MainLayout/InspectorPane/VBox/Metadata/CriticalityGroup"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.4, 0.4, 0.4, 1)
-theme_override_font_sizes/font_size = 9
-text = "CRITICALity_RATING"
+theme_override_font_sizes/font_size = 10
+text = "ASSET PRIORITY"
 
 [node name="CriticalityLabel" type="Label" parent="MainLayout/InspectorPane/VBox/Metadata/CriticalityGroup"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 12
-text = "MEDIUM"
+theme_override_colors/font_color = Color(0.101961, 0.101961, 0.101961, 1)
+theme_override_font_sizes/font_size = 14
+text = "N/A"
 
 [node name="ContextMenu" type="PopupMenu" parent="."]
 unique_name_in_owner = true
