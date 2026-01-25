@@ -1,6 +1,6 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=5 format=3 uid="uid://ch7ftdwdaxpgh"]
 
-[ext_resource type="Script" path="res://scripts/3d/HardwareSocket.gd" id="1_socket"]
+[ext_resource type="Script" uid="uid://bj2scmdyp1x75" path="res://scripts/3d/HardwareSocket.gd" id="1_socket"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_slot"]
 albedo_color = Color(0.1, 0.1, 0.1, 1)

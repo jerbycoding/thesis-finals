@@ -1,21 +1,15 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=3 format=3 uid="uid://c3agxs18h3brt"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gray"]
-albedo_color = Color(0.5, 0.5, 0.5, 1)
-
-[sub_resource type="BoxMesh" id="BoxMesh_extinguisher"]
-material = SubResource("StandardMaterial3D_gray")
-size = Vector3(0.15, 0.6, 0.15)
+[ext_resource type="PackedScene" uid="uid://bqgefu8l4cekn" path="res://assets/props/graybox/Fire Extinguisher.glb" id="1_6bk5w"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_extinguisher"]
 size = Vector3(0.15, 0.6, 0.15)
 
 [node name="Graybox_FireExtinguisher" type="StaticBody3D"]
 
-[node name="Mesh" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
-mesh = SubResource("BoxMesh_extinguisher")
-
 [node name="Collision" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
 shape = SubResource("BoxShape3D_extinguisher")
+
+[node name="Fire Extinguisher" parent="." instance=ExtResource("1_6bk5w")]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0)

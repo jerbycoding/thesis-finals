@@ -1,4 +1,6 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=5 format=3 uid="uid://dimq5c2kc6wc4"]
+
+[ext_resource type="PackedScene" uid="uid://c5x8cs7tknkft" path="res://assets/props/graybox/Water Cooler.glb" id="1_pedl5"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gray"]
 albedo_color = Color(0.5, 0.5, 0.5, 1)
@@ -19,3 +21,5 @@ mesh = SubResource("BoxMesh_watercooler")
 [node name="Collision" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
 shape = SubResource("BoxShape3D_watercooler")
+
+[node name="Water Cooler" parent="." instance=ExtResource("1_pedl5")]

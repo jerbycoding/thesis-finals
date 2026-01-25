@@ -1,23 +1,15 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=3 format=3 uid="uid://duwuugwisvmoc"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rack"]
-albedo_color = Color(0.05, 0.05, 0.05, 1)
-metallic = 0.8
-roughness = 0.2
-
-[sub_resource type="BoxMesh" id="BoxMesh_rack"]
-material = SubResource("StandardMaterial3D_rack")
-size = Vector3(1, 2.2, 1)
+[ext_resource type="PackedScene" uid="uid://bf7we84m0pkf8" path="res://assets/props/graybox/server rack.glb" id="1_n3v34"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_rack"]
 size = Vector3(1, 2.2, 1)
 
 [node name="Prop_ServerRack" type="StaticBody3D"]
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0)
-mesh = SubResource("BoxMesh_rack")
-
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0)
 shape = SubResource("BoxShape3D_rack")
+
+[node name="server rack" parent="." instance=ExtResource("1_n3v34")]
+transform = Transform3D(-0.0231958, 0, -0.499462, 0, 0.5, 0, 0.499462, 0, -0.0231958, -0.0372958, 0, 0)

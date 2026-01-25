@@ -1,7 +1,7 @@
 [gd_scene load_steps=8 format=3]
 
 [ext_resource type="Script" path="res://scripts/3d/PatchPanel.gd" id="1_panel"]
-[ext_resource type="PackedScene" path="res://scenes/3d/props/Prop_ServerSlot.tscn" id="2_socket"]
+[ext_resource type="PackedScene" path="res://scenes/3d/props/graybox/Prop_ServerSlot.tscn" id="2_socket"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_base"]
 size = Vector3(1, 0.5, 0.2)

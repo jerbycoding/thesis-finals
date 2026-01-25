@@ -1,21 +1,15 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=3 format=3 uid="uid://b0fduqw1fngjf"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gray"]
-albedo_color = Color(0.5, 0.5, 0.5, 1)
-
-[sub_resource type="BoxMesh" id="BoxMesh_phone"]
-material = SubResource("StandardMaterial3D_gray")
-size = Vector3(0.25, 0.15, 0.2)
+[ext_resource type="PackedScene" uid="uid://csc2n03kuskvt" path="res://assets/props/graybox/Cell phone.glb" id="1_hgwt2"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_phone"]
 size = Vector3(0.25, 0.15, 0.2)
 
 [node name="Graybox_Phone" type="StaticBody3D"]
 
-[node name="Mesh" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.075, 0)
-mesh = SubResource("BoxMesh_phone")
-
 [node name="Collision" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.075, 0)
 shape = SubResource("BoxShape3D_phone")
+
+[node name="Cell phone" parent="." instance=ExtResource("1_hgwt2")]
+transform = Transform3D(0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0)

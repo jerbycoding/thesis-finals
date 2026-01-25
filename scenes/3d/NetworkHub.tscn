@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://b2d35yngg7u75" path="res://scenes/Player3D.tscn" id="1_player"]
 [ext_resource type="Script" uid="uid://dh3hcvpwq0ufa" path="res://scripts/3d/RoomTeleporter.gd" id="2_teleport"]
 [ext_resource type="Script" uid="uid://cw8wvj6b5bg13" path="res://scripts/3d/SlidingDoor.gd" id="3_door"]
-[ext_resource type="PackedScene" path="res://scenes/3d/props/Prop_AuditRouter.tscn" id="4_audit"]
+[ext_resource type="PackedScene" path="res://scenes/3d/props/graybox/Prop_AuditRouter.tscn" id="4_audit"]
 
 [sub_resource type="Environment" id="Environment_hub"]
 background_mode = 1

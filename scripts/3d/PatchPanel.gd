@@ -18,7 +18,7 @@ func _ready():
 	restricted_socket.accepted_hardware_type = "none" # Can't plug back into restricted
 
 func _spawn_rogue_cable():
-	var cable_scene = load("res://scenes/3d/props/Prop_PatchCable.tscn")
+	var cable_scene = load("res://scenes/3d/props/graybox/Prop_PatchCable.tscn")
 	var cable = cable_scene.instantiate()
 	get_tree().root.call_deferred("add_child", cable)
 	

@@ -1,20 +1,14 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=3 format=3 uid="uid://876au006ge3i"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gray"]
-albedo_color = Color(0.5, 0.5, 0.5, 1)
-
-[sub_resource type="BoxMesh" id="BoxMesh_desk"]
-material = SubResource("StandardMaterial3D_gray")
-size = Vector3(1.6, 0.75, 0.8)
+[ext_resource type="PackedScene" uid="uid://b4ij1gf4n7xo7" path="res://assets/props/graybox/Desk.glb" id="1_sm0qt"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_desk"]
 size = Vector3(1.6, 0.75, 0.8)
 
 [node name="Graybox_Desk" type="StaticBody3D"]
 
-[node name="Mesh" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.375, 0)
-mesh = SubResource("BoxMesh_desk")
+[node name="Root Scene" parent="." instance=ExtResource("1_sm0qt")]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -0.49493, 0, 0)
 
 [node name="Collision" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.375, 0)

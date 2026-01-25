@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://dtc3v3ufo5y87"]
+
+[ext_resource type="PackedScene" uid="uid://buo55ou5my1jq" path="res://assets/props/graybox/Sofa.glb" id="1_17lfv"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_sofa"]
+size = Vector3(2, 0.8, 0.8)
+
+[node name="Graybox_Sofa" type="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0600601, 0)
+
+[node name="Collision" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
+shape = SubResource("BoxShape3D_sofa")
+
+[node name="Sofa" parent="." instance=ExtResource("1_17lfv")]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 0.24257, 0)

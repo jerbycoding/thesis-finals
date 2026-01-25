@@ -1,20 +1,14 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=3 format=3 uid="uid://q38i1bbfyp7y"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_glass"]
-albedo_color = Color(0.7, 0.8, 1.0, 0.3)
-transparency = 1
-
-[sub_resource type="BoxMesh" id="BoxMesh_window"]
-material = SubResource("StandardMaterial3D_glass")
-size = Vector3(1.5, 1.2, 0.1)
+[ext_resource type="PackedScene" uid="uid://cga8wqksxuiv4" path="res://assets/props/graybox/window.glb" id="1_qof5m"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_window"]
 size = Vector3(1.5, 1.2, 0.1)
 
 [node name="Graybox_Window" type="StaticBody3D"]
 
-[node name="Mesh" type="MeshInstance3D" parent="."]
-mesh = SubResource("BoxMesh_window")
-
 [node name="Collision" type="CollisionShape3D" parent="."]
 shape = SubResource("BoxShape3D_window")
+
+[node name="window" parent="." instance=ExtResource("1_qof5m")]
+transform = Transform3D(-0.0302419, 0, -0.999543, 0, 1, 0, 0.999543, 0, -0.0302419, 0, 0, 0)
