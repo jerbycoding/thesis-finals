@@ -12,6 +12,8 @@ var carried_object: Node3D = null
 
 @onready var carry_marker: Marker3D = %CarryMarker3D
 @onready var tablet_hud: Control = $TabletHUD
+# Delegate animation logic to the child component
+@onready var animator = $CameraPivot/BodyModel
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -21,6 +23,8 @@ func _on_game_mode_changed(mode):
 	if mode == GameState.GameMode.MODE_2D or mode == GameState.GameMode.MODE_DIALOGUE or mode == GameState.GameMode.MODE_MINIGAME:
 		movement_enabled = false
 		EventBus.request_prompt.emit("", false)
+		if animator and animator.has_method("force_idle"):
+			animator.force_idle()
 	else:
 		movement_enabled = true
 
@@ -36,6 +40,8 @@ func _try_toggle_tablet():
 		if tablet_active:
 			tablet_hud.open()
 			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+			if animator and animator.has_method("force_idle"):
+				animator.force_idle()
 		else:
 			tablet_hud.close()
 			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -60,18 +66,37 @@ func _physics_process(_delta):
 		velocity.x = move_toward(velocity.x, 0, current_speed)
 		velocity.z = move_toward(velocity.z, 0, current_speed)
 	move_and_slide()
+	
+	# Update animation state
+	if animator and animator.has_method("update_movement"):
+		animator.update_movement(velocity, Input.is_action_pressed("sprint"))
 
 var tablet_active: bool = false
+var bob_time = 0.0
+const BOB_FREQ = 2.4
+const BOB_AMP = 0.05
 
-func _process(_delta):
+func _process(delta):
 	if not movement_enabled: return
+	_handle_headbob(delta)
+	
 	if Input.is_action_just_pressed("ui_focus_next"): _try_toggle_tablet()
+	
 	if Input.is_action_just_pressed("interact"):
 		if carried_object: _drop_object()
 		elif near_computer: TransitionManager.enter_desktop_mode(near_computer)
 		elif near_npc:
 			if near_npc.has_method("start_dialogue"): near_npc.start_dialogue("default")
 			else: _pickup_object()
+
+func _handle_headbob(delta):
+	if velocity.length() > 0.1:
+		bob_time += delta * velocity.length() * (sprint_multiplier if Input.is_action_pressed("sprint") else 1.0)
+		var target_y = 1.55 + sin(bob_time * BOB_FREQ) * BOB_AMP
+		$CameraPivot/Camera3D.position.y = lerp($CameraPivot/Camera3D.position.y, target_y, delta * 10.0)
+	else:
+		bob_time = 0.0
+		$CameraPivot/Camera3D.position.y = lerp($CameraPivot/Camera3D.position.y, 1.55, delta * 10.0)
 
 func _pickup_object():
 	if not near_npc or carried_object: return

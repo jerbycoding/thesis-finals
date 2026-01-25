@@ -1,6 +1,6 @@
 # NPC_ITSupport.gd
 # IT Support NPC - Technical and overworked
-extends "res://scripts/3d/NPC.gd"
+extends BaseNPC
 
 func _ready():
 

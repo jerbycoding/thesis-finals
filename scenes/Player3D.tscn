@@ -1,12 +1,14 @@
-[gd_scene load_steps=9 format=3 uid="uid://b2d35yngg7u75"]
+[gd_scene load_steps=11 format=3 uid="uid://b2d35yngg7u75"]
 
 [ext_resource type="Script" uid="uid://dx3637o27a75s" path="res://scripts/PlayerController.gd" id="1_15gk4"]
+[ext_resource type="Script" uid="uid://clra78uil2mle" path="res://scripts/3d/PlayerAnimator.gd" id="2_animator"]
 [ext_resource type="PackedScene" uid="uid://c8x6y708bab0e" path="res://scenes/ui/UnifiedHUD.tscn" id="2_unified"]
 [ext_resource type="PackedScene" uid="uid://pwr7hj6luthk" path="res://scenes/ui/InteractionPrompt.tscn" id="3_prompt"]
 [ext_resource type="PackedScene" uid="uid://dotgpl1o3q8uw" path="res://scenes/ui/MaintenanceHUD.tscn" id="4_maint"]
 [ext_resource type="PackedScene" path="res://scenes/ui/TabletHUD.tscn" id="5_tablet"]
 [ext_resource type="Resource" path="res://resources/minigames/DefaultRecoveryConfig.tres" id="6_config"]
 [ext_resource type="Resource" path="res://resources/minigames/DefaultCalibrationConfig.tres" id="7_audit"]
+[ext_resource type="PackedScene" uid="uid://c67sml5y1uxgf" path="res://assets/npc/Man.glb" id="8_man_model"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_jib20"]
 radius = 0.4
@@ -43,9 +45,13 @@ shape = SubResource("CapsuleShape3D_jib20")
 
 [node name="CameraPivot" type="Node3D" parent="."]
 
+[node name="BodyModel" parent="CameraPivot" instance=ExtResource("8_man_model")]
+transform = Transform3D(-0.5, 0, -4.37114e-08, 0, 0.5, 0, 4.37114e-08, 0, -0.5, 0, 0, 0)
+script = ExtResource("2_animator")
+is_player = true
+
 [node name="Camera3D" type="Camera3D" parent="CameraPivot"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 0)
-fov = 70.0
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.11456, -0.230708)
 
 [node name="InteractionRay" type="RayCast3D" parent="CameraPivot/Camera3D"]
 unique_name_in_owner = true

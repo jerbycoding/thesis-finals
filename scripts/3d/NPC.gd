@@ -1,6 +1,6 @@
-
 # Base script for all NPCs in the game
 extends CharacterBody3D
+class_name BaseNPC
 
 @export var npc_id: String = "npc"
 @export var npc_name: String = "NPC"
@@ -10,9 +10,9 @@ var player_nearby: bool = false
 var interaction_area: Area3D = null
 var is_highlighted: bool = false
 var highlight_tween: Tween
+var animator: Node3D = null
 
 func set_highlight(active: bool):
-# ... existing set_highlight logic ...
 	is_highlighted = active
 	
 	# Find mesh to highlight
@@ -42,8 +42,14 @@ func set_highlight(active: bool):
 		mesh.transparency = 0.0
 
 func _ready():
+	# Find animator in children
+	for child in get_children():
+		if child.has_method("update_movement"):
+			animator = child
+			break
+			
 	# Find interaction area
-	interaction_area = $InteractionArea
+	interaction_area = get_node_or_null("InteractionArea")
 	if interaction_area:
 		interaction_area.body_entered.connect(_on_body_entered)
 		interaction_area.body_exited.connect(_on_body_exited)

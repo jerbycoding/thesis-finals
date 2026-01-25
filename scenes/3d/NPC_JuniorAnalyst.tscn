@@ -1,0 +1,30 @@
+[gd_scene load_steps=6 format=3 uid="uid://b8j8y76543210"]
+
+[ext_resource type="Script" path="res://scripts/3d/NPC_JuniorAnalyst.gd" id="1_npc"]
+[ext_resource type="Script" path="res://scripts/3d/PlayerAnimator.gd" id="2_animator"]
+[ext_resource type="PackedScene" uid="uid://c67sml5y1uxgf" path="res://assets/npc/Man.glb" id="3_vwxg8"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_junior"]
+radius = 0.4
+height = 1.8
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_interact"]
+size = Vector3(3, 3, 3)
+
+[node name="NPC_JuniorAnalyst" type="CharacterBody3D"]
+script = ExtResource("1_npc")
+npc_id = "junior_analyst"
+npc_name = "Junior Analyst"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+shape = SubResource("CapsuleShape3D_junior")
+
+[node name="InteractionArea" type="Area3D" parent="."]
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="InteractionArea"]
+shape = SubResource("BoxShape3D_interact")
+
+[node name="Model" parent="." instance=ExtResource("3_vwxg8")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+script = ExtResource("2_animator")

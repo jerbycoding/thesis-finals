@@ -1,6 +1,6 @@
 # NPC_CISO.gd
 # CISO (Chief Information Security Officer) NPC
-extends "res://scripts/3d/NPC.gd"
+extends BaseNPC
 
 func start_dialogue(dialogue_id: String = "default"):
 

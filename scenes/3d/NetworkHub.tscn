@@ -12,13 +12,9 @@ ambient_light_source = 2
 ambient_light_color = Color(1, 0.4, 0.2, 1)
 ambient_light_energy = 0.3
 tonemap_mode = 2
-glow_enabled = false
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_dark"]
 size = Vector2(15, 15)
-
-[sub_resource type="BoxMesh" id="BoxMesh_router"]
-size = Vector3(1.5, 2, 0.5)
 
 [sub_resource type="BoxShape3D" id="BoxShape_elevator"]
 size = Vector3(4, 4, 4)
@@ -38,7 +34,6 @@ mesh = SubResource("PlaneMesh_dark")
 
 [node name="Router1" parent="Routers" instance=ExtResource("4_audit")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 1, -4)
-audit_id = "audit_1"
 
 [node name="Router2" parent="Routers" instance=ExtResource("4_audit")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 1, -4)

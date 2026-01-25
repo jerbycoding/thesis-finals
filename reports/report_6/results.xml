@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites id="2026-01-25" name="report_6" tests="1" failures="0" skipped="0" flaky="0" time="0.000">
+	<testsuite id="0" name="test_npc_animations" package="tests/model" timestamp="2026-01-25T01:35:21" hostname="localhost" tests="1" failures="0" errors="0" skipped="0" flaky="0" time="0.177">
+		<testcase name="test_man_model_has_animations" classname="test_npc_animations" time="0.121">
+		</testcase>
+	</testsuite>
+</testsuites>
