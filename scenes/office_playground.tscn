@@ -1,0 +1,152 @@
+[gd_scene load_steps=11 format=3 uid="uid://bv3byj0b31hf1"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_m7qj5"]
+sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
+ground_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
+
+[sub_resource type="Sky" id="Sky_roilu"]
+sky_material = SubResource("ProceduralSkyMaterial_m7qj5")
+
+[sub_resource type="Environment" id="Environment_ijim1"]
+background_mode = 2
+sky = SubResource("Sky_roilu")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_m7qj5"]
+size = Vector2(35, 25)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_roilu"]
+data = PackedVector3Array(17.5, 0, 12.5, -17.5, 0, 12.5, 17.5, 0, -12.5, -17.5, 0, 12.5, -17.5, 0, -12.5, 17.5, 0, -12.5)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_ijim1"]
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_ijim1"]
+data = PackedVector3Array(1, 0, 1, -1, 0, 1, 1, 0, -1, -1, 0, 1, -1, 0, -1, 1, 0, -1)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_nvuut"]
+data = PackedVector3Array(1, 0, 1, -1, 0, 1, 1, 0, -1, -1, 0, 1, -1, 0, -1, 1, 0, -1)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_a3as8"]
+data = PackedVector3Array(1, 0, 1, -1, 0, 1, 1, 0, -1, -1, 0, 1, -1, 0, -1, 1, 0, -1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_roilu"]
+
+[node name="Office_Playground" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_ijim1")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 5.58255, 0)
+shadow_enabled = true
+
+[node name="floor" type="MeshInstance3D" parent="."]
+transform = Transform3D(2.5, 0, 0, 0, 3, 0, 0, 0, 2, 0.0395555, 0.0203953, 0.0193229)
+mesh = SubResource("PlaneMesh_m7qj5")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="floor"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="floor/StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_roilu")
+
+[node name="ceiling" type="MeshInstance3D" parent="."]
+transform = Transform3D(2.51562, 0, 0, 0, -1.08294, -3.01479e-07, 0, 1.6352e-07, -1.99661, 0.166553, 10.0293, 0.0476456)
+mesh = SubResource("PlaneMesh_m7qj5")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="ceiling"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ceiling/StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_roilu")
+
+[node name="wall1" type="MeshInstance3D" parent="."]
+transform = Transform3D(2.18557e-07, 6.667, -3.7749e-06, 5, -2.91424e-07, -4.37114e-06, -8.74228e-07, -1.00669e-06, -25, -43.7866, 4.98074, 0)
+mesh = SubResource("PlaneMesh_ijim1")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="wall1"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="wall1/StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_ijim1")
+
+[node name="wall2" type="MeshInstance3D" parent="."]
+transform = Transform3D(-2.18557e-07, -6.667, 0, 5, -2.91424e-07, 0, 0, 0, 25, 43.7878, 5.05994, 0.303851)
+mesh = SubResource("PlaneMesh_ijim1")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="wall2"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="wall2/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.0052461)
+shape = SubResource("ConcavePolygonShape3D_nvuut")
+
+[node name="wall3" type="MeshInstance3D" parent="."]
+transform = Transform3D(9.55343e-15, 6.55671e-07, 44, 5, -6.55671e-07, 2.10064e-20, 2.18557e-07, 15, -1.9233e-06, 0.0400939, 5.03389, -24.9441)
+mesh = SubResource("PlaneMesh_ijim1")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="wall3"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="wall3/StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_a3as8")
+
+[node name="wall4" type="MeshInstance3D" parent="."]
+transform = Transform3D(9.55343e-15, 6.55671e-07, -44, 5, -6.55671e-07, 1.6864e-21, -2.18557e-07, -15, -1.9233e-06, 0.0400939, 5.03389, 25.0571)
+mesh = SubResource("PlaneMesh_ijim1")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="wall4"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="wall4/StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_a3as8")
+
+[node name="InnerWall1" type="CSGCombiner3D" parent="."]
+transform = Transform3D(0.2, 0, 0, 0, 10, 0, 0, 0, 49.8782, 21.846, 4.998, -0.0443496)
+
+[node name="solid" type="CSGBox3D" parent="InnerWall1"]
+
+[node name="hole" type="CSGBox3D" parent="InnerWall1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.171814, -0.368332)
+operation = 2
+size = Vector3(1, 0.656372, 0.0536194)
+
+[node name="InnerWall2" type="CSGCombiner3D" parent="."]
+transform = Transform3D(-8.74228e-09, 0, -50, 0, 10.024, 0, 0.2, 0, -2.18557e-06, -18.8536, 4.998, 50.3079)
+
+[node name="solid" type="CSGBox3D" parent="InnerWall2"]
+transform = Transform3D(1, 0, -1.60982e-15, 0, 1, 0, 1.60982e-15, 0, 1, -234.882, 0, -0.0865479)
+size = Vector3(1, 1, 1.1731)
+
+[node name="Door1" type="CSGBox3D" parent="InnerWall2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -234.821, -0.163114, 0.407121)
+operation = 2
+size = Vector3(1.2666, 0.656372, 0.0536194)
+
+[node name="Door2" type="CSGBox3D" parent="InnerWall2"]
+transform = Transform3D(1, 0, 9.09495e-13, 0, 1, 0, 4.16334e-17, 0, 1, -234.821, -0.163114, 0.00753707)
+operation = 2
+size = Vector3(1.2666, 0.656372, 0.0536194)
+
+[node name="Door3" type="CSGBox3D" parent="InnerWall2"]
+transform = Transform3D(1, 0, 2.72848e-12, 0, 1, 0, 8.32667e-17, 0, 1, -234.821, -0.163114, -0.36764)
+operation = 2
+size = Vector3(1.2666, 0.656372, 0.0536194)
+
+[node name="Window1" type="CSGBox3D" parent="InnerWall2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -234.821, 0.00433591, 0.232026)
+operation = 2
+size = Vector3(1.2666, 0.321472, 0.156227)
+
+[node name="Window2" type="CSGBox3D" parent="InnerWall2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 1.38778e-17, 0, 1, -234.821, 0.00433591, -0.154273)
+operation = 2
+size = Vector3(1.2666, 0.321472, 0.156227)
+
+[node name="Window3" type="CSGBox3D" parent="InnerWall2"]
+transform = Transform3D(1, 0, 9.09495e-13, 0, 1, 0, 4.16334e-17, 0, 1, -234.821, 0.00433591, -0.526898)
+operation = 2
+size = Vector3(1.2666, 0.321472, 0.156227)
+
+[node name="InnerWall3" type="MeshInstance3D" parent="."]
+transform = Transform3D(-6.55671e-07, 0, 0.14, 0, 6.977, 0, -15, 0, -6.11959e-09, -24.265, 4.98359, 16.591)
+mesh = SubResource("BoxMesh_roilu")
+
+[node name="InnerWall4" type="MeshInstance3D" parent="."]
+transform = Transform3D(-6.55671e-07, 0, 0.14, 0, 6.977, 0, -15, 0, -6.11959e-09, -4.38262, 4.98359, 16.653)
+mesh = SubResource("BoxMesh_roilu")
