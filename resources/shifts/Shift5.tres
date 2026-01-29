@@ -10,7 +10,7 @@ briefing_dialogue_id = "briefing_friday"
 event_sequence = [
 	{"time": 10, "event": "zero_day_start", "type": "system_event", "event_id": "ZERO_DAY", "duration": 180.0},
 	{"time": 30, "event": "spawn_exfil", "type": "spawn_ticket", "ticket_id": "DATA-EXFIL-001"},
-	{"time": 90, "event": "spawn_ransom", "type": "spawn_ticket", "ticket_id": "RANSOM-001"},
+	{"time": 90, "event": "spawn_ransom_2", "type": "spawn_ticket", "ticket_id": "RANSOM-002"},
 	{"time": 150, "event": "ddos_start", "type": "system_event", "event_id": "DDOS_ATTACK", "duration": 120.0},
 	{"time": 150, "event": "spawn_ddos", "type": "spawn_ticket", "ticket_id": "DDOS-MITIGATION-001"},
 	{"time": 240, "event": "maybe_spawn_redemption", "type": "spawn_ticket", "ticket_id": "BLACK-TICKET-REDEMPTION"},

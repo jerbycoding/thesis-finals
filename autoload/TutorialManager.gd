@@ -129,6 +129,8 @@ func _create_overlay():
 	overlay_layer.add_child(overlay)
 
 func _on_shift_ended(_results: Dictionary):
+	if not is_tutorial_active: return
+	
 	is_tutorial_active = false
 	current_step_index = -1
 	summary_shown = false

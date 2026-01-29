@@ -8,52 +8,14 @@ var window_z_index_base: int = 10
 var focused_window: Control = null
 var window_container: CanvasLayer = null
 
-# App configuration dictionaries (moved from computer_desktop.gd)
-const APP_PATHS: Dictionary = {
-	"tickets": "res://scenes/2d/apps/App_TicketQueue.tscn",
-	"siem": "res://scenes/2d/apps/App_SIEMViewer.tscn",
-	"email": "res://scenes/2d/apps/App_EmailAnalyzer.tscn",
-	"terminal": "res://scenes/2d/apps/App_Terminal.tscn",
-	"handbook": "res://scenes/2d/apps/App_Handbook.tscn",
-	"taskmanager": "res://scenes/2d/apps/App_TaskManager.tscn",
-	"network": "res://scenes/2d/apps/App_NetworkMapper.tscn",
-	"decrypt": "res://scenes/2d/apps/App_Decryption.tscn"
-}
-
-const APP_TITLES: Dictionary = {
-	"tickets": "Ticket Queue",
-	"siem": "SIEM Log Viewer", 
-	"email": "Email Analyzer",
-	"terminal": "Terminal",
-	"handbook": "SOC Handbook",
-	"taskmanager": "Task Manager",
-	"network": "Network Topology",
-	"decrypt": "Decryption Tool"
-}
-
-const APP_SIZES: Dictionary = {
-	"tickets": Vector2(500, 600),
-	"siem": Vector2(750, 550),
-	"email": Vector2(900, 700),
-	"terminal": Vector2(650, 450),
-	"handbook": Vector2(700, 500),
-	"taskmanager": Vector2(600, 400),
-	"network": Vector2(800, 600),
-	"decrypt": Vector2(700, 500)
-}
-
-# Apps that require specific ticket context to open
-const RESTRICTED_APPS: Dictionary = {
-	"decrypt": {
-		"required_category": "Ransomware",
-		"required_tool": "decrypt",
-		"error_message": "ACCESS DENIED: High-Priority Utility requires active incident context."
-	}
-}
+var app_configs: Dictionary = {} # app_id -> AppConfig resource
+const APP_CONFIG_DIR = "res://resources/apps/"
 
 var window_frame_scene = preload("res://scenes/2d/apps/components/WindowFrame.tscn")
 
 func _ready():
+	_load_app_configs()
+	
 	# Create a persistent CanvasLayer for windows to ensure they stay on top
 	window_container = CanvasLayer.new()
 	window_container.name = "DesktopWindowLayer"
@@ -67,11 +29,25 @@ func _ready():
 	
 	print("DesktopWindowManager ready.")
 
+func _load_app_configs():
+	app_configs.clear()
+	var app_resources = FileUtil.load_and_validate_resources(APP_CONFIG_DIR, "AppConfig")
+	for res in app_resources:
+		if res is AppConfig:
+			app_configs[res.app_id] = res
+	print("DesktopWindowManager: Loaded %d application configurations." % app_configs.size())
+
+
 ## The currently active permission profile. If null, all apps are allowed.
 var active_permission_profile: AppPermissionProfile = null
 
 func can_open_app(app_name: String) -> Dictionary:
 	"""Returns {'allowed': bool, 'reason': String}"""
+	if not app_configs.has(app_name):
+		return {"allowed": false, "reason": "Application not registered."}
+	
+	var config = app_configs[app_name]
+	
 	# Check Active Profile (Tutorial/Narrative Restrictions)
 	if active_permission_profile != null:
 		if not active_permission_profile.is_allowed(app_name):
@@ -81,29 +57,27 @@ func can_open_app(app_name: String) -> Dictionary:
 			}
 
 	# Check Logic Restrictions (Context-based)
-	if app_name not in RESTRICTED_APPS:
+	if not config.is_restricted:
 		return {"allowed": true, "reason": ""}
 		
-	var restriction = RESTRICTED_APPS[app_name]
 	var allowed = false
-	
 	if TicketManager:
 		for ticket in TicketManager.get_active_tickets():
-			if ticket.category == restriction.required_category or ticket.required_tool == restriction.required_tool:
+			if ticket.category == config.required_category or ticket.required_tool == config.required_tool_id:
 				allowed = true
 				break
 				
 	return {
 		"allowed": allowed,
-		"reason": restriction.error_message if not allowed else ""
+		"reason": config.restriction_message if not allowed else ""
 	}
 
 func open_app(app_name: String, force_new: bool = false):
-	print("DesktopWindowManager: open_app called for: ", app_name, " (force_new: ", force_new, ")")
-	
-	if app_name not in APP_PATHS:
+	if not app_configs.has(app_name):
 		print("ERROR: DesktopWindowManager: Unknown app: ", app_name)
 		return
+		
+	var config = app_configs[app_name]
 		
 	# Check permissions
 	var permission = can_open_app(app_name)
@@ -136,7 +110,7 @@ func open_app(app_name: String, force_new: bool = false):
 	
 	# Set window properties
 	window.window_id = window_id
-	window.set_title(APP_TITLES.get(app_name, app_name.capitalize()))
+	window.set_title(config.title)
 	window.position = _get_next_window_position()
 	
 	# Set window size based on app type
@@ -144,11 +118,9 @@ func open_app(app_name: String, force_new: bool = false):
 	
 	# Add to layer
 	window_container.add_child(window)
-	print("DesktopWindowManager: Window added to layer: ", window.name)
 	
 	# Wait for window to be ready
 	await get_tree().process_frame
-	print("DesktopWindowManager: Frame processed, window should be ready now")
 	
 	# Double-check window is valid
 	if not is_instance_valid(window):
@@ -156,44 +128,27 @@ func open_app(app_name: String, force_new: bool = false):
 		return
 	
 	# Load app content
-	var app_scene_path = APP_PATHS[app_name]
-	print("DesktopWindowManager: App scene path: ", app_scene_path)
+	var app_scene_path = config.scene_path
 	
 	if ResourceLoader.exists(app_scene_path):
-		print("DesktopWindowManager: App scene exists, loading...")
 		var app_scene = load(app_scene_path)
 		if app_scene:
-			print("DesktopWindowManager: App scene loaded successfully, calling load_content")
 			window.load_content(app_scene)
 			# Wait a frame to ensure content is loaded
 			await get_tree().process_frame
-			print("DesktopWindowManager: App content should now be loaded")
 		else:
 			print("ERROR: DesktopWindowManager: Failed to load app scene resource - load() returned null")
-			# Create placeholder
 			var placeholder = Label.new()
-			placeholder.text = app_name.capitalize() + " (Failed to Load)"
-			placeholder.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-			placeholder.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-			if window.content_container:
-				window.content_container.add_child(placeholder)
-			else:
-				print("ERROR: DesktopWindowManager: window.content_container is also null!")
+			placeholder.text = config.title + " (Failed to Load)"
+			window.content_container.add_child(placeholder)
 	else:
 		print("ERROR: DesktopWindowManager: App scene not found at path: ", app_scene_path)
-		# Create placeholder
 		var placeholder = Label.new()
-		placeholder.text = app_name.capitalize() + " (Scene Not Found)"
-		placeholder.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		placeholder.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-		if window.content_container:
-			window.content_container.add_child(placeholder)
-		else:
-			print("ERROR: DesktopWindowManager: window.content_container is null, cannot add placeholder!")
+		placeholder.text = config.title + " (Scene Not Found)"
+		window.content_container.add_child(placeholder)
 	
 	# Store reference
 	open_windows[window_id] = window
-	print("DesktopWindowManager: Window stored in open_windows. Total windows: ", open_windows.size())
 	
 	# Update next position (stagger)
 	next_window_position += Vector2(30, 30)

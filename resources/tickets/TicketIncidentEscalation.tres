@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="TicketResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/tickets/TicketResource.gd" id="1_ticket"]
+
+[resource]
+script = ExtResource("1_ticket")
+ticket_id = "INCIDENT-ESCALATION-FOLLOWUP"
+title = "Escalation: Unaddressed High-Priority Alert"
+description = "A high-priority alert was not addressed in a timely manner, and has now escalated. The threat has likely spread or evolved.
+
+Immediate investigation is required to re-assess the threat level and contain the incident."
+severity = "High"
+category = "Follow-up"
+steps = ["Review original high-priority alert", "Scan for new indicators of compromise", "Contain any new threats found"]
+required_tool = "siem"
+base_time = 240.0

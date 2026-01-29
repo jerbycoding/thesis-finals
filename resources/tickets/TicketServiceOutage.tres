@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="TicketResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/tickets/TicketResource.gd" id="1_ticket"]
+
+[resource]
+script = ExtResource("1_ticket")
+ticket_id = "SERVICE-OUTAGE-FOLLOWUP"
+title = "URGENT: Service Outage Reported"
+description = "A critical service has been taken offline due to network isolation of its host server. This is causing a major operational disruption.
+
+Action Required:
+1. Identify the isolated host.
+2. If isolation was unjustified, restore host to network immediately.
+3. If isolation was valid, escalate to the infrastructure team for service migration."
+severity = "High"
+category = "System"
+steps = ["Identify isolated critical host", "Determine if isolation was justified", "Escalate to infrastructure team"]
+required_tool = "network"
+base_time = 120.0

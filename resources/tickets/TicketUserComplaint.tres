@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="TicketResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/tickets/TicketResource.gd" id="1_ticket"]
+
+[resource]
+script = ExtResource("1_ticket")
+ticket_id = "USER-COMPLAINT-FOLLOWUP"
+title = "User Complaint Investigation"
+description = "A user has filed a complaint regarding service disruption or an overly aggressive security action (e.g., a legitimate email being quarantined).
+
+Review the user's report and the associated system logs to determine the validity of the complaint."
+severity = "Low"
+category = "General"
+steps = ["Review user complaint email", "Cross-reference with system logs", "Apologize or justify action"]
+required_tool = "email"
+base_time = 180.0

@@ -2,7 +2,7 @@
 extends Node3D
 
 @export var server_blade_scene: PackedScene = preload("res://scenes/3d/props/graybox/Prop_CarriableBlade.tscn")
-@export var config: HardwareRecoveryConfig # ADDED THIS LINE
+@export var config: HardwareRecoveryConfig = preload("res://resources/minigames/DefaultRecoveryConfig.tres")
 
 func _ready():
 	# Only run if this is a Recovery shift (e.g. Sunday)

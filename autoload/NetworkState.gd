@@ -6,8 +6,7 @@ extends Node
 const HOSTS = {
 	"FINANCE": "FINANCE-SRV-01",
 	"WEB": "WEB-SRV-01",
-	"DATABASE": "DB-SRV-01",
-	"MALWARE_SOURCE": "WORKSTATION-45"
+	"DATABASE": "DB-SRV-01"
 }
 
 # The single source of truth for host information.

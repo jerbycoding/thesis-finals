@@ -4,13 +4,11 @@
 
 [resource]
 script = ExtResource("1_log")
-log_id = "LOG-MAL-002-B"
-timestamp = "11:16:05"
-source = "IDS"
+log_id = "LOG-SPEAR-003"
+timestamp = "14:45:00"
+source = "User-Report"
 category = "Security"
-message = "Outbound connection to known C2 server IP 185.12.44.11 from {victim_host}."
-severity = 5
-related_ticket = "MALWARE-002"
-ip_address = "185.12.44.11"
+message = "Employee reported receiving a confidential-looking email from an unknown external domain: corp-mail.io."
+severity = 3
+related_ticket = "SPEAR-PHISH-003"
 hostname = "{victim_host}"
-is_revealed = false

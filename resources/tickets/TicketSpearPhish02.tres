@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="TicketResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/tickets/TicketResource.gd" id="1_ticket"]
+
+[resource]
+script = ExtResource("1_ticket")
+ticket_id = "SPEAR-PHISH-002"
+title = "Spear Phish: Fake Invoice for CFO"
+description = "The CFO's office has forwarded a suspicious email from a 'vendor' with an attached invoice. The CFO's executive assistant reported that they do not recognize the vendor.
+
+Investigate the email for signs of spoofing and scan the attached 'invoice.exe' for malware."
+severity = "High"
+category = "Phishing"
+steps = ["Inspect email headers for spoofing", "Scan attachment for malware", "Quarantine email if malicious"]
+required_tool = "email"
+base_time = 220.0
+hidden_risks = ["missed_attachment_scan"]
+required_log_ids = ["LOG-SPEAR-002"]
+kill_chain_path = "Malware Outbreak"
+kill_chain_stage = 1

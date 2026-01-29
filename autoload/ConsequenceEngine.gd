@@ -297,13 +297,13 @@ func _trigger_hidden_risk_consequence(ticket: TicketResource, risk: String, comp
 	# Parse risk description to determine consequence
 	if GlobalConstants.RISK_TYPE.MALWARE in risk.to_lower() or "clicked" in risk.to_lower():
 		# Spawn malware cleanup ticket
-		_schedule_followup_ticket("MALWARE-CLEANUP", 60.0, "Malware cleanup required after missed detection", ticket.ticket_id)
+		_schedule_followup_ticket("MALWARE-CLEANUP-FOLLOWUP", 60.0, "Malware cleanup required after missed detection", ticket.ticket_id)
 	elif GlobalConstants.RISK_TYPE.DATA_BREACH in risk.to_lower() or "data" in risk.to_lower():
 		# Spawn data breach report
-		_schedule_followup_ticket("BREACH-REPORT", 30.0, "Data breach report required", ticket.ticket_id)
+		_schedule_followup_ticket("MAJOR-BREACH-FOLLOWUP", 30.0, "Data breach report required", ticket.ticket_id)
 	else:
 		# Generic followup
-		_schedule_followup_ticket("FOLLOWUP-001", 90.0, "Follow-up investigation required", ticket.ticket_id)
+		_schedule_followup_ticket("FOLLOWUP-GENERIC", 90.0, "Follow-up investigation required", ticket.ticket_id)
 
 func _schedule_consequences(ticket: TicketResource, completion_type: String, time_remaining: float):
 	match completion_type:
@@ -313,13 +313,13 @@ func _schedule_consequences(ticket: TicketResource, completion_type: String, tim
 		GlobalConstants.COMPLETION_TYPE.EFFICIENT:
 			if time_remaining < ticket.base_time * 0.3:  # Used less than 30% of time
 				print("⚠ Efficient completion with very little time used - High risk")
-				_schedule_followup_ticket("EFFICIENT-RISK", 60.0, "Rushed resolution may have missed critical checks", ticket.ticket_id)
+				_schedule_followup_ticket("FOLLOWUP-GENERIC", 60.0, "Rushed resolution may have missed critical checks", ticket.ticket_id)
 			else:
 				print("✓ Efficient completion - Moderate risk accepted")
 
 		GlobalConstants.COMPLETION_TYPE.EMERGENCY:
 			print("🚨 Emergency completion - Immediate consequences")
-			_schedule_followup_ticket("EMERGENCY-FOLLOWUP", 10.0, "Emergency resolution requires immediate follow-up", ticket.ticket_id)
+			_schedule_followup_ticket("FOLLOWUP-GENERIC", 10.0, "Emergency resolution requires immediate follow-up", ticket.ticket_id)
 
 func _schedule_followup_ticket(ticket_id: String, delay_seconds: float, reason: String, original_id: String = "N/A"):
 	print("📅 Scheduling follow-up ticket: ", ticket_id, " in ", delay_seconds, " seconds")
@@ -355,26 +355,8 @@ func _spawn_followup_ticket(ticket_id: String, reason: String, original_id: Stri
 		if original_id != "N/A" and not original_id in followup_ticket.description:
 			followup_ticket.description += "\n\n[ Technical Context ]\nRelated Incident: " + original_id + "\nDetection Reason: " + reason
 	else:
-		# Fallback: Programmatic Generation (Technical Debt - Phase 4 goal is to move these to .tres)
-		followup_ticket = TicketResource.new()
-		followup_ticket.ticket_id = ticket_id + "-" + str(randi() % 999) # Unique ID
-		
-		if original_id != "N/A":
-			followup_ticket.title = "AUDIT: Re: " + original_id
-			followup_ticket.description = "URGENT AUDIT REQUIRED.\n\nOriginal Incident: " + original_id + "\n\nReason: " + reason + "\n\nBecause this incident was resolved via non-standard procedures (Emergency/Efficient), we must re-verify the state of the network. Review the original logs and ensure no secondary persistence exists."
-		else:
-			followup_ticket.title = "Follow-up Investigation"
-			followup_ticket.description = reason
-
-		followup_ticket.severity = "High"
-		followup_ticket.category = "Follow-up"
-		
-		followup_ticket.steps.clear()
-		followup_ticket.steps.append("Re-examine original logs")
-		followup_ticket.steps.append("Verify host integrity")
-		
-		followup_ticket.required_tool = "siem"
-		followup_ticket.base_time = 120.0
+		push_error("ConsequenceEngine: Could not spawn ticket. ID '%s' not found in TicketManager library." % ticket_id)
+		return
 	
 	if TicketManager and followup_ticket:
 		# Tell TicketManager to reveal logs for the ORIGINAL ticket again if applicable

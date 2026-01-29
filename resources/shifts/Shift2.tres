@@ -11,7 +11,7 @@ event_sequence = [
 	{"time": 30, "event": "spawn_social", "type": "spawn_ticket", "ticket_id": "SOCIAL-001"},
 	{"time": 90, "event": "spawn_phish_remix", "type": "spawn_ticket", "ticket_id": "PHISH-002"},
 	{"time": 120, "event": "log_flood", "type": "system_event", "event_id": "FALSE_FLAG", "duration": 90.0},
-	{"time": 150, "event": "spawn_spear", "type": "spawn_ticket", "ticket_id": "SPEAR-PHISH-001"},
+	{"time": 150, "event": "spawn_spear_2", "type": "spawn_ticket", "ticket_id": "SPEAR-PHISH-002"},
 	{"time": 300, "event": "shift_end_talk", "type": "npc_interaction", "npc_id": "ciso", "dialogue_id": "shift_end"},
 	{"time": 330, "event": "shift_end", "type": "shift_end"}
 ]

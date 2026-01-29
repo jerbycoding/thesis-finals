@@ -8,11 +8,11 @@ shift_name = "Shift 4: Thursday (Betrayal)"
 shift_id = "shift_thursday"
 briefing_dialogue_id = "briefing_thursday"
 event_sequence = [
-	{"time": 30, "event": "spawn_auth", "type": "spawn_ticket", "ticket_id": "AUTH-FAIL-GENERIC"},
+	{"time": 30, "event": "spawn_auth_3", "type": "spawn_ticket", "ticket_id": "AUTH-003"},
 	{"time": 60, "event": "analyst_checkin", "type": "npc_interaction", "npc_id": "senior_analyst", "dialogue_id": "checkin_insider"},
 	{"time": 120, "event": "spawn_insider", "type": "spawn_ticket", "ticket_id": "INSIDER-001"},
 	{"time": 210, "event": "spawn_vpn", "type": "spawn_ticket", "ticket_id": "VPN-ANOMALY-001"},
-	{"time": 300, "event": "spawn_spear", "type": "spawn_ticket", "ticket_id": "SPEAR-PHISH-001"},
+	{"time": 300, "event": "spawn_spear_3", "type": "spawn_ticket", "ticket_id": "SPEAR-PHISH-003"},
 	{"time": 420, "event": "shift_end", "type": "shift_end"}
 ]
 random_event_pool = [

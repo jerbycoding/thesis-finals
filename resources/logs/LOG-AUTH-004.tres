@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="LogResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/logs/LogResource.gd" id="1_log"]
+
+[resource]
+script = ExtResource("1_log")
+log_id = "LOG-AUTH-004"
+timestamp = "09:30:15"
+source = "Domain-Ctrl-01"
+category = "Authentication"
+message = "Multiple failed login attempts for user '{victim_name}' from internal IP {attacker_ip}."
+severity = 4
+related_ticket = "AUTH-003"
+ip_address = "{attacker_ip}"
+hostname = "{victim_host}"

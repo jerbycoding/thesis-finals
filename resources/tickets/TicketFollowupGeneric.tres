@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="TicketResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/tickets/TicketResource.gd" id="1_ticket"]
+
+[resource]
+script = ExtResource("1_ticket")
+ticket_id = "FOLLOWUP-GENERIC"
+title = "Follow-up Investigation Required"
+description = "A previous incident was closed with a non-standard procedure (Efficient/Emergency). A follow-up review is required to ensure no secondary threats have emerged.
+
+Review the original incident logs and re-verify host integrity."
+severity = "Medium"
+category = "Follow-up"
+steps = ["Re-examine original logs", "Verify host integrity", "Close audit ticket"]
+required_tool = "siem"
+base_time = 180.0

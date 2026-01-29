@@ -8,4 +8,4 @@ hostname = "WORKSTATION-45"
 ip_address = "10.0.5.45"
 is_critical = false
 os_type = "Windows"
-initial_status = "INFECTED"
+initial_status = "CLEAN"

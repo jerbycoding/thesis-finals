@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="AppConfig" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/AppConfigResource.gd" id="1_config"]
+
+[resource]
+script = ExtResource("1_config")
+app_id = "siem"
+scene_path = "res://scenes/2d/apps/App_SIEMViewer.tscn"
+title = "SIEM Log Viewer"
+default_size = Vector2(750, 550)

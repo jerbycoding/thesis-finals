@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="TicketResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/tickets/TicketResource.gd" id="1_ticket"]
+
+[resource]
+script = ExtResource("1_ticket")
+ticket_id = "PHISH-003"
+title = "Phish Attempt: Fake System Health Alert"
+description = "A user has reported an email claiming to be from 'IT Systems Monitoring' that warns of a critical system error. It contains a link to a supposed 'health check' portal.
+
+This is likely an attempt to steal credentials or deploy malware, capitalizing on the ongoing network instability."
+severity = "Medium"
+category = "Phishing"
+steps = ["Analyze email for suspicious domain", "Check link reputation", "Block domain if malicious"]
+required_tool = "email"
+base_time = 180.0
+required_log_ids = ["LOG-PHISH-003"]
+kill_chain_path = "Malware Outbreak"
+kill_chain_stage = 1

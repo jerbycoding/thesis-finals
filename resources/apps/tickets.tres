@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="AppConfig" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/AppConfigResource.gd" id="1_config"]
+
+[resource]
+script = ExtResource("1_config")
+app_id = "tickets"
+scene_path = "res://scenes/2d/apps/App_TicketQueue.tscn"
+title = "Ticket Queue"
+default_size = Vector2(500, 600)

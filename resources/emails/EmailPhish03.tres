@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="EmailResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/EmailResource.gd" id="1_email"]
+
+[resource]
+script = ExtResource("1_email")
+email_id = "EMAIL-PHISH-003"
+sender = "system.alerts@corp-monitoring.net"
+subject = "CRITICAL: System Performance Degraded"
+body = "Automated monitoring has detected a critical performance issue on your workstation. Please run a system health check immediately to prevent data loss.
+
+[Click here to run health check]"
+attachments = []
+headers = {"status": {"spf": "FAIL", "dkim": "FAIL", "dmarc": "FAIL"}}
+is_malicious = true
+is_urgent = true
+clues = ["suspicious_link", "suspicious_domain"]
+related_ticket = "PHISH-003"
+suspicious_domain = "corp-monitoring.net"

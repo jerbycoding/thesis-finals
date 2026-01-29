@@ -4,12 +4,11 @@
 
 [resource]
 script = ExtResource("1_log")
-log_id = "LOG-MALWARE-001"
-timestamp = "15:10:45"
-source = "IDS"
+log_id = "LOG-RANSOM-002"
+timestamp = "11:15:22"
+source = "System"
 category = "Security"
-message = "Malware beacon detected from host {victim_host} to external IP"
+message = "Mass file encryption detected on WEB-SRV-01. 'README_FIX.txt' created."
 severity = 5
-related_ticket = "MALWARE-CONTAIN-001"
-ip_address = "192.168.100.45"
-hostname = "{victim_host}"
+related_ticket = "RANSOM-002"
+hostname = "WEB-SRV-01"

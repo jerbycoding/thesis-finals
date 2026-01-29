@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="EmailResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/EmailResource.gd" id="1_email"]
+
+[resource]
+script = ExtResource("1_email")
+email_id = "EMAIL-SPEAR-003"
+sender = "internal-leak@corp-mail.io"
+subject = "CONFIDENTIAL: Internal Project Re-org"
+body = "Team,\n\nI am forwarding this confidential document regarding the upcoming departmental re-organization. Please review and do not share outside this thread.\n\n[Confidential_Reorg_Doc.pdf.html]"
+attachments = []
+headers = {"status": {"spf": "FAIL", "dkim": "FAIL", "dmarc": "FAIL"}}
+is_malicious = true
+is_urgent = true
+clues = ["suspicious_link", "spoofed_sender"]
+related_ticket = "SPEAR-PHISH-003"
+suspicious_domain = "corp-mail.io"

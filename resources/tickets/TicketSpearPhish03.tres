@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="TicketResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/tickets/TicketResource.gd" id="1_ticket"]
+
+[resource]
+script = ExtResource("1_ticket")
+ticket_id = "SPEAR-PHISH-003"
+title = "Spear Phish: Internal Document Leak"
+description = "An employee has reported a suspicious email that appears to be an internal conversation they were not supposed to be on. It contains a link to a 'Confidential Project Document'.
+
+This could be a sophisticated internal spear-phishing attack. Investigate the link and the sender's authenticity."
+severity = "High"
+category = "Phishing"
+steps = ["Analyze email for signs of internal spoofing", "Check link reputation", "Report findings"]
+required_tool = "email"
+base_time = 200.0
+required_log_ids = ["LOG-SPEAR-003"]
+kill_chain_path = "The Data Breach"
+kill_chain_stage = 1

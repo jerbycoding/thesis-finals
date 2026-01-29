@@ -2,7 +2,7 @@ extends StaticBody3D
 
 @export var audit_id: String = "audit_1"
 @export var object_name: String = "Network Router"
-@export var config: CalibrationMinigameConfig # ADDED THIS LINE
+@export var config: CalibrationMinigameConfig = preload("res://resources/minigames/DefaultCalibrationConfig.tres")
 
 var is_audited: bool = false
 var modal_scene = load("res://scenes/ui/AuditSelectionModal.tscn")

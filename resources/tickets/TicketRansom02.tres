@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="TicketResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/tickets/TicketResource.gd" id="1_ticket"]
+
+[resource]
+script = ExtResource("1_ticket")
+ticket_id = "RANSOM-002"
+title = "Ransomware: Public Web Server Locked"
+description = "Our public-facing web server (WEB-SRV-01) has been encrypted by ransomware. A ransom note has been found in the root directory.
+
+This is a critical blow to our public reputation. Isolate the server immediately and initiate emergency data recovery procedures."
+severity = "Critical"
+category = "Ransomware"
+steps = ["Isolate WEB-SRV-01 via Terminal", "Launch Decryption Tool", "Verify web service restoration"]
+required_tool = "decrypt"
+base_time = 240.0
+required_log_ids = ["LOG-RANSOM-002"]
+kill_chain_path = "Malware Outbreak"
+kill_chain_stage = 3

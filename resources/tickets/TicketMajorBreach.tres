@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="TicketResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/tickets/TicketResource.gd" id="1_ticket"]
+
+[resource]
+script = ExtResource("1_ticket")
+ticket_id = "MAJOR-BREACH-FOLLOWUP"
+title = "CRITICAL: Major Breach Post-Mortem"
+description = "A critical alert was ignored, leading to a major security breach. Data exfiltration is confirmed.
+
+This ticket is for post-mortem analysis. You must identify the full scope of the breach by cross-referencing all related logs and artifacts."
+severity = "Critical"
+category = "Forensics"
+steps = ["Identify initial ignored alert", "Trace lateral movement from breach point", "Quantify extent of data loss"]
+required_tool = "siem"
+base_time = 300.0
