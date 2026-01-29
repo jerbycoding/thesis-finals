@@ -43,6 +43,8 @@ func _gui_input(event: InputEvent):
 		if AudioManager: AudioManager.play_ui_click()
 		if email_data:
 			email_selected.emit(email_data, self)
+			# Signal for Tutorial system
+			EventBus.emit_signal("email_read", email_data)
 		get_viewport().set_input_as_handled()
 
 func set_highlight(active: bool):

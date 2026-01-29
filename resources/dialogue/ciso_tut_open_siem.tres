@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="DialogueDataResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/dialogue/DialogueDataResource.gd" id="1_dialogue_data"]
+
+[resource]
+script = ExtResource("1_dialogue_data")
+npc_name = "CISO (Remote)"
+portrait = "👔"
+lines = [
+    {"choices": [], "text": "Understood. The source IP is confirmed. Now you need to find the matching traffic logs."},
+    {"choices": [], "text": "Open the [color=cyan]SIEM Log Viewer[/color] from your dock to begin the forensic search.", "wait_for_task": true}
+]

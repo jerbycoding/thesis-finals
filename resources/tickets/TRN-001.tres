@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="TicketResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/tickets/TicketResource.gd" id="1_ticket"]
+
+[resource]
+script = ExtResource("1_ticket")
+ticket_id = "TRN-001"
+title = "TRAINING: Unauthorized Access"
+description = "System alert: Suspicious connection detected on Workstation C. Identify the source IP and verify if it matches known malicious patterns mentioned in instructor briefing."
+severity = "Medium"
+category = "Unauthorized Access"
+steps = ["Locate source IP in SIEM", "Verify against Email Briefing", "Attach evidence and resolve"]
+required_tool = "siem"
+base_time = 600.0
+hidden_risks = []
+required_log_ids = ["LOG-TRN-001"]
+kill_chain_path = ""
+kill_chain_stage = 0

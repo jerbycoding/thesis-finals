@@ -1,0 +1,52 @@
+[gd_scene load_steps=4 format=3 uid="uid://dgkhv2v8v8v8y"]
+
+[ext_resource type="Script" uid="uid://duacxcqphyhdl" path="res://scripts/ui/CommsMessage.gd" id="1_script"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Msg"]
+content_margin_left = 10.0
+content_margin_top = 8.0
+content_margin_right = 10.0
+content_margin_bottom = 8.0
+bg_color = Color(0.1, 0.1, 0.1, 0.8)
+border_width_left = 2
+border_color = Color(0, 0.423529, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Sender"]
+content_margin_left = 5.0
+content_margin_right = 5.0
+bg_color = Color(0, 0.423529, 1, 1)
+
+[node name="CommsMessage" type="PanelContainer"]
+custom_minimum_size = Vector2(260, 0)
+offset_right = 260.0
+offset_bottom = 60.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_Msg")
+script = ExtResource("1_script")
+
+[node name="VBox" type="VBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="Header" type="HBoxContainer" parent="VBox"]
+layout_mode = 2
+
+[node name="PortraitLabel" type="Label" parent="VBox/Header"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "👤"
+
+[node name="SenderLabel" type="Label" parent="VBox/Header"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+theme_override_styles/normal = SubResource("StyleBoxFlat_Sender")
+text = "SENDER"
+
+[node name="TextLabel" type="RichTextLabel" parent="VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/normal_font_size = 11
+bbcode_enabled = true
+text = "Message content..."
+fit_content = true
+scroll_active = false

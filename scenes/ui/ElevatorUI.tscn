@@ -1,6 +1,6 @@
-[gd_scene load_steps=6 format=3 uid="uid://r1r0ofgrecn5"]
+[gd_scene load_steps=4 format=3 uid="uid://r1r0ofgrecn5"]
 
-[ext_resource type="Script" path="res://scripts/ui/ElevatorUI.gd" id="1_elevator"]
+[ext_resource type="Script" uid="uid://drs7f2kew5x35" path="res://scripts/ui/ElevatorUI.gd" id="1_elevator"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_MetalPlate"]
 bg_color = Color(0.75, 0.75, 0.75, 1)
@@ -27,19 +27,6 @@ corner_radius_top_left = 2
 corner_radius_top_right = 2
 corner_radius_bottom_right = 2
 corner_radius_bottom_left = 2
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Indicator"]
-bg_color = Color(0.8, 0.8, 0, 0.1)
-draw_center = false
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.8, 0.8, 0, 0.2)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Separator"]
-bg_color = Color(0.4, 0.4, 0.4, 1)
-custom_margin_top = 1.0
 
 [node name="ElevatorUI" type="Control"]
 layout_mode = 3

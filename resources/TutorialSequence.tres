@@ -1,0 +1,211 @@
+[gd_resource type="Resource" script_class="TutorialSequenceResource" load_steps=20 format=3]
+
+[ext_resource type="Script" path="res://resources/TutorialStepResource.gd" id="1_step"]
+[ext_resource type="Script" path="res://resources/TutorialSequenceResource.gd" id="2_seq"]
+
+[sub_resource type="Resource" id="Step_1"]
+script = ExtResource("1_step")
+instruction_text = "ORIENTATION: FIND YOUR ROOM (Office C)"
+comms_sender = "CISO"
+comms_text = ""
+highlight_path = ""
+icon_glow_name = ""
+trigger_type = 1
+trigger_id = "office_c"
+
+[sub_resource type="Resource" id="Step_2"]
+script = ExtResource("1_step")
+instruction_text = "INITIALIZATION: Access your TERMINAL by pressing [E] at the desk."
+comms_sender = "CISO"
+comms_text = ""
+highlight_path = ""
+icon_glow_name = ""
+trigger_type = 2
+trigger_id = "desktop"
+
+[sub_resource type="Resource" id="Step_3"]
+script = ExtResource("1_step")
+instruction_text = "TASK: Open the Ticket Queue app from the dock."
+comms_sender = "CISO"
+comms_text = "Station initialized. Welcome to your workstation. Open the Ticket Queue from your dock to begin."
+highlight_path = "%%Tickets_Icon"
+icon_glow_name = "tickets"
+trigger_type = 2
+trigger_id = "tickets"
+
+[sub_resource type="Resource" id="Step_4"]
+script = ExtResource("1_step")
+instruction_text = "TASK: Select the TRN-001 ticket."
+comms_sender = "CISO"
+comms_text = "Select TRN-001 to review the incident context. You need to understand the 'Technical Truth' before acting."
+highlight_path = "[DYNAMIC]TICKET_LIST_0"
+icon_glow_name = ""
+trigger_type = 3
+trigger_id = "TRN-001"
+
+[sub_resource type="Resource" id="Step_5"]
+script = ExtResource("1_step")
+instruction_text = "TASK: Open the Email Analyzer from the dock."
+comms_sender = "CISO"
+comms_text = "Ticket accepted. Now, open the Email Analyzer to find specific forensic indicators provided in the briefing."
+highlight_path = "%%Email_Icon"
+icon_glow_name = "email"
+trigger_type = 2
+trigger_id = "email"
+
+[sub_resource type="Resource" id="Step_6"]
+script = ExtResource("1_step")
+instruction_text = "TASK: Perform link analysis on the briefing email."
+comms_sender = "CISO"
+comms_text = "Reading the text is not enough. Use the [color=cyan]Check Links[/color] tool to extract forensic indicators from the briefing."
+highlight_path = "%%CheckLinksButton"
+icon_glow_name = ""
+trigger_type = 5
+trigger_id = "EMAIL-TRN-001"
+target_ticket_id = "links"
+
+[sub_resource type="Resource" id="Step_7"]
+script = ExtResource("1_step")
+instruction_text = "INVESTIGATION: Open the SIEM Log Viewer from the dock."
+comms_sender = "CISO"
+comms_text = "IP confirmed: 192.168.100.50. Open the SIEM to begin the forensic search for that address."
+highlight_path = "%%SIEM_Icon"
+icon_glow_name = "siem"
+trigger_type = 2
+trigger_id = "siem"
+
+[sub_resource type="Resource" id="Step_8"]
+script = ExtResource("1_step")
+instruction_text = "VERIFICATION: DRAG the malicious log entry onto your ticket."
+comms_sender = "CISO"
+comms_text = "Evidence verified. Return to the queue and close as COMPLIANT."
+highlight_path = "[DYNAMIC]LOG_LIST_0"
+icon_glow_name = ""
+trigger_type = 6
+trigger_id = "LOG-TRN-001"
+target_ticket_id = "TRN-001"
+
+[sub_resource type="Resource" id="Step_9"]
+script = ExtResource("1_step")
+instruction_text = "RESOLUTION: Close the case as COMPLIANT."
+comms_sender = "CISO"
+comms_text = "Training complete. You are ready for live operations."
+highlight_path = "[DYNAMIC]TICKET_0_COMPLETE"
+icon_glow_name = ""
+trigger_type = 9
+trigger_id = "TRN-001"
+
+[sub_resource type="Resource" id="Step_10"]
+script = ExtResource("1_step")
+instruction_text = "ALERT: A second, higher-priority ticket has appeared."
+comms_sender = "CISO"
+comms_text = "New alert confirmed. We need to actively contain this host. Open the Terminal."
+highlight_path = "[DYNAMIC]TICKET_LIST_0"
+icon_glow_name = ""
+trigger_type = 3
+trigger_id = "TRN-002"
+
+[sub_resource type="Resource" id="Step_11"]
+script = ExtResource("1_step")
+instruction_text = "TASK: Open the Terminal to begin active containment."
+comms_sender = "CISO"
+comms_text = "The Terminal is for active defense. Type 'scan WORKSTATION-T' to verify the threat."
+highlight_path = "%%Terminal_Icon"
+icon_glow_name = "terminal"
+trigger_type = 2
+trigger_id = "terminal"
+
+[sub_resource type="Resource" id="Step_12"]
+script = ExtResource("1_step")
+instruction_text = "COMMAND: Type 'scan WORKSTATION-T' to verify infection."
+comms_sender = "CISO"
+comms_text = "Malware detected. Contain the threat immediately. Type 'isolate WORKSTATION-T'."
+highlight_path = "%%CommandInput"
+icon_glow_name = ""
+trigger_type = 7
+trigger_id = "scan"
+
+[sub_resource type="Resource" id="Step_13"]
+script = ExtResource("1_step")
+instruction_text = "COMMAND: Type 'isolate WORKSTATION-T' to contain the host."
+comms_sender = "CISO"
+comms_text = "Host isolated. Now, open the Network Map to verify situational status."
+highlight_path = "%%CommandInput"
+icon_glow_name = ""
+trigger_type = 7
+trigger_id = "isolate"
+
+[sub_resource type="Resource" id="Step_14"]
+script = ExtResource("1_step")
+instruction_text = "TASK: Open the Network Map to verify situational awareness."
+comms_sender = "CISO"
+comms_text = "Situational awareness is key. Locate WORKSTATION-T on the map."
+highlight_path = "%%Network_Icon"
+icon_glow_name = "network"
+trigger_type = 2
+trigger_id = "network"
+
+[sub_resource type="Resource" id="Step_15"]
+script = ExtResource("1_step")
+instruction_text = "MAP: Select WORKSTATION-T to confirm network status."
+comms_sender = "CISO"
+comms_text = "Host containment confirmed. Final step: Return to SIEM to collect proof."
+highlight_path = "[DYNAMIC]MAP_NODE_T"
+icon_glow_name = ""
+trigger_type = 8
+trigger_id = "WORKSTATION-T"
+
+[sub_resource type="Resource" id="Step_16"]
+script = ExtResource("1_step")
+instruction_text = "CERTIFICATION: Attach LOG-TRN-002 and close the case."
+comms_sender = "CISO"
+comms_text = "Good work. However, there is one final lesson: The price of speed. Open TRN-003."
+highlight_path = "[DYNAMIC]TICKET_0_COMPLETE"
+icon_glow_name = ""
+trigger_type = 9
+trigger_id = "TRN-002"
+
+[sub_resource type="Resource" id="Step_17"]
+script = ExtResource("1_step")
+instruction_text = "CONSEQUENCES: Open training ticket TRN-003."
+comms_sender = "CISO"
+comms_text = "In high-pressure shifts, you may be tempted to cut corners. Do it now. Isolate DB-SRV-01 immediately."
+highlight_path = "[DYNAMIC]TICKET_LIST_0"
+icon_glow_name = ""
+trigger_type = 3
+trigger_id = "TRN-003"
+
+[sub_resource type="Resource" id="Step_18"]
+script = ExtResource("1_step")
+instruction_text = "COWBOY ACTION: Type 'isolate DB-SRV-01' WITHOUT scanning."
+comms_sender = "CISO"
+comms_text = "Your Integrity dropped. Unjustified actions damage organization stability."
+highlight_path = "%%CommandInput"
+icon_glow_name = ""
+trigger_type = 7
+trigger_id = "isolate"
+
+[sub_resource type="Resource" id="Step_19"]
+script = ExtResource("1_step")
+instruction_text = "INTEGRITY: Observe the Integrity Bar (Top Left)."
+comms_sender = "CISO"
+comms_text = "If Integrity hits 0%, you are fired. Speed is required, but precision is vital. Certification complete."
+highlight_path = "%%IntegrityBar"
+icon_glow_name = ""
+trigger_type = 0
+trigger_id = ""
+
+[sub_resource type="Resource" id="Step_20"]
+script = ExtResource("1_step")
+instruction_text = "CERTIFICATION COMPLETE: Ready for operations."
+comms_sender = "CISO"
+comms_text = "Certification finalized. Transitioning to active shift."
+highlight_path = ""
+icon_glow_name = ""
+trigger_type = 0
+trigger_id = ""
+
+[resource]
+script = ExtResource("2_seq")
+sequence_name = "Tier 1 Certification"
+steps = [SubResource("Step_1"), SubResource("Step_2"), SubResource("Step_3"), SubResource("Step_4"), SubResource("Step_5"), SubResource("Step_6"), SubResource("Step_7"), SubResource("Step_8"), SubResource("Step_9"), SubResource("Step_10"), SubResource("Step_11"), SubResource("Step_12"), SubResource("Step_13"), SubResource("Step_14"), SubResource("Step_15"), SubResource("Step_16"), SubResource("Step_17"), SubResource("Step_18"), SubResource("Step_19"), SubResource("Step_20")]

@@ -102,6 +102,7 @@ func _on_view_headers_pressed():
 	var analysis = selected_email.get_header_analysis()
 	forensic_modal.show_report("Header Forensics", analysis.text)
 	_update_decision_visibility()
+	EventBus.email_inspected.emit(selected_email, "headers")
 
 func _on_scan_attachments_pressed():
 	if not selected_email: return
@@ -109,6 +110,7 @@ func _on_scan_attachments_pressed():
 	var analysis = selected_email.get_attachment_analysis()
 	forensic_modal.show_report("Malware Scan Results", analysis.text)
 	_update_decision_visibility()
+	EventBus.email_inspected.emit(selected_email, "attachments")
 
 func _on_check_links_pressed():
 	if not selected_email: return
@@ -116,6 +118,7 @@ func _on_check_links_pressed():
 	var analysis = selected_email.get_link_analysis()
 	forensic_modal.show_report("Link Reputation Analysis", analysis.text)
 	_update_decision_visibility()
+	EventBus.email_inspected.emit(selected_email, "links")
 
 func _on_approve_pressed(): _make_decision(GlobalConstants.EMAIL_DECISION.APPROVE)
 func _on_quarantine_pressed(): _make_decision(GlobalConstants.EMAIL_DECISION.QUARANTINE)

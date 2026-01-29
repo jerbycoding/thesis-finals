@@ -162,6 +162,9 @@ func _on_consequence_triggered(consequence_type: String, details: Dictionary):
 		"user_complaint":
 			message = CorporateVoice.get_notification("user_complaint")
 			notif_type = "warning"
+		"procedural_violation":
+			message = CorporateVoice.get_notification("procedural_violation")
+			notif_type = "error"
 		_:
 			message = "⚠ Consequence: " + consequence_type
 			notif_type = "error"

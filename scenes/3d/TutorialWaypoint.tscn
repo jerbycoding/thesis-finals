@@ -1,0 +1,25 @@
+[gd_scene load_steps=3 format=3 uid="uid://dgkhv2v8v8v8w"]
+
+[ext_resource type="Script" uid="uid://onhtdubmahei" path="res://scripts/3d/TutorialWaypoint.gd" id="1_script"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_waypoint"]
+transparency = 1
+albedo_color = Color(0, 0.423529, 1, 0.8)
+emission_enabled = true
+emission = Color(0, 0.423529, 1, 1)
+emission_energy_multiplier = 2.0
+billboard_mode = 1
+
+[node name="TutorialWaypoint" type="Node3D"]
+script = ExtResource("1_script")
+
+[node name="Icon" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+billboard = 1
+modulate = Color(0, 0.423529, 1, 1)
+text = "▼"
+font_size = 72
+
+[node name="Glow" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0.1, 0)
+material_override = SubResource("StandardMaterial3D_waypoint")

@@ -24,19 +24,19 @@ The player's primary goal is to keep the **Integrity Score** above 0%. This scor
 ### 3.1 Integrity Math (The "HP" Bar)
 *   **Formula:** `New_Integrity = Clamp(Current_Integrity + Delta, 0, 100)`
 *   **Delta Values:**
-    *   `+5.0`: Compliant Closure (Thorough verification).
-    *   `-2.0`: Efficient Closure (Rushed, risk accepted).
-    *   `-5.0`: Emergency Closure (Protocol bypass).
-    *   `-10.0`: Ticket Timeout (Negligence).
-    *   `-40.0`: Critical Breach (Total Friday failure).
+	*   `+5.0`: Compliant Closure (Thorough verification).
+	*   `-2.0`: Efficient Closure (Rushed, risk accepted).
+	*   `-5.0`: Emergency Closure (Protocol bypass).
+	*   `-10.0`: Ticket Timeout (Negligence).
+	*   `-40.0`: Critical Breach (Total Friday failure).
 
 ### 3.2 Maintenance Decay & Recovery
 To ensure the 3D weekend missions are essential, Integrity suffers from **Active Session Decay**:
 *   **Decay Rate:** Base `-1.0%` per hour of active play (approx. `-0.016%` per minute).
 *   **Calculation:** Processed in real-time while the player is inside a 2D or 3D shift.
 *   **The Weekend Payoff:** 
-    *   **Saturday:** Completing the physical audit in the **Network Hub** grants "Maintenance Immunity," pausing the decay for the remainder of the weekend.
-    *   **Sunday:** Completing hardware repairs in the **Server Vault** restores a lump sum of **+15% Integrity**.
+	*   **Saturday:** Completing the physical audit in the **Network Hub** grants "Maintenance Immunity," pausing the decay for the remainder of the weekend.
+	*   **Sunday:** Completing hardware repairs in the **Server Vault** restores a lump sum of **+15% Integrity**.
 *   **Scaling Decay:** In Week 2+, the decay rate is multiplied by the current **Heat Multiplier** (e.g., Week 5 may see `-1.5%` per hour as infrastructure ages).
 *   **UI Feedback:** The Integrity Bar displays a subtle "leaking" animation (downward arrows) when decay is active.
 
@@ -78,20 +78,20 @@ A centralized dictionary containing valid organizational data:
 ### 5.2 The Incident Context (The Truth Packet)
 Every spawned incident generates a **Truth Packet** that is passed to all managers via the `EventBus`.
 *   **Structure:**
-    ```json
-    {
-      "context_id": "UID_12345",
-      "victim": "Alice",
-      "victim_host": "WS-05",
-      "attacker_ip": "203.0.113.42",
-      "malicious_url": "verify-update.net",
-      "is_vulnerable": false
-    }
-    ```
+	```json
+	{
+	  "context_id": "UID_12345",
+	  "victim": "Alice",
+	  "victim_host": "WS-05",
+	  "attacker_ip": "203.0.113.42",
+	  "malicious_url": "verify-update.net",
+	  "is_vulnerable": false
+	}
+	```
 *   **Format-on-Access Logic:** To preserve the integrity of static `.tres` files, data injection occurs only at the UI layer. 
-    1. The tool (SIEM, Email, Ticket) retrieves the raw template string containing `{placeholders}`.
-    2. The system applies `string.format(truth_packet)` immediately before rendering.
-    3. **Crucial:** The original Resource file is never modified or overwritten.
+	1. The tool (SIEM, Email, Ticket) retrieves the raw template string containing `{placeholders}`.
+	2. The system applies `string.format(truth_packet)` immediately before rendering.
+	3. **Crucial:** The original Resource file is never modified or overwritten.
 
 ---
 
@@ -172,16 +172,16 @@ To facilitate rapid testing of the 7-day loop and 3D mechanics, a hidden **Debug
 
 ## 11. Development Roadmap (The Path to Gold)
 1.  **Core Systems (High Priority):**
-    *   Build `VariableRegistry.gd` and the Context Generator.
-    *   Refactor `TicketManager` to support placeholder injection.
-    *   Implement the `OrganizationIntegrity` bar and persistence.
+	*   Build `VariableRegistry.gd` and the Context Generator.
+	*   Refactor `TicketManager` to support placeholder injection.
+	*   Implement the `OrganizationIntegrity` bar and persistence.
 2.  **3D Expansion (Medium Priority):**
-    *   Build `ElevatorUI.tscn` and scene transition logic.
-    *   Create `ServerVault.tscn` and `NetworkHub.tscn` levels.
-    *   Implement the 3D "InteractableHardware" system.
+	*   Build `ElevatorUI.tscn` and scene transition logic.
+	*   Create `ServerVault.tscn` and `NetworkHub.tscn` levels.
+	*   Implement the 3D "InteractableHardware" system.
 3.  **Debug & Quality of Life:**
-    *   Build the `DebugManager.gd` for F-key shift jumping.
+	*   Build the `DebugManager.gd` for F-key shift jumping.
 4.  **Content Expansion (Continuous):**
-    *   Expand NPC dialogue matrix (Context-aware responses).
-    *   Implement 20+ generic ticket templates for pool variety.
-    *   Convert Master Threat Catalog (DDoS, BEC, SQLi) into procedural templates.
+	*   Expand NPC dialogue matrix (Context-aware responses).
+	*   Implement 20+ generic ticket templates for pool variety.
+	*   Convert Master Threat Catalog (DDoS, BEC, SQLi) into procedural templates.

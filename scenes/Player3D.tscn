@@ -5,8 +5,8 @@
 [ext_resource type="PackedScene" uid="uid://c8x6y708bab0e" path="res://scenes/ui/UnifiedHUD.tscn" id="2_unified"]
 [ext_resource type="PackedScene" uid="uid://pwr7hj6luthk" path="res://scenes/ui/InteractionPrompt.tscn" id="3_prompt"]
 [ext_resource type="PackedScene" uid="uid://dotgpl1o3q8uw" path="res://scenes/ui/MaintenanceHUD.tscn" id="4_maint"]
-[ext_resource type="PackedScene" path="res://scenes/ui/TabletHUD.tscn" id="5_tablet"]
-[ext_resource type="Resource" path="res://resources/minigames/DefaultRecoveryConfig.tres" id="6_config"]
+[ext_resource type="PackedScene" uid="uid://bgk20yi3egwfp" path="res://scenes/ui/TabletHUD.tscn" id="5_tablet"]
+[ext_resource type="Resource" uid="uid://dny42b338pxg0" path="res://resources/minigames/DefaultRecoveryConfig.tres" id="6_config"]
 [ext_resource type="Resource" path="res://resources/minigames/DefaultCalibrationConfig.tres" id="7_audit"]
 [ext_resource type="PackedScene" uid="uid://c67sml5y1uxgf" path="res://assets/npc/Man.glb" id="8_man_model"]
 
@@ -60,4 +60,4 @@ collide_with_areas = true
 
 [node name="CarryMarker3D" type="Marker3D" parent="CameraPivot/Camera3D"]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4, -0.3, -0.8)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, -0.45, -0.6)

@@ -7,6 +7,10 @@ var active_logs: Array[LogResource] = [] # Only these are shown in the app
 var reviewed_logs: Array[String] = []
 var noise_pool: NoiseLogPool = null
 
+## Optional filter to restrict which logs can be revealed. 
+## signature: func(log: LogResource, ticket_id: String) -> bool
+var active_filter
+
 const LOG_DIR = "res://resources/logs/"
 const MAX_LOG_HISTORY = 150 # Performance safeguard
 
@@ -75,17 +79,22 @@ func _prepare_library():
 
 func reveal_logs_for_ticket(ticket_id: String):
 	print("📋 LogSystem: reveal_logs_for_ticket(%s)" % (ticket_id if not ticket_id.is_empty() else "GENERIC"))
+	
 	var count = 0
 	for log in all_logs:
-		var is_exact_match = not ticket_id.is_empty() and log.related_ticket == ticket_id
-		var is_generic_log = log.related_ticket == "GENERIC"
-		var log_is_orphaned = (log.related_ticket == "" or log.related_ticket == "NONE")
+		var should_reveal = false
 		
-		# Reveal if:
-		# 1. Exact ticket match
-		# 2. Log is GENERIC (always show noise)
-		# 3. Request is for GENERIC and log is orphaned
-		if is_exact_match or is_generic_log or (ticket_id == "" and log_is_orphaned):
+		if active_filter != null:
+			should_reveal = active_filter.call(log, ticket_id)
+		else:
+			var is_exact_match = not ticket_id.is_empty() and log.related_ticket == ticket_id
+			var is_generic_log = log.related_ticket == "GENERIC"
+			var log_is_orphaned = (log.related_ticket == "" or log.related_ticket == "NONE")
+			
+			if is_exact_match or is_generic_log or (ticket_id == "" and log_is_orphaned):
+				should_reveal = true
+		
+		if should_reveal:
 			if log not in active_logs:
 				active_logs.append(log)
 				EventBus.log_added.emit(log)
@@ -94,6 +103,11 @@ func reveal_logs_for_ticket(ticket_id: String):
 	
 	if count > 0:
 		print("📋 LogSystem: Revealed ", count, " new logs")
+
+func clear_active_data():
+	print("📋 LogSystem: Purging all active log data.")
+	active_logs.clear()
+	reviewed_logs.clear()
 
 func add_log(log: LogResource):
 	if not log: return

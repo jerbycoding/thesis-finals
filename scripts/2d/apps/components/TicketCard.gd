@@ -40,6 +40,7 @@ func _gui_input(event: InputEvent):
 		if AudioManager: AudioManager.play_ui_click()
 		if ticket:
 			card_selected.emit(ticket, self)
+			EventBus.ticket_selected.emit(ticket)
 		get_viewport().set_input_as_handled()
 
 func _can_drop_data(_at_position: Vector2, data: Variant) -> bool:

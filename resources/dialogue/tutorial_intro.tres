@@ -7,7 +7,7 @@ script = ExtResource("1_dialogue_data")
 npc_name = "CISO"
 portrait = "👔"
 lines = [
-    {"choices": [], "text": "Analyst, welcome to your first day. This is a non-live training simulation. We're going to walk through the basic incident response loop."},
-    {"choices": [], "text": "On your desk is a workstation. Use it to access the Ticket Queue, the SIEM Log Viewer, and your Email client."},
-    {"choices": [{"effect": {"change_scene": "res://scenes/SOC_Office.tscn", "then_start_narrative": "shift_tutorial"}, "text": "I'm ready to begin the training."}], "text": "Follow the prompts. Do not deviate from the sequence. Efficiency is important, but accuracy is paramount. Get to work."}
+    {"choices": [], "text": "Analyst, welcome to your first day. This is a non-live training simulation. We're going to walk through the basic SOC protocol."},
+    {"choices": [], "text": "Before you touch a terminal, you need to familiarize yourself with the office layout. Head down the hallway to your assigned room: Office C."},
+    {"choices": [{"effect": {"change_scene": "res://scenes/SOC_Office.tscn", "then_start_narrative": "shift_tutorial"}, "text": "Understood. Locating Office C."}], "text": "Locate your workstation and initialize the session. I'll provide your first case once you're seated. Move out."}
 ]

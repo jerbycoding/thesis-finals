@@ -33,8 +33,8 @@
 #### Desktop Shell (SOC OS style)
 *   **Inspiration:** Linux Desktop (Debian/XFCE).
 *   **Top System Bar:** 
-    *   Left: "Applications" menu trigger.
-    *   Right: Connectivity status, Analyst Username, and Clock.
+	*   Left: "Applications" menu trigger.
+	*   Right: Connectivity status, Analyst Username, and Clock.
 *   **Bottom Dock:** Centered tray containing shortcuts for core incident response tools (SIEM, Terminal, Email, Tickets).
 *   **Icon Alignment:** Secondary utilities (Handbook, Network Map) aligned vertically on the left edge.
 *   **Visuals:** Semi-transparent glass effects for bars; flat, high-density icons.
@@ -42,28 +42,28 @@
 #### A. SIEM Log Viewer (Dashboard style)
 *   **Theme:** Enterprise Dark (`#0E1117`).
 *   **Layout:** 
-    *   **Left Sidebar:** Data management and metadata filters.
-    *   **Top Visualization:** Line graph showing temporal log volume.
-    *   **Log Stream:** High-density table.
+	*   **Left Sidebar:** Data management and metadata filters.
+	*   **Top Visualization:** Line graph showing temporal log volume.
+	*   **Log Stream:** High-density table.
 *   **Key Features:**
-    *   **Status Indicators:** Discrete colored dots (Red = Error, Blue = Info) at the start of the line.
-    *   **Text Highlighting:** Use a `RichTextLabel` to highlight search terms with a background color.
-    *   **Zebra Stripping:** Subtle background difference between rows for readability.
+	*   **Status Indicators:** Discrete colored dots (Red = Error, Blue = Info) at the start of the line.
+	*   **Text Highlighting:** Use a `RichTextLabel` to highlight search terms with a background color.
+	*   **Zebra Stripping:** Subtle background difference between rows for readability.
 
 #### B. Terminal (Forensic TUI style)
 *   **Inspiration:** `binsider` / Retro-Modern Terminal.
 *   **Layout:** Structured "Box" design using ASCII-style borders.
-    *   **Header:** Mode tabs (LOGS | TRACE | ISOLATE).
-    *   **Main:** Center data blocks for Host Metadata and Results.
-    *   **Footer:** Hotkey legend (e.g., `[TAB: Next Mode] [ENTER: Confirm Action]`).
+	*   **Header:** Mode tabs (LOGS | TRACE | ISOLATE).
+	*   **Main:** Center data blocks for Host Metadata and Results.
+	*   **Footer:** Hotkey legend (e.g., `[TAB: Next Mode] [ENTER: Confirm Action]`).
 *   **Aesthetic:** High-contrast White-on-Black or Teal-on-DarkGrey. No neon glows.
 
 #### C. Email Analyzer (Corporate SaaS style)
 *   **Inspiration:** Modern SaaS (Gmail/Slack/Notion).
 *   **Layout:** Three-column view.
-    *   **Left (Nav):** Folders and Status Filters.
-    *   **Middle (List):** Email preview cards with discrete colored "Risk Bars."
-    *   **Right (Content):** Full document view with attachment "Tile" indicators.
+	*   **Left (Nav):** Folders and Status Filters.
+	*   **Middle (List):** Email preview cards with discrete colored "Risk Bars."
+	*   **Right (Content):** Full document view with attachment "Tile" indicators.
 *   **Aesthetic:** Light-mode base (`#FDFDFD`) with vibrant accent colors for primary buttons (e.g., "QUARANTINE" in Solid Red).
 
 #### D. Ticket Queue (Task list style)

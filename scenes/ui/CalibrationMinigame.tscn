@@ -1,6 +1,6 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=2 format=3 uid="uid://bxfc61a0unofs"]
 
-[ext_resource type="Script" path="res://scripts/ui/CalibrationMinigame.gd" id="1_calib"]
+[ext_resource type="Script" uid="uid://bctqk4eg6cltx" path="res://scripts/ui/CalibrationMinigame.gd" id="1_calib"]
 
 [node name="CalibrationMinigame" type="Control"]
 layout_mode = 3

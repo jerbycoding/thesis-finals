@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="TicketResource" format=3]
+
+[ext_resource type="Script" path="res://resources/tickets/TicketResource.gd" id="1_ticket"]
+
+[resource]
+script = ExtResource("1_ticket")
+ticket_id = "TRN-002"
+title = "TRAINING: Active Malware Response"
+description = "Detection system has flagged a secondary infection on WORKSTATION-T.\n\n[b]Required Protocol:[/b]\n1. Use Terminal to [color=cyan]scan[/color] the host.\n2. Use Terminal to [color=cyan]isolate[/color] the host if infected.\n3. Verify isolation on the [color=cyan]Network Map[/color].\n4. Attach evidence log LOG-TRN-002."
+severity = "High"
+category = "Malware"
+steps = ["Scan and Isolate WORKSTATION-T", "Verify isolation on Network Map", "Attach forensic proof and resolve"]
+required_tool = "terminal"
+base_time = 600.0
+hidden_risks = []
+required_log_ids = ["LOG-TRN-002"]
+kill_chain_path = ""
+kill_chain_stage = 0

@@ -4,6 +4,7 @@ extends Node
 
 # --- Ticket Signals ---
 signal ticket_added(ticket: TicketResource)
+signal ticket_selected(ticket: TicketResource)
 signal ticket_completed(ticket: TicketResource, completion_type: String, time_taken: float)
 signal ticket_ignored(ticket: TicketResource)
 signal ticket_timeout(ticket_id: String)
@@ -16,6 +17,8 @@ signal log_reviewed(log_id: String)
 
 # --- Email Signals ---
 signal email_added(email: EmailResource)
+signal email_read(email: EmailResource)
+signal email_inspected(email: EmailResource, type: String) # type: "headers", "attachments", "links"
 signal email_decision_processed(email: EmailResource, decision: String, inspection_state: Dictionary)
 
 # --- Terminal Signals ---
@@ -45,6 +48,7 @@ signal window_focused(window: Control)
 signal window_closed(window: Control)
 signal host_status_changed(hostname: String, new_status: int)
 signal host_state_changed(hostname: String, new_state: Dictionary)
+signal host_selected(host: HostResource)
 signal request_prompt(text: String, active: bool)
 signal game_loaded()
 signal timer_finished(timer_id: String)

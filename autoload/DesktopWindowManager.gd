@@ -63,11 +63,24 @@ func _ready():
 	# Connect to EventBus for global window management
 	EventBus.window_focused.connect(_on_window_focused)
 	EventBus.window_closed.connect(_on_window_closed)
+	EventBus.shift_ended.connect(func(_results): close_all_windows())
 	
 	print("DesktopWindowManager ready.")
 
+## The currently active permission profile. If null, all apps are allowed.
+var active_permission_profile: AppPermissionProfile = null
+
 func can_open_app(app_name: String) -> Dictionary:
 	"""Returns {'allowed': bool, 'reason': String}"""
+	# Check Active Profile (Tutorial/Narrative Restrictions)
+	if active_permission_profile != null:
+		if not active_permission_profile.is_allowed(app_name):
+			return {
+				"allowed": false, 
+				"reason": active_permission_profile.restricted_message
+			}
+
+	# Check Logic Restrictions (Context-based)
 	if app_name not in RESTRICTED_APPS:
 		return {"allowed": true, "reason": ""}
 		
@@ -215,11 +228,18 @@ func close_app(app_name: String, window_id: String = ""):
 			open_windows.erase(wid)
 
 func close_all_windows():
+	print("DesktopWindowManager: Closing all windows.")
 	# Close all open app windows to clear the desktop
 	for window_id in open_windows:
 		var window = open_windows[window_id]
 		if is_instance_valid(window):
 			window.queue_free()
+	
+	# Thorough cleanup: ensure container is empty
+	if is_instance_valid(window_container):
+		for child in window_container.get_children():
+			child.queue_free()
+			
 	open_windows.clear()
 	next_window_position = Vector2(50, 50) # Reset position when all closed
 

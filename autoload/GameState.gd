@@ -7,6 +7,7 @@ var current_computer = null
 var desktop_instance = null
 var is_paused: bool = false
 var pause_menu_instance: Control = null
+var is_guided_mode: bool = false
 
 func _ready():
 	# Instantiate pause menu but keep it hidden
@@ -18,6 +19,12 @@ func _ready():
 func _input(event):
 	if event.is_action_pressed("ui_cancel"): # Usually ESC
 		if get_tree().current_scene.name == "TitleScreen":
+			return
+		
+		# Prevent pausing during critical tutorial sequences
+		if is_guided_mode:
+			if NotificationManager:
+				NotificationManager.show_notification("RESTRICTED: Pause menu disabled during active certification.", "warning")
 			return
 			
 		set_paused(!is_paused)

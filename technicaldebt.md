@@ -34,13 +34,13 @@ This document identifies core architectural weaknesses (Technical Debt) and outl
 ### [MEDIUM] Animation Debt: First-Person Body Implementation
 *   **Status:** `PlayerController.gd` directly manages a full-body `Man.glb` instance with hardcoded animation strings (e.g., "HumanArmature|Man_Idle") and loops enabled programmatically.
 *   **Impact:** 
-    *   **Fragility:** Renaming animations in Blender will silently break player movement.
-    *   **Visuals:** Potential for "clipping" (seeing inside one's own neck) due to the "headless hack" approach.
-    *   **Architecture:** `PlayerController` now acts as a "God Object" handling input, movement, interaction, and animation.
+	*   **Fragility:** Renaming animations in Blender will silently break player movement.
+	*   **Visuals:** Potential for "clipping" (seeing inside one's own neck) due to the "headless hack" approach.
+	*   **Architecture:** `PlayerController` now acts as a "God Object" handling input, movement, interaction, and animation.
 *   **Requirement:** 
-    *   Extract animation logic to a `PlayerAnimator` class.
-    *   Move string constants to `GlobalConstants` or export variables.
-    *   Eventually separate "View Model" (arms) from "World Model" (body) for proper shadow/clipping handling.
+	*   Extract animation logic to a `PlayerAnimator` class.
+	*   Move string constants to `GlobalConstants` or export variables.
+	*   Eventually separate "View Model" (arms) from "World Model" (body) for proper shadow/clipping handling.
 
 ---
 

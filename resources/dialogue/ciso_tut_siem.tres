@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="DialogueDataResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/dialogue/DialogueDataResource.gd" id="1_dialogue_data"]
+
+[resource]
+script = ExtResource("1_dialogue_data")
+npc_name = "CISO (Remote)"
+portrait = "👔"
+lines = [
+    {"choices": [], "text": "This is the [color=cyan]SIEM Log Viewer[/color]. It aggregates every connection and file action within our network."},
+    {"choices": [], "text": "Search for the malicious IP mentioned in your briefing. When you find the match, [color=cyan]drag and drop[/color] that log onto the ticket."},
+    {"choices": [], "text": "Evidence is the only thing that separates a guess from a forensic fact. Document everything.", "wait_for_task": true}
+]

@@ -35,7 +35,9 @@ func show_for_ticket(ticket: TicketResource):
 	current_ticket = ticket
 	if ticket:
 		var is_compliant_valid = ValidationManager.can_complete_compliant(ticket)
-		compliant_button.disabled = not is_compliant_valid
+		compliant_button.disabled = not is_compliant_valid or not ValidationManager.is_resolution_allowed(ticket, "compliant")
+		efficient_button.disabled = not ValidationManager.is_resolution_allowed(ticket, "efficient")
+		emergency_button.disabled = not ValidationManager.is_resolution_allowed(ticket, "emergency")
 		
 		if is_compliant_valid:
 			description_label.text = "Select resolution strategy for " + ticket.ticket_id + ". Every decision impacts organizational security posture."

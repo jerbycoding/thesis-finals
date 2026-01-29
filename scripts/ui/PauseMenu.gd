@@ -38,6 +38,9 @@ func _on_quit_pressed():
 	if GameState:
 		GameState.set_paused(false)
 	
+	# Fix: Ensure mouse is visible at Title Screen
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	
 	if TransitionManager:
 		TransitionManager.change_scene_to("res://scenes/ui/TitleScreen.tscn")
 

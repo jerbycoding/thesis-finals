@@ -42,9 +42,9 @@ Expanding these areas will directly contribute to the "3-5 hours of unique gamep
 ### 7. NPCs & Dialogues (`DialogueDataResource`)
 *   **Importance:** NPCs provide narrative, guidance, and social consequences. Expanding their dialogue enhances the story, character interactions, and player feedback.
 *   **Expansion:**
-    *   **New Dialogue Chains:** Create new `DialogueDataResource.tres` files for existing NPCs. These can cover new topics, offer different choices, or provide contextual information linked to new tickets or events.
-    *   **Contextual Triggers:** Integrate these dialogues into `ShiftResource.event_sequence` as `npc_interaction` events.
-    *   **Relationship Impacts:** Design dialogues with `effect` dictionaries that alter `ConsequenceEngine.npc_relationships` to reflect player choices.
+	*   **New Dialogue Chains:** Create new `DialogueDataResource.tres` files for existing NPCs. These can cover new topics, offer different choices, or provide contextual information linked to new tickets or events.
+	*   **Contextual Triggers:** Integrate these dialogues into `ShiftResource.event_sequence` as `npc_interaction` events.
+	*   **Relationship Impacts:** Design dialogues with `effect` dictionaries that alter `ConsequenceEngine.npc_relationships` to reflect player choices.
 
 ### 8. Minigame Content Variations
 *   **Importance:** Existing minigames (e.g., `App_Decryption`, `CalibrationMinigame`) can offer more varied challenges.

@@ -1,9 +1,10 @@
-[gd_scene load_steps=9 format=3 uid="uid://c4xkfk6xo2ycf"]
+[gd_scene load_steps=10 format=3 uid="uid://c4xkfk6xo2ycf"]
 
 [ext_resource type="Script" uid="uid://b22xof43jxemv" path="res://scripts/2d/ComputerDesktop.gd" id="1_0kbkv"]
 [ext_resource type="Script" uid="uid://c28t6vqktfrln" path="res://scripts/2d/DesktopClock.gd" id="1_0l3ag"]
 [ext_resource type="Script" uid="uid://cbi6smmdpx4yu" path="res://scripts/2d/ExitButton.gd" id="2_0kbkv"]
 [ext_resource type="PackedScene" uid="uid://c8x6y708bab0e" path="res://scenes/ui/UnifiedHUD.tscn" id="3_unified"]
+[ext_resource type="Texture2D" uid="uid://h3tu8o7rvs7x" path="res://assets/icons/siem.png" id="4_i1hx7"]
 [ext_resource type="Theme" uid="uid://dny3rlbltexc7" path="res://assets/themes/EnterpriseTheme.tres" id="4_theme"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_TopBar"]
@@ -303,7 +304,7 @@ custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 tooltip_text = "SIEM Log Viewer"
 theme_override_font_sizes/font_size = 24
-text = "📊"
+icon = ExtResource("4_i1hx7")
 flat = true
 
 [node name="Email_Icon" type="Button" parent="BottomDock/Margin/DockIcons"]

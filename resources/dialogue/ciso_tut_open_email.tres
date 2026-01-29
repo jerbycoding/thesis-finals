@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="DialogueDataResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/dialogue/DialogueDataResource.gd" id="1_dialogue_data"]
+
+[resource]
+script = ExtResource("1_dialogue_data")
+npc_name = "CISO (Remote)"
+portrait = "👔"
+lines = [
+    {"choices": [], "text": "Incident context confirmed. However, we need specific forensic indicators before we can search the logs."},
+    {"choices": [], "text": "Open the [color=cyan]Email Analyzer[/color] from your dock. I've sent a technical briefing to your inbox.", "wait_for_task": true}
+]

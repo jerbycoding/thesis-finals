@@ -6,6 +6,10 @@ var all_emails: Array[EmailResource] = []
 var active_emails: Array[EmailResource] = [] # Only these are shown in the app
 var processed_emails: Array[String] = []  # Email IDs that have been processed
 
+## Optional filter to restrict which emails can be revealed.
+## signature: func(email: EmailResource, ticket_id: String) -> bool
+var active_filter
+
 const EMAIL_DIR = "res://resources/emails/"
 
 func _ready():
@@ -34,17 +38,23 @@ func _prepare_library():
 
 func reveal_emails_for_ticket(ticket_id: String):
 	print("📧 EmailSystem: reveal_emails_for_ticket(%s)" % (ticket_id if not ticket_id.is_empty() else "GENERIC"))
+	
 	var count = 0
 	for email in all_emails:
-		# Match if:
-		# 1. Exact ticket ID match
-		# 2. Email is GENERIC (always show noise)
-		# 3. Request is for GENERIC and email is orphaned
-		var is_exact_match = not ticket_id.is_empty() and email.related_ticket == ticket_id
-		var is_generic_email = email.related_ticket == "GENERIC"
-		var email_is_orphaned = (email.related_ticket == "" or email.related_ticket == "NONE")
+		var should_reveal = false
 		
-		if is_exact_match or is_generic_email or (ticket_id == "" and email_is_orphaned):
+		if active_filter != null:
+			should_reveal = active_filter.call(email, ticket_id)
+		else:
+			# DEFAULT REVEAL LOGIC
+			var is_exact_match = not ticket_id.is_empty() and email.related_ticket == ticket_id
+			var is_generic_email = email.related_ticket == "GENERIC"
+			var email_is_orphaned = (email.related_ticket == "" or email.related_ticket == "NONE")
+			
+			if is_exact_match or is_generic_email or (ticket_id == "" and email_is_orphaned):
+				should_reveal = true
+		
+		if should_reveal:
 			if email not in active_emails:
 				active_emails.append(email)
 				EventBus.email_added.emit(email)
@@ -53,6 +63,11 @@ func reveal_emails_for_ticket(ticket_id: String):
 	
 	if count > 0:
 		print("📧 EmailSystem: Revealed ", count, " new emails")
+
+func clear_active_data():
+	print("📧 EmailSystem: Purging all active email data.")
+	active_emails.clear()
+	processed_emails.clear()
 
 func add_email(email: EmailResource):
 	if not email: return

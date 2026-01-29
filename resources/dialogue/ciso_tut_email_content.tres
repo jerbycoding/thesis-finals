@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="DialogueDataResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/dialogue/DialogueDataResource.gd" id="1_dialogue_data"]
+
+[resource]
+script = ExtResource("1_dialogue_data")
+npc_name = "CISO (Remote)"
+portrait = "👔"
+lines = [
+    {"choices": [], "text": "Locate the email from the [color=cyan]Instructor[/color] regarding the unauthorized access incident."},
+    {"choices": [], "text": "Note the malicious IP mentioned: [color=cyan]192.168.100.50[/color]. Select the email to confirm you've identified the target.", "wait_for_task": true}
+]

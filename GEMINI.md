@@ -12,33 +12,33 @@ The core concept places the player in the role of a Security Operations Center (
 *   **Event-Driven Architecture:** The project has evolved to use a centralized `EventBus` singleton. This decouples core managers, allowing them to react to game events (like ticket completion or host isolation) without direct dependencies on each other.
 *   **Performance Optimization:** UI-heavy tools like the SIEM Log Viewer use a `UIObjectPool` to manage and reuse list entries, ensuring smooth performance even when handling hundreds of simulated logs.
 *   **Autoload Singletons:** The project relies on globally accessible singleton scripts (found in the `autoload/` directory) to manage core systems:
-    *   `ArchetypeAnalyzer`: Determines the player's "analyst archetype" (e.g., 'Cowboy', 'By-the-Book') by deriving metrics from the `ConsequenceEngine` choice history.
-    *   `AudioManager`: Manages playback of music and sound effects, with semantic helpers for UI and notifications.
-    *   `ConfigManager`: Manages persistent user settings (Volume, Display) saved in `user://settings.cfg`.
-    *   `ConsequenceEngine`: The source of truth for player choices; logs history and triggers delayed, cascading consequences, including "Kill Chain" escalations.
-    *   `CorporateVoice`: Provides a library of corporate-toned phrases and templates for consistent narrative style.
-    *   `DebugManager`: Provides hotkey jumps (F1-F10) for shift testing and manual state manipulation.
-    *   `DesktopWindowManager`: Manages the lifecycle, Z-ordering, and snapping of desktop application windows.
-    *   `DialogueManager`: Centralized system for NPC dialogue flow, display, and choice-based scene transitions.
-    *   `EmailSystem`: Backend manager for the email client tool, including discovery and threat processing.
-    *   `EventBus`: The central hub for global signals, reducing coupling between managers.
-    *   `FPSManager`: Persistent overlay for real-time performance tracking.
-    *   `GameState`: Manages the current game mode (3D, 2D, or Dialogue) and pause state.
-    *   `GlobalConstants`: Central authority for shared constants, event IDs, and severity enums.
-    *   `HeatManager`: Manages difficulty scaling and "Vulnerability Inheritance," where unresolved risks from previous tickets impact future ones.
-    *   `IntegrityManager`: Manages organizational "HP" (Stability), handling decay rates and integrity-based failure states.
-    *   `LogSystem`: Backend manager for the SIEM log viewer, featuring a ring-buffer-style history to manage memory.
-    *   `NarrativeDirector`: Manages scripted story flow (Shifts 1-5 + Weekends), NPC interactions, and shift report generation.
-    *   `NetworkState`: Single source of truth for host information (IPs, Status, Criticality) utilizing a resource-driven registry.
-    *   `NotificationManager`: Handles display and queuing of notification toasts on the desktop.
-    *   `SaveSystem`: Manages JSON-based serialization of player metrics, world state, and ticket progress.
-    *   `TerminalSystem`: Backend for the command-line tool, including command parsing, tracing, and host isolation.
-    *   `TicketManager`: Handles the lifecycle of security incidents, managing timers and ambient noise tickets.
-    *   `TimeManager`: Centralizes game timers to ensure consistency across scene transitions.
-    *   `TransitionManager`: Manages visual fades and state transitions between 3D world and 2D desktop.
-    *   `TutorialManager`: Manages the guided onboarding experience for the "Training Simulation."
-    *   `ValidationManager`: Central authority for gameplay rules (e.g., verifying evidence before a compliant closure).
-    *   `VariableRegistry`: The engine for "Procedural Truth," generating consistent technical context (IPs, Hostnames, Victim names) across all tools for each incident.
+	*   `ArchetypeAnalyzer`: Determines the player's "analyst archetype" (e.g., 'Cowboy', 'By-the-Book') by deriving metrics from the `ConsequenceEngine` choice history.
+	*   `AudioManager`: Manages playback of music and sound effects, with semantic helpers for UI and notifications.
+	*   `ConfigManager`: Manages persistent user settings (Volume, Display) saved in `user://settings.cfg`.
+	*   `ConsequenceEngine`: The source of truth for player choices; logs history and triggers delayed, cascading consequences, including "Kill Chain" escalations.
+	*   `CorporateVoice`: Provides a library of corporate-toned phrases and templates for consistent narrative style.
+	*   `DebugManager`: Provides hotkey jumps (F1-F10) for shift testing and manual state manipulation.
+	*   `DesktopWindowManager`: Manages the lifecycle, Z-ordering, and snapping of desktop application windows.
+	*   `DialogueManager`: Centralized system for NPC dialogue flow, display, and choice-based scene transitions.
+	*   `EmailSystem`: Backend manager for the email client tool, including discovery and threat processing.
+	*   `EventBus`: The central hub for global signals, reducing coupling between managers.
+	*   `FPSManager`: Persistent overlay for real-time performance tracking.
+	*   `GameState`: Manages the current game mode (3D, 2D, or Dialogue) and pause state.
+	*   `GlobalConstants`: Central authority for shared constants, event IDs, and severity enums.
+	*   `HeatManager`: Manages difficulty scaling and "Vulnerability Inheritance," where unresolved risks from previous tickets impact future ones.
+	*   `IntegrityManager`: Manages organizational "HP" (Stability), handling decay rates and integrity-based failure states.
+	*   `LogSystem`: Backend manager for the SIEM log viewer, featuring a ring-buffer-style history to manage memory.
+	*   `NarrativeDirector`: Manages scripted story flow (Shifts 1-5 + Weekends), NPC interactions, and shift report generation.
+	*   `NetworkState`: Single source of truth for host information (IPs, Status, Criticality) utilizing a resource-driven registry.
+	*   `NotificationManager`: Handles display and queuing of notification toasts on the desktop.
+	*   `SaveSystem`: Manages JSON-based serialization of player metrics, world state, and ticket progress.
+	*   `TerminalSystem`: Backend for the command-line tool, including command parsing, tracing, and host isolation.
+	*   `TicketManager`: Handles the lifecycle of security incidents, managing timers and ambient noise tickets.
+	*   `TimeManager`: Centralizes game timers to ensure consistency across scene transitions.
+	*   `TransitionManager`: Manages visual fades and state transitions between 3D world and 2D desktop.
+	*   `TutorialManager`: Manages the guided onboarding experience for the "Training Simulation."
+	*   `ValidationManager`: Central authority for gameplay rules (e.g., verifying evidence before a compliant closure).
+	*   `VariableRegistry`: The engine for "Procedural Truth," generating consistent technical context (IPs, Hostnames, Victim names) across all tools for each incident.
 
 ### Data Types (Resources):
 
@@ -96,8 +96,8 @@ addons\gdUnit4\runtest.cmd --godot_bin "C:\Godot 4\Godot 4.exe" -a "tests/unit/"
 *   **Tests:** 2
 *   **Duration:** 175ms
 *   **Key Coverage:** 
-    *   `test_full_shift_chain_progression`: Verified linear progression from Monday through Sunday.
-    *   `test_briefing_ids_are_assigned`: Verified all shift resources have associated briefing dialogues.
+	*   `test_full_shift_chain_progression`: Verified linear progression from Monday through Sunday.
+	*   `test_briefing_ids_are_assigned`: Verified all shift resources have associated briefing dialogues.
 
 ### Key File Locations:
 

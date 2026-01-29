@@ -64,6 +64,9 @@ func _on_node_pressed(host: HostResource):
 	selected_host = host
 	_update_inspector(host)
 	
+	# Signal for tutorial verification
+	EventBus.host_selected.emit(host)
+	
 	# Visual selection on map
 	for h in node_instances:
 		var inst = node_instances[h]

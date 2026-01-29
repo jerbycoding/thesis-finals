@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="TicketResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/tickets/TicketResource.gd" id="1_ticket"]
+
+[resource]
+script = ExtResource("1_ticket")
+ticket_id = "AUDIT-PROC-001"
+title = "AUDIT: Procedural Deviation Detected"
+description = "The automated monitoring system has flagged an unjustified host isolation event. 
+
+[b]Violation:[/b] Network isolation command executed without prior forensic scan/verification. 
+
+[b]Action Required:[/b] Re-examine the logs for the target host to justify the isolation post-facto. Attach the missing evidence to this audit report."
+severity = "Medium"
+category = "Audit"
+steps = ["Locate original justification logs", "Verify threat presence", "Attach logs and close audit"]
+required_tool = "siem"
+base_time = 300.0
+hidden_risks = []
+required_log_ids = ["LOG-TRN-002"]
+kill_chain_path = ""
+kill_chain_stage = 0
+

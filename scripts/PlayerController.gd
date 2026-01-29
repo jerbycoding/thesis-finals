@@ -9,6 +9,7 @@ var near_computer = null
 var near_npc = null
 var movement_enabled = true
 var carried_object: Node3D = null
+var current_target_height: float = 1.75 # Default to eye height
 
 @onready var carry_marker: Marker3D = %CarryMarker3D
 @onready var tablet_hud: Control = $TabletHUD
@@ -18,15 +19,19 @@ var carried_object: Node3D = null
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	EventBus.game_mode_changed.connect(_on_game_mode_changed)
+	# Initialize POV
+	$CameraPivot/Camera3D.fov = 80
 
 func _on_game_mode_changed(mode):
 	if mode == GameState.GameMode.MODE_2D or mode == GameState.GameMode.MODE_DIALOGUE or mode == GameState.GameMode.MODE_MINIGAME:
 		movement_enabled = false
+		current_target_height = SEATED_HEIGHT
 		EventBus.request_prompt.emit("", false)
 		if animator and animator.has_method("force_idle"):
 			animator.force_idle()
 	else:
 		movement_enabled = true
+		current_target_height = EYE_HEIGHT
 
 func _try_toggle_tablet():
 	var is_minigame_mode = false
@@ -69,15 +74,21 @@ func _physics_process(_delta):
 	
 	# Update animation state
 	if animator and animator.has_method("update_movement"):
-		animator.update_movement(velocity, Input.is_action_pressed("sprint"))
+		animator.update_movement(velocity, Input.is_action_pressed("sprint"), carried_object != null)
 
 var tablet_active: bool = false
 var bob_time = 0.0
-const BOB_FREQ = 2.4
-const BOB_AMP = 0.05
+const BOB_FREQ = 2.0 # Slightly slower for more "weight"
+const BOB_AMP = 0.04 # Slightly subtler
+const EYE_HEIGHT = 1.75 # True eye level
+const SEATED_HEIGHT = 1.35 # Seated eye level
 
 func _process(delta):
-	if not movement_enabled: return
+	if not movement_enabled: 
+		# Smoothly lerp to target height even if not moving (for sitting down)
+		$CameraPivot/Camera3D.position.y = lerp($CameraPivot/Camera3D.position.y, current_target_height, delta * 5.0)
+		return
+		
 	_handle_headbob(delta)
 	
 	if Input.is_action_just_pressed("ui_focus_next"): _try_toggle_tablet()
@@ -87,16 +98,17 @@ func _process(delta):
 		elif near_computer: TransitionManager.enter_desktop_mode(near_computer)
 		elif near_npc:
 			if near_npc.has_method("start_dialogue"): near_npc.start_dialogue("default")
-			else: _pickup_object()
+			# EXPLICIT CHECK: Only pick up if it belongs to 'carriable' group
+			elif near_npc.is_in_group("carriable"): _pickup_object()
 
 func _handle_headbob(delta):
 	if velocity.length() > 0.1:
 		bob_time += delta * velocity.length() * (sprint_multiplier if Input.is_action_pressed("sprint") else 1.0)
-		var target_y = 1.55 + sin(bob_time * BOB_FREQ) * BOB_AMP
+		var target_y = current_target_height + sin(bob_time * BOB_FREQ) * BOB_AMP
 		$CameraPivot/Camera3D.position.y = lerp($CameraPivot/Camera3D.position.y, target_y, delta * 10.0)
 	else:
 		bob_time = 0.0
-		$CameraPivot/Camera3D.position.y = lerp($CameraPivot/Camera3D.position.y, 1.55, delta * 10.0)
+		$CameraPivot/Camera3D.position.y = lerp($CameraPivot/Camera3D.position.y, current_target_height, delta * 10.0)
 
 func _pickup_object():
 	if not near_npc or carried_object: return
@@ -104,7 +116,8 @@ func _pickup_object():
 	carried_object.get_parent().remove_child(carried_object)
 	carry_marker.add_child(carried_object)
 	carried_object.position = Vector3.ZERO
-	carried_object.rotation = Vector3.ZERO
+	# Add a slight "held" tilt
+	carried_object.rotation = Vector3(deg_to_rad(-15), deg_to_rad(10), 0)
 	if carried_object.has_node("CollisionShape3D"): carried_object.get_node("CollisionShape3D").disabled = true
 	speed *= 0.75
 	EventBus.request_prompt.emit("Drop " + carried_object.name, true)

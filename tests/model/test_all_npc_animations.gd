@@ -7,7 +7,8 @@ func test_inspect_all_npc_models():
 		"res://assets/npc/Business Man.glb",
 		"res://assets/npc/Hoodie Character.glb",
 		"res://assets/npc/Woman.glb",
-		"res://assets/npc/Stylized Character.glb"
+		"res://assets/npc/Stylized Character.glb",
+		"res://assets/npc/Man.glb"
 	]
 	
 	print("\n===================================================")

@@ -1,25 +1,74 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=11 format=3]
 
 [ext_resource type="Script" path="res://scripts/3d/CarryableHardware.gd" id="1_carry"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_nvme"]
-albedo_color = Color(1, 0.5, 0, 1) # Orange
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_PCB"]
+albedo_color = Color(0.08, 0.08, 0.08, 1)
+roughness = 0.8
+
+[sub_resource type="BoxMesh" id="BoxMesh_PCB"]
+material = SubResource("StandardMaterial3D_PCB")
+size = Vector3(0.1, 0.01, 0.35)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_Chip"]
+albedo_color = Color(0, 0, 0, 1)
+metallic = 0.2
+roughness = 0.3
+
+[sub_resource type="BoxMesh" id="BoxMesh_Chip"]
+material = SubResource("StandardMaterial3D_Chip")
+size = Vector3(0.08, 0.01, 0.06)
+
+[sub_resource type="BoxMesh" id="BoxMesh_Controller"]
+material = SubResource("StandardMaterial3D_Chip")
+size = Vector3(0.06, 0.015, 0.06)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_Gold"]
+albedo_color = Color(1, 0.84, 0, 1)
 metallic = 1.0
 roughness = 0.2
 
-[sub_resource type="BoxMesh" id="BoxMesh_nvme"]
-material = SubResource("StandardMaterial3D_nvme")
-size = Vector3(0.1, 0.02, 0.4)
+[sub_resource type="BoxMesh" id="BoxMesh_Pins"]
+material = SubResource("StandardMaterial3D_Gold")
+size = Vector3(0.09, 0.005, 0.02)
 
-[sub_resource type="BoxShape3D" id="BoxShape_nvme"]
-size = Vector3(0.1, 0.05, 0.4)
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_Label"]
+albedo_color = Color(0.7, 0.7, 0.7, 1)
+roughness = 0.9
 
-[node name="Prop_NVMe_Drive" type="CharacterBody3D"]
+[sub_resource type="BoxMesh" id="BoxMesh_Label"]
+material = SubResource("StandardMaterial3D_Label")
+size = Vector3(0.07, 0.002, 0.12)
+
+[sub_resource type="BoxShape3D" id="BoxShape_NVMe"]
+size = Vector3(0.1, 0.03, 0.35)
+
+[node name="Prop_NVMe_Drive" type="CharacterBody3D" groups=["carriable"]]
 script = ExtResource("1_carry")
 hardware_type = "nvme_drive"
 
-[node name="Mesh" type="MeshInstance3D" parent="."]
-mesh = SubResource("BoxMesh_nvme")
+[node name="PCB" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_PCB")
+
+[node name="Chip_NAND1" type="MeshInstance3D" parent="PCB"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.01, -0.05)
+mesh = SubResource("BoxMesh_Chip")
+
+[node name="Chip_NAND2" type="MeshInstance3D" parent="PCB"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.01, 0.03)
+mesh = SubResource("BoxMesh_Chip")
+
+[node name="Chip_Controller" type="MeshInstance3D" parent="PCB"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.01, -0.13)
+mesh = SubResource("BoxMesh_Controller")
+
+[node name="GoldPins" type="MeshInstance3D" parent="PCB"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.17)
+mesh = SubResource("BoxMesh_Pins")
+
+[node name="Label" type="MeshInstance3D" parent="PCB"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.011, 0.1)
+mesh = SubResource("BoxMesh_Label")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-shape = SubResource("BoxShape_nvme")
+shape = SubResource("BoxShape_NVMe")

@@ -183,8 +183,11 @@ func _create_ticket_timer(ticket: TicketResource):
 	var base_time = max(0.1, ticket.base_time)
 	var final_time = base_time
 	
+	# TUTORIAL SAFETY: Remove all time pressure
+	if GameState and GameState.is_guided_mode:
+		final_time = 9999.0 
 	# HEAT SCALING: Reduce time allowed based on week
-	if HeatManager:
+	elif HeatManager:
 		final_time = HeatManager.get_scaled_time(base_time)
 	
 	var timer = Timer.new()
@@ -255,6 +258,21 @@ func _load_initial_tickets():
 
 	print("📋 Total tickets loaded: ", active_tickets.size())
 
+
+func clear_active_data():
+	print("📋 TicketManager: Purging all active tickets and timers.")
+	# Stop and remove all timers
+	for tid in active_timers:
+		var timer = active_timers[tid]
+		if is_instance_valid(timer):
+			timer.stop()
+			timer.queue_free()
+	active_timers.clear()
+	
+	active_tickets.clear()
+	# We don't necessarily clear completed_tickets here as they are history, 
+	# but for a hard shift reset, it's safer to clear everything.
+	completed_tickets.clear()
 
 func add_ticket(ticket: TicketResource):
 	if not ticket:

@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://b8yay001a2b3c"]
 
-[ext_resource type="Script" path="res://scripts/2d/NotificationToast.gd" id="1_notif"]
+[ext_resource type="Script" uid="uid://c7w0aibcjpmal" path="res://scripts/2d/NotificationToast.gd" id="1_notif"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Badge"]
 bg_color = Color(0.992157, 0.992157, 0.992157, 1)

@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="EmailResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/EmailResource.gd" id="1_email"]
+
+[resource]
+script = ExtResource("1_email")
+email_id = "EMAIL-TRN-001"
+sender = "SOC Instructor"
+subject = "TRAINING: Incident Investigation SOP"
+body = "Analyst,\n\nFor this training module, we are investigating a possible unauthorized access on YOUR workstation.\n\nCheck the SIEM for any connections from IP 192.168.100.50. If found, attach it to your active ticket TRN-001.\n\nGood luck."
+attachments = []
+headers = {"status": {"dkim": "PASS", "dmarc": "PASS", "spf": "PASS"}}
+is_malicious = false
+is_urgent = true
+clues = []
+related_ticket = "TRN-001"
+suspicious_ip = "192.168.100.50"
+suspicious_domain = ""
+

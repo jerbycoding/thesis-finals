@@ -4,12 +4,13 @@
 
 [resource]
 script = ExtResource("1_shift")
-shift_name = "Tutorial: Basic Training"
+shift_name = "Tutorial: Tier 1 Certification"
 shift_id = "shift_tutorial"
 briefing_dialogue_id = "tutorial_intro"
 event_sequence = [
-	{"time": 10, "event": "spawn_maint", "type": "spawn_ticket", "ticket_id": "SYS-MAINT-GENERIC"},
+	{"time": 5, "event": "spawn_trn", "type": "spawn_ticket", "ticket_id": "TRN-001"},
 	{"time": 180, "event": "ciso_end", "type": "npc_interaction", "npc_id": "ciso", "dialogue_id": "shift_end"},
 	{"time": 200, "event": "shift_end", "type": "shift_end"}
 ]
 random_event_pool = []
+next_shift_id = "shift_monday"

@@ -17,6 +17,7 @@ const DELTA_EFFICIENT = -2.0
 const DELTA_EMERGENCY = -5.0
 const DELTA_TIMEOUT = -10.0
 const DELTA_BREACH = -40.0
+const DELTA_VIOLATION = -15.0
 
 const THRESHOLD_CRITICAL = 0.0
 const THRESHOLD_WARNING = 20.0
@@ -89,6 +90,9 @@ func _on_consequence_triggered(type: String, _details: Dictionary):
 	if type == GlobalConstants.CONSEQUENCE_ID.DATA_LOSS or type == GlobalConstants.CONSEQUENCE_ID.MAJOR_BREACH:
 		print("IntegrityManager: Major Breach -> Delta: %+.1f" % DELTA_BREACH)
 		_apply_change(DELTA_BREACH)
+	elif type == GlobalConstants.CONSEQUENCE_ID.PROCEDURAL_VIOLATION:
+		print("IntegrityManager: Procedural Violation -> Delta: %+.1f" % DELTA_VIOLATION)
+		_apply_change(DELTA_VIOLATION)
 
 func _on_shift_started(_id):
 	start_decay()

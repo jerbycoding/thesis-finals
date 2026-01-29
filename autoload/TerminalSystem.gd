@@ -182,12 +182,16 @@ func _cmd_isolate(args: Array) -> Dictionary:
 		return {"success": true, "output": CorporateVoice.get_formatted_phrase("host_already_isolated", {"hostname": hostname})}
 
 	# --- Perform Isolation ---
-	NetworkState.update_host_state(hostname, {"isolated": true})
+	NetworkState.update_host_state(hostname, {"isolated": true, "status": "ISOLATED"})
 	var output = "[b]" + CorporateVoice.get_formatted_phrase("isolating_host", {"hostname": hostname}) + "[/b]\n"
 	output += "Disconnecting network interfaces...\n"
 	output += CorporateVoice.get_formatted_phrase("host_quarantined", {"hostname": hostname}) + "\n"
 
 	# --- Trigger Consequences ---
+	var was_scanned = host_info.get("scanned", false)
+	if not was_scanned:
+		EventBus.consequence_triggered.emit(GlobalConstants.CONSEQUENCE_ID.PROCEDURAL_VIOLATION, {"hostname": hostname, "reason": "unjustified_isolation"})
+
 	# If host was critical, trigger a service outage.
 	if host_info.get("critical", false):
 		output += "\n[color=red]" + CorporateVoice.get_formatted_phrase("critical_server_offline", {"hostname": hostname}) + "[/color]"

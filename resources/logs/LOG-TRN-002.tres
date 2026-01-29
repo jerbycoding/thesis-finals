@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="LogResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/logs/LogResource.gd" id="1_log"]
+
+[resource]
+script = ExtResource("1_log")
+log_id = "LOG-TRN-002"
+timestamp = "10:30:00"
+source = "IDS"
+category = "Security"
+message = "MALWARE_BEACON: Active infection confirmed on WORKSTATION-T."
+severity = 5
+related_ticket = "TRN-002"
+ip_address = "10.0.99.1"
+hostname = "WORKSTATION-T"
+is_revealed = false

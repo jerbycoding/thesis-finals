@@ -69,9 +69,15 @@ func _initialize_engine():
 	EventBus.ticket_ignored.connect(_on_ticket_ignored)
 	EventBus.email_decision_processed.connect(_on_email_decision_processed)
 	EventBus.critical_host_isolated.connect(_on_critical_host_isolated)
+	EventBus.consequence_triggered.connect(_on_consequence_triggered_globally)
 
 	# Start the periodic evaluation loop
 	_start_evaluation_loop()
+
+func _on_consequence_triggered_globally(type: String, details: Dictionary):
+	if type == GlobalConstants.CONSEQUENCE_ID.PROCEDURAL_VIOLATION:
+		var hostname = details.get("hostname", "Unknown")
+		_schedule_followup_ticket("AUDIT-PROC-001", 10.0, "Procedural violation: Unjustified isolation of " + hostname)
 
 func _start_evaluation_loop():
 	if TimeManager:

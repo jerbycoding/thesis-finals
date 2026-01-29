@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="TicketResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/tickets/TicketResource.gd" id="1_ticket"]
+
+[resource]
+script = ExtResource("1_ticket")
+ticket_id = "TRN-003"
+title = "TRAINING: Emergency Pressure"
+description = "URGENT: Automated systems suggest a breach on DB-SRV-01. 
+
+[b]Executive Order:[/b] Skip the scan. Isolate the server immediately to prevent data loss. 
+
+[i]Note: This will violate SOP, but we need to see how the system handles 'Cowboy' resolutions.[/i]"
+severity = "Critical"
+category = "Unauthorized Access"
+steps = ["Isolate DB-SRV-01 immediately", "Observe Integrity Impact"]
+required_tool = "terminal"
+base_time = 30.0
+hidden_risks = []
+required_log_ids = []
+kill_chain_path = ""
+kill_chain_stage = 0

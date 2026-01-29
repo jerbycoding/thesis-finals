@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="LogResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/logs/LogResource.gd" id="1_log"]
+
+[resource]
+script = ExtResource("1_log")
+log_id = "LOG-TRN-001"
+timestamp = "09:00:00"
+source = "Workstation-C"
+category = "Security"
+message = "UNAUTHORIZED_ACCESS: Connection established from malicious IP 192.168.100.50."
+severity = 5
+related_ticket = "TRN-001"
+ip_address = "192.168.100.50"
+hostname = "WORKSTATION-C"
+is_revealed = false

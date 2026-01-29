@@ -31,7 +31,12 @@ func _process(delta):
 			integrity_bar.modulate = GlobalConstants.UI_COLORS.SUCCESS_FLAT
 
 	# Update Timer
-	if NarrativeDirector and NarrativeDirector.is_shift_active():
+	if GameState and GameState.is_guided_mode:
+		timer_label.visible = false
+		status_label.text = "MODE: CERTIFICATION"
+		status_label.add_theme_color_override("font_color", GlobalConstants.UI_COLORS.INFO_BLUE)
+	elif NarrativeDirector and NarrativeDirector.is_shift_active():
+		timer_label.visible = true
 		var time_elapsed = NarrativeDirector.get_shift_timer()
 		var shift_duration = NarrativeDirector.get_current_shift_duration()
 		var time_remaining = max(0, shift_duration - time_elapsed)

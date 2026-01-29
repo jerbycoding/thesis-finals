@@ -10,6 +10,17 @@ func can_complete_compliant(ticket: TicketResource) -> bool:
 		return false
 	return ticket.has_sufficient_evidence()
 
+## Checks if a specific resolution type is allowed for a ticket.
+func is_resolution_allowed(ticket: TicketResource, type: String) -> bool:
+	if not ticket: return false
+	
+	# During Tutorial / Guided Mode, force 'compliant' only for training tickets
+	if GameState and GameState.is_guided_mode:
+		if ticket.ticket_id.begins_with("TRN-"):
+			return type == GlobalConstants.COMPLETION_TYPE.COMPLIANT
+			
+	return true
+
 # --- Email Validation ---
 
 ## Checks if the player has performed enough investigation to act on an email.
@@ -24,6 +35,10 @@ func can_action_email(inspection_state: Dictionary) -> bool:
 
 ## Checks if a host is authorized for isolation (must be scanned first).
 func can_isolate_host(hostname: String) -> bool:
+	# During tutorial, allow failure (don't block the button/command)
+	if GameState and GameState.is_guided_mode:
+		return true
+		
 	if not NetworkState:
 		return false
 	var host_info = NetworkState.get_host_state(hostname)

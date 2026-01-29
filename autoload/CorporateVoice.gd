@@ -103,7 +103,8 @@ static var notifications = {
 	"hidden_risk_attachment_scan_missed": "FAILURE: Attachment Scan Skipped",
 	"kill_chain_escalation": "ESCALATION: {path} -> Stage {stage}",
 	"followup_ticket_triggered": "Follow-up Investigation Opened",
-	"followup_ticket_scheduled": "Follow-up scheduled in {delay}s"
+	"followup_ticket_scheduled": "Follow-up scheduled in {delay}s",
+	"procedural_violation": "WARNING: Procedural Violation Recorded"
 }
 
 static func get_phrase(key: String) -> String:

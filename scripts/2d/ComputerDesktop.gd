@@ -35,6 +35,10 @@ func _ready():
 	if NotificationManager:
 		NotificationManager.set_desktop(self)
 	
+	# Notify Manager that desktop is ready for highlighting
+	if TutorialManager and TutorialManager.is_tutorial_active:
+		TutorialManager._update_visual_focus()
+	
 	print("DesktopManager ready - Window system active")
 
 func _setup_container_connections(container: Control):
@@ -58,9 +62,6 @@ func _setup_container_connections(container: Control):
 			
 			print("Connected icon: ", child.name, " -> ", app_name)
 
-func _setup_app_connections():
-	pass # Deprecated in favor of _setup_container_connections
-
 func _on_app_icon_hover():
 	if AudioManager:
 		AudioManager.play_ui_hover()
@@ -73,7 +74,7 @@ func _on_app_icon_pressed(app_name: String):
 		DesktopWindowManager.open_app(app_name)
 		# Clear glow when app is opened (if it was actually opened)
 		if DesktopWindowManager._find_window_by_app(app_name):
-			_set_icon_glow(app_name, false)
+			set_icon_glow(app_name, false)
 
 func _on_ticket_added(ticket_data: TicketResource):
 	print("New ticket in queue: ", ticket_data.title)
@@ -91,7 +92,7 @@ func _on_ticket_added(ticket_data: TicketResource):
 		
 		# ICON GLOW: Apply glow to relevant tool icon
 		if ticket_data.required_tool != "none":
-			_set_icon_glow(ticket_data.required_tool, true)
+			set_icon_glow(ticket_data.required_tool, true)
 			
 		# DYNAMIC AUTHORIZATION: Grant permission for restricted apps based on data
 		for app_name in DesktopWindowManager.RESTRICTED_APPS:
@@ -106,7 +107,7 @@ func _on_ticket_added(ticket_data: TicketResource):
 				if btn:
 					btn.tooltip_text = "AUTHORIZATION GRANTED: High-Priority Incident in Progress"
 
-func _set_icon_glow(app_name: String, active: bool):
+func set_icon_glow(app_name: String, active: bool):
 	var icon_name = app_name.capitalize() + "_Icon"
 	# Handle cases like SIEM (all caps)
 	if app_name == "siem": icon_name = "SIEM_Icon"
@@ -132,13 +133,13 @@ func _set_icon_glow(app_name: String, active: bool):
 func _on_consequence_triggered(consequence_type: String, _details: Dictionary):
 	if consequence_type == "escalation":
 		print("Desktop: Escalation detected. Activating SIEM glow.")
-		_set_icon_glow("siem", true)
+		set_icon_glow("siem", true)
 
 func _on_ticket_completed(ticket: TicketResource, completion_type: String, time_taken: float):
 	print("Ticket completed: ", ticket.ticket_id, " as ", completion_type)
 	# Remove glow when ticket is solved
 	if ticket.required_tool != "none":
-		_set_icon_glow(ticket.required_tool, false)
+		set_icon_glow(ticket.required_tool, false)
 
 func _input(event):
 	# Close focused window with Escape

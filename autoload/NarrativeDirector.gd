@@ -140,6 +140,15 @@ func _schedule_next_event():
 		
 	if current_event_index < current_active_arc.size():
 		var next_event = current_active_arc[current_event_index]
+		
+		# TUTORIAL SAFETY: If we are in the tutorial, do not proceed to 'shift_end' 
+		# until the TutorialManager says we are finished.
+		if TutorialManager and TutorialManager.is_tutorial_active:
+			if next_event.get("type") == GlobalConstants.NARRATIVE_EVENT_TYPE.SHIFT_END:
+				if TutorialManager.current_step != TutorialManager.TutorialStep.COMPLETE:
+					# Hold the shift open!
+					return
+
 		if next_event.has("time"):
 			var current_elapsed = get_shift_timer()
 			var delay = max(0.01, next_event.time - current_elapsed)

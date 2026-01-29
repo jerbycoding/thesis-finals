@@ -30,6 +30,7 @@ func _spawn_hardware():
 	for i in range(config.nvme_to_spawn):
 		if current_spawn_idx < spawn_points.size():
 			var nvme = nvme_scene.instantiate()
+			if not nvme.is_in_group("carriable"): nvme.add_to_group("carriable")
 			spawn_points[current_spawn_idx].add_child(nvme)
 			print("HardwareSpawner: Spawned NVMe at ", spawn_points[current_spawn_idx].name)
 			current_spawn_idx += 1
@@ -38,6 +39,7 @@ func _spawn_hardware():
 	for i in range(config.sata_to_spawn):
 		if current_spawn_idx < spawn_points.size():
 			var sata = sata_scene.instantiate()
+			if not sata.is_in_group("carriable"): sata.add_to_group("carriable")
 			spawn_points[current_spawn_idx].add_child(sata)
 			print("HardwareSpawner: Spawned SATA at ", spawn_points[current_spawn_idx].name)
 			current_spawn_idx += 1
@@ -46,6 +48,7 @@ func _spawn_hardware():
 	for i in range(config.decoy_nvme_to_spawn):
 		if current_spawn_idx < spawn_points.size():
 			var decoy = nvme_scene.instantiate()
+			if not decoy.is_in_group("carriable"): decoy.add_to_group("carriable")
 			decoy.set_meta("is_decoy", true) # Mark as decoy
 			spawn_points[current_spawn_idx].add_child(decoy)
 			print("HardwareSpawner: Spawned Decoy NVMe at ", spawn_points[current_spawn_idx].name)
@@ -55,6 +58,7 @@ func _spawn_hardware():
 	for i in range(config.decoy_sata_to_spawn):
 		if current_spawn_idx < spawn_points.size():
 			var decoy = sata_scene.instantiate()
+			if not decoy.is_in_group("carriable"): decoy.add_to_group("carriable")
 			decoy.set_meta("is_decoy", true) # Mark as decoy
 			spawn_points[current_spawn_idx].add_child(decoy)
 			print("HardwareSpawner: Spawned Decoy SATA at ", spawn_points[current_spawn_idx].name)
