@@ -10,29 +10,29 @@ decoy_sata_to_spawn = 2
 decoy_nvme_to_spawn = 1
 spawn_random_clutter = true
 socket_requirements = {
-"RACK_1": "nvme_drive",
-"RACK_2": "nvme_drive",
-"RACK_4": "sata_drive",
-"RACK_5": "sata_drive"
+"RACK_1": "server_blade",
+"RACK_2": "server_blade",
+"RACK_4": "server_blade",
+"RACK_5": "server_blade"
 }
 tasks = Array[Dictionary]([{
-"completes_on_hardware_type": "nvme_drive",
+"completes_on_hardware_type": "server_blade",
 "completes_on_socket_id": "RACK_1",
-"description": "Rebuild Rack 01 [NVMe]",
+"description": "Critical Node Recovery: Rack 01",
 "id": "rep_1"
 }, {
-"completes_on_hardware_type": "nvme_drive",
+"completes_on_hardware_type": "server_blade",
 "completes_on_socket_id": "RACK_2",
-"description": "Rebuild Rack 02 [NVMe]",
+"description": "Critical Node Recovery: Rack 02",
 "id": "rep_2"
 }, {
-"completes_on_hardware_type": "sata_drive",
+"completes_on_hardware_type": "server_blade",
 "completes_on_socket_id": "RACK_4",
-"description": "Rebuild Rack 04 [SATA]",
+"description": "Critical Node Recovery: Rack 04",
 "id": "rep_3"
 }, {
-"completes_on_hardware_type": "sata_drive",
+"completes_on_hardware_type": "server_blade",
 "completes_on_socket_id": "RACK_5",
-"description": "Rebuild Rack 05 [SATA]",
+"description": "Critical Node Recovery: Rack 05",
 "id": "rep_4"
 }])

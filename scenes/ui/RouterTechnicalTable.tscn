@@ -1,0 +1,82 @@
+[gd_scene load_steps=4 format=3 uid="uid://c8v2y708bab0g"]
+
+[sub_resource type="StyleBoxFlat" id="2"]
+bg_color = Color(0.98, 0.98, 0.98, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0, 0, 0, 1)
+
+[sub_resource type="GDScript" id="3"]
+script/source = "extends PanelContainer
+
+@onready var grid = %Grid
+
+func set_identity(data: Dictionary):
+	# Clear previous
+	for child in grid.get_children(): child.queue_free()
+	
+	_add_row(\"ASSET_ID\", data.get(\"node_id\", \"UNKNOWN\"))
+	_add_row(\"MODEL\", data.get(\"model\", \"N/A\"))
+	_add_row(\"MAC_ADDR\", data.get(\"mac_address\", \"--:--\"))
+	_add_row(\"SERIAL\", data.get(\"serial\", \"N/A\"))
+	_add_row(\"FIRMWARE\", data.get(\"firmware\", \"v0.0\"))
+	_add_row(\"UPTIME\", data.get(\"uptime\", \"0 Days\"))
+
+func _add_row(key: String, val: String):
+	var k_lbl = Label.new()
+	k_lbl.text = key
+	k_lbl.add_theme_color_override(\"font_color\", Color(0.4, 0.4, 0.4))
+	k_lbl.add_theme_font_size_override(\"font_size\", 9)
+	
+	var v_lbl = Label.new()
+	v_lbl.text = val
+	v_lbl.add_theme_color_override(\"font_color\", Color(0, 0, 0))
+	v_lbl.add_theme_font_size_override(\"font_size\", 10)
+	v_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	
+	grid.add_child(k_lbl)
+	grid.add_child(v_lbl)
+"
+
+[sub_resource type="StyleBoxFlat" id="1"]
+content_margin_left = 10.0
+content_margin_top = 5.0
+content_margin_right = 10.0
+content_margin_bottom = 5.0
+bg_color = Color(0, 0, 0, 1)
+
+[node name="RouterTechnicalTable" type="PanelContainer"]
+custom_minimum_size = Vector2(250, 0)
+theme_override_styles/panel = SubResource("2")
+script = SubResource("3")
+
+[node name="VBox" type="VBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Header" type="PanelContainer" parent="VBox"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("1")
+
+[node name="Title" type="Label" parent="VBox/Header"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 9
+text = "HARDWARE_ASSET_METADATA"
+horizontal_alignment = 1
+
+[node name="Margin" type="MarginContainer" parent="VBox"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="Grid" type="GridContainer" parent="VBox/Margin"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/h_separation = 20
+theme_override_constants/v_separation = 8
+columns = 2

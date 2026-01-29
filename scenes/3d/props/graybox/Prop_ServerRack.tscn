@@ -1,9 +1,46 @@
-[gd_scene load_steps=3 format=3 uid="uid://duwuugwisvmoc"]
-
-[ext_resource type="PackedScene" uid="uid://bf7we84m0pkf8" path="res://assets/props/graybox/server rack.glb" id="1_n3v34"]
+[gd_scene load_steps=11 format=3 uid="uid://duwuugwisvmoc"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_rack"]
-size = Vector3(1, 2.2, 1)
+size = Vector3(0.8, 2.2, 0.8)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_Chassis"]
+albedo_color = Color(0.1, 0.1, 0.1, 1)
+metallic = 0.6
+roughness = 0.3
+
+[sub_resource type="BoxMesh" id="BoxMesh_Pillar"]
+material = SubResource("StandardMaterial3D_Chassis")
+size = Vector3(0.05, 2.2, 0.05)
+
+[sub_resource type="BoxMesh" id="BoxMesh_Horizontal"]
+material = SubResource("StandardMaterial3D_Chassis")
+size = Vector3(0.8, 0.05, 0.05)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_Panels"]
+albedo_color = Color(0.08, 0.08, 0.08, 1)
+roughness = 0.8
+
+[sub_resource type="BoxMesh" id="BoxMesh_SidePanel"]
+material = SubResource("StandardMaterial3D_Panels")
+size = Vector3(0.01, 2.1, 0.7)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_Glass"]
+transparency = 1
+albedo_color = Color(0, 0, 0, 0.392157)
+metallic = 0.9
+roughness = 0.1
+
+[sub_resource type="BoxMesh" id="BoxMesh_Glass"]
+material = SubResource("StandardMaterial3D_Glass")
+size = Vector3(0.7, 2.1, 0.01)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_Accents"]
+albedo_color = Color(0.2, 0.2, 0.2, 1)
+metallic = 1.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_Rail"]
+material = SubResource("StandardMaterial3D_Accents")
+size = Vector3(0.02, 2.1, 0.02)
 
 [node name="Prop_ServerRack" type="StaticBody3D"]
 
@@ -11,5 +48,64 @@ size = Vector3(1, 2.2, 1)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0)
 shape = SubResource("BoxShape3D_rack")
 
-[node name="server rack" parent="." instance=ExtResource("1_n3v34")]
-transform = Transform3D(-0.0231958, 0, -0.499462, 0, 0.5, 0, 0.499462, 0, -0.0231958, -0.0372958, 0, 0)
+[node name="Frame" type="Node3D" parent="."]
+
+[node name="Pillar_FL" type="MeshInstance3D" parent="Frame"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.375, 1.1, 0.375)
+mesh = SubResource("BoxMesh_Pillar")
+
+[node name="Pillar_FR" type="MeshInstance3D" parent="Frame"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.375, 1.1, 0.375)
+mesh = SubResource("BoxMesh_Pillar")
+
+[node name="Pillar_BL" type="MeshInstance3D" parent="Frame"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.375, 1.1, -0.375)
+mesh = SubResource("BoxMesh_Pillar")
+
+[node name="Pillar_BR" type="MeshInstance3D" parent="Frame"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.375, 1.1, -0.375)
+mesh = SubResource("BoxMesh_Pillar")
+
+[node name="Top_F" type="MeshInstance3D" parent="Frame"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.175, 0.375)
+mesh = SubResource("BoxMesh_Horizontal")
+
+[node name="Top_B" type="MeshInstance3D" parent="Frame"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.175, -0.375)
+mesh = SubResource("BoxMesh_Horizontal")
+
+[node name="Bottom_F" type="MeshInstance3D" parent="Frame"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.025, 0.375)
+mesh = SubResource("BoxMesh_Horizontal")
+
+[node name="Bottom_B" type="MeshInstance3D" parent="Frame"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.025, -0.375)
+mesh = SubResource("BoxMesh_Horizontal")
+
+[node name="Panels" type="Node3D" parent="."]
+
+[node name="Side_L" type="MeshInstance3D" parent="Panels"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.39, 1.1, 0)
+mesh = SubResource("BoxMesh_SidePanel")
+
+[node name="Side_R" type="MeshInstance3D" parent="Panels"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.39, 1.1, 0)
+mesh = SubResource("BoxMesh_SidePanel")
+
+[node name="Back" type="MeshInstance3D" parent="Panels"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 1.1, -0.39)
+mesh = SubResource("BoxMesh_SidePanel")
+
+[node name="FrontDoor" type="MeshInstance3D" parent="Panels"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0.39)
+mesh = SubResource("BoxMesh_Glass")
+
+[node name="Rails" type="Node3D" parent="."]
+
+[node name="Rail_FL" type="MeshInstance3D" parent="Rails"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.3, 1.1, 0.3)
+mesh = SubResource("BoxMesh_Rail")
+
+[node name="Rail_FR" type="MeshInstance3D" parent="Rails"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, 1.1, 0.3)
+mesh = SubResource("BoxMesh_Rail")

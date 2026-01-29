@@ -10,17 +10,31 @@ emission_energy_multiplier = 0.5
 
 [sub_resource type="BoxMesh" id="BoxMesh_slot"]
 material = SubResource("StandardMaterial3D_slot")
-size = Vector3(0.3, 0.1, 0.4)
+size = Vector3(0.5, 0.1, 0.6)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_slot"]
-size = Vector3(0.3, 0.1, 0.4)
+size = Vector3(0.5, 0.1, 0.6)
 
-[node name="Prop_ServerSlot" type="CharacterBody3D"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_Metal"]
+albedo_color = Color(0.2, 0.2, 0.2, 1)
+metallic = 1.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_LED"]
+material = SubResource("StandardMaterial3D_Metal")
+size = Vector3(0.01, 0.01, 0.01)
+
+[node name="Prop_ServerSlot" type="StaticBody3D"]
 script = ExtResource("1_socket")
-accepted_hardware_type = "hard_drive"
+accepted_hardware_type = "server_blade"
 
 [node name="Mesh" type="MeshInstance3D" parent="."]
 mesh = SubResource("BoxMesh_slot")
 
+[node name="StatusLED" type="MeshInstance3D" parent="Mesh"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, 0.03, -0.28)
+mesh = SubResource("BoxMesh_LED")
+
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.02, 0)
 shape = SubResource("BoxShape3D_slot")

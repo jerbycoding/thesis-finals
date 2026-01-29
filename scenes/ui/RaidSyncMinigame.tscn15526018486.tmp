@@ -1,0 +1,215 @@
+[gd_scene load_steps=6 format=3 uid="uid://babbw2x3knnnd"]
+
+[ext_resource type="Script" uid="uid://c10xp4aw7k5xm" path="res://scripts/ui/RaidSyncMinigame.gd" id="1_script"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Wire_Inactive"]
+bg_color = Color(0.9, 0.9, 0.9, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Controller"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 0.42, 1, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Log"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0, 0, 0, 0.03)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0, 0, 0, 0.05)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Progress_Fill"]
+bg_color = Color(0, 0.423529, 1, 1)
+
+[node name="RaidSyncMinigame" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_script")
+
+[node name="Content" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 15
+
+[node name="StatusLabel" type="Label" parent="Content"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.4, 0.4, 0.4, 1)
+theme_override_font_sizes/font_size = 10
+text = "AWAITING_NODE_LINKS [0/4]"
+horizontal_alignment = 1
+
+[node name="SchematicArea" type="Control" parent="Content"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Wires" type="Control" parent="Content/SchematicArea"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Wire1" type="Panel" parent="Content/SchematicArea/Wires"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 120.0
+offset_top = 80.0
+offset_right = 260.0
+offset_bottom = 82.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_Wire_Inactive")
+
+[node name="Wire2" type="Panel" parent="Content/SchematicArea/Wires"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 120.0
+offset_top = 180.0
+offset_right = 260.0
+offset_bottom = 182.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_Wire_Inactive")
+
+[node name="Wire3" type="Panel" parent="Content/SchematicArea/Wires"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 360.0
+offset_top = 80.0
+offset_right = 500.0
+offset_bottom = 82.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_Wire_Inactive")
+
+[node name="Wire4" type="Panel" parent="Content/SchematicArea/Wires"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 360.0
+offset_top = 180.0
+offset_right = 500.0
+offset_bottom = 182.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_Wire_Inactive")
+
+[node name="Nodes" type="Control" parent="Content/SchematicArea"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Node1" type="Button" parent="Content/SchematicArea/Nodes"]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 65.0
+offset_right = 120.0
+offset_bottom = 95.0
+theme_override_font_sizes/font_size = 9
+text = "DISK_NODE_01"
+
+[node name="Node2" type="Button" parent="Content/SchematicArea/Nodes"]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 165.0
+offset_right = 120.0
+offset_bottom = 195.0
+theme_override_font_sizes/font_size = 9
+text = "DISK_NODE_02"
+
+[node name="Node3" type="Button" parent="Content/SchematicArea/Nodes"]
+layout_mode = 0
+offset_left = 500.0
+offset_top = 65.0
+offset_right = 600.0
+offset_bottom = 95.0
+theme_override_font_sizes/font_size = 9
+text = "DISK_NODE_03"
+
+[node name="Node4" type="Button" parent="Content/SchematicArea/Nodes"]
+layout_mode = 0
+offset_left = 500.0
+offset_top = 165.0
+offset_right = 600.0
+offset_bottom = 195.0
+theme_override_font_sizes/font_size = 9
+text = "DISK_NODE_04"
+
+[node name="Controller" type="Panel" parent="Content/SchematicArea"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -50.0
+offset_top = -50.0
+offset_right = 50.0
+offset_bottom = 50.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_Controller")
+
+[node name="Label" type="Label" parent="Content/SchematicArea/Controller"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -30.0
+offset_top = -11.5
+offset_right = 30.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 9
+text = "RAID_CTRL"
+horizontal_alignment = 1
+
+[node name="LogArea" type="PanelContainer" parent="Content"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_Log")
+
+[node name="LogText" type="RichTextLabel" parent="Content/LogArea"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/default_color = Color(0.1, 0.1, 0.1, 1)
+theme_override_font_sizes/normal_font_size = 9
+bbcode_enabled = true
+text = "[i]Initializing internal backplane...[/i]"
+scroll_following = true
+
+[node name="SyncProgress" type="ProgressBar" parent="Content"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 4)
+layout_mode = 2
+theme_override_styles/fill = SubResource("StyleBoxFlat_Progress_Fill")
+show_percentage = false
+
+[node name="SyncButton" type="Button" parent="Content"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "INITIALIZE_MASTER_SYNC"

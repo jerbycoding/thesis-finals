@@ -14,6 +14,7 @@ signal minigame_closed
 @onready var player_input_label = %PlayerInput
 @onready var handshake_timer_bar = %HandshakeTimer
 @onready var game_area = %GameArea
+@onready var tech_table = %TechnicalTable
 
 enum GamePhase { SIGNAL_LOCK, HANDSHAKE }
 var current_phase = GamePhase.SIGNAL_LOCK
@@ -30,8 +31,6 @@ var target_code: String = ""
 var current_input: String = ""
 var handshake_time_left: float
 var max_handshake_time: float
-
-# const CODES = [...]  <- No longer needed, comes from config
 
 func _ready():
 	visible = false
@@ -77,6 +76,14 @@ func start_game(difficulty_modifier: float = 1.0):
 	else:
 		_setup_saturday_game(difficulty_modifier)
 	
+	# POPULATE ASSET TABLE
+	if tech_table and VariableRegistry:
+		var target_id = "ROUTER_ALPHA"
+		if GameState and GameState.current_computer:
+			target_id = GameState.current_computer.name.to_upper()
+		var identity = VariableRegistry.generate_asset_identity(target_id)
+		tech_table.set_identity(identity)
+	
 	if GameState: GameState.set_mode(GameState.GameMode.MODE_MINIGAME)
 
 func _setup_saturday_game(difficulty_modifier):
@@ -86,18 +93,16 @@ func _setup_saturday_game(difficulty_modifier):
 	zone.position.x = randf_range(0, bar.size.x - zone.size.x)
 	
 	needle.position.x = randf_range(0, bar.size.x - needle.size.x)
-	needle.color = Color(1, 0.8, 0.2)
 	difficulty_speed = config.difficulty_speed * difficulty_modifier
-	label.text = "PHASE 1: LOCK SIGNAL [SPACE]"
+	label.text = "PHASE 1: LOCK LOCAL SIGNAL [SPACE]"
 	label.add_theme_color_override("font_color", Color.WHITE)
 
 func _setup_sunday_game():
 	sunday_heat = 100.0 # Start at max (far right)
 	zone.position.x = 20.0 # Target is cool (far left)
 	needle.position.x = bar.size.x - needle.size.x
-	needle.color = Color.RED
-	label.text = "PHASE 1: TAP [SPACE] TO COOL SYSTEM"
-	label.add_theme_color_override("font_color", Color.ORANGE)
+	label.text = "PHASE 1: COOLING SYSTEM [TAP SPACE]"
+	label.add_theme_color_override("font_color", Color.WHITE)
 
 func _process(delta):
 	if not is_active: return
@@ -175,8 +180,7 @@ func _try_lock():
 
 func _on_lock_success():
 	is_active = false
-	needle.color = Color.GREEN
-	label.text = "SIGNAL LOCKED"
+	label.text = "SIGNAL_STABILIZED"
 	if AudioManager: AudioManager.play_sfx(AudioManager.SFX.button_click)
 	
 	await get_tree().create_timer(0.5).timeout
@@ -188,16 +192,35 @@ func _on_lock_success():
 
 func _start_handshake_phase():
 	current_phase = GamePhase.HANDSHAKE
-	label.text = "PHASE 2: PROTOCOL HANDSHAKE"
+	label.text = "PHASE 2: PROTOCOL_HANDSHAKE"
 	
-	target_code = config.codes.pick_random() # Use codes from config
-	code_display.text = target_code
-	current_input = ""
+	randomize() # Force fresh randomness
+	target_code = _generate_procedural_code()
 	_update_input_display()
 	
 	typing_area.visible = true
 	handshake_time_left = config.max_handshake_time # Use max_handshake_time from config
 	if AudioManager: AudioManager.play_terminal_beep()
+
+func _generate_procedural_code() -> String:
+	# Technical prefixes (All Uppercase)
+	var prefixes = ["AUTH", "SYNC", "GATE", "NODE", "LINK", "RECV", "HASH", "XFER"]
+	var mid = ["ROUTER", "SRV", "INFRA", "CORE", "GW", "BACKPLANE"]
+	
+	var p = prefixes.pick_random()
+	var m = mid.pick_random()
+	# Random 4-digit Hex (Uppercase)
+	var hex = "%04X" % (randi() % 0xFFFF)
+	
+	# Patterns using only uppercase
+	var patterns = [
+		"%s-%s-%s" % [p, m, hex],
+		"%s_%s_%s" % [p, m, hex], # Removed 0x lowercase
+		"%s-PROTOCOL-%s" % [p, hex],
+		"%s-NODE-%s" % [hex, m]
+	]
+	
+	return patterns.pick_random().to_upper()
 
 func _handle_typing(event: InputEventKey):
 	if event.keycode == KEY_BACKSPACE:
@@ -205,18 +228,31 @@ func _handle_typing(event: InputEventKey):
 		_update_input_display()
 		return
 
-	var character = char(event.unicode)
+	var character = char(event.unicode).to_upper()
 	if character.length() > 0 and character.unicode_at(0) > 31:
-		current_input += character.to_upper()
-		_update_input_display()
+		# CHECK: Is this the NEXT correct character in the sequence?
+		var next_char_needed = target_code[current_input.length()]
 		
-		if current_input == target_code:
-			_success()
-		elif not target_code.begins_with(current_input):
-			handshake_time_left -= config.typing_time_penalty # Use penalty from config
-			if AudioManager: AudioManager.play_notification("warning")
+		if character == next_char_needed:
+			current_input += character
+			_update_input_display()
+			if AudioManager: AudioManager.play_terminal_beep()
+			
+			if current_input == target_code:
+				_success()
+		else:
+			# Block incorrect character - No penalty, just visual/audio feedback
+			if AudioManager: AudioManager.play_sfx(AudioManager.SFX.notification_error)
+			# Optional: shake the screen or flash red
 
 func _update_input_display():
+	# Update the main code display with color-coded progress
+	var typed = current_input
+	var remaining = target_code.right(target_code.length() - typed.length())
+	
+	code_display.text = "[center][color=#2E7D32]%s[/color][color=#666666]%s[/color][/center]" % [typed, remaining]
+	
+	# Update the small player input label for additional clarity
 	player_input_label.text = "> " + current_input + "_"
 
 func _success():
@@ -231,12 +267,15 @@ func _success():
 
 func _fail(reason: String):
 	is_active = false
-	label.text = reason
+	label.text = reason + " [ESC to ABORT]"
 	label.add_theme_color_override("font_color", Color.RED)
 	if AudioManager: AudioManager.play_sfx(AudioManager.SFX.notification_error)
 	
-	await get_tree().create_timer(1.0).timeout
+	# Give the player 2 seconds to decide to press ESC to quit, 
+	# otherwise it will auto-restart the game.
+	await get_tree().create_timer(2.0).timeout
 	if is_instance_valid(self) and not is_queued_for_deletion():
+		# If they haven't ESC'd yet, restart
 		start_game(1.0) 
 
 func _close_game():

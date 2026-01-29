@@ -150,29 +150,38 @@ text = "PWR_STAT: 88%"
 [node name="HSeparator" type="HSeparator" parent="HardwareFrame/ScreenMargin/ScreenContent/ContentMargin/VBox"]
 layout_mode = 2
 
-[node name="Content" type="HBoxContainer" parent="HardwareFrame/ScreenMargin/ScreenContent/ContentMargin/VBox"]
+[node name="Content" type="Control" parent="HardwareFrame/ScreenMargin/ScreenContent/ContentMargin/VBox"]
 layout_mode = 2
 size_flags_vertical = 3
+
+[node name="LiveLayout" type="HBoxContainer" parent="HardwareFrame/ScreenMargin/ScreenContent/ContentMargin/VBox/Content"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 theme_override_constants/separation = 30
 
-[node name="Topology" type="VBoxContainer" parent="HardwareFrame/ScreenMargin/ScreenContent/ContentMargin/VBox/Content"]
+[node name="Topology" type="VBoxContainer" parent="HardwareFrame/ScreenMargin/ScreenContent/ContentMargin/VBox/Content/LiveLayout"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 1.5
 
-[node name="Label" type="Label" parent="HardwareFrame/ScreenMargin/ScreenContent/ContentMargin/VBox/Content/Topology"]
+[node name="Label" type="Label" parent="HardwareFrame/ScreenMargin/ScreenContent/ContentMargin/VBox/Content/LiveLayout/Topology"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 14
 text = "LIVE MESH TOPOLOGY"
 horizontal_alignment = 1
 
-[node name="TopologyMap" type="Control" parent="HardwareFrame/ScreenMargin/ScreenContent/ContentMargin/VBox/Content/Topology"]
+[node name="TopologyMap" type="Control" parent="HardwareFrame/ScreenMargin/ScreenContent/ContentMargin/VBox/Content/LiveLayout/Topology"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Grid" type="ColorRect" parent="HardwareFrame/ScreenMargin/ScreenContent/ContentMargin/VBox/Content/Topology/TopologyMap"]
+[node name="Grid" type="ColorRect" parent="HardwareFrame/ScreenMargin/ScreenContent/ContentMargin/VBox/Content/LiveLayout/Topology/TopologyMap"]
 show_behind_parent = true
 layout_mode = 1
 anchors_preset = 15
@@ -183,23 +192,33 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0, 0, 0, 0.03)
 
-[node name="VSeparator" type="VSeparator" parent="HardwareFrame/ScreenMargin/ScreenContent/ContentMargin/VBox/Content"]
+[node name="VSeparator" type="VSeparator" parent="HardwareFrame/ScreenMargin/ScreenContent/ContentMargin/VBox/Content/LiveLayout"]
 layout_mode = 2
 
-[node name="Checklist" type="VBoxContainer" parent="HardwareFrame/ScreenMargin/ScreenContent/ContentMargin/VBox/Content"]
+[node name="Checklist" type="VBoxContainer" parent="HardwareFrame/ScreenMargin/ScreenContent/ContentMargin/VBox/Content/LiveLayout"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Label" type="Label" parent="HardwareFrame/ScreenMargin/ScreenContent/ContentMargin/VBox/Content/Checklist"]
+[node name="Label" type="Label" parent="HardwareFrame/ScreenMargin/ScreenContent/ContentMargin/VBox/Content/LiveLayout/Checklist"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 14
 text = "PROVISION_QUEUE"
 horizontal_alignment = 1
 
-[node name="ChecklistContainer" type="VBoxContainer" parent="HardwareFrame/ScreenMargin/ScreenContent/ContentMargin/VBox/Content/Checklist"]
+[node name="ChecklistContainer" type="VBoxContainer" parent="HardwareFrame/ScreenMargin/ScreenContent/ContentMargin/VBox/Content/LiveLayout/Checklist"]
 unique_name_in_owner = true
 layout_mode = 2
+
+[node name="MinigameHost" type="Control" parent="HardwareFrame/ScreenMargin/ScreenContent/ContentMargin/VBox/Content"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

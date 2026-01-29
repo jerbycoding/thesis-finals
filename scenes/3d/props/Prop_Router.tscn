@@ -1,0 +1,114 @@
+[gd_scene load_steps=9 format=3 uid="uid://o4j48sgqeknw"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_Chassis"]
+albedo_color = Color(0.1, 0.1, 0.1, 1)
+metallic = 0.5
+roughness = 0.4
+
+[sub_resource type="BoxMesh" id="BoxMesh_Chassis"]
+material = SubResource("StandardMaterial3D_Chassis")
+size = Vector3(0.45, 0.044, 0.3)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_Panel"]
+albedo_color = Color(0.15, 0.15, 0.15, 1)
+metallic = 0.8
+roughness = 0.2
+
+[sub_resource type="BoxMesh" id="BoxMesh_Panel"]
+material = SubResource("StandardMaterial3D_Panel")
+size = Vector3(0.43, 0.035, 0.01)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_Port"]
+albedo_color = Color(0, 0, 0, 1)
+roughness = 0.1
+
+[sub_resource type="BoxMesh" id="BoxMesh_Port"]
+material = SubResource("StandardMaterial3D_Port")
+size = Vector3(0.02, 0.015, 0.005)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_LED"]
+albedo_color = Color(0, 1, 0, 1)
+emission_enabled = true
+emission = Color(0, 1, 0, 1)
+emission_energy_multiplier = 2.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_LED"]
+material = SubResource("StandardMaterial3D_LED")
+size = Vector3(0.005, 0.005, 0.005)
+
+[node name="Prop_Router" type="Node3D"]
+
+[node name="Chassis" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_Chassis")
+
+[node name="FrontPanel" type="MeshInstance3D" parent="Chassis"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.146)
+mesh = SubResource("BoxMesh_Panel")
+
+[node name="Ports" type="Node3D" parent="Chassis/FrontPanel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.18, 0, -0.005)
+
+[node name="Port1" type="MeshInstance3D" parent="Chassis/FrontPanel/Ports"]
+mesh = SubResource("BoxMesh_Port")
+
+[node name="Port2" type="MeshInstance3D" parent="Chassis/FrontPanel/Ports"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.03, 0, 0)
+mesh = SubResource("BoxMesh_Port")
+
+[node name="Port3" type="MeshInstance3D" parent="Chassis/FrontPanel/Ports"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.06, 0, 0)
+mesh = SubResource("BoxMesh_Port")
+
+[node name="Port4" type="MeshInstance3D" parent="Chassis/FrontPanel/Ports"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.09, 0, 0)
+mesh = SubResource("BoxMesh_Port")
+
+[node name="Port5" type="MeshInstance3D" parent="Chassis/FrontPanel/Ports"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.12, 0, 0)
+mesh = SubResource("BoxMesh_Port")
+
+[node name="Port6" type="MeshInstance3D" parent="Chassis/FrontPanel/Ports"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.15, 0, 0)
+mesh = SubResource("BoxMesh_Port")
+
+[node name="Port7" type="MeshInstance3D" parent="Chassis/FrontPanel/Ports"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.18, 0, 0)
+mesh = SubResource("BoxMesh_Port")
+
+[node name="Port8" type="MeshInstance3D" parent="Chassis/FrontPanel/Ports"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.21, 0, 0)
+mesh = SubResource("BoxMesh_Port")
+
+[node name="Port9" type="MeshInstance3D" parent="Chassis/FrontPanel/Ports"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.24, 0, 0)
+mesh = SubResource("BoxMesh_Port")
+
+[node name="Port10" type="MeshInstance3D" parent="Chassis/FrontPanel/Ports"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.27, 0, 0)
+mesh = SubResource("BoxMesh_Port")
+
+[node name="Port11" type="MeshInstance3D" parent="Chassis/FrontPanel/Ports"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, 0, 0)
+mesh = SubResource("BoxMesh_Port")
+
+[node name="Port12" type="MeshInstance3D" parent="Chassis/FrontPanel/Ports"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.33, 0, 0)
+mesh = SubResource("BoxMesh_Port")
+
+[node name="LEDs" type="Node3D" parent="Chassis/FrontPanel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.18, 0.01, -0.005)
+
+[node name="PWR" type="MeshInstance3D" parent="Chassis/FrontPanel/LEDs"]
+mesh = SubResource("BoxMesh_LED")
+
+[node name="LINK" type="MeshInstance3D" parent="Chassis/FrontPanel/LEDs"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.01, 0, 0)
+mesh = SubResource("BoxMesh_LED")
+
+[node name="SYS" type="MeshInstance3D" parent="Chassis/FrontPanel/LEDs"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.02, 0, 0)
+mesh = SubResource("BoxMesh_LED")
+
+[node name="RackEar_L" type="MeshInstance3D" parent="Chassis"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.235, 0, -0.13)
+mesh = SubResource("BoxMesh_LED")

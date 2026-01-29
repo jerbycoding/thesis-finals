@@ -10,6 +10,7 @@ var near_npc = null
 var movement_enabled = true
 var carried_object: Node3D = null
 var current_target_height: float = 1.75 # Default to eye height
+var modal_active: bool = false # NEW: Flag to block input
 
 @onready var carry_marker: Marker3D = %CarryMarker3D
 @onready var tablet_hud: Control = $TabletHUD
@@ -52,7 +53,7 @@ func _try_toggle_tablet():
 			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 func _input(event):
-	if not movement_enabled or tablet_active: return
+	if not movement_enabled or tablet_active or modal_active: return
 	if event is InputEventMouseMotion:
 		camera_rotation.y -= event.relative.x * mouse_sensitivity
 		camera_rotation.x = clamp(camera_rotation.x - event.relative.y * mouse_sensitivity, -1.5, 1.5)
@@ -60,7 +61,7 @@ func _input(event):
 		$CameraPivot/Camera3D.rotation.x = camera_rotation.x
 
 func _physics_process(_delta):
-	if not movement_enabled: return
+	if not movement_enabled or modal_active: return
 	var input_dir = Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
 	var direction = ($CameraPivot.global_transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	var current_speed = speed * (sprint_multiplier if Input.is_action_pressed("sprint") else 1.0)
@@ -92,6 +93,10 @@ func _process(delta):
 	_handle_headbob(delta)
 	
 	if Input.is_action_just_pressed("ui_focus_next"): _try_toggle_tablet()
+	
+	# Dedicated Drop Key (Q)
+	if Input.is_action_just_pressed("drop") and carried_object:
+		_drop_object()
 	
 	if Input.is_action_just_pressed("interact"):
 		if carried_object: _drop_object()
@@ -126,20 +131,45 @@ func _drop_object():
 	if not carried_object: return
 	var socket = _get_targeted_socket()
 	
-	if NarrativeDirector and NarrativeDirector.is_weekend() and not socket:
-		if NotificationManager: NotificationManager.show_notification("Place part in target rack.", "warning")
+	# If looking at a socket, try to plug it in
+	if socket:
+		if socket.has_method("can_accept_object") and not socket.can_accept_object(carried_object):
+			return # Cannot plug in here
+			
+		var world = get_tree().current_scene
+		carried_object.get_parent().remove_child(carried_object)
+		world.add_child(carried_object)
+		carried_object.global_transform = carry_marker.global_transform
+		if carried_object.has_node("CollisionShape3D"): 
+			carried_object.get_node("CollisionShape3D").disabled = false
+		
+		_plug_into_socket(carried_object, socket)
+		speed /= 0.75
+		carried_object = null
+		EventBus.request_prompt.emit("", false)
 		return
 
-	if socket and socket.has_method("can_accept_object") and not socket.can_accept_object(carried_object):
-		return
-
+	# Fallback: Drop on floor (anywhere)
 	var world = get_tree().current_scene
 	carried_object.get_parent().remove_child(carried_object)
 	world.add_child(carried_object)
-	carried_object.global_transform = carry_marker.global_transform
-	if carried_object.has_node("CollisionShape3D"): carried_object.get_node("CollisionShape3D").disabled = false
+	
+	# Raycast down from marker to find the floor
+	var space_state = get_world_3d().direct_space_state
+	var origin = carry_marker.global_position
+	var end = origin + Vector3.DOWN * 2.0
+	var query = PhysicsRayQueryParameters3D.create(origin, end)
+	var result = space_state.intersect_ray(query)
+	
+	if result:
+		carried_object.global_position = result.position
+	else:
+		carried_object.global_transform = carry_marker.global_transform
+		
+	if carried_object.has_node("CollisionShape3D"): 
+		carried_object.get_node("CollisionShape3D").disabled = false
+		
 	speed /= 0.75
-	if socket: _plug_into_socket(carried_object, socket)
 	carried_object = null
 	EventBus.request_prompt.emit("", false)
 
@@ -159,12 +189,14 @@ func set_near_computer(computer_node, is_near):
 	if not movement_enabled: return
 	if is_near:
 		near_computer = computer_node
+		if GameState: GameState.current_computer = computer_node
 		if near_computer.has_method("set_highlight"): near_computer.set_highlight(true)
 		EventBus.request_prompt.emit("USE WORKSTATION", true)
 	else:
 		if near_computer == computer_node:
 			if near_computer.has_method("set_highlight"): near_computer.set_highlight(false)
 			near_computer = null
+			if GameState: GameState.current_computer = null
 		EventBus.request_prompt.emit("", false)
 
 func set_near_npc(npc_node, is_near):

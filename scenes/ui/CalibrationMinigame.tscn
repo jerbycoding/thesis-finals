@@ -1,6 +1,27 @@
-[gd_scene load_steps=2 format=3 uid="uid://bxfc61a0unofs"]
+[gd_scene load_steps=6 format=3 uid="uid://bxfc61a0unofs"]
 
-[ext_resource type="Script" uid="uid://bctqk4eg6cltx" path="res://scripts/ui/CalibrationMinigame.gd" id="1_calib"]
+[ext_resource type="Script" path="res://scripts/ui/CalibrationMinigame.gd" id="1_calib"]
+[ext_resource type="PackedScene" uid="uid://c8v2y708bab0g" path="res://scenes/ui/RouterTechnicalTable.tscn" id="3_table"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Bar"]
+bg_color = Color(0.05, 0.05, 0.05, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.4, 0.4, 0.4, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Target"]
+bg_color = Color(0, 0.42, 1, 0.3)
+border_width_left = 1
+border_width_right = 1
+border_color = Color(0, 0.42, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Needle"]
+bg_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Progress"]
+bg_color = Color(0.18, 0.49, 0.2, 1)
 
 [node name="CalibrationMinigame" type="Control"]
 layout_mode = 3
@@ -18,7 +39,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0, 0, 0, 0.5)
+color = Color(0, 0, 0, 0.75)
 
 [node name="CenterContainer" type="CenterContainer" parent="."]
 layout_mode = 1
@@ -28,78 +49,212 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBox" type="VBoxContainer" parent="CenterContainer"]
-layout_mode = 2
-theme_override_constants/separation = 20
+[node name="MainPanel" type="PanelContainer" parent="CenterContainer"]
 
-[node name="Label" type="Label" parent="CenterContainer/VBox"]
-unique_name_in_owner = true
+custom_minimum_size = Vector2(800, 0)
+
 layout_mode = 2
+
+
+
+[node name="HBox" type="HBoxContainer" parent="CenterContainer/MainPanel"]
+
+layout_mode = 2
+
+theme_override_constants/separation = 30
+
+
+
+[node name="InteractionArea" type="VBoxContainer" parent="CenterContainer/MainPanel/HBox"]
+
+layout_mode = 2
+
+size_flags_horizontal = 3
+
+theme_override_constants/separation = 25
+
+
+
+[node name="Label" type="Label" parent="CenterContainer/MainPanel/HBox/InteractionArea"]
+
+unique_name_in_owner = true
+
+layout_mode = 2
+
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 24
-text = "CALIBRATING SIGNAL..."
+
+theme_override_font_sizes/font_size = 14
+
+text = "TECHNICAL AUDIT: INITIALIZING LOCAL LINK..."
+
 horizontal_alignment = 1
 
-[node name="GameArea" type="Control" parent="CenterContainer/VBox"]
+
+
+[node name="GameArea" type="Control" parent="CenterContainer/MainPanel/HBox/InteractionArea"]
+
 unique_name_in_owner = true
-custom_minimum_size = Vector2(400, 40)
+
+custom_minimum_size = Vector2(400, 30)
+
 layout_mode = 2
 
-[node name="BarBackground" type="ColorRect" parent="CenterContainer/VBox/GameArea"]
+
+
+[node name="BarBackground" type="Panel" parent="CenterContainer/MainPanel/HBox/InteractionArea/GameArea"]
+
 unique_name_in_owner = true
+
 layout_mode = 1
+
 anchors_preset = 15
+
 anchor_right = 1.0
+
 anchor_bottom = 1.0
+
 grow_horizontal = 2
+
 grow_vertical = 2
-color = Color(0.2, 0.2, 0.2, 1)
 
-[node name="TargetZone" type="ColorRect" parent="CenterContainer/VBox/GameArea/BarBackground"]
+theme_override_styles/panel = SubResource("StyleBoxFlat_Bar")
+
+
+
+[node name="TargetZone" type="Panel" parent="CenterContainer/MainPanel/HBox/InteractionArea/GameArea/BarBackground"]
+
 unique_name_in_owner = true
+
 layout_mode = 0
+
 offset_left = 100.0
+
 offset_right = 160.0
-offset_bottom = 40.0
-color = Color(0.2, 0.8, 0.2, 0.5)
 
-[node name="Needle" type="ColorRect" parent="CenterContainer/VBox/GameArea/BarBackground"]
+offset_bottom = 30.0
+
+theme_override_styles/panel = SubResource("StyleBoxFlat_Target")
+
+
+
+[node name="Needle" type="Panel" parent="CenterContainer/MainPanel/HBox/InteractionArea/GameArea/BarBackground"]
+
 unique_name_in_owner = true
+
+custom_minimum_size = Vector2(2, 40)
+
 layout_mode = 0
+
 offset_left = 10.0
+
 offset_top = -5.0
-offset_right = 15.0
-offset_bottom = 45.0
-color = Color(1, 0.8, 0.2, 1)
 
-[node name="TypingArea" type="VBoxContainer" parent="CenterContainer/VBox"]
+offset_right = 12.0
+
+offset_bottom = 35.0
+
+theme_override_styles/panel = SubResource("StyleBoxFlat_Needle")
+
+
+
+[node name="TypingArea" type="VBoxContainer" parent="CenterContainer/MainPanel/HBox/InteractionArea"]
+
 unique_name_in_owner = true
+
 visible = false
-layout_mode = 2
-theme_override_constants/separation = 10
 
-[node name="HSeparator" type="HSeparator" parent="CenterContainer/VBox/TypingArea"]
 layout_mode = 2
 
-[node name="CodeDisplay" type="Label" parent="CenterContainer/VBox/TypingArea"]
-unique_name_in_owner = true
+theme_override_constants/separation = 15
+
+
+
+[node name="HSeparator" type="HSeparator" parent="CenterContainer/MainPanel/HBox/InteractionArea/TypingArea"]
+
 layout_mode = 2
-theme_override_colors/font_color = Color(0, 1, 1, 1)
-theme_override_font_sizes/font_size = 32
-text = "INIT_HANDSHAKE_0x4F"
+
+
+
+[node name="ContextHint" type="Label" parent="CenterContainer/MainPanel/HBox/InteractionArea/TypingArea"]
+
+layout_mode = 2
+
+theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1)
+
+theme_override_font_sizes/font_size = 10
+
+text = "AUTHENTICATION_KEY_REQUIRED:"
+
 horizontal_alignment = 1
 
-[node name="PlayerInput" type="Label" parent="CenterContainer/VBox/TypingArea"]
+
+
+[node name="CodeDisplay" type="RichTextLabel" parent="CenterContainer/MainPanel/HBox/InteractionArea/TypingArea"]
+
 unique_name_in_owner = true
+
+custom_minimum_size = Vector2(0, 35)
+
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 24
+
+theme_override_colors/default_color = Color(1, 1, 1, 1)
+
+theme_override_font_sizes/normal_font_size = 24
+
+bbcode_enabled = true
+
+text = "[center]INIT_HANDSHAKE_0x4F[/center]"
+
+fit_content = true
+
+scroll_active = false
+
+autowrap_mode = 0
+
+
+
+[node name="PlayerInput" type="Label" parent="CenterContainer/MainPanel/HBox/InteractionArea/TypingArea"]
+
+unique_name_in_owner = true
+
+layout_mode = 2
+
+theme_override_colors/font_color = Color(0, 0.42, 1, 1)
+
+theme_override_font_sizes/font_size = 20
+
 text = "> _"
+
 horizontal_alignment = 1
 
-[node name="HandshakeTimer" type="ProgressBar" parent="CenterContainer/VBox/TypingArea"]
+
+
+[node name="HandshakeTimer" type="ProgressBar" parent="CenterContainer/MainPanel/HBox/InteractionArea/TypingArea"]
+
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 5)
+
+custom_minimum_size = Vector2(0, 4)
+
 layout_mode = 2
+
+theme_override_styles/fill = SubResource("StyleBoxFlat_Progress")
+
 value = 100.0
+
 show_percentage = false
+
+
+
+[node name="VSeparator" type="VSeparator" parent="CenterContainer/MainPanel/HBox"]
+
+layout_mode = 2
+
+
+
+[node name="TechnicalTable" parent="CenterContainer/MainPanel/HBox" instance=ExtResource("3_table")]
+
+unique_name_in_owner = true
+
+layout_mode = 2
+
+size_flags_vertical = 4

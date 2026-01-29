@@ -8,6 +8,27 @@ var pool: VariablePool = null
 # --- Logic ---
 
 ## Generates a new Truth Packet for an incident.
+## Generates a technical identity block for a hardware asset
+func generate_asset_identity(node_id: String) -> Dictionary:
+	seed(node_id.hash()) # Ensure the same router always has the same stats
+	
+	var mac = "%02X:%02X:%02X:%02X:%02X:%02X" % [randi()%256, randi()%256, randi()%256, randi()%256, randi()%256, randi()%256]
+	var serial = "SN-" + str(randi_range(100000, 999999)) + "-X"
+	var firmware = "OS-v" + str(randi_range(1, 4)) + "." + str(randi_range(0, 9)) + "." + str(randi_range(0, 9)) + "-STABLE"
+	var model = ["NetCore-X1", "Nexus-Alpha", "Cisco-ISR-Mimic", "EdgeGateway-PRO"].pick_random()
+	
+	var result = {
+		"node_id": node_id.to_upper(),
+		"model": model,
+		"serial": serial,
+		"mac_address": mac,
+		"firmware": firmware,
+		"uptime": str(randi_range(10, 200)) + " Days"
+	}
+	
+	randomize() # Reset to global random pool
+	return result
+
 func generate_truth_packet(ticket_id: String) -> Dictionary:
 	if not pool:
 		push_error("VariableRegistry: VariablePool not loaded!")

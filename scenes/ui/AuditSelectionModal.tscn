@@ -1,0 +1,122 @@
+[gd_scene load_steps=5 format=3 uid="uid://s7gcgvtnqe6d"]
+
+[sub_resource type="StyleBoxFlat" id="1"]
+bg_color = Color(0, 0, 0, 0.6)
+
+[sub_resource type="GDScript" id="4"]
+script/source = "extends PanelContainer
+
+signal action_selected(type: String)
+
+@onready var status_label = %StatusLabel
+@onready var desc_label = %DescLabel
+@onready var action_button = %ActionButton
+@onready var cancel_button = %CancelButton
+
+func setup(is_critical: bool):
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	if is_critical:
+		status_label.text = \"STATUS: ANOMALY_DETECTED\"
+		status_label.add_theme_color_override(\"font_color\", Color(0.8, 0.2, 0.2))
+		desc_label.text = \"System integrity check required to clear pending security flags.\"
+		action_button.text = \"FIX THE ROUTER\"
+	else:
+		status_label.text = \"STATUS: NOMINAL\"
+		status_label.add_theme_color_override(\"font_color\", Color(0.2, 0.6, 0.2))
+		desc_label.text = \"All sub-systems are within established parameters. Manual audit is optional.\"
+		action_button.text = \"VERIFY & CLOSE\"
+
+func _ready():
+	action_button.pressed.connect(func(): 
+		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+		action_selected.emit(\"action\")
+		queue_free()
+	)
+	
+	cancel_button.pressed.connect(func(): 
+		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+		action_selected.emit(\"cancel\")
+		queue_free()
+	)
+"
+
+[sub_resource type="StyleBoxFlat" id="2"]
+content_margin_left = 20.0
+content_margin_top = 20.0
+content_margin_right = 20.0
+content_margin_bottom = 20.0
+bg_color = Color(0.98, 0.98, 0.98, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 0, 0, 1)
+shadow_color = Color(0, 0, 0, 0.2)
+shadow_size = 10
+
+[sub_resource type="StyleBoxFlat" id="3"]
+content_margin_left = 15.0
+content_margin_top = 8.0
+content_margin_right = 15.0
+content_margin_bottom = 8.0
+bg_color = Color(0, 0, 0, 1)
+
+[node name="AuditSelectionModal" type="PanelContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("1")
+script = SubResource("4")
+
+[node name="Center" type="CenterContainer" parent="."]
+layout_mode = 2
+
+[node name="Panel" type="PanelContainer" parent="Center"]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("2")
+
+[node name="VBox" type="VBoxContainer" parent="Center/Panel"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="StatusLabel" type="Label" parent="Center/Panel/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 12
+text = "STATUS: CHECKING..."
+horizontal_alignment = 1
+
+[node name="DescLabel" type="Label" parent="Center/Panel/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.4, 0.4, 0.4, 1)
+theme_override_font_sizes/font_size = 10
+text = "Technical summary of current node state."
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="HBox" type="HBoxContainer" parent="Center/Panel/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 15
+alignment = 1
+
+[node name="ActionButton" type="Button" parent="Center/Panel/VBox/HBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 10
+theme_override_styles/normal = SubResource("3")
+text = "ACTION"
+
+[node name="CancelButton" type="Button" parent="Center/Panel/VBox/HBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 10
+text = "CLOSE"

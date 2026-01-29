@@ -65,9 +65,10 @@ func _on_event(type: String, details: Dictionary):
 	if type == "audit_complete":
 		var id = details.get("id", "").strip_edges().to_lower()
 		_complete_task(id)
-	elif type == "hardware_repaired":
-		var socket_id = details.get("rack", "").strip_edges().to_upper() # "rack" is emitted by TabletHUD
-		var hardware_type = details.get("type", "").strip_edges().to_lower() # "type" is emitted by HardwareSocket
+	elif type == "hardware_slotted":
+		# This is emitted immediately by HardwareSocket.gd when a part is physically placed
+		var socket_id = details.get("socket_id", "").strip_edges().to_upper()
+		var hardware_type = details.get("type", "").strip_edges().to_lower()
 		
 		if not recovery_config: return
 		
@@ -75,6 +76,9 @@ func _on_event(type: String, details: Dictionary):
 			if task_data.has("completes_on_socket_id") and task_data.has("completes_on_hardware_type"):
 				if task_data.completes_on_socket_id == socket_id and task_data.completes_on_hardware_type == hardware_type:
 					_complete_task(task_data.id)
+	elif type == "RAID_REBUILD":
+		# Final signal from the minigame
+		_apply_weekend_payoff()
 
 func _complete_task(id: String):
 	var normalized_id = id.strip_edges().to_lower()
@@ -87,8 +91,14 @@ func _complete_task(id: String):
 	task.node.text = "[✔] " + task.desc
 	task.node.add_theme_color_override("font_color", GlobalConstants.UI_COLORS.SUCCESS_FLAT)
 	
+	# Only auto-end for AUDIT mode. RECOVERY requires the master sync.
 	if _all_tasks_done():
-		_apply_weekend_payoff()
+		var type = NarrativeDirector.current_shift_resource.minigame_type
+		if type == "AUDIT":
+			_apply_weekend_payoff()
+		else:
+			if NotificationManager:
+				NotificationManager.show_notification("ALL BLADES INSTALLED: Finalize RAID Sync via Tablet", "info")
 
 func _apply_weekend_payoff():
 	if not NarrativeDirector or not NarrativeDirector.current_shift_resource: return
