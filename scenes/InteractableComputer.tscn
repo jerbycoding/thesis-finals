@@ -1,43 +1,34 @@
-[gd_scene load_steps=8 format=3 uid="uid://b78xk57l146ve"]
+[gd_scene load_steps=7 format=3 uid="uid://b78xk57l146ve"]
 
 [ext_resource type="Script" uid="uid://ypme8lcwjfib" path="res://scripts/InteractableComputer.gd" id="1_57yv1"]
+[ext_resource type="PackedScene" uid="uid://k00gk7ap6a7k" path="res://assets/player-props/NeatFreakDesk.fbx" id="2_kxh54"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_m0q1u"]
-albedo_color = Color(0.0666667, 0.0666667, 0.0666667, 1)
-
-[sub_resource type="BoxMesh" id="BoxMesh_tnhup"]
-material = SubResource("StandardMaterial3D_m0q1u")
-size = Vector3(1.8, 1, 0.1)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3tvkj"]
-albedo_color = Color(0.2, 0.2, 0.2, 1)
-
-[sub_resource type="BoxMesh" id="BoxMesh_82ru2"]
-material = SubResource("StandardMaterial3D_3tvkj")
-size = Vector3(0.5, 0.02, 0.2)
-
-[sub_resource type="BoxMesh" id="BoxMesh_uoukq"]
-size = Vector3(0.4, 0.8, 0.4)
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_kxh54"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_v5j2c"]
 size = Vector3(2, 2, 2)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_kxh54"]
+size = Vector3(0.553711, 1, 1.35797)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_yg1ix"]
+
 [node name="InteractableComputer" type="StaticBody3D"]
+physics_material_override = SubResource("PhysicsMaterial_kxh54")
 script = ExtResource("1_57yv1")
-
-[node name="Monitor" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
-mesh = SubResource("BoxMesh_tnhup")
-
-[node name="Keyboard" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, -0.3)
-mesh = SubResource("BoxMesh_82ru2")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, -1)
-mesh = SubResource("BoxMesh_uoukq")
 
 [node name="InteractionArea" type="Area3D" parent="."]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="InteractionArea"]
 shape = SubResource("BoxShape3D_v5j2c")
+
+[node name="NeatFreakDesk" parent="." instance=ExtResource("2_kxh54")]
+transform = Transform3D(1.3, 0, 0, 0, 1.3, 0, 0, 0, 1.3, 0.89666, 0, -0.431483)
+
+[node name="Collision" type="CollisionShape3D" parent="."]
+transform = Transform3D(2.06802, 0, 0, 0, 1, 0, 0, 0, 1.62683, 0.461467, 0.759907, 0.174508)
+shape = SubResource("BoxShape3D_kxh54")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1.75186, 0, 0, 0, 1, -1.09853, 0, 0)
+shape = SubResource("BoxShape3D_yg1ix")

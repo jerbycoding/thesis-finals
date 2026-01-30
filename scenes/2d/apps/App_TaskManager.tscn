@@ -1,7 +1,40 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=6 format=3 uid="uid://c56dr4pk8j82u"]
 
-[ext_resource type="Script" path="res://scripts/2d/apps/App_TaskManager.gd" id="1_taskmgr"]
-[ext_resource type="Theme" path="res://assets/themes/EnterpriseTheme.tres" id="2_theme"]
+[ext_resource type="Script" uid="uid://bkxhbti8i8gqn" path="res://scripts/2d/apps/App_TaskManager.gd" id="1_taskmgr"]
+[ext_resource type="Theme" uid="uid://dny3rlbltexc7" path="res://assets/themes/EnterpriseTheme.tres" id="2_theme"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Header"]
+bg_color = Color(0, 0, 0, 1)
+border_width_bottom = 1
+border_color = Color(0.14902, 0.172549, 0.231373, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Widget"]
+content_margin_left = 15.0
+content_margin_top = 15.0
+content_margin_right = 15.0
+content_margin_bottom = 15.0
+bg_color = Color(0.0862745, 0.105882, 0.133333, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.14902, 0.172549, 0.231373, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_GraphBG"]
+bg_color = Color(0.054902, 0.0666667, 0.0901961, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.14902, 0.172549, 0.231373, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
 
 [node name="AppTaskManager" type="Control"]
 custom_minimum_size = Vector2(800, 600)
@@ -21,7 +54,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.105882, 0.133333, 0.172549, 1)
+color = Color(0.054902, 0.0666667, 0.0901961, 1)
 
 [node name="MainLayout" type="HBoxContainer" parent="."]
 layout_mode = 1
@@ -32,83 +65,132 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 0
 
-[node name="Sidebar" type="PanelContainer" parent="MainLayout"]
-custom_minimum_size = Vector2(60, 0)
-layout_mode = 2
-
-[node name="VBox" type="VBoxContainer" parent="MainLayout/Sidebar"]
-layout_mode = 2
-theme_override_constants/separation = 25
-alignment = 1
-
-[node name="IconActive" type="Label" parent="MainLayout/Sidebar/VBox"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0, 0.423529, 1, 1)
-theme_override_font_sizes/font_size = 24
-text = "📈"
-horizontal_alignment = 1
-
-[node name="ContentArea" type="MarginContainer" parent="MainLayout"]
+[node name="ContentArea" type="VBoxContainer" parent="MainLayout"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/margin_left = 30
-theme_override_constants/margin_top = 20
-theme_override_constants/margin_right = 30
-theme_override_constants/margin_bottom = 20
+theme_override_constants/separation = 0
 
-[node name="VBox" type="VBoxContainer" parent="MainLayout/ContentArea"]
+[node name="Header" type="PanelContainer" parent="MainLayout/ContentArea"]
+custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
-theme_override_constants/separation = 30
+theme_override_styles/panel = SubResource("StyleBoxFlat_Header")
 
-[node name="Header" type="Label" parent="MainLayout/ContentArea/VBox"]
+[node name="Margin" type="MarginContainer" parent="MainLayout/ContentArea/Header"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1)
-theme_override_font_sizes/font_size = 14
-text = "System Resources"
-horizontal_alignment = 1
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_right = 20
 
-[node name="CPUHistory" type="VBoxContainer" parent="MainLayout/ContentArea/VBox"]
+[node name="HBox" type="HBoxContainer" parent="MainLayout/ContentArea/Header/Margin"]
 layout_mode = 2
-size_flags_vertical = 3
-theme_override_constants/separation = 10
 
-[node name="Label" type="Label" parent="MainLayout/ContentArea/VBox/CPUHistory"]
+[node name="Title" type="Label" parent="MainLayout/ContentArea/Header/Margin/HBox"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 12
-text = "↖ 🚀 CPU History"
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
+theme_override_font_sizes/font_size = 11
+text = "SYSTEM_PERFORMANCE_MONITOR v2.1"
+vertical_alignment = 1
 
-[node name="CPULegend" type="Label" parent="MainLayout/ContentArea/VBox/CPUHistory"]
-unique_name_in_owner = true
+[node name="LiveIndicator" type="HBoxContainer" parent="MainLayout/ContentArea/Header/Margin/HBox"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.5, 0.5, 0.5, 1)
+theme_override_constants/separation = 8
+
+[node name="Dot" type="ColorRect" parent="MainLayout/ContentArea/Header/Margin/HBox/LiveIndicator"]
+custom_minimum_size = Vector2(6, 6)
+layout_mode = 2
+size_flags_vertical = 4
+color = Color(0.180392, 0.490196, 0.196078, 1)
+
+[node name="Label" type="Label" parent="MainLayout/ContentArea/Header/Margin/HBox/LiveIndicator"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.180392, 0.490196, 0.196078, 1)
 theme_override_font_sizes/font_size = 10
-text = "CPU Metrics"
-horizontal_alignment = 1
+text = "LIVE DATA"
+vertical_alignment = 1
 
-[node name="CPUGraph" type="Control" parent="MainLayout/ContentArea/VBox/CPUHistory"]
-unique_name_in_owner = true
+[node name="Scroll" type="ScrollContainer" parent="MainLayout/ContentArea"]
 layout_mode = 2
 size_flags_vertical = 3
+horizontal_scroll_mode = 0
 
-[node name="NetHistory" type="VBoxContainer" parent="MainLayout/ContentArea/VBox"]
+[node name="Padding" type="MarginContainer" parent="MainLayout/ContentArea/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 25
+theme_override_constants/margin_top = 25
+theme_override_constants/margin_right = 25
+theme_override_constants/margin_bottom = 25
+
+[node name="VBox" type="VBoxContainer" parent="MainLayout/ContentArea/Scroll/Padding"]
+layout_mode = 2
+theme_override_constants/separation = 25
+
+[node name="CPU_Widget" type="PanelContainer" parent="MainLayout/ContentArea/Scroll/Padding/VBox"]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_constants/separation = 10
+theme_override_styles/panel = SubResource("StyleBoxFlat_Widget")
 
-[node name="Label" type="Label" parent="MainLayout/ContentArea/VBox/NetHistory"]
+[node name="VBox" type="VBoxContainer" parent="MainLayout/ContentArea/Scroll/Padding/VBox/CPU_Widget"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 12
-text = "↖ 🕸️ Network History"
+theme_override_constants/separation = 15
 
-[node name="NetLegend" type="Label" parent="MainLayout/ContentArea/VBox/NetHistory"]
+[node name="HBox" type="HBoxContainer" parent="MainLayout/ContentArea/Scroll/Padding/VBox/CPU_Widget/VBox"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MainLayout/ContentArea/Scroll/Padding/VBox/CPU_Widget/VBox/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 13
+text = "PROCESSOR LOAD (QUAD-CORE)"
+
+[node name="CPULegend" type="Label" parent="MainLayout/ContentArea/Scroll/Padding/VBox/CPU_Widget/VBox/HBox"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_color = Color(0.5, 0.5, 0.5, 1)
+theme_override_colors/font_color = Color(0.4, 0.4, 0.4, 1)
 theme_override_font_sizes/font_size = 10
-text = "Network Metrics"
-horizontal_alignment = 1
+text = "CPU1: --%  CPU2: --%  CPU3: --%  CPU4: --%"
+horizontal_alignment = 2
 
-[node name="NetGraph" type="Control" parent="MainLayout/ContentArea/VBox/NetHistory"]
+[node name="GraphFrame" type="PanelContainer" parent="MainLayout/ContentArea/Scroll/Padding/VBox/CPU_Widget/VBox"]
+custom_minimum_size = Vector2(0, 180)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_GraphBG")
+
+[node name="CPUGraph" type="Control" parent="MainLayout/ContentArea/Scroll/Padding/VBox/CPU_Widget/VBox/GraphFrame"]
 unique_name_in_owner = true
 layout_mode = 2
+
+[node name="Net_Widget" type="PanelContainer" parent="MainLayout/ContentArea/Scroll/Padding/VBox"]
+layout_mode = 2
 size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_Widget")
+
+[node name="VBox" type="VBoxContainer" parent="MainLayout/ContentArea/Scroll/Padding/VBox/Net_Widget"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="HBox" type="HBoxContainer" parent="MainLayout/ContentArea/Scroll/Padding/VBox/Net_Widget/VBox"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MainLayout/ContentArea/Scroll/Padding/VBox/Net_Widget/VBox/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 13
+text = "NETWORK THROUGHPUT"
+
+[node name="NetLegend" type="Label" parent="MainLayout/ContentArea/Scroll/Padding/VBox/Net_Widget/VBox/HBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.4, 0.4, 0.4, 1)
+theme_override_font_sizes/font_size = 10
+text = "DOWN: -- B/s  UP: -- B/s"
+horizontal_alignment = 2
+
+[node name="GraphFrame" type="PanelContainer" parent="MainLayout/ContentArea/Scroll/Padding/VBox/Net_Widget/VBox"]
+custom_minimum_size = Vector2(0, 180)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_GraphBG")
+
+[node name="NetGraph" type="Control" parent="MainLayout/ContentArea/Scroll/Padding/VBox/Net_Widget/VBox/GraphFrame"]
+unique_name_in_owner = true
+layout_mode = 2

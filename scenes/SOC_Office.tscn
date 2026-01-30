@@ -143,7 +143,7 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 5.5944
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -5.3, 0, 8.75)
 
 [node name="InteractableComputer" parent="." instance=ExtResource("8")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 1, 0.8, 8.75)
+transform = Transform3D(0.0724722, 0, 0.997371, 0, 1, 0, -0.997371, 0, 0.0724722, 1.18803, -0.024116, 10.3288)
 
 [node name="ElevatorTeleport" type="Area3D" parent="."]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -14.5, 0, 1)
@@ -477,8 +477,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
 
 [node name="Player_Workstation" type="Node3D" parent="Props"]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 1, 0, 8.75)
-
-[node name="Desk" parent="Props/Player_Workstation" instance=ExtResource("15")]
 
 [node name="Chair" parent="Props/Player_Workstation" instance=ExtResource("16")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -1.2, 0, 0)

@@ -1,19 +1,27 @@
 [gd_scene load_steps=5 format=3 uid="uid://dpkhv2v8v8v8v"]
 
-[ext_resource type="Script" path="res://scripts/2d/apps/App_Handbook.gd" id="1_handbook"]
+[ext_resource type="Script" uid="uid://o22ilymgwhaa" path="res://scripts/2d/apps/App_Handbook.gd" id="1_handbook"]
 [ext_resource type="Theme" uid="uid://dny3rlbltexc7" path="res://assets/themes/EnterpriseTheme.tres" id="2_theme"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Sidebar"]
-bg_color = Color(1, 1, 1, 1)
-border_width_right = 1
-border_color = Color(0.866667, 0.866667, 0.866667, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_NameHeader"]
 content_margin_left = 15.0
-content_margin_top = 20.0
+content_margin_top = 5.0
 content_margin_right = 15.0
-content_margin_bottom = 20.0
+content_margin_bottom = 5.0
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_DialogueBody"]
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0, 0, 0, 1)
+shadow_color = Color(0, 0, 0, 0.15)
+shadow_size = 12
 
 [node name="AppHandbook" type="Control"]
-custom_minimum_size = Vector2(900, 650)
+custom_minimum_size = Vector2(1000, 700)
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -23,16 +31,24 @@ grow_vertical = 2
 theme = ExtResource("2_theme")
 script = ExtResource("1_handbook")
 
-[node name="Background" type="ColorRect" parent="."]
+[node name="ViewerWorkspace" type="Control" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.992157, 0.992157, 0.992157, 1)
 
-[node name="MainLayout" type="HSplitContainer" parent="."]
+[node name="WorkspaceBG" type="ColorRect" parent="ViewerWorkspace"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.321569, 0.337255, 0.34902, 1)
+
+[node name="VBox" type="VBoxContainer" parent="ViewerWorkspace"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -40,108 +56,87 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 0
-split_offset = 240
 
-[node name="Sidebar" type="PanelContainer" parent="MainLayout"]
+[node name="PDF_Toolbar" type="PanelContainer" parent="ViewerWorkspace/VBox"]
+custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_Sidebar")
+theme_override_styles/panel = SubResource("StyleBoxFlat_NameHeader")
 
-[node name="VBox" type="VBoxContainer" parent="MainLayout/Sidebar"]
+[node name="HBox" type="HBoxContainer" parent="ViewerWorkspace/VBox/PDF_Toolbar"]
 layout_mode = 2
 theme_override_constants/separation = 20
 
-[node name="SectionLabel" type="Label" parent="MainLayout/Sidebar/VBox"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.4, 0.4, 0.4, 1)
-theme_override_font_sizes/font_size = 10
-text = "TECHNICAL DOCUMENTATION"
-
-[node name="NavButtons" type="VBoxContainer" parent="MainLayout/Sidebar/VBox"]
+[node name="TitleLabel" type="Label" parent="ViewerWorkspace/VBox/PDF_Toolbar/HBox"]
 unique_name_in_owner = true
-layout_mode = 2
-theme_override_constants/separation = 5
-
-[node name="Btn_Terminal" type="Button" parent="MainLayout/Sidebar/VBox/NavButtons"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.101961, 0.101961, 0.101961, 1)
-theme_override_font_sizes/font_size = 13
-text = "  🐚 Terminal Guide"
-alignment = 0
-flat = true
-
-[node name="Btn_Network" type="Button" parent="MainLayout/Sidebar/VBox/NavButtons"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.101961, 0.101961, 0.101961, 1)
-theme_override_font_sizes/font_size = 13
-text = "  🕸️ Network Map"
-alignment = 0
-flat = true
-
-[node name="Btn_SIEM" type="Button" parent="MainLayout/Sidebar/VBox/NavButtons"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.101961, 0.101961, 0.101961, 1)
-theme_override_font_sizes/font_size = 13
-text = "  📊 SIEM Forensics"
-alignment = 0
-flat = true
-
-[node name="Btn_Email" type="Button" parent="MainLayout/Sidebar/VBox/NavButtons"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.101961, 0.101961, 0.101961, 1)
-theme_override_font_sizes/font_size = 13
-text = "  ✉ Email Analysis"
-alignment = 0
-flat = true
-
-[node name="HSeparator" type="HSeparator" parent="MainLayout/Sidebar/VBox"]
-layout_mode = 2
-
-[node name="Btn_Procedures" type="Button" parent="MainLayout/Sidebar/VBox/NavButtons"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.101961, 0.101961, 0.101961, 1)
-theme_override_font_sizes/font_size = 13
-text = "  📜 SOP Procedures"
-alignment = 0
-flat = true
-
-[node name="Btn_Incidents" type="Button" parent="MainLayout/Sidebar/VBox/NavButtons"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.101961, 0.101961, 0.101961, 1)
-theme_override_font_sizes/font_size = 13
-text = "  🎫 Incident Catalog"
-alignment = 0
-flat = true
-
-[node name="ReaderPane" type="VBoxContainer" parent="MainLayout"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/separation = 0
-
-[node name="DocHeader" type="PanelContainer" parent="MainLayout/ReaderPane"]
-custom_minimum_size = Vector2(0, 45)
-layout_mode = 2
-theme_type_variation = &"HeaderPanel"
-
-[node name="TitleLabel" type="Label" parent="MainLayout/ReaderPane/DocHeader"]
-unique_name_in_owner = true
-layout_mode = 2
-theme_type_variation = &"TechnicalHeader"
-text = ":: SOC_HANDBOOK v4.4 ::"
+theme_override_font_sizes/font_size = 12
+text = "SECURE_PROTOCOL_v4.pdf"
 vertical_alignment = 1
 
-[node name="ContentMargin" type="MarginContainer" parent="MainLayout/ReaderPane"]
+[node name="CosmeticControls" type="HBoxContainer" parent="ViewerWorkspace/VBox/PDF_Toolbar/HBox"]
 layout_mode = 2
-size_flags_vertical = 3
-theme_override_constants/margin_left = 40
-theme_override_constants/margin_top = 30
-theme_override_constants/margin_right = 40
-theme_override_constants/margin_bottom = 30
+theme_override_constants/separation = 15
 
-[node name="Reader" type="RichTextLabel" parent="MainLayout/ReaderPane/ContentMargin"]
+[node name="Zoom" type="Label" parent="ViewerWorkspace/VBox/PDF_Toolbar/HBox/CosmeticControls"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.7, 0.7, 1)
+theme_override_font_sizes/font_size = 11
+text = "100%  [-]  [+] "
+
+[node name="Page" type="Label" parent="ViewerWorkspace/VBox/PDF_Toolbar/HBox/CosmeticControls"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.7, 0.7, 1)
+theme_override_font_sizes/font_size = 11
+text = "PAGE 1 / 1"
+
+[node name="ActionIcons" type="Label" parent="ViewerWorkspace/VBox/PDF_Toolbar/HBox/CosmeticControls"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.7, 0.7, 1)
+theme_override_font_sizes/font_size = 14
+text = "⎙  ⤓  ⋮ "
+
+[node name="ScrollContainer" type="ScrollContainer" parent="ViewerWorkspace/VBox"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/default_color = Color(0.101961, 0.101961, 0.101961, 1)
-theme_override_constants/line_separation = 6
-theme_override_font_sizes/normal_font_size = 14
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 2
+
+[node name="PageContainer" type="VBoxContainer" parent="ViewerWorkspace/VBox/ScrollContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 40
+
+[node name="PageCentering" type="MarginContainer" parent="ViewerWorkspace/VBox/ScrollContainer/PageContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 50
+theme_override_constants/margin_top = 40
+theme_override_constants/margin_right = 50
+
+[node name="PaperSheet" type="PanelContainer" parent="ViewerWorkspace/VBox/ScrollContainer/PageContainer/PageCentering"]
+custom_minimum_size = Vector2(650, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_DialogueBody")
+
+[node name="ContentPadding" type="MarginContainer" parent="ViewerWorkspace/VBox/ScrollContainer/PageContainer/PageCentering/PaperSheet"]
+layout_mode = 2
+theme_override_constants/margin_left = 60
+theme_override_constants/margin_top = 60
+theme_override_constants/margin_right = 60
+theme_override_constants/margin_bottom = 60
+
+[node name="Reader" type="RichTextLabel" parent="ViewerWorkspace/VBox/ScrollContainer/PageContainer/PageCentering/PaperSheet/ContentPadding"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/default_color = Color(0.1, 0.1, 0.1, 1)
+theme_override_constants/line_separation = 8
+theme_override_font_sizes/normal_font_size = 15
 bbcode_enabled = true
-text = "Select a topic from the sidebar to begin..."
+text = "Loading Secure Documentation..."
+fit_content = true
+scroll_active = false
