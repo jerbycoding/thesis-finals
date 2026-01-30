@@ -31,7 +31,7 @@ script = ExtResource("1_dialogue")
 
 [node name="MainPanel" type="PanelContainer" parent="."]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(850, 240)
+custom_minimum_size = Vector2(850, 280)
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -39,7 +39,7 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -425.0
-offset_top = -270.0
+offset_top = -310.0
 offset_right = 425.0
 offset_bottom = -30.0
 grow_horizontal = 2
@@ -77,22 +77,22 @@ vertical_alignment = 1
 [node name="ContentMargin" type="MarginContainer" parent="MainPanel/VBox"]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_constants/margin_left = 25
-theme_override_constants/margin_top = 20
-theme_override_constants/margin_right = 25
-theme_override_constants/margin_bottom = 20
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 25
+theme_override_constants/margin_right = 30
+theme_override_constants/margin_bottom = 25
 
 [node name="HBox" type="HBoxContainer" parent="MainPanel/VBox/ContentMargin"]
 layout_mode = 2
-theme_override_constants/separation = 30
+theme_override_constants/separation = 35
 
 [node name="PortraitLabel" type="Label" parent="MainPanel/VBox/ContentMargin/HBox"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(60, 60)
+custom_minimum_size = Vector2(70, 70)
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
-theme_override_font_sizes/font_size = 42
+theme_override_font_sizes/font_size = 48
 text = "👤"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -100,12 +100,14 @@ vertical_alignment = 1
 [node name="MainVBox" type="VBoxContainer" parent="MainPanel/VBox/ContentMargin/HBox"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/separation = 15
+theme_override_constants/separation = 20
 
 [node name="Scroll" type="ScrollContainer" parent="MainPanel/VBox/ContentMargin/HBox/MainVBox"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 horizontal_scroll_mode = 0
+vertical_scroll_mode = 2
 
 [node name="TextLabel" type="RichTextLabel" parent="MainPanel/VBox/ContentMargin/HBox/MainVBox/Scroll"]
 unique_name_in_owner = true
@@ -113,7 +115,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_colors/default_color = Color(0.1, 0.1, 0.1, 1)
-theme_override_constants/line_separation = 4
+theme_override_constants/line_separation = 6
 theme_override_font_sizes/normal_font_size = 16
 bbcode_enabled = true
 text = "Establishing communication link..."
@@ -123,4 +125,4 @@ scroll_active = false
 [node name="ChoicesContainer" type="VBoxContainer" parent="MainPanel/VBox/ContentMargin/HBox/MainVBox"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_constants/separation = 8
+theme_override_constants/separation = 10

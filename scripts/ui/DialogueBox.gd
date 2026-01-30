@@ -11,6 +11,7 @@ var npc_id: String = ""
 @onready var portrait_label: Label = %PortraitLabel
 @onready var name_label: Label = %NameLabel
 @onready var text_label: RichTextLabel = %TextLabel
+@onready var scroll_container: ScrollContainer = %Scroll
 @onready var choices_container: VBoxContainer = %ChoicesContainer
 @onready var main_panel: PanelContainer = %MainPanel
 
@@ -46,6 +47,10 @@ func _show_current_line():
 	if current_line_index >= lines.size():
 		_close_dialogue()
 		return
+	
+	# Reset scroll to top for new text
+	if scroll_container:
+		scroll_container.scroll_vertical = 0
 	
 	var line = lines[current_line_index]
 	var raw_text = line.get("text", "")
