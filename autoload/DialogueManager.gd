@@ -120,11 +120,9 @@ func _close_dialogue_session():
 	# This function is called when the dialogue box is closed, either by finishing
 	# the dialogue or by the player pressing Escape.
 	
-	# Restore mouse capture for 3D gameplay
-	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	
 	# We only change the mode back to 3D. The dialogue box handles hiding itself.
+	# GameState.set_mode will automatically handle mouse capturing.
 	if GameState.current_mode == GameState.GameMode.MODE_DIALOGUE:
-		GameState.set_game_mode(GameState.GameMode.MODE_3D)
+		GameState.set_mode(GameState.GameMode.MODE_3D)
 
 	current_npc = null

@@ -57,3 +57,4 @@ signal timer_finished(timer_id: String)
 # --- Transition Signals ---
 signal transition_started()
 signal transition_completed()
+signal prepare_for_scene_change()

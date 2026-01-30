@@ -20,7 +20,7 @@ func enter_desktop_mode(computer_node):
 	print("ENTER DESKTOP: Step 1 - Set mode")
 	EventBus.transition_started.emit()
 
-# Set mode FIRST (disables movement)
+# Set mode FIRST (disables movement and shows mouse)
 	GameState.set_mode(GameState.GameMode.MODE_2D)
 	GameState.current_computer = computer_node
 
@@ -51,9 +51,6 @@ func enter_desktop_mode(computer_node):
 
 	# Show persistent windows
 	DesktopWindowManager.show_all_windows()
-
-# Show mouse cursor
-	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 
 	print("ENTER DESKTOP: Step 5 - Fade out")
 	overlay_instance.fade_out()
@@ -95,9 +92,6 @@ func exit_desktop_mode():
 # Return to 3D mode
 	GameState.set_mode(GameState.GameMode.MODE_3D)
 
-# Hide mouse cursor
-	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-
 	print("EXIT DESKTOP: Step 3 - Fade out")
 	overlay_instance.fade_out()
 	await overlay_instance.fade_finished
@@ -118,6 +112,12 @@ func change_scene_to(path: String, narrative_to_start_after: String = "", title_
 	is_transitioning = true
 	EventBus.transition_started.emit()
 	
+	# CLEANUP SIGNAL: Let persistent UIs (like Desktop) kill themselves
+	EventBus.prepare_for_scene_change.emit()
+	
+	# Force mode reset to 3D for the next scene
+	GameState.set_mode(GameState.GameMode.MODE_3D)
+
 	# TITLE CARD LOGIC
 	if not title_card.is_empty():
 		overlay_instance.set_title_card(title_card)

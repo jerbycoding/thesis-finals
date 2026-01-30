@@ -8,6 +8,10 @@ extends Control
 @onready var title_label: Label = %TitleLabel
 
 func _ready():
+	# Centralized mode enforcement
+	if GameState:
+		GameState.set_mode(GameState.GameMode.MODE_UI_ONLY)
+	
 	# Initial state for animation
 	main_container.modulate.a = 0
 	main_container.position.y += 20

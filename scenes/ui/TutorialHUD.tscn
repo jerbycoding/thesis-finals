@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://dgkhv2v8v8v8x"]
+[gd_scene load_steps=10 format=3 uid="uid://dgkhv2v8v8v8x"]
 
 [ext_resource type="Script" uid="uid://d3kvvit4crikr" path="res://scripts/ui/TutorialHUD.gd" id="1_script"]
 
@@ -15,6 +15,17 @@ content_margin_bottom = 10.0
 bg_color = Color(0.05, 0.05, 0.05, 0.9)
 border_width_left = 2
 border_color = Color(0, 0.423529, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Subtitle"]
+content_margin_left = 20.0
+content_margin_top = 10.0
+content_margin_right = 20.0
+content_margin_bottom = 10.0
+bg_color = Color(0, 0, 0, 0.7)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
 
 [sub_resource type="Animation" id="Animation_pulse"]
 resource_name = "pulse"
@@ -48,23 +59,49 @@ tracks/0/keys = {
 "values": [-300.0, 20.0]
 }
 
+[sub_resource type="Animation" id="Animation_subtitle_fade"]
+resource_name = "subtitle_fade"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SubtitleContainer:modulate:a")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 1.0]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_tut"]
 _data = {
 &"pulse": SubResource("Animation_pulse"),
-&"slide_in": SubResource("Animation_slide")
+&"slide_in": SubResource("Animation_slide"),
+&"subtitle_fade": SubResource("Animation_subtitle_fade")
 }
 
 [node name="TutorialHUD" type="Control"]
 layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_script")
+
+[node name="TaskContainer" type="Control" parent="."]
+layout_mode = 1
 anchors_preset = 0
 offset_left = 20.0
 offset_top = 20.0
 offset_right = 320.0
 offset_bottom = 120.0
 pivot_offset = Vector2(150, 50)
-script = ExtResource("1_script")
 
-[node name="VBox" type="VBoxContainer" parent="."]
+[node name="VBox" type="VBoxContainer" parent="TaskContainer"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -73,37 +110,37 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 0
 
-[node name="Header" type="PanelContainer" parent="VBox"]
+[node name="Header" type="PanelContainer" parent="TaskContainer/VBox"]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_Header")
 
-[node name="HBox" type="HBoxContainer" parent="VBox/Header"]
+[node name="HBox" type="HBoxContainer" parent="TaskContainer/VBox/Header"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VBox/Header/HBox"]
+[node name="Label" type="Label" parent="TaskContainer/VBox/Header/HBox"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 10
 text = "TIER 1 CERTIFICATION"
 
-[node name="StepCounter" type="Label" parent="VBox/Header/HBox"]
+[node name="StepCounter" type="Label" parent="TaskContainer/VBox/Header/HBox"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 0.7)
 theme_override_font_sizes/font_size = 9
 text = "PHASE 1/7"
 
-[node name="Body" type="PanelContainer" parent="VBox"]
+[node name="Body" type="PanelContainer" parent="TaskContainer/VBox"]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_Body")
 
-[node name="VBox" type="VBoxContainer" parent="VBox/Body"]
+[node name="VBox" type="VBoxContainer" parent="TaskContainer/VBox/Body"]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="TaskLabel" type="Label" parent="VBox/Body/VBox"]
+[node name="TaskLabel" type="Label" parent="TaskContainer/VBox/Body/VBox"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
@@ -111,12 +148,43 @@ theme_override_font_sizes/font_size = 14
 text = "FIND YOUR ROOM"
 autowrap_mode = 3
 
-[node name="ProgressBar" type="ProgressBar" parent="VBox/Body/VBox"]
+[node name="ProgressBar" type="ProgressBar" parent="TaskContainer/VBox/Body/VBox"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 4)
 layout_mode = 2
 value = 15.0
 show_percentage = false
+
+[node name="SubtitleContainer" type="MarginContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -100.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+theme_override_constants/margin_left = 150
+theme_override_constants/margin_right = 150
+theme_override_constants/margin_bottom = 40
+
+[node name="Panel" type="PanelContainer" parent="SubtitleContainer"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_Subtitle")
+
+[node name="SubtitleLabel" type="RichTextLabel" parent="SubtitleContainer/Panel"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_font_sizes/normal_font_size = 16
+bbcode_enabled = true
+text = "[center]Transmission standby...[/center]"
+fit_content = true
+scroll_active = false
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

@@ -4,11 +4,15 @@ extends Control
 @onready var task_label: Label = %TaskLabel
 @onready var step_counter: Label = %StepCounter
 @onready var progress_bar: ProgressBar = %ProgressBar
+@onready var subtitle_label: RichTextLabel = %SubtitleLabel
+@onready var subtitle_container: MarginContainer = %SubtitleContainer
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 
 func _ready():
 	hide()
 	modulate.a = 0
+	subtitle_container.modulate.a = 0
+	
 	if TutorialManager:
 		TutorialManager.step_changed.connect(_on_step_changed)
 
@@ -24,6 +28,19 @@ func hide_hud():
 	await tween.finished
 	hide()
 
+func update_subtitle(text: String):
+	if text.is_empty():
+		subtitle_container.hide()
+		return
+		
+	subtitle_container.show()
+	subtitle_label.text = "[center]" + text + "[/center]"
+	
+	# Reset and fade in subtitle
+	subtitle_container.modulate.a = 0
+	var tween = create_tween()
+	tween.tween_property(subtitle_container, "modulate:a", 1.0, 0.3)
+
 func _on_step_changed(step_id: int):
 	if not TutorialManager or not TutorialManager.is_tutorial_active:
 		hide_hud()
@@ -32,10 +49,15 @@ func _on_step_changed(step_id: int):
 	if not visible:
 		show_hud()
 	
-	# Update Text (step_id is 1-based, need 0-based for instruction)
-	var full_text = TutorialManager._get_instruction_for_step(step_id - 1)
-	var task_name = full_text.split(": ")[-1]
-	task_label.text = task_name
+	# Update Task Text
+	var step_data = TutorialManager.sequence.get_step(step_id - 1)
+	if step_data:
+		var full_text = step_data.instruction_text
+		var task_name = full_text.split(": ")[-1]
+		task_label.text = task_name
+		
+		# Update Subtitle (Long narrative text)
+		update_subtitle(step_data.comms_text)
 	
 	# Update Counter
 	var total_steps = 7

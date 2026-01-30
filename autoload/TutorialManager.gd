@@ -284,6 +284,16 @@ func _show_final_summary():
 	if summary_shown: return
 	summary_shown = true
 	
+	# CLEANUP: If the player is at the desk, exit 2D mode before showing summary
+	if GameState.is_in_2d_mode():
+		if TransitionManager:
+			TransitionManager.exit_desktop_mode()
+			await EventBus.transition_completed
+
+	# DISABLE PLAYER: Block mouse-look and movement using centralized mode
+	if GameState:
+		GameState.set_mode(GameState.GameMode.MODE_UI_ONLY)
+
 	# FREEZE BACKGROUND
 	if NarrativeDirector: NarrativeDirector.stop_shift()
 	if IntegrityManager: IntegrityManager.stop_decay()
