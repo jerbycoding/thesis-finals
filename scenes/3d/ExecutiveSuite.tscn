@@ -1,71 +1,142 @@
-[gd_scene load_steps=10 format=3 uid="uid://det2gmwrw5v8i"]
+[gd_scene load_steps=14 format=3 uid="uid://det2gmwrw5v8i"]
 
 [ext_resource type="PackedScene" uid="uid://b2d35yngg7u75" path="res://scenes/Player3D.tscn" id="1_player"]
 [ext_resource type="PackedScene" uid="uid://ceta2wna3gome" path="res://scenes/3d/NPC_CISO.tscn" id="2_ciso"]
 [ext_resource type="Script" uid="uid://dh3hcvpwq0ufa" path="res://scripts/3d/RoomTeleporter.gd" id="3_teleport"]
-[ext_resource type="Script" uid="uid://cw8wvj6b5bg13" path="res://scripts/3d/SlidingDoor.gd" id="4_door"]
+[ext_resource type="PackedScene" uid="uid://byav1eqq5v48f" path="res://scenes/3d/props/graybox/Prop_Desk.tscn" id="4_desk"]
+[ext_resource type="PackedScene" uid="uid://d4ne0p5l7d6w" path="res://scenes/3d/props/graybox/Graybox_Chair.tscn" id="5_chair"]
+[ext_resource type="PackedScene" uid="uid://byh82hlg10odp" path="res://scenes/3d/props/graybox/Graybox_Elevator.tscn" id="6_elevator_visual"]
+[ext_resource type="PackedScene" uid="uid://dtc3v3ufo5y87" path="res://scenes/3d/props/graybox/Graybox_Sofa.tscn" id="7_sofa"]
+[ext_resource type="PackedScene" uid="uid://b0gqano663ehk" path="res://scenes/3d/props/graybox/Graybox_PlantPot.tscn" id="8_plant"]
 
 [sub_resource type="Environment" id="Environment_exec"]
 background_mode = 1
-background_color = Color(0.05, 0.05, 0.1, 1)
+background_color = Color(0.02, 0.02, 0.05, 1)
 ambient_light_source = 2
-ambient_light_color = Color(0.4, 0.4, 0.6, 1)
+ambient_light_color = Color(0.2, 0.2, 0.3, 1)
 tonemap_mode = 2
+glow_enabled = true
+glow_intensity = 1.5
+glow_bloom = 0.2
 
-[sub_resource type="PlaneMesh" id="PlaneMesh_carpet"]
-size = Vector2(15, 10)
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_floor"]
+albedo_color = Color(0.15, 0.15, 0.15, 1)
+metallic = 0.1
+roughness = 0.8
 
-[sub_resource type="BoxMesh" id="BoxMesh_desk"]
-size = Vector3(3, 0.8, 1.2)
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wall"]
+albedo_color = Color(0.2, 0.2, 0.25, 1)
+metallic = 0.5
+roughness = 0.4
 
-[sub_resource type="BoxShape3D" id="BoxShape_elevator"]
-size = Vector3(4, 4, 4)
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_glass"]
+transparency = 1
+albedo_color = Color(0, 0.5, 1, 0.1)
+metallic = 1.0
+roughness = 0.0
+refraction_enabled = true
 
-[sub_resource type="BoxMesh" id="BoxMesh_door"]
-size = Vector3(2, 4, 0.2)
+[sub_resource type="BoxShape3D" id="BoxShape3D_elevator_trigger"]
+size = Vector3(2, 3, 2)
 
 [node name="ExecutiveSuite" type="Node3D"]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_exec")
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, -0.75, 0.433013, 0, 5, 0)
+[node name="Architecture" type="Node3D" parent="."]
+
+[node name="Floor" type="CSGBox3D" parent="Architecture"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
+use_collision = true
+size = Vector3(15, 0.2, 15)
+material = SubResource("StandardMaterial3D_floor")
+
+[node name="Ceiling" type="CSGBox3D" parent="Architecture"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.1, 0)
+use_collision = true
+size = Vector3(15, 0.2, 15)
+material = SubResource("StandardMaterial3D_wall")
+
+[node name="Wall_Back" type="CSGBox3D" parent="Architecture"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -7.6)
+use_collision = true
+size = Vector3(15, 4, 0.2)
+material = SubResource("StandardMaterial3D_wall")
+
+[node name="Wall_Left" type="CSGBox3D" parent="Architecture"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -7.6, 2, 0)
+use_collision = true
+size = Vector3(15, 4, 0.2)
+material = SubResource("StandardMaterial3D_wall")
+
+[node name="Wall_Right" type="CSGBox3D" parent="Architecture"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 7.6, 2, 0)
+use_collision = true
+size = Vector3(15, 4, 0.2)
+material = SubResource("StandardMaterial3D_wall")
+
+[node name="Window_Glass" type="CSGBox3D" parent="Architecture"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 7.6)
+use_collision = true
+size = Vector3(15, 4, 0.1)
+material = SubResource("StandardMaterial3D_glass")
+
+[node name="Lighting" type="Node3D" parent="."]
+
+[node name="DeskSpot" type="SpotLight3D" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 3.8, -3)
+light_color = Color(0.9, 0.95, 1, 1)
+light_energy = 2.0
+shadow_enabled = true
+spot_range = 10.0
+spot_angle = 35.0
+
+[node name="LoungeOmni" type="OmniLight3D" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 3, 2)
+light_color = Color(1, 0.8, 0.6, 1)
 light_energy = 0.5
+omni_range = 8.0
 
-[node name="Room" type="Node3D" parent="."]
+[node name="CityGlow" type="DirectionalLight3D" parent="Lighting"]
+transform = Transform3D(-1, 0, -8.74228e-08, -4.37114e-08, 0.866025, 0.5, 7.57103e-08, 0.5, -0.866025, 0, 0, 20)
+light_color = Color(0.1, 0.2, 0.4, 1)
+light_energy = 0.2
 
-[node name="Floor" type="MeshInstance3D" parent="Room"]
-mesh = SubResource("PlaneMesh_carpet")
+[node name="Furnishing" type="Node3D" parent="."]
 
-[node name="CISO_Desk" type="MeshInstance3D" parent="Room"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, -3)
-mesh = SubResource("BoxMesh_desk")
+[node name="ExecutiveDesk" parent="Furnishing" instance=ExtResource("4_desk")]
+transform = Transform3D(1.2, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="ExecutiveChair" parent="Furnishing" instance=ExtResource("5_chair")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, -4.2)
+
+[node name="Sofa_L" parent="Furnishing" instance=ExtResource("7_sofa")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 6, 0, 2)
+
+[node name="Sofa_R" parent="Furnishing" instance=ExtResource("7_sofa")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 2, 0, 2)
+
+[node name="Plant_1" parent="Furnishing" instance=ExtResource("8_plant")]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -6, 0, -6)
+
+[node name="Plant_2" parent="Furnishing" instance=ExtResource("8_plant")]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 6, 0, -6)
 
 [node name="NPC_CISO" parent="." instance=ExtResource("2_ciso")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, -4)
 
 [node name="Elevator" type="Area3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4)
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -7.4, 0, 0)
 script = ExtResource("3_teleport")
 is_elevator = true
 current_floor = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Elevator"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
-shape = SubResource("BoxShape_elevator")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+shape = SubResource("BoxShape3D_elevator_trigger")
 
-[node name="ElevatorDoor" type="Node3D" parent="Elevator"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
-script = ExtResource("4_door")
-
-[node name="LeftPanel" type="MeshInstance3D" parent="Elevator/ElevatorDoor"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 2, 0)
-mesh = SubResource("BoxMesh_door")
-
-[node name="RightPanel" type="MeshInstance3D" parent="Elevator/ElevatorDoor"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 2, 0)
-mesh = SubResource("BoxMesh_door")
+[node name="ElevatorDoor" parent="Elevator" instance=ExtResource("6_elevator_visual")]
 
 [node name="Player3D" parent="." instance=ExtResource("1_player")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -5, 0, 0)

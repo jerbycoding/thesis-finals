@@ -1,133 +1,127 @@
-[gd_scene load_steps=19 format=3 uid="uid://dp4al4ut4ijjm"]
+[gd_scene load_steps=15 format=3 uid="uid://dp4al4ut4ijjm"]
 
-[ext_resource type="PackedScene" uid="uid://ceta2wna3gome" path="res://scenes/3d/NPC_CISO.tscn" id="1"]
-[ext_resource type="PackedScene" uid="uid://b2d35yngg7u75" path="res://scenes/Player3D.tscn" id="2"]
-[ext_resource type="Script" uid="uid://dh3hcvpwq0ufa" path="res://scripts/3d/RoomTeleporter.gd" id="3"]
-[ext_resource type="PackedScene" path="res://scenes/3d/props/graybox/Graybox_MeetingTable.tscn" id="4"]
-[ext_resource type="PackedScene" uid="uid://byh82hlg10odp" path="res://scenes/3d/props/graybox/Graybox_Elevator.tscn" id="5"]
-[ext_resource type="PackedScene" uid="uid://fu75aaq0cx15" path="res://scenes/3d/props/graybox/Prop_Monitor.tscn" id="6"]
-[ext_resource type="PackedScene" path="res://scenes/3d/props/graybox/Prop_Mug.tscn" id="7"]
-[ext_resource type="PackedScene" path="res://scenes/3d/props/graybox/Prop_Plant.tscn" id="8_plant"]
-[ext_resource type="PackedScene" uid="uid://cljwgt8jnd0f3" path="res://scenes/3d/props/graybox/Graybox_Shredder.tscn" id="9_shred"]
+[ext_resource type="PackedScene" uid="uid://ceta2wna3gome" path="res://scenes/3d/NPC_CISO.tscn" id="1_ciso"]
+[ext_resource type="PackedScene" uid="uid://b2d35yngg7u75" path="res://scenes/Player3D.tscn" id="2_player"]
+[ext_resource type="Script" uid="uid://dh3hcvpwq0ufa" path="res://scripts/3d/RoomTeleporter.gd" id="3_teleport"]
+[ext_resource type="PackedScene" path="res://scenes/3d/props/graybox/Graybox_MeetingTable.tscn" id="4_table"]
+[ext_resource type="PackedScene" uid="uid://byh82hlg10odp" path="res://scenes/3d/props/graybox/Graybox_Elevator.tscn" id="5_elevator"]
+[ext_resource type="PackedScene" uid="uid://fu75aaq0cx15" path="res://scenes/3d/props/graybox/Prop_Monitor.tscn" id="6_monitor"]
+[ext_resource type="PackedScene" path="res://scenes/3d/props/graybox/Prop_Mug.tscn" id="7_mug"]
+[ext_resource type="PackedScene" uid="uid://b0gqano663ehk" path="res://scenes/3d/props/graybox/Graybox_PlantPot.tscn" id="8_plant"]
+[ext_resource type="PackedScene" uid="uid://cljwgt8jnd0f3" path="res://scenes/3d/props/graybox/Graybox_Shredder.tscn" id="9_shredder"]
 [ext_resource type="PackedScene" uid="uid://cbr4jn67g1n0l" path="res://scenes/3d/props/graybox/Graybox_HVAC.tscn" id="10_hvac"]
 
-[sub_resource type="Environment" id="101"]
+[sub_resource type="Environment" id="Environment_briefing"]
 background_mode = 1
 background_color = Color(0.02, 0.02, 0.05, 1)
 ambient_light_source = 2
-ambient_light_color = Color(0.5, 0.5, 0.6, 1)
-ambient_light_energy = 0.8
+ambient_light_color = Color(0.3, 0.3, 0.4, 1)
 tonemap_mode = 2
 ssao_enabled = true
+glow_enabled = true
 
-[sub_resource type="StandardMaterial3D" id="102"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_floor"]
 albedo_color = Color(0.1, 0.1, 0.12, 1)
-roughness = 0.8
+metallic = 0.1
+roughness = 0.6
 
-[sub_resource type="PlaneMesh" id="103"]
-material = SubResource("102")
-size = Vector2(8, 10)
-
-[sub_resource type="StandardMaterial3D" id="106"]
-albedo_color = Color(0.9, 0.9, 0.9, 1)
-roughness = 0.8
-
-[sub_resource type="PlaneMesh" id="107"]
-material = SubResource("106")
-size = Vector2(8, 10)
-orientation = 2
-
-[sub_resource type="StandardMaterial3D" id="104"]
-albedo_color = Color(0.2, 0.22, 0.25, 1)
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wall"]
+albedo_color = Color(0.25, 0.25, 0.28, 1)
 roughness = 0.5
 
-[sub_resource type="BoxMesh" id="105"]
-material = SubResource("104")
-size = Vector3(8, 5, 0.2)
-
-[sub_resource type="BoxShape3D" id="108"]
-size = Vector3(4, 4, 4)
+[sub_resource type="BoxShape3D" id="BoxShape3D_trigger"]
+size = Vector3(2, 3, 2)
 
 [node name="BriefingRoom" type="Node3D"]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("101")
+environment = SubResource("Environment_briefing")
 
-[node name="RoomShell" type="Node3D" parent="."]
+[node name="Architecture" type="Node3D" parent="."]
 
-[node name="Floor" type="MeshInstance3D" parent="RoomShell"]
-mesh = SubResource("103")
+[node name="Floor" type="CSGBox3D" parent="Architecture"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
+use_collision = true
+size = Vector3(10, 0.2, 12)
+material = SubResource("StandardMaterial3D_floor")
 
-[node name="Ceiling" type="MeshInstance3D" parent="RoomShell"]
-transform = Transform3D(1, 0, 0, 0, -0.0339403, 0.999424, 0, -0.999424, -0.0339403, 0, 5, 0)
-mesh = SubResource("107")
+[node name="Ceiling" type="CSGBox3D" parent="Architecture"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.1, 0)
+use_collision = true
+size = Vector3(10, 0.2, 12)
+material = SubResource("StandardMaterial3D_wall")
 
-[node name="Wall_Front" type="MeshInstance3D" parent="RoomShell"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, -5)
-mesh = SubResource("105")
+[node name="Wall_Front" type="CSGBox3D" parent="Architecture"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -6.1)
+use_collision = true
+size = Vector3(10, 4, 0.2)
+material = SubResource("StandardMaterial3D_wall")
 
-[node name="Wall_Back" type="MeshInstance3D" parent="RoomShell"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 5)
-mesh = SubResource("105")
+[node name="Wall_Back" type="CSGBox3D" parent="Architecture"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 6.1)
+use_collision = true
+size = Vector3(10, 4, 0.2)
+material = SubResource("StandardMaterial3D_wall")
 
-[node name="Wall_Left" type="MeshInstance3D" parent="RoomShell"]
-transform = Transform3D(-5.44833e-08, 0, 1, 0, 1, 0, -1.24643, 0, -4.37114e-08, -4, 2.5, 0)
-mesh = SubResource("105")
+[node name="Wall_Left" type="CSGBox3D" parent="Architecture"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -5.1, 2, 0)
+use_collision = true
+size = Vector3(12, 4, 0.2)
+material = SubResource("StandardMaterial3D_wall")
 
-[node name="Wall_Right" type="MeshInstance3D" parent="RoomShell"]
-transform = Transform3D(-5.59229e-08, 0, 1, 0, 1, 0, -1.27937, 0, -4.37114e-08, 4, 2.5, 0)
-mesh = SubResource("105")
-
-[node name="Briefing_Display" parent="RoomShell" instance=ExtResource("6")]
-transform = Transform3D(6, 0, 0, 0, 4, 0, 0, 0, 1, 0, 2.5, -4.9)
+[node name="Wall_Right" type="CSGBox3D" parent="Architecture"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 5.1, 2, 0)
+use_collision = true
+size = Vector3(12, 4, 0.2)
+material = SubResource("StandardMaterial3D_wall")
 
 [node name="Props" type="Node3D" parent="."]
 
-[node name="MeetingTable" parent="Props" instance=ExtResource("4")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
+[node name="MeetingTable" parent="Props" instance=ExtResource("4_table")]
 
-[node name="CISO_Mug" parent="Props" instance=ExtResource("7")]
+[node name="CISO_Mug" parent="Props" instance=ExtResource("7_mug")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4, 0.8, -1.5)
 
-[node name="Background_Details" type="Node3D" parent="Props"]
+[node name="MainDisplay" parent="Props" instance=ExtResource("6_monitor")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 1, 0, 2, -5.9)
 
-[node name="Plant_NW" parent="Props/Background_Details" instance=ExtResource("8_plant")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5, 0, -4.5)
+[node name="SideDisplay" parent="Props" instance=ExtResource("6_monitor")]
+transform = Transform3D(-8.74228e-08, 0, -1, 0, 1, 0, 1, 0, -8.74228e-08, -4.9, 2, 0)
 
-[node name="Plant_NE" parent="Props/Background_Details" instance=ExtResource("8_plant")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5, 0, -4.5)
+[node name="Plant_NW" parent="Props" instance=ExtResource("8_plant")]
+transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, -4, 0, -5)
 
-[node name="Shredder" parent="Props/Background_Details" instance=ExtResource("9_shred")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5, 0, 3)
+[node name="Plant_NE" parent="Props" instance=ExtResource("8_plant")]
+transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 4, 0, -5)
 
-[node name="HVAC_Unit" parent="Props/Background_Details" instance=ExtResource("10_hvac")]
-transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 3.5, 0, 3)
+[node name="Shredder" parent="Props" instance=ExtResource("9_shredder")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, 4)
 
-[node name="Side_Display" parent="Props/Background_Details" instance=ExtResource("6")]
-transform = Transform3D(-8.74228e-08, 0, -2, 0, 2, 0, 2, 0, -8.74228e-08, -3.9, 2.5, 0)
+[node name="HVAC" parent="Props" instance=ExtResource("10_hvac")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 4, 0, 4)
 
-[node name="Lights" type="Node3D" parent="."]
+[node name="Lighting" type="Node3D" parent="."]
 
-[node name="Spotlight_Table" type="SpotLight3D" parent="Lights"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 4.5, 0)
-light_energy = 3.0
-spot_range = 10.0
+[node name="SpotLight3D" type="SpotLight3D" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 3.8, 0)
+light_energy = 2.0
+spot_range = 8.0
+spot_angle = 40.0
 
-[node name="NPC_CISO" parent="." instance=ExtResource("1")]
-transform = Transform3D(0.999326, 0, -0.0366959, 0, 1, 0, 0.0366959, 0, 0.999326, 0, 0, -2.5)
+[node name="NPC_CISO" parent="." instance=ExtResource("1_ciso")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.5)
 
 [node name="Elevator_Area" type="Area3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4.8)
-script = ExtResource("3")
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 5.8)
+script = ExtResource("3_teleport")
 target_scene_path = "res://scenes/SOC_Office.tscn"
 interaction_text = "Return to SOC"
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Elevator_Area"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
-shape = SubResource("108")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+shape = SubResource("BoxShape3D_trigger")
 
-[node name="Elevator_Model" parent="Elevator_Area" instance=ExtResource("5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.1)
+[node name="Elevator_Model" parent="Elevator_Area" instance=ExtResource("5_elevator")]
 
-[node name="Player3D" parent="." instance=ExtResource("2")]
-transform = Transform3D(0.996281, -0.000768735, -0.0861638, 0.000755952, 1, -0.000181022, 0.0861639, 0.000115234, 0.996281, 0, 0, 2.5)
+[node name="Player3D" parent="." instance=ExtResource("2_player")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3)
