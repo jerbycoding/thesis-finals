@@ -1,175 +1,180 @@
-[gd_scene load_steps=18 format=3 uid="uid://bot2u23kyxdxc"]
+[gd_scene load_steps=15 format=3 uid="uid://bot2u23kyxdxc"]
 
-[ext_resource type="PackedScene" uid="uid://b2d35yngg7u75" path="res://scenes/Player3D.tscn" id="1"]
-[ext_resource type="Script" uid="uid://dh3hcvpwq0ufa" path="res://scripts/3d/RoomTeleporter.gd" id="2"]
-[ext_resource type="PackedScene" uid="uid://kix0ll2kuom7" path="res://scenes/3d/props/graybox/Prop_AuditRouter.tscn" id="3"]
-[ext_resource type="PackedScene" uid="uid://byh82hlg10odp" path="res://scenes/3d/props/graybox/Graybox_Elevator.tscn" id="4"]
-[ext_resource type="PackedScene" uid="uid://cbr4jn67g1n0l" path="res://scenes/3d/props/graybox/Graybox_HVAC.tscn" id="5"]
-[ext_resource type="PackedScene" path="res://scenes/3d/props/graybox/Graybox_UPS.tscn" id="6"]
-[ext_resource type="PackedScene" uid="uid://bcxiimotr1s2a" path="res://scenes/3d/props/graybox/Graybox_CeilingLight.tscn" id="7"]
-[ext_resource type="PackedScene" uid="uid://q38i1bbfyp7y" path="res://scenes/3d/props/graybox/Graybox_Window.tscn" id="8"]
-[ext_resource type="PackedScene" uid="uid://c8n7m6l5k4j32" path="res://scenes/3d/NPC_NetworkSpecialist.tscn" id="9"]
+[ext_resource type="PackedScene" uid="uid://b2d35yngg7u75" path="res://scenes/Player3D.tscn" id="1_player"]
+[ext_resource type="Script" uid="uid://dh3hcvpwq0ufa" path="res://scripts/3d/RoomTeleporter.gd" id="2_teleport"]
+[ext_resource type="PackedScene" uid="uid://kix0ll2kuom7" path="res://scenes/3d/props/graybox/Prop_AuditRouter.tscn" id="3_router"]
+[ext_resource type="PackedScene" uid="uid://byh82hlg10odp" path="res://scenes/3d/props/graybox/Graybox_Elevator.tscn" id="4_elevator"]
+[ext_resource type="PackedScene" uid="uid://cbr4jn67g1n0l" path="res://scenes/3d/props/graybox/Graybox_HVAC.tscn" id="5_hvac"]
+[ext_resource type="PackedScene" path="res://scenes/3d/props/graybox/Graybox_UPS.tscn" id="6_ups"]
+[ext_resource type="PackedScene" uid="uid://bcxiimotr1s2a" path="res://scenes/3d/props/graybox/Graybox_CeilingLight.tscn" id="7_light"]
+[ext_resource type="PackedScene" uid="uid://q38i1bbfyp7y" path="res://scenes/3d/props/graybox/Graybox_Window.tscn" id="8_window"]
+[ext_resource type="PackedScene" uid="uid://c8n7m6l5k4j32" path="res://scenes/3d/NPC_NetworkSpecialist.tscn" id="9_npc"]
 
-[sub_resource type="Environment" id="101"]
+[sub_resource type="Environment" id="Environment_hub"]
 background_mode = 1
-background_color = Color(0.05, 0.02, 0.05, 1)
+background_color = Color(0.01, 0.01, 0.02, 1)
 ambient_light_source = 2
-ambient_light_color = Color(0.8, 0.4, 1, 1)
-ambient_light_energy = 3.0
+ambient_light_color = Color(0.1, 0.1, 0.2, 1)
 tonemap_mode = 2
 ssao_enabled = true
+glow_enabled = true
+glow_intensity = 1.2
 
-[sub_resource type="StandardMaterial3D" id="103"]
+[sub_resource type="NavigationMesh" id="NavigationMesh_hub"]
+geometry_parsed_geometry_type = 1
+agent_height = 1.8
+agent_radius = 0.4
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_floor"]
 albedo_color = Color(0.1, 0.1, 0.12, 1)
-roughness = 0.7
-
-[sub_resource type="PlaneMesh" id="104"]
-material = SubResource("103")
-size = Vector2(16, 16)
-
-[sub_resource type="StandardMaterial3D" id="107"]
-albedo_color = Color(0.2, 0.22, 0.25, 1)
+metallic = 0.2
 roughness = 0.5
 
-[sub_resource type="BoxMesh" id="108"]
-material = SubResource("107")
-size = Vector3(16, 4, 0.5)
-
-[sub_resource type="StandardMaterial3D" id="105"]
-albedo_color = Color(0.9, 0.9, 0.9, 1)
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wall"]
+albedo_color = Color(0.15, 0.15, 0.18, 1)
+metallic = 0.1
 roughness = 0.8
 
-[sub_resource type="PlaneMesh" id="106"]
-material = SubResource("105")
-size = Vector2(16, 16)
-orientation = 2
-
-[sub_resource type="BoxShape3D" id="109"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_trigger"]
 size = Vector3(4, 4, 4)
 
 [node name="NetworkHub" type="Node3D"]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("101")
+environment = SubResource("Environment_hub")
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
+navigation_mesh = SubResource("NavigationMesh_hub")
 
-[node name="WalkableGeometry" type="Node3D" parent="NavigationRegion3D"]
+[node name="Architecture" type="Node3D" parent="NavigationRegion3D"]
 
-[node name="Floor" type="MeshInstance3D" parent="NavigationRegion3D/WalkableGeometry"]
-mesh = SubResource("104")
+[node name="Floor" type="CSGBox3D" parent="NavigationRegion3D/Architecture"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
+use_collision = true
+size = Vector3(16, 0.2, 16)
+material = SubResource("StandardMaterial3D_floor")
 
-[node name="NorthWall" type="MeshInstance3D" parent="NavigationRegion3D/WalkableGeometry"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -8)
-mesh = SubResource("108")
+[node name="Ceiling" type="CSGBox3D" parent="NavigationRegion3D/Architecture"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.1, 0)
+use_collision = true
+size = Vector3(16, 0.2, 16)
+material = SubResource("StandardMaterial3D_wall")
 
-[node name="SouthWall" type="MeshInstance3D" parent="NavigationRegion3D/WalkableGeometry"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 8)
-mesh = SubResource("108")
+[node name="NorthWall" type="CSGBox3D" parent="NavigationRegion3D/Architecture"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -8.1)
+use_collision = true
+size = Vector3(16, 4, 0.2)
+material = SubResource("StandardMaterial3D_wall")
 
-[node name="EastWall" type="MeshInstance3D" parent="NavigationRegion3D/WalkableGeometry"]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 8, 2, 0)
-mesh = SubResource("108")
+[node name="SouthWall" type="CSGBox3D" parent="NavigationRegion3D/Architecture"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 8.1)
+use_collision = true
+size = Vector3(16, 4, 0.2)
+material = SubResource("StandardMaterial3D_wall")
 
-[node name="WestWall" type="MeshInstance3D" parent="NavigationRegion3D/WalkableGeometry"]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -8, 2, 0)
-mesh = SubResource("108")
+[node name="EastWall" type="CSGBox3D" parent="NavigationRegion3D/Architecture"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 8.1, 2, 0)
+use_collision = true
+size = Vector3(16, 4, 0.2)
+material = SubResource("StandardMaterial3D_wall")
+
+[node name="WestWall" type="CSGBox3D" parent="NavigationRegion3D/Architecture"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -8.1, 2, 0)
+use_collision = true
+size = Vector3(16, 4, 0.2)
+material = SubResource("StandardMaterial3D_wall")
 
 [node name="Routers" type="Node3D" parent="NavigationRegion3D"]
 
-[node name="Router1" parent="NavigationRegion3D/Routers" instance=ExtResource("3")]
+[node name="Router1" parent="NavigationRegion3D/Routers" instance=ExtResource("3_router")]
 transform = Transform3D(0.5, 0, 0.866025, 0, 1, 0, -0.866025, 0, 0.5, -2.5, 0, -1.5)
 
-[node name="Router2" parent="NavigationRegion3D/Routers" instance=ExtResource("3")]
+[node name="Router2" parent="NavigationRegion3D/Routers" instance=ExtResource("3_router")]
 transform = Transform3D(-0.5, 0, 0.866025, 0, 1, 0, -0.866025, 0, -0.5, 2.5, 0, -1.5)
 audit_id = "audit_2"
 
-[node name="Router3" parent="NavigationRegion3D/Routers" instance=ExtResource("3")]
+[node name="Router3" parent="NavigationRegion3D/Routers" instance=ExtResource("3_router")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 3, 0, 1.5)
 audit_id = "audit_3"
 
-[node name="Router4" parent="NavigationRegion3D/Routers" instance=ExtResource("3")]
+[node name="Router4" parent="NavigationRegion3D/Routers" instance=ExtResource("3_router")]
 transform = Transform3D(-0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, -0.5, 0, 0, 3.5)
 audit_id = "audit_4"
 
-[node name="Router5" parent="NavigationRegion3D/Routers" instance=ExtResource("3")]
+[node name="Router5" parent="NavigationRegion3D/Routers" instance=ExtResource("3_router")]
 transform = Transform3D(0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, 0.5, -3, 0, 1.5)
 audit_id = "audit_5"
 
-[node name="Router6" parent="NavigationRegion3D/Routers" instance=ExtResource("3")]
+[node name="Router6" parent="NavigationRegion3D/Routers" instance=ExtResource("3_router")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.5)
 audit_id = "audit_6"
 
 [node name="HVAC_Obstacles" type="Node3D" parent="NavigationRegion3D"]
 
-[node name="HVAC_1" parent="NavigationRegion3D/HVAC_Obstacles" instance=ExtResource("5")]
+[node name="HVAC_1" parent="NavigationRegion3D/HVAC_Obstacles" instance=ExtResource("5_hvac")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.5, 0, -6.5)
 
-[node name="HVAC_2" parent="NavigationRegion3D/HVAC_Obstacles" instance=ExtResource("5")]
+[node name="HVAC_2" parent="NavigationRegion3D/HVAC_Obstacles" instance=ExtResource("5_hvac")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.5, 0, -6.5)
 
-[node name="UPS_Bank" parent="NavigationRegion3D/HVAC_Obstacles" instance=ExtResource("6")]
+[node name="UPS_Bank" parent="NavigationRegion3D/HVAC_Obstacles" instance=ExtResource("6_ups")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6.5)
 
-[node name="NPC_NetworkSpecialist" parent="NavigationRegion3D" instance=ExtResource("9")]
+[node name="NPC_NetworkSpecialist" parent="NavigationRegion3D" instance=ExtResource("9_npc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.0512, 0, -2.32807)
 
-[node name="Infrastructure_Aerial" type="Node3D" parent="."]
+[node name="Ceiling_Details" type="Node3D" parent="."]
 
-[node name="Ceiling" type="MeshInstance3D" parent="Infrastructure_Aerial"]
-transform = Transform3D(1, 0, 0, 0, -0.00500908, 0.999987, 0, -0.999987, -0.00500908, 0, 4, 0)
-mesh = SubResource("106")
-
-[node name="Window_L" parent="Infrastructure_Aerial" instance=ExtResource("8")]
+[node name="Window_L" parent="Ceiling_Details" instance=ExtResource("8_window")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -7.9, 3, 0)
 
-[node name="Window_R" parent="Infrastructure_Aerial" instance=ExtResource("8")]
+[node name="Window_R" parent="Ceiling_Details" instance=ExtResource("8_window")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 7.9, 3, 0)
 
-[node name="Lights" type="Node3D" parent="Infrastructure_Aerial"]
+[node name="Lights" type="Node3D" parent="Ceiling_Details"]
 
-[node name="OmniLight_Center" type="OmniLight3D" parent="Infrastructure_Aerial/Lights"]
+[node name="OmniLight_Center" type="OmniLight3D" parent="Ceiling_Details/Lights"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
 light_color = Color(0.4, 0.7, 1, 1)
 light_energy = 5.0
 omni_range = 12.0
 
-[node name="OmniLight_L" type="OmniLight3D" parent="Infrastructure_Aerial/Lights"]
+[node name="OmniLight_L" type="OmniLight3D" parent="Ceiling_Details/Lights"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 3, -5)
 light_color = Color(0.8, 0.4, 1, 1)
 light_energy = 3.0
 omni_range = 10.0
 
-[node name="OmniLight_R" type="OmniLight3D" parent="Infrastructure_Aerial/Lights"]
+[node name="OmniLight_R" type="OmniLight3D" parent="Ceiling_Details/Lights"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 3, 5)
 light_color = Color(0.8, 0.4, 1, 1)
 light_energy = 3.0
 omni_range = 10.0
 
-[node name="Grid_1" parent="Infrastructure_Aerial/Lights" instance=ExtResource("7")]
+[node name="Grid_1" parent="Ceiling_Details/Lights" instance=ExtResource("7_light")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 3.9, -4)
 
-[node name="Grid_2" parent="Infrastructure_Aerial/Lights" instance=ExtResource("7")]
+[node name="Grid_2" parent="Ceiling_Details/Lights" instance=ExtResource("7_light")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 3.9, -4)
 
-[node name="Grid_3" parent="Infrastructure_Aerial/Lights" instance=ExtResource("7")]
+[node name="Grid_3" parent="Ceiling_Details/Lights" instance=ExtResource("7_light")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 3.9, 4)
 
-[node name="Grid_4" parent="Infrastructure_Aerial/Lights" instance=ExtResource("7")]
+[node name="Grid_4" parent="Ceiling_Details/Lights" instance=ExtResource("7_light")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 3.9, 4)
 
 [node name="Elevator_Area" type="Area3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 7.56086)
-script = ExtResource("2")
+script = ExtResource("2_teleport")
 is_elevator = true
 current_floor = -2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Elevator_Area"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
-shape = SubResource("109")
+shape = SubResource("BoxShape3D_trigger")
 
-[node name="Graybox_Elevator" parent="Elevator_Area" instance=ExtResource("4")]
+[node name="Graybox_Elevator" parent="Elevator_Area" instance=ExtResource("4_elevator")]
 transform = Transform3D(-0.998903, 0, 0.0468274, 0, 1, 0, -0.0468274, 0, -0.998903, 0, 0, 0)
 
-[node name="Player3D" parent="." instance=ExtResource("1")]
+[node name="Player3D" parent="." instance=ExtResource("1_player")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 6)
