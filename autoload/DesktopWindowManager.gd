@@ -113,6 +113,9 @@ func open_app(app_name: String, force_new: bool = false):
 	window.set_title(config.title)
 	window.position = _get_next_window_position()
 	
+	# Store reference IMMEDIATELY to prevent race conditions during 'await'
+	open_windows[window_id] = window
+	
 	# Set window size based on app type
 	window_container.visible = true
 	
@@ -122,9 +125,9 @@ func open_app(app_name: String, force_new: bool = false):
 	# Wait for window to be ready
 	await get_tree().process_frame
 	
-	# Double-check window is valid
+	# Double-check window is valid after await
 	if not is_instance_valid(window):
-		print("ERROR: DesktopWindowManager: Window became invalid after adding to tree!")
+		open_windows.erase(window_id)
 		return
 	
 	# Load app content
@@ -137,18 +140,13 @@ func open_app(app_name: String, force_new: bool = false):
 			# Wait a frame to ensure content is loaded
 			await get_tree().process_frame
 		else:
-			print("ERROR: DesktopWindowManager: Failed to load app scene resource - load() returned null")
-			var placeholder = Label.new()
-			placeholder.text = config.title + " (Failed to Load)"
-			window.content_container.add_child(placeholder)
+			print("ERROR: DesktopWindowManager: Failed to load app scene resource")
+			_cleanup_failed_window(window_id)
+			return
 	else:
-		print("ERROR: DesktopWindowManager: App scene not found at path: ", app_scene_path)
-		var placeholder = Label.new()
-		placeholder.text = config.title + " (Scene Not Found)"
-		window.content_container.add_child(placeholder)
-	
-	# Store reference
-	open_windows[window_id] = window
+		print("ERROR: DesktopWindowManager: App scene not found: ", app_scene_path)
+		_cleanup_failed_window(window_id)
+		return
 	
 	# Update next position (stagger)
 	next_window_position += Vector2(30, 30)
@@ -163,6 +161,13 @@ func open_app(app_name: String, force_new: bool = false):
 	
 	EventBus.app_opened.emit(app_name, window_id)
 	print("DesktopWindowManager: Opened app: ", app_name, " at position: ", window.position)
+
+func _cleanup_failed_window(window_id: String):
+	if window_id in open_windows:
+		var window = open_windows[window_id]
+		if is_instance_valid(window):
+			window.queue_free()
+		open_windows.erase(window_id)
 
 func close_app(app_name: String, window_id: String = ""):
 	if window_id and window_id in open_windows:
@@ -270,15 +275,27 @@ func _focus_window(window: Control):
 func _update_window_z_indices():
 	var current_z = window_z_index_base
 	var windows_to_sort: Array = []
+	
+	# Clean up invalid references first
+	var invalid_ids = []
 	for window_id in open_windows:
 		var window = open_windows[window_id]
 		if is_instance_valid(window):
 			windows_to_sort.append(window)
+		else:
+			invalid_ids.append(window_id)
+	
+	for id in invalid_ids:
+		open_windows.erase(id)
 	
 	# Sort windows by their current z_index to maintain relative ordering
-	windows_to_sort.sort_custom(func(a, b): return a.z_index < b.z_index)
+	windows_to_sort.sort_custom(func(a, b): 
+		if not is_instance_valid(a) or not is_instance_valid(b): return false
+		return a.z_index < b.z_index
+	)
 	
 	for window in windows_to_sort:
+		if not is_instance_valid(window): continue
 		if window == focused_window:
 			window.z_index = window_z_index_base + 100 # Highest Z-index for focused window
 		else:

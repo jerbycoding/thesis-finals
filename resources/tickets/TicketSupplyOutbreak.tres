@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="TicketResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/tickets/TicketResource.gd" id="1_ticket"]
+
+[resource]
+script = ExtResource("1_ticket")
+ticket_id = "SUPPLY-CHAIN-003"
+title = "Critical: Multi-Host Subnet Outbreak"
+description = "CRITICAL ALERT: Lateral movement has been confirmed. The infection from the compromised server has spread to multiple workstations within the same subnet. This is now a full-scale subnet outbreak.
+
+Immediate containment of the entire subnet may be necessary. Identify all infected hosts and isolate them to prevent further spread to the production network."
+severity = "Critical"
+category = "Malware"
+steps = ["Identify all workstations communicating with the infected server", "Isolate all infected workstations in the subnet", "Verify that the outbreak is contained"]
+required_tool = "network"
+base_time = 300.0
+required_log_ids = ["LOG-SUPPLY-003"]
+kill_chain_path = "Supply Chain"
+kill_chain_stage = 3

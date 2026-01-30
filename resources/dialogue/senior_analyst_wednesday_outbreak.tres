@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="DialogueDataResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/dialogue/DialogueDataResource.gd" id="1_dialogue_data"]
+
+[resource]
+script = ExtResource("1_dialogue_data")
+npc_name = "Senior Analyst"
+portrait = "👨‍💻"
+lines = [
+    {"choices": [], "text": "Things are heating up. Lateral movement is active. If you don't catch the beacon now, it's going to hit the database by lunch."},
+    {"choices": [
+        {"text": "I can handle it solo.", "effect": {"npc": "senior_analyst", "relationship_change": -0.1}},
+        {"text": "What should I look for first?", "effect": {"npc": "senior_analyst", "relationship_change": 0.2}},
+        {"text": "The tools are too slow.", "effect": {"npc": "senior_analyst", "relationship_change": -0.2}}
+    ], "text": "Are you feeling the pressure yet?"},
+    {"choices": [], "text": "Check the DNS logs. Look for anything that doesn't resolve to a corporate internal. Stay sharp."}
+]

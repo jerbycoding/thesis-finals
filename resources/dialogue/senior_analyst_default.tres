@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="DialogueDataResource" load_steps=2]
+[gd_resource type="Resource" script_class="DialogueDataResource" load_steps=2 format=3]
 
 [ext_resource type="Script" path="res://resources/dialogue/DialogueDataResource.gd" id="1_dialogue_data"]
 
@@ -7,5 +7,6 @@ script = ExtResource("1_dialogue_data")
 npc_name = "Senior Analyst"
 portrait = "👨‍💻"
 lines = [
-    {"choices": [], "text": "Need something? I'm busy, but I can help if it's quick."}
+    {"choices": [], "text": "If you're looking for a coffee break, you're in the wrong department. Check the logs, verify the headers, and don't take any cowboy shortcuts."},
+    {"choices": [], "text": "Need help? Read the handbook. That's why we wrote it. Stay sharp, the noise is only going to get louder."}
 ]

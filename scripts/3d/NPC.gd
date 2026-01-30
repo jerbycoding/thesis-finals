@@ -71,20 +71,18 @@ func _on_body_exited(body):
 		if body.has_method("set_near_npc"):
 			body.set_near_npc(self, false)
 
-func _input(event):
-	if player_nearby and event.is_action_pressed("interact"):
-		start_dialogue("default")
-
 func start_dialogue(dialogue_id: String = "default"):
 	# Delegate starting the dialogue to the DialogueManager.
 	# This avoids scene-specific instances and ensures the dialogue UI
 	# is handled by a persistent system.
+	print("NPC [%s]: Manually starting dialogue '%s'" % [npc_name, dialogue_id])
+	
 	if DialogueManager:
 		var dialogue_resource = get_dialogue(dialogue_id)
 		if dialogue_resource:
 			DialogueManager.start_dialogue(self, dialogue_resource)
 		else:
-			push_warning("No dialogue resource found for ID '%s' on NPC '%s'" % [dialogue_id, npc_name])
+			push_warning("NPC [%s]: Failed to find dialogue '%s'" % [npc_name, dialogue_id])
 	else:
 		push_error("DialogueManager not found. Cannot start dialogue.")
 
@@ -104,6 +102,11 @@ func _apply_choice_effect(effect: Dictionary):
 		var change = effect.get("relationship_change", 0.0)
 		if ConsequenceEngine:
 			ConsequenceEngine.update_npc_relationship(npc, change)
+	
+	if effect.has("favor"):
+		var favor_data = effect["favor"]
+		if ConsequenceEngine:
+			ConsequenceEngine.apply_social_favor(favor_data.get("id", ""), favor_data.get("cost", 0.0), npc_id)
 	
 	# Handle scene changes, which are asynchronous and may have a follow-up action.
 	if effect.has("change_scene"):
@@ -133,6 +136,8 @@ func get_dialogue(dialogue_id: String) -> DialogueDataResource:
 	
 	# 2. Convention-based discovery: res://resources/dialogue/[npc_id]_[dialogue_id].tres
 	var convention_path = "res://resources/dialogue/" + npc_id + "_" + dialogue_id + ".tres"
+	print("NPC [%s]: Searching for dialogue at convention path: %s" % [npc_name, convention_path])
+	
 	if ResourceLoader.exists(convention_path):
 		var res = load(convention_path)
 		if res is DialogueDataResource:

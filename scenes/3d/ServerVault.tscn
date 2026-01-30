@@ -1,11 +1,10 @@
-[gd_scene load_steps=22 format=3 uid="uid://dryl8qn0omosa"]
+[gd_scene load_steps=21 format=3 uid="uid://dryl8qn0omosa"]
 
 [ext_resource type="PackedScene" uid="uid://b2d35yngg7u75" path="res://scenes/Player3D.tscn" id="1"]
 [ext_resource type="PackedScene" uid="uid://duwuugwisvmoc" path="res://scenes/3d/props/graybox/Prop_ServerRack.tscn" id="2"]
 [ext_resource type="PackedScene" uid="uid://ch7ftdwdaxpgh" path="res://scenes/3d/props/graybox/Prop_ServerSlot.tscn" id="3"]
 [ext_resource type="Script" uid="uid://dh3hcvpwq0ufa" path="res://scripts/3d/RoomTeleporter.gd" id="4"]
 [ext_resource type="Script" uid="uid://ct6hutk18pyyw" path="res://scripts/3d/HardwareSpawner.gd" id="5"]
-[ext_resource type="Resource" uid="uid://dny42b338pxg0" path="res://resources/minigames/DefaultRecoveryConfig.tres" id="6"]
 [ext_resource type="PackedScene" uid="uid://cbr4jn67g1n0l" path="res://scenes/3d/props/graybox/Graybox_HVAC.tscn" id="7"]
 [ext_resource type="PackedScene" path="res://scenes/3d/props/graybox/Graybox_UPS.tscn" id="8"]
 [ext_resource type="PackedScene" uid="uid://bcxiimotr1s2a" path="res://scenes/3d/props/graybox/Graybox_CeilingLight.tscn" id="9"]
@@ -204,7 +203,6 @@ omni_range = 15.0
 
 [node name="HardwareSpawner" type="Node3D" parent="."]
 script = ExtResource("5")
-config = ExtResource("6")
 
 [node name="Point1" type="Marker3D" parent="HardwareSpawner"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0.1, -4)
@@ -237,8 +235,8 @@ current_floor = -1
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 shape = SubResource("108")
 
-[node name="Elevator_Model" parent="Elevator_Area" instance=ExtResource("11")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.23)
+[node name="Graybox_Elevator" parent="Elevator_Area" instance=ExtResource("11")]
+transform = Transform3D(-0.999866, 0, -0.0163704, 0, 1, 0, 0.0163704, 0, -0.999866, 0, 0, -0.0519743)
 
 [node name="Player3D" parent="." instance=ExtResource("1")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 10)

@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="DialogueDataResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/dialogue/DialogueDataResource.gd" id="1_dialogue_data"]
+
+[resource]
+script = ExtResource("1_dialogue_data")
+npc_name = "Junior Analyst"
+portrait = "👨‍💻"
+lines = [
+    {"choices": [], "text": "Is it always this intense? My queue is already full and I've only been here for twenty minutes."},
+    {"choices": [
+        {"text": "Stay calm and follow the logs.", "effect": {"npc": "junior_analyst", "relationship_change": 0.1}},
+        {"text": "It gets worse on Fridays.", "effect": {}}
+    ], "text": "The CISO was just here, looking over my shoulder. I think I'm going to need a lot more coffee."},
+    {"choices": [], "text": "If you find any easy phishing tickets, send them my way. I need the practice."}
+]

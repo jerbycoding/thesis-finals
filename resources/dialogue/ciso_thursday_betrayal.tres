@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="DialogueDataResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/dialogue/DialogueDataResource.gd" id="1_dialogue_data"]
+
+[resource]
+script = ExtResource("1_dialogue_data")
+npc_name = "CISO"
+portrait = "👔"
+lines = [
+    {"choices": [], "text": "Analyst, we have a situation. Internal data is leaking, and it's not coming from an external breach. It's a credentialed user."},
+    {"choices": [
+        {"text": "I'll find them, no matter who it is.", "effect": {"npc": "ciso", "relationship_change": 0.2}},
+        {"text": "Could it be a false flag?", "effect": {"npc": "ciso", "relationship_change": 0.1}},
+        {"text": "I don't like investigating coworkers.", "effect": {"npc": "ciso", "relationship_change": -0.2}}
+    ], "text": "Trust is gone. I need you to scrutinize every internal log as if it were a hostile IP."},
+    {"choices": [], "text": "This is a test of your loyalty to the organization. Do not let personal feelings cloud your forensics. Proceed."}
+]

@@ -52,6 +52,10 @@ func _on_start_button_pressed():
 	tween.tween_property(main_container, "modulate:a", 0.0, 0.5)
 	await tween.finished
 	
+	# TOTAL REFRESH: Purge all stale memory/saves before starting fresh
+	if SaveSystem:
+		SaveSystem.new_game_setup()
+	
 	if NarrativeDirector:
 		NarrativeDirector.start_briefing()
 

@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="TicketResource" load_steps=3 format=3]
+
+[ext_resource type="Resource" path="res://resources/tickets/TicketSupplyBackdoor.tres" id="1_escalation"]
+[ext_resource type="Script" path="res://resources/tickets/TicketResource.gd" id="2_ticket"]
+
+[resource]
+script = ExtResource("2_ticket")
+ticket_id = "SUPPLY-CHAIN-001"
+title = "Account Compromise: Trusted Partner"
+description = "A suspicious email has been reported from one of our trusted software vendors. The email asks for an 'urgent security update' to be downloaded and installed. Our relationship with this vendor is critical, and any compromise on their end could have severe implications for our own network.
+
+Analyze the email for signs of spoofing and check if any systems have already attempted to download the 'update'."
+severity = "Medium"
+category = "Phishing"
+steps = ["Inspect email headers for authenticity", "Verify if the download link is malicious", "Identify any internal traffic to the download domain"]
+required_tool = "email"
+base_time = 200.0
+required_log_ids = ["LOG-SUPPLY-001"]
+kill_chain_path = "Supply Chain"
+kill_chain_stage = 1
+escalation_ticket = ExtResource("1_escalation")

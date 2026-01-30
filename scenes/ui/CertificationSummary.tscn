@@ -1,6 +1,6 @@
 [gd_scene load_steps=10 format=3 uid="uid://dd8xpqqoldorn"]
 
-[ext_resource type="Script" path="res://scripts/ui/CertificationSummary.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://co0dk525653jw" path="res://scripts/ui/CertificationSummary.gd" id="1_script"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_BG"]
 bg_color = Color(0, 0, 0, 0.4)
@@ -24,6 +24,21 @@ shadow_color = Color(0, 0, 0, 0.1)
 shadow_size = 8
 shadow_offset = Vector2(0, 4)
 
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_Header"]
+thickness = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_TabContent"]
+content_margin_left = 20.0
+content_margin_top = 20.0
+content_margin_right = 20.0
+content_margin_bottom = 20.0
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.866667, 0.866667, 0.866667, 1)
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_TabActive"]
 content_margin_left = 15.0
 content_margin_right = 15.0
@@ -40,29 +55,6 @@ border_color = Color(0, 0, 0, 1)
 corner_radius_top_left = 2
 corner_radius_top_right = 2
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_TabContent"]
-content_margin_left = 20.0
-content_margin_top = 20.0
-content_margin_right = 20.0
-content_margin_bottom = 20.0
-bg_color = Color(1, 1, 1, 1)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.866667, 0.866667, 0.866667, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Button"]
-content_margin_left = 30.0
-content_margin_top = 12.0
-content_margin_right = 30.0
-content_margin_bottom = 12.0
-bg_color = Color(0, 0, 0, 1)
-corner_radius_top_left = 2
-corner_radius_top_right = 2
-corner_radius_bottom_right = 2
-corner_radius_bottom_left = 2
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ButtonHover"]
 content_margin_left = 30.0
 content_margin_top = 12.0
@@ -74,9 +66,16 @@ corner_radius_top_right = 2
 corner_radius_bottom_right = 2
 corner_radius_bottom_left = 2
 
-[sub_resource type="StyleBoxLine" id="StyleBoxLine_Header"]
-color = Color(0, 0, 0, 1)
-thickness = 2
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Button"]
+content_margin_left = 30.0
+content_margin_top = 12.0
+content_margin_right = 30.0
+content_margin_bottom = 12.0
+bg_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
 
 [node name="CertificationSummary" type="PanelContainer"]
 anchors_preset = 15
@@ -124,11 +123,11 @@ theme_override_styles/separator = SubResource("StyleBoxLine_Header")
 [node name="TabContainer" type="TabContainer" parent="Center/MainPanel/VBox"]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_colors/font_selected_color = Color(1, 1, 1, 1)
 theme_override_colors/font_unselected_color = Color(0.4, 0.4, 0.4, 1)
+theme_override_colors/font_selected_color = Color(1, 1, 1, 1)
+theme_override_styles/panel = SubResource("StyleBoxFlat_TabContent")
 theme_override_styles/tab_selected = SubResource("StyleBoxFlat_TabActive")
 theme_override_styles/tab_unselected = SubResource("StyleBoxFlat_TabInactive")
-theme_override_styles/panel = SubResource("StyleBoxFlat_TabContent")
 current_tab = 0
 
 [node name="THE TOOLS" type="RichTextLabel" parent="Center/MainPanel/VBox/TabContainer"]
@@ -194,8 +193,8 @@ layout_mode = 2
 [node name="StartButton" type="Button" parent="Center/MainPanel/VBox/Footer"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_hover_color = Color(0.9, 0.9, 0.9, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 16
 theme_override_styles/hover = SubResource("StyleBoxFlat_ButtonHover")
 theme_override_styles/normal = SubResource("StyleBoxFlat_Button")

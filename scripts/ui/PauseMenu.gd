@@ -38,6 +38,10 @@ func _on_quit_pressed():
 	if GameState:
 		GameState.set_paused(false)
 	
+	# Safety: Ensure NarrativeDirector is deactivated
+	if NarrativeDirector:
+		NarrativeDirector.stop_shift()
+	
 	# Fix: Ensure mouse is visible at Title Screen
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	

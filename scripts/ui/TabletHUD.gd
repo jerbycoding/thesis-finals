@@ -19,6 +19,7 @@ var rule_slider_scene = load("res://scenes/ui/RuleSliderMinigame.tscn")
 @export var config: HardwareRecoveryConfig 
 
 func _ready():
+	add_to_group("tablet_hud")
 	hide()
 	topology_map.draw.connect(_draw_topology)
 	topology_map.gui_input.connect(_on_map_gui_input)

@@ -114,6 +114,12 @@ func restore_integrity(amount: float):
 	print("IntegrityManager: Manual Restore -> %+.1f" % amount)
 	_apply_change(amount)
 
+func reset_to_default():
+	print("IntegrityManager: Resetting to default state.")
+	stop_decay()
+	current_integrity = max_integrity
+	integrity_changed.emit(current_integrity, 0.0)
+
 # --- Persistence ---
 
 func load_state(data: Dictionary):

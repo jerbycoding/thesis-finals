@@ -48,7 +48,13 @@ func _show_current_line():
 		return
 	
 	var line = lines[current_line_index]
-	text_label.text = line.get("text", "")
+	var raw_text = line.get("text", "")
+	
+	# Apply placeholders if they exist (Sprint 11)
+	if current_dialogue.has("placeholders") and not current_dialogue["placeholders"].is_empty():
+		raw_text = raw_text.format(current_dialogue["placeholders"])
+		
+	text_label.text = raw_text
 	
 	for child in choices_container.get_children():
 		child.queue_free()

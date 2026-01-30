@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="DialogueDataResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/dialogue/DialogueDataResource.gd" id="1_dialogue_data"]
+
+[resource]
+script = ExtResource("1_dialogue_data")
+npc_name = "Staff"
+portrait = "👥"
+lines = [
+    {"choices": [], "text": "Did you see that email from HR? Something about a policy update for cloud storage. Glad I'm not in Marketing."},
+    {"choices": [], "text": "The coffee in the breakroom tastes like liquid copper today. IT Support says it's 'within nominal parameters'."},
+    {"choices": [], "text": "My workstation has been so slow all morning. I bet it's that new security agent you guys installed."},
+    {"choices": [], "text": "Stay safe, analyst. I heard the Finance servers are under heavy fire today."}
+]

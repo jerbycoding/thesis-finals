@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="DialogueDataResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/dialogue/DialogueDataResource.gd" id="1_dialogue_data"]
+
+[resource]
+script = ExtResource("1_dialogue_data")
+npc_name = "Compliance Auditor"
+portrait = "🧐"
+lines = [
+    {"choices": [], "text": "Greetings, analyst. I am here to verify that organizational protocol is being observed. Every 'Efficient' closure is a calculated risk—one we track meticulously."},
+    {"choices": [], "text": "I've been reviewing your recent activity logs..."},
+    {"choices": [], "text": "Keep in mind: In the eyes of the board, a fast failure is still a failure. Adherence to established SOP is your only true metric of success."}
+]

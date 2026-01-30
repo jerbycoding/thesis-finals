@@ -79,8 +79,10 @@ func _physics_process(_delta):
 
 var tablet_active: bool = false
 var bob_time = 0.0
+var footstep_timer = 0.0
 const BOB_FREQ = 2.0 # Slightly slower for more "weight"
 const BOB_AMP = 0.04 # Slightly subtler
+const FOOTSTEP_INTERVAL = 0.5
 const EYE_HEIGHT = 1.75 # True eye level
 const SEATED_HEIGHT = 1.35 # Seated eye level
 
@@ -91,6 +93,7 @@ func _process(delta):
 		return
 		
 	_handle_headbob(delta)
+	_handle_footsteps(delta)
 	
 	if Input.is_action_just_pressed("ui_focus_next"): _try_toggle_tablet()
 	
@@ -105,6 +108,17 @@ func _process(delta):
 			if near_npc.has_method("start_dialogue"): near_npc.start_dialogue("default")
 			# EXPLICIT CHECK: Only pick up if it belongs to 'carriable' group
 			elif near_npc.is_in_group("carriable"): _pickup_object()
+
+func _handle_footsteps(delta):
+	if velocity.length() > 0.1 and is_on_floor():
+		var multiplier = sprint_multiplier if Input.is_action_pressed("sprint") else 1.0
+		footstep_timer -= delta * multiplier
+		if footstep_timer <= 0:
+			if AudioManager: AudioManager.play_footstep()
+			footstep_timer = FOOTSTEP_INTERVAL
+	else:
+		footstep_timer = 0.0
+		if AudioManager: AudioManager.stop_footstep()
 
 func _handle_headbob(delta):
 	if velocity.length() > 0.1:

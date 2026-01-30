@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="DialogueDataResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/dialogue/DialogueDataResource.gd" id="1_dialogue_data"]
+
+[resource]
+script = ExtResource("1_dialogue_data")
+npc_name = "Senior Analyst"
+portrait = "👨‍💻"
+lines = [
+    {"choices": [], "text": "I've been watching you work. You're fast, I'll give you that. But you're closing tickets without even looking at the DNS logs."},
+    {"choices": [], "text": "That 'Cowboy' attitude might get the queue cleared, but it leaves backdoors wide open. The attacker is counting on you being in a hurry."},
+    {"choices": [], "text": "Try slowing down. Adherence to protocol isn't just bureaucracy; it's how we stay safe."}
+]

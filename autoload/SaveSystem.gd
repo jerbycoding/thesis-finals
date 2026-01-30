@@ -94,6 +94,26 @@ func load_game() -> bool:
 func has_save_file() -> bool:
 	return FileAccess.file_exists(SAVE_PATH)
 
+func new_game_setup():
+	print("💾 SaveSystem: Executing master reset for New Game.")
+	
+	# 1. Reset Managers to resource defaults
+	if IntegrityManager: IntegrityManager.reset_to_default()
+	if ConsequenceEngine: ConsequenceEngine.reset_to_default()
+	if NetworkState: NetworkState.reset_to_default()
+	if HeatManager: HeatManager.reset_to_default()
+	if NarrativeDirector: NarrativeDirector.reset_to_default()
+	
+	# 2. Purge active tool data
+	if TicketManager: TicketManager.clear_active_data()
+	if LogSystem: LogSystem.clear_active_data()
+	if EmailSystem: EmailSystem.clear_active_data()
+	
+	# 3. Delete physical save file
+	if has_save_file():
+		DirAccess.remove_absolute(SAVE_PATH)
+		print("💾 SaveSystem: Save file purged.")
+
 # Calls the 'load_state' function on each manager with its relevant data slice.
 func _distribute_loaded_data(data: Dictionary):
 	# ArchetypeAnalyzer is stateless (derived from ConsequenceEngine), no load_state needed.

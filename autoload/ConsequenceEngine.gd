@@ -44,6 +44,15 @@ func load_state(relationships: Dictionary, choices: Array):
 	
 	print("ConsequenceEngine state loaded.")
 
+func reset_to_default():
+	print("ConsequenceEngine: Resetting all social and choice data.")
+	choice_log.clear()
+	scheduled_consequences.clear()
+	npc_relationships.clear()
+	if TimeManager:
+		# Specifically clear consequence timers
+		TimeManager.clear_all_timers()
+
 func trigger_consequence(consequence_id: String):
 	print("🚨 CONSECUTIVE TRIGGERED by NarrativeDirector: ", consequence_id)
 	
@@ -182,10 +191,106 @@ func _is_spear_phishing_email(email: EmailResource) -> bool:
 
 
 func _evaluate_consequences():
-	# TODO: Implement logic to evaluate player choices from 'choice_log'
-	# and trigger emergent consequences based on patterns of behavior.
+	# Implement logic to evaluate player choices and relationships
 	print("⚙️ Evaluating for emergent consequences...")
-	pass
+	_apply_social_consequences()
+
+func get_relationship_rank(npc_id: String) -> String:
+	var score = npc_relationships.get(npc_id, 0.0)
+	if score >= GlobalConstants.RELATIONSHIP_THRESHOLD.ADMIRED: return GlobalConstants.RELATIONSHIP_RANK.ADMIRED
+	if score >= GlobalConstants.RELATIONSHIP_THRESHOLD.RESPECTED: return GlobalConstants.RELATIONSHIP_RANK.RESPECTED
+	if score <= GlobalConstants.RELATIONSHIP_THRESHOLD.HATED: return GlobalConstants.RELATIONSHIP_RANK.HATED
+	if score <= GlobalConstants.RELATIONSHIP_THRESHOLD.DISTRUSTED: return GlobalConstants.RELATIONSHIP_RANK.DISTRUSTED
+	return GlobalConstants.RELATIONSHIP_RANK.NEUTRAL
+
+func _apply_social_consequences():
+	# 1. Senior Analyst Perks (Auto-Forensics)
+	var analyst_rank = get_relationship_rank(GlobalConstants.NPC_ID.SENIOR_ANALYST)
+	if analyst_rank == GlobalConstants.RELATIONSHIP_RANK.ADMIRED:
+		_try_auto_reveal_evidence()
+	
+	# 2. IT Support Penalties (Terminal Glitches)
+	var it_rank = get_relationship_rank(GlobalConstants.NPC_ID.IT_SUPPORT)
+	if it_rank == GlobalConstants.RELATIONSHIP_RANK.HATED:
+		_try_terminal_glitch()
+
+func _try_auto_reveal_evidence():
+	if not LogSystem: return
+	if randf() > 0.3: return # 30% chance per evaluation
+	
+	if TicketManager and TicketManager.has_active_tickets():
+		var ticket = TicketManager.get_active_tickets().pick_random()
+		if not ticket.required_log_ids.is_empty():
+			var log_id = ticket.required_log_ids.pick_random()
+			var log_res = LogSystem.get_log_by_id(log_id)
+			if log_res and not log_res.is_revealed:
+				log_res.is_revealed = true
+				print("💡 SOCIAL PERK: Senior Analyst revealed evidence for ", ticket.ticket_id)
+				if NotificationManager:
+					NotificationManager.show_notification("ANALYST TIP: Evidence surfaced in SIEM.", "success")
+
+func _try_terminal_glitch():
+	if not TerminalSystem: return
+	if randf() > 0.2: return # 20% chance per evaluation
+	
+	if not TerminalSystem.is_terminal_locked():
+		print("🔌 SOCIAL PENALTY: IT Support restricted terminal access.")
+		TerminalSystem.lock_terminal(10.0)
+		if NotificationManager:
+			NotificationManager.show_notification("TERMINAL ERROR: Network connection reset by IT.", "error")
+
+# --- Social Favor System (Sprint 10) ---
+
+func apply_social_favor(favor_id: String, cost: float, npc_id: String):
+	var current_score = npc_relationships.get(npc_id, 0.0)
+	var rank = get_relationship_rank(npc_id)
+	
+	# Minimum requirement: Respected
+	if current_score < GlobalConstants.RELATIONSHIP_THRESHOLD.RESPECTED:
+		if NotificationManager:
+			NotificationManager.show_notification("FAVOR DENIED: Standing with " + npc_id + " too low.", "warning")
+		return
+
+	print("💳 Applying Social Favor: ", favor_id, " | NPC: ", npc_id, " | Cost: ", cost)
+	update_npc_relationship(npc_id, -cost)
+	
+	match favor_id:
+		"reveal_evidence":
+			_reveal_guaranteed_evidence()
+		"boost_bandwidth":
+			_apply_bandwidth_boost()
+		_:
+			push_warning("ConsequenceEngine: Unknown favor ID: " + favor_id)
+
+func _reveal_guaranteed_evidence():
+	if not LogSystem or not TicketManager: return
+	
+	var active = TicketManager.get_active_tickets()
+	if active.is_empty(): return
+	
+	# Filter for tickets that have unrevealed required logs
+	var valid_tickets = []
+	for t in active:
+		for log_id in t.required_log_ids:
+			var l = LogSystem.get_log_by_id(log_id)
+			if l and not l.is_revealed:
+				valid_tickets.append({"ticket": t, "log_id": log_id})
+	
+	if not valid_tickets.is_empty():
+		var target = valid_tickets.pick_random()
+		var log_res = LogSystem.get_log_by_id(target.log_id)
+		log_res.is_revealed = true
+		if NotificationManager:
+			NotificationManager.show_notification("FAVOR: Analyst surfaced evidence for " + target.ticket.ticket_id, "success")
+	else:
+		if NotificationManager:
+			NotificationManager.show_notification("FAVOR: No new evidence to surface at this time.", "info")
+
+func _apply_bandwidth_boost():
+	# Notify TerminalSystem to ignore ISP throttling for a duration
+	EventBus.world_event_triggered.emit(GlobalConstants.EVENTS.ISP_THROTTLING, false, 60.0)
+	if NotificationManager:
+		NotificationManager.show_notification("FAVOR: IT bypassed network throttling (60s).", "success")
 
 func _on_ticket_completed_by_manager(ticket: TicketResource, completion_type: String, time_taken: float):
 	print("📝 ConsequenceEngine: Logged ticket completion: ", ticket.ticket_id, " - ", completion_type)

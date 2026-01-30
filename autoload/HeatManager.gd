@@ -52,6 +52,12 @@ func pop_vulnerability() -> Dictionary:
 		return {}
 	return vulnerability_buffer.pop_front()
 
+func reset_to_default():
+	print("HeatManager: Resetting difficulty scaling.")
+	current_week = 1
+	heat_multiplier = 1.0
+	vulnerability_buffer.clear()
+
 func load_state(data: Dictionary):
 	current_week = data.get("current_week", 1)
 	heat_multiplier = data.get("heat_multiplier", 1.0)

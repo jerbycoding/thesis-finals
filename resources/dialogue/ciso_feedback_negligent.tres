@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="DialogueDataResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/dialogue/DialogueDataResource.gd" id="1_dialogue_data"]
+
+[resource]
+script = ExtResource("1_dialogue_data")
+npc_name = "CISO"
+portrait = "👔"
+lines = [
+    {"choices": [], "text": "I've been looking at your performance metrics, and frankly, they are abysmal. More incidents are timing out than are being resolved."},
+    {"choices": [], "text": "This is a Security Operations Center, not a training simulation. Every alert you ignore is a potential breach. If you cannot handle the load, I will find someone who can."},
+    {"choices": [], "text": "Return to your station. Clear the queue. Do not let another alert time out."}
+]

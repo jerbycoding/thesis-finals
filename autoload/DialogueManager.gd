@@ -22,7 +22,7 @@ func _ready():
 	dialogue_box_instance.dialogue_closed.connect(_on_dialogue_closed)
 	print("DialogueManager ready.")
 
-func start_dialogue(requesting_npc: Node, dialogue_resource: DialogueDataResource):
+func start_dialogue(requesting_npc: Node, dialogue_resource: DialogueDataResource, placeholders: Dictionary = {}):
 	# requesting_npc can be null for 'remote' terminal calls
 	
 	if dialogue_resource == null:
@@ -41,7 +41,8 @@ func start_dialogue(requesting_npc: Node, dialogue_resource: DialogueDataResourc
 	var dialogue_data = {
 		"npc_name": dialogue_resource.npc_name,
 		"portrait": dialogue_resource.portrait,
-		"lines": dialogue_resource.lines
+		"lines": dialogue_resource.lines,
+		"placeholders": placeholders
 	}
 	
 	# Show the dialogue

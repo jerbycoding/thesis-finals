@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="DialogueDataResource" load_steps=2]
+[gd_resource type="Resource" script_class="DialogueDataResource" load_steps=2 format=3]
 
 [ext_resource type="Script" path="res://resources/dialogue/DialogueDataResource.gd" id="1_dialogue_data"]
 
@@ -7,5 +7,6 @@ script = ExtResource("1_dialogue_data")
 npc_name = "CISO"
 portrait = "👔"
 lines = [
-    {"choices": [], "text": "How is your shift progressing? Remember, we need results, not excuses."}
+    {"choices": [], "text": "Report to your station, analyst. We have a heavy queue today and the board is expecting high compliance metrics."},
+    {"choices": [], "text": "Every second you spend away from the SIEM is a second the attacker has to entrench themselves in our network. Move."}
 ]

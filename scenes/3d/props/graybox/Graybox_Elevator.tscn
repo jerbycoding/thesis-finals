@@ -1,26 +1,67 @@
-[gd_scene load_steps=7 format=3 uid="uid://byh82hlg10odp"]
+[gd_scene load_steps=15 format=3 uid="uid://byh82hlg10odp"]
 
 [ext_resource type="Script" uid="uid://cw8wvj6b5bg13" path="res://scripts/3d/SlidingDoor.gd" id="1"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_metal"]
-albedo_color = Color(0.4, 0.4, 0.45, 1)
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_brushed_metal"]
+albedo_color = Color(0.35, 0.35, 0.38, 1)
 metallic = 1.0
-roughness = 0.3
+roughness = 0.25
 
 [sub_resource type="BoxMesh" id="BoxMesh_frame"]
-material = SubResource("StandardMaterial3D_metal")
+material = SubResource("StandardMaterial3D_brushed_metal")
 size = Vector3(0.2, 3.2, 0.2)
 
 [sub_resource type="BoxMesh" id="BoxMesh_panel"]
-material = SubResource("StandardMaterial3D_metal")
-size = Vector3(1, 3, 0.05)
+material = SubResource("StandardMaterial3D_brushed_metal")
+size = Vector3(1, 3, 0.08)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_button"]
-albedo_color = Color(0.1, 0.1, 0.1, 1)
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_inset"]
+albedo_color = Color(0.2, 0.2, 0.22, 1)
+metallic = 1.0
+roughness = 0.5
 
-[sub_resource type="BoxMesh" id="BoxMesh_button"]
-material = SubResource("StandardMaterial3D_button")
-size = Vector3(0.1, 0.3, 0.2)
+[sub_resource type="BoxMesh" id="BoxMesh_panel_inset"]
+material = SubResource("StandardMaterial3D_inset")
+size = Vector3(0.8, 2.8, 0.02)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_display_bg"]
+albedo_color = Color(0, 0, 0, 1)
+metallic = 0.5
+roughness = 0.1
+
+[sub_resource type="BoxMesh" id="BoxMesh_indicator_box"]
+material = SubResource("StandardMaterial3D_display_bg")
+size = Vector3(0.6, 0.3, 0.15)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_emissive_blue"]
+albedo_color = Color(0, 0.4, 1, 1)
+emission_enabled = true
+emission = Color(0, 0.423529, 1, 1)
+emission_energy_multiplier = 2.0
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_screen"]
+material = SubResource("StandardMaterial3D_emissive_blue")
+size = Vector2(0.4, 0.2)
+orientation = 2
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_button_box"]
+albedo_color = Color(0.25, 0.25, 0.25, 1)
+metallic = 1.0
+roughness = 0.4
+
+[sub_resource type="BoxMesh" id="BoxMesh_call_panel"]
+material = SubResource("StandardMaterial3D_button_box")
+size = Vector3(0.15, 0.5, 0.1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_button_idle"]
+albedo_color = Color(0.8, 0.8, 0.8, 1)
+emission_enabled = true
+emission = Color(1, 1, 1, 1)
+emission_energy_multiplier = 0.2
+
+[sub_resource type="BoxMesh" id="BoxMesh_physical_button"]
+material = SubResource("StandardMaterial3D_button_idle")
+size = Vector3(0.08, 0.08, 0.05)
 
 [node name="Graybox_Elevator" type="Node3D"]
 script = ExtResource("1")
@@ -43,10 +84,38 @@ mesh = SubResource("BoxMesh_frame")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 1.5, 0)
 mesh = SubResource("BoxMesh_panel")
 
+[node name="Inset" type="MeshInstance3D" parent="LeftPanel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.04)
+mesh = SubResource("BoxMesh_panel_inset")
+
 [node name="RightPanel" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 1.5, 0)
 mesh = SubResource("BoxMesh_panel")
 
-[node name="Button_Box" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2, 1.4, 0)
-mesh = SubResource("BoxMesh_button")
+[node name="Inset" type="MeshInstance3D" parent="RightPanel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.04)
+mesh = SubResource("BoxMesh_panel_inset")
+
+[node name="FloorIndicator" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.4, 0)
+
+[node name="Box" type="MeshInstance3D" parent="FloorIndicator"]
+mesh = SubResource("BoxMesh_indicator_box")
+
+[node name="Screen" type="MeshInstance3D" parent="FloorIndicator"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.08)
+mesh = SubResource("PlaneMesh_screen")
+
+[node name="CallPanel" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.25, 1.4, 0)
+
+[node name="Backing" type="MeshInstance3D" parent="CallPanel"]
+mesh = SubResource("BoxMesh_call_panel")
+
+[node name="Btn_Up" type="MeshInstance3D" parent="CallPanel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0.05)
+mesh = SubResource("BoxMesh_physical_button")
+
+[node name="Btn_Down" type="MeshInstance3D" parent="CallPanel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0.05)
+mesh = SubResource("BoxMesh_physical_button")

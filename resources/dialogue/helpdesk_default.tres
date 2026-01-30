@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="DialogueDataResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/dialogue/DialogueDataResource.gd" id="1_dialogue_data"]
+
+[resource]
+script = ExtResource("1_dialogue_data")
+npc_name = "Helpdesk Lead"
+portrait = "🎧"
+lines = [
+    {"choices": [], "text": "The phones won't stop ringing. Everyone's password 'magically' stopped working at the same time. You having a better day than I am?"},
+    {"choices": [
+        {"text": "Can you hold the noise tickets for a bit?", "effect": {"relationship_change": -0.1}},
+        {"text": "Hang in there.", "effect": {"relationship_change": 0.1}}
+    ], "text": "I can try to filter some of these low-priority requests before they hit your queue, but my team's going to hear about it."},
+    {"choices": [], "text": "Alright, I'll stall the non-criticals for a few minutes. Focus on the real threats."}
+]

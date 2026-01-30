@@ -1,7 +1,7 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=3 format=3 uid="uid://b1rrpeealqxmb"]
 
-[ext_resource type="Script" path="res://scripts/2d/apps/components/WindowFrame.gd" id="1_k1wc0"]
-[ext_resource type="Theme" path="res://assets/themes/EnterpriseTheme.tres" id="2_theme"]
+[ext_resource type="Script" uid="uid://cy3db0qsjcwgt" path="res://scripts/2d/apps/components/WindowFrame.gd" id="1_k1wc0"]
+[ext_resource type="Theme" uid="uid://dny3rlbltexc7" path="res://assets/themes/EnterpriseTheme.tres" id="2_theme"]
 
 [node name="WindowFrame" type="Control"]
 custom_minimum_size = Vector2(300, 200)

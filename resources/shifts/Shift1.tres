@@ -9,7 +9,7 @@ shift_id = "shift_monday"
 briefing_dialogue_id = "briefing_01"
 event_sequence = [
 	{"time": 15, "event": "spawn_phish", "type": "spawn_ticket", "ticket_id": "PHISH-001"},
-	{"time": 45, "event": "analyst_checkin", "type": "npc_interaction", "npc_id": "senior_analyst", "dialogue_id": "checkin_01"},
+	{"time": 45, "event": "analyst_checkin", "type": "npc_interaction", "npc_id": "senior_analyst", "dialogue_id": "monday_morning"},
 	{"time": 60, "event": "spawn_auth", "type": "spawn_ticket", "ticket_id": "AUTH-FAIL-GENERIC"},
 	{"time": 120, "event": "spawn_maint", "type": "spawn_ticket", "ticket_id": "SYS-MAINT-GENERIC"},
 	{"time": 180, "event": "spawn_spear", "type": "spawn_ticket", "ticket_id": "SPEAR-PHISH-001"},
@@ -20,6 +20,8 @@ random_event_pool = [
 	{"event": "random_login_fail", "type": "spawn_ticket", "ticket_id": "AUTH-FAIL-GENERIC"},
 	{"event": "account_lockout_noise", "type": "spawn_ticket", "ticket_id": "TICKET-NOISE-001"},
 	{"event": "minor_siem_lag", "type": "system_event", "event_id": "SIEM_LAG", "duration": 15.0},
+	{"event": "isp_blip", "type": "system_event", "event_id": "ISP_THROTTLING", "duration": 30.0},
+	{"event": "internal_gossip", "type": "system_event", "event_id": "GOSSIP_FLOOD", "duration": 60.0},
 	{"event": "peer_checkin", "type": "npc_interaction", "npc_id": "senior_analyst", "dialogue_id": "default"}
 ]
 next_shift_id = "shift_tuesday"

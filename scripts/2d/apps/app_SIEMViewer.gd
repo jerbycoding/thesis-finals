@@ -104,6 +104,17 @@ func _add_log_entry(log: LogResource, prepend: bool = false):
 		entry.log_selected.connect(_on_log_selected)
 
 func _on_log_selected(log: LogResource, instance: Control):
+	# Social/Event Consequence: Apply artificial lag
+	var lag_duration = 0.1
+	if LogSystem:
+		lag_duration *= LogSystem.siem_lag_multiplier
+	
+	if lag_duration > 0.1:
+		log_detail_label.text = "[center][i]Retrieving forensic data...[/i][/center]"
+		await get_tree().create_timer(lag_duration).timeout
+		# Re-verify if this is still the selected log after wait
+		if selected_log != log: return
+
 	selected_log = log
 	inspector_pane.visible = true
 	log_detail_label.text = log.get_forensic_report()

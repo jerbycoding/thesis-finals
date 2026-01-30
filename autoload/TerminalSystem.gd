@@ -6,6 +6,7 @@ var is_locked: bool = false
 var lock_timer: Timer
 var scan_multiplier: float = 1.0 # Multiplier for scan time (affected by ZERO_DAY)
 var ddos_multiplier: float = 1.0 # Multiplier for network ops (affected by DDOS_ATTACK)
+var isp_multiplier: float = 1.0 # Multiplier for network latency (affected by ISP_THROTTLING)
 
 # Available commands
 var commands: Dictionary = {
@@ -64,6 +65,9 @@ func _on_world_event(event_id: String, active: bool, _duration: float):
 	elif event_id == GlobalConstants.EVENTS.DDOS_ATTACK:
 		ddos_multiplier = 3.0 if active else 1.0
 		print("TerminalSystem: DDOS_ATTACK event ", "ACTIVE" if active else "CLEARED", ". Network multiplier: ", ddos_multiplier)
+	elif event_id == GlobalConstants.EVENTS.ISP_THROTTLING:
+		isp_multiplier = 3.0 if active else 1.0
+		print("TerminalSystem: ISP_THROTTLING event ", "ACTIVE" if active else "CLEARED", ". Latency multiplier: ", isp_multiplier)
 
 
 func execute_command(command_line: String) -> Dictionary:
@@ -107,7 +111,7 @@ func _execute_command_internal(command_name: String, args: Array) -> Dictionary:
 		"status":
 			result = _cmd_status()
 		"logs":
-			result = _cmd_logs(args)
+			result = await _cmd_logs(args)
 		"list":
 			result = _cmd_list()
 		_:
@@ -143,9 +147,16 @@ func _cmd_scan(args: Array) -> Dictionary:
 	if host_info.is_empty():
 		return {"success": false, "output": CorporateVoice.get_phrase("unknown_host")}
 
+	# Legacy OS Check (Mechanical Variety)
+	if host_info.get("os") == "Legacy":
+		return {
+			"success": false, 
+			"output": "[color=red]ERROR: Legacy Protocol Unsupported.[/color]\nActive forensic scanning is disabled for this kernel version. Use SIEM for passive analysis."
+		}
+
 	# Calculate scan time
 	var base_scan_time = 3.0
-	var total_scan_time = base_scan_time * scan_multiplier
+	var total_scan_time = base_scan_time * scan_multiplier * isp_multiplier
 	
 	# Wait for scan to complete
 	await get_tree().create_timer(total_scan_time).timeout
@@ -228,6 +239,9 @@ func _cmd_logs(args: Array) -> Dictionary:
 	if host_info.is_empty():
 		return {"success": false, "output": CorporateVoice.get_phrase("unknown_host")}
 		
+	# Simulate fetch delay
+	await get_tree().create_timer(1.0 * isp_multiplier).timeout
+
 	var output = "[b]" + CorporateVoice.get_formatted_phrase("fetching_logs_for_host", {"hostname": hostname}) + "[/b]\n\n"
 	
 	# Fetch actual historical logs from LogSystem
@@ -280,17 +294,17 @@ func _cmd_trace(args: Array) -> Dictionary:
 	var target_ip = args[0]
 	var output = "Tracing route to %s...\n\n" % target_ip
 	
-	# Simulate hop delay (affected by DDOS)
-	var hop_delay = 0.8 * ddos_multiplier
+	# Simulate hop delay (affected by DDOS and ISP throttling)
+	var hop_delay = 0.8 * ddos_multiplier * isp_multiplier
 	var max_hops = 4
 	
 	# Generate fake intermediate hops
 	for i in range(1, max_hops):
-		if ddos_multiplier > 1.0:
+		if ddos_multiplier > 1.0 or isp_multiplier > 1.0:
 			output += "[color=orange][!] PACKET LOSS DETECTED... RETRYING...[/color]\n"
 		await get_tree().create_timer(hop_delay).timeout
 		var fake_ip = "192.168.%d.%d" % [randi()%255, randi()%255]
-		output += "  %d    %d ms    %s\n" % [i, randi_range(10, 50) * ddos_multiplier, fake_ip]
+		output += "  %d    %d ms    %s\n" % [i, randi_range(10, 50) * ddos_multiplier * isp_multiplier, fake_ip]
 		
 		# If traceroute is executed via command_run/command_executed signal, we might want to update partial output
 		# But since this function returns the final output, we just wait.

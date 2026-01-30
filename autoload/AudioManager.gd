@@ -4,11 +4,25 @@ extends Node
 
 @onready var sfx_player: AudioStreamPlayer = AudioStreamPlayer.new()
 @onready var music_player: AudioStreamPlayer = AudioStreamPlayer.new()
+@onready var ambient_player: AudioStreamPlayer = AudioStreamPlayer.new() # For environment loops
+@onready var footstep_player: AudioStreamPlayer = AudioStreamPlayer.new() # Dedicated for movement
+
+# Dynamic Typing Cache
+var typing_stream: AudioStream = null
 
 func _ready():
 	add_child(sfx_player)
 	add_child(music_player)
+	add_child(ambient_player)
+	add_child(footstep_player)
+	
+	ambient_player.bus = "Ambient" # Ensure you have an Ambient bus or it defaults to Master
+	
 	print("AudioManager initialized.")
+	
+	# Load typing stream for sampling
+	if ResourceLoader.exists(SFX.keyboard_typing):
+		typing_stream = load(SFX.keyboard_typing)
 	
 	# Connect to EventBus for automated feedback
 	EventBus.ticket_added.connect(func(_t): play_sfx(SFX.ticket_spawn))
@@ -17,6 +31,10 @@ func _ready():
 	EventBus.terminal_unlocked.connect(func(): play_notification("info"))
 	EventBus.terminal_command_executed.connect(_on_terminal_command_executed)
 	EventBus.email_decision_processed.connect(_on_email_decision_processed)
+	EventBus.app_opened.connect(func(_a, _w): play_sfx(SFX.ui_window_open, -5.0))
+	
+	# Start initial atmosphere (SOC Office)
+	update_ambient_audio(1)
 
 func _on_ticket_completed(_ticket: TicketResource, completion_type: String, _time: float):
 	match completion_type:
@@ -51,21 +69,23 @@ func _on_terminal_command_executed(_cmd, success, _out):
 
 func play_sfx(sfx_path: String, volume_db: float = 0.0):
 	if ResourceLoader.exists(sfx_path):
-		sfx_player.stream = load(sfx_path)
-		sfx_player.volume_db = volume_db
-		sfx_player.play()
+		var p = AudioStreamPlayer.new() # Use temporary players for overlapping SFX
+		add_child(p)
+		p.stream = load(sfx_path)
+		p.volume_db = volume_db
+		p.play()
+		p.finished.connect(p.queue_free)
 	else:
 		push_warning("AudioManager: Sound effect not found at path: %s" % sfx_path)
 
-func play_music(music_path: String, volume_db: float = 0.0, loop: bool = true):
+func play_music(music_path: String, volume_db: float = -10.0, loop: bool = true):
+	if music_player.playing and music_player.stream and music_player.stream.resource_path == music_path:
+		return # Already playing
+		
 	if ResourceLoader.exists(music_path):
 		var audio_stream = load(music_path)
-		
-		# In Godot 4, the 'loop' property is on the stream, not the player.
-		if audio_stream.has_method("set_loop"): # For some stream types
-			audio_stream.set_loop(loop)
-		elif "loop" in audio_stream: # For AudioStreamOggVorbis
-			audio_stream.loop = loop
+		if audio_stream.has_method("set_loop"): audio_stream.set_loop(loop)
+		elif "loop" in audio_stream: audio_stream.loop = loop
 			
 		music_player.stream = audio_stream
 		music_player.volume_db = volume_db
@@ -76,13 +96,61 @@ func play_music(music_path: String, volume_db: float = 0.0, loop: bool = true):
 func stop_music():
 	music_player.stop()
 
-# --- Semantic Audio Helpers (Technical Debt Refactor) ---
+# --- Dynamic Audio logic (Sprint 12) ---
+
+func play_dynamic_typing():
+	if not typing_stream: return
+	
+	var p = AudioStreamPlayer.new()
+	add_child(p)
+	p.stream = typing_stream
+	p.volume_db = randf_range(-15.0, -10.0)
+	p.pitch_scale = randf_range(0.9, 1.1)
+	
+	# Randomly sample from the 19s file
+	var start_pos = randf_range(0.0, typing_stream.get_length() - 0.2)
+	p.play(start_pos)
+	
+	# Kill the sound after a short burst (simulating a key press)
+	get_tree().create_timer(randf_range(0.05, 0.12)).timeout.connect(func():
+		p.stop()
+		p.queue_free()
+	)
+
+func update_ambient_audio(floor_num: int):
+	var target_path = ""
+	match floor_num:
+		1: target_path = SFX.ambient_office
+		-1: target_path = SFX.ambient_vault
+		-2: target_path = SFX.ambient_hub
+		
+	if target_path == "" or not ResourceLoader.exists(target_path):
+		ambient_player.stop()
+		return
+		
+	if ambient_player.playing and ambient_player.stream and ambient_player.stream.resource_path == target_path:
+		return
+
+	# Fade out and switch
+	var tween = create_tween()
+	tween.tween_property(ambient_player, "volume_db", -40.0, 0.5)
+	tween.tween_callback(func():
+		ambient_player.stream = load(target_path)
+		if "loop" in ambient_player.stream: ambient_player.stream.loop = true
+		ambient_player.play()
+	)
+	tween.tween_property(ambient_player, "volume_db", -15.0, 1.0)
+
+func update_music_intensity(is_emergency: bool):
+	var track = SFX.music_emergency if is_emergency else SFX.music_standard
+	play_music(track)
+
+# --- Semantic Audio Helpers ---
 
 func play_ui_click():
 	play_sfx(SFX.button_click, -5.0)
 
 func play_ui_hover():
-	# Subtle hover
 	play_sfx(SFX.button_click, -15.0)
 
 func play_notification(type: String = "info"):
@@ -98,17 +166,38 @@ func play_alert():
 func play_terminal_beep(volume_db: float = 0.0):
 	play_sfx(SFX.terminal_beep, volume_db)
 
-# Predefined SFX paths (example)
+func play_footstep():
+	if ResourceLoader.exists(SFX.footsteps_tile):
+		footstep_player.stream = load(SFX.footsteps_tile)
+		footstep_player.volume_db = -15.0
+		footstep_player.play()
+
+func stop_footstep():
+	footstep_player.stop()
+
+func play_hardware_slot():
+	play_sfx(SFX.hardware_slot, -5.0)
+
+# Predefined SFX paths
 var SFX = {
-	"notification_info": "res://assets/sfx/notification_info.ogg", #/
-	"notification_success": "res://assets/sfx/notification_success.ogg", #/
-	"notification_warning": "res://assets/sfx/notification_warning.ogg", #/
-	"notification_error": "res://assets/sfx/notification_error.ogg", #/
-	"button_click": "res://assets/sfx/button_click.ogg", # /
-	"terminal_beep": "res://assets/sfx/terminal_beep.ogg",  #/
-	"music_ambient_desktop": "res://assets/music/ambient_desktop.ogg", # /
-	# Add more as needed
-	"consequence_alert": "res://assets/sfx/notification_error.ogg", # Using existing error sound
-	"ticket_spawn": "res://assets/sfx/newTicket.ogg", # Using existing new ticket sound
-	"ui_hover": "res://assets/sfx/button_click.ogg", # Using existing button click sound
+	"notification_info": "res://assets/sfx/notification_info.ogg",
+	"notification_success": "res://assets/sfx/notification_success.ogg",
+	"notification_warning": "res://assets/sfx/notification_warning.ogg",
+	"notification_error": "res://assets/sfx/notification_error.ogg",
+	"button_click": "res://assets/sfx/button_click.ogg",
+	"terminal_beep": "res://assets/sfx/terminal_beep.ogg",
+	"keyboard_typing": "res://assets/sfx/keyboard_typing.ogg",
+	"ui_window_open": "res://assets/sfx/ui_window_open.ogg",
+	"ui_data_processing": "res://assets/sfx/ui_data_processing.ogg",
+	"footsteps_tile": "res://assets/sfx/footstep-tile.ogg",
+	"hardware_slot": "res://assets/sfx/hardware-slot.ogg",
+	"ambient_office": "res://assets/sfx/ambient_office.ogg",
+	"ambient_vault": "res://assets/sfx/ambient_vault.ogg",
+	"ambient_hub": "res://assets/sfx/ambient_hub.ogg",
+	"electrical_crackle": "res://assets/sfx/electrical_crackle.ogg",
+	"ticket_spawn": "res://assets/sfx/newTicket.ogg",
+	"consequence_alert": "res://assets/sfx/notification_error.ogg",
+	"music_standard": "res://assets/music/theme-standard.ogg",
+	"music_emergency": "res://assets/music/theme-emergency.ogg"
 }
+

@@ -116,6 +116,10 @@ func load_state(data: Dictionary):
 		host_states = data
 		print("NetworkState state loaded.")
 
+func reset_to_default():
+	print("NetworkState: Resetting all host states to resource defaults.")
+	_register_hosts_from_folder()
+
 # Updates the state of a specific host.
 func update_host_state(hostname: String, new_state: Dictionary):
 	if host_states.has(hostname):

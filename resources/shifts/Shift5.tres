@@ -19,6 +19,8 @@ event_sequence = [
 random_event_pool = [
 	{"event": "system_panic_glitch", "type": "system_event", "event_id": "SIEM_LAG", "duration": 20.0},
 	{"event": "packet_storm", "type": "system_event", "event_id": "DDOS_ATTACK", "duration": 60.0},
+	{"event": "grid_instability", "type": "system_event", "event_id": "POWER_FLICKER", "duration": 2.0},
+	{"event": "global_latency_spike", "type": "system_event", "event_id": "ISP_THROTTLING", "duration": 30.0},
 	{"event": "urgent_noise", "type": "spawn_ticket", "ticket_id": "TICKET-NOISE-002"}
 ]
 next_shift_id = "shift_saturday"

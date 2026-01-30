@@ -299,6 +299,10 @@ func _show_final_summary():
 	await summary.closed
 	layer.queue_free()
 	
+	# TOTAL REFRESH: Purge all training data/memory before returning to Title
+	if SaveSystem:
+		SaveSystem.new_game_setup()
+	
 	# TRIGGER CLEANUP: Manually emit shift_ended to clear filters, tickets, and UI
 	EventBus.shift_ended.emit({})
 	

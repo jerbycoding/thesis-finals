@@ -17,7 +17,18 @@ func _ready():
 	print("EmailSystem initialized")
 	print("========================================")
 	
+	# Connect to EventBus for events
+	EventBus.world_event_triggered.connect(_on_world_event)
+	
 	_initialize_system.call_deferred()
+
+func _on_world_event(event_id: String, active: bool, _duration: float):
+	if event_id == GlobalConstants.EVENTS.GOSSIP_FLOOD and active:
+		_trigger_gossip_flood()
+
+func _trigger_gossip_flood():
+	print("📧 EMAIL: Internal gossip flood detected. Spawning noise.")
+	reveal_emails_for_ticket("GENERIC")
 
 func _initialize_system():
 	# Load all emails into the background library

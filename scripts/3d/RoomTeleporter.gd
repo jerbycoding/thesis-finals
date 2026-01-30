@@ -51,6 +51,10 @@ func _input(event):
 func _on_floor_selected(floor_id: int):
 	var floor_info = elevator_ui_instance.FLOORS.get(floor_id)
 	if floor_info:
+		# Update Atmosphere (Sprint 12)
+		if AudioManager:
+			AudioManager.update_ambient_audio(floor_id)
+			
 		var title_card = ""
 		match floor_id:
 			-1: title_card = "[ MAINTENANCE WINDOW: HARDWARE RECOVERY ]"

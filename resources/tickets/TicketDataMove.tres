@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="TicketResource" load_steps=3 format=3]
+
+[ext_resource type="Resource" path="res://resources/tickets/TicketLegalHold.tres" id="1_escalation"]
+[ext_resource type="Script" path="res://resources/tickets/TicketResource.gd" id="2_ticket"]
+
+[resource]
+script = ExtResource("2_ticket")
+ticket_id = "SHADOW-IT-002"
+title = "Escalation: Large Data Transfer"
+description = "Alert: High-volume outbound data transfer detected to 'dropbox.com'. The same workstation (MARKETING-WS-02) previously flagged for unauthorized app use is now uploading several gigabytes of data.
+
+This has exceeded the threshold for a policy reminder. Immediate investigation is required to determine if sensitive data is being exfiltrated."
+severity = "High"
+category = "Data Breach"
+steps = ["Verify size of outbound transfer in SIEM", "Identify specific files being moved (if possible)", "Isolate Marketing-WS-02 to prevent further loss"]
+required_tool = "terminal"
+base_time = 150.0
+required_log_ids = ["LOG-SHADOW-002"]
+kill_chain_path = "Shadow IT"
+kill_chain_stage = 2
+escalation_ticket = ExtResource("1_escalation")

@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="DialogueDataResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/dialogue/DialogueDataResource.gd" id="1_dialogue_data"]
+
+[resource]
+script = ExtResource("1_dialogue_data")
+npc_name = "IT Support"
+portrait = "🔧"
+lines = [
+    {"choices": [], "text": "Hey, analyst. I'm seeing a lot of isolation commands coming from your station. You know every time you kick a host off the grid, I'm the one who has to manually re-image it, right?"},
+    {"choices": [
+        {"text": "I'm containing threats. It's my job.", "effect": {"npc": "it_support", "relationship_change": -0.2}},
+        {"text": "I'll try to be more selective.", "effect": {"npc": "it_support", "relationship_change": 0.2}},
+        {"text": "The protocol requires it.", "effect": {"npc": "it_support", "relationship_change": 0.0}}
+    ], "text": "Just... think before you click. We're already behind on the server patches."},
+    {"choices": [], "text": "If my queue hits 50 tickets because of you, don't expect your terminal to stay stable. Just saying."}
+]

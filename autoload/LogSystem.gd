@@ -14,6 +14,8 @@ var active_filter
 const LOG_DIR = "res://resources/logs/"
 const MAX_LOG_HISTORY = 150 # Performance safeguard
 
+var siem_lag_multiplier: float = 1.0 # Affected by SIEM_LAG event
+
 func _ready():
 	print("========================================")
 	print("LogSystem initialized")
@@ -43,6 +45,9 @@ func _initialize_system():
 func _on_world_event(event_id: String, active: bool, duration: float):
 	if event_id == "FALSE_FLAG" and active:
 		_start_false_flag_flood(duration)
+	elif event_id == GlobalConstants.EVENTS.SIEM_LAG:
+		siem_lag_multiplier = 5.0 if active else 1.0
+		print("📋 LogSystem: SIEM_LAG event ", "ACTIVE" if active else "CLEARED")
 
 func _start_false_flag_flood(duration: float):
 	print("LogSystem: Starting FALSE_FLAG log flood...")

@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="DialogueDataResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/dialogue/DialogueDataResource.gd" id="1_dialogue_data"]
+
+[resource]
+script = ExtResource("1_dialogue_data")
+npc_name = "Senior Analyst"
+portrait = "👨‍💻"
+lines = [
+    {"choices": [], "text": "Steady hands, kid. We're rebuilding the master RAID array from scratch. If one blade is misaligned when we sync the backplane, we'll lose everything."},
+    {"choices": [
+        {"text": "What's the status of the server racks?", "effect": {}},
+        {"text": "Is there anything I can help with?", "effect": {}}
+    ], "text": "Don't rush the physical slotting. Check the tablet for parity errors."},
+    {"choices": [], "text": "We still need a [color=orange]{req_type}[/color] module for [color=cyan]{socket_id}[/color]. Check the spawners near the vault entrance if you're running low."}
+]

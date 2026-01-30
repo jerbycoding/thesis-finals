@@ -23,10 +23,17 @@ func _ready():
 	modulate = Color.WHITE
 	
 	command_input.text_submitted.connect(_on_command_submitted)
+	command_input.gui_input.connect(_on_command_gui_input)
 	command_input.grab_focus()
 	
 	_append_output("[color=gray]SOC_CORE v4.4 Operating System[/color]\n[color=gray]Unauthorized access is strictly prohibited.[/color]\n\n")
 	_append_output("Type [color=cyan]help[/color] to list available forensic modules.\n\n")
+
+func _on_command_gui_input(event):
+	if event is InputEventKey and event.pressed:
+		# Don't play for non-character keys like Enter or Shift
+		if event.unicode > 31: 
+			if AudioManager: AudioManager.play_dynamic_typing()
 
 func _on_command_submitted(command: String):
 	if command.strip_edges().is_empty(): return

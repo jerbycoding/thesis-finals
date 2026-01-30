@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="DialogueDataResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/dialogue/DialogueDataResource.gd" id="1_dialogue_data"]
+
+[resource]
+script = ExtResource("1_dialogue_data")
+npc_name = "Senior Analyst"
+portrait = "👨‍💻"
+lines = [
+    {"choices": [], "text": "Stuck on an investigation? Forensics isn't just about staring at the logs; it's about knowing where to look."},
+    {"choices": [
+        {"text": "Can you verify a technical indicator for me?", "effect": {"favor": {"id": "reveal_evidence", "cost": 0.2}}},
+        {"text": "I'll keep digging.", "effect": {}}
+    ], "text": "I can help you build the timeline, but you need to learn to trust your own analysis. Want me to take a look at your active tickets?"},
+    {"choices": [], "text": "I've flagged a matching log in the SIEM for you. Use it wisely."}
+]

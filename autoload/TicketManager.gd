@@ -47,12 +47,17 @@ func _setup_system_connections():
 			else:
 				stop_ambient_spawning()
 	)
-	EventBus.shift_ended.connect(func(_r): stop_ambient_spawning())
+	EventBus.shift_ended.connect(_on_shift_ended)
 	EventBus.email_decision_processed.connect(_on_email_decision_processed)
 	EventBus.app_opened.connect(_on_app_opened)
 	
 	# Listen for followup requests (from ConsequenceEngine)
 	EventBus.followup_ticket_creation_requested.connect(add_ticket)
+
+func _on_shift_ended(_results: Dictionary):
+	stop_ambient_spawning()
+	clear_active_data()
+	print("TicketManager: Shift cleanup complete. Queue reset.")
 
 func _on_app_opened(app_name: String, _window_id: String):
 	print("TicketManager: App %s opened. Refreshing evidence visibility." % app_name)

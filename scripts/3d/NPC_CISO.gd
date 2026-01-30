@@ -3,19 +3,30 @@
 extends BaseNPC
 
 func start_dialogue(dialogue_id: String = "default"):
+	# Priority 1: Weekend Guidance (Saturday)
+	if NarrativeDirector and NarrativeDirector.current_shift_resource:
+		if NarrativeDirector.current_shift_resource.minigame_type == "AUDIT":
+			var hint = NarrativeDirector.get_weekend_hint()
+			var res = get_dialogue("saturday_guide")
+			if res and DialogueManager:
+				DialogueManager.start_dialogue(self, res, hint)
+				return
 
 	# If the shift is active and it's a manual interaction, check if we can clock out
 
 	if NarrativeDirector and NarrativeDirector.is_shift_active() and dialogue_id == "default":
-
 		if _can_player_clock_out():
-
 			super.start_dialogue("clockout_ready")
-
 		else:
-
+			# Check for urgent performance feedback if not ready
+			if ArchetypeAnalyzer:
+				var results = ArchetypeAnalyzer.get_analysis_results()
+				if results.get("archetype") == GlobalConstants.ARCHETYPE.NEGLIGENT:
+					if get_dialogue("feedback_negligent"):
+						super.start_dialogue("feedback_negligent")
+						return
+			
 			super.start_dialogue("clockout_rejected")
-
 		return
 
 		

@@ -164,6 +164,14 @@ func stop_shift():
 	event_timer.stop()
 	chaos_timer.stop()
 
+func reset_to_default():
+	print("NarrativeDirector: Resetting to default state.")
+	stop_shift()
+	current_shift_name = ""
+	current_shift_resource = null
+	current_active_arc.clear()
+	current_event_index = 0
+
 func get_shift_timer() -> float:
 	if not _is_shift_active:
 		return 0.0
@@ -309,3 +317,31 @@ func start_thursday_briefing():
 
 func start_friday_briefing():
 	trigger_briefing("shift_friday")
+
+# --- Dynamic Guidance Engine (Sprint 11) ---
+
+func get_weekend_hint() -> Dictionary:
+	if not current_shift_resource: return {}
+	
+	match current_shift_resource.minigame_type:
+		"AUDIT":
+			# Find first un-audited node
+			var nodes = get_tree().get_nodes_in_group("audit_nodes")
+			for n in nodes:
+				if n.get("is_audited") == false:
+					return {"next_node": n.audit_id}
+			return {"next_node": "ALL VERIFIED"}
+			
+		"RECOVERY":
+			# Query TabletHUD for first un-ready socket
+			var huds = get_tree().get_nodes_in_group("tablet_hud")
+			if not huds.is_empty():
+				var tablet = huds[0]
+				var data = tablet.get("dynamic_sunday_hardware_data")
+				if data:
+					for socket_id in data:
+						if data[socket_id].ready == false:
+							return {"socket_id": socket_id, "req_type": data[socket_id].req}
+			return {"socket_id": "NONE", "req_type": "DONE"}
+			
+	return {}

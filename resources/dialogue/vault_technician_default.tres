@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="DialogueDataResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/dialogue/DialogueDataResource.gd" id="1_dialogue_data"]
+
+[resource]
+script = ExtResource("1_dialogue_data")
+npc_name = "Vault Technician"
+portrait = "🔧"
+lines = [
+    {"choices": [], "text": "Mind where you step. These server blades are sensitive and the RAID array is in a critical rebuild state."},
+    {"choices": [
+        {"text": "How's the hardware integrity?", "effect": {}},
+        {"text": "Need a hand with the blades?", "effect": {"npc": "vault_technician", "relationship_change": 0.1}}
+    ], "text": "We're seeing a lot of parity errors on the older racks. It's like something is trying to corrupt the data as fast as we can slot new drives."},
+    {"choices": [], "text": "Check the status monitors on the racks. If you see RED, it means the backplane is failing. Don't let it stay red for too long."}
+]

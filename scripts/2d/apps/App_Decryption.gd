@@ -35,7 +35,12 @@ func _ready():
 	visible = true
 	modulate = Color.WHITE
 	start_button.pressed.connect(_on_start_pressed)
+	
+	# Connect to events for dynamic UI updates
 	EventBus.world_event_triggered.connect(_on_world_event)
+	EventBus.ticket_added.connect(func(_t): _update_ui_state())
+	EventBus.ticket_completed.connect(func(_t, _c, _ti): _update_ui_state())
+	
 	_update_ui_state()
 
 func _on_world_event(event_id: String, active: bool, _duration: float):
@@ -44,42 +49,61 @@ func _on_world_event(event_id: String, active: bool, _duration: float):
 		_update_ui_state()
 
 func _process(delta):
-	if puzzle_active and time_remaining > 0:
+	if not puzzle_active: return
+	
+	if time_remaining > 0:
 		time_remaining -= delta
-		timer_label.text = "DATA WIPE IN: %.1fs" % time_remaining
+		# Clamp to zero for display
+		var display_time = max(0.0, time_remaining)
+		timer_label.text = "DATA WIPE IN: %.1fs" % display_time
 		if timer_bar:
-			timer_bar.value = (time_remaining / max_time) * 100.0
-		if time_remaining <= 0:
-			_fail_puzzle()
+			timer_bar.value = (display_time / max_time) * 100.0
+			
+	if time_remaining <= 0:
+		_fail_puzzle()
 
 func _set_status(text: String, color: Color):
 	status_label.text = text
 	status_label.add_theme_color_override("font_color", color)
 
 func _update_ui_state():
-	if is_locked_down:
+	# If a puzzle is already running, don't interrupt it
+	if puzzle_active:
+		puzzle_container.visible = true
+		timer_container.visible = true
+		start_button.visible = false
+		selection_container.visible = false
+		return
+
+	# Logic: Tool is available if there is a world event OR an active Ransomware ticket
+	var has_valid_ticket = _get_ransomware_tickets().size() > 0
+	
+	if is_locked_down or has_valid_ticket:
 		_set_status("CRITICAL ALERT: SERVER ENCRYPTION DETECTED", Color.RED)
 		start_button.visible = (target_ticket_id == "" and not puzzle_active)
 		selection_container.visible = false
-		puzzle_container.visible = puzzle_active
-		timer_container.visible = puzzle_active
+		puzzle_container.visible = false
+		timer_container.visible = false
 	else:
 		_set_status("ACCESS RESTRICTED: NO ENCRYPTION DETECTED", Color.GRAY)
 		start_button.visible = false
 		puzzle_container.visible = false
 		timer_container.visible = false
 		selection_container.visible = false
-		puzzle_active = false
 		target_ticket_id = ""
 
-func _on_start_pressed():
-	if AudioManager: AudioManager.play_ui_click()
-	
+func _get_ransomware_tickets() -> Array:
 	var ransomware_tickets = []
 	if TicketManager:
 		for ticket in TicketManager.get_active_tickets():
 			if ticket.category == "Ransomware" or ticket.required_tool == "decrypt":
 				ransomware_tickets.append(ticket)
+	return ransomware_tickets
+
+func _on_start_pressed():
+	if AudioManager: AudioManager.play_ui_click()
+	
+	var ransomware_tickets = _get_ransomware_tickets()
 	
 	if ransomware_tickets.is_empty():
 		_set_status("ERROR: NO ACTIVE TARGETS FOUND", Color.RED)

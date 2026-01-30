@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="DialogueDataResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/dialogue/DialogueDataResource.gd" id="1_dialogue_data"]
+
+[resource]
+script = ExtResource("1_dialogue_data")
+npc_name = "Senior Analyst"
+portrait = "👨‍💻"
+lines = [
+    {"choices": [], "text": "Morning. Ready for your first full week? Monday is usually quiet, but don't get complacent. The noise starts slow."},
+    {"choices": [
+        {"text": "I follow procedure to the letter.", "effect": {"npc": "senior_analyst", "relationship_change": 0.2}},
+        {"text": "I'm just here to clear the queue.", "effect": {"npc": "senior_analyst", "relationship_change": -0.1}},
+        {"text": "Any advice for a rookie?", "effect": {"npc": "senior_analyst", "relationship_change": 0.1}}
+    ], "text": "The board is watching our metrics. How do you plan to handle the load?"},
+    {"choices": [], "text": "Remember: A fast resolution is good, but a correct one is better. If you skip logs, you leave backdoors open. Good luck."}
+]

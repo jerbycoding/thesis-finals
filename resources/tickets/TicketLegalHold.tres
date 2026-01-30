@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="TicketResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/tickets/TicketResource.gd" id="1_ticket"]
+
+[resource]
+script = ExtResource("1_ticket")
+ticket_id = "SHADOW-IT-003"
+title = "Legal Hold: Intent Verification"
+description = "The Legal department has placed a hold on all activity related to the data breach from MARKETING-WS-02. We need to verify if the data transfer was an intentional act of exfiltration or a gross negligence of policy.
+
+Locate the timestamp of the initial application installation to build the timeline of intent."
+severity = "Medium"
+category = "Forensics"
+steps = ["Locate app installation event in SIEM", "Identify associated user credentials", "Submit findings to Legal"]
+required_tool = "siem"
+base_time = 240.0
+required_log_ids = ["LOG-SHADOW-003"]
+kill_chain_path = "Shadow IT"
+kill_chain_stage = 3

@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="EmailResource" format=3]
+
+[ext_resource type="Script" path="res://resources/EmailResource.gd" id="1_email"]
+
+[resource]
+script = ExtResource("1_email")
+email_id = "EMAIL-SHADOW-001"
+sender = "Marketing Dept"
+subject = "Internal file server is too slow!!"
+body = "Hey IT,\n\nI'm trying to upload the project assets for the Q4 campaign but the internal server is taking ages. I've started using my personal Dropbox instead so I can get this finished before the deadline.\n\nHope that's okay!\n- Marketing Team"
+attachments = []
+headers = {"status": {"spf": "PASS", "dkim": "PASS", "dmarc": "PASS"}}
+is_malicious = false
+is_urgent = false
+clues = []
+related_ticket = "SHADOW-IT-001"
+suspicious_domain = "dropbox.com"

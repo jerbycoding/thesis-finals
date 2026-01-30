@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="LogResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/logs/LogResource.gd" id="1_log"]
+
+[resource]
+script = ExtResource("1_log")
+log_id = "LOG-SUPPLY-001"
+timestamp = "14:20:45"
+source = "Firewall"
+category = "Security"
+message = "Inbound connection blocked to known malicious domain global-it-solutions.biz."
+severity = 4
+related_ticket = "SUPPLY-CHAIN-001"
+ip_address = "185.12.44.11"
+hostname = "GATEWAY-01"

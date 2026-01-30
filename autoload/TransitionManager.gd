@@ -64,7 +64,7 @@ func enter_desktop_mode(computer_node):
 	EventBus.transition_completed.emit()
 	
 	if AudioManager:
-		AudioManager.play_music(AudioManager.SFX.music_ambient_desktop, -10.0) # Play ambient desktop music, lower volume
+		AudioManager.play_music(AudioManager.SFX.music_standard, -10.0) # Play ambient desktop music, lower volume
 
 func exit_desktop_mode():
 	if not overlay_instance or is_transitioning:

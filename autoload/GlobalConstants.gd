@@ -14,7 +14,10 @@ const COMPLETION_TYPE = {
 const NPC_ID = {
 	"CISO": "ciso",
 	"SENIOR_ANALYST": "senior_analyst",
-	"IT_SUPPORT": "it_support"
+	"IT_SUPPORT": "it_support",
+	"NETWORK_SPECIALIST": "network_specialist",
+	"VAULT_TECHNICIAN": "vault_technician",
+	"JUNIOR_ANALYST": "junior_analyst"
 }
 
 const CONSEQUENCE_ID = {
@@ -113,7 +116,10 @@ const EVENTS = {
 	"DDOS_ATTACK": "DDOS_ATTACK",
 	"LATERAL_MOVEMENT": "LATERAL_MOVEMENT",
 	"SERVER_LOCKDOWN": "SERVER_LOCKDOWN",
-	"CRYPTO_SPIKE": "CRYPTO_SPIKE"
+	"CRYPTO_SPIKE": "CRYPTO_SPIKE",
+	"ISP_THROTTLING": "ISP_THROTTLING",
+	"POWER_FLICKER": "POWER_FLICKER",
+	"GOSSIP_FLOOD": "GOSSIP_FLOOD"
 }
 
 # Standardized Severity Levels
@@ -122,6 +128,22 @@ enum Severity {
 	MEDIUM = 2,
 	HIGH = 3,
 	CRITICAL = 4
+}
+
+const RELATIONSHIP_RANK = {
+	"HATED": "Hated",
+	"DISTRUSTED": "Distrusted",
+	"NEUTRAL": "Neutral",
+	"RESPECTED": "Respected",
+	"ADMIRED": "Admired"
+}
+
+const RELATIONSHIP_THRESHOLD = {
+	"ADMIRED": 1.5,
+	"RESPECTED": 0.5,
+	"NEUTRAL": -0.5,
+	"DISTRUSTED": -1.5,
+	"HATED": -2.5
 }
 
 # String to Enum conversion helper
