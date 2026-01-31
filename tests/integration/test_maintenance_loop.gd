@@ -48,7 +48,7 @@ func test_maintenance_restores_integrity():
 	# We need to spy on the signal to ensure it emits
 	var result = {"emitted": false}
 	EventBus.consequence_triggered.connect(func(type, _data): 
-		if type == "hardware_repaired": result.emitted = true
+		if type == "hardware_slotted": result.emitted = true
 	)
 	
 	socket.on_object_inserted(hardware)

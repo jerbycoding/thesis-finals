@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites id="2026-01-31" name="report_4" tests="3" failures="0" skipped="0" flaky="0" time="0.000">
+	<testsuite id="0" name="test_maintenance_loop" package="tests/integration" timestamp="2026-01-31T15:07:40" hostname="localhost" tests="3" failures="0" errors="0" skipped="0" flaky="0" time="0.388">
+		<testcase name="test_hardware_compatibility" classname="test_maintenance_loop" time="0.045">
+		</testcase>
+		<testcase name="test_maintenance_restores_integrity" classname="test_maintenance_loop" time="0.075">
+		</testcase>
+		<testcase name="test_socket_occupancy" classname="test_maintenance_loop" time="0.056">
+		</testcase>
+	</testsuite>
+</testsuites>
