@@ -11,37 +11,35 @@ func _ready():
 	print("TransitionManager ready")
 
 func enter_desktop_mode(computer_node):
-	if not overlay_instance or is_transitioning:
-		print("Transition blocked: already transitioning or no overlay")
+	if is_transitioning:
+		print("Transition blocked: already transitioning")
 		return
 
-
 	is_transitioning = true
-	print("ENTER DESKTOP: Step 1 - Set mode")
+	print("ENTER DESKTOP: Step 1 - Trigger Camera Sit")
 	EventBus.transition_started.emit()
 
-# Set mode FIRST (disables movement and shows mouse)
+	# Trigger Player Camera Animation
+	var player = get_tree().root.find_child("Player3D", true, false)
+	if player and player.has_method("sit_down"):
+		var anchor = computer_node.get_node_or_null("ViewAnchor")
+		if anchor:
+			player.sit_down(anchor)
+		else:
+			push_warning("TransitionManager: No ViewAnchor found on computer!")
+	
+	# Wait for sit animation (0.8s)
+	await get_tree().create_timer(0.8).timeout
+
+	# Set mode (enables mouse)
 	GameState.set_mode(GameState.GameMode.MODE_2D)
 	GameState.current_computer = computer_node
 
-	print("ENTER DESKTOP: Step 2 - Fade in")
-# Ensure overlay is on top
-	overlay_instance.z_index = 1000
-	overlay_instance.fade_in()
-
-# Wait for fade
-	await overlay_instance.fade_finished
-	print("ENTER DESKTOP: Step 3 - Fade complete")
-
-# Small extra delay
-	await get_tree().create_timer(0.1).timeout
-
-	print("ENTER DESKTOP: Step 4 - Create desktop")
+	print("ENTER DESKTOP: Step 2 - Create desktop")
 	# Clean up any existing desktop instance first
 	if GameState.desktop_instance and is_instance_valid(GameState.desktop_instance):
-		print("WARNING: Existing desktop instance found, cleaning up...")
 		GameState.desktop_instance.queue_free()
-		await get_tree().process_frame  # Wait one frame for cleanup
+		await get_tree().process_frame
 		GameState.desktop_instance = null
 	
 	# Create desktop instance
@@ -52,49 +50,38 @@ func enter_desktop_mode(computer_node):
 	# Show persistent windows
 	DesktopWindowManager.show_all_windows()
 
-	print("ENTER DESKTOP: Step 5 - Fade out")
-	overlay_instance.fade_out()
-	await overlay_instance.fade_finished
-
 	print("ENTER DESKTOP: Complete")
 	is_transitioning = false
 	EventBus.transition_completed.emit()
 	
 	if AudioManager:
-		AudioManager.play_music(AudioManager.SFX.music_standard, -10.0) # Play ambient desktop music, lower volume
+		AudioManager.play_music(AudioManager.SFX.music_standard, -10.0) 
 
 func exit_desktop_mode():
-	if not overlay_instance or is_transitioning:
-		print("Exit blocked: already transitioning or no overlay")
+	if is_transitioning:
+		print("Exit blocked: already transitioning")
 		return
 
 	if AudioManager:
 		AudioManager.stop_music()
 
-
 	is_transitioning = true
-	print("EXIT DESKTOP: Step 1 - Fade in")
+	print("EXIT DESKTOP: Step 1 - Hide Windows")
 	EventBus.transition_started.emit()
 
-# Fade to black
-	overlay_instance.fade_in()
-	await overlay_instance.fade_finished
-
-	print("EXIT DESKTOP: Step 2 - Hide windows and remove desktop background")
 	# Hide persistent windows instead of closing them
 	DesktopWindowManager.hide_all_windows()
 		
-	# Remove desktop background
+	# Remove desktop background overlay immediately so we see the stand-up anim
 	if GameState.desktop_instance:
 		GameState.desktop_instance.queue_free()
 		GameState.desktop_instance = null
 
-# Return to 3D mode
+	# Return to 3D mode (Triggers Player stand_up() via signal)
 	GameState.set_mode(GameState.GameMode.MODE_3D)
 
-	print("EXIT DESKTOP: Step 3 - Fade out")
-	overlay_instance.fade_out()
-	await overlay_instance.fade_finished
+	# Wait for stand animation (0.8s)
+	await get_tree().create_timer(0.8).timeout
 
 	print("EXIT DESKTOP: Complete")
 	is_transitioning = false
@@ -151,3 +138,63 @@ func change_scene_to(path: String, narrative_to_start_after: String = "", title_
 			NarrativeDirector.start_shift(narrative_to_start_after)
 		else:
 			push_error("TransitionManager: Cannot start narrative, NarrativeDirector not found!")
+
+func play_secure_login(target_path: String, narrative: String = ""):
+	if is_transitioning: return
+	is_transitioning = true
+	
+	overlay_instance.show()
+	var login_ui = overlay_instance.get_node("%LoginContainer")
+	var auth_label = overlay_instance.get_node("%AuthLabel")
+	var progress = overlay_instance.get_node("%InitProgressBar")
+	
+	login_ui.visible = true
+	progress.value = 0
+	overlay_instance.fade_in()
+	await overlay_instance.fade_finished
+	
+	# HEAVY LOADING SEQUENCE
+	var steps = [
+		{"text": "INITIALIZING SECURE KERNEL...", "val": 15.0, "wait": 0.8},
+		{"text": "MOUNTING ENCRYPTED VOLUMES...", "val": 45.0, "wait": 0.5},
+		{"text": "ESTABLISHING SECURE VPN TUNNEL...", "val": 52.0, "wait": 1.2}, # Long pause for 'network' feel
+		{"text": "SYNCING SIEM LOG DATABASE...", "val": 85.0, "wait": 0.7},
+		{"text": "ENFORCING ZERO-TRUST PROTOCOLS...", "val": 98.0, "wait": 0.4},
+		{"text": "BIOMETRIC MATCH CONFIRMED. ACCESS GRANTED.", "val": 100.0, "wait": 0.8}
+	]
+	
+	for step in steps:
+		auth_label.text = step.text
+		auth_label.modulate = Color.WHITE
+		
+		# Rapid snap for the bar
+		var tween = create_tween()
+		tween.tween_property(progress, "value", step.val, 0.15).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		
+		await get_tree().create_timer(step.wait).timeout
+		
+		# Feedback: Flash text green to show step is done
+		auth_label.text = step.text + " [ OK ]"
+		auth_label.modulate = Color.GREEN
+		if AudioManager: AudioManager.play_terminal_beep(-10.0)
+		await get_tree().create_timer(0.15).timeout
+	
+	# Scene Change
+	get_tree().change_scene_to_file(target_path)
+	await get_tree().create_timer(0.3).timeout
+	
+	login_ui.visible = false
+	overlay_instance.fade_out()
+	await overlay_instance.fade_finished
+	
+	is_transitioning = false
+	
+	# Trigger Post-Transition Logic
+	if not narrative.is_empty():
+		if target_path.contains("BriefingRoom"):
+			await get_tree().create_timer(0.5).timeout
+			if NarrativeDirector.shift_library.has(narrative):
+				var res = NarrativeDirector.shift_library[narrative]
+				EventBus.npc_interaction_requested.emit(GlobalConstants.NPC_ID.CISO, res.briefing_dialogue_id)
+		else:
+			NarrativeDirector.start_shift(narrative)

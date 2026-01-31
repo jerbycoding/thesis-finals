@@ -1,0 +1,78 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="PackedScene" uid="uid://fu75aaq0cx15" path="res://scenes/3d/props/graybox/Prop_Monitor.tscn" id="1_monitor"]
+
+[sub_resource type="StandardMaterial3D" id="Mat_BlackPlastic"]
+albedo_color = Color(0.05, 0.05, 0.05, 1)
+roughness = 0.6
+
+[sub_resource type="StandardMaterial3D" id="Mat_DarkGrey"]
+albedo_color = Color(0.15, 0.15, 0.15, 1)
+roughness = 0.5
+
+[sub_resource type="StandardMaterial3D" id="Mat_LED_Blue"]
+albedo_color = Color(0, 0.5, 1, 1)
+emission_enabled = true
+emission = Color(0, 0.5, 1, 1)
+emission_energy_multiplier = 2.0
+
+[node name="Prop_ComputerSet" type="Node3D"]
+
+[node name="Prop_Monitor" parent="." instance=ExtResource("1_monitor")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, -0.2)
+
+[node name="Keyboard" type="CSGCombiner3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.965926, 0.258819, 0, -0.258819, 0.965926, 0, 0.05, 0.3)
+
+[node name="Board" type="CSGBox3D" parent="Keyboard"]
+size = Vector3(0.6, 0.02, 0.25)
+material = SubResource("Mat_BlackPlastic")
+
+[node name="Keys_Row1" type="CSGBox3D" parent="Keyboard"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.015, -0.08)
+size = Vector3(0.55, 0.01, 0.04)
+material = SubResource("Mat_DarkGrey")
+
+[node name="Keys_Row2" type="CSGBox3D" parent="Keyboard"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.015, -0.02)
+size = Vector3(0.55, 0.01, 0.04)
+material = SubResource("Mat_DarkGrey")
+
+[node name="Keys_Row3" type="CSGBox3D" parent="Keyboard"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.015, 0.04)
+size = Vector3(0.55, 0.01, 0.04)
+material = SubResource("Mat_DarkGrey")
+
+[node name="Keys_Space" type="CSGBox3D" parent="Keyboard"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.015, 0.1)
+size = Vector3(0.3, 0.01, 0.04)
+material = SubResource("Mat_DarkGrey")
+
+[node name="Mouse" type="CSGCombiner3D" parent="."]
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 0.5, 0.03, 0.3)
+
+[node name="Body" type="CSGBox3D" parent="Mouse"]
+size = Vector3(0.08, 0.04, 0.12)
+material = SubResource("Mat_BlackPlastic")
+
+[node name="Buttons" type="CSGBox3D" parent="Mouse"]
+transform = Transform3D(1, 0, 0, 0, 0.965926, 0.258819, 0, -0.258819, 0.965926, 0, 0.02, -0.03)
+size = Vector3(0.07, 0.01, 0.05)
+material = SubResource("Mat_DarkGrey")
+
+[node name="PCTower" type="CSGCombiner3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 0.3, -0.2)
+
+[node name="Case" type="CSGBox3D" parent="PCTower"]
+size = Vector3(0.25, 0.6, 0.5)
+material = SubResource("Mat_BlackPlastic")
+
+[node name="Vent" type="CSGBox3D" parent="PCTower"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.25)
+size = Vector3(0.2, 0.5, 0.02)
+material = SubResource("Mat_DarkGrey")
+
+[node name="PowerLED" type="CSGBox3D" parent="PCTower"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0.255)
+size = Vector3(0.05, 0.01, 0.01)
+material = SubResource("Mat_LED_Blue")

@@ -1,5 +1,5 @@
 
-extends Control
+extends CanvasLayer
 
 signal fade_finished
 

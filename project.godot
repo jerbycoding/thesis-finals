@@ -12,7 +12,7 @@ config_version=5
 
 config/name="VERIFY.EXE-FINAL"
 config/description="for thesis"
-run/main_scene="res://scenes/ui/TitleScreen.tscn"
+run/main_scene="res://scenes/ui/StartupLogo.tscn"
 config/features=PackedStringArray("4.4", "Mobile")
 config/icon="res://icon.svg"
 

@@ -16,12 +16,6 @@ var window_frame_scene = preload("res://scenes/2d/apps/components/WindowFrame.ts
 func _ready():
 	_load_app_configs()
 	
-	# Create a persistent CanvasLayer for windows to ensure they stay on top
-	window_container = CanvasLayer.new()
-	window_container.name = "DesktopWindowLayer"
-	window_container.layer = 10 # Higher than main scene and desktop background
-	get_tree().root.call_deferred("add_child", window_container)
-	
 	# Connect to EventBus for global window management
 	EventBus.window_focused.connect(_on_window_focused)
 	EventBus.window_closed.connect(_on_window_closed)
@@ -94,14 +88,23 @@ func open_app(app_name: String, force_new: bool = false):
 		var existing_window = _find_window_by_app(app_name)
 		if existing_window and is_instance_valid(existing_window):
 			print("DesktopWindowManager: App already open, focusing and bringing to front")
-			window_container.visible = true # Ensure the whole layer is visible
 			existing_window.visible = true 
 			_focus_window(existing_window)
-			existing_window.bring_to_front()
+			existing_window.move_to_front() # Bring to front in scene tree
 			return
 		else:
 			print("DesktopWindowManager: No existing window found for app: ", app_name)
 	
+	# FIND CONTAINER
+	if not GameState or not is_instance_valid(GameState.desktop_instance):
+		print("ERROR: DesktopWindowManager: No active desktop instance found!")
+		return
+		
+	var container = GameState.desktop_instance.get_node_or_null("%AppWindowContainer")
+	if not container:
+		print("ERROR: DesktopWindowManager: AppWindowContainer not found in desktop scene!")
+		return
+
 	# Generate unique window ID
 	var window_id = app_name + "_" + str(Time.get_ticks_msec())
 	
@@ -116,11 +119,8 @@ func open_app(app_name: String, force_new: bool = false):
 	# Store reference IMMEDIATELY to prevent race conditions during 'await'
 	open_windows[window_id] = window
 	
-	# Set window size based on app type
-	window_container.visible = true
-	
 	# Add to layer
-	window_container.add_child(window)
+	container.add_child(window)
 	
 	# Wait for window to be ready
 	await get_tree().process_frame
@@ -157,7 +157,7 @@ func open_app(app_name: String, force_new: bool = false):
 	
 	# Focus the new window
 	_focus_window(window)
-	window.bring_to_front()
+	window.move_to_front()
 	
 	EventBus.app_opened.emit(app_name, window_id)
 	print("DesktopWindowManager: Opened app: ", app_name, " at position: ", window.position)
@@ -194,28 +194,17 @@ func close_all_windows():
 		var window = open_windows[window_id]
 		if is_instance_valid(window):
 			window.queue_free()
-	
-	# Thorough cleanup: ensure container is empty
-	if is_instance_valid(window_container):
-		for child in window_container.get_children():
-			child.queue_free()
 			
 	open_windows.clear()
 	next_window_position = Vector2(50, 50) # Reset position when all closed
 
 func hide_all_windows():
-	# Hide the entire window layer and pause its processing
-	if is_instance_valid(window_container):
-		window_container.visible = false
-		window_container.process_mode = Node.PROCESS_MODE_DISABLED
-	print("DesktopWindowManager: All windows hidden and paused.")
+	# No longer needed - The desktop scene itself is removed/hidden
+	pass
 
 func show_all_windows():
-	# Show the window layer and resume its processing
-	if is_instance_valid(window_container):
-		window_container.visible = true
-		window_container.process_mode = Node.PROCESS_MODE_INHERIT
-	print("DesktopWindowManager: All windows shown and resumed.")
+	# No longer needed
+	pass
 
 func _find_window_by_app(app_name: String) -> Control:
 	for window_id in open_windows:

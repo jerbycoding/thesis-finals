@@ -36,8 +36,6 @@ func _ready():
 	if border:
 		border.gui_input.connect(_on_window_gui_input)
 
-const SNAP_MARGIN: float = 20.0
-
 func _on_title_bar_gui_input(event):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.pressed:
@@ -49,21 +47,38 @@ func _on_title_bar_gui_input(event):
 			is_dragging = false
 			_apply_snapping()
 	elif event is InputEventMouseMotion and is_dragging:
-		global_position += event.relative
+		var parent_rect = get_viewport_rect()
+		if get_parent() is Control:
+			parent_rect = get_parent().get_global_rect()
+			
+		var new_pos = global_position + event.relative
+		
+		# Real-time clamping during drag
+		new_pos.x = clamp(new_pos.x, parent_rect.position.x, parent_rect.position.x + parent_rect.size.x - size.x)
+		new_pos.y = clamp(new_pos.y, parent_rect.position.y, parent_rect.position.y + parent_rect.size.y - size.y)
+		
+		global_position = new_pos
 		get_viewport().set_input_as_handled()
 
+const SNAP_MARGIN: float = 20.0
+
 func _apply_snapping():
-	var viewport_rect = get_viewport().get_visible_rect()
+	# Visual snapping only (magnetic edges)
+	var parent_rect = get_viewport_rect()
+	if get_parent() is Control:
+		parent_rect = get_parent().get_global_rect()
+	
 	var new_pos = global_position
 	
-	if abs(new_pos.x) < SNAP_MARGIN: new_pos.x = 0
-	if abs(new_pos.y) < SNAP_MARGIN: new_pos.y = 35 # Top bar offset
+	# Snap to Left/Right
+	if abs(new_pos.x - parent_rect.position.x) < SNAP_MARGIN: new_pos.x = parent_rect.position.x
+	elif abs(new_pos.x + size.x - (parent_rect.position.x + parent_rect.size.x)) < SNAP_MARGIN:
+		new_pos.x = parent_rect.position.x + parent_rect.size.x - size.x
 		
-	if abs(new_pos.x + size.x - viewport_rect.size.x) < SNAP_MARGIN:
-		new_pos.x = viewport_rect.size.x - size.x
-		
-	if abs(new_pos.y + size.y - (viewport_rect.size.y - 70)) < SNAP_MARGIN:
-		new_pos.y = viewport_rect.size.y - 70 - size.y
+	# Snap to Top/Bottom
+	if abs(new_pos.y - parent_rect.position.y) < SNAP_MARGIN: new_pos.y = parent_rect.position.y
+	elif abs(new_pos.y + size.y - (parent_rect.position.y + parent_rect.size.y)) < SNAP_MARGIN:
+		new_pos.y = parent_rect.position.y + parent_rect.size.y - size.y
 		
 	if new_pos != global_position:
 		var tween = create_tween()

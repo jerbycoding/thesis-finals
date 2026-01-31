@@ -60,8 +60,8 @@ func _on_start_button_pressed():
 	if SaveSystem:
 		SaveSystem.new_game_setup()
 	
-	if NarrativeDirector:
-		NarrativeDirector.start_briefing()
+	if TransitionManager:
+		TransitionManager.play_secure_login("res://scenes/3d/BriefingRoom.tscn", "shift_monday")
 
 func _on_training_pressed():
 	if AudioManager:
@@ -94,4 +94,4 @@ func _on_quit_pressed():
 
 func _on_game_loaded():
 	if TransitionManager:
-		TransitionManager.change_scene_to("res://scenes/SOC_Office.tscn")
+		TransitionManager.play_secure_login("res://scenes/SOC_Office.tscn")

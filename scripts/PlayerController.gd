@@ -11,17 +11,48 @@ var movement_enabled = true
 var carried_object: Node3D = null
 var current_target_height: float = 1.75 # Default to eye height
 var modal_active: bool = false # NEW: Flag to block input
+var stored_camera_transform: Transform3D
 
 @onready var carry_marker: Marker3D = %CarryMarker3D
 @onready var tablet_hud: Control = $TabletHUD
 # Delegate animation logic to the child component
 @onready var animator = $CameraPivot/BodyModel
+@onready var camera = $CameraPivot/Camera3D
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	EventBus.game_mode_changed.connect(_on_game_mode_changed)
 	# Initialize POV
-	$CameraPivot/Camera3D.fov = 80
+	camera.fov = 80
+
+func sit_down(target_node: Node3D):
+	if not target_node: return
+	stored_camera_transform = camera.global_transform
+	_tween_camera_to(target_node.global_transform)
+
+func stand_up():
+	_tween_camera_to(stored_camera_transform, true)
+
+func _tween_camera_to(target: Transform3D, is_standing_up: bool = false):
+	movement_enabled = false
+	modal_active = true # Block inputs during transition
+	
+	var tween = create_tween()
+	tween.set_trans(Tween.TRANS_CUBIC)
+	tween.set_ease(Tween.EASE_IN_OUT)
+	tween.tween_property(camera, "global_transform", target, 0.8)
+	
+	tween.finished.connect(func():
+		modal_active = false
+		if is_standing_up:
+			movement_enabled = true
+			# Snap back to local coords to ensure headbob works
+			camera.position = Vector3(0, EYE_HEIGHT, -0.23)
+			camera.rotation = Vector3.ZERO
+			# Restore rotation vars from the pivot's current state
+			camera_rotation.y = $CameraPivot.rotation.y
+			camera_rotation.x = 0.0
+	)
 
 func _on_game_mode_changed(mode):
 	if mode == GameState.GameMode.MODE_2D or mode == GameState.GameMode.MODE_DIALOGUE or mode == GameState.GameMode.MODE_MINIGAME:
@@ -31,7 +62,11 @@ func _on_game_mode_changed(mode):
 		if animator and animator.has_method("force_idle"):
 			animator.force_idle()
 	else:
-		movement_enabled = true
+		# If returning to 3D mode from 2D, trigger stand up
+		if mode == GameState.GameMode.MODE_3D and not movement_enabled:
+			stand_up()
+		
+		# movement_enabled is re-enabled by stand_up() tween callback
 		current_target_height = EYE_HEIGHT
 
 func _try_toggle_tablet():
