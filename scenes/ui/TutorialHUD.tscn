@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://dgkhv2v8v8v8x"]
+[gd_scene load_steps=9 format=3 uid="uid://dgkhv2v8v8v8x"]
 
 [ext_resource type="Script" uid="uid://d3kvvit4crikr" path="res://scripts/ui/TutorialHUD.gd" id="1_script"]
 

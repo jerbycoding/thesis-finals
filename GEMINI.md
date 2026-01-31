@@ -8,8 +8,9 @@ The core concept places the player in the role of a Security Operations Center (
 
 ### Architecture and Core Systems:
 
-*   **Hybrid 2D/3D World:** The player navigates a 3D office environment but interacts with a 2D desktop interface to use analysis tools. This transition is a core architectural feature managed by `TransitionManager.gd` and `GameState.gd`.
-*   **Event-Driven Architecture:** The project has evolved to use a centralized `EventBus` singleton. This decouples core managers, allowing them to react to game events (like ticket completion or host isolation) without direct dependencies on each other.
+*   **Hybrid 2D/3D World:** The player navigates a 3D office environment but interacts with a 2D desktop interface to use analysis tools. This transition is managed by `TransitionManager.gd` and `GameState.gd`, featuring an architectural overhaul that uses `CSGBox3D` for high-fidelity office environments.
+*   **Event-Driven Architecture:** A centralized `EventBus` singleton decouples core managers. Recent improvements include the `prepare_for_scene_change` signal, which allows persistent 2D UIs to automatically clean themselves up during transitions.
+*   **Unified State Authority:** `GameState.gd` serves as the single source of truth for the mouse cursor and game modes (`MODE_3D`, `MODE_2D`, `MODE_DIALOGUE`, `MODE_MINIGAME`, `MODE_UI_ONLY`). It automatically enforces mouse capture or visibility based on the current context.
 *   **Performance Optimization:** UI-heavy tools like the SIEM Log Viewer use a `UIObjectPool` to manage and reuse list entries, ensuring smooth performance even when handling hundreds of simulated logs.
 *   **Autoload Singletons:** The project relies on globally accessible singleton scripts (found in the `autoload/` directory) to manage core systems:
 	*   `ArchetypeAnalyzer`: Determines the player's "analyst archetype" (e.g., 'Cowboy', 'By-the-Book') by deriving metrics from the `ConsequenceEngine` choice history.
@@ -23,7 +24,7 @@ The core concept places the player in the role of a Security Operations Center (
 	*   `EmailSystem`: Backend manager for the email client tool, including discovery and threat processing.
 	*   `EventBus`: The central hub for global signals, reducing coupling between managers.
 	*   `FPSManager`: Persistent overlay for real-time performance tracking.
-	*   `GameState`: Manages the current game mode (3D, 2D, or Dialogue) and pause state.
+	*   `GameState`: Manages the current game mode and pause state, enforcing global mouse authority.
 	*   `GlobalConstants`: Central authority for shared constants, event IDs, and severity enums.
 	*   `HeatManager`: Manages difficulty scaling and "Vulnerability Inheritance," where unresolved risks from previous tickets impact future ones.
 	*   `IntegrityManager`: Manages organizational "HP" (Stability), handling decay rates and integrity-based failure states.
@@ -35,8 +36,8 @@ The core concept places the player in the role of a Security Operations Center (
 	*   `TerminalSystem`: Backend for the command-line tool, including command parsing, tracing, and host isolation.
 	*   `TicketManager`: Handles the lifecycle of security incidents, managing timers and ambient noise tickets.
 	*   `TimeManager`: Centralizes game timers to ensure consistency across scene transitions.
-	*   `TransitionManager`: Manages visual fades and state transitions between 3D world and 2D desktop.
-	*   `TutorialManager`: Manages the guided onboarding experience for the "Training Simulation."
+	*   `TransitionManager`: Manages visual fades and state transitions between 3D world and 2D desktop, triggering global cleanup signals.
+	*   `TutorialManager`: Manages the guided onboarding experience, utilizing a persistent subtitle system in `TutorialHUD`.
 	*   `ValidationManager`: Central authority for gameplay rules (e.g., verifying evidence before a compliant closure).
 	*   `VariableRegistry`: The engine for "Procedural Truth," generating consistent technical context (IPs, Hostnames, Victim names) across all tools for each incident.
 
@@ -49,24 +50,24 @@ The core concept places the player in the role of a Security Operations Center (
 *   `ShiftResource.gd`: Defines the sequence of events and narrative beats for a specific work shift.
 *   `TicketResource.gd`: Manages incident state, required evidence, and Kill Chain escalation paths.
 
-### Scene-Based Tools:
+### Scene-Based Tools (Enterprise-Clean Aesthetic):
 
 *   **SIEM Log Viewer**: For forensic log analysis and evidence collection.
 *   **Email Analyzer**: For inspecting headers, scanning links, and quarantining threats.
 *   **Terminal**: For network commands, tracing, and host isolation.
 *   **Network Mapper**: Visualizes topology and real-time host status.
 *   **Decryption Tool**: Specialized utility for ransomware recovery puzzles.
-*   **SOC Handbook**: Central documentation resource for the player.
-*   **Resource Monitor (Task Manager)**: For monitoring system load and event-driven performance impacts.
-*   **Ticket Queue**: For managing and resolving active security incidents.
+*   **SOC Handbook**: Overhauled into a PDF-style infinite scroll document reader.
+*   **Resource Monitor (Task Manager)**: A high-density dashboard for monitoring system load and performance impacts.
+*   **Ticket Queue**: For managing and resolving active security incidents with high-contrast UI.
 *   **Shift Report**: Post-shift analysis UI displaying metrics and archetype derivation.
 *   **Field Tablet (Forensic Tablet)**: Handheld 3D tool used during maintenance shifts for network topology audits and hardware synchronization.
 
 ### Narrative Structure & Weekend Shifts:
 
 The game follows a 7-day narrative arc. While weekdays (Mon-Fri) focus on the 2D desktop workstation loop, weekend shifts introduce physical 3D objectives:
-*   **Saturday (Infrastructure Audit)**: Requires physical inspection of router nodes and technical handshake minigames.
-*   **Sunday (Hardware Recovery)**: Focuses on physical hardware maintenance, including carrying and replacing server drives.
+*   **Saturday (Infrastructure Audit)**: Requires physical inspection of router nodes and technical handshake minigames in the Network Hub.
+*   **Sunday (Hardware Recovery)**: Focuses on physical hardware maintenance in the Server Vault, including carrying and replacing server drives.
 
 ## 2. Building and Running
 
