@@ -6,7 +6,7 @@ var open_windows: Dictionary = {}  # window_id: WindowFrame
 var next_window_position: Vector2 = Vector2(50, 50)
 var window_z_index_base: int = 10
 var focused_window: Control = null
-var window_container: CanvasLayer = null
+var active_window_container: Control = null
 
 var app_configs: Dictionary = {} # app_id -> AppConfig resource
 const APP_CONFIG_DIR = "res://resources/apps/"
@@ -22,6 +22,10 @@ func _ready():
 	EventBus.shift_ended.connect(func(_results): close_all_windows())
 	
 	print("DesktopWindowManager ready.")
+
+func register_container(container: Control):
+	active_window_container = container
+	print("DesktopWindowManager: Registered window container: ", container.name)
 
 func _load_app_configs():
 	app_configs.clear()
@@ -96,14 +100,11 @@ func open_app(app_name: String, force_new: bool = false):
 			print("DesktopWindowManager: No existing window found for app: ", app_name)
 	
 	# FIND CONTAINER
-	if not GameState or not is_instance_valid(GameState.desktop_instance):
-		print("ERROR: DesktopWindowManager: No active desktop instance found!")
+	if not is_instance_valid(active_window_container):
+		print("ERROR: DesktopWindowManager: No active window container registered!")
 		return
 		
-	var container = GameState.desktop_instance.get_node_or_null("%AppWindowContainer")
-	if not container:
-		print("ERROR: DesktopWindowManager: AppWindowContainer not found in desktop scene!")
-		return
+	var container = active_window_container
 
 	# Generate unique window ID
 	var window_id = app_name + "_" + str(Time.get_ticks_msec())
@@ -197,14 +198,6 @@ func close_all_windows():
 			
 	open_windows.clear()
 	next_window_position = Vector2(50, 50) # Reset position when all closed
-
-func hide_all_windows():
-	# No longer needed - The desktop scene itself is removed/hidden
-	pass
-
-func show_all_windows():
-	# No longer needed
-	pass
 
 func _find_window_by_app(app_name: String) -> Control:
 	for window_id in open_windows:

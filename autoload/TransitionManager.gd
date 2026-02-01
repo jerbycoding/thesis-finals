@@ -47,9 +47,6 @@ func enter_desktop_mode(computer_node):
 	GameState.desktop_instance = desktop_scene.instantiate()
 	get_tree().root.add_child(GameState.desktop_instance)
 
-	# Show persistent windows
-	DesktopWindowManager.show_all_windows()
-
 	print("ENTER DESKTOP: Complete")
 	is_transitioning = false
 	EventBus.transition_completed.emit()
@@ -69,9 +66,6 @@ func exit_desktop_mode():
 	print("EXIT DESKTOP: Step 1 - Hide Windows")
 	EventBus.transition_started.emit()
 
-	# Hide persistent windows instead of closing them
-	DesktopWindowManager.hide_all_windows()
-		
 	# Remove desktop background overlay immediately so we see the stand-up anim
 	if GameState.desktop_instance:
 		GameState.desktop_instance.queue_free()
@@ -189,12 +183,7 @@ func play_secure_login(target_path: String, narrative: String = ""):
 	
 	is_transitioning = false
 	
-	# Trigger Post-Transition Logic
+	# Let NarrativeDirector handle what happens next (Debt #5 Fix)
 	if not narrative.is_empty():
-		if target_path.contains("BriefingRoom"):
-			await get_tree().create_timer(0.5).timeout
-			if NarrativeDirector.shift_library.has(narrative):
-				var res = NarrativeDirector.shift_library[narrative]
-				EventBus.npc_interaction_requested.emit(GlobalConstants.NPC_ID.CISO, res.briefing_dialogue_id)
-		else:
-			NarrativeDirector.start_shift(narrative)
+		if NarrativeDirector:
+			NarrativeDirector.prepare_shift(narrative)

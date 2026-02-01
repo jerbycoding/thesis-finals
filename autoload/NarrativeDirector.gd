@@ -85,6 +85,24 @@ func _discover_shifts():
 		
 	print("🎬 NARRATIVE_DEBUG: Library ready: %d shifts." % shift_library.size())
 
+func prepare_shift(shift_id: String):
+	if not shift_library.has(shift_id):
+		push_error("NarrativeDirector: Cannot prepare unknown shift ID: " + shift_id)
+		return
+		
+	var shift_res = shift_library[shift_id]
+	print("NarrativeDirector: Preparing shift: ", shift_id)
+	
+	# DECISION LOGIC: 
+	# If the shift has a briefing dialogue, we trigger THAT. 
+	# If not, we start the live shift timers immediately.
+	if shift_res.briefing_dialogue_id != "" and shift_res.briefing_dialogue_id != "default":
+		print("NarrativeDirector: Shift requires briefing. Triggering...")
+		trigger_briefing(shift_id)
+	else:
+		print("NarrativeDirector: No briefing required. Starting live shift.")
+		start_shift(shift_id)
+
 func start_shift(shift_id: String):
 	print("NarrativeDirector: Attempting to start shift: ", shift_id)
 	

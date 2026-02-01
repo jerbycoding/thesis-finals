@@ -21,6 +21,9 @@ func _ready():
 		push_error("AppWindowContainer is missing - windows cannot be created")
 	else:
 		app_window_container.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		# REGISTER WITH MANAGER (Debt #3 Fix)
+		if DesktopWindowManager:
+			DesktopWindowManager.register_container(app_window_container)
 	
 	# Connect app icons from all containers
 	_setup_container_connections(dock_icons)
