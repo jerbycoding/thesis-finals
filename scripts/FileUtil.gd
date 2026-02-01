@@ -2,7 +2,7 @@
 # Utility class for handling file system operations
 class_name FileUtil
 
-## Scans a directory for files matching an extension and returns their full paths.
+## Scans a directory (and all sub-directories) for files matching an extension and returns their full paths.
 static func get_resource_paths(dir_path: String, extension: String = ".tres") -> Array[String]:
 	var paths: Array[String] = []
 	var dir = DirAccess.open(dir_path)
@@ -11,9 +11,14 @@ static func get_resource_paths(dir_path: String, extension: String = ".tres") ->
 		dir.list_dir_begin()
 		var file_name = dir.get_next()
 		while file_name != "":
-			if not dir.current_is_dir():
+			var full_path = dir_path.path_join(file_name)
+			if dir.current_is_dir():
+				# RECURSIVE CALL: Drill down into sub-folders
+				if file_name != "." and file_name != "..":
+					paths.append_array(get_resource_paths(full_path, extension))
+			else:
 				if file_name.ends_with(extension):
-					paths.append(dir_path.path_join(file_name))
+					paths.append(full_path)
 			file_name = dir.get_next()
 		dir.list_dir_end()
 	else:
