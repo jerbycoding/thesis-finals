@@ -1,13 +1,13 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=5 format=3 uid="uid://bjy8b0vcfuc0r"]
 
 [ext_resource type="PackedScene" uid="uid://fu75aaq0cx15" path="res://scenes/3d/props/graybox/Prop_Monitor.tscn" id="1_monitor"]
 
 [sub_resource type="StandardMaterial3D" id="Mat_BlackPlastic"]
-albedo_color = Color(0.05, 0.05, 0.05, 1)
-roughness = 0.6
+albedo_color = Color(0.9, 0.92, 0.95, 1)
+roughness = 0.4
 
 [sub_resource type="StandardMaterial3D" id="Mat_DarkGrey"]
-albedo_color = Color(0.15, 0.15, 0.15, 1)
+albedo_color = Color(0.8, 0.82, 0.85, 1)
 roughness = 0.5
 
 [sub_resource type="StandardMaterial3D" id="Mat_LED_Blue"]

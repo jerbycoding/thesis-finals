@@ -35,17 +35,21 @@ func enter_desktop_mode(computer_node):
 	GameState.set_mode(GameState.GameMode.MODE_2D)
 	GameState.current_computer = computer_node
 
-	print("ENTER DESKTOP: Step 2 - Create desktop")
-	# Clean up any existing desktop instance first
-	if GameState.desktop_instance and is_instance_valid(GameState.desktop_instance):
-		GameState.desktop_instance.queue_free()
-		await get_tree().process_frame
-		GameState.desktop_instance = null
+	print("ENTER DESKTOP: Step 2 - Activate desktop")
 	
-	# Create desktop instance
-	var desktop_scene = load("res://scenes/2d/ComputerDesktop.tscn")
-	GameState.desktop_instance = desktop_scene.instantiate()
-	get_tree().root.add_child(GameState.desktop_instance)
+	# Check for existing instance
+	if GameState.desktop_instance and is_instance_valid(GameState.desktop_instance):
+		print("Resuming existing desktop session...")
+		GameState.desktop_instance.visible = true
+		GameState.desktop_instance.process_mode = Node.PROCESS_MODE_INHERIT
+		
+		# Optional: Play wakeup sound or effect?
+	else:
+		# Create new instance if none exists
+		print("Initializing new desktop session...")
+		var desktop_scene = load("res://scenes/2d/ComputerDesktop.tscn")
+		GameState.desktop_instance = desktop_scene.instantiate()
+		get_tree().root.add_child(GameState.desktop_instance)
 
 	print("ENTER DESKTOP: Complete")
 	is_transitioning = false
@@ -66,9 +70,11 @@ func exit_desktop_mode():
 	print("EXIT DESKTOP: Step 1 - Hide Windows")
 	EventBus.transition_started.emit()
 
-	# Remove desktop background overlay immediately so we see the stand-up anim
-	if GameState.desktop_instance:
-		GameState.desktop_instance.queue_free()
+	# Hide desktop instead of destroying it to preserve state (windows, text, etc.)
+	if GameState.desktop_instance and is_instance_valid(GameState.desktop_instance):
+		GameState.desktop_instance.visible = false
+		GameState.desktop_instance.process_mode = Node.PROCESS_MODE_DISABLED
+	else:
 		GameState.desktop_instance = null
 
 	# Return to 3D mode (Triggers Player stand_up() via signal)
@@ -92,6 +98,12 @@ func change_scene_to(path: String, narrative_to_start_after: String = "", title_
 	print(">>> TRANSITION START: To '", path, "'")
 	is_transitioning = true
 	EventBus.transition_started.emit()
+	
+	# CLEANUP: Explicitly destroy the persistent desktop before changing scenes
+	if GameState.desktop_instance and is_instance_valid(GameState.desktop_instance):
+		print(">>> TRANSITION CLEANUP: Destroying persistent desktop session.")
+		GameState.desktop_instance.queue_free()
+		GameState.desktop_instance = null
 	
 	# CLEANUP SIGNAL: Let persistent UIs (like Desktop) kill themselves
 	EventBus.prepare_for_scene_change.emit()

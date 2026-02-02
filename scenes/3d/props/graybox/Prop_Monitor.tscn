@@ -1,19 +1,22 @@
-[gd_scene format=3 uid="uid://fu75aaq0cx15"]
+[gd_scene load_steps=5 format=3 uid="uid://fu75aaq0cx15"]
+
+[ext_resource type="Script" uid="uid://1x2gxftl2mge" path="res://scripts/3d/Prop_Monitor.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://scenes/2d/AmbientDesktop.tscn" id="2_desktop"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_Plastic"]
-albedo_color = Color(0.05, 0.05, 0.05, 1)
+albedo_color = Color(0.9, 0.92, 0.95, 1)
 metallic = 0.1
-roughness = 0.6
+roughness = 0.4
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_Screen"]
 albedo_color = Color(0.02, 0.02, 0.02, 1)
 metallic = 0.5
 roughness = 0.2
-emission_enabled = true
 emission = Color(0.1, 0.15, 0.2, 1)
 emission_energy_multiplier = 0.5
 
 [node name="Prop_Monitor" type="Node3D"]
+script = ExtResource("1_script")
 
 [node name="Geometry" type="CSGCombiner3D" parent="."]
 
@@ -32,12 +35,19 @@ size = Vector3(0.8, 0.45, 0.03)
 material = SubResource("StandardMaterial3D_Plastic")
 
 [node name="Screen" type="CSGBox3D" parent="Geometry/Bezel"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.01)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.02)
 operation = 2
 size = Vector3(0.76, 0.41, 0.05)
 material = SubResource("StandardMaterial3D_Screen")
 
 [node name="Screen_Glass" type="CSGBox3D" parent="Geometry/Bezel"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.005)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.016)
 size = Vector3(0.76, 0.41, 0.02)
 material = SubResource("StandardMaterial3D_Screen")
+
+[node name="SubViewport" type="SubViewport" parent="."]
+disable_3d = true
+size = Vector2i(1280, 720)
+render_target_update_mode = 3
+
+[node name="AmbientDesktop" parent="SubViewport" instance=ExtResource("2_desktop")]
