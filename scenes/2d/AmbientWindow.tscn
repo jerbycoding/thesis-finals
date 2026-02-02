@@ -1,0 +1,60 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/2d/AmbientWindow.gd" id="1_ambient_win"]
+[ext_resource type="Theme" uid="uid://dny3rlbltexc7" path="res://assets/themes/EnterpriseTheme.tres" id="2_theme"]
+
+[node name="AmbientWindow" type="PanelContainer"]
+offset_right = 300.0
+offset_bottom = 200.0
+theme = ExtResource("2_theme")
+script = ExtResource("1_ambient_win")
+
+[node name="VBox" type="VBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Header" type="PanelContainer" parent="VBox"]
+layout_mode = 2
+theme_type_variation = &"HeaderPanel"
+
+[node name="HBox" type="HBoxContainer" parent="VBox/Header"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+
+[node name="Title" type="Label" parent="VBox/Header/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"TechnicalHeader"
+text = "Application"
+vertical_alignment = 1
+
+[node name="CloseButton" type="Button" parent="VBox/Header/HBox"]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+text = "X"
+flat = true
+
+[node name="ContentArea" type="Control" parent="VBox"]
+unique_name_in_owner = true
+clip_contents = true
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="PlaceholderBackground" type="ColorRect" parent="VBox/ContentArea"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.054902, 0.0666667, 0.0901961, 1)
+
+[node name="Grid" type="ColorRect" parent="VBox/ContentArea"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 1, 1, 0.02)
+
