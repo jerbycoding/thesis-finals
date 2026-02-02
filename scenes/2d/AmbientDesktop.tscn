@@ -56,7 +56,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
-color = Color(0.0509804, 0.0823529, 0.141176, 0)
+color = Color(0.01, 0.01, 0.01, 1)
 
 [node name="ScreenSafeArea" type="MarginContainer" parent="."]
 layout_mode = 1
@@ -66,10 +66,10 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-theme_override_constants/margin_left = 60
-theme_override_constants/margin_top = 40
-theme_override_constants/margin_right = 60
-theme_override_constants/margin_bottom = 40
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 0
+theme_override_constants/margin_bottom = 0
 
 [node name="DesktopBackground" type="ColorRect" parent="ScreenSafeArea"]
 layout_mode = 2
