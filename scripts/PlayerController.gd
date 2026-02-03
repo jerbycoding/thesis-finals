@@ -106,11 +106,21 @@ func _input(event):
 			get_viewport().set_input_as_handled()
 			return
 		elif event is InputEventKey:
+			if event.is_action_pressed("ui_cancel"):
+				# SMART ESCAPE: Only stand up if no apps are open
+				var has_open_apps = false
+				if DesktopWindowManager and not DesktopWindowManager.open_windows.is_empty():
+					has_open_apps = true
+				
+				if not has_open_apps:
+					TransitionManager.exit_desktop_mode()
+					get_viewport().set_input_as_handled()
+					return
+			
+			# Otherwise forward to bridge
 			GameState.active_bridge.handle_key(event)
-			# Do not consume Escape so we can exit
-			if not event.is_action_pressed("ui_cancel"):
-				get_viewport().set_input_as_handled()
-				return
+			get_viewport().set_input_as_handled()
+			return
 
 	if not movement_enabled or tablet_active or modal_active: return
 	if event is InputEventMouseMotion:

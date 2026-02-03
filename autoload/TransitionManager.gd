@@ -37,25 +37,36 @@ func enter_desktop_mode(computer_node):
 	if monitor and monitor.viewport:
 		print("ENTER DESKTOP (3D): Initializing UI in monitor viewport...")
 		
-		# Clear ambient view
+		# Clear any existing (ambient) children
 		for child in monitor.viewport.get_children():
-			child.queue_free()
+			if child != GameState.desktop_instance:
+				child.queue_free()
 		
-		# Create interactive desktop
-		var desktop_scene = load("res://scenes/2d/ComputerDesktop.tscn")
-		var desktop = desktop_scene.instantiate()
-		monitor.viewport.add_child(desktop)
-		GameState.desktop_instance = desktop
-		
-		# Inject Virtual Cursor
-		var cursor_scene = load("res://scenes/ui/VirtualCursor.tscn")
-		var cursor = cursor_scene.instantiate()
-		desktop.add_child(cursor) # Added to CanvasLayer 100 inside
+		# Persistence: Check if desktop already exists
+		if GameState.desktop_instance and is_instance_valid(GameState.desktop_instance):
+			print("ENTER DESKTOP (3D): Resuming existing desktop session.")
+			if GameState.desktop_instance.get_parent():
+				GameState.desktop_instance.get_parent().remove_child(GameState.desktop_instance)
+			monitor.viewport.add_child(GameState.desktop_instance)
+			GameState.desktop_instance.process_mode = Node.PROCESS_MODE_INHERIT
+			GameState.desktop_instance.visible = true
+		else:
+			# Create new interactive desktop
+			print("ENTER DESKTOP (3D): Starting new desktop session.")
+			var desktop_scene = load("res://scenes/2d/ComputerDesktop.tscn")
+			var desktop = desktop_scene.instantiate()
+			monitor.viewport.add_child(desktop)
+			GameState.desktop_instance = desktop
+			
+			# Inject Virtual Cursor
+			var cursor_scene = load("res://scenes/ui/VirtualCursor.tscn")
+			var cursor = cursor_scene.instantiate()
+			desktop.add_child(cursor) # Added to CanvasLayer 100 inside
 		
 		# Wait for sit animation (0.8s)
 		await get_tree().create_timer(0.8).timeout
 		
-		# Activate Input Bridge (Master Advice #3 - handles mouse entry)
+		# Activate Input Bridge
 		if bridge:
 			bridge.activate()
 			GameState.active_bridge = bridge
@@ -90,11 +101,12 @@ func exit_desktop_mode():
 		GameState.active_bridge.deactivate()
 		GameState.active_bridge = null
 
-	# Restore ambient view logic could go here, or just let it stay
-	# But for performance, we disable the interactive desktop
+	# EXIT DESKTOP (3D): Preservation Logic
 	if GameState.desktop_instance and is_instance_valid(GameState.desktop_instance):
-		GameState.desktop_instance.queue_free()
-		GameState.desktop_instance = null
+		print("EXIT DESKTOP (3D): Preserving desktop state.")
+		GameState.desktop_instance.process_mode = Node.PROCESS_MODE_DISABLED
+		GameState.desktop_instance.visible = false
+		# We leave it parented to the viewport for now; it will be reparented on next 'sit down'
 
 	# Return to 3D mode (Triggers Player stand_up() via signal)
 	GameState.set_mode(GameState.GameMode.MODE_3D)

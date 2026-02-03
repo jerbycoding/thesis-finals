@@ -11,19 +11,28 @@ class_name MonitorInputBridge
 
 @export_group("Config")
 @export var physics_layer: int = 20 # Layer 20 for monitors
-@export var mesh_size: Vector2 = Vector2(0.76, 0.41) # Actual screen quad size
 
 # State
 var is_active: bool = false
 var last_uv: Vector2 = Vector2.ZERO
 var pressed_keys: Dictionary = {} # scancode -> bool
 var virtual_cursor: Sprite2D = null
+var current_mesh_size: Vector2 = Vector2(0.76, 0.41) # Dynamic fallback
 
 func _ready():
 	_setup_collision()
+	_update_mesh_size()
 	# Disable SubViewport input by default; we forward manually
 	if subviewport:
 		subviewport.gui_disable_input = false
+
+func _update_mesh_size():
+	if screen_mesh and screen_mesh.mesh:
+		if screen_mesh.mesh is QuadMesh:
+			current_mesh_size = screen_mesh.mesh.size
+		else:
+			var aabb = screen_mesh.get_aabb()
+			current_mesh_size = Vector2(aabb.size.x, aabb.size.y)
 
 func _setup_collision():
 	if not interaction_area: return
@@ -109,8 +118,8 @@ func _get_uv_from_screen_pos(screen_pos: Vector2) -> Vector2:
 		# Convert hit to local UV
 		var local_hit = screen_mesh.to_local(result.position)
 		var uv = Vector2(
-			(local_hit.x / mesh_size.x) + 0.5,
-			1.0 - ((local_hit.y / mesh_size.y) + 0.5)
+			(local_hit.x / current_mesh_size.x) + 0.5,
+			1.0 - ((local_hit.y / current_mesh_size.y) + 0.5)
 		)
 		return uv.clamp(Vector2.ZERO, Vector2.ONE)
 	
