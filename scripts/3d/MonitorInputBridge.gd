@@ -129,6 +129,7 @@ func _inject_mouse_motion(uv: Vector2):
 	if not subviewport: return
 	
 	var pixel_pos = uv * Vector2(subviewport.size)
+	var prev_pixel_pos = last_uv * Vector2(subviewport.size)
 	
 	# Update Virtual Cursor
 	if virtual_cursor:
@@ -138,6 +139,7 @@ func _inject_mouse_motion(uv: Vector2):
 	var ev = InputEventMouseMotion.new()
 	ev.position = pixel_pos
 	ev.global_position = pixel_pos
+	ev.relative = pixel_pos - prev_pixel_pos
 	subviewport.push_input(ev)
 
 func handle_mouse_button(event: InputEventMouseButton):
