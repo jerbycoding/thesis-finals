@@ -34,4 +34,4 @@ shape = SubResource("BoxShape3D_yg1ix")
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.5, 0.75, 0)
 
 [node name="ViewAnchor" type="Marker3D" parent="."]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.286619, 0.969984, 0)
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.286619, 0.973676, 0)

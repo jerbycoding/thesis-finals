@@ -11,6 +11,7 @@ var movement_enabled = true
 var carried_object: Node3D = null
 var current_target_height: float = 1.75 # Default to eye height
 var modal_active: bool = false # NEW: Flag to block input
+var is_seated: bool = false # NEW: Track if camera is detached from pivot
 var stored_camera_transform: Transform3D
 
 @onready var carry_marker: Marker3D = %CarryMarker3D
@@ -26,12 +27,19 @@ func _ready():
 	camera.fov = 80
 
 func sit_down(target_node: Node3D):
-	if not target_node: return
+	if not target_node or is_seated: return
+	
+	is_seated = true
 	stored_camera_transform = camera.global_transform
 	_tween_camera_to(target_node.global_transform)
 
 func stand_up():
+	if not is_seated:
+		movement_enabled = true
+		return
+		
 	_tween_camera_to(stored_camera_transform, true)
+	is_seated = false
 
 func _tween_camera_to(target: Transform3D, is_standing_up: bool = false):
 	movement_enabled = false
@@ -62,11 +70,14 @@ func _on_game_mode_changed(mode):
 		if animator and animator.has_method("force_idle"):
 			animator.force_idle()
 	else:
-		# If returning to 3D mode from 2D, trigger stand up
+		# If returning to 3D mode, ensure movement is restored
 		if mode == GameState.GameMode.MODE_3D and not movement_enabled:
-			stand_up()
+			if is_seated:
+				stand_up()
+			else:
+				movement_enabled = true
 		
-		# movement_enabled is re-enabled by stand_up() tween callback
+		# movement_enabled is re-enabled by stand_up() tween callback OR directly above
 		current_target_height = EYE_HEIGHT
 
 func _try_toggle_tablet():

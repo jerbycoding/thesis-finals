@@ -20,13 +20,6 @@ func set_highlight(active: bool):
 		if monitor and monitor.get_active_material(0):
 			monitor.get_active_material(0).emission_enabled = false
 
-func set_visual_visibility(_visible_state: bool):
-	# ALWAYS VISIBLE FOR TESTING
-	if computer_mesh:
-		computer_mesh.visible = true
-	if monitor:
-		monitor.visible = true
-
 func _process(delta):
 	if is_highlighted and monitor:
 		highlight_time += delta * 5.0

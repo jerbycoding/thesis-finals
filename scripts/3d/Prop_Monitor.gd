@@ -27,6 +27,10 @@ func _ready():
 			# Set base color to white so texture isn't tinted dark
 			new_mat.albedo_color = Color.WHITE 
 			
+			# FIX: Flip UVs horizontally to correct mirroring, keep vertical at 1
+			new_mat.uv1_scale = Vector3(-1, 1, 1)
+			new_mat.uv1_offset = Vector3(1, 0, 0)
+			
 			new_mat.emission_enabled = false
 			new_mat.emission_texture = tex
 			new_mat.emission = Color.WHITE
