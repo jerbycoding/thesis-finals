@@ -5,6 +5,8 @@ signal player_entered_interaction
 signal player_exited_interaction
 
 @onready var monitor = $Monitor
+@onready var computer_mesh = $Prop_ComputerSet
+
 var is_highlighted: bool = false
 var highlight_time: float = 0.0
 
@@ -17,6 +19,13 @@ func set_highlight(active: bool):
 	if not active:
 		if monitor and monitor.get_active_material(0):
 			monitor.get_active_material(0).emission_enabled = false
+
+func set_visual_visibility(_visible_state: bool):
+	# ALWAYS VISIBLE FOR TESTING
+	if computer_mesh:
+		computer_mesh.visible = true
+	if monitor:
+		monitor.visible = true
 
 func _process(delta):
 	if is_highlighted and monitor:

@@ -3,6 +3,12 @@ extends Node3D
 @onready var screen_mesh = $Geometry/Bezel/Screen_Glass
 @onready var viewport = $SubViewport
 
+func set_screen_active(active: bool):
+	if viewport:
+		viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS if active else SubViewport.UPDATE_DISABLED
+	if screen_mesh:
+		screen_mesh.visible = active
+
 func _ready():
 	# Wait a frame to ensure viewport is initialized
 	await get_tree().process_frame

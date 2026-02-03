@@ -49,17 +49,23 @@ grow_vertical = 2
 theme = ExtResource("4_theme")
 script = ExtResource("1_0kbkv")
 
-[node name="Background" type="ColorRect" parent="."]
+[node name="MonitorAssembly" type="Control" parent="."]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = 372.0
+offset_top = 209.0
+offset_right = -320.0
+offset_bottom = -180.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 1
-color = Color(0.0509804, 0.0823529, 0.141176, 0)
+mouse_filter = 2
 
-[node name="ScreenSafeArea" type="MarginContainer" parent="."]
+[node name="LCD_Group" type="Control" parent="MonitorAssembly"]
+unique_name_in_owner = true
+clip_contents = true
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -67,17 +73,29 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-theme_override_constants/margin_left = 60
-theme_override_constants/margin_top = 40
-theme_override_constants/margin_right = 60
-theme_override_constants/margin_bottom = 40
 
-[node name="DesktopBackground" type="ColorRect" parent="ScreenSafeArea"]
-layout_mode = 2
+[node name="DesktopBackground" type="ColorRect" parent="MonitorAssembly/LCD_Group"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 2
 color = Color(0.0509804, 0.0627451, 0.0823529, 1)
 
-[node name="GridPattern" type="ColorRect" parent="ScreenSafeArea/DesktopBackground"]
+[node name="ScreenGlow" type="ColorRect" parent="MonitorAssembly/LCD_Group/DesktopBackground"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.2, 0.4, 1, 0.02)
+
+[node name="GridPattern" type="ColorRect" parent="MonitorAssembly/LCD_Group/DesktopBackground"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -87,27 +105,41 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(1, 1, 1, 0.0156863)
 
-[node name="AppWindowContainer" type="Control" parent="ScreenSafeArea"]
+[node name="ScreenSafeArea" type="MarginContainer" parent="MonitorAssembly/LCD_Group"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 25
+theme_override_constants/margin_top = 25
+theme_override_constants/margin_right = 25
+theme_override_constants/margin_bottom = 25
+
+[node name="AppWindowContainer" type="Control" parent="MonitorAssembly/LCD_Group/ScreenSafeArea"]
 unique_name_in_owner = true
 clip_contents = true
 layout_mode = 2
 mouse_filter = 1
 
-[node name="TopSystemBar" type="PanelContainer" parent="ScreenSafeArea"]
+[node name="TopSystemBar" type="PanelContainer" parent="MonitorAssembly/LCD_Group/ScreenSafeArea"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_TopBar")
 
-[node name="Margin" type="MarginContainer" parent="ScreenSafeArea/TopSystemBar"]
+[node name="Margin" type="MarginContainer" parent="MonitorAssembly/LCD_Group/ScreenSafeArea/TopSystemBar"]
 layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_right = 10
 
-[node name="HBox" type="HBoxContainer" parent="ScreenSafeArea/TopSystemBar/Margin"]
+[node name="HBox" type="HBoxContainer" parent="MonitorAssembly/LCD_Group/ScreenSafeArea/TopSystemBar/Margin"]
 layout_mode = 2
 
-[node name="AppMenuButton" type="Button" parent="ScreenSafeArea/TopSystemBar/Margin/HBox"]
+[node name="AppMenuButton" type="Button" parent="MonitorAssembly/LCD_Group/ScreenSafeArea/TopSystemBar/Margin/HBox"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"TechnicalHeader"
@@ -115,33 +147,33 @@ theme_override_font_sizes/font_size = 11
 text = "❄ APPLICATIONS"
 flat = true
 
-[node name="VSeparator" type="VSeparator" parent="ScreenSafeArea/TopSystemBar/Margin/HBox"]
+[node name="VSeparator" type="VSeparator" parent="MonitorAssembly/LCD_Group/ScreenSafeArea/TopSystemBar/Margin/HBox"]
 layout_mode = 2
 theme_override_constants/separation = 15
 
-[node name="StatusLabel" type="Label" parent="ScreenSafeArea/TopSystemBar/Margin/HBox"]
+[node name="StatusLabel" type="Label" parent="MonitorAssembly/LCD_Group/ScreenSafeArea/TopSystemBar/Margin/HBox"]
 layout_mode = 2
 theme_type_variation = &"TechnicalHeader"
 theme_override_colors/font_color = Color(0.2, 1, 0.2, 1)
 theme_override_font_sizes/font_size = 10
 text = "NETWORK_ONLINE"
 
-[node name="Spacer" type="Control" parent="ScreenSafeArea/TopSystemBar/Margin/HBox"]
+[node name="Spacer" type="Control" parent="MonitorAssembly/LCD_Group/ScreenSafeArea/TopSystemBar/Margin/HBox"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="UserLabel" type="Label" parent="ScreenSafeArea/TopSystemBar/Margin/HBox"]
+[node name="UserLabel" type="Label" parent="MonitorAssembly/LCD_Group/ScreenSafeArea/TopSystemBar/Margin/HBox"]
 layout_mode = 2
 theme_type_variation = &"TechnicalHeader"
 theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
 theme_override_font_sizes/font_size = 10
 text = "ANALYST_ Hammond, B."
 
-[node name="VSeparator2" type="VSeparator" parent="ScreenSafeArea/TopSystemBar/Margin/HBox"]
+[node name="VSeparator2" type="VSeparator" parent="MonitorAssembly/LCD_Group/ScreenSafeArea/TopSystemBar/Margin/HBox"]
 layout_mode = 2
 theme_override_constants/separation = 15
 
-[node name="DesktopClock" type="Label" parent="ScreenSafeArea/TopSystemBar/Margin/HBox"]
+[node name="DesktopClock" type="Label" parent="MonitorAssembly/LCD_Group/ScreenSafeArea/TopSystemBar/Margin/HBox"]
 layout_mode = 2
 theme_type_variation = &"TechnicalHeader"
 theme_override_colors/font_color = Color(1, 1, 1, 1)
@@ -151,14 +183,14 @@ horizontal_alignment = 1
 vertical_alignment = 1
 script = ExtResource("1_0l3ag")
 
-[node name="LeftUtilityBar" type="VBoxContainer" parent="ScreenSafeArea"]
+[node name="LeftUtilityBar" type="VBoxContainer" parent="MonitorAssembly/LCD_Group/ScreenSafeArea"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 4
 theme_override_constants/separation = 15
 
-[node name="Handbook_Icon" type="Button" parent="ScreenSafeArea/LeftUtilityBar"]
+[node name="Handbook_Icon" type="Button" parent="MonitorAssembly/LCD_Group/ScreenSafeArea/LeftUtilityBar"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(70, 75)
 layout_mode = 2
@@ -166,7 +198,7 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_IconHover")
 icon = ExtResource("4_71q3h")
 flat = true
 
-[node name="VBox" type="VBoxContainer" parent="ScreenSafeArea/LeftUtilityBar/Handbook_Icon"]
+[node name="VBox" type="VBoxContainer" parent="MonitorAssembly/LCD_Group/ScreenSafeArea/LeftUtilityBar/Handbook_Icon"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -178,20 +210,20 @@ mouse_filter = 2
 theme_override_constants/separation = 2
 alignment = 1
 
-[node name="IconText" type="Label" parent="ScreenSafeArea/LeftUtilityBar/Handbook_Icon/VBox"]
+[node name="IconText" type="Label" parent="MonitorAssembly/LCD_Group/ScreenSafeArea/LeftUtilityBar/Handbook_Icon/VBox"]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 32
 horizontal_alignment = 1
 
-[node name="Label" type="Label" parent="ScreenSafeArea/LeftUtilityBar/Handbook_Icon/VBox"]
+[node name="Label" type="Label" parent="MonitorAssembly/LCD_Group/ScreenSafeArea/LeftUtilityBar/Handbook_Icon/VBox"]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 10
 text = "Handbook"
 horizontal_alignment = 1
 
-[node name="Network_Icon" type="Button" parent="ScreenSafeArea/LeftUtilityBar"]
+[node name="Network_Icon" type="Button" parent="MonitorAssembly/LCD_Group/ScreenSafeArea/LeftUtilityBar"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(70, 75)
 layout_mode = 2
@@ -199,7 +231,7 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_IconHover")
 icon = ExtResource("5_pghwf")
 flat = true
 
-[node name="VBox" type="VBoxContainer" parent="ScreenSafeArea/LeftUtilityBar/Network_Icon"]
+[node name="VBox" type="VBoxContainer" parent="MonitorAssembly/LCD_Group/ScreenSafeArea/LeftUtilityBar/Network_Icon"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -211,13 +243,13 @@ mouse_filter = 2
 theme_override_constants/separation = 2
 alignment = 1
 
-[node name="IconText" type="Label" parent="ScreenSafeArea/LeftUtilityBar/Network_Icon/VBox"]
+[node name="IconText" type="Label" parent="MonitorAssembly/LCD_Group/ScreenSafeArea/LeftUtilityBar/Network_Icon/VBox"]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 32
 horizontal_alignment = 1
 
-[node name="Label" type="Label" parent="ScreenSafeArea/LeftUtilityBar/Network_Icon/VBox"]
+[node name="Label" type="Label" parent="MonitorAssembly/LCD_Group/ScreenSafeArea/LeftUtilityBar/Network_Icon/VBox"]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 10
@@ -225,7 +257,7 @@ text = "Network Map"
 horizontal_alignment = 1
 vertical_alignment = 2
 
-[node name="Decrypt_Icon" type="Button" parent="ScreenSafeArea/LeftUtilityBar"]
+[node name="Decrypt_Icon" type="Button" parent="MonitorAssembly/LCD_Group/ScreenSafeArea/LeftUtilityBar"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(70, 75)
 layout_mode = 2
@@ -233,7 +265,7 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_IconHover")
 icon = ExtResource("6_b2npl")
 flat = true
 
-[node name="VBox" type="VBoxContainer" parent="ScreenSafeArea/LeftUtilityBar/Decrypt_Icon"]
+[node name="VBox" type="VBoxContainer" parent="MonitorAssembly/LCD_Group/ScreenSafeArea/LeftUtilityBar/Decrypt_Icon"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -246,20 +278,20 @@ mouse_filter = 2
 theme_override_constants/separation = 2
 alignment = 2
 
-[node name="IconText" type="Label" parent="ScreenSafeArea/LeftUtilityBar/Decrypt_Icon/VBox"]
+[node name="IconText" type="Label" parent="MonitorAssembly/LCD_Group/ScreenSafeArea/LeftUtilityBar/Decrypt_Icon/VBox"]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 32
 horizontal_alignment = 1
 
-[node name="Label" type="Label" parent="ScreenSafeArea/LeftUtilityBar/Decrypt_Icon/VBox"]
+[node name="Label" type="Label" parent="MonitorAssembly/LCD_Group/ScreenSafeArea/LeftUtilityBar/Decrypt_Icon/VBox"]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 10
 text = "Decryption"
 horizontal_alignment = 1
 
-[node name="TaskManager_Icon" type="Button" parent="ScreenSafeArea/LeftUtilityBar"]
+[node name="TaskManager_Icon" type="Button" parent="MonitorAssembly/LCD_Group/ScreenSafeArea/LeftUtilityBar"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(70, 75)
 layout_mode = 2
@@ -267,7 +299,7 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_IconHover")
 icon = ExtResource("7_qy5y3")
 flat = true
 
-[node name="VBox" type="VBoxContainer" parent="ScreenSafeArea/LeftUtilityBar/TaskManager_Icon"]
+[node name="VBox" type="VBoxContainer" parent="MonitorAssembly/LCD_Group/ScreenSafeArea/LeftUtilityBar/TaskManager_Icon"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -278,38 +310,38 @@ mouse_filter = 2
 theme_override_constants/separation = 2
 alignment = 1
 
-[node name="IconText" type="Label" parent="ScreenSafeArea/LeftUtilityBar/TaskManager_Icon/VBox"]
+[node name="IconText" type="Label" parent="MonitorAssembly/LCD_Group/ScreenSafeArea/LeftUtilityBar/TaskManager_Icon/VBox"]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 32
 horizontal_alignment = 1
 
-[node name="Label" type="Label" parent="ScreenSafeArea/LeftUtilityBar/TaskManager_Icon/VBox"]
+[node name="Label" type="Label" parent="MonitorAssembly/LCD_Group/ScreenSafeArea/LeftUtilityBar/TaskManager_Icon/VBox"]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 10
 text = "Resources"
 horizontal_alignment = 1
 
-[node name="BottomDock" type="PanelContainer" parent="ScreenSafeArea"]
+[node name="BottomDock" type="PanelContainer" parent="MonitorAssembly/LCD_Group/ScreenSafeArea"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 8
 theme_override_styles/panel = SubResource("StyleBoxFlat_Dock")
 
-[node name="Margin" type="MarginContainer" parent="ScreenSafeArea/BottomDock"]
+[node name="Margin" type="MarginContainer" parent="MonitorAssembly/LCD_Group/ScreenSafeArea/BottomDock"]
 layout_mode = 2
 theme_override_constants/margin_left = 15
 theme_override_constants/margin_right = 15
 
-[node name="DockIcons" type="HBoxContainer" parent="ScreenSafeArea/BottomDock/Margin"]
+[node name="DockIcons" type="HBoxContainer" parent="MonitorAssembly/LCD_Group/ScreenSafeArea/BottomDock/Margin"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 25
 alignment = 1
 
-[node name="SIEM_Icon" type="Button" parent="ScreenSafeArea/BottomDock/Margin/DockIcons"]
+[node name="SIEM_Icon" type="Button" parent="MonitorAssembly/LCD_Group/ScreenSafeArea/BottomDock/Margin/DockIcons"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
@@ -318,7 +350,7 @@ theme_override_font_sizes/font_size = 24
 icon = ExtResource("4_i1hx7")
 flat = true
 
-[node name="Email_Icon" type="Button" parent="ScreenSafeArea/BottomDock/Margin/DockIcons"]
+[node name="Email_Icon" type="Button" parent="MonitorAssembly/LCD_Group/ScreenSafeArea/BottomDock/Margin/DockIcons"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
@@ -327,7 +359,7 @@ theme_override_font_sizes/font_size = 24
 icon = ExtResource("9_e71pk")
 flat = true
 
-[node name="Terminal_Icon" type="Button" parent="ScreenSafeArea/BottomDock/Margin/DockIcons"]
+[node name="Terminal_Icon" type="Button" parent="MonitorAssembly/LCD_Group/ScreenSafeArea/BottomDock/Margin/DockIcons"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
@@ -336,7 +368,7 @@ theme_override_font_sizes/font_size = 24
 icon = ExtResource("10_pct8o")
 flat = true
 
-[node name="Tickets_Icon" type="Button" parent="ScreenSafeArea/BottomDock/Margin/DockIcons"]
+[node name="Tickets_Icon" type="Button" parent="MonitorAssembly/LCD_Group/ScreenSafeArea/BottomDock/Margin/DockIcons"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
@@ -345,7 +377,7 @@ theme_override_font_sizes/font_size = 24
 icon = ExtResource("11_3hg8b")
 flat = true
 
-[node name="ExitButton" type="Button" parent="ScreenSafeArea/BottomDock/Margin/DockIcons"]
+[node name="ExitButton" type="Button" parent="MonitorAssembly/LCD_Group/ScreenSafeArea/BottomDock/Margin/DockIcons"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2

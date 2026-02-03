@@ -34,6 +34,12 @@ func enter_desktop_mode(computer_node):
 	# Set mode (enables mouse)
 	GameState.set_mode(GameState.GameMode.MODE_2D)
 	GameState.current_computer = computer_node
+	
+	# Turn off 3D screen texture to prevent ghosting
+	if computer_node:
+		var monitor_node = computer_node.find_child("Prop_Monitor", true, false)
+		if monitor_node and monitor_node.has_method("set_screen_active"):
+			monitor_node.set_screen_active(false)
 
 	print("ENTER DESKTOP: Step 2 - Activate desktop")
 	
@@ -42,8 +48,6 @@ func enter_desktop_mode(computer_node):
 		print("Resuming existing desktop session...")
 		GameState.desktop_instance.visible = true
 		GameState.desktop_instance.process_mode = Node.PROCESS_MODE_INHERIT
-		
-		# Optional: Play wakeup sound or effect?
 	else:
 		# Create new instance if none exists
 		print("Initializing new desktop session...")
@@ -67,6 +71,14 @@ func exit_desktop_mode():
 		AudioManager.stop_music()
 
 	is_transitioning = true
+	
+	# MESH SHOWING REMOVED FOR TESTING
+	# Restore the 3D screen texture
+	if GameState.current_computer:
+		var monitor_node = GameState.current_computer.find_child("Prop_Monitor", true, false)
+		if monitor_node and monitor_node.has_method("set_screen_active"):
+			monitor_node.set_screen_active(true)
+
 	print("EXIT DESKTOP: Step 1 - Hide Windows")
 	EventBus.transition_started.emit()
 

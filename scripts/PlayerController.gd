@@ -122,9 +122,8 @@ const EYE_HEIGHT = 1.75 # True eye level
 const SEATED_HEIGHT = 1.35 # Seated eye level
 
 func _process(delta):
-	if not movement_enabled: 
-		# Smoothly lerp to target height even if not moving (for sitting down)
-		$CameraPivot/Camera3D.position.y = lerp($CameraPivot/Camera3D.position.y, current_target_height, delta * 5.0)
+	if not movement_enabled or modal_active: 
+		# Do not interfere with camera height during transitions or while seated
 		return
 		
 	_handle_headbob(delta)
