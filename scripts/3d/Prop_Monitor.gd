@@ -1,11 +1,12 @@
 extends Node3D
 
-@onready var screen_mesh = $Geometry/Bezel/Screen_Glass
+@onready var screen_mesh = $Screen_Mesh
 @onready var viewport = $SubViewport
+@onready var input_bridge = $InputBridge
 
 func set_screen_active(active: bool):
 	if viewport:
-		viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS if active else SubViewport.UPDATE_DISABLED
+		viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS if active else SubViewport.UPDATE_WHEN_VISIBLE
 	if screen_mesh:
 		screen_mesh.visible = active
 
@@ -16,27 +17,31 @@ func _ready():
 	if screen_mesh and viewport:
 		var tex = viewport.get_texture()
 		
-		# CSGBox3D stores material in the 'material' property
-		var current_mat = screen_mesh.material
+		# For MeshInstance3D, we use material_override or get_active_material
+		var current_mat = screen_mesh.get_active_material(0)
 		
 		if current_mat:
 			# Duplicate material so each monitor is unique
 			var new_mat = current_mat.duplicate()
 			
 			new_mat.albedo_texture = tex
-			# Set base color to white so texture isn't tinted dark
 			new_mat.albedo_color = Color.WHITE 
 			
-			# FIX: Flip UVs horizontally to correct mirroring, keep vertical at 1
-			new_mat.uv1_scale = Vector3(-1, 1, 1)
-			new_mat.uv1_offset = Vector3(1, 0, 0)
+			# PRO RENDERING: High fidelity for text (Master Advice #2)
+			new_mat.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
+			new_mat.anisotropy_enabled = true
+			new_mat.anisotropy_strength = 16.0
 			
-			new_mat.emission_enabled = false
-			new_mat.emission_texture = tex
-			new_mat.emission = Color.WHITE
-			new_mat.emission_energy_multiplier = 0.0
+			# MAKE IT LOOK LIKE A REAL SCREEN: Unshaded means it's not affected by room lights
+			# and won't wash out into "just white"
+			new_mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
 			
-			screen_mesh.material = new_mat
-			# print("Monitor Screen Texture Applied")
+			# FIX: Orientation for QuadMesh
+			new_mat.uv1_scale = Vector3(1, 1, 1)
+			new_mat.uv1_offset = Vector3(0, 0, 0)
+			
+			new_mat.emission_enabled = false # Unshaded doesn't need emission to be bright
+			
+			screen_mesh.material_override = new_mat
 	else:
 		push_warning("Prop_Monitor: Missing nodes for screen projection")

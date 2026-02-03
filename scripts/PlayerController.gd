@@ -99,6 +99,19 @@ func _try_toggle_tablet():
 			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 func _input(event):
+	# Pure 3D Input Forwarding
+	if GameState and GameState.active_bridge:
+		if event is InputEventMouseButton:
+			GameState.active_bridge.handle_mouse_button(event)
+			get_viewport().set_input_as_handled()
+			return
+		elif event is InputEventKey:
+			GameState.active_bridge.handle_key(event)
+			# Do not consume Escape so we can exit
+			if not event.is_action_pressed("ui_cancel"):
+				get_viewport().set_input_as_handled()
+				return
+
 	if not movement_enabled or tablet_active or modal_active: return
 	if event is InputEventMouseMotion:
 		camera_rotation.y -= event.relative.x * mouse_sensitivity

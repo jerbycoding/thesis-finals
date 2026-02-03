@@ -69,11 +69,16 @@ func _set_next_waypoint():
 	print("[NPC_Patrol] Heading to waypoint ", current_waypoint_idx, " at ", target)
 
 func _physics_process(delta):
+	if waypoints.is_empty(): return
+	
 	if is_waiting:
 		wait_timer -= delta
 		if wait_timer <= 0:
-			current_waypoint_idx = (current_waypoint_idx + 1) % waypoints.size()
-			_set_next_waypoint()
+			if waypoints.size() > 0:
+				current_waypoint_idx = (current_waypoint_idx + 1) % waypoints.size()
+				_set_next_waypoint()
+			else:
+				wait_timer = 1.0 # Wait for initialization
 		return
 
 	# If navigation is finished but we aren't waiting, something is wrong

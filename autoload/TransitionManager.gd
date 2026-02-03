@@ -16,9 +16,14 @@ func enter_desktop_mode(computer_node):
 		return
 
 	is_transitioning = true
-	print("ENTER DESKTOP: Step 1 - Trigger Camera Sit")
+	print("ENTER DESKTOP (3D): Step 1 - Find Monitor and Bridge")
 	EventBus.transition_started.emit()
 
+	var monitor = computer_node.find_child("Prop_Monitor", true, false)
+	var bridge = null
+	if monitor and monitor.has_node("InputBridge"):
+		bridge = monitor.get_node("InputBridge")
+	
 	# Trigger Player Camera Animation
 	var player = get_tree().root.find_child("Player3D", true, false)
 	if player and player.has_method("sit_down"):
@@ -28,34 +33,39 @@ func enter_desktop_mode(computer_node):
 		else:
 			push_warning("TransitionManager: No ViewAnchor found on computer!")
 	
-	# Wait for sit animation (0.8s)
-	await get_tree().create_timer(0.8).timeout
-
-	# Set mode (enables mouse)
+	# Setup Desktop UI in 3D Viewport
+	if monitor and monitor.viewport:
+		print("ENTER DESKTOP (3D): Initializing UI in monitor viewport...")
+		
+		# Clear ambient view
+		for child in monitor.viewport.get_children():
+			child.queue_free()
+		
+		# Create interactive desktop
+		var desktop_scene = load("res://scenes/2d/ComputerDesktop.tscn")
+		var desktop = desktop_scene.instantiate()
+		monitor.viewport.add_child(desktop)
+		GameState.desktop_instance = desktop
+		
+		# Inject Virtual Cursor
+		var cursor_scene = load("res://scenes/ui/VirtualCursor.tscn")
+		var cursor = cursor_scene.instantiate()
+		desktop.add_child(cursor) # Added to CanvasLayer 100 inside
+		
+		# Wait for sit animation (0.8s)
+		await get_tree().create_timer(0.8).timeout
+		
+		# Activate Input Bridge (Master Advice #3 - handles mouse entry)
+		if bridge:
+			bridge.activate()
+			GameState.active_bridge = bridge
+	
+	# Set mode (enables mouse tracking)
 	GameState.set_mode(GameState.GameMode.MODE_2D)
 	GameState.current_computer = computer_node
-	
-	# Turn off 3D screen texture to prevent ghosting
-	if computer_node:
-		var monitor_node = computer_node.find_child("Prop_Monitor", true, false)
-		if monitor_node and monitor_node.has_method("set_screen_active"):
-			monitor_node.set_screen_active(false)
+	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 
-	print("ENTER DESKTOP: Step 2 - Activate desktop")
-	
-	# Check for existing instance
-	if GameState.desktop_instance and is_instance_valid(GameState.desktop_instance):
-		print("Resuming existing desktop session...")
-		GameState.desktop_instance.visible = true
-		GameState.desktop_instance.process_mode = Node.PROCESS_MODE_INHERIT
-	else:
-		# Create new instance if none exists
-		print("Initializing new desktop session...")
-		var desktop_scene = load("res://scenes/2d/ComputerDesktop.tscn")
-		GameState.desktop_instance = desktop_scene.instantiate()
-		get_tree().root.add_child(GameState.desktop_instance)
-
-	print("ENTER DESKTOP: Complete")
+	print("ENTER DESKTOP (3D): Complete")
 	is_transitioning = false
 	EventBus.transition_completed.emit()
 	
@@ -72,30 +82,28 @@ func exit_desktop_mode():
 
 	is_transitioning = true
 	
-	# MESH SHOWING REMOVED FOR TESTING
-	# Restore the 3D screen texture
-	if GameState.current_computer:
-		var monitor_node = GameState.current_computer.find_child("Prop_Monitor", true, false)
-		if monitor_node and monitor_node.has_method("set_screen_active"):
-			monitor_node.set_screen_active(true)
-
-	print("EXIT DESKTOP: Step 1 - Hide Windows")
+	print("EXIT DESKTOP (3D): Step 1 - Cleanup Bridge and UI")
 	EventBus.transition_started.emit()
 
-	# Hide desktop instead of destroying it to preserve state (windows, text, etc.)
+	# Deactivate Bridge (Master Advice #4 - flushes keys)
+	if GameState.active_bridge:
+		GameState.active_bridge.deactivate()
+		GameState.active_bridge = null
+
+	# Restore ambient view logic could go here, or just let it stay
+	# But for performance, we disable the interactive desktop
 	if GameState.desktop_instance and is_instance_valid(GameState.desktop_instance):
-		GameState.desktop_instance.visible = false
-		GameState.desktop_instance.process_mode = Node.PROCESS_MODE_DISABLED
-	else:
+		GameState.desktop_instance.queue_free()
 		GameState.desktop_instance = null
 
 	# Return to 3D mode (Triggers Player stand_up() via signal)
 	GameState.set_mode(GameState.GameMode.MODE_3D)
+	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 	# Wait for stand animation (0.8s)
 	await get_tree().create_timer(0.8).timeout
 
-	print("EXIT DESKTOP: Complete")
+	print("EXIT DESKTOP (3D): Complete")
 	is_transitioning = false
 	EventBus.transition_completed.emit()
 
