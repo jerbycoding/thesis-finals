@@ -11,6 +11,10 @@ var ambient_windows = {} # window_id -> AmbientWindow instance
 func _ready():
 	z_index = 0
 	visible = true
+	
+	# FORCE FULL RECT: Ensure it fills the SubViewport (Master Advice #2)
+	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	
 	# Ensure container is ready
 	if not window_container:
 		push_error("AmbientDesktop: AppWindowContainer not found!")
@@ -27,16 +31,15 @@ func _process(_delta):
 		var real_win = real_windows[wid]
 		if not is_instance_valid(real_win): continue
 		
-		# Skip if window is hidden
-		if not real_win.visible:
-			if wid in ambient_windows:
-				ambient_windows[wid].visible = false
-			continue
-			
+		# MIRROR REAL VISIBILITY
 		if not wid in ambient_windows:
 			_create_ambient_window(wid, real_win)
 		
-		_sync_window_state(wid, real_win)
+		var amb_win = ambient_windows[wid]
+		amb_win.visible = real_win.visible
+		
+		if amb_win.visible:
+			_sync_window_state(wid, real_win)
 	
 	# 2. Cleanup Removed
 	var to_remove = []
@@ -68,15 +71,15 @@ func _sync_window_state(wid: String, real_win: Control):
 	var amb_win = ambient_windows[wid]
 	
 	# SCALE CALCULATION
-	# Calculate ratio between the real desktop size and this ambient viewport size
-	var real_container = real_win.get_parent()
-	if not is_instance_valid(real_container): return
+	# Use DesktopWindowManager container size as reference
+	var real_size = Vector2(1280, 720) # Fallback to standard
+	if DesktopWindowManager and DesktopWindowManager.active_window_container:
+		real_size = DesktopWindowManager.active_window_container.size
 	
-	var real_size = real_container.size
 	var my_size = window_container.size
 	
 	# Avoid division by zero
-	if real_size.x <= 1 or real_size.y <= 1: return
+	if real_size.x <= 1 or real_size.y <= 1 or my_size.x <= 1 or my_size.y <= 1: return
 	
 	var scale_factor = my_size / real_size
 	
@@ -88,8 +91,9 @@ func _sync_window_state(wid: String, real_win: Control):
 	amb_win.z_index = real_win.z_index
 	amb_win.visible = real_win.visible
 	
-	# Move to front if Z-index is high to ensure draw order in container
-	if real_win.z_index > 100: # Arbitrary "Focused" threshold
+	# Handle Window Ordering in Container
+	# Use actual scene tree order to match Z-index visuals
+	if real_win == DesktopWindowManager.focused_window:
 		amb_win.move_to_front()
 
 func _remove_ambient_window(wid: String):

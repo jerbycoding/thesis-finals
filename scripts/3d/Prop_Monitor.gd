@@ -4,15 +4,19 @@ extends Node3D
 @onready var viewport = $SubViewport
 @onready var input_bridge = $InputBridge
 
-func set_screen_active(active: bool):
+func set_screen_active(_active: bool):
 	if viewport:
-		viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS if active else SubViewport.UPDATE_WHEN_VISIBLE
+		# ALWAYS UPDATE for ambient view
+		viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
 	if screen_mesh:
-		screen_mesh.visible = active
+		screen_mesh.visible = true
 
 func _ready():
 	# Wait a frame to ensure viewport is initialized
 	await get_tree().process_frame
+	
+	if viewport:
+		viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
 	
 	if screen_mesh and viewport:
 		var tex = viewport.get_texture()

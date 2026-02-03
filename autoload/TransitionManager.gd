@@ -37,10 +37,11 @@ func enter_desktop_mode(computer_node):
 	if monitor and monitor.viewport:
 		print("ENTER DESKTOP (3D): Initializing UI in monitor viewport...")
 		
-		# Clear any existing (ambient) children
+		# HIDE Ambient children instead of destroying them
 		for child in monitor.viewport.get_children():
 			if child != GameState.desktop_instance:
-				child.queue_free()
+				if child is Control:
+					child.visible = false
 		
 		# Persistence: Check if desktop already exists
 		if GameState.desktop_instance and is_instance_valid(GameState.desktop_instance):
@@ -106,7 +107,13 @@ func exit_desktop_mode():
 		print("EXIT DESKTOP (3D): Preserving desktop state.")
 		GameState.desktop_instance.process_mode = Node.PROCESS_MODE_DISABLED
 		GameState.desktop_instance.visible = false
-		# We leave it parented to the viewport for now; it will be reparented on next 'sit down'
+		
+		# Restore Ambient View visibility
+		var viewport = GameState.desktop_instance.get_parent()
+		if viewport:
+			for child in viewport.get_children():
+				if child != GameState.desktop_instance and child is Control:
+					child.visible = true
 
 	# Return to 3D mode (Triggers Player stand_up() via signal)
 	GameState.set_mode(GameState.GameMode.MODE_3D)
