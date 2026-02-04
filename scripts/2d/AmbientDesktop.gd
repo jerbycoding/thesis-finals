@@ -7,15 +7,24 @@ var ambient_window_scene = preload("res://scenes/2d/AmbientWindow.tscn")
 var ambient_windows = {} # window_id -> AmbientWindow instance
 
 @onready var window_container = %AppWindowContainer
+@onready var tasks_container = get_node_or_null("%ActiveTasksContainer")
+
+var taskbar_icon_scene = preload("res://scenes/2d/TaskbarIcon.tscn")
+var ambient_taskbar_icons = {} # window_id -> Icon instance
 
 func _ready():
 	z_index = 0
 	visible = true
 	
-	# FORCE FULL RECT: Ensure it fills the SubViewport (Master Advice #2)
+	# FORCE FULL RECT: Ensure it fills the SubViewport
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	
-	# Ensure container is ready
+	# Ensure Taskbar is visible but non-interactive
+	var taskbar = get_node_or_null("%Taskbar")
+	if taskbar:
+		taskbar.visible = true
+		taskbar.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	
 	if not window_container:
 		push_error("AmbientDesktop: AppWindowContainer not found!")
 
@@ -23,25 +32,26 @@ func _process(_delta):
 	# Sync with real desktop manager
 	if not DesktopWindowManager: return
 	
-	# Get real windows
 	var real_windows = DesktopWindowManager.open_windows
 	
-	# 1. Update or Create
+	# 1. Sync Windows
 	for wid in real_windows:
 		var real_win = real_windows[wid]
 		if not is_instance_valid(real_win): continue
 		
-		# MIRROR REAL VISIBILITY
 		if not wid in ambient_windows:
 			_create_ambient_window(wid, real_win)
 		
 		var amb_win = ambient_windows[wid]
 		amb_win.visible = real_win.visible
-		
 		if amb_win.visible:
 			_sync_window_state(wid, real_win)
+			
+		# 2. Sync Taskbar Icons
+		if tasks_container and not wid in ambient_taskbar_icons:
+			_create_ambient_taskbar_icon(wid, real_win)
 	
-	# 2. Cleanup Removed
+	# 3. Cleanup Removed
 	var to_remove = []
 	for wid in ambient_windows:
 		if not wid in real_windows:
@@ -49,6 +59,29 @@ func _process(_delta):
 	
 	for wid in to_remove:
 		_remove_ambient_window(wid)
+		_remove_ambient_taskbar_icon(wid)
+
+func _create_ambient_taskbar_icon(wid: String, window: Control):
+	if not tasks_container: return
+	
+	var icon = taskbar_icon_scene.instantiate()
+	tasks_container.add_child(icon)
+	icon.setup(window)
+	
+	# Disable interaction
+	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	for child in icon.get_children():
+		if child is Control:
+			child.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			
+	ambient_taskbar_icons[wid] = icon
+
+func _remove_ambient_taskbar_icon(wid: String):
+	if wid in ambient_taskbar_icons:
+		if is_instance_valid(ambient_taskbar_icons[wid]):
+			ambient_taskbar_icons[wid].queue_free()
+		ambient_taskbar_icons.erase(wid)
+
 
 func _create_ambient_window(wid: String, _real_win: Control):
 	if not window_container: return

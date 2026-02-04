@@ -92,55 +92,46 @@ clip_contents = true
 layout_mode = 2
 mouse_filter = 1
 
-[node name="TopSystemBar" type="PanelContainer" parent="ScreenSafeArea"]
+[node name="Taskbar" type="PanelContainer" parent="ScreenSafeArea"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
-size_flags_vertical = 0
-theme_override_styles/panel = SubResource("StyleBoxFlat_TopBar")
+size_flags_vertical = 8
+theme_override_styles/panel = SubResource("StyleBoxFlat_Dock")
 
-[node name="Margin" type="MarginContainer" parent="ScreenSafeArea/TopSystemBar"]
+[node name="HBox" type="HBoxContainer" parent="ScreenSafeArea/Taskbar"]
 layout_mode = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_right = 10
+theme_override_constants/separation = 10
 
-[node name="HBox" type="HBoxContainer" parent="ScreenSafeArea/TopSystemBar/Margin"]
-layout_mode = 2
-
-[node name="AppMenuButton" type="Button" parent="ScreenSafeArea/TopSystemBar/Margin/HBox"]
+[node name="StartMenuButton" type="Button" parent="ScreenSafeArea/Taskbar/HBox"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 0)
 layout_mode = 2
-theme_type_variation = &"TechnicalHeader"
-theme_override_font_sizes/font_size = 11
-text = "❄ APPLICATIONS"
+theme_override_font_sizes/font_size = 18
+text = "❄"
 flat = true
 
-[node name="VSeparator" type="VSeparator" parent="ScreenSafeArea/TopSystemBar/Margin/HBox"]
+[node name="VSeparator" type="VSeparator" parent="ScreenSafeArea/Taskbar/HBox"]
 layout_mode = 2
-theme_override_constants/separation = 15
 
-[node name="StatusLabel" type="Label" parent="ScreenSafeArea/TopSystemBar/Margin/HBox"]
+[node name="ActiveTasksContainer" type="HBoxContainer" parent="ScreenSafeArea/Taskbar/HBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 5
+
+[node name="VSeparator2" type="VSeparator" parent="ScreenSafeArea/Taskbar/HBox"]
+layout_mode = 2
+
+[node name="StatusLabel" type="Label" parent="ScreenSafeArea/Taskbar/HBox"]
 layout_mode = 2
 theme_type_variation = &"TechnicalHeader"
 theme_override_colors/font_color = Color(0.2, 1, 0.2, 1)
 theme_override_font_sizes/font_size = 10
-text = "NETWORK_ONLINE"
+text = "ONLINE"
 
-[node name="Spacer" type="Control" parent="ScreenSafeArea/TopSystemBar/Margin/HBox"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="UserLabel" type="Label" parent="ScreenSafeArea/TopSystemBar/Margin/HBox"]
-layout_mode = 2
-theme_type_variation = &"TechnicalHeader"
-theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
-theme_override_font_sizes/font_size = 10
-text = "ANALYST_ Hammond, B."
-
-[node name="VSeparator2" type="VSeparator" parent="ScreenSafeArea/TopSystemBar/Margin/HBox"]
-layout_mode = 2
-theme_override_constants/separation = 15
-
-[node name="DesktopClock" type="Label" parent="ScreenSafeArea/TopSystemBar/Margin/HBox"]
+[node name="DesktopClock" type="Label" parent="ScreenSafeArea/Taskbar/HBox"]
+custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 theme_type_variation = &"TechnicalHeader"
 theme_override_colors/font_color = Color(1, 1, 1, 1)
@@ -150,196 +141,3 @@ horizontal_alignment = 1
 vertical_alignment = 1
 script = ExtResource("1_0l3ag")
 
-[node name="LeftUtilityBar" type="VBoxContainer" parent="ScreenSafeArea"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 4
-theme_override_constants/separation = 15
-
-[node name="Handbook_Icon" type="Button" parent="ScreenSafeArea/LeftUtilityBar"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(70, 75)
-layout_mode = 2
-theme_override_styles/hover = SubResource("StyleBoxFlat_IconHover")
-icon = ExtResource("4_71q3h")
-flat = true
-
-[node name="VBox" type="VBoxContainer" parent="ScreenSafeArea/LeftUtilityBar/Handbook_Icon"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_bottom = 20.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-theme_override_constants/separation = 2
-alignment = 1
-
-[node name="IconText" type="Label" parent="ScreenSafeArea/LeftUtilityBar/Handbook_Icon/VBox"]
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 32
-horizontal_alignment = 1
-
-[node name="Label" type="Label" parent="ScreenSafeArea/LeftUtilityBar/Handbook_Icon/VBox"]
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 10
-text = "Handbook"
-horizontal_alignment = 1
-
-[node name="Network_Icon" type="Button" parent="ScreenSafeArea/LeftUtilityBar"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(70, 75)
-layout_mode = 2
-theme_override_styles/hover = SubResource("StyleBoxFlat_IconHover")
-icon = ExtResource("5_pghwf")
-flat = true
-
-[node name="VBox" type="VBoxContainer" parent="ScreenSafeArea/LeftUtilityBar/Network_Icon"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_bottom = 20.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-theme_override_constants/separation = 2
-alignment = 1
-
-[node name="IconText" type="Label" parent="ScreenSafeArea/LeftUtilityBar/Network_Icon/VBox"]
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 32
-horizontal_alignment = 1
-
-[node name="Label" type="Label" parent="ScreenSafeArea/LeftUtilityBar/Network_Icon/VBox"]
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 10
-text = "Network Map"
-horizontal_alignment = 1
-vertical_alignment = 2
-
-[node name="Decrypt_Icon" type="Button" parent="ScreenSafeArea/LeftUtilityBar"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(70, 75)
-layout_mode = 2
-theme_override_styles/hover = SubResource("StyleBoxFlat_IconHover")
-icon = ExtResource("6_b2npl")
-flat = true
-
-[node name="VBox" type="VBoxContainer" parent="ScreenSafeArea/LeftUtilityBar/Decrypt_Icon"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_right = 5.0
-offset_bottom = 10.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-theme_override_constants/separation = 2
-alignment = 2
-
-[node name="IconText" type="Label" parent="ScreenSafeArea/LeftUtilityBar/Decrypt_Icon/VBox"]
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 32
-horizontal_alignment = 1
-
-[node name="Label" type="Label" parent="ScreenSafeArea/LeftUtilityBar/Decrypt_Icon/VBox"]
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 10
-text = "Decryption"
-horizontal_alignment = 1
-
-[node name="TaskManager_Icon" type="Button" parent="ScreenSafeArea/LeftUtilityBar"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(70, 75)
-layout_mode = 2
-theme_override_styles/hover = SubResource("StyleBoxFlat_IconHover")
-icon = ExtResource("7_qy5y3")
-flat = true
-
-[node name="VBox" type="VBoxContainer" parent="ScreenSafeArea/LeftUtilityBar/TaskManager_Icon"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-theme_override_constants/separation = 2
-alignment = 1
-
-[node name="IconText" type="Label" parent="ScreenSafeArea/LeftUtilityBar/TaskManager_Icon/VBox"]
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 32
-horizontal_alignment = 1
-
-[node name="Label" type="Label" parent="ScreenSafeArea/LeftUtilityBar/TaskManager_Icon/VBox"]
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 10
-text = "Resources"
-horizontal_alignment = 1
-
-[node name="BottomDock" type="PanelContainer" parent="ScreenSafeArea"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 8
-theme_override_styles/panel = SubResource("StyleBoxFlat_Dock")
-
-[node name="Margin" type="MarginContainer" parent="ScreenSafeArea/BottomDock"]
-layout_mode = 2
-theme_override_constants/margin_left = 15
-theme_override_constants/margin_right = 15
-
-[node name="DockIcons" type="HBoxContainer" parent="ScreenSafeArea/BottomDock/Margin"]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_constants/separation = 25
-alignment = 1
-
-[node name="SIEM_Icon" type="Button" parent="ScreenSafeArea/BottomDock/Margin/DockIcons"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(50, 50)
-layout_mode = 2
-tooltip_text = "SIEM Log Viewer"
-theme_override_font_sizes/font_size = 24
-icon = ExtResource("4_i1hx7")
-flat = true
-
-[node name="Email_Icon" type="Button" parent="ScreenSafeArea/BottomDock/Margin/DockIcons"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(50, 50)
-layout_mode = 2
-tooltip_text = "Email Analyzer"
-theme_override_font_sizes/font_size = 24
-icon = ExtResource("9_e71pk")
-flat = true
-
-[node name="Terminal_Icon" type="Button" parent="ScreenSafeArea/BottomDock/Margin/DockIcons"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(50, 50)
-layout_mode = 2
-tooltip_text = "Terminal"
-theme_override_font_sizes/font_size = 24
-icon = ExtResource("10_pct8o")
-flat = true
-
-[node name="Tickets_Icon" type="Button" parent="ScreenSafeArea/BottomDock/Margin/DockIcons"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(50, 50)
-layout_mode = 2
-tooltip_text = "Ticket Queue"
-theme_override_font_sizes/font_size = 24
-icon = ExtResource("11_3hg8b")
-flat = true

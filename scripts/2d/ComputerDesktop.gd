@@ -7,12 +7,13 @@ signal app_closed(app_name: String, window_id: String)
 
 var shift_report_scene = preload("res://scenes/2d/apps/App_ShiftReport.tscn")
 
-@onready var dock_icons: HBoxContainer = %DockIcons
-@onready var utility_bar: VBoxContainer = %LeftUtilityBar
+@onready var start_menu_button: Button = %StartMenuButton
+@onready var tasks_container: HBoxContainer = %ActiveTasksContainer
 @onready var app_window_container: Control = %AppWindowContainer
-@onready var lcd_group = %LCD_Group
-@onready var desktop_bg = %DesktopBackground
-@onready var monitor_assembly = %MonitorAssembly
+
+var taskbar_icon_scene = preload("res://scenes/2d/TaskbarIcon.tscn")
+var start_menu_scene = preload("res://scenes/2d/StartMenu.tscn")
+var start_menu_instance = null
 
 func _ready():
 	# Set as background layer
@@ -29,37 +30,69 @@ func _ready():
 		if DesktopWindowManager:
 			DesktopWindowManager.register_container(app_window_container)
 	
-	# Connect app icons
-	_setup_container_connections(dock_icons)
-	_setup_container_connections(utility_bar)
-	
 	# Connect signals
-	EventBus.ticket_added.connect(_on_ticket_added)
-	EventBus.ticket_completed.connect(_on_ticket_completed)
-	EventBus.consequence_triggered.connect(_on_consequence_triggered)
-	EventBus.world_event_triggered.connect(_on_world_event)
+	EventBus.app_opened.connect(_on_app_opened)
+	EventBus.app_closed.connect(_on_app_closed)
+	EventBus.window_focused.connect(_on_window_focused)
 	
-	if NotificationManager:
-		NotificationManager.set_desktop(self)
+	if start_menu_button:
+		start_menu_button.pressed.connect(_on_start_menu_pressed)
 	
-	print("DesktopManager ready - Window system active")
+	# Instantiate Start Menu
+	start_menu_instance = start_menu_scene.instantiate()
+	add_child(start_menu_instance)
+	start_menu_instance.app_selected.connect(_on_app_selected)
+	
+	# Initial taskbar sync
+	_refresh_taskbar()
 
-func _process(_delta):
+func _on_start_menu_pressed():
+	if start_menu_instance:
+		start_menu_instance.toggle()
+		if AudioManager: AudioManager.play_ui_click()
+
+func _on_app_selected(app_id: String):
+	if DesktopWindowManager:
+		DesktopWindowManager.open_app(app_id)
+	if AudioManager:
+		AudioManager.play_ui_click()
+
+func _refresh_taskbar():
+	if not tasks_container: return
+	
+	# Clear
+	for child in tasks_container.get_children():
+		child.queue_free()
+		
+	# Populate from DesktopWindowManager
+	if DesktopWindowManager:
+		for wid in DesktopWindowManager.open_windows:
+			var win = DesktopWindowManager.open_windows[wid]
+			_add_taskbar_icon(win)
+
+func _on_app_opened(_app_name: String, window_id: String):
+	if DesktopWindowManager and window_id in DesktopWindowManager.open_windows:
+		_add_taskbar_icon(DesktopWindowManager.open_windows[window_id])
+
+func _add_taskbar_icon(window: Control):
+	if not tasks_container or not window: return
+	
+	# Check if icon already exists
+	for child in tasks_container.get_children():
+		if child.has_method("get_target_window") and child.target_window == window:
+			return
+			
+	var icon = taskbar_icon_scene.instantiate()
+	tasks_container.add_child(icon)
+	icon.setup(window)
+
+func _on_app_closed(_app_name: String, _window_id: String):
+	# Icons clean themselves up in their _process
 	pass
 
-func _setup_container_connections(container: Control):
-	if not container: return
-	for child in container.get_children():
-		if child is Button:
-			var app_name = child.name.to_lower().replace("_icon", "")
-			if app_name == "exitbutton": continue
-			child.pressed.connect(_on_app_icon_pressed.bind(app_name))
-			child.mouse_entered.connect(func(): if AudioManager: AudioManager.play_ui_hover())
-
-func _on_app_icon_pressed(app_name: String):
-	if AudioManager: AudioManager.play_ui_click()
-	if DesktopWindowManager:
-		DesktopWindowManager.open_app(app_name)
+func _on_window_focused(_window: Control):
+	# Highlight logic is in TaskbarIcon.gd _process
+	pass
 
 func _on_world_event(event_id: String, active: bool, _duration: float):
 	if event_id == GlobalConstants.EVENTS.POWER_FLICKER and active:

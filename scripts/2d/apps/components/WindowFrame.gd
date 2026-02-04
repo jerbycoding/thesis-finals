@@ -2,6 +2,7 @@
 extends Control
 
 var is_dragging: bool = false
+var is_minimized: bool = false
 var drag_offset: Vector2 = Vector2.ZERO
 var window_id: String = ""
 var window_title: String = "Window"
@@ -9,6 +10,7 @@ var content_scene: PackedScene = null
 
 @onready var title_bar: HBoxContainer = $Border/VBoxContainer/TitleBarPanel/TitleBar
 @onready var title_label: Label = $Border/VBoxContainer/TitleBarPanel/TitleBar/TitleLabel
+@onready var minimize_button: Button = %MinimizeButton
 @onready var close_button: Button = $Border/VBoxContainer/TitleBarPanel/TitleBar/CloseButton
 @onready var content_container: MarginContainer = $Border/VBoxContainer/ContentContainer
 
@@ -28,6 +30,9 @@ func _ready():
 	if close_button:
 		close_button.pressed.connect(_on_close_pressed)
 	
+	if minimize_button:
+		minimize_button.pressed.connect(toggle_minimize)
+	
 	if title_bar:
 		title_bar.gui_input.connect(_on_title_bar_gui_input)
 		title_bar.mouse_filter = Control.MOUSE_FILTER_STOP
@@ -35,6 +40,13 @@ func _ready():
 	var border = get_node_or_null("Border")
 	if border:
 		border.gui_input.connect(_on_window_gui_input)
+
+func toggle_minimize():
+	is_minimized = !is_minimized
+	visible = !is_minimized
+	if not is_minimized:
+		bring_to_front()
+		EventBus.window_focused.emit(self)
 
 func _on_title_bar_gui_input(event):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
