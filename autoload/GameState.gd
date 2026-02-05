@@ -5,6 +5,7 @@ enum GameMode { MODE_3D, MODE_2D, MODE_DIALOGUE, MODE_MINIGAME, MODE_UI_ONLY }
 var current_mode = GameMode.MODE_3D
 var current_computer = null
 var desktop_instance = null
+var active_bridge = null # NEW: Track active 3D monitor bridge
 var is_paused: bool = false
 var pause_menu_instance: Control = null
 var is_guided_mode: bool = false
