@@ -55,6 +55,7 @@ layout_mode = 2
 [node name="StatsLabel" type="Label" parent="Layout/Visualizer/Margin/VBox"]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 3
 theme_override_colors/font_color = Color(1, 1, 1, 0.6)
 theme_override_font_sizes/font_size = 11
 text = "ANALYSIS: 6,229 events discovered"
@@ -62,21 +63,24 @@ text = "ANALYSIS: 6,229 events discovered"
 [node name="VolumeGraph" type="Control" parent="Layout/Visualizer/Margin/VBox"]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="MainSplit" type="VSplitContainer" parent="Layout"]
 layout_mode = 2
+size_flags_horizontal = 3
 size_flags_vertical = 3
 split_offset = 320
 
 [node name="StreamArea" type="VBoxContainer" parent="Layout/MainSplit"]
 layout_mode = 2
+size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 0
 
 [node name="TableHeader" type="PanelContainer" parent="Layout/MainSplit/StreamArea"]
-custom_minimum_size = Vector2(0, 25)
 layout_mode = 2
+size_flags_horizontal = 3
 theme_type_variation = &"HeaderPanel"
 
 [node name="HBox" type="HBoxContainer" parent="Layout/MainSplit/StreamArea/TableHeader"]
@@ -103,6 +107,7 @@ vertical_alignment = 1
 
 [node name="Scroll" type="ScrollContainer" parent="Layout/MainSplit/StreamArea"]
 layout_mode = 2
+size_flags_horizontal = 3
 size_flags_vertical = 3
 horizontal_scroll_mode = 0
 
@@ -110,6 +115,7 @@ horizontal_scroll_mode = 0
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 3
 theme_override_constants/separation = 1
 
 [node name="InspectorPane" type="PanelContainer" parent="Layout/MainSplit"]
@@ -117,14 +123,16 @@ unique_name_in_owner = true
 visible = false
 custom_minimum_size = Vector2(0, 220)
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
 [node name="VBox" type="VBoxContainer" parent="Layout/MainSplit/InspectorPane"]
 layout_mode = 2
 theme_override_constants/separation = 0
 
 [node name="HeaderPanel" type="PanelContainer" parent="Layout/MainSplit/InspectorPane/VBox"]
-custom_minimum_size = Vector2(0, 35)
 layout_mode = 2
+size_flags_horizontal = 3
 theme_type_variation = &"HeaderPanel"
 
 [node name="HBox" type="HBoxContainer" parent="Layout/MainSplit/InspectorPane/VBox/HeaderPanel"]
