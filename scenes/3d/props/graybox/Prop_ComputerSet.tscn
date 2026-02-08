@@ -19,7 +19,7 @@ emission_energy_multiplier = 2.0
 [node name="Prop_ComputerSet" type="Node3D"]
 
 [node name="Prop_Monitor" parent="." instance=ExtResource("1_monitor")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, -0.2)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, -0.2)
 
 [node name="Keyboard" type="CSGCombiner3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.996477, 0.0838691, 0, -0.0838691, 0.996477, -0.156819, 0.05, 0.3)

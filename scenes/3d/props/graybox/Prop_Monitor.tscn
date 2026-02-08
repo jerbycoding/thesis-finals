@@ -17,10 +17,10 @@ emission = Color(0.1, 0.15, 0.2, 1)
 emission_energy_multiplier = 0.5
 
 [sub_resource type="QuadMesh" id="QuadMesh_Screen"]
-size = Vector2(0.76, 0.4275)
+size = Vector2(0.912, 0.513)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_Interaction"]
-size = Vector3(0.76, 0.4275, 0.02)
+size = Vector3(0.912, 0.513, 0.02)
 
 [node name="Prop_Monitor" type="Node3D"]
 script = ExtResource("1_script")
@@ -28,23 +28,23 @@ script = ExtResource("1_script")
 [node name="Geometry" type="CSGCombiner3D" parent="."]
 
 [node name="Stand_Base" type="CSGBox3D" parent="Geometry"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.25, 0)
-size = Vector3(0.3, 0.02, 0.2)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.3, 0)
+size = Vector3(0.36, 0.02, 0.24)
 material = SubResource("StandardMaterial3D_Plastic")
 
 [node name="Stand_Neck" type="CSGBox3D" parent="Geometry"]
-transform = Transform3D(1, 0, 0, 0, 0.965926, -0.258819, 0, 0.258819, 0.965926, 0, -0.1, -0.05)
-size = Vector3(0.08, 0.3, 0.02)
+transform = Transform3D(1, 0, 0, 0, 0.965926, -0.258819, 0, 0.258819, 0.965926, 0, -0.15, -0.05)
+size = Vector3(0.1, 0.35, 0.02)
 material = SubResource("StandardMaterial3D_Plastic")
 
 [node name="Bezel" type="CSGBox3D" parent="Geometry"]
-size = Vector3(0.8, 0.4675, 0.03)
+size = Vector3(0.96, 0.561, 0.03)
 material = SubResource("StandardMaterial3D_Plastic")
 
 [node name="Screen_Cutout" type="CSGBox3D" parent="Geometry/Bezel"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.02)
 operation = 2
-size = Vector3(0.76, 0.4275, 0.05)
+size = Vector3(0.912, 0.513, 0.05)
 material = SubResource("StandardMaterial3D_Screen")
 
 [node name="Screen_Mesh" type="MeshInstance3D" parent="."]

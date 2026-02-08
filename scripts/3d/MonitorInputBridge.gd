@@ -17,7 +17,7 @@ var is_active: bool = false
 var last_uv: Vector2 = Vector2.ZERO
 var pressed_keys: Dictionary = {} # scancode -> bool
 var virtual_cursor: Sprite2D = null
-var current_mesh_size: Vector2 = Vector2(0.76, 0.4275) # Dynamic fallback
+var current_mesh_size: Vector2 = Vector2(0.912, 0.513) # Dynamic fallback
 
 func _ready():
 	_setup_collision()

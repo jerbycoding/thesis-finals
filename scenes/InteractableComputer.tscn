@@ -25,7 +25,7 @@ transform = Transform3D(2.06802, 0, 0, 0, 1, 0, 0, 0, 1.62683, 0.461467, 0.75990
 shape = SubResource("BoxShape3D_kxh54")
 
 [node name="Prop_ComputerSet" parent="." instance=ExtResource("3_compset")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.5, 0.75, 0)
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.435201, 0.75, 0)
 
 [node name="ViewAnchor" type="Marker3D" parent="."]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.286619, 0.973676, 0)
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.233354, 1.05, 0)
