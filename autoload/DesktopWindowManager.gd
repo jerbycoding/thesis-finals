@@ -95,6 +95,10 @@ func open_app(app_name: String, force_new: bool = false):
 			existing_window.visible = true 
 			_focus_window(existing_window)
 			existing_window.move_to_front() # Bring to front in scene tree
+			# Ensure start menu closes even if app was already open
+			var desktop = get_tree().root.find_child("ComputerDesktop", true, false)
+			if desktop and "start_menu_instance" in desktop:
+				if desktop.start_menu_instance: desktop.start_menu_instance.visible = false
 			return
 		else:
 			print("DesktopWindowManager: No existing window found for app: ", app_name)
@@ -115,7 +119,6 @@ func open_app(app_name: String, force_new: bool = false):
 	# Set window properties
 	window.window_id = window_id
 	window.set_title(config.title)
-	window.position = _get_next_window_position()
 	
 	# Store reference IMMEDIATELY to prevent race conditions during 'await'
 	open_windows[window_id] = window
@@ -153,8 +156,6 @@ func open_app(app_name: String, force_new: bool = false):
 	var count = open_windows.size()
 	var offset_x = (count % 4) * 40
 	var offset_y = (count % 4) * 35
-	
-	# Base starting positions per app type (optional, but let's do a clean fan for now)
 	window.position = Vector2(100 + offset_x, 80 + offset_y)
 	
 	# Focus the new window
