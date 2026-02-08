@@ -149,12 +149,13 @@ func open_app(app_name: String, force_new: bool = false):
 		_cleanup_failed_window(window_id)
 		return
 	
-	# Update next position (stagger)
-	next_window_position += Vector2(30, 30)
-	if next_window_position.x > 300:
-		next_window_position.x = 50
-	if next_window_position.y > 200:
-		next_window_position.y = 50
+	# SMART STAGGER: Quadrant-based fanning
+	var count = open_windows.size()
+	var offset_x = (count % 4) * 40
+	var offset_y = (count % 4) * 35
+	
+	# Base starting positions per app type (optional, but let's do a clean fan for now)
+	window.position = Vector2(100 + offset_x, 80 + offset_y)
 	
 	# Focus the new window
 	_focus_window(window)

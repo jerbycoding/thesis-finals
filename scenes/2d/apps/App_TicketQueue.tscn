@@ -26,7 +26,7 @@ corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
 [node name="App_TicketQueue" type="Control"]
-custom_minimum_size = Vector2(1000, 700)
+custom_minimum_size = Vector2(850, 600)
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -68,7 +68,7 @@ vertical_alignment = 1
 [node name="Content" type="HSplitContainer" parent="Background/VBox"]
 layout_mode = 2
 size_flags_vertical = 3
-split_offset = 380
+split_offset = 300
 
 [node name="QueuePanel" type="PanelContainer" parent="Background/VBox/Content"]
 layout_mode = 2

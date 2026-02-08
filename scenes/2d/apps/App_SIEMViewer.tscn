@@ -9,7 +9,7 @@ border_width_bottom = 1
 border_color = Color(1, 1, 1, 0.1)
 
 [node name="App_SIEMViewer" type="Control"]
-custom_minimum_size = Vector2(1000, 700)
+custom_minimum_size = Vector2(850, 600)
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -38,7 +38,7 @@ grow_vertical = 2
 theme_override_constants/separation = 0
 
 [node name="Visualizer" type="PanelContainer" parent="Layout"]
-custom_minimum_size = Vector2(0, 120)
+custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_TopBar")
 
@@ -67,7 +67,7 @@ size_flags_vertical = 3
 [node name="MainSplit" type="VSplitContainer" parent="Layout"]
 layout_mode = 2
 size_flags_vertical = 3
-split_offset = 400
+split_offset = 320
 
 [node name="StreamArea" type="VBoxContainer" parent="Layout/MainSplit"]
 layout_mode = 2

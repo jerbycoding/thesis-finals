@@ -5,7 +5,7 @@
 [ext_resource type="Theme" uid="uid://dny3rlbltexc7" path="res://assets/themes/EnterpriseTheme.tres" id="3_theme"]
 
 [node name="App_EmailAnalyzer" type="Control"]
-custom_minimum_size = Vector2(1000, 700)
+custom_minimum_size = Vector2(850, 600)
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -31,7 +31,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-split_offset = 380
+split_offset = 300
 
 [node name="InboxPanel" type="VBoxContainer" parent="MainLayout"]
 layout_mode = 2
