@@ -11,13 +11,13 @@ content_margin_bottom = 5.0
 bg_color = Color(0, 0, 0, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_DialogueBody"]
-bg_color = Color(1, 1, 1, 1)
+bg_color = Color(1, 1, 1, 0.05)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0, 0, 0, 1)
-shadow_color = Color(0, 0, 0, 0.15)
+border_color = Color(1, 1, 1, 0.1)
+shadow_color = Color(0, 0, 0, 0.3)
 shadow_size = 12
 
 [node name="AppHandbook" type="Control"]
@@ -46,7 +46,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.321569, 0.337255, 0.34902, 1)
+color = Color(0.0509804, 0.0509804, 0.0666667, 1)
 
 [node name="VBox" type="VBoxContainer" parent="ViewerWorkspace"]
 layout_mode = 1
@@ -80,19 +80,19 @@ theme_override_constants/separation = 15
 
 [node name="Zoom" type="Label" parent="ViewerWorkspace/VBox/PDF_Toolbar/HBox/CosmeticControls"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.7, 0.7, 0.7, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 0.4)
 theme_override_font_sizes/font_size = 11
 text = "100%  [-]  [+] "
 
 [node name="Page" type="Label" parent="ViewerWorkspace/VBox/PDF_Toolbar/HBox/CosmeticControls"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.7, 0.7, 0.7, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 0.4)
 theme_override_font_sizes/font_size = 11
 text = "PAGE 1 / 1"
 
 [node name="ActionIcons" type="Label" parent="ViewerWorkspace/VBox/PDF_Toolbar/HBox/CosmeticControls"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.7, 0.7, 0.7, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 0.4)
 theme_override_font_sizes/font_size = 14
 text = "⎙  ⤓  ⋮ "
 
@@ -133,7 +133,6 @@ theme_override_constants/margin_bottom = 60
 [node name="Reader" type="RichTextLabel" parent="ViewerWorkspace/VBox/ScrollContainer/PageContainer/PageCentering/PaperSheet/ContentPadding"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/default_color = Color(0.1, 0.1, 0.1, 1)
 theme_override_constants/line_separation = 8
 theme_override_font_sizes/normal_font_size = 15
 bbcode_enabled = true

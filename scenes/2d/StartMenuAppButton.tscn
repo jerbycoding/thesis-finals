@@ -1,0 +1,63 @@
+[gd_scene load_steps=5 format=3 uid="uid://b1k8p8v2j1sy"]
+
+[ext_resource type="Theme" uid="uid://dny3rlbltexc7" path="res://assets/themes/EnterpriseTheme.tres" id="1_theme"]
+[ext_resource type="Script" uid="uid://c5k8p8v2j1sy" path="res://scripts/2d/StartMenuAppButton.gd" id="2_script"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Hover"]
+bg_color = Color(1, 1, 1, 0.0588235)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_Normal"]
+
+[node name="StartMenuAppButton" type="Button"]
+custom_minimum_size = Vector2(0, 42)
+offset_right = 250.0
+offset_bottom = 42.0
+size_flags_horizontal = 3
+theme = ExtResource("1_theme")
+theme_override_styles/hover = SubResource("StyleBoxFlat_Hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_Hover")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_Normal")
+flat = true
+alignment = 0
+script = ExtResource("2_script")
+
+[node name="Margin" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_right = 10
+
+[node name="HBox" type="HBoxContainer" parent="Margin"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 12
+
+[node name="IconRect" type="TextureRect" parent="Margin/HBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="Margin/HBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.901961, 0.94902, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.501961)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 12
+text = "App Name"
+vertical_alignment = 1

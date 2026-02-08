@@ -37,9 +37,14 @@ func _build_full_document():
 	for page_id in docs:
 		var page = docs[page_id]
 		full_text += "[b][font_size=24]" + page.title.to_upper() + "[/font_size][/b]\n"
-		full_text += "[color=#666666][i]Document ID: REF-" + page_id.to_upper() + "-v4.4[/i][/color]\n\n"
+		full_text += "[color=#aaaaaa][i]Document ID: REF-" + page_id.to_upper() + "-v4.4[/i][/color]\n\n"
 		full_text += page.content
 		full_text += separator
+	
+	# Final Clarity Pass: Force white for all highlighted text
+	var clean_text = full_text.replace("[color=cyan]", "[color=white]")
+	clean_text = clean_text.replace("[color=blue]", "[color=white]")
+	clean_text = clean_text.replace("[color=#006CFF]", "[color=white]")
 		
-	reader.text = full_text
-	print("📘 Handbook: Integrated %d pages into full document." % docs.size())
+	reader.text = clean_text
+	print("📘 Handbook: Integrated %d pages into full document (Cleaned)." % docs.size())

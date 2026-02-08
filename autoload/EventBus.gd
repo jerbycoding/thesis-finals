@@ -9,6 +9,7 @@ signal ticket_completed(ticket: TicketResource, completion_type: String, time_ta
 signal ticket_ignored(ticket: TicketResource)
 signal ticket_timeout(ticket_id: String)
 signal log_attached_to_ticket(ticket_id: String, log_id: String)
+signal log_detached_from_ticket(ticket_id: String, log_id: String)
 signal followup_ticket_creation_requested(ticket: TicketResource)
 
 # --- Log/Forensic Signals ---

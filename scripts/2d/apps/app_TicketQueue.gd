@@ -4,6 +4,7 @@ extends Control
 var selected_ticket: TicketResource = null
 var pool: UIObjectPool
 var card_scene = preload("res://scenes/2d/apps/components/TicketCard.tscn")
+var artifact_tag_scene = preload("res://scenes/2d/apps/components/TicketArtifactTag.tscn")
 
 # UI Elements
 @onready var ticket_list: VBoxContainer = %TicketList
@@ -12,6 +13,8 @@ var card_scene = preload("res://scenes/2d/apps/components/TicketCard.tscn")
 @onready var title_label: Label = %TitleLabel
 @onready var description_label: RichTextLabel = %DescriptionLabel
 @onready var steps_container: VBoxContainer = %StepsContainer
+@onready var evidence_box: VBoxContainer = %EvidenceBox
+@onready var artifact_container: HFlowContainer = %ArtifactContainer
 @onready var completion_modal: Control = %CompletionModal
 @onready var required_tool_label: Label = %RequiredToolLabel
 
@@ -31,6 +34,7 @@ func _ready():
 	EventBus.ticket_added.connect(_on_ticket_added)
 	EventBus.ticket_completed.connect(_on_ticket_completed)
 	EventBus.log_attached_to_ticket.connect(_on_log_attached)
+	EventBus.log_detached_from_ticket.connect(_on_log_detached)
 	
 	_refresh_list()
 	_update_detail_view(null)
@@ -51,20 +55,60 @@ func _update_detail_view(ticket: TicketResource):
 		title_label.text = selected_ticket.get_formatted_title()
 		description_label.text = selected_ticket.get_formatted_description()
 		
+		# Steps
 		for child in steps_container.get_children():
 			child.queue_free()
 		
 		for i in range(selected_ticket.steps.size()):
 			var lbl = Label.new()
 			lbl.text = "> %s" % selected_ticket.steps[i]
-			lbl.add_theme_color_override("font_color", Color(0.2, 0.2, 0.2, 1))
+			# Technical Off-White for steps
+			lbl.add_theme_color_override("font_color", Color(0.9, 0.95, 1.0, 1))
 			lbl.add_theme_font_size_override("font_size", 12)
 			steps_container.add_child(lbl)
+			
+		# Evidence Artifacts
+		_update_artifact_list()
+
+func _update_artifact_list():
+	if not selected_ticket: return
+	
+	# Clear existing
+	for child in artifact_container.get_children():
+		child.queue_free()
+		
+	# Visibility
+	evidence_box.visible = not selected_ticket.attached_log_ids.is_empty()
+	
+	# Populate
+	for log_id in selected_ticket.attached_log_ids:
+		var tag = artifact_tag_scene.instantiate()
+		artifact_container.add_child(tag)
+		tag.setup(log_id)
+		tag.removal_requested.connect(_on_artifact_removal_requested)
+
+func _on_artifact_removal_requested(log_id: String):
+	if selected_ticket and TicketManager:
+		TicketManager.detach_log_from_ticket(selected_ticket.ticket_id, log_id)
+
+func _on_log_detached(ticket_id: String, _log_id: String):
+	if selected_ticket and selected_ticket.ticket_id == ticket_id:
+		_update_artifact_list()
+	
+	# Update the counts on the list cards
+	if ticket_list:
+		for child in ticket_list.get_children():
+			if child.has_method("_update_evidence_display"):
+				child._update_evidence_display()
 
 func _on_ticket_added(ticket: TicketResource):
 	var card = pool.acquire(card_scene)
 	ticket_list.add_child(card)
 	card.set_ticket(ticket)
+	
+	# Initial highlight check
+	if card.has_method("set_highlight"):
+		card.set_highlight(selected_ticket == ticket)
 	
 	if not card.card_selected.is_connected(_on_ticket_card_selected):
 		card.card_selected.connect(_on_ticket_card_selected)
@@ -87,16 +131,8 @@ func _on_completion_selected(completion_type: String):
 
 func _highlight_card(selected_card: Control):
 	for child in ticket_list.get_children():
-		if child is PanelContainer:
-			var style = child.get_theme_stylebox("panel").duplicate() as StyleBoxFlat
-			if child == selected_card:
-				style.bg_color = Color(0.94, 0.94, 0.94, 1.0)
-				style.border_width_left = 4
-				style.border_color = GlobalConstants.UI_COLORS.HEADER_BLACK
-			else:
-				style.bg_color = Color(1, 1, 1, 1)
-				style.border_width_left = 0
-			child.add_theme_stylebox_override("panel", style)
+		if child.has_method("set_highlight"):
+			child.set_highlight(child == selected_card)
 
 func _refresh_list():
 	if not ticket_list: return
@@ -111,7 +147,10 @@ func _refresh_list():
 func _on_ticket_completed(_ticket: TicketResource, _completion_type: String, _time_taken: float):
 	_refresh_list()
 
-func _on_log_attached(_ticket_id: String, _log_id: String):
+func _on_log_attached(ticket_id: String, _log_id: String):
+	if selected_ticket and selected_ticket.ticket_id == ticket_id:
+		_update_artifact_list()
+		
 	if ticket_list:
 		for child in ticket_list.get_children():
 			if child.has_method("_update_evidence_display"):

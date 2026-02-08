@@ -35,20 +35,26 @@ func set_zebra_style(is_even: bool):
 	var style = get_theme_stylebox("panel").duplicate() as StyleBoxFlat
 	if style:
 		if is_even:
-			style.bg_color = Color(0.054902, 0.0666667, 0.0901961, 1) # Darker
+			# Very subtle charcoal for zebra rows
+			style.bg_color = Color(1, 1, 1, 0.02) 
 		else:
-			style.bg_color = Color(0.08, 0.09, 0.12, 1) # Slightly Lighter
+			# Fully transparent for alternate rows
+			style.bg_color = Color(0, 0, 0, 0)
 		add_theme_stylebox_override("panel", style)
 
 func _gui_input(event: InputEvent):
+	# Restore selection on click, but DO NOT consume the event
+	# This allows Godot to still see the click-and-hold for dragging
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-		if AudioManager: AudioManager.play_ui_click()
 		if log_data:
 			log_selected.emit(log_data, self)
-		get_viewport().set_input_as_handled()
 
 func _get_drag_data(_at_position: Vector2):
 	if not log_data: return null
+	
+	# Keep side-effect for drag start
+	if AudioManager: AudioManager.play_ui_click()
+	log_selected.emit(log_data, self)
 	
 	# Create high-visibility forensic drag preview
 	var preview = PanelContainer.new()
@@ -60,7 +66,7 @@ func _get_drag_data(_at_position: Vector2):
 	style.border_width_top = 1
 	style.border_width_right = 1
 	style.border_width_bottom = 1
-	style.border_color = GlobalConstants.UI_COLORS.INFO_BLUE
+	style.border_color = Color(0.2, 0.6, 1, 1) # Cyber Blue
 	style.content_margin_left = 10
 	style.content_margin_right = 10
 	style.content_margin_top = 5
@@ -87,7 +93,11 @@ func set_highlight(active: bool):
 	var style = get_theme_stylebox("panel").duplicate() as StyleBoxFlat
 	if style:
 		if active:
-			style.bg_color = Color(0.15, 0.2, 0.25, 1.0)
+			# Technical blue highlight for selected log
+			style.bg_color = Color(0.2, 0.6, 1, 0.15)
+			style.border_width_left = 3
+			style.border_color = Color(0.2, 0.6, 1, 1)
 		else:
-			style.bg_color = Color(0.05, 0.07, 0.09, 1.0)
+			style.bg_color = Color(0, 0, 0, 0)
+			style.border_width_left = 0
 		add_theme_stylebox_override("panel", style)

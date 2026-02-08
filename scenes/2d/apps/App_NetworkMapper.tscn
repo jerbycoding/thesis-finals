@@ -8,9 +8,9 @@ content_margin_left = 20.0
 content_margin_top = 20.0
 content_margin_right = 20.0
 content_margin_bottom = 20.0
-bg_color = Color(1, 1, 1, 1)
-border_width_left = 2
-border_color = Color(0, 0, 0, 1)
+bg_color = Color(1, 1, 1, 0.0392157)
+border_width_left = 1
+border_color = Color(1, 1, 1, 0.117647)
 
 [node name="App_NetworkMapper" type="Control"]
 custom_minimum_size = Vector2(1000, 700)
@@ -30,7 +30,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.992157, 0.992157, 0.992157, 1)
+color = Color(0.0509804, 0.0509804, 0.0666667, 1)
 
 [node name="MainLayout" type="HBoxContainer" parent="."]
 layout_mode = 1
@@ -57,7 +57,6 @@ theme_override_constants/separation = 20
 
 [node name="Title" type="Label" parent="MainLayout/CenterArea/TopBar/HBox"]
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 14
 text = "NETWORK TOPOLOGY VIEWER"
 
@@ -65,7 +64,7 @@ text = "NETWORK TOPOLOGY VIEWER"
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 0.6)
 theme_override_font_sizes/font_size = 10
 text = "SYSTEM STATUS: NOMINAL"
 horizontal_alignment = 2
@@ -83,7 +82,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-color = Color(0.0728424, 0.0728427, 0.0728425, 1)
+color = Color(0.0392157, 0.0392157, 0.0509804, 1)
 
 [node name="NodesContainer" type="Control" parent="MainLayout/CenterArea/MapContainer"]
 unique_name_in_owner = true
@@ -110,7 +109,7 @@ theme_override_constants/separation = 5
 
 [node name="HostIcon" type="Label" parent="MainLayout/InspectorPane/VBox/HostHeader"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.101961, 0.101961, 0.101961, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 0.25)
 theme_override_font_sizes/font_size = 48
 text = "🖧"
 horizontal_alignment = 1
@@ -118,7 +117,6 @@ horizontal_alignment = 1
 [node name="HostnameLabel" type="Label" parent="MainLayout/InspectorPane/VBox/HostHeader"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 20
 text = "SELECTED_HOST"
 horizontal_alignment = 1
@@ -132,14 +130,13 @@ layout_mode = 2
 
 [node name="Label" type="Label" parent="MainLayout/InspectorPane/VBox/Metadata/IPGroup"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.4, 0.4, 0.4, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 0.4)
 theme_override_font_sizes/font_size = 10
 text = "NETWORK IP"
 
 [node name="IPLabel" type="Label" parent="MainLayout/InspectorPane/VBox/Metadata/IPGroup"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_color = Color(0.101961, 0.101961, 0.101961, 1)
 theme_override_font_sizes/font_size = 14
 text = "0.0.0.0"
 
@@ -148,14 +145,13 @@ layout_mode = 2
 
 [node name="Label" type="Label" parent="MainLayout/InspectorPane/VBox/Metadata/StatusGroup"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.4, 0.4, 0.4, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 0.4)
 theme_override_font_sizes/font_size = 10
 text = "CONNECTIVITY"
 
 [node name="StatusValueLabel" type="Label" parent="MainLayout/InspectorPane/VBox/Metadata/StatusGroup"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_color = Color(0.101961, 0.101961, 0.101961, 1)
 theme_override_font_sizes/font_size = 14
 text = "UNKNOWN"
 
@@ -164,14 +160,13 @@ layout_mode = 2
 
 [node name="Label" type="Label" parent="MainLayout/InspectorPane/VBox/Metadata/CriticalityGroup"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.4, 0.4, 0.4, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 0.4)
 theme_override_font_sizes/font_size = 10
 text = "ASSET PRIORITY"
 
 [node name="CriticalityLabel" type="Label" parent="MainLayout/InspectorPane/VBox/Metadata/CriticalityGroup"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_color = Color(0.101961, 0.101961, 0.101961, 1)
 theme_override_font_sizes/font_size = 14
 text = "N/A"
 

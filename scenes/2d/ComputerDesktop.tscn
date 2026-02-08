@@ -1,23 +1,29 @@
-[gd_scene load_steps=6 format=3 uid="uid://c4xkfk6xo2ycf"]
+[gd_scene load_steps=8 format=3 uid="uid://c4xkfk6xo2ycf"]
 
 [ext_resource type="Script" uid="uid://b22xof43jxemv" path="res://scripts/2d/ComputerDesktop.gd" id="1_0kbkv"]
 [ext_resource type="Script" uid="uid://c28t6vqktfrln" path="res://scripts/2d/DesktopClock.gd" id="1_0l3ag"]
 [ext_resource type="Script" uid="uid://cbi6smmdpx4yu" path="res://scripts/2d/ExitButton.gd" id="2_0kbkv"]
+[ext_resource type="Texture2D" uid="uid://dk37ymi787rod" path="res://assets/wallpapers/Microsoft_Surface_Duo.jpg" id="3_r1l77"]
 [ext_resource type="Theme" uid="uid://dny3rlbltexc7" path="res://assets/themes/EnterpriseTheme.tres" id="4_theme"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Dock"]
-bg_color = Color(0.0196078, 0.0196078, 0.0196078, 0.862745)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_TaskbarGlass"]
+bg_color = Color(0.0196078, 0.0196078, 0.0196078, 0.705882)
+border_width_top = 1
+border_color = Color(1, 1, 1, 0.117647)
+shadow_color = Color(0, 0, 0, 0.117647)
+shadow_size = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_PillTray"]
+bg_color = Color(1, 1, 1, 0.0588235)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
 border_color = Color(1, 1, 1, 0.0784314)
-corner_radius_top_left = 10
-corner_radius_top_right = 10
-corner_radius_bottom_right = 10
-corner_radius_bottom_left = 10
-shadow_color = Color(0, 0, 0, 0.235294)
-shadow_size = 8
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
 
 [node name="ComputerDesktop" type="Control"]
 layout_mode = 3
@@ -50,7 +56,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="DesktopBackground" type="ColorRect" parent="MonitorAssembly/LCD_Group"]
+[node name="DesktopBackground" type="TextureRect" parent="MonitorAssembly/LCD_Group"]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 15
@@ -59,7 +65,9 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-color = Color(0.0509804, 0.0627451, 0.0823529, 1)
+texture = ExtResource("3_r1l77")
+expand_mode = 1
+stretch_mode = 6
 
 [node name="ScreenGlow" type="ColorRect" parent="MonitorAssembly/LCD_Group/DesktopBackground"]
 layout_mode = 1
@@ -93,7 +101,7 @@ mouse_filter = 2
 theme_override_constants/margin_left = 25
 theme_override_constants/margin_top = 25
 theme_override_constants/margin_right = 25
-theme_override_constants/margin_bottom = 25
+theme_override_constants/margin_bottom = 65
 
 [node name="AppWindowContainer" type="Control" parent="MonitorAssembly/LCD_Group/ScreenSafeArea"]
 unique_name_in_owner = true
@@ -101,46 +109,73 @@ clip_contents = true
 layout_mode = 2
 mouse_filter = 1
 
-[node name="Taskbar" type="PanelContainer" parent="MonitorAssembly/LCD_Group/ScreenSafeArea"]
+[node name="Taskbar" type="PanelContainer" parent="MonitorAssembly/LCD_Group"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 40)
-layout_mode = 2
-size_flags_vertical = 8
-theme_override_styles/panel = SubResource("StyleBoxFlat_Dock")
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_TaskbarGlass")
 
-[node name="HBox" type="HBoxContainer" parent="MonitorAssembly/LCD_Group/ScreenSafeArea/Taskbar"]
+[node name="Margin" type="MarginContainer" parent="MonitorAssembly/LCD_Group/Taskbar"]
 layout_mode = 2
-theme_override_constants/separation = 10
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_right = 10
 
-[node name="StartMenuButton" type="Button" parent="MonitorAssembly/LCD_Group/ScreenSafeArea/Taskbar/HBox"]
+[node name="HBox" type="HBoxContainer" parent="MonitorAssembly/LCD_Group/Taskbar/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="StartMenuButton" type="Button" parent="MonitorAssembly/LCD_Group/Taskbar/Margin/HBox"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(40, 0)
+custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
-theme_override_font_sizes/font_size = 18
+size_flags_vertical = 4
+theme_override_colors/font_hover_color = Color(0.2, 0.6, 1, 1)
+theme_override_font_sizes/font_size = 22
 text = "❄"
 flat = true
 
-[node name="VSeparator" type="VSeparator" parent="MonitorAssembly/LCD_Group/ScreenSafeArea/Taskbar/HBox"]
+[node name="VSeparator" type="VSeparator" parent="MonitorAssembly/LCD_Group/Taskbar/Margin/HBox"]
 layout_mode = 2
+theme_override_constants/separation = 1
 
-[node name="ActiveTasksContainer" type="HBoxContainer" parent="MonitorAssembly/LCD_Group/ScreenSafeArea/Taskbar/HBox"]
+[node name="ActiveTasksContainer" type="HBoxContainer" parent="MonitorAssembly/LCD_Group/Taskbar/Margin/HBox"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/separation = 5
+theme_override_constants/separation = 8
 
-[node name="VSeparator2" type="VSeparator" parent="MonitorAssembly/LCD_Group/ScreenSafeArea/Taskbar/HBox"]
+[node name="SystemTrayPill" type="PanelContainer" parent="MonitorAssembly/LCD_Group/Taskbar/Margin/HBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 34)
 layout_mode = 2
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_PillTray")
 
-[node name="StatusLabel" type="Label" parent="MonitorAssembly/LCD_Group/ScreenSafeArea/Taskbar/HBox"]
+[node name="Margin" type="MarginContainer" parent="MonitorAssembly/LCD_Group/Taskbar/Margin/HBox/SystemTrayPill"]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_right = 10
+
+[node name="SystemTray" type="HBoxContainer" parent="MonitorAssembly/LCD_Group/Taskbar/Margin/HBox/SystemTrayPill/Margin"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="StatusLabel" type="Label" parent="MonitorAssembly/LCD_Group/Taskbar/Margin/HBox/SystemTrayPill/Margin/SystemTray"]
 layout_mode = 2
 theme_type_variation = &"TechnicalHeader"
-theme_override_colors/font_color = Color(0.2, 1, 0.2, 1)
+theme_override_colors/font_color = Color(0.870878, 0.791014, 0.993602, 1)
 theme_override_font_sizes/font_size = 10
 text = "ONLINE"
 
-[node name="DesktopClock" type="Label" parent="MonitorAssembly/LCD_Group/ScreenSafeArea/Taskbar/HBox"]
-custom_minimum_size = Vector2(80, 0)
+[node name="DesktopClock" type="Label" parent="MonitorAssembly/LCD_Group/Taskbar/Margin/HBox/SystemTrayPill/Margin/SystemTray"]
+custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
 theme_type_variation = &"TechnicalHeader"
 theme_override_colors/font_color = Color(1, 1, 1, 1)
@@ -150,14 +185,18 @@ horizontal_alignment = 1
 vertical_alignment = 1
 script = ExtResource("1_0l3ag")
 
-[node name="ExitButton" type="Button" parent="MonitorAssembly/LCD_Group/ScreenSafeArea/Taskbar/HBox"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(40, 0)
+[node name="VSeparator" type="VSeparator" parent="MonitorAssembly/LCD_Group/Taskbar/Margin/HBox/SystemTrayPill/Margin/SystemTray"]
 layout_mode = 2
+
+[node name="ExitButton" type="Button" parent="MonitorAssembly/LCD_Group/Taskbar/Margin/HBox/SystemTrayPill/Margin/SystemTray"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+size_flags_vertical = 4
 tooltip_text = "Terminate Session"
 theme_override_colors/font_hover_color = Color(1, 0.2, 0.2, 1)
 theme_override_colors/font_color = Color(1, 1, 1, 0.6)
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 16
 text = "⏻"
 flat = true
 script = ExtResource("2_0kbkv")

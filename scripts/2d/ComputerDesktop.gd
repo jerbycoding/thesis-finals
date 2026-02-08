@@ -30,10 +30,15 @@ func _ready():
 		if DesktopWindowManager:
 			DesktopWindowManager.register_container(app_window_container)
 	
+	# Register for notifications
+	if NotificationManager:
+		NotificationManager.set_desktop(self)
+	
 	# Connect signals
 	EventBus.app_opened.connect(_on_app_opened)
 	EventBus.app_closed.connect(_on_app_closed)
 	EventBus.window_focused.connect(_on_window_focused)
+	EventBus.ticket_added.connect(_on_ticket_added)
 	
 	if start_menu_button:
 		start_menu_button.pressed.connect(_on_start_menu_pressed)
@@ -41,6 +46,7 @@ func _ready():
 	# Instantiate Start Menu
 	start_menu_instance = start_menu_scene.instantiate()
 	add_child(start_menu_instance)
+	start_menu_instance.z_index = 100 # ALWAYS ON TOP
 	start_menu_instance.app_selected.connect(_on_app_selected)
 	
 	# Initial taskbar sync
@@ -56,6 +62,8 @@ func _on_app_selected(app_id: String):
 		DesktopWindowManager.open_app(app_id)
 	if AudioManager:
 		AudioManager.play_ui_click()
+	# Start menu handles its own visibility on selection, but we ensure it here
+	if start_menu_instance: start_menu_instance.visible = false
 
 func _refresh_taskbar():
 	if not tasks_container: return
@@ -73,6 +81,8 @@ func _refresh_taskbar():
 func _on_app_opened(_app_name: String, window_id: String):
 	if DesktopWindowManager and window_id in DesktopWindowManager.open_windows:
 		_add_taskbar_icon(DesktopWindowManager.open_windows[window_id])
+	# Auto-close start menu when app opens
+	if start_menu_instance: start_menu_instance.visible = false
 
 func _add_taskbar_icon(window: Control):
 	if not tasks_container or not window: return
@@ -91,8 +101,9 @@ func _on_app_closed(_app_name: String, _window_id: String):
 	pass
 
 func _on_window_focused(_window: Control):
-	# Highlight logic is in TaskbarIcon.gd _process
-	pass
+	# Auto-close start menu when clicking a window
+	if start_menu_instance and start_menu_instance.visible:
+		start_menu_instance.visible = false
 
 func _on_world_event(event_id: String, active: bool, _duration: float):
 	if event_id == GlobalConstants.EVENTS.POWER_FLICKER and active:
@@ -102,9 +113,16 @@ func _on_world_event(event_id: String, active: bool, _duration: float):
 		if DesktopWindowManager: DesktopWindowManager.close_all_windows()
 
 func _on_ticket_added(ticket_data: TicketResource):
-	if DesktopWindowManager:
-		if not DesktopWindowManager._find_window_by_app("tickets"):
-			DesktopWindowManager.open_app("tickets")
+	# PASSIVE NOTIFICATION: Instead of opening the app, show a toast
+	if NotificationManager:
+		NotificationManager.show_notification("NEW TICKET: " + ticket_data.ticket_id, "warning")
+	
+	if AudioManager:
+		AudioManager.play_notification("new_ticket")
+	
+	# Logic to pulse the taskbar icon can be added here if the app is already open
+	# Or we can pulse a 'Ticket' shortcut if we had one. 
+	# For now, the toast is the primary non-intrusive alert.
 
 func _on_ticket_completed(_ticket: TicketResource, _type: String, _time: float):
 	pass

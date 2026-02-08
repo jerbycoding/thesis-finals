@@ -16,6 +16,7 @@ class_name MonitorInputBridge
 var is_active: bool = false
 var last_uv: Vector2 = Vector2.ZERO
 var pressed_keys: Dictionary = {} # scancode -> bool
+var current_button_mask: int = 0 # Track which mouse buttons are held
 var virtual_cursor: Sprite2D = null
 var current_mesh_size: Vector2 = Vector2(0.912, 0.513) # Dynamic fallback
 
@@ -135,15 +136,25 @@ func _inject_mouse_motion(uv: Vector2):
 	if virtual_cursor:
 		virtual_cursor.position = pixel_pos
 	
-	# Forward to Viewport
+	# Forward to Viewport with current button state (Crucial for Drag & Drop)
 	var ev = InputEventMouseMotion.new()
 	ev.position = pixel_pos
 	ev.global_position = pixel_pos
 	ev.relative = pixel_pos - prev_pixel_pos
+	ev.button_mask = current_button_mask
 	subviewport.push_input(ev)
 
 func handle_mouse_button(event: InputEventMouseButton):
 	if not is_active or not subviewport: return
+	
+	# Update state tracking mask
+	if event.pressed:
+		current_button_mask |= (1 << (event.button_index - 1))
+	else:
+		# Use Bitwise XOR to remove, but only if it was present
+		var bit = (1 << (event.button_index - 1))
+		if current_button_mask & bit:
+			current_button_mask ^= bit
 	
 	var pixel_pos = last_uv * Vector2(subviewport.size)
 	var ev = event.duplicate()

@@ -115,6 +115,7 @@ environment = SubResource("101")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.707107, -0.5, 0.5, 0, 0.707107, 0.707107, -0.707107, -0.5, 0.5, 0, 10, 0)
+visible = false
 light_energy = 1.5
 shadow_enabled = true
 
@@ -126,21 +127,27 @@ bounce_indirect_energy = 2.0
 
 [node name="NPC_SeniorAnalyst" parent="." instance=ExtResource("3")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -12.8, 0, 8.75)
+visible = false
 
 [node name="NPC_ITSupport" parent="." instance=ExtResource("4")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 0, 9)
+visible = false
 
 [node name="NPC_Auditor" parent="." instance=ExtResource("5")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+visible = false
 
 [node name="NPC_Helpdesk" parent="." instance=ExtResource("6")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, -8)
+visible = false
 
 [node name="NPC_Victim" parent="." instance=ExtResource("7")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 5.59445, 0, -2)
+visible = false
 
 [node name="NPC_JuniorAnalyst" parent="." instance=ExtResource("13")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -5.3, 0, 8.75)
+visible = false
 
 [node name="InteractableComputer" parent="." instance=ExtResource("8")]
 transform = Transform3D(0.0724722, 0, 0.997371, 0, 1, 0, -0.997371, 0, 0.0724722, 1.18803, -0.024116, 10.3288)
@@ -173,6 +180,7 @@ mesh = SubResource("117")
 
 [node name="Lighting_Grid" type="Node3D" parent="NavigationRegion3D/RoomGeometry"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.95, 0)
+visible = false
 
 [node name="Light_1" parent="NavigationRegion3D/RoomGeometry/Lighting_Grid" instance=ExtResource("30")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0, -8)
@@ -325,6 +333,7 @@ transform = Transform3D(-3.27835e-07, 0, 1, 0, 1, 0, -7.5, 0, -4.37114e-08, 7.5,
 mesh = SubResource("109")
 
 [node name="Labels" type="Node3D" parent="."]
+visible = false
 
 [node name="Label_CISO" type="Label3D" parent="Labels"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 3.5, -4.9)
@@ -377,6 +386,7 @@ shape = SubResource("114")
 
 [node name="Door_Analyst_1" type="CharacterBody3D" parent="Props"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.5, 0, 5)
+visible = false
 script = ExtResource("14")
 open_angle = -90.0
 
@@ -396,6 +406,7 @@ shape = SubResource("114")
 
 [node name="Door_Analyst_2" type="CharacterBody3D" parent="Props"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 5)
+visible = false
 script = ExtResource("14")
 open_angle = -90.0
 
@@ -434,6 +445,7 @@ shape = SubResource("114")
 
 [node name="Door_Vault" type="CharacterBody3D" parent="Props"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 0, 5)
+visible = false
 script = ExtResource("14")
 open_angle = -90.0
 
@@ -452,6 +464,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1.5, 0)
 shape = SubResource("114")
 
 [node name="Analyst_Workstations" type="Node3D" parent="Props"]
+visible = false
 
 [node name="Senior_Workstation" type="Node3D" parent="Props/Analyst_Workstations"]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -14, 0, 8.75)
@@ -486,6 +499,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, 2)
 
 [node name="Lounge_Area" type="Node3D" parent="Props"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, -10)
+visible = false
 
 [node name="Counter" parent="Props/Lounge_Area" instance=ExtResource("15")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.5)
@@ -521,6 +535,7 @@ transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 1, 1.41202, 2.2, 4.92329)
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 1, 8.9125, 2.16319, 4.81586)
 
 [node name="Bullpen_Utilities" type="Node3D" parent="Props"]
+visible = false
 
 [node name="Reception_Chair" parent="Props/Bullpen_Utilities" instance=ExtResource("16")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -14, 0, 1)

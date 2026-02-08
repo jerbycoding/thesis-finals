@@ -3,16 +3,27 @@
 [ext_resource type="Script" path="res://scripts/2d/apps/App_ShiftReport.gd" id="1_abcde"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Header"]
-bg_color = Color(0, 0, 0, 1)
+bg_color = Color(0.0196078, 0.0196078, 0.0196078, 1)
 content_margin_left = 20.0
 content_margin_right = 20.0
+border_width_bottom = 1
+border_color = Color(0.2, 0.6, 1, 0.3)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Continue"]
-bg_color = Color(0, 0, 0, 1)
+bg_color = Color(0.2, 0.6, 1, 0.117647)
 content_margin_left = 25.0
 content_margin_top = 12.0
 content_margin_right = 25.0
 content_margin_bottom = 12.0
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.2, 0.6, 1, 0.5)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
 
 [node name="App_ShiftReport" type="Control"]
 layout_mode = 3
@@ -30,7 +41,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(1, 1, 1, 1)
+color = Color(0.0509804, 0.0509804, 0.0666667, 1)
 
 [node name="MainContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
@@ -54,7 +65,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_Header")
 
 [node name="TitleLabel" type="Label" parent="MainContainer/Header"]
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_color = Color(0.2, 0.6, 1, 1)
 theme_override_font_sizes/font_size = 18
 text = ":: SHIFT PERFORMANCE AUDIT ::"
 vertical_alignment = 1
@@ -78,14 +89,14 @@ theme_override_constants/separation = 10
 [node name="ArchetypeLabel" type="Label" parent="MainContainer/Content/VBox/Summary"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_color = Color(0.901961, 0.94902, 1, 1)
 theme_override_font_sizes/font_size = 28
 text = "Archetype: Pragmatic"
 
 [node name="ArchetypeDescription" type="Label" parent="MainContainer/Content/VBox/Summary"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_color = Color(0.2, 0.2, 0.2, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 0.6)
 theme_override_font_sizes/font_size = 14
 text = "[Analysis data regarding operational style...]"
 autowrap_mode = 2
@@ -93,7 +104,7 @@ autowrap_mode = 2
 [node name="ArchetypeFeedback" type="Label" parent="MainContainer/Content/VBox/Summary"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_color = Color(0.4, 0.4, 0.4, 1)
+theme_override_colors/font_color = Color(0.2, 1, 0.2, 0.6)
 theme_override_font_sizes/font_size = 12
 text = "[Managerial feedback...]"
 autowrap_mode = 2
@@ -107,7 +118,7 @@ theme_override_constants/separation = 15
 
 [node name="Label" type="Label" parent="MainContainer/Content/VBox/MetricsArea"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_color = Color(0.2, 0.6, 1, 1)
 theme_override_font_sizes/font_size = 12
 text = "QUANTITATIVE DATA"
 
@@ -119,57 +130,52 @@ columns = 2
 
 [node name="Label1" type="Label" parent="MainContainer/Content/VBox/MetricsArea/MetricsGrid"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.4, 0.4, 0.4, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 0.4)
 text = "Tickets Processed:"
 
 [node name="TicketsCompletedValue" type="Label" parent="MainContainer/Content/VBox/MetricsArea/MetricsGrid"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "0"
 
 [node name="Label2" type="Label" parent="MainContainer/Content/VBox/MetricsArea/MetricsGrid"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.4, 0.4, 0.4, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 0.4)
 text = "Tickets Overlooked:"
 
 [node name="TicketsIgnoredValue" type="Label" parent="MainContainer/Content/VBox/MetricsArea/MetricsGrid"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "0"
 
 [node name="Label3" type="Label" parent="MainContainer/Content/VBox/MetricsArea/MetricsGrid"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.4, 0.4, 0.4, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 0.4)
 text = "Avg Resolution Time:"
 
 [node name="AvgTimeValue" type="Label" parent="MainContainer/Content/VBox/MetricsArea/MetricsGrid"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "0s"
 
 [node name="Label4" type="Label" parent="MainContainer/Content/VBox/MetricsArea/MetricsGrid"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.4, 0.4, 0.4, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 0.4)
 text = "Procedural Deviations:"
 
 [node name="RisksTakenValue" type="Label" parent="MainContainer/Content/VBox/MetricsArea/MetricsGrid"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "0"
 
 [node name="Label5" type="Label" parent="MainContainer/Content/VBox/MetricsArea/MetricsGrid"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.4, 0.4, 0.4, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 0.4)
 text = "Security Consequences:"
 
 [node name="ConsequencesValue" type="Label" parent="MainContainer/Content/VBox/MetricsArea/MetricsGrid"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "0"
 
 [node name="Footer" type="MarginContainer" parent="MainContainer"]
@@ -180,6 +186,7 @@ theme_override_constants/margin_bottom = 40
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_color = Color(0.2, 0.6, 1, 1)
 theme_override_styles/normal = SubResource("StyleBoxFlat_Continue")
 text = "INITIALIZE NEXT SHIFT"

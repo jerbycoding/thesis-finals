@@ -160,6 +160,11 @@ func open_app(app_name: String, force_new: bool = false):
 	_focus_window(window)
 	window.move_to_front()
 	
+	# Intelligent Dismiss
+	var desktop = get_tree().root.find_child("ComputerDesktop", true, false)
+	if desktop and "start_menu_instance" in desktop:
+		if desktop.start_menu_instance: desktop.start_menu_instance.visible = false
+	
 	EventBus.app_opened.emit(app_name, window_id)
 	print("DesktopWindowManager: Opened app: ", app_name, " at position: ", window.position)
 
@@ -219,6 +224,12 @@ func _on_window_focused(window: Control):
 	print("DesktopWindowManager: Window focused: ", window.window_id)
 	focused_window = window
 	_update_window_z_indices()
+	
+	# Intelligent Dismiss: Close Start Menu when clicking any window
+	var desktop = get_tree().root.find_child("ComputerDesktop", true, false)
+	if desktop and "start_menu_instance" in desktop:
+		if desktop.start_menu_instance and desktop.start_menu_instance.visible:
+			desktop.start_menu_instance.visible = false
 
 func _on_window_closed(window: Control):
 	if not window or not is_instance_valid(window):

@@ -42,7 +42,7 @@ func _process(_delta):
 		%Label.text = target_window.window_title
 		# Highlight if focused
 		if DesktopWindowManager.focused_window == target_window:
-			modulate = Color(1.2, 1.2, 1.5) # Slight glow
+			modulate = Color(0.5, 0.8, 1.0, 1.0) # Bright technical blue for focus
 		else:
 			modulate = Color.WHITE
 	else:

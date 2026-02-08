@@ -3,9 +3,9 @@
 [ext_resource type="Script" uid="uid://e3getwdtdogp" path="res://scripts/2d/apps/components/EmailListEntry.gd" id="1_email_entry"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Card"]
-bg_color = Color(1, 1, 1, 1)
+bg_color = Color(1, 1, 1, 0.0392157)
 border_width_bottom = 1
-border_color = Color(0.921569, 0.921569, 0.921569, 1)
+border_color = Color(1, 1, 1, 0.0784314)
 
 [node name="EmailListEntry" type="PanelContainer"]
 custom_minimum_size = Vector2(0, 100)
@@ -44,7 +44,6 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 14
 text = "New app design brief"
 clip_text = true
@@ -52,21 +51,21 @@ clip_text = true
 [node name="TimeLabel" type="Label" parent="Layout/Margin/Content/Header"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 0.4)
 theme_override_font_sizes/font_size = 11
 text = "12 min ago"
 
 [node name="SenderLabel" type="Label" parent="Layout/Margin/Content"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_color = Color(0.4, 0.4, 0.4, 1)
+theme_override_colors/font_color = Color(0.2, 0.6, 1, 1)
 theme_override_font_sizes/font_size = 12
 text = "Mariana Dickey"
 
 [node name="PreviewLabel" type="Label" parent="Layout/Margin/Content"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_color = Color(0.5, 0.5, 0.5, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 0.5)
 theme_override_font_sizes/font_size = 11
 text = "A design is a plan or specification for the construction..."
 autowrap_mode = 3

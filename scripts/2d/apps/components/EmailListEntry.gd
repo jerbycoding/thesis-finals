@@ -51,10 +51,12 @@ func set_highlight(active: bool):
 	var style = get_theme_stylebox("panel").duplicate() as StyleBoxFlat
 	if style:
 		if active:
-			style.bg_color = Color(0.95, 0.95, 0.95, 1.0)
-			style.border_width_left = 2
-			style.border_color = GlobalConstants.UI_COLORS.INFO_BLUE
+			# Dark highlight: slight white tint with a cyber-blue border
+			style.bg_color = Color(1, 1, 1, 0.08) 
+			style.border_width_left = 3
+			style.border_color = Color(0.2, 0.6, 1, 1) # Cyber Blue
 		else:
-			style.bg_color = Color(1, 1, 1, 1)
+			# Normal state: Fully transparent (let theme decide)
+			style.bg_color = Color(0, 0, 0, 0)
 			style.border_width_left = 0
 		add_theme_stylebox_override("panel", style)

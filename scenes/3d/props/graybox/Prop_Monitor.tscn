@@ -1,7 +1,7 @@
 [gd_scene load_steps=8 format=3 uid="uid://fu75aaq0cx15"]
 
 [ext_resource type="Script" uid="uid://1x2gxftl2mge" path="res://scripts/3d/Prop_Monitor.gd" id="1_script"]
-[ext_resource type="PackedScene" path="res://scenes/2d/AmbientDesktop.tscn" id="2_desktop"]
+[ext_resource type="PackedScene" uid="uid://c6ddnqoskkxa2" path="res://scenes/2d/AmbientDesktop.tscn" id="2_desktop"]
 [ext_resource type="Script" uid="uid://c2cy2718vv2f" path="res://scripts/3d/MonitorInputBridge.gd" id="Script_Bridge"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_Plastic"]
