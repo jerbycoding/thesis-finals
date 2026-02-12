@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://c3hu1axtllbqc"
-path="res://.godot/imported/Fruit_Apple.fbx-742b274e0573fcdfb8d6d8602e407301.scn"
+path="res://.godot/imported/Fruit_Apple.fbx-845b9284520a0da45ee458828c29cd24.scn"
 
 [deps]
 
 source_file="res://assets/props/FBX/Separated/Fruit_Apple.fbx"
-dest_files=["res://.godot/imported/Fruit_Apple.fbx-742b274e0573fcdfb8d6d8602e407301.scn"]
+dest_files=["res://.godot/imported/Fruit_Apple.fbx-845b9284520a0da45ee458828c29cd24.scn"]
 
 [params]
 

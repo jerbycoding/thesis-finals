@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://betc4mtrlde4o"
-path="res://.godot/imported/Computer_Mouse.fbx-fdf7538ebe394dce3ea8e5dcb7cf1a34.scn"
+path="res://.godot/imported/Computer_Mouse.fbx-be8b78846a225e39afed8221e7d4e57e.scn"
 
 [deps]
 
 source_file="res://assets/props/FBX/Separated/Computer_Mouse.fbx"
-dest_files=["res://.godot/imported/Computer_Mouse.fbx-fdf7538ebe394dce3ea8e5dcb7cf1a34.scn"]
+dest_files=["res://.godot/imported/Computer_Mouse.fbx-be8b78846a225e39afed8221e7d4e57e.scn"]
 
 [params]
 

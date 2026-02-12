@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://nqu5602pvljy"
-path="res://.godot/imported/Food_CheeseSlice_3.fbx-80b5936862c7b314c5522431dc7550fe.scn"
+path="res://.godot/imported/Food_CheeseSlice_3.fbx-6d91d197a41b18763a80ad1f11518a6d.scn"
 
 [deps]
 
 source_file="res://assets/props/FBX/Separated/Food_CheeseSlice_3.fbx"
-dest_files=["res://.godot/imported/Food_CheeseSlice_3.fbx-80b5936862c7b314c5522431dc7550fe.scn"]
+dest_files=["res://.godot/imported/Food_CheeseSlice_3.fbx-6d91d197a41b18763a80ad1f11518a6d.scn"]
 
 [params]
 

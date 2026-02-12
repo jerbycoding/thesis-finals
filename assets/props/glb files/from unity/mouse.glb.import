@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://b5ds6f03lslro"
-path="res://.godot/imported/mouse.glb-2be264c264636cd4018cabca53bf2b11.scn"
+path="res://.godot/imported/mouse.glb-3e466984d8a1b8f41e777aa4739cf5b8.scn"
 
 [deps]
 
 source_file="res://assets/props/glb files/from unity/mouse.glb"
-dest_files=["res://.godot/imported/mouse.glb-2be264c264636cd4018cabca53bf2b11.scn"]
+dest_files=["res://.godot/imported/mouse.glb-3e466984d8a1b8f41e777aa4739cf5b8.scn"]
 
 [params]
 

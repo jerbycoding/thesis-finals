@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://cgc4sw2yd3mb8"
-path="res://.godot/imported/Shelf_Door_B.fbx-50b56c644c278f16a2d68bbfd30c5cf6.scn"
+path="res://.godot/imported/Shelf_Door_B.fbx-8ae85bcfd07885e4175989709454559a.scn"
 
 [deps]
 
 source_file="res://assets/props/FBX/Separated/Shelf_Door_B.fbx"
-dest_files=["res://.godot/imported/Shelf_Door_B.fbx-50b56c644c278f16a2d68bbfd30c5cf6.scn"]
+dest_files=["res://.godot/imported/Shelf_Door_B.fbx-8ae85bcfd07885e4175989709454559a.scn"]
 
 [params]
 

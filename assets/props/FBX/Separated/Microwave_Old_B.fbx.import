@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://eihi6e582063"
-path="res://.godot/imported/Microwave_Old_B.fbx-2ff1925a56dea3a8cd8abd853e4c8003.scn"
+path="res://.godot/imported/Microwave_Old_B.fbx-7e9cdd5dcff084d43df28788f4bee60e.scn"
 
 [deps]
 
 source_file="res://assets/props/FBX/Separated/Microwave_Old_B.fbx"
-dest_files=["res://.godot/imported/Microwave_Old_B.fbx-2ff1925a56dea3a8cd8abd853e4c8003.scn"]
+dest_files=["res://.godot/imported/Microwave_Old_B.fbx-7e9cdd5dcff084d43df28788f4bee60e.scn"]
 
 [params]
 

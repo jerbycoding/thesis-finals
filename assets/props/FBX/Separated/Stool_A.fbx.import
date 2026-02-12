@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://c11ihdfyyx6a2"
-path="res://.godot/imported/Stool_A.fbx-53d349f19d160b5463bbc3519e9f8f26.scn"
+path="res://.godot/imported/Stool_A.fbx-c2463da258b7ec9fcea6150e314a9b93.scn"
 
 [deps]
 
 source_file="res://assets/props/FBX/Separated/Stool_A.fbx"
-dest_files=["res://.godot/imported/Stool_A.fbx-53d349f19d160b5463bbc3519e9f8f26.scn"]
+dest_files=["res://.godot/imported/Stool_A.fbx-c2463da258b7ec9fcea6150e314a9b93.scn"]
 
 [params]
 

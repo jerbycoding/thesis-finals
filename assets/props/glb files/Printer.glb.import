@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://bsi15r2qq730y"
-path="res://.godot/imported/Printer.glb-0cc82523e79e81d8b7275fb5f1a6b75c.scn"
+path="res://.godot/imported/Printer.glb-8b4ac268ecad055d4b5a9701a9178baf.scn"
 
 [deps]
 
 source_file="res://assets/props/glb files/Printer.glb"
-dest_files=["res://.godot/imported/Printer.glb-0cc82523e79e81d8b7275fb5f1a6b75c.scn"]
+dest_files=["res://.godot/imported/Printer.glb-8b4ac268ecad055d4b5a9701a9178baf.scn"]
 
 [params]
 

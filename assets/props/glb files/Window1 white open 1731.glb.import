@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://ckpew1shmchr4"
-path="res://.godot/imported/Window1 white open 1731.glb-9ab6fb99793ea8259d4f24302f126011.scn"
+path="res://.godot/imported/Window1 white open 1731.glb-9cf2546b249ef23d3f84489c4a2b90b0.scn"
 
 [deps]
 
 source_file="res://assets/props/glb files/Window1 white open 1731.glb"
-dest_files=["res://.godot/imported/Window1 white open 1731.glb-9ab6fb99793ea8259d4f24302f126011.scn"]
+dest_files=["res://.godot/imported/Window1 white open 1731.glb-9cf2546b249ef23d3f84489c4a2b90b0.scn"]
 
 [params]
 

@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://bxmrh1xfmishc"
-path="res://.godot/imported/Curtains Double.glb-9243054dee67e4f1e7f566edca19bee8.scn"
+path="res://.godot/imported/Curtains Double.glb-d5c2359bd1ac653c9f1447df7fa14ea2.scn"
 
 [deps]
 
 source_file="res://assets/props/glb files/Curtains Double.glb"
-dest_files=["res://.godot/imported/Curtains Double.glb-9243054dee67e4f1e7f566edca19bee8.scn"]
+dest_files=["res://.godot/imported/Curtains Double.glb-d5c2359bd1ac653c9f1447df7fa14ea2.scn"]
 
 [params]
 

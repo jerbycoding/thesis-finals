@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://g73xwukx7sjb"
-path="res://.godot/imported/Vending Machine (1).glb-b8fc1a77a261273abd9ad81672a3a759.scn"
+path="res://.godot/imported/Vending Machine (1).glb-88b6f0346327cbfadffd84d22b3c4249.scn"
 
 [deps]
 
 source_file="res://assets/props/glb files/Vending Machine (1).glb"
-dest_files=["res://.godot/imported/Vending Machine (1).glb-b8fc1a77a261273abd9ad81672a3a759.scn"]
+dest_files=["res://.godot/imported/Vending Machine (1).glb-88b6f0346327cbfadffd84d22b3c4249.scn"]
 
 [params]
 

@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://ceghvhctr588f"
-path="res://.godot/imported/Office_CounterA1.fbx-d9d2a1b9314fff1767e86bb63377a8f6.scn"
+path="res://.godot/imported/Office_CounterA1.fbx-28e32370d8dc1901d60f69dce3836472.scn"
 
 [deps]
 
 source_file="res://assets/props/FBX/Separated/Office_CounterA1.fbx"
-dest_files=["res://.godot/imported/Office_CounterA1.fbx-d9d2a1b9314fff1767e86bb63377a8f6.scn"]
+dest_files=["res://.godot/imported/Office_CounterA1.fbx-28e32370d8dc1901d60f69dce3836472.scn"]
 
 [params]
 

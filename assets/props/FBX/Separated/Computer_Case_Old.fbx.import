@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://bhs7xhm4peyw7"
-path="res://.godot/imported/Computer_Case_Old.fbx-0b8cfe91d739f950eec8c358ede4d6e3.scn"
+path="res://.godot/imported/Computer_Case_Old.fbx-7d7ef7ce84ea0b62f7d5883aee08c34c.scn"
 
 [deps]
 
 source_file="res://assets/props/FBX/Separated/Computer_Case_Old.fbx"
-dest_files=["res://.godot/imported/Computer_Case_Old.fbx-0b8cfe91d739f950eec8c358ede4d6e3.scn"]
+dest_files=["res://.godot/imported/Computer_Case_Old.fbx-7d7ef7ce84ea0b62f7d5883aee08c34c.scn"]
 
 [params]
 

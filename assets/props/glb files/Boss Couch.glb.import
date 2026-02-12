@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://xmsjrrhfiju7"
-path="res://.godot/imported/Boss Couch.glb-d738cccb40c95813b43ecf356b3508f4.scn"
+path="res://.godot/imported/Boss Couch.glb-5a67255c2905d936be8099051a8f802a.scn"
 
 [deps]
 
 source_file="res://assets/props/glb files/Boss Couch.glb"
-dest_files=["res://.godot/imported/Boss Couch.glb-d738cccb40c95813b43ecf356b3508f4.scn"]
+dest_files=["res://.godot/imported/Boss Couch.glb-5a67255c2905d936be8099051a8f802a.scn"]
 
 [params]
 

@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://b640dq7775nbm"
-path="res://.godot/imported/Wall Art 03.glb-c2266bddb774b60e18eaf8ac33399ad6.scn"
+path="res://.godot/imported/Wall Art 03.glb-2889689bd26c1f6d1f1daedcc2f9dbe0.scn"
 
 [deps]
 
 source_file="res://assets/props/glb files/Wall Art 03.glb"
-dest_files=["res://.godot/imported/Wall Art 03.glb-c2266bddb774b60e18eaf8ac33399ad6.scn"]
+dest_files=["res://.godot/imported/Wall Art 03.glb-2889689bd26c1f6d1f1daedcc2f9dbe0.scn"]
 
 [params]
 

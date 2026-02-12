@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://byvvbjfq5c2eq"
-path="res://.godot/imported/Coffee Shop.glb-b8b6b47b63cb0476f08542539df0c49e.scn"
+path="res://.godot/imported/Coffee Shop.glb-d38039bc948a5c25341a17dfc2d3306e.scn"
 
 [deps]
 
 source_file="res://assets/props/glb files/Coffee Shop.glb"
-dest_files=["res://.godot/imported/Coffee Shop.glb-b8b6b47b63cb0476f08542539df0c49e.scn"]
+dest_files=["res://.godot/imported/Coffee Shop.glb-d38039bc948a5c25341a17dfc2d3306e.scn"]
 
 [params]
 

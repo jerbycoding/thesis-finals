@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://5nk42502me65"
-path="res://.godot/imported/small_bamboo_deco.glb-b94edc9c11e39d5802bac43db18635c6.scn"
+path="res://.godot/imported/small_bamboo_deco.glb-29e823102b40edb0920fea8cd23abda5.scn"
 
 [deps]
 
 source_file="res://assets/props/glb files/from unity/small_bamboo_deco.glb"
-dest_files=["res://.godot/imported/small_bamboo_deco.glb-b94edc9c11e39d5802bac43db18635c6.scn"]
+dest_files=["res://.godot/imported/small_bamboo_deco.glb-29e823102b40edb0920fea8cd23abda5.scn"]
 
 [params]
 

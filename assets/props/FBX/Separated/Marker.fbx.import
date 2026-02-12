@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://bgx6lnmn402y8"
-path="res://.godot/imported/Marker.fbx-d4b8c549696b990d91ed5d1b58f6702c.scn"
+path="res://.godot/imported/Marker.fbx-ab34890d8577e37b6fd8560618d91989.scn"
 
 [deps]
 
 source_file="res://assets/props/FBX/Separated/Marker.fbx"
-dest_files=["res://.godot/imported/Marker.fbx-d4b8c549696b990d91ed5d1b58f6702c.scn"]
+dest_files=["res://.godot/imported/Marker.fbx-ab34890d8577e37b6fd8560618d91989.scn"]
 
 [params]
 

@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://c6stkr63gaup0"
-path="res://.godot/imported/mousepad.glb-f8c8e3f41cfc8ffe9aeaf7c20a8466ac.scn"
+path="res://.godot/imported/mousepad.glb-7d9bf49eea4b3d39716f4052d89dcbdb.scn"
 
 [deps]
 
 source_file="res://assets/props/glb files/from unity/mousepad.glb"
-dest_files=["res://.godot/imported/mousepad.glb-f8c8e3f41cfc8ffe9aeaf7c20a8466ac.scn"]
+dest_files=["res://.godot/imported/mousepad.glb-7d9bf49eea4b3d39716f4052d89dcbdb.scn"]
 
 [params]
 

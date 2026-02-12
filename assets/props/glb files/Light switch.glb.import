@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://clls0cdipsksh"
-path="res://.godot/imported/Light switch.glb-ddda78d3fe78d4a34b6ae24fe732e189.scn"
+path="res://.godot/imported/Light switch.glb-6b9c38db32dade2aa8ce2bf036c2b014.scn"
 
 [deps]
 
 source_file="res://assets/props/glb files/Light switch.glb"
-dest_files=["res://.godot/imported/Light switch.glb-ddda78d3fe78d4a34b6ae24fe732e189.scn"]
+dest_files=["res://.godot/imported/Light switch.glb-6b9c38db32dade2aa8ce2bf036c2b014.scn"]
 
 [params]
 

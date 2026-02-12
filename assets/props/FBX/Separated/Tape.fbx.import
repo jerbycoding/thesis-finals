@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://bwbvlimxpq724"
-path="res://.godot/imported/Tape.fbx-abf94e0fd721f5ed5d178a76d5d7a04e.scn"
+path="res://.godot/imported/Tape.fbx-e6cfe08a61ab4c45c69aedca90f0aef1.scn"
 
 [deps]
 
 source_file="res://assets/props/FBX/Separated/Tape.fbx"
-dest_files=["res://.godot/imported/Tape.fbx-abf94e0fd721f5ed5d178a76d5d7a04e.scn"]
+dest_files=["res://.godot/imported/Tape.fbx-e6cfe08a61ab4c45c69aedca90f0aef1.scn"]
 
 [params]
 

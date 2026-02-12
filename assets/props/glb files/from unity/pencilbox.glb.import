@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://bce5yftu67neq"
-path="res://.godot/imported/pencilbox.glb-a4b71678d4b4460298bed66d5626d635.scn"
+path="res://.godot/imported/pencilbox.glb-fb9b4056befc7a8c747c9a943712b0f7.scn"
 
 [deps]
 
 source_file="res://assets/props/glb files/from unity/pencilbox.glb"
-dest_files=["res://.godot/imported/pencilbox.glb-a4b71678d4b4460298bed66d5626d635.scn"]
+dest_files=["res://.godot/imported/pencilbox.glb-fb9b4056befc7a8c747c9a943712b0f7.scn"]
 
 [params]
 

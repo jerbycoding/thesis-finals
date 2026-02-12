@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://dbiesj6skn043"
-path="res://.godot/imported/Stapler.fbx-c5de77819d7c9e402a4a9c7c419307a1.scn"
+path="res://.godot/imported/Stapler.fbx-26b138b0531af959e463268d26a5370b.scn"
 
 [deps]
 
 source_file="res://assets/props/FBX/Separated/Stapler.fbx"
-dest_files=["res://.godot/imported/Stapler.fbx-c5de77819d7c9e402a4a9c7c419307a1.scn"]
+dest_files=["res://.godot/imported/Stapler.fbx-26b138b0531af959e463268d26a5370b.scn"]
 
 [params]
 

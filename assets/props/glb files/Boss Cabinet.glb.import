@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://8yse44xhch4b"
-path="res://.godot/imported/Boss Cabinet.glb-254b0ecf81232c670b94c682dc4ef0ee.scn"
+path="res://.godot/imported/Boss Cabinet.glb-cee6a876b5959edd544a726afe7ba175.scn"
 
 [deps]
 
 source_file="res://assets/props/glb files/Boss Cabinet.glb"
-dest_files=["res://.godot/imported/Boss Cabinet.glb-254b0ecf81232c670b94c682dc4ef0ee.scn"]
+dest_files=["res://.godot/imported/Boss Cabinet.glb-cee6a876b5959edd544a726afe7ba175.scn"]
 
 [params]
 

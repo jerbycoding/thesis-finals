@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://crc4qhtcqjh81"
-path="res://.godot/imported/pc.glb-416ebcfc62649f556328353ddae68974.scn"
+path="res://.godot/imported/pc.glb-537a7ee60471fc12af908dfc3ed15aaf.scn"
 
 [deps]
 
 source_file="res://assets/props/glb files/from unity/pc.glb"
-dest_files=["res://.godot/imported/pc.glb-416ebcfc62649f556328353ddae68974.scn"]
+dest_files=["res://.godot/imported/pc.glb-537a7ee60471fc12af908dfc3ed15aaf.scn"]
 
 [params]
 

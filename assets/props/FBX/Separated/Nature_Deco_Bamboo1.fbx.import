@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://1jb4do7qhjul"
-path="res://.godot/imported/Nature_Deco_Bamboo1.fbx-06bb7cb86b6eb47d8e64341aafcefe1d.scn"
+path="res://.godot/imported/Nature_Deco_Bamboo1.fbx-cd5c75401f9baac11b020094dd785638.scn"
 
 [deps]
 
 source_file="res://assets/props/FBX/Separated/Nature_Deco_Bamboo1.fbx"
-dest_files=["res://.godot/imported/Nature_Deco_Bamboo1.fbx-06bb7cb86b6eb47d8e64341aafcefe1d.scn"]
+dest_files=["res://.godot/imported/Nature_Deco_Bamboo1.fbx-cd5c75401f9baac11b020094dd785638.scn"]
 
 [params]
 

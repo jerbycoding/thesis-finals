@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://bhosrpios8ytg"
-path="res://.godot/imported/Rug.glb-f7c8ed620dd3bf9dd999fe686c04af2a.scn"
+path="res://.godot/imported/Rug.glb-18568356ca931329e1cab240ada0c202.scn"
 
 [deps]
 
 source_file="res://assets/props/glb files/Rug.glb"
-dest_files=["res://.godot/imported/Rug.glb-f7c8ed620dd3bf9dd999fe686c04af2a.scn"]
+dest_files=["res://.godot/imported/Rug.glb-18568356ca931329e1cab240ada0c202.scn"]
 
 [params]
 

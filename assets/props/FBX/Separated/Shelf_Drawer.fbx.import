@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://mdsh6icfail0"
-path="res://.godot/imported/Shelf_Drawer.fbx-07beaa94093432dd91f5ccc1e6a67423.scn"
+path="res://.godot/imported/Shelf_Drawer.fbx-6073d3e30598a30d0ea495f7273631d0.scn"
 
 [deps]
 
 source_file="res://assets/props/FBX/Separated/Shelf_Drawer.fbx"
-dest_files=["res://.godot/imported/Shelf_Drawer.fbx-07beaa94093432dd91f5ccc1e6a67423.scn"]
+dest_files=["res://.godot/imported/Shelf_Drawer.fbx-6073d3e30598a30d0ea495f7273631d0.scn"]
 
 [params]
 

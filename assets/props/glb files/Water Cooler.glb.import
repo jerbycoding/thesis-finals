@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://jn87b3fsdgkf"
-path="res://.godot/imported/Water Cooler.glb-7fed694ea0b863103ae4b9d3640822b6.scn"
+path="res://.godot/imported/Water Cooler.glb-f5a0b0ff58519809072f37540d6fec78.scn"
 
 [deps]
 
 source_file="res://assets/props/glb files/Water Cooler.glb"
-dest_files=["res://.godot/imported/Water Cooler.glb-7fed694ea0b863103ae4b9d3640822b6.scn"]
+dest_files=["res://.godot/imported/Water Cooler.glb-f5a0b0ff58519809072f37540d6fec78.scn"]
 
 [params]
 

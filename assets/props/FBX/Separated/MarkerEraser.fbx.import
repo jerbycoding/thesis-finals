@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://bu2qbl4r4awuk"
-path="res://.godot/imported/MarkerEraser.fbx-3b4e385a13a60b0f9d0f471a2da434da.scn"
+path="res://.godot/imported/MarkerEraser.fbx-ea066a800f8cd6d121e5b176359aa9bb.scn"
 
 [deps]
 
 source_file="res://assets/props/FBX/Separated/MarkerEraser.fbx"
-dest_files=["res://.godot/imported/MarkerEraser.fbx-3b4e385a13a60b0f9d0f471a2da434da.scn"]
+dest_files=["res://.godot/imported/MarkerEraser.fbx-ea066a800f8cd6d121e5b176359aa9bb.scn"]
 
 [params]
 

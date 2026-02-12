@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://ckwuc5o0lqfk8"
-path="res://.godot/imported/Clock.glb-f681bba4e2ed64e3ba5b4d8d2fb34554.scn"
+path="res://.godot/imported/Clock.glb-34d7567c3c3067975fa191057a26ac85.scn"
 
 [deps]
 
 source_file="res://assets/props/glb files/Clock.glb"
-dest_files=["res://.godot/imported/Clock.glb-f681bba4e2ed64e3ba5b4d8d2fb34554.scn"]
+dest_files=["res://.godot/imported/Clock.glb-34d7567c3c3067975fa191057a26ac85.scn"]
 
 [params]
 

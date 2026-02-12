@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://byao5gf51ea44"
-path="res://.godot/imported/Painting_Small2.fbx-504135642fbf9c6688e42a02db844a5f.scn"
+path="res://.godot/imported/Painting_Small2.fbx-6eefe9192f278ca87b4e53c0022cfb88.scn"
 
 [deps]
 
 source_file="res://assets/props/FBX/Separated/Painting_Small2.fbx"
-dest_files=["res://.godot/imported/Painting_Small2.fbx-504135642fbf9c6688e42a02db844a5f.scn"]
+dest_files=["res://.godot/imported/Painting_Small2.fbx-6eefe9192f278ca87b4e53c0022cfb88.scn"]
 
 [params]
 

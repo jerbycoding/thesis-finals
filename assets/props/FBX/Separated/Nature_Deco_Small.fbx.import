@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://cueppe8dgb250"
-path="res://.godot/imported/Nature_Deco_Small.fbx-4b5f94cf55e3f6ad120069c92837eb43.scn"
+path="res://.godot/imported/Nature_Deco_Small.fbx-24ec674c45ca783bc9a0bd1dc912f4ac.scn"
 
 [deps]
 
 source_file="res://assets/props/FBX/Separated/Nature_Deco_Small.fbx"
-dest_files=["res://.godot/imported/Nature_Deco_Small.fbx-4b5f94cf55e3f6ad120069c92837eb43.scn"]
+dest_files=["res://.godot/imported/Nature_Deco_Small.fbx-24ec674c45ca783bc9a0bd1dc912f4ac.scn"]
 
 [params]
 

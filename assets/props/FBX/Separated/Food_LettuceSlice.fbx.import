@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://c3ln1b5vy6cwn"
-path="res://.godot/imported/Food_LettuceSlice.fbx-e62e55982d3f5d54590ebd8756114b39.scn"
+path="res://.godot/imported/Food_LettuceSlice.fbx-40435a47b275a7b9a615c3d560e1d8c5.scn"
 
 [deps]
 
 source_file="res://assets/props/FBX/Separated/Food_LettuceSlice.fbx"
-dest_files=["res://.godot/imported/Food_LettuceSlice.fbx-e62e55982d3f5d54590ebd8756114b39.scn"]
+dest_files=["res://.godot/imported/Food_LettuceSlice.fbx-40435a47b275a7b9a615c3d560e1d8c5.scn"]
 
 [params]
 

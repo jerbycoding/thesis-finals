@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://7vjikjmwqovh"
-path="res://.godot/imported/Small_Fan.fbx-ab24c3bc9a97252508eb2d6a8e7d2ed1.scn"
+path="res://.godot/imported/Small_Fan.fbx-acbc86fbf35aa8722c5ad562c33ff40e.scn"
 
 [deps]
 
 source_file="res://assets/props/FBX/Separated/Small_Fan.fbx"
-dest_files=["res://.godot/imported/Small_Fan.fbx-ab24c3bc9a97252508eb2d6a8e7d2ed1.scn"]
+dest_files=["res://.godot/imported/Small_Fan.fbx-acbc86fbf35aa8722c5ad562c33ff40e.scn"]
 
 [params]
 

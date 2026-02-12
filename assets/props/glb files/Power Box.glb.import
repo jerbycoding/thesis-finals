@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://b53sd407ls86e"
-path="res://.godot/imported/Power Box.glb-f7e9c9ac6749a9e43007f6888cfeeb11.scn"
+path="res://.godot/imported/Power Box.glb-856408d19067807f9d5a70f450fb28b5.scn"
 
 [deps]
 
 source_file="res://assets/props/glb files/Power Box.glb"
-dest_files=["res://.godot/imported/Power Box.glb-f7e9c9ac6749a9e43007f6888cfeeb11.scn"]
+dest_files=["res://.godot/imported/Power Box.glb-856408d19067807f9d5a70f450fb28b5.scn"]
 
 [params]
 

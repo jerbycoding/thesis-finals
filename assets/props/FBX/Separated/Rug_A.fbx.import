@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://bnqrhixp3f0n7"
-path="res://.godot/imported/Rug_A.fbx-ad705ed195851e0f5f331a30841f9869.scn"
+path="res://.godot/imported/Rug_A.fbx-ee04939ca37900b2acdda4b3795fd921.scn"
 
 [deps]
 
 source_file="res://assets/props/FBX/Separated/Rug_A.fbx"
-dest_files=["res://.godot/imported/Rug_A.fbx-ad705ed195851e0f5f331a30841f9869.scn"]
+dest_files=["res://.godot/imported/Rug_A.fbx-ee04939ca37900b2acdda4b3795fd921.scn"]
 
 [params]
 

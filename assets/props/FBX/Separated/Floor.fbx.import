@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://bnnyadb5a1ox6"
-path="res://.godot/imported/Floor.fbx-0dfa13d46ec01993fd1de7e57d094cdc.scn"
+path="res://.godot/imported/Floor.fbx-57d03a2b5dfc8386fc835b2027e9d644.scn"
 
 [deps]
 
 source_file="res://assets/props/FBX/Separated/Floor.fbx"
-dest_files=["res://.godot/imported/Floor.fbx-0dfa13d46ec01993fd1de7e57d094cdc.scn"]
+dest_files=["res://.godot/imported/Floor.fbx-57d03a2b5dfc8386fc835b2027e9d644.scn"]
 
 [params]
 

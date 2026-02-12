@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://d0v0k3fhs5st5"
-path="res://.godot/imported/low_poly_meeting_room_assets.glb-84bee87487d3da4a7e116d667b6b0166.scn"
+path="res://.godot/imported/low_poly_meeting_room_assets.glb-3f7b7505b18b8028624825268459ae93.scn"
 
 [deps]
 
 source_file="res://assets/props/glb files/low_poly_meeting_room_assets.glb"
-dest_files=["res://.godot/imported/low_poly_meeting_room_assets.glb-84bee87487d3da4a7e116d667b6b0166.scn"]
+dest_files=["res://.godot/imported/low_poly_meeting_room_assets.glb-3f7b7505b18b8028624825268459ae93.scn"]
 
 [params]
 

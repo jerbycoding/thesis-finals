@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://diaaxvywitnpl"
-path="res://.godot/imported/8_port_ethernet_switch.glb-e464fbc74c7b0d8bc56978d9dca2956c.scn"
+path="res://.godot/imported/8_port_ethernet_switch.glb-a178724f48f9c043c4436ca3748628ba.scn"
 
 [deps]
 
 source_file="res://assets/props/glb files/ethernet/8_port_ethernet_switch.glb"
-dest_files=["res://.godot/imported/8_port_ethernet_switch.glb-e464fbc74c7b0d8bc56978d9dca2956c.scn"]
+dest_files=["res://.godot/imported/8_port_ethernet_switch.glb-a178724f48f9c043c4436ca3748628ba.scn"]
 
 [params]
 

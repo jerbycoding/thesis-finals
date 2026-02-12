@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://bbmsi1hsugqtu"
-path="res://.godot/imported/Mainframe.glb-1b6b1b0cbb89dc35b58875c595489d70.scn"
+path="res://.godot/imported/Mainframe.glb-44b5367853db6e07e5f52a6761c4b25b.scn"
 
 [deps]
 
 source_file="res://assets/props/glb files/Mainframe.glb"
-dest_files=["res://.godot/imported/Mainframe.glb-1b6b1b0cbb89dc35b58875c595489d70.scn"]
+dest_files=["res://.godot/imported/Mainframe.glb-44b5367853db6e07e5f52a6761c4b25b.scn"]
 
 [params]
 

@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://buavt2cavw0mq"
-path="res://.godot/imported/Boss Phone.glb-dd73892fca2d6063d77176d5ee8e5949.scn"
+path="res://.godot/imported/Boss Phone.glb-23bcbdd7b51b447dde5241b45d6c1ec0.scn"
 
 [deps]
 
 source_file="res://assets/props/glb files/Boss Phone.glb"
-dest_files=["res://.godot/imported/Boss Phone.glb-dd73892fca2d6063d77176d5ee8e5949.scn"]
+dest_files=["res://.godot/imported/Boss Phone.glb-23bcbdd7b51b447dde5241b45d6c1ec0.scn"]
 
 [params]
 

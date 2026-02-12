@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://bymrwh1vl1caj"
-path="res://.godot/imported/Boss Chair.glb-89c5bd8593bfcf5fdeb409ec379e3bcb.scn"
+path="res://.godot/imported/Boss Chair.glb-0c8ddef4b037a28b750d0b301e5bf649.scn"
 
 [deps]
 
 source_file="res://assets/props/glb files/Boss Chair.glb"
-dest_files=["res://.godot/imported/Boss Chair.glb-89c5bd8593bfcf5fdeb409ec379e3bcb.scn"]
+dest_files=["res://.godot/imported/Boss Chair.glb-0c8ddef4b037a28b750d0b301e5bf649.scn"]
 
 [params]
 

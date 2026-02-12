@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://wb2c6lig1sfx"
-path="res://.godot/imported/StickNote_2.fbx-b8ee9baaa18c25f30dc49f9a104aecd9.scn"
+path="res://.godot/imported/StickNote_2.fbx-47e0321d743b29b1d1ffb3ac9ef529b8.scn"
 
 [deps]
 
 source_file="res://assets/props/FBX/Separated/StickNote_2.fbx"
-dest_files=["res://.godot/imported/StickNote_2.fbx-b8ee9baaa18c25f30dc49f9a104aecd9.scn"]
+dest_files=["res://.godot/imported/StickNote_2.fbx-47e0321d743b29b1d1ffb3ac9ef529b8.scn"]
 
 [params]
 

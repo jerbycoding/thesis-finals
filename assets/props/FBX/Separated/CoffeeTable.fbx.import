@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://brp87cjsj6icr"
-path="res://.godot/imported/CoffeeTable.fbx-ce639e5dfb4ecc249d9bd0ba7c73d6eb.scn"
+path="res://.godot/imported/CoffeeTable.fbx-d355ff69edb4f0fc91f78496fed43337.scn"
 
 [deps]
 
 source_file="res://assets/props/FBX/Separated/CoffeeTable.fbx"
-dest_files=["res://.godot/imported/CoffeeTable.fbx-ce639e5dfb4ecc249d9bd0ba7c73d6eb.scn"]
+dest_files=["res://.godot/imported/CoffeeTable.fbx-d355ff69edb4f0fc91f78496fed43337.scn"]
 
 [params]
 

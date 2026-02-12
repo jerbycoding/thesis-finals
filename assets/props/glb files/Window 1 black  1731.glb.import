@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://bbxn58e7vsd33"
-path="res://.godot/imported/Window 1 black  1731.glb-d5fca4a1d9684bc389570d8d0ba71c56.scn"
+path="res://.godot/imported/Window 1 black  1731.glb-8e5c3424cf3c33f2f43bd5dc412e369b.scn"
 
 [deps]
 
 source_file="res://assets/props/glb files/Window 1 black  1731.glb"
-dest_files=["res://.godot/imported/Window 1 black  1731.glb-d5fca4a1d9684bc389570d8d0ba71c56.scn"]
+dest_files=["res://.godot/imported/Window 1 black  1731.glb-8e5c3424cf3c33f2f43bd5dc412e369b.scn"]
 
 [params]
 

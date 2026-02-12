@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://nwy7cls0iy4y"
-path="res://.godot/imported/Printer.fbx-1a2f10445a9f09dbd3942f0b42e2efa2.scn"
+path="res://.godot/imported/Printer.fbx-ede710d0f8ac69ed8b96d8e9fcc9aaf4.scn"
 
 [deps]
 
 source_file="res://assets/props/FBX/Separated/Printer.fbx"
-dest_files=["res://.godot/imported/Printer.fbx-1a2f10445a9f09dbd3942f0b42e2efa2.scn"]
+dest_files=["res://.godot/imported/Printer.fbx-ede710d0f8ac69ed8b96d8e9fcc9aaf4.scn"]
 
 [params]
 

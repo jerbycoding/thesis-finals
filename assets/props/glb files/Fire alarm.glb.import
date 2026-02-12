@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://1u6x164kwgfi"
-path="res://.godot/imported/Fire alarm.glb-cce4e3b358e158c213b0be243768d17f.scn"
+path="res://.godot/imported/Fire alarm.glb-81068f8fe9151a64bf894d0c4b01036e.scn"
 
 [deps]
 
 source_file="res://assets/props/glb files/Fire alarm.glb"
-dest_files=["res://.godot/imported/Fire alarm.glb-cce4e3b358e158c213b0be243768d17f.scn"]
+dest_files=["res://.godot/imported/Fire alarm.glb-81068f8fe9151a64bf894d0c4b01036e.scn"]
 
 [params]
 

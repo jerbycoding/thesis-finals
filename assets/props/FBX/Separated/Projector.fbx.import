@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://1y2pi8b6r67"
-path="res://.godot/imported/Projector.fbx-d87498db2fc6318b0848b16850cde89a.scn"
+path="res://.godot/imported/Projector.fbx-23352e4b658f8405f472d2e78813eca8.scn"
 
 [deps]
 
 source_file="res://assets/props/FBX/Separated/Projector.fbx"
-dest_files=["res://.godot/imported/Projector.fbx-d87498db2fc6318b0848b16850cde89a.scn"]
+dest_files=["res://.godot/imported/Projector.fbx-23352e4b658f8405f472d2e78813eca8.scn"]
 
 [params]
 

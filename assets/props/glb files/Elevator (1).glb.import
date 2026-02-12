@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://c8pr35tqs8nki"
-path="res://.godot/imported/Elevator (1).glb-7724ad527aedd9e42cbf173f68cd4efa.scn"
+path="res://.godot/imported/Elevator (1).glb-fed80ccf8ee9453f0eca4580bd65ba26.scn"
 
 [deps]
 
 source_file="res://assets/props/glb files/Elevator (1).glb"
-dest_files=["res://.godot/imported/Elevator (1).glb-7724ad527aedd9e42cbf173f68cd4efa.scn"]
+dest_files=["res://.godot/imported/Elevator (1).glb-fed80ccf8ee9453f0eca4580bd65ba26.scn"]
 
 [params]
 

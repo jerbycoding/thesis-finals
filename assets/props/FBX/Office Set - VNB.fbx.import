@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://c0us84kbpw4e"
-path="res://.godot/imported/Office Set - VNB.fbx-545334da15b40cedc5b027a4034e297e.scn"
+path="res://.godot/imported/Office Set - VNB.fbx-3bc0599fc25ffd04ca766d998880d688.scn"
 
 [deps]
 
 source_file="res://assets/props/FBX/Office Set - VNB.fbx"
-dest_files=["res://.godot/imported/Office Set - VNB.fbx-545334da15b40cedc5b027a4034e297e.scn"]
+dest_files=["res://.godot/imported/Office Set - VNB.fbx-3bc0599fc25ffd04ca766d998880d688.scn"]
 
 [params]
 

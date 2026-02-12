@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://cy3de2s4f52xh"
-path="res://.godot/imported/TrashBin_Small.fbx-619511b693c57bceae5d6aae344fd0e7.scn"
+path="res://.godot/imported/TrashBin_Small.fbx-0d90a6fa0bab56b442b04e1ba39527fa.scn"
 
 [deps]
 
 source_file="res://assets/props/FBX/Separated/TrashBin_Small.fbx"
-dest_files=["res://.godot/imported/TrashBin_Small.fbx-619511b693c57bceae5d6aae344fd0e7.scn"]
+dest_files=["res://.godot/imported/TrashBin_Small.fbx-0d90a6fa0bab56b442b04e1ba39527fa.scn"]
 
 [params]
 

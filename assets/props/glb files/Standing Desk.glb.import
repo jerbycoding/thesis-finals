@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://2xhgyqvqulvy"
-path="res://.godot/imported/Standing Desk.glb-9ca8d0a9e696816e26a9dd749fb4b346.scn"
+path="res://.godot/imported/Standing Desk.glb-7b4349b386e7570f21691ab65d32f89e.scn"
 
 [deps]
 
 source_file="res://assets/props/glb files/Standing Desk.glb"
-dest_files=["res://.godot/imported/Standing Desk.glb-9ca8d0a9e696816e26a9dd749fb4b346.scn"]
+dest_files=["res://.godot/imported/Standing Desk.glb-7b4349b386e7570f21691ab65d32f89e.scn"]
 
 [params]
 

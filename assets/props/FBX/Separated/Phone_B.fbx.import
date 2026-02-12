@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://drf5276p58th5"
-path="res://.godot/imported/Phone_B.fbx-4976097d5fb888f037c1832a638faabd.scn"
+path="res://.godot/imported/Phone_B.fbx-aa9dd6de6c3f5b83f0f41477790923e2.scn"
 
 [deps]
 
 source_file="res://assets/props/FBX/Separated/Phone_B.fbx"
-dest_files=["res://.godot/imported/Phone_B.fbx-4976097d5fb888f037c1832a638faabd.scn"]
+dest_files=["res://.godot/imported/Phone_B.fbx-aa9dd6de6c3f5b83f0f41477790923e2.scn"]
 
 [params]
 

@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://crc3y8iq4fmgr"
-path="res://.godot/imported/Notepad.fbx-05a26855813bb2fa1461563798a4ff30.scn"
+path="res://.godot/imported/Notepad.fbx-3f148a7170f99e3705e19abfccc1695a.scn"
 
 [deps]
 
 source_file="res://assets/props/FBX/Separated/Notepad.fbx"
-dest_files=["res://.godot/imported/Notepad.fbx-05a26855813bb2fa1461563798a4ff30.scn"]
+dest_files=["res://.godot/imported/Notepad.fbx-3f148a7170f99e3705e19abfccc1695a.scn"]
 
 [params]
 

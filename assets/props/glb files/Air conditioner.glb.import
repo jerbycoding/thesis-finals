@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://chspbgh4ih5th"
-path="res://.godot/imported/Air conditioner.glb-f60f5bc78beb4ad79dbcf6dd934152df.scn"
+path="res://.godot/imported/Air conditioner.glb-c52c3d7394be495768a72336f1cdb396.scn"
 
 [deps]
 
 source_file="res://assets/props/glb files/Air conditioner.glb"
-dest_files=["res://.godot/imported/Air conditioner.glb-f60f5bc78beb4ad79dbcf6dd934152df.scn"]
+dest_files=["res://.godot/imported/Air conditioner.glb-c52c3d7394be495768a72336f1cdb396.scn"]
 
 [params]
 

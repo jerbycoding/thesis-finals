@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://pole80sr8ytu"
-path="res://.godot/imported/Pen.fbx-e8268e7cd6b5623446ca37cf7fabba82.scn"
+path="res://.godot/imported/Pen.fbx-c5e49c23ab8d10b7c3456bd17ec07c49.scn"
 
 [deps]
 
 source_file="res://assets/props/FBX/Separated/Pen.fbx"
-dest_files=["res://.godot/imported/Pen.fbx-e8268e7cd6b5623446ca37cf7fabba82.scn"]
+dest_files=["res://.godot/imported/Pen.fbx-c5e49c23ab8d10b7c3456bd17ec07c49.scn"]
 
 [params]
 

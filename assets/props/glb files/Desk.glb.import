@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://bnel3fy2gmnyi"
-path="res://.godot/imported/Desk.glb-84987942f61717f143012f430404b78b.scn"
+path="res://.godot/imported/Desk.glb-3b52c3fa02609f2e203707c6a5cc753f.scn"
 
 [deps]
 
 source_file="res://assets/props/glb files/Desk.glb"
-dest_files=["res://.godot/imported/Desk.glb-84987942f61717f143012f430404b78b.scn"]
+dest_files=["res://.godot/imported/Desk.glb-3b52c3fa02609f2e203707c6a5cc753f.scn"]
 
 [params]
 

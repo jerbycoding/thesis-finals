@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://n28x3hn5cby1"
-path="res://.godot/imported/Doorway Front.glb-91134f646738bc53ddddea4276e1dfdc.scn"
+path="res://.godot/imported/Doorway Front.glb-e8155e0b3e8997be2c0a3fcf30810755.scn"
 
 [deps]
 
 source_file="res://assets/props/glb files/Doorway Front.glb"
-dest_files=["res://.godot/imported/Doorway Front.glb-91134f646738bc53ddddea4276e1dfdc.scn"]
+dest_files=["res://.godot/imported/Doorway Front.glb-e8155e0b3e8997be2c0a3fcf30810755.scn"]
 
 [params]
 

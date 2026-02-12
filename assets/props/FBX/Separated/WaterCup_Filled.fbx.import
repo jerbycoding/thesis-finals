@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://ec5t7kvuu353"
-path="res://.godot/imported/WaterCup_Filled.fbx-e1ea123d3650c2ab2e14f7806e5ed47d.scn"
+path="res://.godot/imported/WaterCup_Filled.fbx-049a3cea5a6298c6ee9de08bf03eb787.scn"
 
 [deps]
 
 source_file="res://assets/props/FBX/Separated/WaterCup_Filled.fbx"
-dest_files=["res://.godot/imported/WaterCup_Filled.fbx-e1ea123d3650c2ab2e14f7806e5ed47d.scn"]
+dest_files=["res://.godot/imported/WaterCup_Filled.fbx-049a3cea5a6298c6ee9de08bf03eb787.scn"]
 
 [params]
 

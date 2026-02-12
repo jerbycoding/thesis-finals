@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://ba8b7s7ewep5e"
-path="res://.godot/imported/Window Blinds.glb-e9bfeca49dac9790edec203df436d3e4.scn"
+path="res://.godot/imported/Window Blinds.glb-b03064e8abc2611aba374cade76a5e07.scn"
 
 [deps]
 
 source_file="res://assets/props/glb files/Window Blinds.glb"
-dest_files=["res://.godot/imported/Window Blinds.glb-e9bfeca49dac9790edec203df436d3e4.scn"]
+dest_files=["res://.godot/imported/Window Blinds.glb-b03064e8abc2611aba374cade76a5e07.scn"]
 
 [params]
 

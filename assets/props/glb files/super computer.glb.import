@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://b5168fu3dw3l4"
-path="res://.godot/imported/super computer.glb-482a535afd9e77a4ce73bf2a7629b296.scn"
+path="res://.godot/imported/super computer.glb-3a311f270cb289ccfdecb9390f50f266.scn"
 
 [deps]
 
 source_file="res://assets/props/glb files/super computer.glb"
-dest_files=["res://.godot/imported/super computer.glb-482a535afd9e77a4ce73bf2a7629b296.scn"]
+dest_files=["res://.godot/imported/super computer.glb-3a311f270cb289ccfdecb9390f50f266.scn"]
 
 [params]
 

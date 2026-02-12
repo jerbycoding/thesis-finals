@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://cb1ab6rpyra6r"
-path="res://.godot/imported/FileCabinet_Small_Drawer_B.fbx-401e2ad2e1167a8430bfc11455117c34.scn"
+path="res://.godot/imported/FileCabinet_Small_Drawer_B.fbx-649158166d55aa5ed0847ec6281bbeba.scn"
 
 [deps]
 
 source_file="res://assets/props/FBX/Separated/FileCabinet_Small_Drawer_B.fbx"
-dest_files=["res://.godot/imported/FileCabinet_Small_Drawer_B.fbx-401e2ad2e1167a8430bfc11455117c34.scn"]
+dest_files=["res://.godot/imported/FileCabinet_Small_Drawer_B.fbx-649158166d55aa5ed0847ec6281bbeba.scn"]
 
 [params]
 

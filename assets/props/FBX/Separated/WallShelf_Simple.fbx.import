@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://dhk2plip3egjj"
-path="res://.godot/imported/WallShelf_Simple.fbx-2fa4ff49e085ee5beae39c4976e95ed2.scn"
+path="res://.godot/imported/WallShelf_Simple.fbx-797350cb189910e03c0d863125737996.scn"
 
 [deps]
 
 source_file="res://assets/props/FBX/Separated/WallShelf_Simple.fbx"
-dest_files=["res://.godot/imported/WallShelf_Simple.fbx-2fa4ff49e085ee5beae39c4976e95ed2.scn"]
+dest_files=["res://.godot/imported/WallShelf_Simple.fbx-797350cb189910e03c0d863125737996.scn"]
 
 [params]
 

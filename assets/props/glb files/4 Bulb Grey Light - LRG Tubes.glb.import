@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://cteip62nveuo7"
-path="res://.godot/imported/4 Bulb Grey Light - LRG Tubes.glb-793306886cda6c7b66c41091d83ff4fc.scn"
+path="res://.godot/imported/4 Bulb Grey Light - LRG Tubes.glb-f25fe662a01fb83b601a9dd91b588992.scn"
 
 [deps]
 
 source_file="res://assets/props/glb files/4 Bulb Grey Light - LRG Tubes.glb"
-dest_files=["res://.godot/imported/4 Bulb Grey Light - LRG Tubes.glb-793306886cda6c7b66c41091d83ff4fc.scn"]
+dest_files=["res://.godot/imported/4 Bulb Grey Light - LRG Tubes.glb-f25fe662a01fb83b601a9dd91b588992.scn"]
 
 [params]
 

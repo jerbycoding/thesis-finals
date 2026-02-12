@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://bjmffoav4umm2"
-path="res://.godot/imported/Table_Circular.fbx-8bde8e005ef74ec48917f830a34aa104.scn"
+path="res://.godot/imported/Table_Circular.fbx-3fbf25dbe2fd53e9dd5646545df056cb.scn"
 
 [deps]
 
 source_file="res://assets/props/FBX/Separated/Table_Circular.fbx"
-dest_files=["res://.godot/imported/Table_Circular.fbx-8bde8e005ef74ec48917f830a34aa104.scn"]
+dest_files=["res://.godot/imported/Table_Circular.fbx-3fbf25dbe2fd53e9dd5646545df056cb.scn"]
 
 [params]
 

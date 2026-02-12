@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://b26ugnbviwgeq"
-path="res://.godot/imported/fire_extinguisher.glb-a424c5850c5e0420e4694501d6eac8a6.scn"
+path="res://.godot/imported/fire_extinguisher.glb-305d5f730fd4a6e1357050237a721094.scn"
 
 [deps]
 
 source_file="res://assets/props/glb files/from unity/fire_extinguisher.glb"
-dest_files=["res://.godot/imported/fire_extinguisher.glb-a424c5850c5e0420e4694501d6eac8a6.scn"]
+dest_files=["res://.godot/imported/fire_extinguisher.glb-305d5f730fd4a6e1357050237a721094.scn"]
 
 [params]
 

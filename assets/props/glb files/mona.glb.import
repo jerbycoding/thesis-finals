@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://cax2jvad3thrr"
-path="res://.godot/imported/mona.glb-746088e10be68904c28b1c06bf2151ea.scn"
+path="res://.godot/imported/mona.glb-c2e9c9749ffead9021c9974398462eb5.scn"
 
 [deps]
 
 source_file="res://assets/props/glb files/mona.glb"
-dest_files=["res://.godot/imported/mona.glb-746088e10be68904c28b1c06bf2151ea.scn"]
+dest_files=["res://.godot/imported/mona.glb-c2e9c9749ffead9021c9974398462eb5.scn"]
 
 [params]
 

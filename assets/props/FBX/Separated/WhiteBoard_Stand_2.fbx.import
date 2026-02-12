@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://r40lctugmo1v"
-path="res://.godot/imported/WhiteBoard_Stand_2.fbx-29497221d90dffbe2a03d572c1a2457c.scn"
+path="res://.godot/imported/WhiteBoard_Stand_2.fbx-0be18f5a7854cd87163d99dc1c8b3153.scn"
 
 [deps]
 
 source_file="res://assets/props/FBX/Separated/WhiteBoard_Stand_2.fbx"
-dest_files=["res://.godot/imported/WhiteBoard_Stand_2.fbx-29497221d90dffbe2a03d572c1a2457c.scn"]
+dest_files=["res://.godot/imported/WhiteBoard_Stand_2.fbx-0be18f5a7854cd87163d99dc1c8b3153.scn"]
 
 [params]
 

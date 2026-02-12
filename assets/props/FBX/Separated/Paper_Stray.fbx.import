@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://dmfp7l78ip2nj"
-path="res://.godot/imported/Paper_Stray.fbx-f04b0cb8ffa9a7ecf05386faf4025c36.scn"
+path="res://.godot/imported/Paper_Stray.fbx-cc06c6b0482673722acc87cff57a595a.scn"
 
 [deps]
 
 source_file="res://assets/props/FBX/Separated/Paper_Stray.fbx"
-dest_files=["res://.godot/imported/Paper_Stray.fbx-f04b0cb8ffa9a7ecf05386faf4025c36.scn"]
+dest_files=["res://.godot/imported/Paper_Stray.fbx-cc06c6b0482673722acc87cff57a595a.scn"]
 
 [params]
 

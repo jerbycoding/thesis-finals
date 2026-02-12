@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://chbl6d7cjy4rd"
-path="res://.godot/imported/wi-fi_router.glb-929e008f63f405973d550faeb13586e7.scn"
+path="res://.godot/imported/wi-fi_router.glb-5cf4a3e27ba00c4371eeec1b8bb98013.scn"
 
 [deps]
 
 source_file="res://assets/props/glb files/wi-fi_router.glb"
-dest_files=["res://.godot/imported/wi-fi_router.glb-929e008f63f405973d550faeb13586e7.scn"]
+dest_files=["res://.godot/imported/wi-fi_router.glb-5cf4a3e27ba00c4371eeec1b8bb98013.scn"]
 
 [params]
 
