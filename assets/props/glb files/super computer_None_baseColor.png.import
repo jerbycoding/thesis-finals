@@ -1,0 +1,38 @@
+[remap]
+
+importer="texture"
+type="CompressedTexture2D"
+uid="uid://clspdp574whws"
+path.s3tc="res://.godot/imported/super computer_None_baseColor.png-95cb65e712523a148e8b16b6fe86413f.s3tc.ctex"
+metadata={
+"imported_formats": ["s3tc_bptc"],
+"vram_texture": true
+}
+generator_parameters={
+"md5": "c077f282246fb5e32ef8eb4c5e0ed443"
+}
+
+[deps]
+
+source_file="res://assets/furniture/glb files/super computer_None_baseColor.png"
+dest_files=["res://.godot/imported/super computer_None_baseColor.png-95cb65e712523a148e8b16b6fe86413f.s3tc.ctex"]
+
+[params]
+
+compress/mode=2
+compress/high_quality=false
+compress/lossy_quality=0.7
+compress/hdr_compression=1
+compress/normal_map=0
+compress/channel_pack=0
+mipmaps/generate=true
+mipmaps/limit=-1
+roughness/mode=0
+roughness/src_normal=""
+process/fix_alpha_border=true
+process/premult_alpha=false
+process/normal_map_invert_y=false
+process/hdr_as_srgb=false
+process/hdr_clamp_exposure=false
+process/size_limit=0
+detect_3d/compress_to=0
