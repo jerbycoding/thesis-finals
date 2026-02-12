@@ -105,6 +105,5 @@ drop={
 [rendering]
 
 textures/canvas_textures/default_texture_filter=3
-renderer/rendering_method="mobile"
 renderer/rendering_method.web="mobile"
 2d/snap/snap_2d_transforms_to_pixel=true

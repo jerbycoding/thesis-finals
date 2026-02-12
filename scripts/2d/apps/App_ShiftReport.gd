@@ -71,4 +71,4 @@ func _on_continue_pressed():
 			NarrativeDirector.trigger_briefing(next_shift)
 	else:
 		print("ShiftReport: Final shift completed or no next shift defined. Returning to title.")
-		TransitionManager.change_scene_to("res://scenes/ui/TitleScreen.tscn")
+		TransitionManager.change_scene_to("res://scenes/3d/MainMenu3D.tscn")

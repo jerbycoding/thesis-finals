@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://c7c8toku8jd3c"]
+
+[ext_resource type="PackedScene" uid="uid://cwyajod0qanr7" path="res://assets/props/items/clock/clock/clock.glb" id="1_model"]
+[ext_resource type="Script" path="res://scripts/3d/Prop_WallClock.gd" id="2_script"]
+
+[node name="Prop_WallClock" type="Node3D"]
+script = ExtResource("2_script")
+
+[node name="Model" parent="." instance=ExtResource("1_model")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)

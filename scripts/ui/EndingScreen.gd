@@ -15,6 +15,6 @@ func _ready():
 
 func _on_quit_pressed():
 	if TransitionManager:
-		TransitionManager.change_scene_to("res://scenes/ui/TitleScreen.tscn")
+		TransitionManager.change_scene_to("res://scenes/3d/MainMenu3D.tscn")
 	else:
-		get_tree().change_scene_to_file("res://scenes/ui/TitleScreen.tscn")
+		get_tree().change_scene_to_file("res://scenes/3d/MainMenu3D.tscn")
