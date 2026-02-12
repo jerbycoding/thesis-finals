@@ -1,0 +1,30 @@
+[gd_scene load_steps=5 format=3 uid="uid://ccnhvm2f6t16w"]
+
+[ext_resource type="PackedScene" uid="uid://cb0hougumkjum" path="res://assets/props/FBX/Separated/Computer_Monitor.fbx" id="1_7brjf"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_3xq65"]
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_h6dgt"]
+data = PackedVector3Array(-0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, -0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, -0.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_a1v1o"]
+
+[node name="Computer_Monitor" instance=ExtResource("1_7brjf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.4930836, 0, 0, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." index="1"]
+transform = Transform3D(0.57212174, 3.461866e-14, -1.5113509e-34, -3.2521356e-14, 0.6090179, -2.6587966e-21, 0, 3.8689366e-21, 0.41852707, 0.0021251366, 0.28288543, 0.003763117)
+visible = false
+mesh = SubResource("BoxMesh_3xq65")
+skeleton = NodePath("../Computer_Mouse")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="MeshInstance3D" index="0"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D/StaticBody3D" index="0"]
+shape = SubResource("ConcavePolygonShape3D_h6dgt")
+
+[node name="Area3D" type="Area3D" parent="MeshInstance3D" index="1"]
+transform = Transform3D(100, 0, 0, 0, 100, 0, 0, 0, 100, 0, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D/Area3D" index="0"]
+shape = SubResource("BoxShape3D_a1v1o")

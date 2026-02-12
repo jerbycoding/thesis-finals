@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://2al8f5gdtg51"]
+
+[ext_resource type="PackedScene" uid="uid://n28x3hn5cby1" path="res://assets/props/glb files/Doorway Front.glb" id="1_wqo2l"]
+
+[sub_resource type="PlaceholderMesh" id="PlaceholderMesh_u0it8"]
+
+[node name="GrayboxDoor" type="Node3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.5739708, 0, 0, 0, 1.3125955, 0, 0, 0, 0.5989839, -0.2252016, 0.53983265, 0)
+mesh = SubResource("PlaceholderMesh_u0it8")
+skeleton = NodePath("../Doorway Front")
+
+[node name="Doorway Front" parent="." instance=ExtResource("1_wqo2l")]

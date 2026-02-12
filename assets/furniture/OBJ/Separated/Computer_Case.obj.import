@@ -1,0 +1,25 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://bm487n1dx38sp"
+path="res://.godot/imported/Computer_Case.obj-174ab0ab1b92a489ac6313c2e1ac5abc.mesh"
+
+[deps]
+
+files=["res://.godot/imported/Computer_Case.obj-174ab0ab1b92a489ac6313c2e1ac5abc.mesh"]
+
+source_file="res://assets/props/OBJ/Separated/Computer_Case.obj"
+dest_files=["res://.godot/imported/Computer_Case.obj-174ab0ab1b92a489ac6313c2e1ac5abc.mesh", "res://.godot/imported/Computer_Case.obj-174ab0ab1b92a489ac6313c2e1ac5abc.mesh"]
+
+[params]
+
+generate_tangents=true
+generate_lods=true
+generate_shadow_mesh=true
+generate_lightmap_uv2=false
+generate_lightmap_uv2_texel_size=0.2
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+force_disable_mesh_compression=false

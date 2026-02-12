@@ -1,0 +1,29 @@
+[gd_scene load_steps=5 format=3 uid="uid://pqgwaxltmn5b"]
+
+[ext_resource type="PackedScene" uid="uid://jn87b3fsdgkf" path="res://assets/props/glb files/Water Cooler.glb" id="1_jlm1p"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_soq84"]
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_vpnf6"]
+data = PackedVector3Array(-0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, -0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, -0.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_hx1er"]
+
+[node name="Water Cooler" instance=ExtResource("1_jlm1p")]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." index="1"]
+transform = Transform3D(1.4710798, 2.626576e-13, -5.096373e-34, -8.362121e-14, 4.6207213, -8.965635e-21, -6.7548e-41, 2.9354275e-20, 1.4113007, 0.34695923, 1.9598565, 0.003763117)
+visible = false
+mesh = SubResource("BoxMesh_soq84")
+skeleton = NodePath("../Computer_Mouse")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="MeshInstance3D" index="0"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D/StaticBody3D" index="0"]
+shape = SubResource("ConcavePolygonShape3D_vpnf6")
+
+[node name="Area3D" type="Area3D" parent="MeshInstance3D" index="1"]
+transform = Transform3D(100, 0, 0, 0, 100, 0, 0, 0, 100, 0, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D/Area3D" index="0"]
+shape = SubResource("BoxShape3D_hx1er")

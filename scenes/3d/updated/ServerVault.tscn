@@ -1,0 +1,292 @@
+[gd_scene load_steps=29 format=3 uid="uid://bovl77byysvdd"]
+
+[ext_resource type="PackedScene" uid="uid://cteip62nveuo7" path="res://assets/props/glb files/4 Bulb Grey Light - LRG Tubes.glb" id="1_ke7g0"]
+[ext_resource type="PackedScene" uid="uid://brbwiujepsoub" path="res://assets/props/New Inherit props/doorway_front.tscn" id="2_t0yo8"]
+[ext_resource type="PackedScene" uid="uid://b26ugnbviwgeq" path="res://assets/props/glb files/from unity/fire_extinguisher.glb" id="3_ujyno"]
+[ext_resource type="PackedScene" uid="uid://btnu8a43ektel" path="res://assets/props/glb files/Air Vent.glb" id="4_5r86r"]
+[ext_resource type="PackedScene" uid="uid://cmifgwddmu74y" path="res://assets/props/glb files/from unity/box.glb" id="4_n6tnn"]
+[ext_resource type="PackedScene" uid="uid://d11ne6fqqw6i6" path="res://assets/props/glb files/Air conditioner (1).glb" id="5_7fbsa"]
+[ext_resource type="PackedScene" uid="uid://0v6kqa4knv5b" path="res://assets/props/New Inherit props/server_big.tscn" id="5_mvsqq"]
+[ext_resource type="PackedScene" uid="uid://dnj3nokixbr2u" path="res://assets/props/glb files/from unity/desk.glb" id="6_7fbsa"]
+[ext_resource type="PackedScene" uid="uid://dbu7rn0d7neqy" path="res://assets/props/glb files/from unity/chair.glb" id="7_7jqom"]
+[ext_resource type="PackedScene" uid="uid://crumbqnhcfln7" path="res://assets/props/New Inherit props/pc_2.tscn" id="7_wgdxh"]
+[ext_resource type="PackedScene" uid="uid://clls0cdipsksh" path="res://assets/props/glb files/Light switch.glb" id="10_n6tnn"]
+[ext_resource type="PackedScene" uid="uid://c6stkr63gaup0" path="res://assets/props/glb files/from unity/mousepad.glb" id="11_wgdxh"]
+[ext_resource type="PackedScene" uid="uid://pk46jou01ph7" path="res://assets/props/New Inherit props/mouse_2.tscn" id="14_wgdxh"]
+[ext_resource type="PackedScene" uid="uid://bce5yftu67neq" path="res://assets/props/glb files/from unity/pencilbox.glb" id="14_yqfx6"]
+[ext_resource type="PackedScene" uid="uid://csitc16cgwq86" path="res://assets/props/glb files/from unity/security_camera.glb" id="15_fte6i"]
+[ext_resource type="PackedScene" uid="uid://dl0g3wohx47y7" path="res://assets/props/New Inherit props/display_0042.tscn" id="15_ui0rt"]
+[ext_resource type="PackedScene" uid="uid://rr67fw3vji4l" path="res://assets/props/New Inherit props/keyboard_2.tscn" id="15_wgdxh"]
+[ext_resource type="PackedScene" uid="uid://1u6x164kwgfi" path="res://assets/props/glb files/Fire alarm.glb" id="18_dgy6o"]
+[ext_resource type="PackedScene" uid="uid://bmmt5iul73seb" path="res://assets/props/glb files/from unity/password_panel.glb" id="20_wgdxh"]
+[ext_resource type="PackedScene" uid="uid://bohhnaa41md4y" path="res://assets/props/New Inherit props/server_2.tscn" id="22_yqfx6"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_x31b4"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ke7g0"]
+albedo_color = Color(0.3590693, 0.35906905, 0.35906908, 1)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_cownj"]
+data = PackedVector3Array(1, 0, 1, -1, 0, 1, 1, 0, -1, -1, 0, 1, -1, 0, -1, 1, 0, -1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_cownj"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bkyvm"]
+albedo_color = Color(0.89492244, 0.89492244, 0.8949224, 1)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_256jk"]
+data = PackedVector3Array(1, 0, 1, -1, 0, 1, 1, 0, -1, -1, 0, 1, -1, 0, -1, 1, 0, -1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_5r86r"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7fbsa"]
+albedo_color = Color(0.3854925, 0.38549247, 0.38549247, 1)
+
+[node name="ServerVault" type="Node3D"]
+
+[node name="RoomSetup" type="Node3D" parent="."]
+
+[node name="floor" type="MeshInstance3D" parent="RoomSetup"]
+transform = Transform3D(20, 0, 0, 0, 10, 0, 0, 0, 15, -0.02867508, 0.0021185875, -0.2469492)
+mesh = SubResource("PlaneMesh_x31b4")
+skeleton = NodePath("../../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_ke7g0")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="RoomSetup/floor"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RoomSetup/floor/StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_cownj")
+
+[node name="ceiling" type="MeshInstance3D" parent="RoomSetup"]
+transform = Transform3D(20, 0, 0, 0, -10, 2.264937e-06, 0, -1.509958e-06, -15, -0.0019421577, 10.001216, 0.00011014938)
+mesh = SubResource("PlaneMesh_cownj")
+skeleton = NodePath("../../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_bkyvm")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="RoomSetup/ceiling"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RoomSetup/ceiling/StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_256jk")
+
+[node name="bulbs" type="Node3D" parent="RoomSetup/ceiling"]
+
+[node name="4 Bulb Grey Light - LRG Tubes" parent="RoomSetup/ceiling/bulbs" instance=ExtResource("1_ke7g0")]
+transform = Transform3D(0.004, 0, 0, 0, -0.02, -9.0597485e-10, 0, 3.0199159e-09, -0.006, 0.6827991, 0.03195077, 0.44585657)
+
+[node name="OmniLight3D6" type="OmniLight3D" parent="RoomSetup/ceiling/bulbs/4 Bulb Grey Light - LRG Tubes"]
+transform = Transform3D(12.5, 0, 0, 0, 5.0000005, 2.5165966e-07, 0, 8.388654e-07, 11.111112, 21.096024, -6.294735, -6.3085938)
+omni_range = 4096.0
+
+[node name="4 Bulb Grey Light - LRG Tubes2" parent="RoomSetup/ceiling/bulbs" instance=ExtResource("1_ke7g0")]
+transform = Transform3D(0.004, 0, 0, 0, -0.02, -9.0597485e-10, 0, 3.0199159e-09, -0.006, 0.6827991, 0.031950533, -0.51955396)
+
+[node name="OmniLight3D3" type="OmniLight3D" parent="RoomSetup/ceiling/bulbs/4 Bulb Grey Light - LRG Tubes2"]
+transform = Transform3D(12.5, 0, 0, 0, 5.0000005, 2.5165974e-07, 0, 8.388652e-07, 11.111112, 21.096039, -6.294739, -7.6859207)
+omni_range = 4096.0
+
+[node name="4 Bulb Grey Light - LRG Tubes3" parent="RoomSetup/ceiling/bulbs" instance=ExtResource("1_ke7g0")]
+transform = Transform3D(0.004, 0, 0, 0, -0.02, -9.0597485e-10, 0, 3.0199159e-09, -0.006, -0.00473305, 0.03195077, 0.44585648)
+
+[node name="OmniLight3D4" type="OmniLight3D" parent="RoomSetup/ceiling/bulbs/4 Bulb Grey Light - LRG Tubes3"]
+transform = Transform3D(12.5, 0, 0, 0, 5.0000005, 2.5165966e-07, 0, 8.388654e-07, 11.111112, 27.126392, -7.5039673, -5.7459793)
+omni_range = 4096.0
+
+[node name="4 Bulb Grey Light - LRG Tubes4" parent="RoomSetup/ceiling/bulbs" instance=ExtResource("1_ke7g0")]
+transform = Transform3D(0.004, 0, 0, 0, -0.02, -9.0597485e-10, 0, 3.0199159e-09, -0.006, -0.00473305, 0.031950533, -0.5195537)
+
+[node name="OmniLight3D" type="OmniLight3D" parent="RoomSetup/ceiling/bulbs/4 Bulb Grey Light - LRG Tubes4"]
+transform = Transform3D(12.5, 0, 0, 0, 5.0000005, 2.5165966e-07, 0, 8.388654e-07, 11.111112, 27.126392, -7.503971, -7.123268)
+omni_range = 4096.0
+
+[node name="4 Bulb Grey Light - LRG Tubes5" parent="RoomSetup/ceiling/bulbs" instance=ExtResource("1_ke7g0")]
+transform = Transform3D(0.004, 0, 0, 0, -0.02, -9.0597485e-10, 0, 3.0199159e-09, -0.006, -0.7037026, 0.03195077, 0.4458565)
+
+[node name="OmniLight3D5" type="OmniLight3D" parent="RoomSetup/ceiling/bulbs/4 Bulb Grey Light - LRG Tubes5"]
+transform = Transform3D(12.5, 0, 0, 0, 5.0000005, 2.5165966e-07, 0, 8.388654e-07, 11.111112, 28.12925, -7.572689, -6.7503357)
+omni_range = 4096.0
+
+[node name="4 Bulb Grey Light - LRG Tubes6" parent="RoomSetup/ceiling/bulbs" instance=ExtResource("1_ke7g0")]
+transform = Transform3D(0.004, 0, 0, 0, -0.02, -9.0597485e-10, 0, 3.0199159e-09, -0.006, -0.7037026, 0.031950533, -0.5195538)
+
+[node name="OmniLight3D2" type="OmniLight3D" parent="RoomSetup/ceiling/bulbs/4 Bulb Grey Light - LRG Tubes6"]
+transform = Transform3D(12.5, 0, 0, 0, 5.0000005, 2.5165966e-07, 0, 8.388654e-07, 11.111112, 28.12925, -7.572693, -8.127617)
+omni_range = 4096.0
+
+[node name="Walls" type="Node3D" parent="RoomSetup"]
+
+[node name="northwall" type="CSGCombiner3D" parent="RoomSetup/Walls"]
+transform = Transform3D(1.0134313, 0, 0, 0, 1, 0, 0, 0, 1, 0.014099896, 2.5, -5.0988216)
+use_collision = true
+
+[node name="solid" type="CSGBox3D" parent="RoomSetup/Walls/northwall"]
+transform = Transform3D(40, 0, 0, 0, 9.999728, 0, 0, 0, 0.19999576, -0.0453755, 2.5068557, -10.141117)
+size = Vector3(0.98791504, 1, 1)
+
+[node name="northwall2" type="CSGCombiner3D" parent="RoomSetup/Walls"]
+transform = Transform3D(1.0134313, 0, 0, 0, 1, 0, 0, 0, 1, 0.014099896, 2.5, -5.0988216)
+use_collision = true
+
+[node name="solid" type="CSGBox3D" parent="RoomSetup/Walls/northwall2"]
+transform = Transform3D(40, 0, 0, 0, 9.999726, 0, 0, 0, 0.19999573, -0.0453755, 2.5068557, 19.790606)
+size = Vector3(0.98791504, 1, 1)
+
+[node name="solid2" type="CSGBox3D" parent="RoomSetup/Walls/northwall2"]
+transform = Transform3D(40, 0, 2.4957814e-13, 0, 9.999082, 0, 7.128131e-11, 0, 0.19998565, 15.546133, 0.7973776, 19.745363)
+operation = 2
+size = Vector3(0.07658863, 0.65808105, 2.3840332)
+
+[node name="Doorway Front2" parent="RoomSetup/Walls/northwall2" instance=ExtResource("2_t0yo8")]
+transform = Transform3D(6.30206, 0, 3.5527137e-14, 0, 6.624714, 0, 2.8421698e-14, 0, 1.9734918, 17.084871, -2.5376832, 19.996761)
+
+[node name="westwall" type="CSGCombiner3D" parent="RoomSetup/Walls"]
+transform = Transform3D(-4.429849e-08, 0, 1, 0, 1, 0, -1.0134313, 0, -4.371139e-08, -39.677414, 2.5, -5.0988216)
+use_collision = true
+
+[node name="solid" type="CSGBox3D" parent="RoomSetup/Walls/westwall"]
+transform = Transform3D(40, 0, 8.970602e-14, 0, 9.999548, 0, 2.1259439e-11, 0, 0.19999294, -4.724636, 2.5068557, 19.790594)
+size = Vector3(0.7349396, 1, 1)
+
+[node name="Eastwall" type="CSGCombiner3D" parent="RoomSetup/Walls"]
+transform = Transform3D(-4.429849e-08, 0, 1, 0, 1, 0, -1.0134313, 0, -4.371139e-08, -39.677414, 2.5, -5.0988216)
+use_collision = true
+
+[node name="solid" type="CSGBox3D" parent="RoomSetup/Walls/Eastwall"]
+transform = Transform3D(40, 0, 8.970602e-14, 0, 9.999546, 0, 2.1486812e-11, 0, 0.19999291, -4.7246375, 2.5068557, 59.54943)
+size = Vector3(0.7349396, 1, 1)
+
+[node name="Eastwall2" type="CSGCombiner3D" parent="RoomSetup/Walls"]
+transform = Transform3D(-4.429849e-08, 0, 1, 0, 1, 0, -1.0134313, 0, -4.371139e-08, -39.677414, 2.5, -5.0988216)
+use_collision = true
+
+[node name="Doorway Front2" parent="RoomSetup/Walls/Eastwall2" instance=ExtResource("2_t0yo8")]
+transform = Transform3D(6.3020635, 0, 3.5527137e-14, 0, 6.624717, 0, 2.842171e-14, 0, 1.9734926, 6.2884283, -2.6722233, 51.028603)
+
+[node name="solid" type="CSGBox3D" parent="RoomSetup/Walls/Eastwall2"]
+transform = Transform3D(40, 0, 9.05942e-14, 0, 9.999545, 0, 2.16005e-11, 0, 0.1999929, -4.724637, 2.5068557, 51.10379)
+size = Vector3(0.7349396, 1, 1)
+
+[node name="solid2" type="CSGBox3D" parent="RoomSetup/Walls/Eastwall2"]
+transform = Transform3D(40, 0, 2.4957814e-13, 0, 9.999128, 0, 7.128165e-11, 0, 0.19998638, 4.765233, 0.788223, 51.031654)
+operation = 2
+size = Vector3(0.07309914, 0.65625, 2.3840332)
+
+[node name="Elevator" type="Node3D" parent="RoomSetup"]
+
+[node name="Elevator placeholder" type="MeshInstance3D" parent="RoomSetup/Elevator"]
+transform = Transform3D(2, 0, 0, 0, 7, 0, 0, 0, 6, 20.254799, 3.5830595, 0)
+mesh = SubResource("BoxMesh_5r86r")
+surface_material_override/0 = SubResource("StandardMaterial3D_7fbsa")
+
+[node name="Servers" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.8435078, 0, 0)
+
+[node name="RightSide" type="Node3D" parent="Servers"]
+
+[node name="server_24" parent="Servers/RightSide" instance=ExtResource("5_mvsqq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.558597, 0.0021186147, -13.720602)
+
+[node name="server_25" parent="Servers/RightSide" instance=ExtResource("5_mvsqq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.840844, 0.0021186147, -13.720602)
+
+[node name="server2" parent="Servers/RightSide" instance=ExtResource("22_yqfx6")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -7.261572, 0.17198539, -13.36805)
+
+[node name="server3" parent="Servers/RightSide" instance=ExtResource("22_yqfx6")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -4.6102514, 0.17198539, -13.36805)
+
+[node name="server4" parent="Servers/RightSide" instance=ExtResource("22_yqfx6")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -2.0121593, 0.17198539, -13.36805)
+
+[node name="server5" parent="Servers/RightSide" instance=ExtResource("22_yqfx6")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 0.55323076, 0.17198539, -13.36805)
+
+[node name="server6" parent="Servers/RightSide" instance=ExtResource("22_yqfx6")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 3.2045512, 0.17198539, -13.36805)
+
+[node name="server7" parent="Servers/RightSide" instance=ExtResource("22_yqfx6")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 5.8026433, 0.17198539, -13.36805)
+
+[node name="RightSide2" type="Node3D" parent="Servers"]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -2.4088516, 0, 0)
+
+[node name="server_24" parent="Servers/RightSide2" instance=ExtResource("5_mvsqq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.558597, 0.0021186147, -13.720602)
+
+[node name="server_25" parent="Servers/RightSide2" instance=ExtResource("5_mvsqq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.840844, 0.0021186147, -13.720602)
+
+[node name="server2" parent="Servers/RightSide2" instance=ExtResource("22_yqfx6")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -7.261572, 0.17198539, -13.36805)
+
+[node name="server3" parent="Servers/RightSide2" instance=ExtResource("22_yqfx6")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -4.6102514, 0.17198539, -13.36805)
+
+[node name="server4" parent="Servers/RightSide2" instance=ExtResource("22_yqfx6")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -2.0121593, 0.17198539, -13.36805)
+
+[node name="server5" parent="Servers/RightSide2" instance=ExtResource("22_yqfx6")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 0.55323076, 0.17198539, -13.36805)
+
+[node name="server6" parent="Servers/RightSide2" instance=ExtResource("22_yqfx6")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 3.2045512, 0.17198539, -13.36805)
+
+[node name="server7" parent="Servers/RightSide2" instance=ExtResource("22_yqfx6")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 5.8026433, 0.17198539, -13.36805)
+
+[node name="Air Vent" parent="." instance=ExtResource("4_5r86r")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -18.985407, 0.2291342, -15.095738)
+
+[node name="Air conditioner (1)" parent="." instance=ExtResource("5_7fbsa")]
+transform = Transform3D(-1.7484555e-10, 0, 0.004, 0, 0.004, 0, -0.004, 0, -1.7484555e-10, -19.479462, 8.081167, 0)
+
+[node name="Desk" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.7106342, 0, 0)
+
+[node name="pc2" parent="Desk" instance=ExtResource("7_wgdxh")]
+transform = Transform3D(-6.556708e-08, 0, -1.5, 0, 1.5, 0, 1.5, 0, -6.556708e-08, -11.714485, 2.30199, 2.082192)
+
+[node name="desk2" parent="Desk" instance=ExtResource("6_7fbsa")]
+transform = Transform3D(-1.09278474e-07, 0, -3, 0, 2.5, 0, 2.5, 0, -1.3113416e-07, -11.928568, 0.026284235, 0.20805025)
+
+[node name="chair2" parent="Desk" instance=ExtResource("7_7jqom")]
+transform = Transform3D(0.2774148, 0, -2.4845605, 0, 2.5, 0, 2.4845605, 0, 0.2774148, -13.888613, 0.0021189037, 0.42206526)
+
+[node name="mousepad2" parent="Desk" instance=ExtResource("11_wgdxh")]
+transform = Transform3D(2.4998813, 0, -0.024346963, 0, 2.5, 0, 0.024346963, 0, 2.4998813, -12.847601, 2.3119807, 1.6350172)
+
+[node name="pencilbox2" parent="Desk" instance=ExtResource("14_yqfx6")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -12.335476, 2.3122559, -0.9239924)
+
+[node name="display_0042" parent="Desk" instance=ExtResource("15_ui0rt")]
+transform = Transform3D(-1.3113416e-07, 0, -3, 0, 3, 0, 3, 0, -1.3113416e-07, -12.060853, 2.286767, 0.29535472)
+
+[node name="Keyboard2" parent="Desk" instance=ExtResource("15_wgdxh")]
+transform = Transform3D(-0.049457602, 0, -1.9993883, 0, 2, 0, 1.9993883, 0, -0.049457602, -12.736846, 2.3146746, 0.14206642)
+
+[node name="mouse2" parent="Desk" instance=ExtResource("14_wgdxh")]
+transform = Transform3D(1.1494678, 0, -1.6366807, 0, 2, 0, 1.6366807, 0, 1.1494678, -12.902013, 2.3626091, 1.6124668)
+
+[node name="cctv" type="Node3D" parent="Desk"]
+
+[node name="security_camera2" parent="Desk/cctv" instance=ExtResource("15_fte6i")]
+transform = Transform3D(1.2815465, 0.63814104, -1.3965725, -0.58773124, 1.8844256, 0.32173365, 1.4185243, 0.20424634, 1.3950174, -17.056568, 9.689648, -15.085389)
+
+[node name="security_camera3" parent="Desk/cctv" instance=ExtResource("15_fte6i")]
+transform = Transform3D(1.5668321, 0.2819903, 1.2105865, -0.5877312, 1.8844255, 0.3217336, -1.0952668, -0.60780096, 1.5591564, -16.913904, 9.689648, 14.359453)
+
+[node name="details" type="Node3D" parent="."]
+
+[node name="box2" parent="details" instance=ExtResource("4_n6tnn")]
+transform = Transform3D(-6.556708e-08, 0, -1.5, 0, 1.5, 0, 1.5, 0, -6.556708e-08, 11.343176, 3.6975346, -5.9717283)
+
+[node name="Light switch" parent="details" instance=ExtResource("10_n6tnn")]
+transform = Transform3D(-1.09278474e-07, 0, 2.5, 0, 2.5, 0, -2.5, 0, -1.09278474e-07, 11.293569, 4.1584754, -7.7306747)
+
+[node name="fire_extinguisher2" parent="details" instance=ExtResource("3_ujyno")]
+transform = Transform3D(-6.556708e-08, 0, 1.5, 0, 1.5, 0, -1.5, 0, -6.556708e-08, 11.169437, 3.4967892, -6.1336856)
+
+[node name="Fire alarm" parent="details" instance=ExtResource("18_dgy6o")]
+transform = Transform3D(-2.1855694e-08, 0, -0.5, 0, 0.5, 0, 0.5, 0, -2.1855694e-08, 19.586504, 3.8457804, -5.4806676)
+
+[node name="password_panel2" parent="details" instance=ExtResource("20_wgdxh")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 11.51405, 2.9407408, -8.054174)

@@ -1,0 +1,143 @@
+[gd_scene load_steps=12 format=3 uid="uid://db8w3kx4jbfh3"]
+
+[ext_resource type="PackedScene" uid="uid://cteip62nveuo7" path="res://assets/props/glb files/4 Bulb Grey Light - LRG Tubes.glb" id="1_pm706"]
+[ext_resource type="PackedScene" uid="uid://brbwiujepsoub" path="res://assets/props/New Inherit props/doorway_front.tscn" id="2_8jwck"]
+[ext_resource type="PackedScene" uid="uid://brtnx0m05ck57" path="res://assets/props/New Inherit props/elevator.tscn" id="3_160bn"]
+[ext_resource type="PackedScene" uid="uid://g73xwukx7sjb" path="res://assets/props/glb files/Vending Machine (1).glb" id="4_hyfjv"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_3yglv"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pm706"]
+albedo_color = Color(0.5931336, 0.59313357, 0.59313357, 1)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_8jwck"]
+data = PackedVector3Array(1, 0, 1, -1, 0, 1, 1, 0, -1, -1, 0, 1, -1, 0, -1, 1, 0, -1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_8jwck"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_160bn"]
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_hyfjv"]
+data = PackedVector3Array(1, 0, 1, -1, 0, 1, 1, 0, -1, -1, 0, 1, -1, 0, -1, 1, 0, -1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_160bn"]
+
+[node name="ElevatorRoom" type="Node3D"]
+
+[node name="floor" type="MeshInstance3D" parent="."]
+transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, 0, 0, 0)
+mesh = SubResource("PlaneMesh_3yglv")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_pm706")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="floor"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="floor/StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_8jwck")
+
+[node name="ceiling" type="MeshInstance3D" parent="floor"]
+transform = Transform3D(1, 0, 0, 0, -1, 1.509958e-07, 0, -1.509958e-07, -1, 0, 0.9843651, 0)
+mesh = SubResource("PlaneMesh_8jwck")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_160bn")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="floor/ceiling"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="floor/ceiling/StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_hyfjv")
+
+[node name="4 Bulb Grey Light - LRG Tubes" parent="floor/ceiling" instance=ExtResource("1_pm706")]
+transform = Transform3D(0.0016863547, 0, 0, 0, -0.0060171383, -1.0276248e-09, 0, 3.6342518e-10, -0.00272226, 0.25947028, 0.0102418065, 0.63891906)
+
+[node name="OmniLight3D" type="OmniLight3D" parent="floor/ceiling/4 Bulb Grey Light - LRG Tubes"]
+transform = Transform3D(59.299503, 0, 0, 0, 16.619196, -5.269801e-06, 0, -2.2737368e-13, 36.734184, 20.897598, -32.125336, -6.094406)
+omni_range = 4096.0
+
+[node name="4 Bulb Grey Light - LRG Tubes2" parent="floor/ceiling" instance=ExtResource("1_pm706")]
+transform = Transform3D(0.0016863547, 0, 0, 0, -0.0060171383, -1.0276248e-09, 0, 3.6342523e-10, -0.00272226, 0.25947028, 0.010241687, 0.014762877)
+
+[node name="OmniLight3D" type="OmniLight3D" parent="floor/ceiling/4 Bulb Grey Light - LRG Tubes2"]
+transform = Transform3D(59.299503, 0, 0, 0, 16.619196, -5.269801e-06, 0, -2.2737368e-13, 36.734184, 20.897598, -32.125336, -6.094406)
+omni_range = 4096.0
+
+[node name="4 Bulb Grey Light - LRG Tubes3" parent="floor/ceiling" instance=ExtResource("1_pm706")]
+transform = Transform3D(0.0016863547, 0, 0, 0, -0.0060171383, -1.0276248e-09, 0, 3.634253e-10, -0.00272226, 0.25947028, 0.010241628, -0.584704)
+
+[node name="OmniLight3D" type="OmniLight3D" parent="floor/ceiling/4 Bulb Grey Light - LRG Tubes3"]
+transform = Transform3D(59.299503, 0, 0, 0, 16.619196, -5.269801e-06, 0, -2.2737368e-13, 36.734184, 20.897598, -32.125336, -6.094406)
+omni_range = 4096.0
+
+[node name="4 Bulb Grey Light - LRG Tubes4" parent="floor/ceiling" instance=ExtResource("1_pm706")]
+transform = Transform3D(0.0016863547, 0, 0, 0, -0.0060171383, -1.0276248e-09, 0, 3.6342523e-10, -0.00272226, -0.3760198, 0.0102418065, 0.63891906)
+
+[node name="OmniLight3D" type="OmniLight3D" parent="floor/ceiling/4 Bulb Grey Light - LRG Tubes4"]
+transform = Transform3D(59.299503, 0, 0, 0, 16.619196, -5.269801e-06, 0, -2.2737368e-13, 36.734184, 20.897598, -32.125336, -6.094406)
+omni_range = 4096.0
+
+[node name="4 Bulb Grey Light - LRG Tubes5" parent="floor/ceiling" instance=ExtResource("1_pm706")]
+transform = Transform3D(0.0016863547, 0, 0, 0, -0.0060171383, -1.0276248e-09, 0, 3.634253e-10, -0.00272226, -0.3760198, 0.010241687, 0.014762877)
+
+[node name="OmniLight3D" type="OmniLight3D" parent="floor/ceiling/4 Bulb Grey Light - LRG Tubes5"]
+transform = Transform3D(59.299503, 0, 0, 0, 16.619196, -5.269801e-06, 0, -2.2737368e-13, 36.734184, 20.897598, -32.125336, -6.094406)
+omni_range = 4096.0
+
+[node name="4 Bulb Grey Light - LRG Tubes6" parent="floor/ceiling" instance=ExtResource("1_pm706")]
+transform = Transform3D(0.0016863547, 0, 0, 0, -0.0060171383, -1.0276248e-09, 0, 3.6342535e-10, -0.00272226, -0.3760198, 0.010241628, -0.584704)
+
+[node name="OmniLight3D" type="OmniLight3D" parent="floor/ceiling/4 Bulb Grey Light - LRG Tubes6"]
+transform = Transform3D(59.299503, 0, 0, 0, 16.619196, -5.269801e-06, 0, -2.2737368e-13, 36.734184, 20.897598, -32.125336, -6.094406)
+omni_range = 4096.0
+
+[node name="northwall" type="CSGCombiner3D" parent="."]
+transform = Transform3D(0.289, 0, 0, 0, 1, 0, 0, 0, 1, 0.014099896, 2.4153895, 0.23592615)
+use_collision = true
+
+[node name="solid" type="CSGBox3D" parent="northwall"]
+transform = Transform3D(40, 0, 0, 0, 10, 0, 0, 0, 0.2, -0.09176235, 2.5068564, -10.141118)
+size = Vector3(1.7231445, 1, 1)
+
+[node name="southwall" type="CSGCombiner3D" parent="."]
+transform = Transform3D(-1.2632591e-08, 0, -1, 0, 1, 0, 0.289, 0, -4.371139e-08, -0.26773232, 2.409302, 0.08009386)
+use_collision = true
+
+[node name="solid" type="CSGBox3D" parent="southwall"]
+transform = Transform3D(40, 0, 0, 0, 10, 0, 0, 0, 0.2, -0.09176235, 2.5068564, -10.141118)
+size = Vector3(1.7231445, 1, 1)
+
+[node name="hole" type="CSGBox3D" parent="southwall"]
+transform = Transform3D(40, 0, 0, 0, 10, 0, 2.2851054e-11, 0, 0.2, -3.367641, 1.457052, -13.1228075)
+operation = 2
+size = Vector3(0.66516113, 0.79003906, 33.85547)
+
+[node name="eastwall" type="CSGCombiner3D" parent="."]
+transform = Transform3D(0.289, 0, 0, 0, 1, 0, 0, 0, 1, 0.014099896, 2.4092283, 20.055986)
+use_collision = true
+
+[node name="solid" type="CSGBox3D" parent="eastwall"]
+transform = Transform3D(40, 0, 0, 0, 10, 0, 0, 0, 0.2, -0.09176235, 2.5068564, -10.141118)
+size = Vector3(1.7231445, 1, 1)
+
+[node name="westwall" type="CSGCombiner3D" parent="."]
+transform = Transform3D(-1.2632591e-08, 0, 1, 0, 1, 0, -0.289, 0, -4.371139e-08, 0.24816972, 2.467025, -0.020498276)
+use_collision = true
+
+[node name="solid" type="CSGBox3D" parent="westwall"]
+transform = Transform3D(40, 0, 0, 0, 10, 0, 0, 0, 0.2, -0.09176235, 2.5068564, -10.141118)
+size = Vector3(1.7231445, 1, 1)
+
+[node name="Doorway Front5" parent="." instance=ExtResource("2_8jwck")]
+transform = Transform3D(-2.7547208e-07, 0, 2, 0, 6.6247206, 0, -6.302067, 0, -8.742278e-08, -9.826232, -0.061621666, 3.7734065)
+
+[node name="Elevator" parent="." instance=ExtResource("3_160bn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.070712, -0.21703541, -0.950016)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Elevator"]
+transform = Transform3D(0.2, 0, 0, 0, 7, 0, 0, 0, 3, -3.5877247, 3.7522807, -1.5427074)
+mesh = SubResource("BoxMesh_160bn")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Elevator"]
+transform = Transform3D(0.2, 0, 0, 0, 7, 0, 0, 0, 3, -3.5555954, 3.6529121, 1.5060024)
+mesh = SubResource("BoxMesh_160bn")
+
+[node name="Vending Machine (1)" parent="." instance=ExtResource("4_hyfjv")]
+transform = Transform3D(-2, 0, -1.7484555e-07, 0, 2, 0, 1.7484555e-07, 0, -2, -7.9606395, 3.140493, -8.46216)
