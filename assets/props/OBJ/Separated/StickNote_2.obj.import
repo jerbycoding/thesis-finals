@@ -4,14 +4,14 @@ importer="wavefront_obj"
 importer_version=1
 type="Mesh"
 uid="uid://cs7wl7p1rukvi"
-path="res://.godot/imported/StickNote_2.obj-e3ae145a7bc181bc842f9ae3be87eec1.mesh"
+path="res://.godot/imported/StickNote_2.obj-a0d8a5056ac214eab6197bc7f6896117.mesh"
 
 [deps]
 
-files=["res://.godot/imported/StickNote_2.obj-e3ae145a7bc181bc842f9ae3be87eec1.mesh"]
+files=["res://.godot/imported/StickNote_2.obj-a0d8a5056ac214eab6197bc7f6896117.mesh"]
 
 source_file="res://assets/props/OBJ/Separated/StickNote_2.obj"
-dest_files=["res://.godot/imported/StickNote_2.obj-e3ae145a7bc181bc842f9ae3be87eec1.mesh", "res://.godot/imported/StickNote_2.obj-e3ae145a7bc181bc842f9ae3be87eec1.mesh"]
+dest_files=["res://.godot/imported/StickNote_2.obj-a0d8a5056ac214eab6197bc7f6896117.mesh", "res://.godot/imported/StickNote_2.obj-a0d8a5056ac214eab6197bc7f6896117.mesh"]
 
 [params]
 

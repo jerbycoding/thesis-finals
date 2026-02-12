@@ -4,14 +4,14 @@ importer="wavefront_obj"
 importer_version=1
 type="Mesh"
 uid="uid://nebfnj0itwe0"
-path="res://.godot/imported/Office_Desk_4_Rounded_Alt.obj-77cfd85f755df55652e911fce7a0cf2d.mesh"
+path="res://.godot/imported/Office_Desk_4_Rounded_Alt.obj-6a14a71ff8b3b93e73007b2b00012184.mesh"
 
 [deps]
 
-files=["res://.godot/imported/Office_Desk_4_Rounded_Alt.obj-77cfd85f755df55652e911fce7a0cf2d.mesh"]
+files=["res://.godot/imported/Office_Desk_4_Rounded_Alt.obj-6a14a71ff8b3b93e73007b2b00012184.mesh"]
 
 source_file="res://assets/props/OBJ/Separated/Office_Desk_4_Rounded_Alt.obj"
-dest_files=["res://.godot/imported/Office_Desk_4_Rounded_Alt.obj-77cfd85f755df55652e911fce7a0cf2d.mesh", "res://.godot/imported/Office_Desk_4_Rounded_Alt.obj-77cfd85f755df55652e911fce7a0cf2d.mesh"]
+dest_files=["res://.godot/imported/Office_Desk_4_Rounded_Alt.obj-6a14a71ff8b3b93e73007b2b00012184.mesh", "res://.godot/imported/Office_Desk_4_Rounded_Alt.obj-6a14a71ff8b3b93e73007b2b00012184.mesh"]
 
 [params]
 

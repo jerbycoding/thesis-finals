@@ -4,14 +4,14 @@ importer="wavefront_obj"
 importer_version=1
 type="Mesh"
 uid="uid://7vcwga18iicj"
-path="res://.godot/imported/Small_Fan.obj-15f755d479af925dc82feda44e119502.mesh"
+path="res://.godot/imported/Small_Fan.obj-c74ee0b92e62f97b8f7cbb35e7e31b37.mesh"
 
 [deps]
 
-files=["res://.godot/imported/Small_Fan.obj-15f755d479af925dc82feda44e119502.mesh"]
+files=["res://.godot/imported/Small_Fan.obj-c74ee0b92e62f97b8f7cbb35e7e31b37.mesh"]
 
 source_file="res://assets/props/OBJ/Separated/Small_Fan.obj"
-dest_files=["res://.godot/imported/Small_Fan.obj-15f755d479af925dc82feda44e119502.mesh", "res://.godot/imported/Small_Fan.obj-15f755d479af925dc82feda44e119502.mesh"]
+dest_files=["res://.godot/imported/Small_Fan.obj-c74ee0b92e62f97b8f7cbb35e7e31b37.mesh", "res://.godot/imported/Small_Fan.obj-c74ee0b92e62f97b8f7cbb35e7e31b37.mesh"]
 
 [params]
 

@@ -4,14 +4,14 @@ importer="wavefront_obj"
 importer_version=1
 type="Mesh"
 uid="uid://cehrkmav6c5w1"
-path="res://.godot/imported/WhiteBoard_Big.obj-c4ffc79545fae60fa87d9a732fc59a60.mesh"
+path="res://.godot/imported/WhiteBoard_Big.obj-2dcb3401a286d213c91e0541d614bb3d.mesh"
 
 [deps]
 
-files=["res://.godot/imported/WhiteBoard_Big.obj-c4ffc79545fae60fa87d9a732fc59a60.mesh"]
+files=["res://.godot/imported/WhiteBoard_Big.obj-2dcb3401a286d213c91e0541d614bb3d.mesh"]
 
 source_file="res://assets/props/OBJ/Separated/WhiteBoard_Big.obj"
-dest_files=["res://.godot/imported/WhiteBoard_Big.obj-c4ffc79545fae60fa87d9a732fc59a60.mesh", "res://.godot/imported/WhiteBoard_Big.obj-c4ffc79545fae60fa87d9a732fc59a60.mesh"]
+dest_files=["res://.godot/imported/WhiteBoard_Big.obj-2dcb3401a286d213c91e0541d614bb3d.mesh", "res://.godot/imported/WhiteBoard_Big.obj-2dcb3401a286d213c91e0541d614bb3d.mesh"]
 
 [params]
 

@@ -4,14 +4,14 @@ importer="wavefront_obj"
 importer_version=1
 type="Mesh"
 uid="uid://dcluqraxb7gwa"
-path="res://.godot/imported/Food_TomatoSlice.obj-3a1ba843b1e266c202319eb3956f0306.mesh"
+path="res://.godot/imported/Food_TomatoSlice.obj-deca4528c47b1183a7caf6e7aea44352.mesh"
 
 [deps]
 
-files=["res://.godot/imported/Food_TomatoSlice.obj-3a1ba843b1e266c202319eb3956f0306.mesh"]
+files=["res://.godot/imported/Food_TomatoSlice.obj-deca4528c47b1183a7caf6e7aea44352.mesh"]
 
 source_file="res://assets/props/OBJ/Separated/Food_TomatoSlice.obj"
-dest_files=["res://.godot/imported/Food_TomatoSlice.obj-3a1ba843b1e266c202319eb3956f0306.mesh", "res://.godot/imported/Food_TomatoSlice.obj-3a1ba843b1e266c202319eb3956f0306.mesh"]
+dest_files=["res://.godot/imported/Food_TomatoSlice.obj-deca4528c47b1183a7caf6e7aea44352.mesh", "res://.godot/imported/Food_TomatoSlice.obj-deca4528c47b1183a7caf6e7aea44352.mesh"]
 
 [params]
 

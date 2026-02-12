@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://m0t3ggluewhu"
-path="res://.godot/imported/Door_B.fbx-529489979bec8a42646906c2a63bc00d.scn"
+path="res://.godot/imported/Door_B.fbx-86f3e885050706df80698730cfa55fff.scn"
 
 [deps]
 
 source_file="res://assets/props/FBX/Separated/Door_B.fbx"
-dest_files=["res://.godot/imported/Door_B.fbx-529489979bec8a42646906c2a63bc00d.scn"]
+dest_files=["res://.godot/imported/Door_B.fbx-86f3e885050706df80698730cfa55fff.scn"]
 
 [params]
 

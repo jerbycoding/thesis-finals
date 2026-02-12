@@ -4,14 +4,14 @@ importer="wavefront_obj"
 importer_version=1
 type="Mesh"
 uid="uid://yi7bcftloe3p"
-path="res://.godot/imported/Office_Desk_2_drawer.obj-76e80caf9c59e0aabe3ba901dcb3eef0.mesh"
+path="res://.godot/imported/Office_Desk_2_drawer.obj-86ed10c2bd012fcdcaeccb75c0c09b29.mesh"
 
 [deps]
 
-files=["res://.godot/imported/Office_Desk_2_drawer.obj-76e80caf9c59e0aabe3ba901dcb3eef0.mesh"]
+files=["res://.godot/imported/Office_Desk_2_drawer.obj-86ed10c2bd012fcdcaeccb75c0c09b29.mesh"]
 
 source_file="res://assets/props/OBJ/Separated/Office_Desk_2_drawer.obj"
-dest_files=["res://.godot/imported/Office_Desk_2_drawer.obj-76e80caf9c59e0aabe3ba901dcb3eef0.mesh", "res://.godot/imported/Office_Desk_2_drawer.obj-76e80caf9c59e0aabe3ba901dcb3eef0.mesh"]
+dest_files=["res://.godot/imported/Office_Desk_2_drawer.obj-86ed10c2bd012fcdcaeccb75c0c09b29.mesh", "res://.godot/imported/Office_Desk_2_drawer.obj-86ed10c2bd012fcdcaeccb75c0c09b29.mesh"]
 
 [params]
 

@@ -4,14 +4,14 @@ importer="wavefront_obj"
 importer_version=1
 type="Mesh"
 uid="uid://dcya6jausvbd6"
-path="res://.godot/imported/Wall_TV.obj-0ab8d4f1080bffbc4d8ae1927ab3f248.mesh"
+path="res://.godot/imported/Wall_TV.obj-7fb0fc269a10226c3f116d2d2fd686af.mesh"
 
 [deps]
 
-files=["res://.godot/imported/Wall_TV.obj-0ab8d4f1080bffbc4d8ae1927ab3f248.mesh"]
+files=["res://.godot/imported/Wall_TV.obj-7fb0fc269a10226c3f116d2d2fd686af.mesh"]
 
 source_file="res://assets/props/OBJ/Separated/Wall_TV.obj"
-dest_files=["res://.godot/imported/Wall_TV.obj-0ab8d4f1080bffbc4d8ae1927ab3f248.mesh", "res://.godot/imported/Wall_TV.obj-0ab8d4f1080bffbc4d8ae1927ab3f248.mesh"]
+dest_files=["res://.godot/imported/Wall_TV.obj-7fb0fc269a10226c3f116d2d2fd686af.mesh", "res://.godot/imported/Wall_TV.obj-7fb0fc269a10226c3f116d2d2fd686af.mesh"]
 
 [params]
 

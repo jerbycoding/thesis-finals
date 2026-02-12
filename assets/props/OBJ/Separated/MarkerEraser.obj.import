@@ -4,14 +4,14 @@ importer="wavefront_obj"
 importer_version=1
 type="Mesh"
 uid="uid://biy6s2nf6f4h1"
-path="res://.godot/imported/MarkerEraser.obj-2583e4de9b7e4710fe2ae5c07cafb61e.mesh"
+path="res://.godot/imported/MarkerEraser.obj-b47cdffc64f8345336401420072fd567.mesh"
 
 [deps]
 
-files=["res://.godot/imported/MarkerEraser.obj-2583e4de9b7e4710fe2ae5c07cafb61e.mesh"]
+files=["res://.godot/imported/MarkerEraser.obj-b47cdffc64f8345336401420072fd567.mesh"]
 
 source_file="res://assets/props/OBJ/Separated/MarkerEraser.obj"
-dest_files=["res://.godot/imported/MarkerEraser.obj-2583e4de9b7e4710fe2ae5c07cafb61e.mesh", "res://.godot/imported/MarkerEraser.obj-2583e4de9b7e4710fe2ae5c07cafb61e.mesh"]
+dest_files=["res://.godot/imported/MarkerEraser.obj-b47cdffc64f8345336401420072fd567.mesh", "res://.godot/imported/MarkerEraser.obj-b47cdffc64f8345336401420072fd567.mesh"]
 
 [params]
 

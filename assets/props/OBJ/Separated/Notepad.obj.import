@@ -4,14 +4,14 @@ importer="wavefront_obj"
 importer_version=1
 type="Mesh"
 uid="uid://dkmskskblnpui"
-path="res://.godot/imported/Notepad.obj-cd8147694cb80ba65f636fd6056fd817.mesh"
+path="res://.godot/imported/Notepad.obj-65a464329f342ecbb545937311ef62b9.mesh"
 
 [deps]
 
-files=["res://.godot/imported/Notepad.obj-cd8147694cb80ba65f636fd6056fd817.mesh"]
+files=["res://.godot/imported/Notepad.obj-65a464329f342ecbb545937311ef62b9.mesh"]
 
 source_file="res://assets/props/OBJ/Separated/Notepad.obj"
-dest_files=["res://.godot/imported/Notepad.obj-cd8147694cb80ba65f636fd6056fd817.mesh", "res://.godot/imported/Notepad.obj-cd8147694cb80ba65f636fd6056fd817.mesh"]
+dest_files=["res://.godot/imported/Notepad.obj-65a464329f342ecbb545937311ef62b9.mesh", "res://.godot/imported/Notepad.obj-65a464329f342ecbb545937311ef62b9.mesh"]
 
 [params]
 

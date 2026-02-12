@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://codhkxxvh0r2v"
-path="res://.godot/imported/Chair_Office_Bottom.fbx-fae19141481c2ce16554310a1f13fa20.scn"
+path="res://.godot/imported/Chair_Office_Bottom.fbx-c3e8437c2fc5ed886b7f5a6b95828abb.scn"
 
 [deps]
 
 source_file="res://assets/props/FBX/Separated/Chair_Office_Bottom.fbx"
-dest_files=["res://.godot/imported/Chair_Office_Bottom.fbx-fae19141481c2ce16554310a1f13fa20.scn"]
+dest_files=["res://.godot/imported/Chair_Office_Bottom.fbx-c3e8437c2fc5ed886b7f5a6b95828abb.scn"]
 
 [params]
 

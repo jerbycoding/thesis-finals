@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://ctkfkl230pbe3"
-path.s3tc="res://.godot/imported/8_port_ethernet_switch_6.jpg-b38becea055f618c8210dabcbc8d2626.s3tc.ctex"
+path.s3tc="res://.godot/imported/8_port_ethernet_switch_6.jpg-99f8f1017fa062d0c09ece31c372f166.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -15,7 +15,7 @@ generator_parameters={
 [deps]
 
 source_file="res://assets/props/glb files/ethernet/8_port_ethernet_switch_6.jpg"
-dest_files=["res://.godot/imported/8_port_ethernet_switch_6.jpg-b38becea055f618c8210dabcbc8d2626.s3tc.ctex"]
+dest_files=["res://.godot/imported/8_port_ethernet_switch_6.jpg-99f8f1017fa062d0c09ece31c372f166.s3tc.ctex"]
 
 [params]
 

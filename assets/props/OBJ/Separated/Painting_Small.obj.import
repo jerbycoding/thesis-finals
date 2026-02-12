@@ -4,14 +4,14 @@ importer="wavefront_obj"
 importer_version=1
 type="Mesh"
 uid="uid://qchhjiwooxt"
-path="res://.godot/imported/Painting_Small.obj-0538ea3a4b8fd3d025387f211821f687.mesh"
+path="res://.godot/imported/Painting_Small.obj-60ff348049a99f1eba154bacf97ff8ca.mesh"
 
 [deps]
 
-files=["res://.godot/imported/Painting_Small.obj-0538ea3a4b8fd3d025387f211821f687.mesh"]
+files=["res://.godot/imported/Painting_Small.obj-60ff348049a99f1eba154bacf97ff8ca.mesh"]
 
 source_file="res://assets/props/OBJ/Separated/Painting_Small.obj"
-dest_files=["res://.godot/imported/Painting_Small.obj-0538ea3a4b8fd3d025387f211821f687.mesh", "res://.godot/imported/Painting_Small.obj-0538ea3a4b8fd3d025387f211821f687.mesh"]
+dest_files=["res://.godot/imported/Painting_Small.obj-60ff348049a99f1eba154bacf97ff8ca.mesh", "res://.godot/imported/Painting_Small.obj-60ff348049a99f1eba154bacf97ff8ca.mesh"]
 
 [params]
 

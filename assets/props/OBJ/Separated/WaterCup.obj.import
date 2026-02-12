@@ -4,14 +4,14 @@ importer="wavefront_obj"
 importer_version=1
 type="Mesh"
 uid="uid://cdr8mqwusqmu3"
-path="res://.godot/imported/WaterCup.obj-823dac4b9341755ef27aaa06ae86d679.mesh"
+path="res://.godot/imported/WaterCup.obj-4cf665232d41f32d41930bc77e9a4c0c.mesh"
 
 [deps]
 
-files=["res://.godot/imported/WaterCup.obj-823dac4b9341755ef27aaa06ae86d679.mesh"]
+files=["res://.godot/imported/WaterCup.obj-4cf665232d41f32d41930bc77e9a4c0c.mesh"]
 
 source_file="res://assets/props/OBJ/Separated/WaterCup.obj"
-dest_files=["res://.godot/imported/WaterCup.obj-823dac4b9341755ef27aaa06ae86d679.mesh", "res://.godot/imported/WaterCup.obj-823dac4b9341755ef27aaa06ae86d679.mesh"]
+dest_files=["res://.godot/imported/WaterCup.obj-4cf665232d41f32d41930bc77e9a4c0c.mesh", "res://.godot/imported/WaterCup.obj-4cf665232d41f32d41930bc77e9a4c0c.mesh"]
 
 [params]
 

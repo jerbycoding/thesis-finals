@@ -4,14 +4,14 @@ importer="wavefront_obj"
 importer_version=1
 type="Mesh"
 uid="uid://b7x2b3ye3440w"
-path="res://.godot/imported/Pencil_2.obj-b9d93c6eb900c6797e6740886fd41bb3.mesh"
+path="res://.godot/imported/Pencil_2.obj-c1f143862cdb0da90d508c8abe215490.mesh"
 
 [deps]
 
-files=["res://.godot/imported/Pencil_2.obj-b9d93c6eb900c6797e6740886fd41bb3.mesh"]
+files=["res://.godot/imported/Pencil_2.obj-c1f143862cdb0da90d508c8abe215490.mesh"]
 
 source_file="res://assets/props/OBJ/Separated/Pencil_2.obj"
-dest_files=["res://.godot/imported/Pencil_2.obj-b9d93c6eb900c6797e6740886fd41bb3.mesh", "res://.godot/imported/Pencil_2.obj-b9d93c6eb900c6797e6740886fd41bb3.mesh"]
+dest_files=["res://.godot/imported/Pencil_2.obj-c1f143862cdb0da90d508c8abe215490.mesh", "res://.godot/imported/Pencil_2.obj-c1f143862cdb0da90d508c8abe215490.mesh"]
 
 [params]
 

@@ -4,14 +4,14 @@ importer="wavefront_obj"
 importer_version=1
 type="Mesh"
 uid="uid://cgo3rvxw6817q"
-path="res://.godot/imported/RFan_B.obj-a055812abe81c5ccaacff941cb8f2d4f.mesh"
+path="res://.godot/imported/RFan_B.obj-2ece1c5a03920895c9904a8bc551d1fd.mesh"
 
 [deps]
 
-files=["res://.godot/imported/RFan_B.obj-a055812abe81c5ccaacff941cb8f2d4f.mesh"]
+files=["res://.godot/imported/RFan_B.obj-2ece1c5a03920895c9904a8bc551d1fd.mesh"]
 
 source_file="res://assets/props/OBJ/Separated/RFan_B.obj"
-dest_files=["res://.godot/imported/RFan_B.obj-a055812abe81c5ccaacff941cb8f2d4f.mesh", "res://.godot/imported/RFan_B.obj-a055812abe81c5ccaacff941cb8f2d4f.mesh"]
+dest_files=["res://.godot/imported/RFan_B.obj-2ece1c5a03920895c9904a8bc551d1fd.mesh", "res://.godot/imported/RFan_B.obj-2ece1c5a03920895c9904a8bc551d1fd.mesh"]
 
 [params]
 

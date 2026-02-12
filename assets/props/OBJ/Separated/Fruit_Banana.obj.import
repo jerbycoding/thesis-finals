@@ -4,14 +4,14 @@ importer="wavefront_obj"
 importer_version=1
 type="Mesh"
 uid="uid://cmpeex5tst23f"
-path="res://.godot/imported/Fruit_Banana.obj-a2ba137d078fdf1cd48c7881039b78e1.mesh"
+path="res://.godot/imported/Fruit_Banana.obj-c65f351b27c761a7027d0b7469e81560.mesh"
 
 [deps]
 
-files=["res://.godot/imported/Fruit_Banana.obj-a2ba137d078fdf1cd48c7881039b78e1.mesh"]
+files=["res://.godot/imported/Fruit_Banana.obj-c65f351b27c761a7027d0b7469e81560.mesh"]
 
 source_file="res://assets/props/OBJ/Separated/Fruit_Banana.obj"
-dest_files=["res://.godot/imported/Fruit_Banana.obj-a2ba137d078fdf1cd48c7881039b78e1.mesh", "res://.godot/imported/Fruit_Banana.obj-a2ba137d078fdf1cd48c7881039b78e1.mesh"]
+dest_files=["res://.godot/imported/Fruit_Banana.obj-c65f351b27c761a7027d0b7469e81560.mesh", "res://.godot/imported/Fruit_Banana.obj-c65f351b27c761a7027d0b7469e81560.mesh"]
 
 [params]
 

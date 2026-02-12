@@ -4,14 +4,14 @@ importer="wavefront_obj"
 importer_version=1
 type="Mesh"
 uid="uid://bofmgvr8o5qsq"
-path="res://.godot/imported/Food_CheeseSlice_Copy.obj-8979f3994997b868f324193298bf3dd7.mesh"
+path="res://.godot/imported/Food_CheeseSlice_Copy.obj-0e5674d70de596da5e97382ad40f8853.mesh"
 
 [deps]
 
-files=["res://.godot/imported/Food_CheeseSlice_Copy.obj-8979f3994997b868f324193298bf3dd7.mesh"]
+files=["res://.godot/imported/Food_CheeseSlice_Copy.obj-0e5674d70de596da5e97382ad40f8853.mesh"]
 
 source_file="res://assets/props/OBJ/Separated/Food_CheeseSlice_Copy.obj"
-dest_files=["res://.godot/imported/Food_CheeseSlice_Copy.obj-8979f3994997b868f324193298bf3dd7.mesh", "res://.godot/imported/Food_CheeseSlice_Copy.obj-8979f3994997b868f324193298bf3dd7.mesh"]
+dest_files=["res://.godot/imported/Food_CheeseSlice_Copy.obj-0e5674d70de596da5e97382ad40f8853.mesh", "res://.godot/imported/Food_CheeseSlice_Copy.obj-0e5674d70de596da5e97382ad40f8853.mesh"]
 
 [params]
 

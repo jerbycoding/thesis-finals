@@ -4,14 +4,14 @@ importer="wavefront_obj"
 importer_version=1
 type="Mesh"
 uid="uid://2t3sucx7c0mk"
-path="res://.godot/imported/CoffeeCup.obj-b640d57ee58b26710a4f757a15325e3f.mesh"
+path="res://.godot/imported/CoffeeCup.obj-fb79d7bf693a582e613c1974141f90e7.mesh"
 
 [deps]
 
-files=["res://.godot/imported/CoffeeCup.obj-b640d57ee58b26710a4f757a15325e3f.mesh"]
+files=["res://.godot/imported/CoffeeCup.obj-fb79d7bf693a582e613c1974141f90e7.mesh"]
 
 source_file="res://assets/props/OBJ/Separated/CoffeeCup.obj"
-dest_files=["res://.godot/imported/CoffeeCup.obj-b640d57ee58b26710a4f757a15325e3f.mesh", "res://.godot/imported/CoffeeCup.obj-b640d57ee58b26710a4f757a15325e3f.mesh"]
+dest_files=["res://.godot/imported/CoffeeCup.obj-fb79d7bf693a582e613c1974141f90e7.mesh", "res://.godot/imported/CoffeeCup.obj-fb79d7bf693a582e613c1974141f90e7.mesh"]
 
 [params]
 

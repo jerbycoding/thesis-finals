@@ -4,14 +4,14 @@ importer="wavefront_obj"
 importer_version=1
 type="Mesh"
 uid="uid://cuwv10q2meayu"
-path="res://.godot/imported/Food_Bread.obj-e6bb2ebc416c7cb89b01b9b3fed968ec.mesh"
+path="res://.godot/imported/Food_Bread.obj-214d17d6e2743c30ffdf57a8ccbcedee.mesh"
 
 [deps]
 
-files=["res://.godot/imported/Food_Bread.obj-e6bb2ebc416c7cb89b01b9b3fed968ec.mesh"]
+files=["res://.godot/imported/Food_Bread.obj-214d17d6e2743c30ffdf57a8ccbcedee.mesh"]
 
 source_file="res://assets/props/OBJ/Separated/Food_Bread.obj"
-dest_files=["res://.godot/imported/Food_Bread.obj-e6bb2ebc416c7cb89b01b9b3fed968ec.mesh", "res://.godot/imported/Food_Bread.obj-e6bb2ebc416c7cb89b01b9b3fed968ec.mesh"]
+dest_files=["res://.godot/imported/Food_Bread.obj-214d17d6e2743c30ffdf57a8ccbcedee.mesh", "res://.godot/imported/Food_Bread.obj-214d17d6e2743c30ffdf57a8ccbcedee.mesh"]
 
 [params]
 

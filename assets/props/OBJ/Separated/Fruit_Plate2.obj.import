@@ -4,14 +4,14 @@ importer="wavefront_obj"
 importer_version=1
 type="Mesh"
 uid="uid://tl781keqgoie"
-path="res://.godot/imported/Fruit_Plate2.obj-20e4160f93f9497d86e6200236197870.mesh"
+path="res://.godot/imported/Fruit_Plate2.obj-5c0bc5af505548d99198f3f36e12fa52.mesh"
 
 [deps]
 
-files=["res://.godot/imported/Fruit_Plate2.obj-20e4160f93f9497d86e6200236197870.mesh"]
+files=["res://.godot/imported/Fruit_Plate2.obj-5c0bc5af505548d99198f3f36e12fa52.mesh"]
 
 source_file="res://assets/props/OBJ/Separated/Fruit_Plate2.obj"
-dest_files=["res://.godot/imported/Fruit_Plate2.obj-20e4160f93f9497d86e6200236197870.mesh", "res://.godot/imported/Fruit_Plate2.obj-20e4160f93f9497d86e6200236197870.mesh"]
+dest_files=["res://.godot/imported/Fruit_Plate2.obj-5c0bc5af505548d99198f3f36e12fa52.mesh", "res://.godot/imported/Fruit_Plate2.obj-5c0bc5af505548d99198f3f36e12fa52.mesh"]
 
 [params]
 

@@ -4,14 +4,14 @@ importer="wavefront_obj"
 importer_version=1
 type="Mesh"
 uid="uid://cscetuxqfg0vv"
-path="res://.godot/imported/Office_CounterB2.obj-100a12b06805a2a09fb689dacce9cd20.mesh"
+path="res://.godot/imported/Office_CounterB2.obj-85a3ce80d95e4239bcba1b1649762539.mesh"
 
 [deps]
 
-files=["res://.godot/imported/Office_CounterB2.obj-100a12b06805a2a09fb689dacce9cd20.mesh"]
+files=["res://.godot/imported/Office_CounterB2.obj-85a3ce80d95e4239bcba1b1649762539.mesh"]
 
 source_file="res://assets/props/OBJ/Separated/Office_CounterB2.obj"
-dest_files=["res://.godot/imported/Office_CounterB2.obj-100a12b06805a2a09fb689dacce9cd20.mesh", "res://.godot/imported/Office_CounterB2.obj-100a12b06805a2a09fb689dacce9cd20.mesh"]
+dest_files=["res://.godot/imported/Office_CounterB2.obj-85a3ce80d95e4239bcba1b1649762539.mesh", "res://.godot/imported/Office_CounterB2.obj-85a3ce80d95e4239bcba1b1649762539.mesh"]
 
 [params]
 

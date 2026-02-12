@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://bm4e0clc87arg"
-path="res://.godot/imported/AirConditioner_B.fbx-18a7dfd8d2e7b26c43fcf8ce8c654c62.scn"
+path="res://.godot/imported/AirConditioner_B.fbx-758f0cf06c29087cb26dc3147fa4612b.scn"
 
 [deps]
 
 source_file="res://assets/props/FBX/Separated/AirConditioner_B.fbx"
-dest_files=["res://.godot/imported/AirConditioner_B.fbx-18a7dfd8d2e7b26c43fcf8ce8c654c62.scn"]
+dest_files=["res://.godot/imported/AirConditioner_B.fbx-758f0cf06c29087cb26dc3147fa4612b.scn"]
 
 [params]
 

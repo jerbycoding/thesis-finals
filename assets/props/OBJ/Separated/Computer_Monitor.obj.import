@@ -4,14 +4,14 @@ importer="wavefront_obj"
 importer_version=1
 type="Mesh"
 uid="uid://d2wsxkgwthf8j"
-path="res://.godot/imported/Computer_Monitor.obj-a65dbdf49e695e23343328d85158ff12.mesh"
+path="res://.godot/imported/Computer_Monitor.obj-1c6d93b21bd412b4c87fe696032e1fd4.mesh"
 
 [deps]
 
-files=["res://.godot/imported/Computer_Monitor.obj-a65dbdf49e695e23343328d85158ff12.mesh"]
+files=["res://.godot/imported/Computer_Monitor.obj-1c6d93b21bd412b4c87fe696032e1fd4.mesh"]
 
 source_file="res://assets/props/OBJ/Separated/Computer_Monitor.obj"
-dest_files=["res://.godot/imported/Computer_Monitor.obj-a65dbdf49e695e23343328d85158ff12.mesh", "res://.godot/imported/Computer_Monitor.obj-a65dbdf49e695e23343328d85158ff12.mesh"]
+dest_files=["res://.godot/imported/Computer_Monitor.obj-1c6d93b21bd412b4c87fe696032e1fd4.mesh", "res://.godot/imported/Computer_Monitor.obj-1c6d93b21bd412b4c87fe696032e1fd4.mesh"]
 
 [params]
 

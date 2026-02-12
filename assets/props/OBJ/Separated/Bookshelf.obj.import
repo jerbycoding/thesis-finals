@@ -4,14 +4,14 @@ importer="wavefront_obj"
 importer_version=1
 type="Mesh"
 uid="uid://bfswfs6kux3ja"
-path="res://.godot/imported/Bookshelf.obj-6b5202ef5d7fa83f41defd9d510ec960.mesh"
+path="res://.godot/imported/Bookshelf.obj-ed7cf809982a938dfc5046031c1ff977.mesh"
 
 [deps]
 
-files=["res://.godot/imported/Bookshelf.obj-6b5202ef5d7fa83f41defd9d510ec960.mesh"]
+files=["res://.godot/imported/Bookshelf.obj-ed7cf809982a938dfc5046031c1ff977.mesh"]
 
 source_file="res://assets/props/OBJ/Separated/Bookshelf.obj"
-dest_files=["res://.godot/imported/Bookshelf.obj-6b5202ef5d7fa83f41defd9d510ec960.mesh", "res://.godot/imported/Bookshelf.obj-6b5202ef5d7fa83f41defd9d510ec960.mesh"]
+dest_files=["res://.godot/imported/Bookshelf.obj-ed7cf809982a938dfc5046031c1ff977.mesh", "res://.godot/imported/Bookshelf.obj-ed7cf809982a938dfc5046031c1ff977.mesh"]
 
 [params]
 

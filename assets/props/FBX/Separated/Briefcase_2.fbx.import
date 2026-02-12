@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://c8gl1w10vm86n"
-path="res://.godot/imported/Briefcase_2.fbx-57b37d9df142f0ea66a014aa8efa416a.scn"
+path="res://.godot/imported/Briefcase_2.fbx-3b2e25bb37952e2f5d3813a08df69fda.scn"
 
 [deps]
 
 source_file="res://assets/props/FBX/Separated/Briefcase_2.fbx"
-dest_files=["res://.godot/imported/Briefcase_2.fbx-57b37d9df142f0ea66a014aa8efa416a.scn"]
+dest_files=["res://.godot/imported/Briefcase_2.fbx-3b2e25bb37952e2f5d3813a08df69fda.scn"]
 
 [params]
 

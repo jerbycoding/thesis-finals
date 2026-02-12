@@ -4,14 +4,14 @@ importer="wavefront_obj"
 importer_version=1
 type="Mesh"
 uid="uid://2fm1wqh58cas"
-path="res://.godot/imported/Fruit_Apple.obj-da8dd5860d122bdf789891ed9207039e.mesh"
+path="res://.godot/imported/Fruit_Apple.obj-d09c172f5abfcd0e1bfd2c3fe4a3ae3f.mesh"
 
 [deps]
 
-files=["res://.godot/imported/Fruit_Apple.obj-da8dd5860d122bdf789891ed9207039e.mesh"]
+files=["res://.godot/imported/Fruit_Apple.obj-d09c172f5abfcd0e1bfd2c3fe4a3ae3f.mesh"]
 
 source_file="res://assets/props/OBJ/Separated/Fruit_Apple.obj"
-dest_files=["res://.godot/imported/Fruit_Apple.obj-da8dd5860d122bdf789891ed9207039e.mesh", "res://.godot/imported/Fruit_Apple.obj-da8dd5860d122bdf789891ed9207039e.mesh"]
+dest_files=["res://.godot/imported/Fruit_Apple.obj-d09c172f5abfcd0e1bfd2c3fe4a3ae3f.mesh", "res://.godot/imported/Fruit_Apple.obj-d09c172f5abfcd0e1bfd2c3fe4a3ae3f.mesh"]
 
 [params]
 

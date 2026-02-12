@@ -4,14 +4,14 @@ importer="wavefront_obj"
 importer_version=1
 type="Mesh"
 uid="uid://craqrmo3c3r71"
-path="res://.godot/imported/Wall_Standard_Door.obj-95b1c432abcb27e62c03b5ea320df499.mesh"
+path="res://.godot/imported/Wall_Standard_Door.obj-522d7796fc8cc94b707e104cdd3a277e.mesh"
 
 [deps]
 
-files=["res://.godot/imported/Wall_Standard_Door.obj-95b1c432abcb27e62c03b5ea320df499.mesh"]
+files=["res://.godot/imported/Wall_Standard_Door.obj-522d7796fc8cc94b707e104cdd3a277e.mesh"]
 
 source_file="res://assets/props/OBJ/Separated/Wall_Standard_Door.obj"
-dest_files=["res://.godot/imported/Wall_Standard_Door.obj-95b1c432abcb27e62c03b5ea320df499.mesh", "res://.godot/imported/Wall_Standard_Door.obj-95b1c432abcb27e62c03b5ea320df499.mesh"]
+dest_files=["res://.godot/imported/Wall_Standard_Door.obj-522d7796fc8cc94b707e104cdd3a277e.mesh", "res://.godot/imported/Wall_Standard_Door.obj-522d7796fc8cc94b707e104cdd3a277e.mesh"]
 
 [params]
 

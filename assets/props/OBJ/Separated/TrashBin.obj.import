@@ -4,14 +4,14 @@ importer="wavefront_obj"
 importer_version=1
 type="Mesh"
 uid="uid://clhiwauaicyet"
-path="res://.godot/imported/TrashBin.obj-ced6793e4b6b5d3310b4f379fec72691.mesh"
+path="res://.godot/imported/TrashBin.obj-c95ead325fa9ca674fc886caab662e3b.mesh"
 
 [deps]
 
-files=["res://.godot/imported/TrashBin.obj-ced6793e4b6b5d3310b4f379fec72691.mesh"]
+files=["res://.godot/imported/TrashBin.obj-c95ead325fa9ca674fc886caab662e3b.mesh"]
 
 source_file="res://assets/props/OBJ/Separated/TrashBin.obj"
-dest_files=["res://.godot/imported/TrashBin.obj-ced6793e4b6b5d3310b4f379fec72691.mesh", "res://.godot/imported/TrashBin.obj-ced6793e4b6b5d3310b4f379fec72691.mesh"]
+dest_files=["res://.godot/imported/TrashBin.obj-c95ead325fa9ca674fc886caab662e3b.mesh", "res://.godot/imported/TrashBin.obj-c95ead325fa9ca674fc886caab662e3b.mesh"]
 
 [params]
 

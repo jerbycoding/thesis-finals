@@ -4,14 +4,14 @@ importer="wavefront_obj"
 importer_version=1
 type="Mesh"
 uid="uid://djtq0x75yfa6r"
-path="res://.godot/imported/Lamp_1_Small.obj-c94b0536732548c4a61592cbbfdeb1b5.mesh"
+path="res://.godot/imported/Lamp_1_Small.obj-934ddc0831a661f99eb73f6ec3db1b5b.mesh"
 
 [deps]
 
-files=["res://.godot/imported/Lamp_1_Small.obj-c94b0536732548c4a61592cbbfdeb1b5.mesh"]
+files=["res://.godot/imported/Lamp_1_Small.obj-934ddc0831a661f99eb73f6ec3db1b5b.mesh"]
 
 source_file="res://assets/props/OBJ/Separated/Lamp_1_Small.obj"
-dest_files=["res://.godot/imported/Lamp_1_Small.obj-c94b0536732548c4a61592cbbfdeb1b5.mesh", "res://.godot/imported/Lamp_1_Small.obj-c94b0536732548c4a61592cbbfdeb1b5.mesh"]
+dest_files=["res://.godot/imported/Lamp_1_Small.obj-934ddc0831a661f99eb73f6ec3db1b5b.mesh", "res://.godot/imported/Lamp_1_Small.obj-934ddc0831a661f99eb73f6ec3db1b5b.mesh"]
 
 [params]
 

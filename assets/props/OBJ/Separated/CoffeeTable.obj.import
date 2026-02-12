@@ -4,14 +4,14 @@ importer="wavefront_obj"
 importer_version=1
 type="Mesh"
 uid="uid://dvkvxuse8mlhj"
-path="res://.godot/imported/CoffeeTable.obj-36d836133b7f14c936f6cbd99507f4f7.mesh"
+path="res://.godot/imported/CoffeeTable.obj-5910c393bb790005f42057501b461774.mesh"
 
 [deps]
 
-files=["res://.godot/imported/CoffeeTable.obj-36d836133b7f14c936f6cbd99507f4f7.mesh"]
+files=["res://.godot/imported/CoffeeTable.obj-5910c393bb790005f42057501b461774.mesh"]
 
 source_file="res://assets/props/OBJ/Separated/CoffeeTable.obj"
-dest_files=["res://.godot/imported/CoffeeTable.obj-36d836133b7f14c936f6cbd99507f4f7.mesh", "res://.godot/imported/CoffeeTable.obj-36d836133b7f14c936f6cbd99507f4f7.mesh"]
+dest_files=["res://.godot/imported/CoffeeTable.obj-5910c393bb790005f42057501b461774.mesh", "res://.godot/imported/CoffeeTable.obj-5910c393bb790005f42057501b461774.mesh"]
 
 [params]
 

@@ -4,14 +4,14 @@ importer="wavefront_obj"
 importer_version=1
 type="Mesh"
 uid="uid://b33h4j2m5rdya"
-path="res://.godot/imported/Chair_Office_Base_A.obj-53459379eced46b22886df9074646ce1.mesh"
+path="res://.godot/imported/Chair_Office_Base_A.obj-02f9d288e082d1630d87bfb022f0efc9.mesh"
 
 [deps]
 
-files=["res://.godot/imported/Chair_Office_Base_A.obj-53459379eced46b22886df9074646ce1.mesh"]
+files=["res://.godot/imported/Chair_Office_Base_A.obj-02f9d288e082d1630d87bfb022f0efc9.mesh"]
 
 source_file="res://assets/props/OBJ/Separated/Chair_Office_Base_A.obj"
-dest_files=["res://.godot/imported/Chair_Office_Base_A.obj-53459379eced46b22886df9074646ce1.mesh", "res://.godot/imported/Chair_Office_Base_A.obj-53459379eced46b22886df9074646ce1.mesh"]
+dest_files=["res://.godot/imported/Chair_Office_Base_A.obj-02f9d288e082d1630d87bfb022f0efc9.mesh", "res://.godot/imported/Chair_Office_Base_A.obj-02f9d288e082d1630d87bfb022f0efc9.mesh"]
 
 [params]
 

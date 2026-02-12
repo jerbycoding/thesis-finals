@@ -4,14 +4,14 @@ importer="wavefront_obj"
 importer_version=1
 type="Mesh"
 uid="uid://cw75iaesnpyue"
-path="res://.godot/imported/Table_Box.obj-f292dfb7cc1c18b471a542979e4670eb.mesh"
+path="res://.godot/imported/Table_Box.obj-415352740c5abe2d2ae5d537e422f251.mesh"
 
 [deps]
 
-files=["res://.godot/imported/Table_Box.obj-f292dfb7cc1c18b471a542979e4670eb.mesh"]
+files=["res://.godot/imported/Table_Box.obj-415352740c5abe2d2ae5d537e422f251.mesh"]
 
 source_file="res://assets/props/OBJ/Separated/Table_Box.obj"
-dest_files=["res://.godot/imported/Table_Box.obj-f292dfb7cc1c18b471a542979e4670eb.mesh", "res://.godot/imported/Table_Box.obj-f292dfb7cc1c18b471a542979e4670eb.mesh"]
+dest_files=["res://.godot/imported/Table_Box.obj-415352740c5abe2d2ae5d537e422f251.mesh", "res://.godot/imported/Table_Box.obj-415352740c5abe2d2ae5d537e422f251.mesh"]
 
 [params]
 

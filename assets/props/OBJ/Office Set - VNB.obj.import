@@ -4,14 +4,14 @@ importer="wavefront_obj"
 importer_version=1
 type="Mesh"
 uid="uid://dktlls5jvlr8u"
-path="res://.godot/imported/Office Set - VNB.obj-0cd578caac325c5cbcb6488d0f091ad8.mesh"
+path="res://.godot/imported/Office Set - VNB.obj-73c8323660b991aa834d8b9f30b3ba6a.mesh"
 
 [deps]
 
-files=["res://.godot/imported/Office Set - VNB.obj-0cd578caac325c5cbcb6488d0f091ad8.mesh"]
+files=["res://.godot/imported/Office Set - VNB.obj-73c8323660b991aa834d8b9f30b3ba6a.mesh"]
 
 source_file="res://assets/props/OBJ/Office Set - VNB.obj"
-dest_files=["res://.godot/imported/Office Set - VNB.obj-0cd578caac325c5cbcb6488d0f091ad8.mesh", "res://.godot/imported/Office Set - VNB.obj-0cd578caac325c5cbcb6488d0f091ad8.mesh"]
+dest_files=["res://.godot/imported/Office Set - VNB.obj-73c8323660b991aa834d8b9f30b3ba6a.mesh", "res://.godot/imported/Office Set - VNB.obj-73c8323660b991aa834d8b9f30b3ba6a.mesh"]
 
 [params]
 

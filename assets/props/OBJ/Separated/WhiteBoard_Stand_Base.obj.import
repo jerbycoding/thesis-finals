@@ -4,14 +4,14 @@ importer="wavefront_obj"
 importer_version=1
 type="Mesh"
 uid="uid://bs36sffqjec0c"
-path="res://.godot/imported/WhiteBoard_Stand_Base.obj-74c39f0332199b6e1fdc60d29fe8ef90.mesh"
+path="res://.godot/imported/WhiteBoard_Stand_Base.obj-81fd4b57b3c1d083baccbd31f2e1bda0.mesh"
 
 [deps]
 
-files=["res://.godot/imported/WhiteBoard_Stand_Base.obj-74c39f0332199b6e1fdc60d29fe8ef90.mesh"]
+files=["res://.godot/imported/WhiteBoard_Stand_Base.obj-81fd4b57b3c1d083baccbd31f2e1bda0.mesh"]
 
 source_file="res://assets/props/OBJ/Separated/WhiteBoard_Stand_Base.obj"
-dest_files=["res://.godot/imported/WhiteBoard_Stand_Base.obj-74c39f0332199b6e1fdc60d29fe8ef90.mesh", "res://.godot/imported/WhiteBoard_Stand_Base.obj-74c39f0332199b6e1fdc60d29fe8ef90.mesh"]
+dest_files=["res://.godot/imported/WhiteBoard_Stand_Base.obj-81fd4b57b3c1d083baccbd31f2e1bda0.mesh", "res://.godot/imported/WhiteBoard_Stand_Base.obj-81fd4b57b3c1d083baccbd31f2e1bda0.mesh"]
 
 [params]
 

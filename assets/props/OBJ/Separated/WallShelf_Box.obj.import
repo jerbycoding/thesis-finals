@@ -4,14 +4,14 @@ importer="wavefront_obj"
 importer_version=1
 type="Mesh"
 uid="uid://ctlqllq8r2c1"
-path="res://.godot/imported/WallShelf_Box.obj-115c3bf3fce331da8a82cdea5d64689f.mesh"
+path="res://.godot/imported/WallShelf_Box.obj-8c93a9ef681c79f3ee1103423cf8c861.mesh"
 
 [deps]
 
-files=["res://.godot/imported/WallShelf_Box.obj-115c3bf3fce331da8a82cdea5d64689f.mesh"]
+files=["res://.godot/imported/WallShelf_Box.obj-8c93a9ef681c79f3ee1103423cf8c861.mesh"]
 
 source_file="res://assets/props/OBJ/Separated/WallShelf_Box.obj"
-dest_files=["res://.godot/imported/WallShelf_Box.obj-115c3bf3fce331da8a82cdea5d64689f.mesh", "res://.godot/imported/WallShelf_Box.obj-115c3bf3fce331da8a82cdea5d64689f.mesh"]
+dest_files=["res://.godot/imported/WallShelf_Box.obj-8c93a9ef681c79f3ee1103423cf8c861.mesh", "res://.godot/imported/WallShelf_Box.obj-8c93a9ef681c79f3ee1103423cf8c861.mesh"]
 
 [params]
 

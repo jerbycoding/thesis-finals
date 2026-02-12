@@ -4,14 +4,14 @@ importer="wavefront_obj"
 importer_version=1
 type="Mesh"
 uid="uid://j86shkioimqt"
-path="res://.godot/imported/Clock.obj-b73ec0296697a6464499db5e22b4852c.mesh"
+path="res://.godot/imported/Clock.obj-47b25660c3a35d6fc85af683dac9be32.mesh"
 
 [deps]
 
-files=["res://.godot/imported/Clock.obj-b73ec0296697a6464499db5e22b4852c.mesh"]
+files=["res://.godot/imported/Clock.obj-47b25660c3a35d6fc85af683dac9be32.mesh"]
 
 source_file="res://assets/props/OBJ/Separated/Clock.obj"
-dest_files=["res://.godot/imported/Clock.obj-b73ec0296697a6464499db5e22b4852c.mesh", "res://.godot/imported/Clock.obj-b73ec0296697a6464499db5e22b4852c.mesh"]
+dest_files=["res://.godot/imported/Clock.obj-47b25660c3a35d6fc85af683dac9be32.mesh", "res://.godot/imported/Clock.obj-47b25660c3a35d6fc85af683dac9be32.mesh"]
 
 [params]
 

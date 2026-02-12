@@ -4,14 +4,14 @@ importer="wavefront_obj"
 importer_version=1
 type="Mesh"
 uid="uid://b0inrjrin025c"
-path="res://.godot/imported/Microwave_New_B.obj-b10b31a8d9c8834a9111a2da7ff9b259.mesh"
+path="res://.godot/imported/Microwave_New_B.obj-ecca305c2b9c53d75417eeac1d94d75c.mesh"
 
 [deps]
 
-files=["res://.godot/imported/Microwave_New_B.obj-b10b31a8d9c8834a9111a2da7ff9b259.mesh"]
+files=["res://.godot/imported/Microwave_New_B.obj-ecca305c2b9c53d75417eeac1d94d75c.mesh"]
 
 source_file="res://assets/props/OBJ/Separated/Microwave_New_B.obj"
-dest_files=["res://.godot/imported/Microwave_New_B.obj-b10b31a8d9c8834a9111a2da7ff9b259.mesh", "res://.godot/imported/Microwave_New_B.obj-b10b31a8d9c8834a9111a2da7ff9b259.mesh"]
+dest_files=["res://.godot/imported/Microwave_New_B.obj-ecca305c2b9c53d75417eeac1d94d75c.mesh", "res://.godot/imported/Microwave_New_B.obj-ecca305c2b9c53d75417eeac1d94d75c.mesh"]
 
 [params]
 

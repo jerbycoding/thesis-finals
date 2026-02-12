@@ -4,14 +4,14 @@ importer="wavefront_obj"
 importer_version=1
 type="Mesh"
 uid="uid://cpd4v1o2ec7yh"
-path="res://.godot/imported/Tape.obj-e27d9ea46a53ace8a27dfe554990b920.mesh"
+path="res://.godot/imported/Tape.obj-8404fe7e0022174c0c7a58f06129f1e7.mesh"
 
 [deps]
 
-files=["res://.godot/imported/Tape.obj-e27d9ea46a53ace8a27dfe554990b920.mesh"]
+files=["res://.godot/imported/Tape.obj-8404fe7e0022174c0c7a58f06129f1e7.mesh"]
 
 source_file="res://assets/props/OBJ/Separated/Tape.obj"
-dest_files=["res://.godot/imported/Tape.obj-e27d9ea46a53ace8a27dfe554990b920.mesh", "res://.godot/imported/Tape.obj-e27d9ea46a53ace8a27dfe554990b920.mesh"]
+dest_files=["res://.godot/imported/Tape.obj-8404fe7e0022174c0c7a58f06129f1e7.mesh", "res://.godot/imported/Tape.obj-8404fe7e0022174c0c7a58f06129f1e7.mesh"]
 
 [params]
 

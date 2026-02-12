@@ -4,14 +4,14 @@ importer="wavefront_obj"
 importer_version=1
 type="Mesh"
 uid="uid://br7jha7pwocob"
-path="res://.godot/imported/Projector.obj-216088431903e9b84664d37a95dfb4d9.mesh"
+path="res://.godot/imported/Projector.obj-c546d00893ef9c0ff0f7aad8212c864d.mesh"
 
 [deps]
 
-files=["res://.godot/imported/Projector.obj-216088431903e9b84664d37a95dfb4d9.mesh"]
+files=["res://.godot/imported/Projector.obj-c546d00893ef9c0ff0f7aad8212c864d.mesh"]
 
 source_file="res://assets/props/OBJ/Separated/Projector.obj"
-dest_files=["res://.godot/imported/Projector.obj-216088431903e9b84664d37a95dfb4d9.mesh", "res://.godot/imported/Projector.obj-216088431903e9b84664d37a95dfb4d9.mesh"]
+dest_files=["res://.godot/imported/Projector.obj-c546d00893ef9c0ff0f7aad8212c864d.mesh", "res://.godot/imported/Projector.obj-c546d00893ef9c0ff0f7aad8212c864d.mesh"]
 
 [params]
 

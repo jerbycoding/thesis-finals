@@ -4,14 +4,14 @@ importer="wavefront_obj"
 importer_version=1
 type="Mesh"
 uid="uid://t43co5wwqjwb"
-path="res://.godot/imported/Shelf_Door_B.obj-7622e98f086585e64fee3df8a38c6eca.mesh"
+path="res://.godot/imported/Shelf_Door_B.obj-bdf7d66d5a53d9dac0d60cd292f7aadf.mesh"
 
 [deps]
 
-files=["res://.godot/imported/Shelf_Door_B.obj-7622e98f086585e64fee3df8a38c6eca.mesh"]
+files=["res://.godot/imported/Shelf_Door_B.obj-bdf7d66d5a53d9dac0d60cd292f7aadf.mesh"]
 
 source_file="res://assets/props/OBJ/Separated/Shelf_Door_B.obj"
-dest_files=["res://.godot/imported/Shelf_Door_B.obj-7622e98f086585e64fee3df8a38c6eca.mesh", "res://.godot/imported/Shelf_Door_B.obj-7622e98f086585e64fee3df8a38c6eca.mesh"]
+dest_files=["res://.godot/imported/Shelf_Door_B.obj-bdf7d66d5a53d9dac0d60cd292f7aadf.mesh", "res://.godot/imported/Shelf_Door_B.obj-bdf7d66d5a53d9dac0d60cd292f7aadf.mesh"]
 
 [params]
 

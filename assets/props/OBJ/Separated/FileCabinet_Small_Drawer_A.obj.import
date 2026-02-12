@@ -4,14 +4,14 @@ importer="wavefront_obj"
 importer_version=1
 type="Mesh"
 uid="uid://0ayjwi5m5mdm"
-path="res://.godot/imported/FileCabinet_Small_Drawer_A.obj-637fad7d3c30a1bb7844fed698704c7e.mesh"
+path="res://.godot/imported/FileCabinet_Small_Drawer_A.obj-085d42bc6e5278dd2368a1c8eaa02806.mesh"
 
 [deps]
 
-files=["res://.godot/imported/FileCabinet_Small_Drawer_A.obj-637fad7d3c30a1bb7844fed698704c7e.mesh"]
+files=["res://.godot/imported/FileCabinet_Small_Drawer_A.obj-085d42bc6e5278dd2368a1c8eaa02806.mesh"]
 
 source_file="res://assets/props/OBJ/Separated/FileCabinet_Small_Drawer_A.obj"
-dest_files=["res://.godot/imported/FileCabinet_Small_Drawer_A.obj-637fad7d3c30a1bb7844fed698704c7e.mesh", "res://.godot/imported/FileCabinet_Small_Drawer_A.obj-637fad7d3c30a1bb7844fed698704c7e.mesh"]
+dest_files=["res://.godot/imported/FileCabinet_Small_Drawer_A.obj-085d42bc6e5278dd2368a1c8eaa02806.mesh", "res://.godot/imported/FileCabinet_Small_Drawer_A.obj-085d42bc6e5278dd2368a1c8eaa02806.mesh"]
 
 [params]
 

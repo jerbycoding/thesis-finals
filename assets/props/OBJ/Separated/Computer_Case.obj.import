@@ -4,14 +4,14 @@ importer="wavefront_obj"
 importer_version=1
 type="Mesh"
 uid="uid://bm487n1dx38sp"
-path="res://.godot/imported/Computer_Case.obj-174ab0ab1b92a489ac6313c2e1ac5abc.mesh"
+path="res://.godot/imported/Computer_Case.obj-4652ba2b65c3b9edef60112e93607a73.mesh"
 
 [deps]
 
-files=["res://.godot/imported/Computer_Case.obj-174ab0ab1b92a489ac6313c2e1ac5abc.mesh"]
+files=["res://.godot/imported/Computer_Case.obj-4652ba2b65c3b9edef60112e93607a73.mesh"]
 
 source_file="res://assets/props/OBJ/Separated/Computer_Case.obj"
-dest_files=["res://.godot/imported/Computer_Case.obj-174ab0ab1b92a489ac6313c2e1ac5abc.mesh", "res://.godot/imported/Computer_Case.obj-174ab0ab1b92a489ac6313c2e1ac5abc.mesh"]
+dest_files=["res://.godot/imported/Computer_Case.obj-4652ba2b65c3b9edef60112e93607a73.mesh", "res://.godot/imported/Computer_Case.obj-4652ba2b65c3b9edef60112e93607a73.mesh"]
 
 [params]
 

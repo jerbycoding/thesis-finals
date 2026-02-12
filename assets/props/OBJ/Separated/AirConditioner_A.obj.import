@@ -4,14 +4,14 @@ importer="wavefront_obj"
 importer_version=1
 type="Mesh"
 uid="uid://bdolbr0ib8l52"
-path="res://.godot/imported/AirConditioner_A.obj-9f187139d34eac2851d11a6a95a5b340.mesh"
+path="res://.godot/imported/AirConditioner_A.obj-d0e7214771f4f1138300bfddfa1faecb.mesh"
 
 [deps]
 
-files=["res://.godot/imported/AirConditioner_A.obj-9f187139d34eac2851d11a6a95a5b340.mesh"]
+files=["res://.godot/imported/AirConditioner_A.obj-d0e7214771f4f1138300bfddfa1faecb.mesh"]
 
 source_file="res://assets/props/OBJ/Separated/AirConditioner_A.obj"
-dest_files=["res://.godot/imported/AirConditioner_A.obj-9f187139d34eac2851d11a6a95a5b340.mesh", "res://.godot/imported/AirConditioner_A.obj-9f187139d34eac2851d11a6a95a5b340.mesh"]
+dest_files=["res://.godot/imported/AirConditioner_A.obj-d0e7214771f4f1138300bfddfa1faecb.mesh", "res://.godot/imported/AirConditioner_A.obj-d0e7214771f4f1138300bfddfa1faecb.mesh"]
 
 [params]
 

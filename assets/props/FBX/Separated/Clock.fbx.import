@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://bdvy7nngneys2"
-path="res://.godot/imported/Clock.fbx-8a8bae2ef76354a841f072d4cba8a983.scn"
+path="res://.godot/imported/Clock.fbx-5907e4553692eeff7bd36008f0ea8193.scn"
 
 [deps]
 
 source_file="res://assets/props/FBX/Separated/Clock.fbx"
-dest_files=["res://.godot/imported/Clock.fbx-8a8bae2ef76354a841f072d4cba8a983.scn"]
+dest_files=["res://.godot/imported/Clock.fbx-5907e4553692eeff7bd36008f0ea8193.scn"]
 
 [params]
 

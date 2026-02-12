@@ -4,14 +4,14 @@ importer="wavefront_obj"
 importer_version=1
 type="Mesh"
 uid="uid://4lrx467knotc"
-path="res://.godot/imported/Briefcase_2.obj-6e941797570d997e657f1f1ebcda089f.mesh"
+path="res://.godot/imported/Briefcase_2.obj-97f3a6ffeb736b28c21f2842849c3d16.mesh"
 
 [deps]
 
-files=["res://.godot/imported/Briefcase_2.obj-6e941797570d997e657f1f1ebcda089f.mesh"]
+files=["res://.godot/imported/Briefcase_2.obj-97f3a6ffeb736b28c21f2842849c3d16.mesh"]
 
 source_file="res://assets/props/OBJ/Separated/Briefcase_2.obj"
-dest_files=["res://.godot/imported/Briefcase_2.obj-6e941797570d997e657f1f1ebcda089f.mesh", "res://.godot/imported/Briefcase_2.obj-6e941797570d997e657f1f1ebcda089f.mesh"]
+dest_files=["res://.godot/imported/Briefcase_2.obj-97f3a6ffeb736b28c21f2842849c3d16.mesh", "res://.godot/imported/Briefcase_2.obj-97f3a6ffeb736b28c21f2842849c3d16.mesh"]
 
 [params]
 

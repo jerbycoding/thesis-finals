@@ -4,14 +4,14 @@ importer="wavefront_obj"
 importer_version=1
 type="Mesh"
 uid="uid://ba6q477encuqt"
-path="res://.godot/imported/Marker.obj-8a298a34a58b5a87da34799a63a5839a.mesh"
+path="res://.godot/imported/Marker.obj-1346ac1f467be08e77c175ade2b0f2e5.mesh"
 
 [deps]
 
-files=["res://.godot/imported/Marker.obj-8a298a34a58b5a87da34799a63a5839a.mesh"]
+files=["res://.godot/imported/Marker.obj-1346ac1f467be08e77c175ade2b0f2e5.mesh"]
 
 source_file="res://assets/props/OBJ/Separated/Marker.obj"
-dest_files=["res://.godot/imported/Marker.obj-8a298a34a58b5a87da34799a63a5839a.mesh", "res://.godot/imported/Marker.obj-8a298a34a58b5a87da34799a63a5839a.mesh"]
+dest_files=["res://.godot/imported/Marker.obj-1346ac1f467be08e77c175ade2b0f2e5.mesh", "res://.godot/imported/Marker.obj-1346ac1f467be08e77c175ade2b0f2e5.mesh"]
 
 [params]
 

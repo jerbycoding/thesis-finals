@@ -4,14 +4,14 @@ importer="wavefront_obj"
 importer_version=1
 type="Mesh"
 uid="uid://c8aiu8h51vigi"
-path="res://.godot/imported/Wall_Standard_Sep_2.obj-670bd56652c0165b228c2c7773333848.mesh"
+path="res://.godot/imported/Wall_Standard_Sep_2.obj-57267d3c4382772d17751c49841dbeaf.mesh"
 
 [deps]
 
-files=["res://.godot/imported/Wall_Standard_Sep_2.obj-670bd56652c0165b228c2c7773333848.mesh"]
+files=["res://.godot/imported/Wall_Standard_Sep_2.obj-57267d3c4382772d17751c49841dbeaf.mesh"]
 
 source_file="res://assets/props/OBJ/Separated/Wall_Standard_Sep_2.obj"
-dest_files=["res://.godot/imported/Wall_Standard_Sep_2.obj-670bd56652c0165b228c2c7773333848.mesh", "res://.godot/imported/Wall_Standard_Sep_2.obj-670bd56652c0165b228c2c7773333848.mesh"]
+dest_files=["res://.godot/imported/Wall_Standard_Sep_2.obj-57267d3c4382772d17751c49841dbeaf.mesh", "res://.godot/imported/Wall_Standard_Sep_2.obj-57267d3c4382772d17751c49841dbeaf.mesh"]
 
 [params]
 

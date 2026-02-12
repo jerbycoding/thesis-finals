@@ -4,14 +4,14 @@ importer="wavefront_obj"
 importer_version=1
 type="Mesh"
 uid="uid://mc5e5lrum7kh"
-path="res://.godot/imported/Rug_A.obj-905723ae9348b60c5339fedfbadeb998.mesh"
+path="res://.godot/imported/Rug_A.obj-cc450c7b3e8f93b8c672e300d537cde9.mesh"
 
 [deps]
 
-files=["res://.godot/imported/Rug_A.obj-905723ae9348b60c5339fedfbadeb998.mesh"]
+files=["res://.godot/imported/Rug_A.obj-cc450c7b3e8f93b8c672e300d537cde9.mesh"]
 
 source_file="res://assets/props/OBJ/Separated/Rug_A.obj"
-dest_files=["res://.godot/imported/Rug_A.obj-905723ae9348b60c5339fedfbadeb998.mesh", "res://.godot/imported/Rug_A.obj-905723ae9348b60c5339fedfbadeb998.mesh"]
+dest_files=["res://.godot/imported/Rug_A.obj-cc450c7b3e8f93b8c672e300d537cde9.mesh", "res://.godot/imported/Rug_A.obj-cc450c7b3e8f93b8c672e300d537cde9.mesh"]
 
 [params]
 

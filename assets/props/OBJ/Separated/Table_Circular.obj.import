@@ -4,14 +4,14 @@ importer="wavefront_obj"
 importer_version=1
 type="Mesh"
 uid="uid://casjdnky3ioy6"
-path="res://.godot/imported/Table_Circular.obj-f7c64d6a3e49254c771dbf7eecf6fe59.mesh"
+path="res://.godot/imported/Table_Circular.obj-1c79662044b2e135697bacfb3368baec.mesh"
 
 [deps]
 
-files=["res://.godot/imported/Table_Circular.obj-f7c64d6a3e49254c771dbf7eecf6fe59.mesh"]
+files=["res://.godot/imported/Table_Circular.obj-1c79662044b2e135697bacfb3368baec.mesh"]
 
 source_file="res://assets/props/OBJ/Separated/Table_Circular.obj"
-dest_files=["res://.godot/imported/Table_Circular.obj-f7c64d6a3e49254c771dbf7eecf6fe59.mesh", "res://.godot/imported/Table_Circular.obj-f7c64d6a3e49254c771dbf7eecf6fe59.mesh"]
+dest_files=["res://.godot/imported/Table_Circular.obj-1c79662044b2e135697bacfb3368baec.mesh", "res://.godot/imported/Table_Circular.obj-1c79662044b2e135697bacfb3368baec.mesh"]
 
 [params]
 

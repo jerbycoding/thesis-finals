@@ -4,14 +4,14 @@ importer="wavefront_obj"
 importer_version=1
 type="Mesh"
 uid="uid://deqwlxcmejc3r"
-path="res://.godot/imported/Nature_Deco_Bamboo1.obj-837030aa4404ad72a5d5733e498e1f87.mesh"
+path="res://.godot/imported/Nature_Deco_Bamboo1.obj-0464ffa69c32e79f73a29f6205e59d84.mesh"
 
 [deps]
 
-files=["res://.godot/imported/Nature_Deco_Bamboo1.obj-837030aa4404ad72a5d5733e498e1f87.mesh"]
+files=["res://.godot/imported/Nature_Deco_Bamboo1.obj-0464ffa69c32e79f73a29f6205e59d84.mesh"]
 
 source_file="res://assets/props/OBJ/Separated/Nature_Deco_Bamboo1.obj"
-dest_files=["res://.godot/imported/Nature_Deco_Bamboo1.obj-837030aa4404ad72a5d5733e498e1f87.mesh", "res://.godot/imported/Nature_Deco_Bamboo1.obj-837030aa4404ad72a5d5733e498e1f87.mesh"]
+dest_files=["res://.godot/imported/Nature_Deco_Bamboo1.obj-0464ffa69c32e79f73a29f6205e59d84.mesh", "res://.godot/imported/Nature_Deco_Bamboo1.obj-0464ffa69c32e79f73a29f6205e59d84.mesh"]
 
 [params]
 

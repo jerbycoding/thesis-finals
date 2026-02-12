@@ -4,14 +4,14 @@ importer="wavefront_obj"
 importer_version=1
 type="Mesh"
 uid="uid://du706usecoith"
-path="res://.godot/imported/FileCabinet_Standard_Drawer.obj-a221d9d1bed330c0ca1c9f7c58d1af07.mesh"
+path="res://.godot/imported/FileCabinet_Standard_Drawer.obj-99b67e4635f836e3ab8494d1d77c179b.mesh"
 
 [deps]
 
-files=["res://.godot/imported/FileCabinet_Standard_Drawer.obj-a221d9d1bed330c0ca1c9f7c58d1af07.mesh"]
+files=["res://.godot/imported/FileCabinet_Standard_Drawer.obj-99b67e4635f836e3ab8494d1d77c179b.mesh"]
 
 source_file="res://assets/props/OBJ/Separated/FileCabinet_Standard_Drawer.obj"
-dest_files=["res://.godot/imported/FileCabinet_Standard_Drawer.obj-a221d9d1bed330c0ca1c9f7c58d1af07.mesh", "res://.godot/imported/FileCabinet_Standard_Drawer.obj-a221d9d1bed330c0ca1c9f7c58d1af07.mesh"]
+dest_files=["res://.godot/imported/FileCabinet_Standard_Drawer.obj-99b67e4635f836e3ab8494d1d77c179b.mesh", "res://.godot/imported/FileCabinet_Standard_Drawer.obj-99b67e4635f836e3ab8494d1d77c179b.mesh"]
 
 [params]
 

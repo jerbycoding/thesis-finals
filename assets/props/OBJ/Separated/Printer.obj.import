@@ -4,14 +4,14 @@ importer="wavefront_obj"
 importer_version=1
 type="Mesh"
 uid="uid://3ywr5v20jsk1"
-path="res://.godot/imported/Printer.obj-f078fc51072007d63a0f833c42732853.mesh"
+path="res://.godot/imported/Printer.obj-bbb3619f53ccddbbdc28e613635d6e8f.mesh"
 
 [deps]
 
-files=["res://.godot/imported/Printer.obj-f078fc51072007d63a0f833c42732853.mesh"]
+files=["res://.godot/imported/Printer.obj-bbb3619f53ccddbbdc28e613635d6e8f.mesh"]
 
 source_file="res://assets/props/OBJ/Separated/Printer.obj"
-dest_files=["res://.godot/imported/Printer.obj-f078fc51072007d63a0f833c42732853.mesh", "res://.godot/imported/Printer.obj-f078fc51072007d63a0f833c42732853.mesh"]
+dest_files=["res://.godot/imported/Printer.obj-bbb3619f53ccddbbdc28e613635d6e8f.mesh", "res://.godot/imported/Printer.obj-bbb3619f53ccddbbdc28e613635d6e8f.mesh"]
 
 [params]
 

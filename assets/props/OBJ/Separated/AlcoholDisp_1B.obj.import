@@ -4,14 +4,14 @@ importer="wavefront_obj"
 importer_version=1
 type="Mesh"
 uid="uid://jg7155pqhn4q"
-path="res://.godot/imported/AlcoholDisp_1B.obj-cf6f171a0c66e8d1602f1bfe5657e0d2.mesh"
+path="res://.godot/imported/AlcoholDisp_1B.obj-4f5a24074f03e3a14b3192faac88618f.mesh"
 
 [deps]
 
-files=["res://.godot/imported/AlcoholDisp_1B.obj-cf6f171a0c66e8d1602f1bfe5657e0d2.mesh"]
+files=["res://.godot/imported/AlcoholDisp_1B.obj-4f5a24074f03e3a14b3192faac88618f.mesh"]
 
 source_file="res://assets/props/OBJ/Separated/AlcoholDisp_1B.obj"
-dest_files=["res://.godot/imported/AlcoholDisp_1B.obj-cf6f171a0c66e8d1602f1bfe5657e0d2.mesh", "res://.godot/imported/AlcoholDisp_1B.obj-cf6f171a0c66e8d1602f1bfe5657e0d2.mesh"]
+dest_files=["res://.godot/imported/AlcoholDisp_1B.obj-4f5a24074f03e3a14b3192faac88618f.mesh", "res://.godot/imported/AlcoholDisp_1B.obj-4f5a24074f03e3a14b3192faac88618f.mesh"]
 
 [params]
 

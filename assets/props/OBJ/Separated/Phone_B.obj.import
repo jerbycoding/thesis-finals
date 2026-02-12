@@ -4,14 +4,14 @@ importer="wavefront_obj"
 importer_version=1
 type="Mesh"
 uid="uid://bha3rwi2l2liv"
-path="res://.godot/imported/Phone_B.obj-21a508ec1e735af1de1f2dd3629be3cd.mesh"
+path="res://.godot/imported/Phone_B.obj-3ee93d466579cdfc1938afe106715b15.mesh"
 
 [deps]
 
-files=["res://.godot/imported/Phone_B.obj-21a508ec1e735af1de1f2dd3629be3cd.mesh"]
+files=["res://.godot/imported/Phone_B.obj-3ee93d466579cdfc1938afe106715b15.mesh"]
 
 source_file="res://assets/props/OBJ/Separated/Phone_B.obj"
-dest_files=["res://.godot/imported/Phone_B.obj-21a508ec1e735af1de1f2dd3629be3cd.mesh", "res://.godot/imported/Phone_B.obj-21a508ec1e735af1de1f2dd3629be3cd.mesh"]
+dest_files=["res://.godot/imported/Phone_B.obj-3ee93d466579cdfc1938afe106715b15.mesh", "res://.godot/imported/Phone_B.obj-3ee93d466579cdfc1938afe106715b15.mesh"]
 
 [params]
 

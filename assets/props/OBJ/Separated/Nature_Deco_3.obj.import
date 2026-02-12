@@ -4,14 +4,14 @@ importer="wavefront_obj"
 importer_version=1
 type="Mesh"
 uid="uid://cowpl0pibd3h4"
-path="res://.godot/imported/Nature_Deco_3.obj-c87fedbeacf49f66420ab02c06bc421c.mesh"
+path="res://.godot/imported/Nature_Deco_3.obj-3d26b09b7757c6d424dc184fb3baaf13.mesh"
 
 [deps]
 
-files=["res://.godot/imported/Nature_Deco_3.obj-c87fedbeacf49f66420ab02c06bc421c.mesh"]
+files=["res://.godot/imported/Nature_Deco_3.obj-3d26b09b7757c6d424dc184fb3baaf13.mesh"]
 
 source_file="res://assets/props/OBJ/Separated/Nature_Deco_3.obj"
-dest_files=["res://.godot/imported/Nature_Deco_3.obj-c87fedbeacf49f66420ab02c06bc421c.mesh", "res://.godot/imported/Nature_Deco_3.obj-c87fedbeacf49f66420ab02c06bc421c.mesh"]
+dest_files=["res://.godot/imported/Nature_Deco_3.obj-3d26b09b7757c6d424dc184fb3baaf13.mesh", "res://.godot/imported/Nature_Deco_3.obj-3d26b09b7757c6d424dc184fb3baaf13.mesh"]
 
 [params]
 

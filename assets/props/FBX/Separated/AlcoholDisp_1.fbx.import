@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://dyd3o8lbhd5sf"
-path="res://.godot/imported/AlcoholDisp_1.fbx-4e9430f43302163f788748635129cb47.scn"
+path="res://.godot/imported/AlcoholDisp_1.fbx-2e6cc9076636e41140fb48a613892bf1.scn"
 
 [deps]
 
 source_file="res://assets/props/FBX/Separated/AlcoholDisp_1.fbx"
-dest_files=["res://.godot/imported/AlcoholDisp_1.fbx-4e9430f43302163f788748635129cb47.scn"]
+dest_files=["res://.godot/imported/AlcoholDisp_1.fbx-2e6cc9076636e41140fb48a613892bf1.scn"]
 
 [params]
 

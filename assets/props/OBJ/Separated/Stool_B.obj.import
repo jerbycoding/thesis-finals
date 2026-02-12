@@ -4,14 +4,14 @@ importer="wavefront_obj"
 importer_version=1
 type="Mesh"
 uid="uid://dlm5jv65p22m3"
-path="res://.godot/imported/Stool_B.obj-5513f20a639eed1082fe7b38889fd8f8.mesh"
+path="res://.godot/imported/Stool_B.obj-210c66ce69b91611768dce10ded746a2.mesh"
 
 [deps]
 
-files=["res://.godot/imported/Stool_B.obj-5513f20a639eed1082fe7b38889fd8f8.mesh"]
+files=["res://.godot/imported/Stool_B.obj-210c66ce69b91611768dce10ded746a2.mesh"]
 
 source_file="res://assets/props/OBJ/Separated/Stool_B.obj"
-dest_files=["res://.godot/imported/Stool_B.obj-5513f20a639eed1082fe7b38889fd8f8.mesh", "res://.godot/imported/Stool_B.obj-5513f20a639eed1082fe7b38889fd8f8.mesh"]
+dest_files=["res://.godot/imported/Stool_B.obj-210c66ce69b91611768dce10ded746a2.mesh", "res://.godot/imported/Stool_B.obj-210c66ce69b91611768dce10ded746a2.mesh"]
 
 [params]
 
