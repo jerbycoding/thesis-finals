@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bvvkyqm1ud2mg"
-path.s3tc="res://.godot/imported/Desk_House_Props_Diffuse.png-d529a3b46f6a3502880a4955be94c105.s3tc.ctex"
+path.s3tc="res://.godot/imported/Desk_House_Props_Diffuse.png-2abaa324c752b5b9d94d0fbaa406b825.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -14,8 +14,8 @@ generator_parameters={
 
 [deps]
 
-source_file="res://assets/furniture/graybox/Desk_House_Props_Diffuse.png"
-dest_files=["res://.godot/imported/Desk_House_Props_Diffuse.png-d529a3b46f6a3502880a4955be94c105.s3tc.ctex"]
+source_file="res://assets/props/graybox/Desk_House_Props_Diffuse.png"
+dest_files=["res://.godot/imported/Desk_House_Props_Diffuse.png-2abaa324c752b5b9d94d0fbaa406b825.s3tc.ctex"]
 
 [params]
 

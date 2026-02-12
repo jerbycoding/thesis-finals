@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://c26wrhwu76ek7"
-path.s3tc="res://.godot/imported/storage_shelf_pale_wood.png-44517f8f3c03fd0cfbb4c0dc4c3a3ecc.s3tc.ctex"
+path.s3tc="res://.godot/imported/storage_shelf_pale_wood.png-b27a1383e520812e23dcb45cd154d8fe.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -14,8 +14,8 @@ generator_parameters={
 
 [deps]
 
-source_file="res://assets/furniture/items/storage_shelf/storage_shelf_pale_wood.png"
-dest_files=["res://.godot/imported/storage_shelf_pale_wood.png-44517f8f3c03fd0cfbb4c0dc4c3a3ecc.s3tc.ctex"]
+source_file="res://assets/props/items/storage_shelf/storage_shelf_pale_wood.png"
+dest_files=["res://.godot/imported/storage_shelf_pale_wood.png-b27a1383e520812e23dcb45cd154d8fe.s3tc.ctex"]
 
 [params]
 

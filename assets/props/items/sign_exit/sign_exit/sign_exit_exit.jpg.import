@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://brv72l5l4qnd2"
-path.s3tc="res://.godot/imported/sign_exit_exit.jpg-5d62f242e90d0ea5f99594b27f4da148.s3tc.ctex"
+path.s3tc="res://.godot/imported/sign_exit_exit.jpg-56f897805ff1e247897d20a8978cc0ca.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -14,8 +14,8 @@ generator_parameters={
 
 [deps]
 
-source_file="res://assets/furniture/items/sign_exit/sign_exit/sign_exit_exit.jpg"
-dest_files=["res://.godot/imported/sign_exit_exit.jpg-5d62f242e90d0ea5f99594b27f4da148.s3tc.ctex"]
+source_file="res://assets/props/items/sign_exit/sign_exit/sign_exit_exit.jpg"
+dest_files=["res://.godot/imported/sign_exit_exit.jpg-56f897805ff1e247897d20a8978cc0ca.s3tc.ctex"]
 
 [params]
 

@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://6sll0o070lso"
-path.s3tc="res://.godot/imported/Cell phone_1327 iPhone.png-9045b83fdd04e7d36b127f3dc51cbd57.s3tc.ctex"
+path.s3tc="res://.godot/imported/Cell phone_1327 iPhone.png-51696defe062b9a90d3d4cfc1f16d0d1.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -14,8 +14,8 @@ generator_parameters={
 
 [deps]
 
-source_file="res://assets/furniture/graybox/Cell phone_1327 iPhone.png"
-dest_files=["res://.godot/imported/Cell phone_1327 iPhone.png-9045b83fdd04e7d36b127f3dc51cbd57.s3tc.ctex"]
+source_file="res://assets/props/graybox/Cell phone_1327 iPhone.png"
+dest_files=["res://.godot/imported/Cell phone_1327 iPhone.png-51696defe062b9a90d3d4cfc1f16d0d1.s3tc.ctex"]
 
 [params]
 

@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dg0vpox72rlw5"
-path.s3tc="res://.godot/imported/House plant_Houseplant_BaseColor.png-9b6103d012d083b14201561be2e3c781.s3tc.ctex"
+path.s3tc="res://.godot/imported/House plant_Houseplant_BaseColor.png-17e803ada3b99e0961683595abe0853e.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -14,8 +14,8 @@ generator_parameters={
 
 [deps]
 
-source_file="res://assets/furniture/graybox/House plant_Houseplant_BaseColor.png"
-dest_files=["res://.godot/imported/House plant_Houseplant_BaseColor.png-9b6103d012d083b14201561be2e3c781.s3tc.ctex"]
+source_file="res://assets/props/graybox/House plant_Houseplant_BaseColor.png"
+dest_files=["res://.godot/imported/House plant_Houseplant_BaseColor.png-17e803ada3b99e0961683595abe0853e.s3tc.ctex"]
 
 [params]
 

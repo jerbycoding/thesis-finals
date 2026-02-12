@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bc3o6xtf25cji"
-path.s3tc="res://.godot/imported/green_filing_cabinet_green_metal.png-d018f4c15254a05c6be0696f312eee4c.s3tc.ctex"
+path.s3tc="res://.godot/imported/green_filing_cabinet_green_metal.png-00c7151987f63d6693547cc61d37a626.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -14,8 +14,8 @@ generator_parameters={
 
 [deps]
 
-source_file="res://assets/furniture/items/filing_cabinet/filing_cabinet/green_filing_cabinet/green_filing_cabinet_green_metal.png"
-dest_files=["res://.godot/imported/green_filing_cabinet_green_metal.png-d018f4c15254a05c6be0696f312eee4c.s3tc.ctex"]
+source_file="res://assets/props/items/filing_cabinet/filing_cabinet/green_filing_cabinet/green_filing_cabinet_green_metal.png"
+dest_files=["res://.godot/imported/green_filing_cabinet_green_metal.png-00c7151987f63d6693547cc61d37a626.s3tc.ctex"]
 
 [params]
 

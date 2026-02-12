@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://b42qaiga7sne5"
-path="res://.godot/imported/Troubleshooting-Blender.png-21d5f436c7ff00cd45c115c3b41417b2.ctex"
+path="res://.godot/imported/Troubleshooting-Blender.png-d983014ce703cddcd252220acd951301.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/furniture/office_pack/Troubleshooting-Blender.png"
-dest_files=["res://.godot/imported/Troubleshooting-Blender.png-21d5f436c7ff00cd45c115c3b41417b2.ctex"]
+source_file="res://assets/props/office_pack/Troubleshooting-Blender.png"
+dest_files=["res://.godot/imported/Troubleshooting-Blender.png-d983014ce703cddcd252220acd951301.ctex"]
 
 [params]
 

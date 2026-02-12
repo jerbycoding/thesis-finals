@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://d1dowxh8h6ffi"
-path.s3tc="res://.godot/imported/white_plastic.png-1f32c9d29aa48d626bf7cf980a682603.s3tc.ctex"
+path.s3tc="res://.godot/imported/white_plastic.png-0fc19b0df395c3180565784666ce7542.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://assets/furniture/items/sign_exit/sign_exit/white_plastic.png"
-dest_files=["res://.godot/imported/white_plastic.png-1f32c9d29aa48d626bf7cf980a682603.s3tc.ctex"]
+source_file="res://assets/props/items/sign_exit/sign_exit/white_plastic.png"
+dest_files=["res://.godot/imported/white_plastic.png-0fc19b0df395c3180565784666ce7542.s3tc.ctex"]
 
 [params]
 

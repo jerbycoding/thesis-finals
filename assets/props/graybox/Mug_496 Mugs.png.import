@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://ugwdix2xmy33"
-path.s3tc="res://.godot/imported/Mug_496 Mugs.png-583901202eabd53174b359977ac1cf86.s3tc.ctex"
+path.s3tc="res://.godot/imported/Mug_496 Mugs.png-5ead11ad47035f8cc444d1123c10c1c7.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -14,8 +14,8 @@ generator_parameters={
 
 [deps]
 
-source_file="res://assets/furniture/graybox/Mug_496 Mugs.png"
-dest_files=["res://.godot/imported/Mug_496 Mugs.png-583901202eabd53174b359977ac1cf86.s3tc.ctex"]
+source_file="res://assets/props/graybox/Mug_496 Mugs.png"
+dest_files=["res://.godot/imported/Mug_496 Mugs.png-5ead11ad47035f8cc444d1123c10c1c7.s3tc.ctex"]
 
 [params]
 

@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bodux4md7gfxm"
-path.s3tc="res://.godot/imported/white_plastic.jpg-04dfee03eee128423c239722374b6bb0.s3tc.ctex"
+path.s3tc="res://.godot/imported/white_plastic.jpg-79f47fbecaa717ec84c2beb3ecb00d20.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://assets/furniture/items/trashcan/trashcan/white_plastic.jpg"
-dest_files=["res://.godot/imported/white_plastic.jpg-04dfee03eee128423c239722374b6bb0.s3tc.ctex"]
+source_file="res://assets/props/items/trashcan/trashcan/white_plastic.jpg"
+dest_files=["res://.godot/imported/white_plastic.jpg-79f47fbecaa717ec84c2beb3ecb00d20.s3tc.ctex"]
 
 [params]
 

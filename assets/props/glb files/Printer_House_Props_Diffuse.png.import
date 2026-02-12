@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://b4qwxoi7ox762"
-path.s3tc="res://.godot/imported/Printer_House_Props_Diffuse.png-51eaef046dfb0f9e95a2c33e0b13592d.s3tc.ctex"
+path.s3tc="res://.godot/imported/Printer_House_Props_Diffuse.png-122cd0f99f9da741a2544789c2090220.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -14,8 +14,8 @@ generator_parameters={
 
 [deps]
 
-source_file="res://assets/furniture/glb files/Printer_House_Props_Diffuse.png"
-dest_files=["res://.godot/imported/Printer_House_Props_Diffuse.png-51eaef046dfb0f9e95a2c33e0b13592d.s3tc.ctex"]
+source_file="res://assets/props/glb files/Printer_House_Props_Diffuse.png"
+dest_files=["res://.godot/imported/Printer_House_Props_Diffuse.png-122cd0f99f9da741a2544789c2090220.s3tc.ctex"]
 
 [params]
 

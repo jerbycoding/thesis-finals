@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bao1k6i0t28v0"
-path.s3tc="res://.godot/imported/pot.jpg-4298ff471b7a7b6706afefe90077c6d9.s3tc.ctex"
+path.s3tc="res://.godot/imported/pot.jpg-4330a71a229f342157694a7b11a876a5.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://assets/furniture/items/cactus_in_pot/cactus_in_pot/pot.jpg"
-dest_files=["res://.godot/imported/pot.jpg-4298ff471b7a7b6706afefe90077c6d9.s3tc.ctex"]
+source_file="res://assets/props/items/cactus_in_pot/cactus_in_pot/pot.jpg"
+dest_files=["res://.godot/imported/pot.jpg-4330a71a229f342157694a7b11a876a5.s3tc.ctex"]
 
 [params]
 

@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://ciogxshlsoyoy"
-path.s3tc="res://.godot/imported/recycle.jpg-aad5f59198498436e061f525d65b5c40.s3tc.ctex"
+path.s3tc="res://.godot/imported/recycle.jpg-f42cd4d1db3f8cbc8158ec0d6de385db.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://assets/furniture/items/trashcan/trashcan/recycle.jpg"
-dest_files=["res://.godot/imported/recycle.jpg-aad5f59198498436e061f525d65b5c40.s3tc.ctex"]
+source_file="res://assets/props/items/trashcan/trashcan/recycle.jpg"
+dest_files=["res://.godot/imported/recycle.jpg-f42cd4d1db3f8cbc8158ec0d6de385db.s3tc.ctex"]
 
 [params]
 

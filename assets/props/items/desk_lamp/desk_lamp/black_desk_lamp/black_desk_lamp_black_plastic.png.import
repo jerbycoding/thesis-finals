@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://v84s548rxp7i"
-path.s3tc="res://.godot/imported/black_desk_lamp_black_plastic.png-33287bec269e707b57f9900d3dfb265f.s3tc.ctex"
+path.s3tc="res://.godot/imported/black_desk_lamp_black_plastic.png-f5835585dbfe74a79d9160f3f915cad6.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -14,8 +14,8 @@ generator_parameters={
 
 [deps]
 
-source_file="res://assets/furniture/items/desk_lamp/desk_lamp/black_desk_lamp/black_desk_lamp_black_plastic.png"
-dest_files=["res://.godot/imported/black_desk_lamp_black_plastic.png-33287bec269e707b57f9900d3dfb265f.s3tc.ctex"]
+source_file="res://assets/props/items/desk_lamp/desk_lamp/black_desk_lamp/black_desk_lamp_black_plastic.png"
+dest_files=["res://.godot/imported/black_desk_lamp_black_plastic.png-f5835585dbfe74a79d9160f3f915cad6.s3tc.ctex"]
 
 [params]
 

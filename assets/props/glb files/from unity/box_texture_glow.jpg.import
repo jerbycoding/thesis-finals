@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cttibvltsxxwh"
-path.s3tc="res://.godot/imported/box_texture_glow.jpg-745f275b4c346b8e8d8c544a36cddfc6.s3tc.ctex"
+path.s3tc="res://.godot/imported/box_texture_glow.jpg-39491bbe74dbed057257fe133b0d1285.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -14,8 +14,8 @@ generator_parameters={
 
 [deps]
 
-source_file="res://assets/furniture/glb files/from unity/box_texture_glow.jpg"
-dest_files=["res://.godot/imported/box_texture_glow.jpg-745f275b4c346b8e8d8c544a36cddfc6.s3tc.ctex"]
+source_file="res://assets/props/glb files/from unity/box_texture_glow.jpg"
+dest_files=["res://.godot/imported/box_texture_glow.jpg-39491bbe74dbed057257fe133b0d1285.s3tc.ctex"]
 
 [params]
 

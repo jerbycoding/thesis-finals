@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://d3yof0c86ypjb"
-path.s3tc="res://.godot/imported/mousepad_texture_glow.jpg-e3e8b2af481f94df005e4dcd3e90741a.s3tc.ctex"
+path.s3tc="res://.godot/imported/mousepad_texture_glow.jpg-eda208b0d2f55b7902020686c3863511.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -14,8 +14,8 @@ generator_parameters={
 
 [deps]
 
-source_file="res://assets/furniture/glb files/from unity/mousepad_texture_glow.jpg"
-dest_files=["res://.godot/imported/mousepad_texture_glow.jpg-e3e8b2af481f94df005e4dcd3e90741a.s3tc.ctex"]
+source_file="res://assets/props/glb files/from unity/mousepad_texture_glow.jpg"
+dest_files=["res://.godot/imported/mousepad_texture_glow.jpg-eda208b0d2f55b7902020686c3863511.s3tc.ctex"]
 
 [params]
 

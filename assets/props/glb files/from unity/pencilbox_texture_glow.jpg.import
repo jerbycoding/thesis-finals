@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cabgpkhdmop00"
-path.s3tc="res://.godot/imported/pencilbox_texture_glow.jpg-62000785ea6ebd86efb955ae70337abd.s3tc.ctex"
+path.s3tc="res://.godot/imported/pencilbox_texture_glow.jpg-9a21ab55846c446156c47dcd1df431f2.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -14,8 +14,8 @@ generator_parameters={
 
 [deps]
 
-source_file="res://assets/furniture/glb files/from unity/pencilbox_texture_glow.jpg"
-dest_files=["res://.godot/imported/pencilbox_texture_glow.jpg-62000785ea6ebd86efb955ae70337abd.s3tc.ctex"]
+source_file="res://assets/props/glb files/from unity/pencilbox_texture_glow.jpg"
+dest_files=["res://.godot/imported/pencilbox_texture_glow.jpg-9a21ab55846c446156c47dcd1df431f2.s3tc.ctex"]
 
 [params]
 

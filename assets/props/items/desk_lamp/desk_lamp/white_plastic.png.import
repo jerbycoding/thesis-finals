@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://xdtslyea3780"
-path.s3tc="res://.godot/imported/white_plastic.png-bf4b122f3a68e835945e215b925b78af.s3tc.ctex"
+path.s3tc="res://.godot/imported/white_plastic.png-ffaf5f801fee4a8cfeb07d3e6809f8a7.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://assets/furniture/items/desk_lamp/desk_lamp/white_plastic.png"
-dest_files=["res://.godot/imported/white_plastic.png-bf4b122f3a68e835945e215b925b78af.s3tc.ctex"]
+source_file="res://assets/props/items/desk_lamp/desk_lamp/white_plastic.png"
+dest_files=["res://.godot/imported/white_plastic.png-ffaf5f801fee4a8cfeb07d3e6809f8a7.s3tc.ctex"]
 
 [params]
 

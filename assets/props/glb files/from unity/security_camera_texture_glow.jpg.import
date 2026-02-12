@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bgiuwh4y434k4"
-path.s3tc="res://.godot/imported/security_camera_texture_glow.jpg-001f0245ec5b571c7e3cbc92a824b990.s3tc.ctex"
+path.s3tc="res://.godot/imported/security_camera_texture_glow.jpg-deeb42ce504bc568bb59229e394d16dd.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -14,8 +14,8 @@ generator_parameters={
 
 [deps]
 
-source_file="res://assets/furniture/glb files/from unity/security_camera_texture_glow.jpg"
-dest_files=["res://.godot/imported/security_camera_texture_glow.jpg-001f0245ec5b571c7e3cbc92a824b990.s3tc.ctex"]
+source_file="res://assets/props/glb files/from unity/security_camera_texture_glow.jpg"
+dest_files=["res://.godot/imported/security_camera_texture_glow.jpg-deeb42ce504bc568bb59229e394d16dd.s3tc.ctex"]
 
 [params]
 

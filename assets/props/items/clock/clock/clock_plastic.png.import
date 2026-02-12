@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dtjbcbptgmdfp"
-path.s3tc="res://.godot/imported/clock_plastic.png-1fabd5e68e050f8ba1e0caff0e6cb250.s3tc.ctex"
+path.s3tc="res://.godot/imported/clock_plastic.png-ed69ba471076e78764ac23d28968043a.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -14,8 +14,8 @@ generator_parameters={
 
 [deps]
 
-source_file="res://assets/furniture/items/clock/clock/clock_plastic.png"
-dest_files=["res://.godot/imported/clock_plastic.png-1fabd5e68e050f8ba1e0caff0e6cb250.s3tc.ctex"]
+source_file="res://assets/props/items/clock/clock/clock_plastic.png"
+dest_files=["res://.godot/imported/clock_plastic.png-ed69ba471076e78764ac23d28968043a.s3tc.ctex"]
 
 [params]
 

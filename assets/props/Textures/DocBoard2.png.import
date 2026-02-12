@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dirqucph6tmk3"
-path="res://.godot/imported/DocBoard2.png-92fc11e1336ba93f0003d2221c710907.ctex"
+path="res://.godot/imported/DocBoard2.png-2bc78d106f2b4105ac6ec1c74be295f9.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/furniture/Textures/DocBoard2.png"
-dest_files=["res://.godot/imported/DocBoard2.png-92fc11e1336ba93f0003d2221c710907.ctex"]
+source_file="res://assets/props/Textures/DocBoard2.png"
+dest_files=["res://.godot/imported/DocBoard2.png-2bc78d106f2b4105ac6ec1c74be295f9.ctex"]
 
 [params]
 

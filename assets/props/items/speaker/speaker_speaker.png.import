@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dhfabvi45ix8t"
-path.s3tc="res://.godot/imported/speaker_speaker.png-f2968398425072fa9345824c1576f40e.s3tc.ctex"
+path.s3tc="res://.godot/imported/speaker_speaker.png-97e314753f0f1b55fdfa73909113bda2.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -14,8 +14,8 @@ generator_parameters={
 
 [deps]
 
-source_file="res://assets/furniture/items/speaker/speaker_speaker.png"
-dest_files=["res://.godot/imported/speaker_speaker.png-f2968398425072fa9345824c1576f40e.s3tc.ctex"]
+source_file="res://assets/props/items/speaker/speaker_speaker.png"
+dest_files=["res://.godot/imported/speaker_speaker.png-97e314753f0f1b55fdfa73909113bda2.s3tc.ctex"]
 
 [params]
 

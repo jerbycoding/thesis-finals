@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://v40csr6bq6xj"
-path.s3tc="res://.godot/imported/mouse_texture_glow.jpg-75384173fc98bb3d4a6484a13614f655.s3tc.ctex"
+path.s3tc="res://.godot/imported/mouse_texture_glow.jpg-b4594bca04df43e684ab9e8788f24d85.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -14,8 +14,8 @@ generator_parameters={
 
 [deps]
 
-source_file="res://assets/furniture/glb files/from unity/mouse_texture_glow.jpg"
-dest_files=["res://.godot/imported/mouse_texture_glow.jpg-75384173fc98bb3d4a6484a13614f655.s3tc.ctex"]
+source_file="res://assets/props/glb files/from unity/mouse_texture_glow.jpg"
+dest_files=["res://.godot/imported/mouse_texture_glow.jpg-b4594bca04df43e684ab9e8788f24d85.s3tc.ctex"]
 
 [params]
 

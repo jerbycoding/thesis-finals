@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://da6bf2wbw3o2k"
-path.s3tc="res://.godot/imported/Message board_1344 Message Board 02.png-2336925d50ac8ef154f684aea8616aed.s3tc.ctex"
+path.s3tc="res://.godot/imported/Message board_1344 Message Board 02.png-00d91e808dcc305c939273fa76541a1f.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -14,8 +14,8 @@ generator_parameters={
 
 [deps]
 
-source_file="res://assets/furniture/glb files/Message board_1344 Message Board 02.png"
-dest_files=["res://.godot/imported/Message board_1344 Message Board 02.png-2336925d50ac8ef154f684aea8616aed.s3tc.ctex"]
+source_file="res://assets/props/glb files/Message board_1344 Message Board 02.png"
+dest_files=["res://.godot/imported/Message board_1344 Message Board 02.png-00d91e808dcc305c939273fa76541a1f.s3tc.ctex"]
 
 [params]
 

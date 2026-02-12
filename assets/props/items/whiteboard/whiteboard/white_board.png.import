@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cqqgkernpy5xy"
-path.s3tc="res://.godot/imported/white_board.png-7db696d39321a7b4c0b79bb6ec353bf2.s3tc.ctex"
+path.s3tc="res://.godot/imported/white_board.png-284bae30b40a7b77811a5a1f845c455d.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://assets/furniture/items/whiteboard/whiteboard/white_board.png"
-dest_files=["res://.godot/imported/white_board.png-7db696d39321a7b4c0b79bb6ec353bf2.s3tc.ctex"]
+source_file="res://assets/props/items/whiteboard/whiteboard/white_board.png"
+dest_files=["res://.godot/imported/white_board.png-284bae30b40a7b77811a5a1f845c455d.s3tc.ctex"]
 
 [params]
 

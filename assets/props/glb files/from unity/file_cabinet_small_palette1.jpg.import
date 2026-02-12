@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://th0xxisvp44a"
-path.s3tc="res://.godot/imported/file_cabinet_small_palette1.jpg-f0a0a8aea2fb0d476ada534c52f90240.s3tc.ctex"
+path.s3tc="res://.godot/imported/file_cabinet_small_palette1.jpg-997896ac403015b2a352c2598e9f50ae.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -14,8 +14,8 @@ generator_parameters={
 
 [deps]
 
-source_file="res://assets/furniture/glb files/from unity/file_cabinet_small_palette1.jpg"
-dest_files=["res://.godot/imported/file_cabinet_small_palette1.jpg-f0a0a8aea2fb0d476ada534c52f90240.s3tc.ctex"]
+source_file="res://assets/props/glb files/from unity/file_cabinet_small_palette1.jpg"
+dest_files=["res://.godot/imported/file_cabinet_small_palette1.jpg-997896ac403015b2a352c2598e9f50ae.s3tc.ctex"]
 
 [params]
 

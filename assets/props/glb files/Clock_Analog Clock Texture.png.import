@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://c8e46c1wsgq6j"
-path.s3tc="res://.godot/imported/Clock_Analog Clock Texture.png-c1c343b18f518a03ea532c0e89720be2.s3tc.ctex"
+path.s3tc="res://.godot/imported/Clock_Analog Clock Texture.png-b3b58d7c1f6cabfd743c3f0afe2a5fa1.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -14,8 +14,8 @@ generator_parameters={
 
 [deps]
 
-source_file="res://assets/furniture/glb files/Clock_Analog Clock Texture.png"
-dest_files=["res://.godot/imported/Clock_Analog Clock Texture.png-c1c343b18f518a03ea532c0e89720be2.s3tc.ctex"]
+source_file="res://assets/props/glb files/Clock_Analog Clock Texture.png"
+dest_files=["res://.godot/imported/Clock_Analog Clock Texture.png-b3b58d7c1f6cabfd743c3f0afe2a5fa1.s3tc.ctex"]
 
 [params]
 

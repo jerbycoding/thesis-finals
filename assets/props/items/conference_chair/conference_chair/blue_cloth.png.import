@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://b573oc28we5g5"
-path.s3tc="res://.godot/imported/blue_cloth.png-a0029fbd0868a58f2029c430083138cf.s3tc.ctex"
+path.s3tc="res://.godot/imported/blue_cloth.png-131d60e57cbf1bafe613f0cc059478cb.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://assets/furniture/items/conference_chair/conference_chair/blue_cloth.png"
-dest_files=["res://.godot/imported/blue_cloth.png-a0029fbd0868a58f2029c430083138cf.s3tc.ctex"]
+source_file="res://assets/props/items/conference_chair/conference_chair/blue_cloth.png"
+dest_files=["res://.godot/imported/blue_cloth.png-131d60e57cbf1bafe613f0cc059478cb.s3tc.ctex"]
 
 [params]
 

@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://1qh0ua70f0x4"
-path.s3tc="res://.godot/imported/Air conditioner (1)_Air Conditioner.png-bf68fd93691beac7e651097d4380cd1d.s3tc.ctex"
+path.s3tc="res://.godot/imported/Air conditioner (1)_Air Conditioner.png-3c08f11da0738cb03a44addd56387193.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -14,8 +14,8 @@ generator_parameters={
 
 [deps]
 
-source_file="res://assets/furniture/glb files/Air conditioner (1)_Air Conditioner.png"
-dest_files=["res://.godot/imported/Air conditioner (1)_Air Conditioner.png-bf68fd93691beac7e651097d4380cd1d.s3tc.ctex"]
+source_file="res://assets/props/glb files/Air conditioner (1)_Air Conditioner.png"
+dest_files=["res://.godot/imported/Air conditioner (1)_Air Conditioner.png-3c08f11da0738cb03a44addd56387193.s3tc.ctex"]
 
 [params]
 

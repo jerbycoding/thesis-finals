@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://5uagio1d5nk2"
-path.s3tc="res://.godot/imported/desk_lowpoly_server_texture.jpg-bb07b921ff01fa6c4675774089fe7275.s3tc.ctex"
+path.s3tc="res://.godot/imported/desk_lowpoly_server_texture.jpg-0e31160386f704c369537b72745ef05d.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -14,8 +14,8 @@ generator_parameters={
 
 [deps]
 
-source_file="res://assets/furniture/glb files/from unity/desk_lowpoly_server_texture.jpg"
-dest_files=["res://.godot/imported/desk_lowpoly_server_texture.jpg-bb07b921ff01fa6c4675774089fe7275.s3tc.ctex"]
+source_file="res://assets/props/glb files/from unity/desk_lowpoly_server_texture.jpg"
+dest_files=["res://.godot/imported/desk_lowpoly_server_texture.jpg-0e31160386f704c369537b72745ef05d.s3tc.ctex"]
 
 [params]
 

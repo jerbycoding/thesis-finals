@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bktlvdphc6cx"
-path.s3tc="res://.godot/imported/grey_plastic.png-29d14f92465eb53be7292f68f583c694.s3tc.ctex"
+path.s3tc="res://.godot/imported/grey_plastic.png-00a7eda8901343afad91cd64530cc040.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://assets/furniture/items/speaker/grey_plastic.png"
-dest_files=["res://.godot/imported/grey_plastic.png-29d14f92465eb53be7292f68f583c694.s3tc.ctex"]
+source_file="res://assets/props/items/speaker/grey_plastic.png"
+dest_files=["res://.godot/imported/grey_plastic.png-00a7eda8901343afad91cd64530cc040.s3tc.ctex"]
 
 [params]
 

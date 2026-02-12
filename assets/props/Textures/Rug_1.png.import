@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://caoq5cfs6pyrn"
-path.s3tc="res://.godot/imported/Rug_1.png-b3082bf39bbfe1893bc7f6d59a03f660.s3tc.ctex"
+path.s3tc="res://.godot/imported/Rug_1.png-79563329486c72eae1c481fef496fe05.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://assets/furniture/Textures/Rug_1.png"
-dest_files=["res://.godot/imported/Rug_1.png-b3082bf39bbfe1893bc7f6d59a03f660.s3tc.ctex"]
+source_file="res://assets/props/Textures/Rug_1.png"
+dest_files=["res://.godot/imported/Rug_1.png-79563329486c72eae1c481fef496fe05.s3tc.ctex"]
 
 [params]
 

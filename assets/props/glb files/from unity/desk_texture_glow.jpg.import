@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dvh377t8k0l4l"
-path.s3tc="res://.godot/imported/desk_texture_glow.jpg-48879f05cbe9c52f6dcb40000048252d.s3tc.ctex"
+path.s3tc="res://.godot/imported/desk_texture_glow.jpg-19c2b12defe2b8a161d5d9f96e869d4e.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -14,8 +14,8 @@ generator_parameters={
 
 [deps]
 
-source_file="res://assets/furniture/glb files/from unity/desk_texture_glow.jpg"
-dest_files=["res://.godot/imported/desk_texture_glow.jpg-48879f05cbe9c52f6dcb40000048252d.s3tc.ctex"]
+source_file="res://assets/props/glb files/from unity/desk_texture_glow.jpg"
+dest_files=["res://.godot/imported/desk_texture_glow.jpg-19c2b12defe2b8a161d5d9f96e869d4e.s3tc.ctex"]
 
 [params]
 

@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cguaqc3vi0kxe"
-path.s3tc="res://.godot/imported/server rack_servers.png-27d046b218b1f6216d190fb433d003f8.s3tc.ctex"
+path.s3tc="res://.godot/imported/server rack_servers.png-e8b24cb4d668108b65a75e56e1cdd6d0.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -14,8 +14,8 @@ generator_parameters={
 
 [deps]
 
-source_file="res://assets/furniture/glb files/server rack_servers.png"
-dest_files=["res://.godot/imported/server rack_servers.png-27d046b218b1f6216d190fb433d003f8.s3tc.ctex"]
+source_file="res://assets/props/glb files/server rack_servers.png"
+dest_files=["res://.godot/imported/server rack_servers.png-e8b24cb4d668108b65a75e56e1cdd6d0.s3tc.ctex"]
 
 [params]
 

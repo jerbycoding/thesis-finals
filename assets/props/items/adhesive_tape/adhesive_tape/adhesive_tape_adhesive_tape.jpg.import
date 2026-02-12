@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://yy43m7ltu0i0"
-path.s3tc="res://.godot/imported/adhesive_tape_adhesive_tape.jpg-b6f944afd539b16c34d06d4c35de5388.s3tc.ctex"
+path.s3tc="res://.godot/imported/adhesive_tape_adhesive_tape.jpg-dbd884509fee2c816f79837b05459d67.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -14,8 +14,8 @@ generator_parameters={
 
 [deps]
 
-source_file="res://assets/furniture/items/adhesive_tape/adhesive_tape/adhesive_tape_adhesive_tape.jpg"
-dest_files=["res://.godot/imported/adhesive_tape_adhesive_tape.jpg-b6f944afd539b16c34d06d4c35de5388.s3tc.ctex"]
+source_file="res://assets/props/items/adhesive_tape/adhesive_tape/adhesive_tape_adhesive_tape.jpg"
+dest_files=["res://.godot/imported/adhesive_tape_adhesive_tape.jpg-dbd884509fee2c816f79837b05459d67.s3tc.ctex"]
 
 [params]
 

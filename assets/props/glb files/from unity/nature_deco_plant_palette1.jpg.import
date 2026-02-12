@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://c1lilcntc4fx8"
-path.s3tc="res://.godot/imported/nature_deco_plant_palette1.jpg-a017faf8994c5ef50133c92731952af3.s3tc.ctex"
+path.s3tc="res://.godot/imported/nature_deco_plant_palette1.jpg-83b5f30f84e417e92cd1b520ab53858c.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -14,8 +14,8 @@ generator_parameters={
 
 [deps]
 
-source_file="res://assets/furniture/glb files/from unity/nature_deco_plant_palette1.jpg"
-dest_files=["res://.godot/imported/nature_deco_plant_palette1.jpg-a017faf8994c5ef50133c92731952af3.s3tc.ctex"]
+source_file="res://assets/props/glb files/from unity/nature_deco_plant_palette1.jpg"
+dest_files=["res://.godot/imported/nature_deco_plant_palette1.jpg-83b5f30f84e417e92cd1b520ab53858c.s3tc.ctex"]
 
 [params]
 

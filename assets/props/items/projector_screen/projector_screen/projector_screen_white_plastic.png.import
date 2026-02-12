@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://ch5fy1fjntg82"
-path.s3tc="res://.godot/imported/projector_screen_white_plastic.png-2c59ac07b05e618a36c5243313262e35.s3tc.ctex"
+path.s3tc="res://.godot/imported/projector_screen_white_plastic.png-5d91d4dcbf564f2c60cae687ad291062.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -14,8 +14,8 @@ generator_parameters={
 
 [deps]
 
-source_file="res://assets/furniture/items/projector_screen/projector_screen/projector_screen_white_plastic.png"
-dest_files=["res://.godot/imported/projector_screen_white_plastic.png-2c59ac07b05e618a36c5243313262e35.s3tc.ctex"]
+source_file="res://assets/props/items/projector_screen/projector_screen/projector_screen_white_plastic.png"
+dest_files=["res://.godot/imported/projector_screen_white_plastic.png-5d91d4dcbf564f2c60cae687ad291062.s3tc.ctex"]
 
 [params]
 
