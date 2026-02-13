@@ -1,0 +1,29 @@
+[gd_scene load_steps=5 format=3 uid="uid://dvd0lgpbhds0t"]
+
+[ext_resource type="PackedScene" uid="uid://dbu7rn0d7neqy" path="res://assets/props/glb files/from unity/chair.glb" id="1_t7gti"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_0cdtm"]
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_cyb5x"]
+data = PackedVector3Array(-0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, -0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, -0.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gf1kt"]
+
+[node name="chair2" instance=ExtResource("1_t7gti")]
+transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, 0, 0, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." index="1"]
+transform = Transform3D(1, 0, 0, 0, 1.5, 0, 0, 0, 1, 0.01802039, 0.6975951, 0)
+visible = false
+mesh = SubResource("BoxMesh_0cdtm")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="MeshInstance3D" index="0"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D/StaticBody3D" index="0"]
+shape = SubResource("ConcavePolygonShape3D_cyb5x")
+
+[node name="Area3D" type="Area3D" parent="MeshInstance3D" index="1"]
+transform = Transform3D(100, 0, 0, 0, 100, 0, 0, 0, 100, 0, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D/Area3D" index="0"]
+shape = SubResource("BoxShape3D_gf1kt")

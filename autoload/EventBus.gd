@@ -38,6 +38,8 @@ signal narrative_spawn_consequence(consequence_id: String)
 signal consequence_triggered(type: String, details: Dictionary)
 signal followup_ticket_scheduled(ticket_id: String, delay: float)
 signal npc_interaction_requested(npc_id: String, dialogue_id: String)
+signal npc_ready(npc_id: String)
+signal dialogue_choice_selected(choice: Dictionary)
 signal world_event_triggered(event_id: String, active: bool, duration: float)
 signal campaign_ended(type: String)
 

@@ -12,7 +12,7 @@ func _ready():
 
 func enter_desktop_mode(computer_node):
 	if is_transitioning:
-		print("Transition blocked: already transitioning")
+		push_warning("TransitionManager: enter_desktop_mode blocked.")
 		return
 
 	is_transitioning = true
@@ -128,10 +128,10 @@ func exit_desktop_mode():
 
 func change_scene_to(path: String, narrative_to_start_after: String = "", title_card: String = ""):
 	if not overlay_instance:
-		print(">>> TRANSITION ERROR: Overlay instance is null!")
+		push_error("TransitionManager: Overlay instance is null!")
 		return
 	if is_transitioning:
-		print(">>> TRANSITION BLOCKED: A transition is already in progress. New request for '", path, "' was ignored.")
+		push_warning("TransitionManager: change_scene_to blocked (Another transition in progress). Target: " + path)
 		return
 	
 	print(">>> TRANSITION START: To '", path, "'")
@@ -185,43 +185,69 @@ func change_scene_to(path: String, narrative_to_start_after: String = "", title_
 			push_error("TransitionManager: Cannot start narrative, NarrativeDirector not found!")
 
 func play_secure_login(target_path: String, narrative: String = ""):
-	if is_transitioning: return
+	if is_transitioning: 
+		push_warning("TransitionManager: play_secure_login blocked. Target: " + target_path)
+		return
 	is_transitioning = true
 	
 	overlay_instance.show()
 	var login_ui = overlay_instance.get_node("%LoginContainer")
 	var auth_label = overlay_instance.get_node("%AuthLabel")
 	var progress = overlay_instance.get_node("%InitProgressBar")
+	var matrix = overlay_instance.get_node("%MatrixRain")
 	
 	login_ui.visible = true
 	progress.value = 0
+	
+	# Start Matrix Rain
+	if matrix:
+		matrix.activate()
+		matrix.set_speed(0.5)
+	
 	overlay_instance.fade_in()
 	await overlay_instance.fade_finished
 	
-	# HEAVY LOADING SEQUENCE
+	# POLISHED LOADING SEQUENCE
 	var steps = [
-		{"text": "INITIALIZING SECURE KERNEL...", "val": 15.0, "wait": 0.8},
-		{"text": "MOUNTING ENCRYPTED VOLUMES...", "val": 45.0, "wait": 0.5},
-		{"text": "ESTABLISHING SECURE VPN TUNNEL...", "val": 52.0, "wait": 1.2}, # Long pause for 'network' feel
-		{"text": "SYNCING SIEM LOG DATABASE...", "val": 85.0, "wait": 0.7},
-		{"text": "ENFORCING ZERO-TRUST PROTOCOLS...", "val": 98.0, "wait": 0.4},
+		{"text": "INITIALIZING SECURE KERNEL...", "val": 15.0, "wait": 0.6},
+		{"text": "MOUNTING ENCRYPTED VOLUMES...", "val": 45.0, "wait": 0.4},
+		{"text": "ESTABLISHING SECURE VPN TUNNEL...", "val": 52.0, "wait": 1.0},
+		{"text": "SYNCING SIEM LOG DATABASE...", "val": 85.0, "wait": 0.5},
+		{"text": "ENFORCING ZERO-TRUST PROTOCOLS...", "val": 98.0, "wait": 0.3},
 		{"text": "BIOMETRIC MATCH CONFIRMED. ACCESS GRANTED.", "val": 100.0, "wait": 0.8}
 	]
 	
-	for step in steps:
+	for i in range(steps.size()):
+		var step = steps[i]
 		auth_label.text = step.text
 		auth_label.modulate = Color.WHITE
 		
-		# Rapid snap for the bar
-		var tween = create_tween()
-		tween.tween_property(progress, "value", step.val, 0.15).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		# 1. Progress and Matrix Sync
+		var p_tween = create_tween().set_parallel(true)
+		p_tween.tween_property(progress, "value", step.val, 0.3).set_trans(Tween.TRANS_QUINT).set_ease(Tween.EASE_OUT)
 		
-		await get_tree().create_timer(step.wait).timeout
+		if matrix:
+			# Speed up rain based on progress (0.5 to 4.0)
+			var target_speed = 0.5 + (step.val / 100.0) * 3.5
+			p_tween.tween_method(matrix.set_speed, matrix.rect.material.get_shader_parameter("speed"), target_speed, 0.3)
 		
-		# Feedback: Flash text green to show step is done
+		var jittered_wait = step.wait * randf_range(0.85, 1.15)
+		await get_tree().create_timer(jittered_wait).timeout
+		
+		# 2. Feedback
 		auth_label.text = step.text + " [ OK ]"
 		auth_label.modulate = Color.GREEN
 		if AudioManager: AudioManager.play_terminal_beep(-10.0)
+		
+		# 3. Final Step Surge
+		if i == steps.size() - 1:
+			overlay_instance.shake_screen(20.0, 0.4)
+			overlay_instance.flash_green()
+			if matrix:
+				matrix.set_speed(10.0) # Hyper-speed for impact
+				matrix.set_brightness(2.0)
+			if AudioManager: AudioManager.play_sfx(AudioManager.SFX.ui_window_open, 0.0)
+		
 		await get_tree().create_timer(0.15).timeout
 	
 	# Scene Change
@@ -229,12 +255,16 @@ func play_secure_login(target_path: String, narrative: String = ""):
 	await get_tree().create_timer(0.3).timeout
 	
 	login_ui.visible = false
+	
+	# Evaporate Matrix
+	if matrix:
+		await matrix.evaporate()
+	
 	overlay_instance.fade_out()
 	await overlay_instance.fade_finished
 	
 	is_transitioning = false
 	
-	# Let NarrativeDirector handle what happens next (Debt #5 Fix)
 	if not narrative.is_empty():
 		if NarrativeDirector:
 			NarrativeDirector.prepare_shift(narrative)

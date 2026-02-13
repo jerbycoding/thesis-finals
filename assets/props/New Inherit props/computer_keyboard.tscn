@@ -1,0 +1,29 @@
+[gd_scene load_steps=5 format=3 uid="uid://bdpvclnd7ti3l"]
+
+[ext_resource type="PackedScene" uid="uid://ceekfprwuv2q7" path="res://assets/props/FBX/Separated/Computer_Keyboard.fbx" id="1_3o27d"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_3xq65"]
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_h6dgt"]
+data = PackedVector3Array(-0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, -0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, -0.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_a1v1o"]
+
+[node name="Computer_Keyboard" instance=ExtResource("1_3o27d")]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." index="1"]
+transform = Transform3D(0.46383223, 1.7561251e-14, 0, -2.636581e-14, 0.06178816, -4.482882e-22, 0, 3.9252454e-22, 0.21169811, 0.0021251366, 0.007849634, 0.003763117)
+visible = false
+mesh = SubResource("BoxMesh_3xq65")
+skeleton = NodePath("../Computer_Mouse")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="MeshInstance3D" index="0"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D/StaticBody3D" index="0"]
+shape = SubResource("ConcavePolygonShape3D_h6dgt")
+
+[node name="Area3D" type="Area3D" parent="MeshInstance3D" index="1"]
+transform = Transform3D(100, 0, 0, 0, 100, 0, 0, 0, 100, 0, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D/Area3D" index="0"]
+shape = SubResource("BoxShape3D_a1v1o")

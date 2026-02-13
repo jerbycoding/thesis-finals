@@ -25,6 +25,9 @@ size = Vector3(0.912, 0.513, 0.02)
 [node name="Prop_Monitor" type="Node3D"]
 script = ExtResource("1_script")
 
+[node name="ViewAnchor" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0.6)
+
 [node name="Geometry" type="CSGCombiner3D" parent="."]
 
 [node name="Stand_Base" type="CSGBox3D" parent="Geometry"]

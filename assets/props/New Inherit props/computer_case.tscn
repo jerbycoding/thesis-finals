@@ -1,0 +1,28 @@
+[gd_scene load_steps=5 format=3 uid="uid://ch6piox6hap4v"]
+
+[ext_resource type="PackedScene" uid="uid://di24aus262mn0" path="res://assets/props/FBX/Separated/Computer_Case.fbx" id="1_4qbgg"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_f0fe1"]
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_d5kie"]
+data = PackedVector3Array(-0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, -0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, -0.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ogu3k"]
+
+[node name="Computer_Case" instance=ExtResource("1_4qbgg")]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Computer_Case" index="0"]
+transform = Transform3D(0.2600941, 1.5132154e-13, 0, -1.4784638e-14, 0.53241533, -9.935299e-22, 0, 3.3823001e-21, 0.46918127, 0.0056442246, 0.18123576, 0.028562196)
+visible = false
+mesh = SubResource("BoxMesh_f0fe1")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Computer_Case/MeshInstance3D" index="0"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Computer_Case/MeshInstance3D/StaticBody3D" index="0"]
+shape = SubResource("ConcavePolygonShape3D_d5kie")
+
+[node name="Area3D" type="Area3D" parent="Computer_Case/MeshInstance3D" index="1"]
+transform = Transform3D(100, 0, 0, 0, 100, 0, 0, 0, 100, 0, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Computer_Case/MeshInstance3D/Area3D" index="0"]
+shape = SubResource("BoxShape3D_ogu3k")

@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://bcx8wdcxdgkhk"]
+[gd_scene load_steps=6 format=3 uid="uid://bcx8wdcxdgkhk"]
 
-[ext_resource type="Script" uid="uid://dhf4o8owy3mry" path="res://scripts/ui/TransitionOverlay.gd" id="1_j6cvf"]
+[ext_resource type="Script" path="res://scripts/ui/TransitionOverlay.gd" id="1_j6cvf"]
+[ext_resource type="PackedScene" uid="uid://c6j8v8u8k8u8m" path="res://scenes/ui/MatrixRain.tscn" id="2_matrix"]
 
 [sub_resource type="Animation" id="Animation_fade_in"]
 length = 0.5
@@ -53,6 +54,9 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 color = Color(0, 0, 0, 0)
+
+[node name="MatrixRain" parent="." instance=ExtResource("2_matrix")]
+unique_name_in_owner = true
 
 [node name="TitleLabel" type="Label" parent="."]
 unique_name_in_owner = true

@@ -18,6 +18,7 @@ script = ExtResource("1_57yv1")
 [node name="InteractionArea" type="Area3D" parent="."]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="InteractionArea"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.846218, 1.06553, 0)
 shape = SubResource("BoxShape3D_v5j2c")
 
 [node name="Collision" type="CollisionShape3D" parent="."]

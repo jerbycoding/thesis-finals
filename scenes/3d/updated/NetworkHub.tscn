@@ -1,0 +1,674 @@
+[gd_scene load_steps=19 format=3 uid="uid://eewxe25nigce"]
+
+[ext_resource type="PackedScene" uid="uid://cteip62nveuo7" path="res://assets/props/glb files/4 Bulb Grey Light - LRG Tubes.glb" id="1_w2cvh"]
+[ext_resource type="PackedScene" uid="uid://brbwiujepsoub" path="res://assets/props/New Inherit props/doorway_front.tscn" id="2_u5pyk"]
+[ext_resource type="PackedScene" uid="uid://dvd0lgpbhds0t" path="res://assets/props/New Inherit props/chair_2.tscn" id="4_e2vnk"]
+[ext_resource type="PackedScene" uid="uid://dyjym17034s5o" path="res://assets/props/FBX/Separated/mousepad_003.tscn" id="4_fokx0"]
+[ext_resource type="PackedScene" uid="uid://dyfhmwqx5yo0q" path="res://assets/props/New Inherit props/cubicle.tscn" id="4_hl6ts"]
+[ext_resource type="PackedScene" uid="uid://dberps7drmvm6" path="res://assets/props/FBX/Separated/keyboard_a_pwr_5p_1_dluw_2.tscn" id="5_y20s8"]
+[ext_resource type="PackedScene" uid="uid://cfoaiyaaxv311" path="res://assets/props/FBX/Separated/computer_screen_2.tscn" id="6_57git"]
+[ext_resource type="PackedScene" uid="uid://ku4e30eftaqt" path="res://assets/props/FBX/Separated/system_unit_002.tscn" id="7_im6rg"]
+[ext_resource type="PackedScene" uid="uid://bdys54uwli5r" path="res://assets/props/FBX/Separated/computer_mouse_2.tscn" id="8_1ixhq"]
+[ext_resource type="PackedScene" uid="uid://cv8w6k2rvnv3k" path="res://assets/props/FBX/Separated/cylinder_2.tscn" id="9_20ptw"]
+[ext_resource type="PackedScene" uid="uid://kix0ll2kuom7" path="res://scenes/3d/props/graybox/Prop_AuditRouter.tscn" id="ext_router"]
+[ext_resource type="PackedScene" uid="uid://c8n7m6l5k4j32" path="res://scenes/3d/NPC_NetworkSpecialist.tscn" id="ext_npc"]
+[ext_resource type="PackedScene" uid="uid://b2d35yngg7u75" path="res://scenes/Player3D.tscn" id="ext_player"]
+[ext_resource type="Script" uid="uid://dh3hcvpwq0ufa" path="res://scripts/3d/RoomTeleporter.gd" id="ext_teleporter"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_u5pyk"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rxcip"]
+albedo_color = Color(0.3590693, 0.35906905, 0.35906908, 1)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_hl6ts"]
+data = PackedVector3Array(1, 0, 1, -1, 0, 1, 1, 0, -1, -1, 0, 1, -1, 0, -1, 1, 0, -1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_e2vnk"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6vrgg"]
+albedo_color = Color(0.89492244, 0.89492244, 0.8949224, 1)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_p5tbi"]
+data = PackedVector3Array(1, 0, 1, -1, 0, 1, 1, 0, -1, -1, 0, 1, -1, 0, -1, 1, 0, -1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_34e03"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2cg3l"]
+albedo_color = Color(0.3854925, 0.38549247, 0.38549247, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_trigger"]
+size = Vector3(4, 4, 4)
+
+[node name="NetworkHub" type="Node3D"]
+
+[node name="RoomSetup" type="Node3D" parent="."]
+
+[node name="floor" type="MeshInstance3D" parent="RoomSetup"]
+transform = Transform3D(20, 0, 0, 0, 10, 0, 0, 0, 25, -0.02867508, 0.0021185875, -0.2469492)
+mesh = SubResource("PlaneMesh_u5pyk")
+skeleton = NodePath("../../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_rxcip")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="RoomSetup/floor"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RoomSetup/floor/StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_hl6ts")
+
+[node name="ceiling" type="MeshInstance3D" parent="RoomSetup"]
+transform = Transform3D(30, 0, 0, 0, -10, 3.774895e-06, 0, -1.509958e-06, -25, 0.018028498, 10.01451, 0.025853157)
+mesh = SubResource("PlaneMesh_e2vnk")
+skeleton = NodePath("../../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_6vrgg")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="RoomSetup/ceiling"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RoomSetup/ceiling/StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_p5tbi")
+
+[node name="bulbs" type="Node3D" parent="RoomSetup/ceiling"]
+
+[node name="4 Bulb Grey Light - LRG Tubes" parent="RoomSetup/ceiling/bulbs" instance=ExtResource("1_w2cvh")]
+transform = Transform3D(0.004, 0, 0, 0, -0.02, -9.0597496e-10, 0, 3.0199157e-09, -0.006, 0.4463531, 0.031950712, 0.44585654)
+
+[node name="OmniLight3D6" type="OmniLight3D" parent="RoomSetup/ceiling/bulbs/4 Bulb Grey Light - LRG Tubes"]
+transform = Transform3D(12.5, 0, 0, 0, 5.0000005, 2.5165966e-07, 0, 8.388654e-07, 11.111112, 21.096024, -6.294735, -6.3085938)
+omni_range = 4096.0
+
+[node name="4 Bulb Grey Light - LRG Tubes2" parent="RoomSetup/ceiling/bulbs" instance=ExtResource("1_w2cvh")]
+transform = Transform3D(0.004, 0, 0, 0, -0.02, -9.0597496e-10, 0, 3.0199157e-09, -0.006, 0.4463531, 0.031950593, -0.5195539)
+
+[node name="OmniLight3D3" type="OmniLight3D" parent="RoomSetup/ceiling/bulbs/4 Bulb Grey Light - LRG Tubes2"]
+transform = Transform3D(12.5, 0, 0, 0, 5.0000005, 2.5165974e-07, 0, 8.388652e-07, 11.111112, 21.096039, -6.294739, -7.6859207)
+omni_range = 4096.0
+
+[node name="4 Bulb Grey Light - LRG Tubes3" parent="RoomSetup/ceiling/bulbs" instance=ExtResource("1_w2cvh")]
+transform = Transform3D(0.004, 0, 0, 0, -0.02, -9.0597496e-10, 0, 3.0199157e-09, -0.006, -0.06860378, 0.031950712, 0.44585645)
+
+[node name="OmniLight3D4" type="OmniLight3D" parent="RoomSetup/ceiling/bulbs/4 Bulb Grey Light - LRG Tubes3"]
+transform = Transform3D(12.5, 0, 0, 0, 5.0000005, 2.5165966e-07, 0, 8.388654e-07, 11.111112, 27.126392, -7.5039673, -5.7459793)
+omni_range = 4096.0
+
+[node name="4 Bulb Grey Light - LRG Tubes4" parent="RoomSetup/ceiling/bulbs" instance=ExtResource("1_w2cvh")]
+transform = Transform3D(0.004, 0, 0, 0, -0.02, -9.0597496e-10, 0, 3.0199157e-09, -0.006, -0.06860378, 0.031950593, -0.51955366)
+
+[node name="OmniLight3D" type="OmniLight3D" parent="RoomSetup/ceiling/bulbs/4 Bulb Grey Light - LRG Tubes4"]
+transform = Transform3D(12.5, 0, 0, 0, 5.0000005, 2.5165966e-07, 0, 8.388654e-07, 11.111112, 27.126392, -7.503971, -7.123268)
+omni_range = 4096.0
+
+[node name="4 Bulb Grey Light - LRG Tubes5" parent="RoomSetup/ceiling/bulbs" instance=ExtResource("1_w2cvh")]
+transform = Transform3D(0.004, 0, 0, 0, -0.02, -9.0597496e-10, 0, 3.0199157e-09, -0.006, -0.5319207, 0.031950712, 0.44585654)
+
+[node name="OmniLight3D5" type="OmniLight3D" parent="RoomSetup/ceiling/bulbs/4 Bulb Grey Light - LRG Tubes5"]
+transform = Transform3D(12.5, 0, 0, 0, 5.0000005, 2.5165966e-07, 0, 8.388654e-07, 11.111112, 28.12925, -7.572689, -6.7503357)
+omni_range = 4096.0
+
+[node name="4 Bulb Grey Light - LRG Tubes6" parent="RoomSetup/ceiling/bulbs" instance=ExtResource("1_w2cvh")]
+transform = Transform3D(0.004, 0, 0, 0, -0.02, -9.0597496e-10, 0, 3.0199157e-09, -0.006, -0.5319207, 0.031950593, -0.5195538)
+
+[node name="OmniLight3D2" type="OmniLight3D" parent="RoomSetup/ceiling/bulbs/4 Bulb Grey Light - LRG Tubes6"]
+transform = Transform3D(12.5, 0, 0, 0, 5.0000005, 2.5165966e-07, 0, 8.388654e-07, 11.111112, 28.12925, -7.572693, -8.127617)
+omni_range = 4096.0
+
+[node name="Walls" type="Node3D" parent="RoomSetup"]
+
+[node name="northwall" type="CSGCombiner3D" parent="RoomSetup/Walls"]
+transform = Transform3D(1.0134313, 0, 0, 0, 1, 0, 0, 0, 1, 0.014099896, 2.5, -5.0988216)
+use_collision = true
+
+[node name="solid" type="CSGBox3D" parent="RoomSetup/Walls/northwall"]
+transform = Transform3D(40, 0, 0, 0, 9.999726, 0, 0, 0, 0.19999573, -0.0453755, 2.5068557, -20.007061)
+size = Vector3(0.98791504, 1, 1)
+
+[node name="northwall2" type="CSGCombiner3D" parent="RoomSetup/Walls"]
+transform = Transform3D(1.0134313, 0, 0, 0, 1, 0, 0, 0, 1, 0.014099896, 2.5, -5.0988216)
+use_collision = true
+
+[node name="solid" type="CSGBox3D" parent="RoomSetup/Walls/northwall2"]
+transform = Transform3D(40, 0, 0, 0, 9.999724, 0, 0, 0, 0.1999957, -0.0453755, 2.5068557, 29.70398)
+size = Vector3(0.98791504, 1, 1)
+
+[node name="solid2" type="CSGBox3D" parent="RoomSetup/Walls/northwall2"]
+transform = Transform3D(40, 0, 2.4957814e-13, 0, 9.999079, 0, 7.1281286e-11, 0, 0.19998561, 16.091736, 0.7973776, 29.658735)
+operation = 2
+size = Vector3(0.07658863, 0.65808105, 2.3840332)
+
+[node name="Doorway Front2" parent="RoomSetup/Walls/northwall2" instance=ExtResource("2_u5pyk")]
+transform = Transform3D(6.3020587, 0, 3.5527137e-14, 0, 6.6247125, 0, 2.8421692e-14, 0, 1.9734914, 17.630474, -2.5376825, 29.910133)
+
+[node name="westwall" type="CSGCombiner3D" parent="RoomSetup/Walls"]
+transform = Transform3D(-4.429849e-08, 0, 1, 0, 1, 0, -1.0134313, 0, -4.371139e-08, -39.677414, 2.5, -5.0988216)
+use_collision = true
+
+[node name="solid" type="CSGBox3D" parent="RoomSetup/Walls/westwall"]
+transform = Transform3D(40, 0, 8.7929664e-14, 0, 9.999467, 0, 3.092282e-11, 0, 0.19999167, -4.821453, 2.5068557, 19.790586)
+size = Vector3(1.2179756, 1, 1)
+
+[node name="Eastwall" type="CSGCombiner3D" parent="RoomSetup/Walls"]
+transform = Transform3D(-4.429849e-08, 0, 1, 0, 1, 0, -1.0134313, 0, -4.371139e-08, -39.677414, 2.5, -5.0988216)
+use_collision = true
+
+[node name="solid" type="CSGBox3D" parent="RoomSetup/Walls/Eastwall"]
+transform = Transform3D(40, 0, 1.3766766e-13, 0, 9.999392, 0, 3.990408e-11, 0, 0.1999905, -4.8124723, 2.5068557, 59.54937)
+size = Vector3(1.2212725, 1, 1)
+
+[node name="Eastwall2" type="CSGCombiner3D" parent="RoomSetup/Walls"]
+transform = Transform3D(-4.429849e-08, 0, 1, 0, 1, 0, -1.0134313, 0, -4.371139e-08, -38.08039, 2.5, -5.0988216)
+use_collision = true
+
+[node name="Doorway Front2" parent="RoomSetup/Walls/Eastwall2" instance=ExtResource("2_u5pyk")]
+transform = Transform3D(6.3020625, 0, 4.2632564e-14, 0, 6.6247163, 0, 5.684342e-14, 0, 1.9734924, 15.16986, -2.6722229, 51.028595)
+
+[node name="solid" type="CSGBox3D" parent="RoomSetup/Walls/Eastwall2"]
+transform = Transform3D(40, 0, 2.2915003e-13, 0, 9.999202, 0, 6.252776e-11, 0, 0.19998753, -4.902574, 2.5068557, 51.10373)
+size = Vector3(1.2178389, 1, 1)
+
+[node name="solid2" type="CSGBox3D" parent="RoomSetup/Walls/Eastwall2"]
+transform = Transform3D(40, 0, 2.5046631e-13, 0, 9.999126, 0, 7.150902e-11, 0, 0.19998635, 13.646663, 0.788223, 51.031647)
+operation = 2
+size = Vector3(0.07309914, 0.65625, 2.3840332)
+
+[node name="separator" type="CSGCombiner3D" parent="RoomSetup"]
+transform = Transform3D(1.0134313, 0, 0, 0, 1, 0, 0, 0, 1, 0.014099896, 2.5, -5.0988216)
+visible = false
+use_collision = true
+
+[node name="solid" type="CSGBox3D" parent="RoomSetup/separator"]
+transform = Transform3D(40, 0, 0, 0, 9.999626, 0, 0, 0, 0.19999416, -4.3453007, 1.9789197, 5.377856)
+size = Vector3(0.7729187, 0.8944092, 1)
+
+[node name="Doorway Front2" parent="RoomSetup/separator" instance=ExtResource("2_u5pyk")]
+transform = Transform3D(6.30206, 0, 4.2632564e-14, 0, 6.624714, 0, 5.6843402e-14, 0, 1.9734918, -13.360656, -2.6722217, 5.39143)
+
+[node name="solid2" type="CSGBox3D" parent="RoomSetup/separator"]
+transform = Transform3D(40, 0, 2.5046631e-13, 0, 9.999122, 0, 7.1508986e-11, 0, 0.19998628, -14.883853, 0.788223, 5.3944817)
+operation = 2
+size = Vector3(0.07309914, 0.65625, 2.3840332)
+
+[node name="Elevator" type="Node3D" parent="RoomSetup"]
+
+[node name="Elevator placeholder" type="MeshInstance3D" parent="RoomSetup/Elevator"]
+transform = Transform3D(2, 0, 0, 0, 7, 0, 0, 0, 6, 20.254799, 3.5830595, 0)
+mesh = SubResource("BoxMesh_34e03")
+surface_material_override/0 = SubResource("StandardMaterial3D_2cg3l")
+
+[node name="Maze" type="Node3D" parent="."]
+
+[node name="Cubicle" parent="Maze" instance=ExtResource("4_hl6ts")]
+transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2, 10.634913, 2.2221696, -15.091157)
+
+[node name="chair2" parent="Maze/Cubicle" instance=ExtResource("4_e2vnk")]
+transform = Transform3D(-0.23052529, 0, -0.97306615, 0, 0.99999994, 0, 1.2163328, 0, -0.28815663, -0.5003736, -0.8118948, -0.07841635)
+
+[node name="Mousepad_003" parent="Maze/Cubicle" instance=ExtResource("4_fokx0")]
+transform = Transform3D(799.99994, 2.6884843e-06, -6.99383e-05, -0.0003460083, 6.2159996, -0.0005120968, 8.74226e-05, 4.973741e-06, 1000, 0.27163458, 0.11814207, 0.32422733)
+
+[node name="Keyboard-aPwr5p1dluw2" parent="Maze/Cubicle" instance=ExtResource("5_y20s8")]
+transform = Transform3D(-1.9264286e-07, -0.36640006, -1.0630609e-08, 0, -1.6015854e-08, 0.24319997, -0.6000001, 1.8381341e-07, 5.333101e-15, 0.23928261, 0.11624712, -0.03726101)
+
+[node name="Computer Screen2" parent="Maze/Cubicle" instance=ExtResource("6_57git")]
+transform = Transform3D(2.7259004e-05, -139.99998, -6.1195938e-06, 0, -6.1195938e-06, 139.99998, -175, -3.4073757e-05, -1.4894111e-12, 0.46816063, 0.13260752, 0.11717129)
+
+[node name="System_unit_002" parent="Maze/Cubicle" instance=ExtResource("7_im6rg")]
+transform = Transform3D(7.549789e-09, 0.099999994, 4.3711386e-09, 0, -4.3711386e-09, 0.099999994, 0.125, -9.437238e-09, -4.1251476e-16, 0.3697405, 0.2684762, 0.6730609)
+
+[node name="Computer mouse2" parent="Maze/Cubicle" instance=ExtResource("8_1ixhq")]
+transform = Transform3D(-8.742278e-08, -1.9999999, -8.742278e-08, 0, -8.742278e-08, 1.9999999, -2.5, 1.09278474e-07, 4.7767136e-15, 0.27077198, 0.11949867, 0.44262934)
+
+[node name="Cylinder2" parent="Maze/Cubicle" instance=ExtResource("9_20ptw")]
+transform = Transform3D(8.789661e-07, -1.1237499e-06, -2.7999997, -3.979039e-14, 2.7999997, -1.1237499e-06, 3.5, 4.9069256e-13, 1.0987077e-06, 0.5035362, 0.5604175, 0.12070465)
+
+[node name="Cubicle2" parent="Maze" instance=ExtResource("4_hl6ts")]
+transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2, 4.6985226, 2.2221696, -15.091157)
+
+[node name="chair2" parent="Maze/Cubicle2" instance=ExtResource("4_e2vnk")]
+transform = Transform3D(0.47388235, 0, -0.97181726, 0, 0.9999998, 0, 1.143697, 0, 0.29234064, -0.5003736, -0.8118948, -0.07841635)
+
+[node name="Mousepad_003" parent="Maze/Cubicle2" instance=ExtResource("4_fokx0")]
+transform = Transform3D(799.99994, 2.6884843e-06, -6.99383e-05, -0.0003460083, 6.2159996, -0.0005120968, 8.74226e-05, 4.973741e-06, 1000, 0.27163458, 0.11814207, 0.32422733)
+
+[node name="Keyboard-aPwr5p1dluw2" parent="Maze/Cubicle2" instance=ExtResource("5_y20s8")]
+transform = Transform3D(-1.9264286e-07, -0.36640006, -1.0630609e-08, 0, -1.6015854e-08, 0.24319997, -0.6000001, 1.8381341e-07, 5.333101e-15, 0.23928261, 0.11624712, -0.03726101)
+
+[node name="Computer Screen2" parent="Maze/Cubicle2" instance=ExtResource("6_57git")]
+transform = Transform3D(2.7259004e-05, -139.99998, -6.1195938e-06, 0, -6.1195938e-06, 139.99998, -175, -3.4073757e-05, -1.4894111e-12, 0.46816063, 0.13260752, 0.11717129)
+
+[node name="System_unit_002" parent="Maze/Cubicle2" instance=ExtResource("7_im6rg")]
+transform = Transform3D(7.549789e-09, 0.099999994, 4.3711386e-09, 0, -4.3711386e-09, 0.099999994, 0.125, -9.437238e-09, -4.1251476e-16, 0.3697405, 0.2684762, 0.6730609)
+
+[node name="Computer mouse2" parent="Maze/Cubicle2" instance=ExtResource("8_1ixhq")]
+transform = Transform3D(-8.742278e-08, -1.9999999, -8.742278e-08, 0, -8.742278e-08, 1.9999999, -2.5, 1.09278474e-07, 4.7767136e-15, 0.27077198, 0.11949867, 0.44262934)
+
+[node name="Cylinder2" parent="Maze/Cubicle2" instance=ExtResource("9_20ptw")]
+transform = Transform3D(8.789661e-07, -1.1237499e-06, -2.7999997, -3.979039e-14, 2.7999997, -1.1237499e-06, 3.5, 4.9069256e-13, 1.0987077e-06, 0.5035362, 0.5604175, 0.12070465)
+
+[node name="Cubicle3" parent="Maze" instance=ExtResource("4_hl6ts")]
+transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2, -1.2689791, 2.2221696, -15.091157)
+
+[node name="chair2" parent="Maze/Cubicle3" instance=ExtResource("4_e2vnk")]
+transform = Transform3D(-0.23052529, 0, -0.97306615, 0, 0.99999994, 0, 1.2163328, 0, -0.28815663, -0.5003736, -0.8118948, -0.07841635)
+
+[node name="Mousepad_003" parent="Maze/Cubicle3" instance=ExtResource("4_fokx0")]
+transform = Transform3D(799.99994, 2.6884843e-06, -6.99383e-05, -0.0003460083, 6.2159996, -0.0005120968, 8.74226e-05, 4.973741e-06, 1000, 0.27163458, 0.11814207, 0.32422733)
+
+[node name="Keyboard-aPwr5p1dluw2" parent="Maze/Cubicle3" instance=ExtResource("5_y20s8")]
+transform = Transform3D(-1.9264286e-07, -0.36640006, -1.0630609e-08, 0, -1.6015854e-08, 0.24319997, -0.6000001, 1.8381341e-07, 5.333101e-15, 0.23928261, 0.11624712, -0.03726101)
+
+[node name="Computer Screen2" parent="Maze/Cubicle3" instance=ExtResource("6_57git")]
+transform = Transform3D(2.7259004e-05, -139.99998, -6.1195938e-06, 0, -6.1195938e-06, 139.99998, -175, -3.4073757e-05, -1.4894111e-12, 0.46816063, 0.13260752, 0.11717129)
+
+[node name="System_unit_002" parent="Maze/Cubicle3" instance=ExtResource("7_im6rg")]
+transform = Transform3D(7.549789e-09, 0.099999994, 4.3711386e-09, 0, -4.3711386e-09, 0.099999994, 0.125, -9.437238e-09, -4.1251476e-16, 0.3697405, 0.2684762, 0.6730609)
+
+[node name="Computer mouse2" parent="Maze/Cubicle3" instance=ExtResource("8_1ixhq")]
+transform = Transform3D(-8.742278e-08, -1.9999999, -8.742278e-08, 0, -8.742278e-08, 1.9999999, -2.5, 1.09278474e-07, 4.7767136e-15, 0.27077198, 0.11949867, 0.44262934)
+
+[node name="Cylinder2" parent="Maze/Cubicle3" instance=ExtResource("9_20ptw")]
+transform = Transform3D(8.789661e-07, -1.1237499e-06, -2.7999997, -3.979039e-14, 2.7999997, -1.1237499e-06, 3.5, 4.9069256e-13, 1.0987077e-06, 0.5035362, 0.5604175, 0.12070465)
+
+[node name="Cubicle4" parent="Maze" instance=ExtResource("4_hl6ts")]
+transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2, -7.205459, 2.221753, -15.09074)
+
+[node name="chair2" parent="Maze/Cubicle4" instance=ExtResource("4_e2vnk")]
+transform = Transform3D(0.47388235, 0, -0.97181726, 0, 0.9999998, 0, 1.143697, 0, 0.29234064, -0.5003736, -0.8118948, -0.07841635)
+
+[node name="Mousepad_003" parent="Maze/Cubicle4" instance=ExtResource("4_fokx0")]
+transform = Transform3D(799.99994, 2.6884843e-06, -6.99383e-05, -0.0003460083, 6.2159996, -0.0005120968, 8.74226e-05, 4.973741e-06, 1000, 0.27163458, 0.11814207, 0.32422733)
+
+[node name="Keyboard-aPwr5p1dluw2" parent="Maze/Cubicle4" instance=ExtResource("5_y20s8")]
+transform = Transform3D(-1.9264286e-07, -0.36640006, -1.0630609e-08, 0, -1.6015854e-08, 0.24319997, -0.6000001, 1.8381341e-07, 5.333101e-15, 0.23928261, 0.11624712, -0.03726101)
+
+[node name="Computer Screen2" parent="Maze/Cubicle4" instance=ExtResource("6_57git")]
+transform = Transform3D(2.7259004e-05, -139.99998, -6.1195938e-06, 0, -6.1195938e-06, 139.99998, -175, -3.4073757e-05, -1.4894111e-12, 0.46816063, 0.13260752, 0.11717129)
+
+[node name="System_unit_002" parent="Maze/Cubicle4" instance=ExtResource("7_im6rg")]
+transform = Transform3D(7.549789e-09, 0.099999994, 4.3711386e-09, 0, -4.3711386e-09, 0.099999994, 0.125, -9.437238e-09, -4.1251476e-16, 0.3697405, 0.2684762, 0.6730609)
+
+[node name="Computer mouse2" parent="Maze/Cubicle4" instance=ExtResource("8_1ixhq")]
+transform = Transform3D(-8.742278e-08, -1.9999999, -8.742278e-08, 0, -8.742278e-08, 1.9999999, -2.5, 1.09278474e-07, 4.7767136e-15, 0.27077198, 0.11949867, 0.44262934)
+
+[node name="Cylinder2" parent="Maze/Cubicle4" instance=ExtResource("9_20ptw")]
+transform = Transform3D(8.789661e-07, -1.1237499e-06, -2.7999997, -3.979039e-14, 2.7999997, -1.1237499e-06, 3.5, 4.9069256e-13, 1.0987077e-06, 0.5035362, 0.5604175, 0.12070465)
+
+[node name="Cubicle5" parent="Maze" instance=ExtResource("4_hl6ts")]
+transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2, 1.331059, 2.2221696, -7.235611)
+
+[node name="chair2" parent="Maze/Cubicle5" instance=ExtResource("4_e2vnk")]
+transform = Transform3D(-0.23052529, 0, -0.97306615, 0, 0.99999994, 0, 1.2163328, 0, -0.28815663, -0.5003736, -0.8118948, -0.07841635)
+
+[node name="Mousepad_003" parent="Maze/Cubicle5" instance=ExtResource("4_fokx0")]
+transform = Transform3D(799.99994, 2.6884843e-06, -6.99383e-05, -0.0003460083, 6.2159996, -0.0005120968, 8.74226e-05, 4.973741e-06, 1000, 0.27163458, 0.11814207, 0.32422733)
+
+[node name="Keyboard-aPwr5p1dluw2" parent="Maze/Cubicle5" instance=ExtResource("5_y20s8")]
+transform = Transform3D(-1.9264286e-07, -0.36640006, -1.0630609e-08, 0, -1.6015854e-08, 0.24319997, -0.6000001, 1.8381341e-07, 5.333101e-15, 0.23928261, 0.11624712, -0.03726101)
+
+[node name="Computer Screen2" parent="Maze/Cubicle5" instance=ExtResource("6_57git")]
+transform = Transform3D(2.7259004e-05, -139.99998, -6.1195938e-06, 0, -6.1195938e-06, 139.99998, -175, -3.4073757e-05, -1.4894111e-12, 0.46816063, 0.13260752, 0.11717129)
+
+[node name="System_unit_002" parent="Maze/Cubicle5" instance=ExtResource("7_im6rg")]
+transform = Transform3D(7.549789e-09, 0.099999994, 4.3711386e-09, 0, -4.3711386e-09, 0.099999994, 0.125, -9.437238e-09, -4.1251476e-16, 0.3697405, 0.2684762, 0.6730609)
+
+[node name="Computer mouse2" parent="Maze/Cubicle5" instance=ExtResource("8_1ixhq")]
+transform = Transform3D(-8.742278e-08, -1.9999999, -8.742278e-08, 0, -8.742278e-08, 1.9999999, -2.5, 1.09278474e-07, 4.7767136e-15, 0.27077198, 0.11949867, 0.44262934)
+
+[node name="Cylinder2" parent="Maze/Cubicle5" instance=ExtResource("9_20ptw")]
+transform = Transform3D(8.789661e-07, -1.1237499e-06, -2.7999997, -3.979039e-14, 2.7999997, -1.1237499e-06, 3.5, 4.9069256e-13, 1.0987077e-06, 0.5035362, 0.5604175, 0.12070465)
+
+[node name="Cubicle6" parent="Maze" instance=ExtResource("4_hl6ts")]
+transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2, -4.605332, 2.2221696, -7.235611)
+
+[node name="chair2" parent="Maze/Cubicle6" instance=ExtResource("4_e2vnk")]
+transform = Transform3D(0.47388235, 0, -0.97181726, 0, 0.9999998, 0, 1.143697, 0, 0.29234064, -0.5003736, -0.8118948, -0.07841635)
+
+[node name="Mousepad_003" parent="Maze/Cubicle6" instance=ExtResource("4_fokx0")]
+transform = Transform3D(799.99994, 2.6884843e-06, -6.99383e-05, -0.0003460083, 6.2159996, -0.0005120968, 8.74226e-05, 4.973741e-06, 1000, 0.27163458, 0.11814207, 0.32422733)
+
+[node name="Keyboard-aPwr5p1dluw2" parent="Maze/Cubicle6" instance=ExtResource("5_y20s8")]
+transform = Transform3D(-1.9264286e-07, -0.36640006, -1.0630609e-08, 0, -1.6015854e-08, 0.24319997, -0.6000001, 1.8381341e-07, 5.333101e-15, 0.23928261, 0.11624712, -0.03726101)
+
+[node name="Computer Screen2" parent="Maze/Cubicle6" instance=ExtResource("6_57git")]
+transform = Transform3D(2.7259004e-05, -139.99998, -6.1195938e-06, 0, -6.1195938e-06, 139.99998, -175, -3.4073757e-05, -1.4894111e-12, 0.46816063, 0.13260752, 0.11717129)
+
+[node name="System_unit_002" parent="Maze/Cubicle6" instance=ExtResource("7_im6rg")]
+transform = Transform3D(7.549789e-09, 0.099999994, 4.3711386e-09, 0, -4.3711386e-09, 0.099999994, 0.125, -9.437238e-09, -4.1251476e-16, 0.3697405, 0.2684762, 0.6730609)
+
+[node name="Computer mouse2" parent="Maze/Cubicle6" instance=ExtResource("8_1ixhq")]
+transform = Transform3D(-8.742278e-08, -1.9999999, -8.742278e-08, 0, -8.742278e-08, 1.9999999, -2.5, 1.09278474e-07, 4.7767136e-15, 0.27077198, 0.11949867, 0.44262934)
+
+[node name="Cylinder2" parent="Maze/Cubicle6" instance=ExtResource("9_20ptw")]
+transform = Transform3D(8.789661e-07, -1.1237499e-06, -2.7999997, -3.979039e-14, 2.7999997, -1.1237499e-06, 3.5, 4.9069256e-13, 1.0987077e-06, 0.5035362, 0.5604175, 0.12070465)
+
+[node name="Cubicle7" parent="Maze" instance=ExtResource("4_hl6ts")]
+transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2, -10.572834, 2.2221696, -7.235611)
+
+[node name="chair2" parent="Maze/Cubicle7" instance=ExtResource("4_e2vnk")]
+transform = Transform3D(-0.23052529, 0, -0.97306615, 0, 0.99999994, 0, 1.2163328, 0, -0.28815663, -0.5003736, -0.8118948, -0.07841635)
+
+[node name="Mousepad_003" parent="Maze/Cubicle7" instance=ExtResource("4_fokx0")]
+transform = Transform3D(799.99994, 2.6884843e-06, -6.99383e-05, -0.0003460083, 6.2159996, -0.0005120968, 8.74226e-05, 4.973741e-06, 1000, 0.27163458, 0.11814207, 0.32422733)
+
+[node name="Keyboard-aPwr5p1dluw2" parent="Maze/Cubicle7" instance=ExtResource("5_y20s8")]
+transform = Transform3D(-1.9264286e-07, -0.36640006, -1.0630609e-08, 0, -1.6015854e-08, 0.24319997, -0.6000001, 1.8381341e-07, 5.333101e-15, 0.23928261, 0.11624712, -0.03726101)
+
+[node name="Computer Screen2" parent="Maze/Cubicle7" instance=ExtResource("6_57git")]
+transform = Transform3D(2.7259004e-05, -139.99998, -6.1195938e-06, 0, -6.1195938e-06, 139.99998, -175, -3.4073757e-05, -1.4894111e-12, 0.46816063, 0.13260752, 0.11717129)
+
+[node name="System_unit_002" parent="Maze/Cubicle7" instance=ExtResource("7_im6rg")]
+transform = Transform3D(7.549789e-09, 0.099999994, 4.3711386e-09, 0, -4.3711386e-09, 0.099999994, 0.125, -9.437238e-09, -4.1251476e-16, 0.3697405, 0.2684762, 0.6730609)
+
+[node name="Computer mouse2" parent="Maze/Cubicle7" instance=ExtResource("8_1ixhq")]
+transform = Transform3D(-8.742278e-08, -1.9999999, -8.742278e-08, 0, -8.742278e-08, 1.9999999, -2.5, 1.09278474e-07, 4.7767136e-15, 0.27077198, 0.11949867, 0.44262934)
+
+[node name="Cylinder2" parent="Maze/Cubicle7" instance=ExtResource("9_20ptw")]
+transform = Transform3D(8.789661e-07, -1.1237499e-06, -2.7999997, -3.979039e-14, 2.7999997, -1.1237499e-06, 3.5, 4.9069256e-13, 1.0987077e-06, 0.5035362, 0.5604175, 0.12070465)
+
+[node name="Cubicle8" parent="Maze" instance=ExtResource("4_hl6ts")]
+transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2, -16.509224, 2.2221696, -7.235611)
+
+[node name="chair2" parent="Maze/Cubicle8" instance=ExtResource("4_e2vnk")]
+transform = Transform3D(0.47388235, 0, -0.97181726, 0, 0.9999998, 0, 1.143697, 0, 0.29234064, -0.5003736, -0.8118948, -0.07841635)
+
+[node name="Mousepad_003" parent="Maze/Cubicle8" instance=ExtResource("4_fokx0")]
+transform = Transform3D(799.99994, 2.6884843e-06, -6.99383e-05, -0.0003460083, 6.2159996, -0.0005120968, 8.74226e-05, 4.973741e-06, 1000, 0.27163458, 0.11814207, 0.32422733)
+
+[node name="Keyboard-aPwr5p1dluw2" parent="Maze/Cubicle8" instance=ExtResource("5_y20s8")]
+transform = Transform3D(-1.9264286e-07, -0.36640006, -1.0630609e-08, 0, -1.6015854e-08, 0.24319997, -0.6000001, 1.8381341e-07, 5.333101e-15, 0.23928261, 0.11624712, -0.03726101)
+
+[node name="Computer Screen2" parent="Maze/Cubicle8" instance=ExtResource("6_57git")]
+transform = Transform3D(2.7259004e-05, -139.99998, -6.1195938e-06, 0, -6.1195938e-06, 139.99998, -175, -3.4073757e-05, -1.4894111e-12, 0.46816063, 0.13260752, 0.11717129)
+
+[node name="System_unit_002" parent="Maze/Cubicle8" instance=ExtResource("7_im6rg")]
+transform = Transform3D(7.549789e-09, 0.099999994, 4.3711386e-09, 0, -4.3711386e-09, 0.099999994, 0.125, -9.437238e-09, -4.1251476e-16, 0.3697405, 0.2684762, 0.6730609)
+
+[node name="Computer mouse2" parent="Maze/Cubicle8" instance=ExtResource("8_1ixhq")]
+transform = Transform3D(-8.742278e-08, -1.9999999, -8.742278e-08, 0, -8.742278e-08, 1.9999999, -2.5, 1.09278474e-07, 4.7767136e-15, 0.27077198, 0.11949867, 0.44262934)
+
+[node name="Cylinder2" parent="Maze/Cubicle8" instance=ExtResource("9_20ptw")]
+transform = Transform3D(8.789661e-07, -1.1237499e-06, -2.7999997, -3.979039e-14, 2.7999997, -1.1237499e-06, 3.5, 4.9069256e-13, 1.0987077e-06, 0.5035362, 0.5604175, 0.12070465)
+
+[node name="Cubicle9" parent="Maze" instance=ExtResource("4_hl6ts")]
+transform = Transform3D(-1.09278474e-07, 0, 2, 0, 2.5, 0, -2.5, 0, -8.742278e-08, 10.371109, 2.2221696, -1.98065)
+
+[node name="chair2" parent="Maze/Cubicle9" instance=ExtResource("4_e2vnk")]
+transform = Transform3D(0.47388235, 0, -0.97181726, 0, 0.9999998, 0, 1.143697, 0, 0.29234064, -0.5003736, -0.8118948, -0.07841635)
+
+[node name="Mousepad_003" parent="Maze/Cubicle9" instance=ExtResource("4_fokx0")]
+transform = Transform3D(799.99994, 2.6884843e-06, -6.99383e-05, -0.0003460083, 6.2159996, -0.0005120968, 8.74226e-05, 4.973741e-06, 1000, 0.27163458, 0.11814207, 0.32422733)
+
+[node name="Keyboard-aPwr5p1dluw2" parent="Maze/Cubicle9" instance=ExtResource("5_y20s8")]
+transform = Transform3D(-1.9264286e-07, -0.36640006, -1.0630609e-08, 0, -1.6015854e-08, 0.24319997, -0.6000001, 1.8381341e-07, 5.333101e-15, 0.23928261, 0.11624712, -0.03726101)
+
+[node name="Computer Screen2" parent="Maze/Cubicle9" instance=ExtResource("6_57git")]
+transform = Transform3D(2.7259004e-05, -139.99998, -6.1195938e-06, 0, -6.1195938e-06, 139.99998, -175, -3.4073757e-05, -1.4894111e-12, 0.46816063, 0.13260752, 0.11717129)
+
+[node name="System_unit_002" parent="Maze/Cubicle9" instance=ExtResource("7_im6rg")]
+transform = Transform3D(7.549789e-09, 0.099999994, 4.3711386e-09, 0, -4.3711386e-09, 0.099999994, 0.125, -9.437238e-09, -4.1251476e-16, 0.3697405, 0.2684762, 0.6730609)
+
+[node name="Computer mouse2" parent="Maze/Cubicle9" instance=ExtResource("8_1ixhq")]
+transform = Transform3D(-8.742278e-08, -1.9999999, -8.742278e-08, 0, -8.742278e-08, 1.9999999, -2.5, 1.09278474e-07, 4.7767136e-15, 0.27077198, 0.11949867, 0.44262934)
+
+[node name="Cylinder2" parent="Maze/Cubicle9" instance=ExtResource("9_20ptw")]
+transform = Transform3D(8.789661e-07, -1.1237499e-06, -2.7999997, -3.979039e-14, 2.7999997, -1.1237499e-06, 3.5, 4.9069256e-13, 1.0987077e-06, 0.5035362, 0.5604175, 0.12070465)
+
+[node name="Cubicle10" parent="Maze" instance=ExtResource("4_hl6ts")]
+transform = Transform3D(-1.09278474e-07, 0, 2, 0, 2.5, 0, -2.5, 0, -8.742278e-08, 10.371109, 2.2221696, 3.9000993)
+
+[node name="chair2" parent="Maze/Cubicle10" instance=ExtResource("4_e2vnk")]
+transform = Transform3D(0.47388235, 0, -0.97181726, 0, 0.9999998, 0, 1.143697, 0, 0.29234064, -0.5003736, -0.8118948, -0.07841635)
+
+[node name="Mousepad_003" parent="Maze/Cubicle10" instance=ExtResource("4_fokx0")]
+transform = Transform3D(799.99994, 2.6884843e-06, -6.99383e-05, -0.0003460083, 6.2159996, -0.0005120968, 8.74226e-05, 4.973741e-06, 1000, 0.27163458, 0.11814207, 0.32422733)
+
+[node name="Keyboard-aPwr5p1dluw2" parent="Maze/Cubicle10" instance=ExtResource("5_y20s8")]
+transform = Transform3D(-1.9264286e-07, -0.36640006, -1.0630609e-08, 0, -1.6015854e-08, 0.24319997, -0.6000001, 1.8381341e-07, 5.333101e-15, 0.23928261, 0.11624712, -0.03726101)
+
+[node name="Computer Screen2" parent="Maze/Cubicle10" instance=ExtResource("6_57git")]
+transform = Transform3D(2.7259004e-05, -139.99998, -6.1195938e-06, 0, -6.1195938e-06, 139.99998, -175, -3.4073757e-05, -1.4894111e-12, 0.46816063, 0.13260752, 0.11717129)
+
+[node name="System_unit_002" parent="Maze/Cubicle10" instance=ExtResource("7_im6rg")]
+transform = Transform3D(7.549789e-09, 0.099999994, 4.3711386e-09, 0, -4.3711386e-09, 0.099999994, 0.125, -9.437238e-09, -4.1251476e-16, 0.3697405, 0.2684762, 0.6730609)
+
+[node name="Computer mouse2" parent="Maze/Cubicle10" instance=ExtResource("8_1ixhq")]
+transform = Transform3D(-8.742278e-08, -1.9999999, -8.742278e-08, 0, -8.742278e-08, 1.9999999, -2.5, 1.09278474e-07, 4.7767136e-15, 0.27077198, 0.11949867, 0.44262934)
+
+[node name="Cylinder2" parent="Maze/Cubicle10" instance=ExtResource("9_20ptw")]
+transform = Transform3D(8.789661e-07, -1.1237499e-06, -2.7999997, -3.979039e-14, 2.7999997, -1.1237499e-06, 3.5, 4.9069256e-13, 1.0987077e-06, 0.5035362, 0.5604175, 0.12070465)
+
+[node name="Cubicle11" parent="Maze" instance=ExtResource("4_hl6ts")]
+transform = Transform3D(-1.09278474e-07, 0, 2, 0, 2.5, 0, -2.5, 0, -8.742278e-08, 10.371109, 2.2221696, 9.857905)
+
+[node name="chair2" parent="Maze/Cubicle11" instance=ExtResource("4_e2vnk")]
+transform = Transform3D(0.47388235, 0, -0.97181726, 0, 0.9999998, 0, 1.143697, 0, 0.29234064, -0.5003736, -0.8118948, -0.07841635)
+
+[node name="Mousepad_003" parent="Maze/Cubicle11" instance=ExtResource("4_fokx0")]
+transform = Transform3D(799.99994, 2.6884843e-06, -6.99383e-05, -0.0003460083, 6.2159996, -0.0005120968, 8.74226e-05, 4.973741e-06, 1000, 0.27163458, 0.11814207, 0.32422733)
+
+[node name="Keyboard-aPwr5p1dluw2" parent="Maze/Cubicle11" instance=ExtResource("5_y20s8")]
+transform = Transform3D(-1.9264286e-07, -0.36640006, -1.0630609e-08, 0, -1.6015854e-08, 0.24319997, -0.6000001, 1.8381341e-07, 5.333101e-15, 0.23928261, 0.11624712, -0.03726101)
+
+[node name="Computer Screen2" parent="Maze/Cubicle11" instance=ExtResource("6_57git")]
+transform = Transform3D(2.7259004e-05, -139.99998, -6.1195938e-06, 0, -6.1195938e-06, 139.99998, -175, -3.4073757e-05, -1.4894111e-12, 0.46816063, 0.13260752, 0.11717129)
+
+[node name="System_unit_002" parent="Maze/Cubicle11" instance=ExtResource("7_im6rg")]
+transform = Transform3D(7.549789e-09, 0.099999994, 4.3711386e-09, 0, -4.3711386e-09, 0.099999994, 0.125, -9.437238e-09, -4.1251476e-16, 0.3697405, 0.2684762, 0.6730609)
+
+[node name="Computer mouse2" parent="Maze/Cubicle11" instance=ExtResource("8_1ixhq")]
+transform = Transform3D(-8.742278e-08, -1.9999999, -8.742278e-08, 0, -8.742278e-08, 1.9999999, -2.5, 1.09278474e-07, 4.7767136e-15, 0.27077198, 0.11949867, 0.44262934)
+
+[node name="Cylinder2" parent="Maze/Cubicle11" instance=ExtResource("9_20ptw")]
+transform = Transform3D(8.789661e-07, -1.1237499e-06, -2.7999997, -3.979039e-14, 2.7999997, -1.1237499e-06, 3.5, 4.9069256e-13, 1.0987077e-06, 0.5035362, 0.5604175, 0.12070465)
+
+[node name="Cubicle12" parent="Maze" instance=ExtResource("4_hl6ts")]
+transform = Transform3D(-1.09278474e-07, 0, 2, 0, 2.5, 0, -2.5, 0, -8.742278e-08, 10.371109, 2.2221696, 15.738655)
+
+[node name="chair2" parent="Maze/Cubicle12" instance=ExtResource("4_e2vnk")]
+transform = Transform3D(0.47388235, 0, -0.97181726, 0, 0.9999998, 0, 1.143697, 0, 0.29234064, -0.5003736, -0.8118948, -0.07841635)
+
+[node name="Mousepad_003" parent="Maze/Cubicle12" instance=ExtResource("4_fokx0")]
+transform = Transform3D(799.99994, 2.6884843e-06, -6.99383e-05, -0.0003460083, 6.2159996, -0.0005120968, 8.74226e-05, 4.973741e-06, 1000, 0.27163458, 0.11814207, 0.32422733)
+
+[node name="Keyboard-aPwr5p1dluw2" parent="Maze/Cubicle12" instance=ExtResource("5_y20s8")]
+transform = Transform3D(-1.9264286e-07, -0.36640006, -1.0630609e-08, 0, -1.6015854e-08, 0.24319997, -0.6000001, 1.8381341e-07, 5.333101e-15, 0.23928261, 0.11624712, -0.03726101)
+
+[node name="Computer Screen2" parent="Maze/Cubicle12" instance=ExtResource("6_57git")]
+transform = Transform3D(2.7259004e-05, -139.99998, -6.1195938e-06, 0, -6.1195938e-06, 139.99998, -175, -3.4073757e-05, -1.4894111e-12, 0.46816063, 0.13260752, 0.11717129)
+
+[node name="System_unit_002" parent="Maze/Cubicle12" instance=ExtResource("7_im6rg")]
+transform = Transform3D(7.549789e-09, 0.099999994, 4.3711386e-09, 0, -4.3711386e-09, 0.099999994, 0.125, -9.437238e-09, -4.1251476e-16, 0.3697405, 0.2684762, 0.6730609)
+
+[node name="Computer mouse2" parent="Maze/Cubicle12" instance=ExtResource("8_1ixhq")]
+transform = Transform3D(-8.742278e-08, -1.9999999, -8.742278e-08, 0, -8.742278e-08, 1.9999999, -2.5, 1.09278474e-07, 4.7767136e-15, 0.27077198, 0.11949867, 0.44262934)
+
+[node name="Cylinder2" parent="Maze/Cubicle12" instance=ExtResource("9_20ptw")]
+transform = Transform3D(8.789661e-07, -1.1237499e-06, -2.7999997, -3.979039e-14, 2.7999997, -1.1237499e-06, 3.5, 4.9069256e-13, 1.0987077e-06, 0.5035362, 0.5604175, 0.12070465)
+
+[node name="Cubicle17" parent="Maze" instance=ExtResource("4_hl6ts")]
+transform = Transform3D(-1.09278474e-07, 0, 2, 0, 2.5, 0, -2.5, 0, -8.742278e-08, -11.162381, 2.2221696, 3.1463413)
+
+[node name="chair2" parent="Maze/Cubicle17" instance=ExtResource("4_e2vnk")]
+transform = Transform3D(0.47388235, 0, -0.97181726, 0, 0.9999998, 0, 1.143697, 0, 0.29234064, -0.5003736, -0.8118948, -0.07841635)
+
+[node name="Mousepad_003" parent="Maze/Cubicle17" instance=ExtResource("4_fokx0")]
+transform = Transform3D(799.99994, 2.6884843e-06, -6.99383e-05, -0.0003460083, 6.2159996, -0.0005120968, 8.74226e-05, 4.973741e-06, 1000, 0.27163458, 0.11814207, 0.32422733)
+
+[node name="Keyboard-aPwr5p1dluw2" parent="Maze/Cubicle17" instance=ExtResource("5_y20s8")]
+transform = Transform3D(-1.9264286e-07, -0.36640006, -1.0630609e-08, 0, -1.6015854e-08, 0.24319997, -0.6000001, 1.8381341e-07, 5.333101e-15, 0.23928261, 0.11624712, -0.03726101)
+
+[node name="Computer Screen2" parent="Maze/Cubicle17" instance=ExtResource("6_57git")]
+transform = Transform3D(2.7259004e-05, -139.99998, -6.1195938e-06, 0, -6.1195938e-06, 139.99998, -175, -3.4073757e-05, -1.4894111e-12, 0.46816063, 0.13260752, 0.11717129)
+
+[node name="System_unit_002" parent="Maze/Cubicle17" instance=ExtResource("7_im6rg")]
+transform = Transform3D(7.549789e-09, 0.099999994, 4.3711386e-09, 0, -4.3711386e-09, 0.099999994, 0.125, -9.437238e-09, -4.1251476e-16, 0.3697405, 0.2684762, 0.6730609)
+
+[node name="Computer mouse2" parent="Maze/Cubicle17" instance=ExtResource("8_1ixhq")]
+transform = Transform3D(-8.742278e-08, -1.9999999, -8.742278e-08, 0, -8.742278e-08, 1.9999999, -2.5, 1.09278474e-07, 4.7767136e-15, 0.27077198, 0.11949867, 0.44262934)
+
+[node name="Cylinder2" parent="Maze/Cubicle17" instance=ExtResource("9_20ptw")]
+transform = Transform3D(8.789661e-07, -1.1237499e-06, -2.7999997, -3.979039e-14, 2.7999997, -1.1237499e-06, 3.5, 4.9069256e-13, 1.0987077e-06, 0.5035362, 0.5604175, 0.12070465)
+
+[node name="Cubicle18" parent="Maze" instance=ExtResource("4_hl6ts")]
+transform = Transform3D(-1.09278474e-07, 0, 2, 0, 2.5, 0, -2.5, 0, -8.742278e-08, -11.162381, 2.2221696, 9.02709)
+
+[node name="chair2" parent="Maze/Cubicle18" instance=ExtResource("4_e2vnk")]
+transform = Transform3D(0.47388235, 0, -0.97181726, 0, 0.9999998, 0, 1.143697, 0, 0.29234064, -0.5003736, -0.8118948, -0.07841635)
+
+[node name="Mousepad_003" parent="Maze/Cubicle18" instance=ExtResource("4_fokx0")]
+transform = Transform3D(799.99994, 2.6884843e-06, -6.99383e-05, -0.0003460083, 6.2159996, -0.0005120968, 8.74226e-05, 4.973741e-06, 1000, 0.27163458, 0.11814207, 0.32422733)
+
+[node name="Keyboard-aPwr5p1dluw2" parent="Maze/Cubicle18" instance=ExtResource("5_y20s8")]
+transform = Transform3D(-1.9264286e-07, -0.36640006, -1.0630609e-08, 0, -1.6015854e-08, 0.24319997, -0.6000001, 1.8381341e-07, 5.333101e-15, 0.23928261, 0.11624712, -0.03726101)
+
+[node name="Computer Screen2" parent="Maze/Cubicle18" instance=ExtResource("6_57git")]
+transform = Transform3D(2.7259004e-05, -139.99998, -6.1195938e-06, 0, -6.1195938e-06, 139.99998, -175, -3.4073757e-05, -1.4894111e-12, 0.46816063, 0.13260752, 0.11717129)
+
+[node name="System_unit_002" parent="Maze/Cubicle18" instance=ExtResource("7_im6rg")]
+transform = Transform3D(7.549789e-09, 0.099999994, 4.3711386e-09, 0, -4.3711386e-09, 0.099999994, 0.125, -9.437238e-09, -4.1251476e-16, 0.3697405, 0.2684762, 0.6730609)
+
+[node name="Computer mouse2" parent="Maze/Cubicle18" instance=ExtResource("8_1ixhq")]
+transform = Transform3D(-8.742278e-08, -1.9999999, -8.742278e-08, 0, -8.742278e-08, 1.9999999, -2.5, 1.09278474e-07, 4.7767136e-15, 0.27077198, 0.11949867, 0.44262934)
+
+[node name="Cylinder2" parent="Maze/Cubicle18" instance=ExtResource("9_20ptw")]
+transform = Transform3D(8.789661e-07, -1.1237499e-06, -2.7999997, -3.979039e-14, 2.7999997, -1.1237499e-06, 3.5, 4.9069256e-13, 1.0987077e-06, 0.5035362, 0.5604175, 0.12070465)
+
+[node name="Cubicle19" parent="Maze" instance=ExtResource("4_hl6ts")]
+transform = Transform3D(-1.09278474e-07, 0, 2, 0, 2.5, 0, -2.5, 0, -8.742278e-08, -11.162381, 2.2221696, 14.984897)
+
+[node name="chair2" parent="Maze/Cubicle19" instance=ExtResource("4_e2vnk")]
+transform = Transform3D(0.47388235, 0, -0.97181726, 0, 0.9999998, 0, 1.143697, 0, 0.29234064, -0.5003736, -0.8118948, -0.07841635)
+
+[node name="Mousepad_003" parent="Maze/Cubicle19" instance=ExtResource("4_fokx0")]
+transform = Transform3D(799.99994, 2.6884843e-06, -6.99383e-05, -0.0003460083, 6.2159996, -0.0005120968, 8.74226e-05, 4.973741e-06, 1000, 0.27163458, 0.11814207, 0.32422733)
+
+[node name="Keyboard-aPwr5p1dluw2" parent="Maze/Cubicle19" instance=ExtResource("5_y20s8")]
+transform = Transform3D(-1.9264286e-07, -0.36640006, -1.0630609e-08, 0, -1.6015854e-08, 0.24319997, -0.6000001, 1.8381341e-07, 5.333101e-15, 0.23928261, 0.11624712, -0.03726101)
+
+[node name="Computer Screen2" parent="Maze/Cubicle19" instance=ExtResource("6_57git")]
+transform = Transform3D(2.7259004e-05, -139.99998, -6.1195938e-06, 0, -6.1195938e-06, 139.99998, -175, -3.4073757e-05, -1.4894111e-12, 0.46816063, 0.13260752, 0.11717129)
+
+[node name="System_unit_002" parent="Maze/Cubicle19" instance=ExtResource("7_im6rg")]
+transform = Transform3D(7.549789e-09, 0.099999994, 4.3711386e-09, 0, -4.3711386e-09, 0.099999994, 0.125, -9.437238e-09, -4.1251476e-16, 0.3697405, 0.2684762, 0.6730609)
+
+[node name="Computer mouse2" parent="Maze/Cubicle19" instance=ExtResource("8_1ixhq")]
+transform = Transform3D(-8.742278e-08, -1.9999999, -8.742278e-08, 0, -8.742278e-08, 1.9999999, -2.5, 1.09278474e-07, 4.7767136e-15, 0.27077198, 0.11949867, 0.44262934)
+
+[node name="Cylinder2" parent="Maze/Cubicle19" instance=ExtResource("9_20ptw")]
+transform = Transform3D(8.789661e-07, -1.1237499e-06, -2.7999997, -3.979039e-14, 2.7999997, -1.1237499e-06, 3.5, 4.9069256e-13, 1.0987077e-06, 0.5035362, 0.5604175, 0.12070465)
+
+[node name="Cubicle20" parent="Maze" instance=ExtResource("4_hl6ts")]
+transform = Transform3D(-1.09278474e-07, 0, 2, 0, 2.5, 0, -2.5, 0, -8.742278e-08, -11.162381, 2.2221696, 20.865646)
+
+[node name="chair2" parent="Maze/Cubicle20" instance=ExtResource("4_e2vnk")]
+transform = Transform3D(0.47388235, 0, -0.97181726, 0, 0.9999998, 0, 1.143697, 0, 0.29234064, -0.5003736, -0.8118948, -0.07841635)
+
+[node name="Mousepad_003" parent="Maze/Cubicle20" instance=ExtResource("4_fokx0")]
+transform = Transform3D(799.99994, 2.6884843e-06, -6.99383e-05, -0.0003460083, 6.2159996, -0.0005120968, 8.74226e-05, 4.973741e-06, 1000, 0.27163458, 0.11814207, 0.32422733)
+
+[node name="Keyboard-aPwr5p1dluw2" parent="Maze/Cubicle20" instance=ExtResource("5_y20s8")]
+transform = Transform3D(-1.9264286e-07, -0.36640006, -1.0630609e-08, 0, -1.6015854e-08, 0.24319997, -0.6000001, 1.8381341e-07, 5.333101e-15, 0.23928261, 0.11624712, -0.03726101)
+
+[node name="Computer Screen2" parent="Maze/Cubicle20" instance=ExtResource("6_57git")]
+transform = Transform3D(2.7259004e-05, -139.99998, -6.1195938e-06, 0, -6.1195938e-06, 139.99998, -175, -3.4073757e-05, -1.4894111e-12, 0.46816063, 0.13260752, 0.11717129)
+
+[node name="System_unit_002" parent="Maze/Cubicle20" instance=ExtResource("7_im6rg")]
+transform = Transform3D(7.549789e-09, 0.099999994, 4.3711386e-09, 0, -4.3711386e-09, 0.099999994, 0.125, -9.437238e-09, -4.1251476e-16, 0.3697405, 0.2684762, 0.6730609)
+
+[node name="Computer mouse2" parent="Maze/Cubicle20" instance=ExtResource("8_1ixhq")]
+transform = Transform3D(-8.742278e-08, -1.9999999, -8.742278e-08, 0, -8.742278e-08, 1.9999999, -2.5, 1.09278474e-07, 4.7767136e-15, 0.27077198, 0.11949867, 0.44262934)
+
+[node name="Cylinder2" parent="Maze/Cubicle20" instance=ExtResource("9_20ptw")]
+transform = Transform3D(8.789661e-07, -1.1237499e-06, -2.7999997, -3.979039e-14, 2.7999997, -1.1237499e-06, 3.5, 4.9069256e-13, 1.0987077e-06, 0.5035362, 0.5604175, 0.12070465)
+
+[node name="Cubicle13" parent="Maze" instance=ExtResource("4_hl6ts")]
+transform = Transform3D(-1.09278474e-07, 0, 2, 0, 2.5, 0, -2.5, 0, -8.742278e-08, -0.59470654, 2.2221696, 0.00269413)
+
+[node name="chair2" parent="Maze/Cubicle13" instance=ExtResource("4_e2vnk")]
+transform = Transform3D(0.4738823, 0, -0.9718171, 0, 0.99999976, 0, 1.143697, 0, 0.29234064, 1.4925658, -0.8118948, -1.2497878)
+
+[node name="Mousepad_003" parent="Maze/Cubicle13" instance=ExtResource("4_fokx0")]
+transform = Transform3D(799.99994, 2.6884843e-06, -6.99383e-05, -0.0003460083, 6.2159996, -0.0005120968, 8.74226e-05, 4.973741e-06, 1000, 0.27163458, 0.11814207, 0.32422733)
+
+[node name="Keyboard-aPwr5p1dluw2" parent="Maze/Cubicle13" instance=ExtResource("5_y20s8")]
+transform = Transform3D(-1.9264286e-07, -0.36640006, -1.0630609e-08, 0, -1.6015854e-08, 0.24319997, -0.6000001, 1.8381341e-07, 5.333101e-15, 0.23928261, 0.11624712, -0.03726101)
+
+[node name="Computer Screen2" parent="Maze/Cubicle13" instance=ExtResource("6_57git")]
+transform = Transform3D(2.7259004e-05, -139.99998, -6.1195938e-06, 0, -6.1195938e-06, 139.99998, -175, -3.4073757e-05, -1.4894111e-12, 0.46816063, 0.13260752, 0.11717129)
+
+[node name="System_unit_002" parent="Maze/Cubicle13" instance=ExtResource("7_im6rg")]
+transform = Transform3D(7.549789e-09, 0.099999994, 4.3711386e-09, 0, -4.3711386e-09, 0.099999994, 0.125, -9.437238e-09, -4.1251476e-16, 0.3697405, 0.2684762, 0.6730609)
+
+[node name="Computer mouse2" parent="Maze/Cubicle13" instance=ExtResource("8_1ixhq")]
+transform = Transform3D(-8.742278e-08, -1.9999999, -8.742278e-08, 0, -8.742278e-08, 1.9999999, -2.5, 1.09278474e-07, 4.7767136e-15, 0.27077198, 0.11949867, 0.44262934)
+
+[node name="Cylinder2" parent="Maze/Cubicle13" instance=ExtResource("9_20ptw")]
+transform = Transform3D(8.789661e-07, -1.1237499e-06, -2.7999997, -3.979039e-14, 2.7999997, -1.1237499e-06, 3.5, 4.9069256e-13, 1.0987077e-06, 0.5035362, 0.5604175, 0.12070465)
+
+[node name="Cubicle14" parent="Maze" instance=ExtResource("4_hl6ts")]
+transform = Transform3D(-1.09278474e-07, 0, 2, 0, 2.5, 0, -2.5, 0, -8.742278e-08, -0.59470654, 2.2221696, 5.8834434)
+
+[node name="chair2" parent="Maze/Cubicle14" instance=ExtResource("4_e2vnk")]
+transform = Transform3D(0.47388235, 0, -0.97181726, 0, 0.9999998, 0, 1.143697, 0, 0.29234064, -0.5003736, -0.8118948, -0.07841635)
+
+[node name="Mousepad_003" parent="Maze/Cubicle14" instance=ExtResource("4_fokx0")]
+transform = Transform3D(799.99994, 2.6884843e-06, -6.99383e-05, -0.0003460083, 6.2159996, -0.0005120968, 8.74226e-05, 4.973741e-06, 1000, 0.27163458, 0.11814207, 0.32422733)
+
+[node name="Keyboard-aPwr5p1dluw2" parent="Maze/Cubicle14" instance=ExtResource("5_y20s8")]
+transform = Transform3D(-1.9264286e-07, -0.36640006, -1.0630609e-08, 0, -1.6015854e-08, 0.24319997, -0.6000001, 1.8381341e-07, 5.333101e-15, 0.23928261, 0.11624712, -0.03726101)
+
+[node name="Computer Screen2" parent="Maze/Cubicle14" instance=ExtResource("6_57git")]
+transform = Transform3D(2.7259004e-05, -139.99998, -6.1195938e-06, 0, -6.1195938e-06, 139.99998, -175, -3.4073757e-05, -1.4894111e-12, 0.46816063, 0.13260752, 0.11717129)
+
+[node name="System_unit_002" parent="Maze/Cubicle14" instance=ExtResource("7_im6rg")]
+transform = Transform3D(7.549789e-09, 0.099999994, 4.3711386e-09, 0, -4.3711386e-09, 0.099999994, 0.125, -9.437238e-09, -4.1251476e-16, 0.3697405, 0.2684762, 0.6730609)
+
+[node name="Computer mouse2" parent="Maze/Cubicle14" instance=ExtResource("8_1ixhq")]
+transform = Transform3D(-8.742278e-08, -1.9999999, -8.742278e-08, 0, -8.742278e-08, 1.9999999, -2.5, 1.09278474e-07, 4.7767136e-15, 0.27077198, 0.11949867, 0.44262934)
+
+[node name="Cylinder2" parent="Maze/Cubicle14" instance=ExtResource("9_20ptw")]
+transform = Transform3D(8.789661e-07, -1.1237499e-06, -2.7999997, -3.979039e-14, 2.7999997, -1.1237499e-06, 3.5, 4.9069256e-13, 1.0987077e-06, 0.5035362, 0.5604175, 0.12070465)
+
+[node name="Cubicle15" parent="Maze" instance=ExtResource("4_hl6ts")]
+transform = Transform3D(-1.09278474e-07, 0, 2, 0, 2.5, 0, -2.5, 0, -8.742278e-08, -0.59470654, 2.2221696, 11.841249)
+
+[node name="chair2" parent="Maze/Cubicle15" instance=ExtResource("4_e2vnk")]
+transform = Transform3D(0.47388235, 0, -0.97181726, 0, 0.9999998, 0, 1.143697, 0, 0.29234064, -0.5003736, -0.8118948, -0.07841635)
+
+[node name="Mousepad_003" parent="Maze/Cubicle15" instance=ExtResource("4_fokx0")]
+transform = Transform3D(799.99994, 2.6884843e-06, -6.99383e-05, -0.0003460083, 6.2159996, -0.0005120968, 8.74226e-05, 4.973741e-06, 1000, 0.27163458, 0.11814207, 0.32422733)
+
+[node name="Keyboard-aPwr5p1dluw2" parent="Maze/Cubicle15" instance=ExtResource("5_y20s8")]
+transform = Transform3D(-1.9264286e-07, -0.36640006, -1.0630609e-08, 0, -1.6015854e-08, 0.24319997, -0.6000001, 1.8381341e-07, 5.333101e-15, 0.23928261, 0.11624712, -0.03726101)
+
+[node name="Computer Screen2" parent="Maze/Cubicle15" instance=ExtResource("6_57git")]
+transform = Transform3D(2.7259004e-05, -139.99998, -6.1195938e-06, 0, -6.1195938e-06, 139.99998, -175, -3.4073757e-05, -1.4894111e-12, 0.46816063, 0.13260752, 0.11717129)
+
+[node name="System_unit_002" parent="Maze/Cubicle15" instance=ExtResource("7_im6rg")]
+transform = Transform3D(7.549789e-09, 0.099999994, 4.3711386e-09, 0, -4.3711386e-09, 0.099999994, 0.125, -9.437238e-09, -4.1251476e-16, 0.3697405, 0.2684762, 0.6730609)
+
+[node name="Computer mouse2" parent="Maze/Cubicle15" instance=ExtResource("8_1ixhq")]
+transform = Transform3D(-8.742278e-08, -1.9999999, -8.742278e-08, 0, -8.742278e-08, 1.9999999, -2.5, 1.09278474e-07, 4.7767136e-15, 0.27077198, 0.11949867, 0.44262934)
+
+[node name="Cylinder2" parent="Maze/Cubicle15" instance=ExtResource("9_20ptw")]
+transform = Transform3D(8.789661e-07, -1.1237499e-06, -2.7999997, -3.979039e-14, 2.7999997, -1.1237499e-06, 3.5, 4.9069256e-13, 1.0987077e-06, 0.5035362, 0.5604175, 0.12070465)
+
+[node name="Cubicle16" parent="Maze" instance=ExtResource("4_hl6ts")]
+transform = Transform3D(-1.09278474e-07, 0, 2, 0, 2.5, 0, -2.5, 0, -8.742278e-08, -0.59470654, 2.2221696, 17.722)
+
+[node name="chair2" parent="Maze/Cubicle16" instance=ExtResource("4_e2vnk")]
+transform = Transform3D(0.47388235, 0, -0.97181726, 0, 0.9999998, 0, 1.143697, 0, 0.29234064, -0.5003736, -0.8118948, -0.07841635)
+
+[node name="Mousepad_003" parent="Maze/Cubicle16" instance=ExtResource("4_fokx0")]
+transform = Transform3D(799.99994, 2.6884843e-06, -6.99383e-05, -0.0003460083, 6.2159996, -0.0005120968, 8.74226e-05, 4.973741e-06, 1000, 0.27163458, 0.11814207, 0.32422733)
+
+[node name="Keyboard-aPwr5p1dluw2" parent="Maze/Cubicle16" instance=ExtResource("5_y20s8")]
+transform = Transform3D(-1.9264286e-07, -0.36640006, -1.0630609e-08, 0, -1.6015854e-08, 0.24319997, -0.6000001, 1.8381341e-07, 5.333101e-15, 0.23928261, 0.11624712, -0.03726101)
+
+[node name="Computer Screen2" parent="Maze/Cubicle16" instance=ExtResource("6_57git")]
+transform = Transform3D(2.7259004e-05, -139.99998, -6.1195938e-06, 0, -6.1195938e-06, 139.99998, -175, -3.4073757e-05, -1.4894111e-12, 0.46816063, 0.13260752, 0.11717129)
+
+[node name="System_unit_002" parent="Maze/Cubicle16" instance=ExtResource("7_im6rg")]
+transform = Transform3D(7.549789e-09, 0.099999994, 4.3711386e-09, 0, -4.3711386e-09, 0.099999994, 0.125, -9.437238e-09, -4.1251476e-16, 0.3697405, 0.2684762, 0.6730609)
+
+[node name="Computer mouse2" parent="Maze/Cubicle16" instance=ExtResource("8_1ixhq")]
+transform = Transform3D(-8.742278e-08, -1.9999999, -8.742278e-08, 0, -8.742278e-08, 1.9999999, -2.5, 1.09278474e-07, 4.7767136e-15, 0.27077198, 0.11949867, 0.44262934)
+
+[node name="Cylinder2" parent="Maze/Cubicle16" instance=ExtResource("9_20ptw")]
+transform = Transform3D(8.789661e-07, -1.1237499e-06, -2.7999997, -3.979039e-14, 2.7999997, -1.1237499e-06, 3.5, 4.9069256e-13, 1.0987077e-06, 0.5035362, 0.5604175, 0.12070465)

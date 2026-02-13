@@ -1,0 +1,29 @@
+[gd_scene load_steps=5 format=3 uid="uid://jvpi0hc4t1hv"]
+
+[ext_resource type="PackedScene" uid="uid://buavt2cavw0mq" path="res://assets/props/glb files/Boss Phone.glb" id="1_lx0pg"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_soq84"]
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_vpnf6"]
+data = PackedVector3Array(-0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, -0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, -0.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_hx1er"]
+
+[node name="Root Scene" instance=ExtResource("1_lx0pg")]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." index="1"]
+transform = Transform3D(4.8824387, 1.786215e-13, -1.1902376e-33, -2.775345e-13, 3.1423426, -2.0938883e-20, -2.2419e-40, 1.9962508e-20, 3.2960362, -0.61502737, 0.40406185, -1.0981059)
+visible = false
+mesh = SubResource("BoxMesh_soq84")
+skeleton = NodePath("../Computer_Mouse")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="MeshInstance3D" index="0"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D/StaticBody3D" index="0"]
+shape = SubResource("ConcavePolygonShape3D_vpnf6")
+
+[node name="Area3D" type="Area3D" parent="MeshInstance3D" index="1"]
+transform = Transform3D(100, 0, 0, 0, 100, 0, 0, 0, 100, 0, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D/Area3D" index="0"]
+shape = SubResource("BoxShape3D_hx1er")

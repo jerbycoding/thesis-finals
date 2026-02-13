@@ -318,9 +318,9 @@ func _show_final_summary():
 	
 	# IMMEDIATE TRANSITION: Back to Title Screen for a clean break
 	if TransitionManager:
-		TransitionManager.change_scene_to("res://scenes/ui/TitleScreen.tscn")
+		TransitionManager.change_scene_to("res://scenes/3d/MainMenu3D.tscn")
 	else:
-		get_tree().change_scene_to_file("res://scenes/ui/TitleScreen.tscn")
+		get_tree().change_scene_to_file("res://scenes/3d/MainMenu3D.tscn")
 
 func _update_visual_focus():
 	if not overlay or not is_tutorial_active or not sequence: return
