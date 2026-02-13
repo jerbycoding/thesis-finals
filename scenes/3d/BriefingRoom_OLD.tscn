@@ -1,0 +1,127 @@
+[gd_scene load_steps=15 format=3 uid="uid://dp4al4ut4ijjm"]
+
+[ext_resource type="PackedScene" uid="uid://ceta2wna3gome" path="res://scenes/3d/NPC_CISO.tscn" id="1_ciso"]
+[ext_resource type="PackedScene" uid="uid://b2d35yngg7u75" path="res://scenes/Player3D.tscn" id="2_player"]
+[ext_resource type="Script" uid="uid://dh3hcvpwq0ufa" path="res://scripts/3d/RoomTeleporter.gd" id="3_teleport"]
+[ext_resource type="PackedScene" path="res://scenes/3d/props/graybox/Graybox_MeetingTable.tscn" id="4_table"]
+[ext_resource type="PackedScene" uid="uid://byh82hlg10odp" path="res://scenes/3d/props/graybox/Graybox_Elevator.tscn" id="5_elevator"]
+[ext_resource type="PackedScene" uid="uid://fu75aaq0cx15" path="res://scenes/3d/props/graybox/Prop_Monitor.tscn" id="6_monitor"]
+[ext_resource type="PackedScene" path="res://scenes/3d/props/graybox/Prop_Mug.tscn" id="7_mug"]
+[ext_resource type="PackedScene" uid="uid://b0gqano663ehk" path="res://scenes/3d/props/graybox/Graybox_PlantPot.tscn" id="8_plant"]
+[ext_resource type="PackedScene" uid="uid://cljwgt8jnd0f3" path="res://scenes/3d/props/graybox/Graybox_Shredder.tscn" id="9_shredder"]
+[ext_resource type="PackedScene" uid="uid://cbr4jn67g1n0l" path="res://scenes/3d/props/graybox/Graybox_HVAC.tscn" id="10_hvac"]
+
+[sub_resource type="Environment" id="Environment_briefing"]
+background_mode = 1
+background_color = Color(0.02, 0.02, 0.05, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.3, 0.3, 0.4, 1)
+tonemap_mode = 2
+ssao_enabled = true
+glow_enabled = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_floor"]
+albedo_color = Color(0.1, 0.1, 0.12, 1)
+metallic = 0.1
+roughness = 0.6
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wall"]
+albedo_color = Color(0.25, 0.25, 0.28, 1)
+roughness = 0.5
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_trigger"]
+size = Vector3(2, 3, 2)
+
+[node name="BriefingRoom" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_briefing")
+
+[node name="Architecture" type="Node3D" parent="."]
+
+[node name="Floor" type="CSGBox3D" parent="Architecture"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
+use_collision = true
+size = Vector3(10, 0.2, 12)
+material = SubResource("StandardMaterial3D_floor")
+
+[node name="Ceiling" type="CSGBox3D" parent="Architecture"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.1, 0)
+use_collision = true
+size = Vector3(10, 0.2, 12)
+material = SubResource("StandardMaterial3D_wall")
+
+[node name="Wall_Front" type="CSGBox3D" parent="Architecture"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -6.1)
+use_collision = true
+size = Vector3(10, 4, 0.2)
+material = SubResource("StandardMaterial3D_wall")
+
+[node name="Wall_Back" type="CSGBox3D" parent="Architecture"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 6.1)
+use_collision = true
+size = Vector3(10, 4, 0.2)
+material = SubResource("StandardMaterial3D_wall")
+
+[node name="Wall_Left" type="CSGBox3D" parent="Architecture"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -5.1, 2, 0)
+use_collision = true
+size = Vector3(12, 4, 0.2)
+material = SubResource("StandardMaterial3D_wall")
+
+[node name="Wall_Right" type="CSGBox3D" parent="Architecture"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 5.1, 2, 0)
+use_collision = true
+size = Vector3(12, 4, 0.2)
+material = SubResource("StandardMaterial3D_wall")
+
+[node name="Props" type="Node3D" parent="."]
+
+[node name="MeetingTable" parent="Props" instance=ExtResource("4_table")]
+
+[node name="CISO_Mug" parent="Props" instance=ExtResource("7_mug")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4, 0.8, -1.5)
+
+[node name="MainDisplay" parent="Props" instance=ExtResource("6_monitor")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 1, 0, 2, -5.9)
+
+[node name="SideDisplay" parent="Props" instance=ExtResource("6_monitor")]
+transform = Transform3D(-8.74228e-08, 0, -1, 0, 1, 0, 1, 0, -8.74228e-08, -4.9, 2, 0)
+
+[node name="Plant_NW" parent="Props" instance=ExtResource("8_plant")]
+transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, -4, 0, -5)
+
+[node name="Plant_NE" parent="Props" instance=ExtResource("8_plant")]
+transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 4, 0, -5)
+
+[node name="Shredder" parent="Props" instance=ExtResource("9_shredder")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, 4)
+
+[node name="HVAC" parent="Props" instance=ExtResource("10_hvac")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 4, 0, 4)
+
+[node name="Lighting" type="Node3D" parent="."]
+
+[node name="SpotLight3D" type="SpotLight3D" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 3.8, 0)
+light_energy = 2.0
+spot_range = 8.0
+spot_angle = 40.0
+
+[node name="NPC_CISO" parent="." instance=ExtResource("1_ciso")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.5)
+
+[node name="Elevator_Area" type="Area3D" parent="."]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 5.8)
+script = ExtResource("3_teleport")
+target_scene_path = "res://scenes/SOC_Office.tscn"
+interaction_text = "Return to SOC"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Elevator_Area"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+shape = SubResource("BoxShape3D_trigger")
+
+[node name="Elevator_Model" parent="Elevator_Area" instance=ExtResource("5_elevator")]
+
+[node name="Player3D" parent="." instance=ExtResource("2_player")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3)
