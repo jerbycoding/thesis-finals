@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" uid="uid://d2n50f5flx6uv" path="res://scripts/3d/InteractableDoor.gd" id="1_door"]
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_door"]
-size = Vector3(1, 2.2, 0.1)
+[sub_resource type="BoxShape3D" id="BoxShape3D_2q7ha"]
+size = Vector3(1.007, 2, 1)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_door"]
 albedo_color = Color(0.4, 0.25, 0.15, 1)
@@ -14,25 +14,23 @@ material = SubResource("StandardMaterial3D_door")
 size = Vector3(1, 2.2, 0.1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_interact"]
-size = Vector3(6.0, 4.0, 4.0)
+size = Vector3(6, 4, 4)
 
 [node name="InteractableDoor" type="CharacterBody3D"]
-collision_layer = 1
 script = ExtResource("1_door")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 1.1, 0)
-shape = SubResource("BoxShape3D_door")
+transform = Transform3D(2.57123, 0, 0, 0, 2.66888, 0, 0, 0, 0.328545, 0.508945, 1.40257, 0)
+shape = SubResource("BoxShape3D_2q7ha")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 1.1, 0)
+transform = Transform3D(2.55983, 0, 0, 0, 2.73451, 0, 0, 0, 1, 0.544274, 1.1, 0)
 mesh = SubResource("BoxMesh_door")
 
 [node name="InteractionArea" type="Area3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 1.1, 0)
+transform = Transform3D(1.68703, 0, 0, 0, 2.37416, 0, 0, 0, 3.94017, 0.5, 4.81418, 0)
 collision_layer = 524288
-collision_mask = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="InteractionArea"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+transform = Transform3D(0.565168, 0, 0, 0, 0.565168, 0, 0, 0, 0.565168, 0, -1.82588, 0)
 shape = SubResource("BoxShape3D_interact")
