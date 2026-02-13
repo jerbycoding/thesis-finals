@@ -1128,6 +1128,7 @@ script = ExtResource("12")
 transform = Transform3D(1.18112, 0, 0, 0, 1.05857, 0, 0, 0, 1, -18.2419, 1.93204, -10.492)
 
 [node name="Player3D" parent="." instance=ExtResource("1")]
+transform = Transform3D(1.6962161, 0, 0, 0, 1.7825893, 0, 0, 0, 2.3073776, 0, 0, 2.2324834)
 
 [node name="Graybox_Elevator" parent="." instance=ExtResource("31_ee4mk")]
 transform = Transform3D(0.0235947, 0, 0.999722, 0, 1.80706, 0, -0.999722, 0, 0.0235947, -34.7339, 0.0221046, 3.27866)
