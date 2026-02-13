@@ -287,10 +287,10 @@ transform = Transform3D(-2.03823e-07, -3.51815, -1.8302e-07, 0, -1.53783e-07, 4.
 transform = Transform3D(-6.57239e-07, 5.41856e-06, 11.3444, 1.16868e-13, 13.5012, -4.55297e-06, -15.0359, -1.31913e-13, -4.95881e-07, -15.0344, 3.86223, 6.74575)
 
 [node name="NPC_CISO" parent="." instance=ExtResource("25_67j22")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -16.5, 0, 7)
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -13.067041, 1.2094845, 7)
 
 [node name="Player3D" parent="." instance=ExtResource("26_0aykk")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -14, 0, 7)
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -11.248858, 0, 7)
 
 [node name="Elevator_Area" type="Area3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.25, 0, 0)
