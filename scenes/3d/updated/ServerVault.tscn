@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://bovl77byysvdd"]
+[gd_scene load_steps=30 format=3 uid="uid://bovl77byysvdd"]
 
 [ext_resource type="PackedScene" uid="uid://cteip62nveuo7" path="res://assets/props/glb files/4 Bulb Grey Light - LRG Tubes.glb" id="1_ke7g0"]
 [ext_resource type="PackedScene" uid="uid://brbwiujepsoub" path="res://assets/props/New Inherit props/doorway_front.tscn" id="2_t0yo8"]
@@ -19,6 +19,7 @@
 [ext_resource type="PackedScene" uid="uid://rr67fw3vji4l" path="res://assets/props/New Inherit props/keyboard_2.tscn" id="15_wgdxh"]
 [ext_resource type="PackedScene" uid="uid://1u6x164kwgfi" path="res://assets/props/glb files/Fire alarm.glb" id="18_dgy6o"]
 [ext_resource type="PackedScene" uid="uid://bmmt5iul73seb" path="res://assets/props/glb files/from unity/password_panel.glb" id="20_wgdxh"]
+[ext_resource type="PackedScene" uid="uid://b2d35yngg7u75" path="res://scenes/Player3D.tscn" id="21_va2gk"]
 [ext_resource type="PackedScene" uid="uid://bohhnaa41md4y" path="res://assets/props/New Inherit props/server_2.tscn" id="22_yqfx6"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_x31b4"]
@@ -290,3 +291,5 @@ transform = Transform3D(-2.18557e-08, 0, -0.5, 0, 0.5, 0, 0.5, 0, -2.18557e-08, 
 
 [node name="password_panel2" parent="details" instance=ExtResource("20_wgdxh")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 11.514, 2.94074, -8.05417)
+
+[node name="Player3D" parent="." instance=ExtResource("21_va2gk")]

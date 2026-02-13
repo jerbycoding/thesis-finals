@@ -11,7 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://q38i1bbfyp7y" path="res://scenes/3d/props/graybox/Graybox_Window.tscn" id="10"]
 [ext_resource type="PackedScene" uid="uid://byh82hlg10odp" path="res://scenes/3d/props/graybox/Graybox_Elevator.tscn" id="11"]
 [ext_resource type="PackedScene" uid="uid://dm7k8map0o1n2" path="res://scenes/3d/NPC_VaultTechnician.tscn" id="12"]
-[ext_resource type="PackedScene" path="res://scenes/3d/props/graybox/Prop_ServerBlade.tscn" id="server_blade"]
+[ext_resource type="PackedScene" uid="uid://xtu5gdoshq3d" path="res://scenes/3d/props/graybox/Prop_ServerBlade.tscn" id="server_blade"]
 
 [sub_resource type="Environment" id="101"]
 background_mode = 1
