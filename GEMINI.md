@@ -58,7 +58,7 @@ The core concept places the player in the role of a Security Operations Center (
 *   **SOC Handbook**: PDF-style infinite scroll document reader for IR procedures.
 *   **Task Manager**: Performance monitor with real-time procedural graphs for CPU and Network load.
 *   **Ticket Queue**: Triage interface for managing incidents and building forensic cases.
-
+s
 ### Narrative Structure & Weekend Shifts:
 
 The game follows a 7-day narrative arc (Monday-Sunday).
