@@ -2,4 +2,7 @@
 .godot/
 /android/
 addons/
-test/   
+test/ 
+ai_references/
+thesis/
+VERIFY.EXE_DOCUMENTATION/

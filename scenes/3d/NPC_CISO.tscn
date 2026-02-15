@@ -1,8 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://ceta2wna3gome"]
+[gd_scene load_steps=5 format=3 uid="uid://ceta2wna3gome"]
 
 [ext_resource type="Script" uid="uid://c04nuo4vx3swt" path="res://scripts/3d/NPC_CISO.gd" id="1_npc"]
-[ext_resource type="Script" uid="uid://clra78uil2mle" path="res://scripts/3d/PlayerAnimator.gd" id="2_animator"]
-[ext_resource type="PackedScene" uid="uid://bhjbd2am4oi37" path="res://assets/npc/Business Man.glb" id="3_ciso_model"]
+[ext_resource type="PackedScene" uid="uid://c5asbd8lwl2gl" path="res://assets/npc/NPC_CISO.fbx" id="2_qoc3a"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ciso"]
 radius = 0.4
@@ -25,5 +24,5 @@ shape = SubResource("CapsuleShape3D_ciso")
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="InteractionArea"]
 shape = SubResource("BoxShape3D_interact")
 
-[node name="Model" parent="." instance=ExtResource("3_ciso_model")]
-script = ExtResource("2_animator")
+[node name="NPC_CISO" parent="." instance=ExtResource("2_qoc3a")]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 0.92289174, 0)

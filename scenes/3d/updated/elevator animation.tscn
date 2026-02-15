@@ -1,0 +1,86 @@
+[gd_scene load_steps=6 format=3 uid="uid://cle0ge1gpj21t"]
+
+[ext_resource type="PackedScene" uid="uid://brtnx0m05ck57" path="res://assets/props/New Inherit props/elevator.tscn" id="1_5tx0j"]
+
+[sub_resource type="Animation" id="Animation_uxg68"]
+resource_name = "elevator opening"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimationPlayer/Elevator/MeshInstance3D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(-3.5811872, 3.7522807, -1.5427074), Vector3(-3.5811872, 3.7522807, -4.5956845)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimationPlayer/Elevator/MeshInstance3D2:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(-3.5811872, 3.7522807, 1.5513053), Vector3(-3.5811872, 3.7522807, 4.504759)]
+}
+
+[sub_resource type="Animation" id="Animation_gqmgm"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimationPlayer/Elevator/MeshInstance3D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-3.4644327, 3.7522807, -1.5427074)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimationPlayer/Elevator/MeshInstance3D2:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-3.5811872, 3.7522807, 1.5513053)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_fom4d"]
+_data = {
+&"RESET": SubResource("Animation_gqmgm"),
+&"elevator opening": SubResource("Animation_uxg68")
+}
+
+[sub_resource type="BoxMesh" id="BoxMesh_qw85n"]
+
+[node name="ElevatorAnimation" type="Node3D"]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_fom4d")
+}
+
+[node name="Elevator" parent="AnimationPlayer" instance=ExtResource("1_5tx0j")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.070712, -0.21703541, -0.950016)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="AnimationPlayer/Elevator"]
+transform = Transform3D(0.2, 0, 0, 0, 7, 0, 0, 0, 3, -3.4644327, 3.7522807, -1.5427074)
+mesh = SubResource("BoxMesh_qw85n")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="AnimationPlayer/Elevator"]
+transform = Transform3D(0.2, 0, 0, 0, 7, 0, 0, 0, 3, -3.5811872, 3.7522807, 1.5513053)
+mesh = SubResource("BoxMesh_qw85n")
+
+[editable path="AnimationPlayer/Elevator"]

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites id="2026-02-02" name="report_5" tests="1" failures="0" skipped="0" flaky="0" time="0.000">
+	<testsuite id="0" name="test_monitor_prop" package="tests/integration" timestamp="2026-02-02T11:46:49" hostname="localhost" tests="1" failures="0" errors="0" skipped="0" flaky="0" time="0.339">
+		<testcase name="test_monitor_structure" classname="test_monitor_prop" time="0.260">
+		</testcase>
+	</testsuite>
+</testsuites>

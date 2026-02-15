@@ -56,6 +56,9 @@ func _ready():
 	
 	# Connect to EventBus
 	EventBus.npc_interaction_requested.connect(_on_narrative_interaction_requested)
+	
+	# Announce readiness for narrative triggers
+	EventBus.npc_ready.emit(npc_id)
 
 func _on_body_entered(body):
 	if body.name == "Player3D":

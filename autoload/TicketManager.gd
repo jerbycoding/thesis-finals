@@ -480,6 +480,16 @@ func attach_log_to_ticket(ticket_id: String, log_id: String) -> bool:
 		print(CorporateVoice.get_formatted_phrase("log_already_attached_warning", {"log_id": log_id, "ticket_id": ticket_id}))
 		return false
 
+func detach_log_from_ticket(ticket_id: String, log_id: String) -> bool:
+	var ticket = get_ticket_by_id(ticket_id)
+	if not ticket: return false
+	
+	if ticket.detach_log(log_id):
+		print("TicketManager: Detached log %s from %s" % [log_id, ticket_id])
+		EventBus.log_detached_from_ticket.emit(ticket_id, log_id)
+		return true
+	return false
+
 func get_ticket_evidence(ticket_id: String) -> Dictionary:
 	# Get evidence count for a ticket
 	var ticket = get_ticket_by_id(ticket_id)

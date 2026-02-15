@@ -23,10 +23,10 @@ func _ready():
 
 func _setup_style():
 	match notification_type:
-		"success": indicator.color = GlobalConstants.UI_COLORS.SUCCESS_FLAT
-		"warning": indicator.color = GlobalConstants.UI_COLORS.WARNING_FLAT
-		"error": indicator.color = GlobalConstants.UI_COLORS.ERROR_FLAT
-		_: indicator.color = GlobalConstants.UI_COLORS.INFO_BLUE
+		"success": indicator.color = Color(0.2, 1.0, 0.2) # Neon Green
+		"warning": indicator.color = Color(1.0, 0.8, 0.2) # Neon Amber
+		"error": indicator.color = Color(1.0, 0.2, 0.2) # Bright Red
+		_: indicator.color = Color(0.2, 0.6, 1.0) # Cyber Blue
 
 func fade_in():
 	modulate.a = 0.0

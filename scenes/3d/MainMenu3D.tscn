@@ -1,0 +1,184 @@
+[gd_scene load_steps=20 format=3 uid="uid://c6j8v8u8k8u8k"]
+
+[ext_resource type="Script" uid="uid://gnsos5w1l23p" path="res://scripts/3d/MainMenu3D.gd" id="1_script"]
+[ext_resource type="PackedScene" uid="uid://byav1eqq5v48f" path="res://scenes/3d/props/graybox/Prop_Desk.tscn" id="2_desk"]
+[ext_resource type="PackedScene" uid="uid://bjy8b0vcfuc0r" path="res://scenes/3d/props/graybox/Prop_ComputerSet.tscn" id="3_comp"]
+[ext_resource type="PackedScene" path="res://scenes/3d/props/graybox/Prop_Mug.tscn" id="4_mug"]
+[ext_resource type="PackedScene" uid="uid://csc2n03kuskvt" path="res://assets/props/graybox/Cell phone.glb" id="6_phone"]
+[ext_resource type="PackedScene" uid="uid://c7c8toku8jd3b" path="res://scenes/3d/props/graybox/Prop_DeskLamp.tscn" id="7_lamp"]
+[ext_resource type="PackedScene" uid="uid://bodtc8b7dv4df" path="res://assets/props/items/storage_shelf/storage_shelf.glb" id="8_shelf"]
+[ext_resource type="PackedScene" uid="uid://c7c8toku8jd3c" path="res://scenes/3d/props/graybox/Prop_WallClock.tscn" id="9_clock"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_1"]
+sky_top_color = Color(0.05, 0.05, 0.1, 1)
+sky_horizon_color = Color(0, 0, 0, 1)
+ground_bottom_color = Color(0, 0, 0, 1)
+ground_horizon_color = Color(0, 0, 0, 1)
+
+[sub_resource type="Sky" id="Sky_1"]
+sky_material = SubResource("ProceduralSkyMaterial_1")
+
+[sub_resource type="Environment" id="Environment_1"]
+background_mode = 1
+background_color = Color(0.01, 0.01, 0.02, 1)
+sky = SubResource("Sky_1")
+ambient_light_source = 2
+ambient_light_color = Color(0.1, 0.1, 0.15, 1)
+tonemap_mode = 2
+ssao_enabled = true
+glow_enabled = true
+glow_intensity = 0.5
+glow_strength = 1.2
+glow_bloom = 0.1
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.02
+volumetric_fog_albedo = Color(0.1, 0.2, 0.4, 1)
+volumetric_fog_length = 16.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_StickyNote"]
+albedo_color = Color(1, 0.95, 0.4, 1)
+roughness = 0.8
+
+[sub_resource type="Animation" id="Animation_PhoneBlink"]
+length = 2.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PhoneLED:light_energy")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1, 2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [0.0, 0.5, 0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_Phone"]
+_data = {
+&"Blink": SubResource("Animation_PhoneBlink")
+}
+
+[sub_resource type="Curve" id="Curve_1"]
+_data = [Vector2(0, 0), 0.0, 1.4, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_1"]
+curve = SubResource("Curve_1")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_1"]
+emission_shape = 1
+emission_sphere_radius = 0.02
+direction = Vector3(0, 1, 0)
+spread = 5.0
+initial_velocity_min = 0.05
+initial_velocity_max = 0.1
+gravity = Vector3(0, 0.05, 0)
+scale_min = 0.02
+scale_max = 0.05
+scale_curve = SubResource("CurveTexture_1")
+color = Color(1, 1, 1, 0.05)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1"]
+transparency = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_color = Color(1, 1, 1, 0.1)
+billboard_mode = 3
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_1"]
+material = SubResource("StandardMaterial3D_1")
+size = Vector2(0.1, 0.1)
+
+[node name="MainMenu3D" type="Node3D"]
+script = ExtResource("1_script")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_1")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.866025, -0.25, 0.433013, 0, 0.866025, 0.5, -0.5, -0.433013, 0.75, 0, 5, 0)
+light_color = Color(0.7, 0.8, 1, 1)
+light_energy = 0.05
+shadow_enabled = true
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.960537, 0.278153, 0, -0.278153, 0.960537, 0.0326597, 1.3823, 0.609173)
+
+[node name="Prop_Desk" parent="." instance=ExtResource("2_desk")]
+
+[node name="Prop_ComputerSet" parent="." instance=ExtResource("3_comp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.82, 0)
+
+[node name="Prop_Monitor" parent="Prop_ComputerSet" index="0"]
+use_crt_shader = true
+
+[node name="StickyNote" type="CSGBox3D" parent="Prop_ComputerSet/Prop_Monitor" index="5"]
+transform = Transform3D(0.984808, 0.173648, 0, -0.173648, 0.984808, 0, 0, 0, 1, 0.404763, 0.232357, 0.0572986)
+size = Vector3(0.1, 0.1, 0.01)
+material = SubResource("StandardMaterial3D_StickyNote")
+
+[node name="NoteLabel" type="Label3D" parent="Prop_ComputerSet/Prop_Monitor/StickyNote"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.006)
+pixel_size = 0.001
+modulate = Color(0, 0, 0, 1)
+text = "PASS: admin123"
+font_size = 14
+
+[node name="Keyboard" parent="Prop_ComputerSet" index="1"]
+transform = Transform3D(1, 0, 0, 0, 0.996477, 0.0838691, 0, -0.0838691, 0.996477, -0.0721762, 0.05, 0.3)
+
+[node name="Prop_Mug" parent="." instance=ExtResource("4_mug")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0.82, 0.2)
+
+[node name="CellPhone" parent="." instance=ExtResource("6_phone")]
+transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, 0.5, 0.82, 0.3)
+
+[node name="PhoneLED" type="OmniLight3D" parent="CellPhone"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.02, 0.05)
+light_color = Color(1, 0.6, 0, 1)
+light_energy = 0.0
+omni_range = 0.2
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="CellPhone"]
+libraries = {
+&"": SubResource("AnimationLibrary_Phone")
+}
+autoplay = "Blink"
+
+[node name="Prop_DeskLamp" parent="." instance=ExtResource("7_lamp")]
+transform = Transform3D(-0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, -0.707107, -0.8, 0.82, -0.2)
+
+[node name="BackgroundProps" type="Node3D" parent="."]
+
+[node name="StorageShelf" parent="BackgroundProps" instance=ExtResource("8_shelf")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -2, 0, -1)
+
+[node name="WallClock" parent="BackgroundProps" instance=ExtResource("9_clock")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, -2)
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.15, -0.1)
+light_color = Color(0, 1, 0.2, 1)
+light_energy = 0.2
+omni_range = 3.0
+omni_attenuation = 2.0
+
+[node name="MonitorBezelLight" type="SpotLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0, 1.8, 0.5)
+light_color = Color(0.5, 0.7, 1, 1)
+light_energy = 0.15
+spot_range = 2.0
+spot_angle = 35.0
+
+[node name="SteamParticles" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0.95, 0.2)
+lifetime = 2.0
+process_material = SubResource("ParticleProcessMaterial_1")
+draw_pass_1 = SubResource("QuadMesh_1")
+
+[editable path="Prop_ComputerSet"]

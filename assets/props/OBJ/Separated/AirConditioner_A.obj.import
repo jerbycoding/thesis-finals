@@ -1,0 +1,25 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://bdolbr0ib8l52"
+path="res://.godot/imported/AirConditioner_A.obj-d0e7214771f4f1138300bfddfa1faecb.mesh"
+
+[deps]
+
+files=["res://.godot/imported/AirConditioner_A.obj-d0e7214771f4f1138300bfddfa1faecb.mesh"]
+
+source_file="res://assets/props/OBJ/Separated/AirConditioner_A.obj"
+dest_files=["res://.godot/imported/AirConditioner_A.obj-d0e7214771f4f1138300bfddfa1faecb.mesh", "res://.godot/imported/AirConditioner_A.obj-d0e7214771f4f1138300bfddfa1faecb.mesh"]
+
+[params]
+
+generate_tangents=true
+generate_lods=true
+generate_shadow_mesh=true
+generate_lightmap_uv2=false
+generate_lightmap_uv2_texel_size=0.2
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+force_disable_mesh_compression=false

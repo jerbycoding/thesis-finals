@@ -1,0 +1,27 @@
+[gd_scene load_steps=3 format=3 uid="uid://cb5k2x5o2ycf"]
+
+[ext_resource type="Theme" uid="uid://dny3rlbltexc7" path="res://assets/themes/EnterpriseTheme.tres" id="1_theme"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Search"]
+bg_color = Color(1, 1, 1, 0.0392157)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 0.117647)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[node name="DesktopSearchBar" type="LineEdit"]
+custom_minimum_size = Vector2(200, 30)
+offset_right = 200.0
+offset_bottom = 30.0
+size_flags_vertical = 4
+theme = ExtResource("1_theme")
+theme_override_styles/normal = SubResource("StyleBoxFlat_Search")
+placeholder_text = "Search logs, hosts..."
+alignment = 1
+clear_button_enabled = true
+select_all_on_focus = true

@@ -9,6 +9,7 @@ signal ticket_completed(ticket: TicketResource, completion_type: String, time_ta
 signal ticket_ignored(ticket: TicketResource)
 signal ticket_timeout(ticket_id: String)
 signal log_attached_to_ticket(ticket_id: String, log_id: String)
+signal log_detached_from_ticket(ticket_id: String, log_id: String)
 signal followup_ticket_creation_requested(ticket: TicketResource)
 
 # --- Log/Forensic Signals ---
@@ -37,6 +38,8 @@ signal narrative_spawn_consequence(consequence_id: String)
 signal consequence_triggered(type: String, details: Dictionary)
 signal followup_ticket_scheduled(ticket_id: String, delay: float)
 signal npc_interaction_requested(npc_id: String, dialogue_id: String)
+signal npc_ready(npc_id: String)
+signal dialogue_choice_selected(choice: Dictionary)
 signal world_event_triggered(event_id: String, active: bool, duration: float)
 signal campaign_ended(type: String)
 

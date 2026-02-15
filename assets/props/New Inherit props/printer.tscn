@@ -1,0 +1,28 @@
+[gd_scene load_steps=5 format=3 uid="uid://ctprtbqt51c3q"]
+
+[ext_resource type="PackedScene" uid="uid://nwy7cls0iy4y" path="res://assets/props/FBX/Separated/Printer.fbx" id="1_ah7ie"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_pycgu"]
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_oogtt"]
+data = PackedVector3Array(-0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, -0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, -0.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wxhwf"]
+
+[node name="Printer" instance=ExtResource("1_ah7ie")]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Printer" index="0"]
+transform = Transform3D(1.0799024, 1.8543073e-13, 0, -6.1385345e-14, 0.65242636, -2.7125357e-21, 0, 4.1447e-21, 1.2809588, 0.051910006, 0.18123576, 0.028562196)
+visible = false
+mesh = SubResource("BoxMesh_pycgu")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Printer/MeshInstance3D" index="0"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Printer/MeshInstance3D/StaticBody3D" index="0"]
+shape = SubResource("ConcavePolygonShape3D_oogtt")
+
+[node name="Area3D" type="Area3D" parent="Printer/MeshInstance3D" index="1"]
+transform = Transform3D(100, 0, 0, 0, 100, 0, 0, 0, 100, 0, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Printer/MeshInstance3D/Area3D" index="0"]
+shape = SubResource("BoxShape3D_wxhwf")

@@ -101,3 +101,15 @@ func _update_evidence_display():
 func _on_complete_pressed():
 	if AudioManager: AudioManager.play_ui_click()
 	completion_requested.emit(ticket)
+
+func set_highlight(active: bool):
+	var style = get_theme_stylebox("panel").duplicate() as StyleBoxFlat
+	if style:
+		if active:
+			style.bg_color = Color(1, 1, 1, 0.08)
+			style.border_width_left = 3
+			style.border_color = Color(0.2, 0.6, 1, 1)
+		else:
+			style.bg_color = Color(0, 0, 0, 0)
+			style.border_width_left = 0
+		add_theme_stylebox_override("panel", style)

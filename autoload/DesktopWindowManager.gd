@@ -6,7 +6,7 @@ var open_windows: Dictionary = {}  # window_id: WindowFrame
 var next_window_position: Vector2 = Vector2(50, 50)
 var window_z_index_base: int = 10
 var focused_window: Control = null
-var window_container: CanvasLayer = null
+var active_window_container: Control = null
 
 var app_configs: Dictionary = {} # app_id -> AppConfig resource
 const APP_CONFIG_DIR = "res://resources/apps/"
@@ -16,18 +16,16 @@ var window_frame_scene = preload("res://scenes/2d/apps/components/WindowFrame.ts
 func _ready():
 	_load_app_configs()
 	
-	# Create a persistent CanvasLayer for windows to ensure they stay on top
-	window_container = CanvasLayer.new()
-	window_container.name = "DesktopWindowLayer"
-	window_container.layer = 10 # Higher than main scene and desktop background
-	get_tree().root.call_deferred("add_child", window_container)
-	
 	# Connect to EventBus for global window management
 	EventBus.window_focused.connect(_on_window_focused)
 	EventBus.window_closed.connect(_on_window_closed)
 	EventBus.shift_ended.connect(func(_results): close_all_windows())
 	
 	print("DesktopWindowManager ready.")
+
+func register_container(container: Control):
+	active_window_container = container
+	print("DesktopWindowManager: Registered window container: ", container.name)
 
 func _load_app_configs():
 	app_configs.clear()
@@ -94,14 +92,24 @@ func open_app(app_name: String, force_new: bool = false):
 		var existing_window = _find_window_by_app(app_name)
 		if existing_window and is_instance_valid(existing_window):
 			print("DesktopWindowManager: App already open, focusing and bringing to front")
-			window_container.visible = true # Ensure the whole layer is visible
 			existing_window.visible = true 
 			_focus_window(existing_window)
-			existing_window.bring_to_front()
+			existing_window.move_to_front() # Bring to front in scene tree
+			# Ensure start menu closes even if app was already open
+			var desktop = get_tree().root.find_child("ComputerDesktop", true, false)
+			if desktop and "start_menu_instance" in desktop:
+				if desktop.start_menu_instance: desktop.start_menu_instance.visible = false
 			return
 		else:
 			print("DesktopWindowManager: No existing window found for app: ", app_name)
 	
+	# FIND CONTAINER
+	if not is_instance_valid(active_window_container):
+		print("ERROR: DesktopWindowManager: No active window container registered!")
+		return
+		
+	var container = active_window_container
+
 	# Generate unique window ID
 	var window_id = app_name + "_" + str(Time.get_ticks_msec())
 	
@@ -111,16 +119,12 @@ func open_app(app_name: String, force_new: bool = false):
 	# Set window properties
 	window.window_id = window_id
 	window.set_title(config.title)
-	window.position = _get_next_window_position()
 	
 	# Store reference IMMEDIATELY to prevent race conditions during 'await'
 	open_windows[window_id] = window
 	
-	# Set window size based on app type
-	window_container.visible = true
-	
 	# Add to layer
-	window_container.add_child(window)
+	container.add_child(window)
 	
 	# Wait for window to be ready
 	await get_tree().process_frame
@@ -148,16 +152,20 @@ func open_app(app_name: String, force_new: bool = false):
 		_cleanup_failed_window(window_id)
 		return
 	
-	# Update next position (stagger)
-	next_window_position += Vector2(30, 30)
-	if next_window_position.x > 300:
-		next_window_position.x = 50
-	if next_window_position.y > 200:
-		next_window_position.y = 50
+	# SMART STAGGER: Quadrant-based fanning
+	var count = open_windows.size()
+	var offset_x = (count % 4) * 40
+	var offset_y = (count % 4) * 35
+	window.position = Vector2(100 + offset_x, 80 + offset_y)
 	
 	# Focus the new window
 	_focus_window(window)
-	window.bring_to_front()
+	window.move_to_front()
+	
+	# Intelligent Dismiss
+	var desktop = get_tree().root.find_child("ComputerDesktop", true, false)
+	if desktop and "start_menu_instance" in desktop:
+		if desktop.start_menu_instance: desktop.start_menu_instance.visible = false
 	
 	EventBus.app_opened.emit(app_name, window_id)
 	print("DesktopWindowManager: Opened app: ", app_name, " at position: ", window.position)
@@ -194,28 +202,9 @@ func close_all_windows():
 		var window = open_windows[window_id]
 		if is_instance_valid(window):
 			window.queue_free()
-	
-	# Thorough cleanup: ensure container is empty
-	if is_instance_valid(window_container):
-		for child in window_container.get_children():
-			child.queue_free()
 			
 	open_windows.clear()
 	next_window_position = Vector2(50, 50) # Reset position when all closed
-
-func hide_all_windows():
-	# Hide the entire window layer and pause its processing
-	if is_instance_valid(window_container):
-		window_container.visible = false
-		window_container.process_mode = Node.PROCESS_MODE_DISABLED
-	print("DesktopWindowManager: All windows hidden and paused.")
-
-func show_all_windows():
-	# Show the window layer and resume its processing
-	if is_instance_valid(window_container):
-		window_container.visible = true
-		window_container.process_mode = Node.PROCESS_MODE_INHERIT
-	print("DesktopWindowManager: All windows shown and resumed.")
 
 func _find_window_by_app(app_name: String) -> Control:
 	for window_id in open_windows:
@@ -237,6 +226,12 @@ func _on_window_focused(window: Control):
 	print("DesktopWindowManager: Window focused: ", window.window_id)
 	focused_window = window
 	_update_window_z_indices()
+	
+	# Intelligent Dismiss: Close Start Menu when clicking any window
+	var desktop = get_tree().root.find_child("ComputerDesktop", true, false)
+	if desktop and "start_menu_instance" in desktop:
+		if desktop.start_menu_instance and desktop.start_menu_instance.visible:
+			desktop.start_menu_instance.visible = false
 
 func _on_window_closed(window: Control):
 	if not window or not is_instance_valid(window):

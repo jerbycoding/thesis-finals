@@ -1,0 +1,25 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://cj13w5sv1slg8"
+path="res://.godot/imported/Wall_Medium_Door.obj-1a39b1518d00fdffe7944b8739e29311.mesh"
+
+[deps]
+
+files=["res://.godot/imported/Wall_Medium_Door.obj-1a39b1518d00fdffe7944b8739e29311.mesh"]
+
+source_file="res://assets/props/OBJ/Separated/Wall_Medium_Door.obj"
+dest_files=["res://.godot/imported/Wall_Medium_Door.obj-1a39b1518d00fdffe7944b8739e29311.mesh", "res://.godot/imported/Wall_Medium_Door.obj-1a39b1518d00fdffe7944b8739e29311.mesh"]
+
+[params]
+
+generate_tangents=true
+generate_lods=true
+generate_shadow_mesh=true
+generate_lightmap_uv2=false
+generate_lightmap_uv2_texel_size=0.2
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+force_disable_mesh_compression=false

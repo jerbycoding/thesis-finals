@@ -3,16 +3,25 @@
 [ext_resource type="Script" uid="uid://p3uitm5au0vw" path="res://scripts/2d/apps/components/TicketCard.gd" id="1_coujv"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Card"]
-bg_color = Color(1, 1, 1, 1)
+bg_color = Color(1, 1, 1, 0.0392157)
 border_width_bottom = 1
-border_color = Color(0.921569, 0.921569, 0.921569, 1)
+border_color = Color(1, 1, 1, 0.0784314)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Action"]
-bg_color = Color(0, 0, 0, 1)
+bg_color = Color(0.2, 0.6, 1, 0.117647)
 content_margin_left = 10.0
 content_margin_top = 5.0
 content_margin_right = 10.0
 content_margin_bottom = 5.0
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.2, 0.6, 1, 0.392157)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
 
 [node name="TicketCard" type="PanelContainer"]
 custom_minimum_size = Vector2(0, 120)
@@ -52,21 +61,19 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 12
 text = "PHISH-001"
 
 [node name="TimeLabel" type="Label" parent="Layout/Margin/Content/Header"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 0.4)
 theme_override_font_sizes/font_size = 11
 text = "05:00"
 
 [node name="TitleLabel" type="Label" parent="Layout/Margin/Content"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_color = Color(0.1, 0.1, 0.1, 1)
 theme_override_font_sizes/font_size = 14
 text = "Data Exfiltration Detected"
 autowrap_mode = 2
@@ -79,14 +86,15 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0.5, 0.5, 0.5, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 0.4)
 theme_override_font_sizes/font_size = 11
 text = "Evidence: 0/2"
 
 [node name="CompleteButton" type="Button" parent="Layout/Margin/Content/Footer"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_color = Color(0.2, 0.6, 1, 1)
 theme_override_font_sizes/font_size = 10
 theme_override_styles/normal = SubResource("StyleBoxFlat_Action")
 text = "RESOLVE"

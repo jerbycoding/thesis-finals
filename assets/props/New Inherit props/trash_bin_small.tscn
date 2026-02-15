@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://cnpejg0fdvkgh"]
+
+[ext_resource type="PackedScene" uid="uid://cy3de2s4f52xh" path="res://assets/props/FBX/Separated/TrashBin_Small.fbx" id="1_p2xfd"]
+
+[node name="TrashBin_Small" instance=ExtResource("1_p2xfd")]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 0, 0)

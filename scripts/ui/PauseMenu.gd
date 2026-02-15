@@ -46,7 +46,7 @@ func _on_quit_pressed():
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	
 	if TransitionManager:
-		TransitionManager.change_scene_to("res://scenes/ui/TitleScreen.tscn")
+		TransitionManager.change_scene_to("res://scenes/3d/MainMenu3D.tscn")
 
 func show_menu():
 	show()

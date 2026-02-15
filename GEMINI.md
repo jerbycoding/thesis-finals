@@ -8,66 +8,64 @@ The core concept places the player in the role of a Security Operations Center (
 
 ### Architecture and Core Systems:
 
-*   **Hybrid 2D/3D World:** The player navigates a 3D office environment but interacts with a 2D desktop interface to use analysis tools. This transition is managed by `TransitionManager.gd` and `GameState.gd`, featuring an architectural overhaul that uses `CSGBox3D` for high-fidelity office environments.
-*   **Event-Driven Architecture:** A centralized `EventBus` singleton decouples core managers. Recent improvements include the `prepare_for_scene_change` signal, which allows persistent 2D UIs to automatically clean themselves up during transitions.
-*   **Unified State Authority:** `GameState.gd` serves as the single source of truth for the mouse cursor and game modes (`MODE_3D`, `MODE_2D`, `MODE_DIALOGUE`, `MODE_MINIGAME`, `MODE_UI_ONLY`). It automatically enforces mouse capture or visibility based on the current context.
-*   **Performance Optimization:** UI-heavy tools like the SIEM Log Viewer use a `UIObjectPool` to manage and reuse list entries, ensuring smooth performance even when handling hundreds of simulated logs.
-*   **Autoload Singletons:** The project relies on globally accessible singleton scripts (found in the `autoload/` directory) to manage core systems:
-	*   `ArchetypeAnalyzer`: Determines the player's "analyst archetype" (e.g., 'Cowboy', 'By-the-Book') by deriving metrics from the `ConsequenceEngine` choice history.
-	*   `AudioManager`: Manages playback of music and sound effects, with semantic helpers for UI and notifications.
-	*   `ConfigManager`: Manages persistent user settings (Volume, Display) saved in `user://settings.cfg`.
-	*   `ConsequenceEngine`: The source of truth for player choices; logs history and triggers delayed, cascading consequences, including "Kill Chain" escalations.
-	*   `CorporateVoice`: Provides a library of corporate-toned phrases and templates for consistent narrative style.
-	*   `DebugManager`: Provides hotkey jumps (F1-F10) for shift testing and manual state manipulation.
-	*   `DesktopWindowManager`: Manages the lifecycle, Z-ordering, and snapping of desktop application windows.
-	*   `DialogueManager`: Centralized system for NPC dialogue flow, display, and choice-based scene transitions.
-	*   `EmailSystem`: Backend manager for the email client tool, including discovery and threat processing.
-	*   `EventBus`: The central hub for global signals, reducing coupling between managers.
-	*   `FPSManager`: Persistent overlay for real-time performance tracking.
-	*   `GameState`: Manages the current game mode and pause state, enforcing global mouse authority.
-	*   `GlobalConstants`: Central authority for shared constants, event IDs, and severity enums.
-	*   `HeatManager`: Manages difficulty scaling and "Vulnerability Inheritance," where unresolved risks from previous tickets impact future ones.
-	*   `IntegrityManager`: Manages organizational "HP" (Stability), handling decay rates and integrity-based failure states.
-	*   `LogSystem`: Backend manager for the SIEM log viewer, featuring a ring-buffer-style history to manage memory.
-	*   `NarrativeDirector`: Manages scripted story flow (Shifts 1-5 + Weekends), NPC interactions, and shift report generation.
-	*   `NetworkState`: Single source of truth for host information (IPs, Status, Criticality) utilizing a resource-driven registry.
-	*   `NotificationManager`: Handles display and queuing of notification toasts on the desktop.
-	*   `SaveSystem`: Manages JSON-based serialization of player metrics, world state, and ticket progress.
-	*   `TerminalSystem`: Backend for the command-line tool, including command parsing, tracing, and host isolation.
-	*   `TicketManager`: Handles the lifecycle of security incidents, managing timers and ambient noise tickets.
-	*   `TimeManager`: Centralizes game timers to ensure consistency across scene transitions.
-	*   `TransitionManager`: Manages visual fades and state transitions between 3D world and 2D desktop, triggering global cleanup signals.
-	*   `TutorialManager`: Manages the guided onboarding experience, utilizing a persistent subtitle system in `TutorialHUD`.
-	*   `ValidationManager`: Central authority for gameplay rules (e.g., verifying evidence before a compliant closure).
-	*   `VariableRegistry`: The engine for "Procedural Truth," generating consistent technical context (IPs, Hostnames, Victim names) across all tools for each incident.
+*   **Hybrid 2D/3D World:** Transitions between 3D office navigation and 2D workstation interaction are managed by `TransitionManager.gd`. This system includes player camera animations (sitting/standing) and a high-fidelity `MonitorInputBridge` that projects interactive desktop UIs onto 3D meshes using anisotropic filtering for text clarity.
+*   **Unified State Authority:** `GameState.gd` serves as the single source of truth for game modes (`MODE_3D`, `MODE_2D`, `MODE_DIALOGUE`, `MODE_MINIGAME`, `MODE_UI_ONLY`). It enforces mouse authority and UI blocking (modals) globally.
+*   **Procedural Truth System:** The `VariableRegistry` generates "Truth Packets" for each incident. This ensures that technical indicators like IPs, hostnames, and victim names remain semantically consistent across all investigative tools (SIEM, Email, Terminal).
+*   **Heat & Inheritance Engine:** Managed by `HeatManager.gd`, the game scales difficulty weekly. It features "Vulnerability Inheritance," where unresolved risks or "Efficient" closures cache technical indicators that reappear in future, more severe incidents.
+*   **Kill Chain Escalation:** The `ConsequenceEngine` tracks incident lifecycles through four stages: Infiltration, Propagation, Exfiltration, and Impact. Ignoring alerts or choosing risky resolutions allows threats to mature, eventually triggering "Zero Day" events or "Black Ticket" recovery missions.
+*   **Social Dynamics & Favors:** NPC relationships are tracked via `ConsequenceEngine`. High approval allows players to trade relationship points for "Favors" (e.g., Senior Analyst auto-forensics or IT Support bandwidth boosts).
+*   **Performance Optimization:** UI-heavy tools like the SIEM Log Viewer and Email Analyzer use a `UIObjectPool` to manage and reuse list entries, ensuring smooth performance during "Log Floods."
+*   **Autoload Singletons:**
+	*   `ArchetypeAnalyzer`: Derives the player's analyst style (Cowboy, By-the-Book, etc.) from metric history.
+	*   `AudioManager`: Manages SFX, music, and floor-based ambient loops with dynamic typewriter sounds.
+	*   `ConfigManager`: Persists user settings (Volume, Display) in `user://settings.cfg`.
+	*   `ConsequenceEngine`: Tracks choices, manages the Kill Chain, and handles NPC relationship logic.
+	*   `CorporateVoice`: A library of formatted corporate-toned phrases for consistent narrative style.
+	*   `DesktopWindowManager`: Manages application windows, Z-ordering, and context-based app permissions.
+	*   `DialogueManager`: Handles structured NPC dialogue flows and choice-based effects.
+	*   `EmailSystem`: Backend for the email client, featuring data-driven risk analysis and inspection tools.
+	*   `EventBus`: The central hub for all global signals.
+	*   `HeatManager`: Manages difficulty scaling and vulnerability inheritance.
+	*   `IntegrityManager`: Manages organization stability ("HP"), handling decay rates and integrity-based failure states.
+	*   `LogSystem`: Backend for SIEM logs, featuring a ring-buffer history and event-driven log injection.
+	*   `NarrativeDirector`: Manages the 7-day arc, scripted events, and weekend transitions.
+	*   `NetworkState`: Authority for host metadata and real-time statuses (Clean, Infected, Isolated).
+	*   `NotificationManager`: Handles the display and queuing of toast notifications.
+	*   `ResourceAuditManager`: Performs startup connectivity checks between Shifts, Tickets, and Logs.
+	*   `SaveSystem`: JSON-based serialization of player metrics, world state, and shift progress.
+	*   `TerminalSystem`: Backend for command parsing (scan, trace, isolate) and network multipliers.
+	*   `TicketManager`: Handles the incident lifecycle, ambient noise spawning, and log attachment.
+	*   `TutorialManager`: Manages the "Tier 1 Certification" onboarding using `TutorialSequenceResource`.
+	*   `ValidationManager`: Central authority for IR gameplay rules (e.g., scan-before-isolate).
 
 ### Data Types (Resources):
 
-*   `DialogueDataResource.gd`: Stores structured dialogue data (lines, choices, effects).
-*   `EmailResource.gd`: Handles email metadata, clues, and risk analysis logic.
-*   `HostResource.gd`: Defines metadata for network hosts (hostname, IP, criticality).
-*   `LogResource.gd`: Manages log entry data and forensic report formatting.
-*   `ShiftResource.gd`: Defines the sequence of events and narrative beats for a specific work shift.
-*   `TicketResource.gd`: Manages incident state, required evidence, and Kill Chain escalation paths.
+*   **AppConfigResource**: Defines application metadata, scene paths, and context-based restrictions.
+*   **EmailResource**: Metadata, forensic clues, and "hidden risk" consequence triggers.
+*   **HostResource**: Network host metadata (IP, OS type, criticality).
+*   **LogResource**: Log entry data and forensic report templates.
+*   **ShiftResource**: Narrative sequences, random event pools, and weekend minigame configurations.
+*   **TicketResource**: Incident state, required evidence, and Kill Chain escalation paths.
+*   **TutorialSequenceResource**: Data-driven steps for the certification module, including visual highlight paths.
 
 ### Scene-Based Tools (Enterprise-Clean Aesthetic):
 
-*   **SIEM Log Viewer**: For forensic log analysis and evidence collection.
-*   **Email Analyzer**: For inspecting headers, scanning links, and quarantining threats.
-*   **Terminal**: For network commands, tracing, and host isolation.
-*   **Network Mapper**: Visualizes topology and real-time host status.
-*   **Decryption Tool**: Specialized utility for ransomware recovery puzzles.
-*   **SOC Handbook**: Overhauled into a PDF-style infinite scroll document reader.
-*   **Resource Monitor (Task Manager)**: A high-density dashboard for monitoring system load and performance impacts.
-*   **Ticket Queue**: For managing and resolving active security incidents with high-contrast UI.
-*   **Shift Report**: Post-shift analysis UI displaying metrics and archetype derivation.
-*   **Field Tablet (Forensic Tablet)**: Handheld 3D tool used during maintenance shifts for network topology audits and hardware synchronization.
+*   **SIEM Log Viewer**: Forensic analysis with volume graphs, zebra-stripping, and detailed inspector pane.
+*   **Email Analyzer**: SaaS-inspired UI for inspecting headers, scanning attachments, and link reputation.
+*   **Terminal**: TUI-style command interface for active defense and host isolation.
+*   **Network Mapper**: Interactive topology dashboard visualizing host priority and real-time status.
+*   **Decryption Tool**: High-stakes hex-based puzzle utility for ransomware recovery.
+*   **SOC Handbook**: PDF-style infinite scroll document reader for IR procedures.
+*   **Task Manager**: Performance monitor with real-time procedural graphs for CPU and Network load.
+*   **Ticket Queue**: Triage interface for managing incidents and building forensic cases.
 
 ### Narrative Structure & Weekend Shifts:
 
-The game follows a 7-day narrative arc. While weekdays (Mon-Fri) focus on the 2D desktop workstation loop, weekend shifts introduce physical 3D objectives:
-*   **Saturday (Infrastructure Audit)**: Requires physical inspection of router nodes and technical handshake minigames in the Network Hub.
-*   **Sunday (Hardware Recovery)**: Focuses on physical hardware maintenance in the Server Vault, including carrying and replacing server drives.
+The game follows a 7-day narrative arc (Monday-Sunday).
+*   **Weekdays (Mon-Fri)**: Focus on the 2D workstation IR loop, culminating in a Friday "Zero Day" event.
+*   **Saturday (Infrastructure Audit)**: Physical 3D navigation in the Network Hub, featuring signal calibration and ACL slider minigames.
+*   **Sunday (Hardware Recovery)**: Physical hardware maintenance in the Server Vault, including slotting server blades and RAID parity synchronization.
+*   **Endings**: Distinct outcomes based on performance: **Fired** (Negligence), **Bankrupt** (Data Loss), and **Victory** (Promotion).
 
 ## 2. Building and Running
 
@@ -81,29 +79,15 @@ This is a standard Godot project. There are no external build scripts or package
 
 ### Testing:
 
-The project integrates the **GdUnit4** testing framework for automated unit and integration tests. 
+The project integrates the **GdUnit4** testing framework.
 
-*   **Manual Execution:** Users should execute tests manually via the GdUnit4 panel in Godot or via the command line.
-*   **AI Policy:** AI agents are instructed **not** to run tests automatically to prevent excessive token consumption.
-
-**To run tests from the command line:**
-```cmd
-addons\gdUnit4\runtest.cmd --godot_bin "C:\Godot 4\Godot 4.exe" -a "tests/unit/"
-```
-
-**Latest Test Results (Report 5):**
-*   **Status:** PASSED (100% Success Rate)
-*   **Suites:** 1 (Integration)
-*   **Tests:** 2
-*   **Duration:** 175ms
-*   **Key Coverage:** 
-	*   `test_full_shift_chain_progression`: Verified linear progression from Monday through Sunday.
-	*   `test_briefing_ids_are_assigned`: Verified all shift resources have associated briefing dialogues.
+*   **Manual Execution:** Execute tests via the GdUnit4 panel in Godot.
+*   **Latest Test Status**: PASSED (100% Success Rate) covering shift progression, briefing ID assignments, and resource connectivity.
 
 ### Key File Locations:
 
 *   **Global Systems:** `autoload/`
-*   **Game Scenes:** `scenes/` (separated into `2d`, `3d`, and `ui`)
-*   **Game Logic:** `scripts/`
-*   **Data Definitions:** `resources/`
-*   **Project Vision & Progress:** `sprint/`
+*   **Game Scenes:** `scenes/` (2d, 3d, ui)
+*   **Logic Scripts:** `scripts/` (2d, 3d, ui)
+*   **Data Resources:** `resources/` (tickets, logs, emails, hosts, shifts)
+*   **Project Documentation**: `VERIFY.EXE_DOCUMENTATION/` and `sprint/`

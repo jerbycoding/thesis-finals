@@ -1,26 +1,32 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene load_steps=6 format=3 uid="uid://c5l2c07vj1tqw"]
 
-[ext_resource type="Script" path="res://scripts/2d/apps/App_TicketQueue.gd" id="1_4yihl"]
-[ext_resource type="PackedScene" path="res://scenes/2d/apps/components/CompletionModal.tscn" id="2_modal"]
-[ext_resource type="Theme" path="res://assets/themes/EnterpriseTheme.tres" id="3_theme"]
+[ext_resource type="Script" uid="uid://biay8aieuagch" path="res://scripts/2d/apps/app_TicketQueue.gd" id="1_4yihl"]
+[ext_resource type="PackedScene" uid="uid://c5x6y708bab0c" path="res://scenes/2d/apps/components/CompletionModal.tscn" id="2_modal"]
+[ext_resource type="Theme" uid="uid://dny3rlbltexc7" path="res://assets/themes/EnterpriseTheme.tres" id="3_theme"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Header"]
 content_margin_left = 15.0
 content_margin_top = 5.0
 content_margin_right = 15.0
 content_margin_bottom = 5.0
-bg_color = Color(0, 0, 0, 1)
+bg_color = Color(0.0196078, 0.0196078, 0.0196078, 1)
+border_width_bottom = 1
+border_color = Color(0.2, 0.6, 1, 0.3)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Protocol"]
-bg_color = Color(0.96, 0.96, 0.96, 1)
+bg_color = Color(1, 1, 1, 0.03)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.8, 0.8, 0.8, 1)
+border_color = Color(1, 1, 1, 0.1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
 
 [node name="App_TicketQueue" type="Control"]
-custom_minimum_size = Vector2(1000, 700)
+custom_minimum_size = Vector2(850, 600)
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -37,7 +43,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.992157, 0.992157, 0.992157, 1)
+color = Color(0.0509804, 0.0509804, 0.0666667, 1)
 
 [node name="VBox" type="VBoxContainer" parent="Background"]
 layout_mode = 1
@@ -51,6 +57,7 @@ theme_override_constants/separation = 0
 [node name="Header" type="PanelContainer" parent="Background/VBox"]
 layout_mode = 2
 theme_type_variation = &"HeaderPanel"
+theme_override_styles/panel = SubResource("StyleBoxFlat_Header")
 
 [node name="HeaderLabel" type="Label" parent="Background/VBox/Header"]
 layout_mode = 2
@@ -60,11 +67,14 @@ vertical_alignment = 1
 
 [node name="Content" type="HSplitContainer" parent="Background/VBox"]
 layout_mode = 2
+size_flags_horizontal = 3
 size_flags_vertical = 3
-split_offset = 380
+split_offset = 300
 
 [node name="QueuePanel" type="PanelContainer" parent="Background/VBox/Content"]
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
 [node name="Margin" type="MarginContainer" parent="Background/VBox/Content/QueuePanel"]
 layout_mode = 2
@@ -79,12 +89,13 @@ theme_override_constants/separation = 15
 
 [node name="QueueTitle" type="Label" parent="Background/VBox/Content/QueuePanel/Margin/VBox"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.4, 0.4, 0.4, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 0.75)
 theme_override_font_sizes/font_size = 11
 text = "ACTIVE INCIDENTS"
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Background/VBox/Content/QueuePanel/Margin/VBox"]
 layout_mode = 2
+size_flags_horizontal = 3
 size_flags_vertical = 3
 horizontal_scroll_mode = 0
 
@@ -92,14 +103,19 @@ horizontal_scroll_mode = 0
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 3
 theme_override_constants/separation = 1
 
 [node name="DetailPanel" type="PanelContainer" parent="Background/VBox/Content"]
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
 [node name="PlaceholderView" type="CenterContainer" parent="Background/VBox/Content/DetailPanel"]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
 [node name="VBox" type="VBoxContainer" parent="Background/VBox/Content/DetailPanel/PlaceholderView"]
 layout_mode = 2
@@ -107,14 +123,14 @@ theme_override_constants/separation = 10
 
 [node name="Icon" type="Label" parent="Background/VBox/Content/DetailPanel/PlaceholderView/VBox"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 0.25)
 theme_override_font_sizes/font_size = 48
 text = "🎫"
 horizontal_alignment = 1
 
 [node name="PlaceholderLabel" type="Label" parent="Background/VBox/Content/DetailPanel/PlaceholderView/VBox"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 0.75)
 theme_override_font_sizes/font_size = 14
 text = "SELECT INCIDENT FROM QUEUE
 TO BEGIN TRIAGE"
@@ -125,6 +141,8 @@ vertical_alignment = 1
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
 [node name="DetailMargin" type="MarginContainer" parent="Background/VBox/Content/DetailPanel/DetailView"]
 layout_mode = 2
@@ -145,7 +163,6 @@ theme_override_constants/separation = 8
 [node name="TitleLabel" type="Label" parent="Background/VBox/Content/DetailPanel/DetailView/DetailMargin/VBox/Header"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 24
 text = "Ticket Title"
 autowrap_mode = 3
@@ -153,7 +170,7 @@ autowrap_mode = 3
 [node name="RequiredToolLabel" type="Label" parent="Background/VBox/Content/DetailPanel/DetailView/DetailMargin/VBox/Header"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_color = Color(0, 0.423529, 1, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 0.75)
 theme_override_font_sizes/font_size = 11
 text = "ANALYSIS TOOL: ---"
 
@@ -164,7 +181,6 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_colors/default_color = Color(0.1, 0.1, 0.1, 1)
 theme_override_constants/line_separation = 6
 bbcode_enabled = true
 text = "Description text..."
@@ -176,7 +192,6 @@ theme_override_constants/separation = 12
 
 [node name="StepsLabel" type="Label" parent="Background/VBox/Content/DetailPanel/DetailView/DetailMargin/VBox/ProcedureBox"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 12
 text = "REQUIRED FORENSIC PROTOCOL"
 
@@ -196,6 +211,24 @@ unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 10
 
+[node name="EvidenceBox" type="VBoxContainer" parent="Background/VBox/Content/DetailPanel/DetailView/DetailMargin/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Label" type="Label" parent="Background/VBox/Content/DetailPanel/DetailView/DetailMargin/VBox/EvidenceBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.75)
+theme_override_font_sizes/font_size = 11
+text = "ATTACHED EVIDENCE ARTIFACTS"
+
+[node name="ArtifactContainer" type="HFlowContainer" parent="Background/VBox/Content/DetailPanel/DetailView/DetailMargin/VBox/EvidenceBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 10
+
 [node name="CompletionModal" parent="." instance=ExtResource("2_modal")]
 unique_name_in_owner = true
+visible = false
 layout_mode = 1

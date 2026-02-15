@@ -2,6 +2,8 @@
 extends Control
 
 var is_dragging: bool = false
+var is_resizing: bool = false
+var is_minimized: bool = false
 var drag_offset: Vector2 = Vector2.ZERO
 var window_id: String = ""
 var window_title: String = "Window"
@@ -9,8 +11,10 @@ var content_scene: PackedScene = null
 
 @onready var title_bar: HBoxContainer = $Border/VBoxContainer/TitleBarPanel/TitleBar
 @onready var title_label: Label = $Border/VBoxContainer/TitleBarPanel/TitleBar/TitleLabel
+@onready var minimize_button: Button = %MinimizeButton
 @onready var close_button: Button = $Border/VBoxContainer/TitleBarPanel/TitleBar/CloseButton
 @onready var content_container: MarginContainer = $Border/VBoxContainer/ContentContainer
+@onready var resize_handle: Control = %ResizeHandle
 
 func _ready():
 	# Force visibility
@@ -28,15 +32,55 @@ func _ready():
 	if close_button:
 		close_button.pressed.connect(_on_close_pressed)
 	
+	if minimize_button:
+		minimize_button.pressed.connect(toggle_minimize)
+	
 	if title_bar:
 		title_bar.gui_input.connect(_on_title_bar_gui_input)
 		title_bar.mouse_filter = Control.MOUSE_FILTER_STOP
+	
+	if resize_handle:
+		resize_handle.gui_input.connect(_on_resize_handle_gui_input)
+		resize_handle.mouse_filter = Control.MOUSE_FILTER_STOP
 	
 	var border = get_node_or_null("Border")
 	if border:
 		border.gui_input.connect(_on_window_gui_input)
 
-const SNAP_MARGIN: float = 20.0
+func toggle_minimize():
+	is_minimized = !is_minimized
+	visible = !is_minimized
+	if not is_minimized:
+		bring_to_front()
+		EventBus.window_focused.emit(self)
+
+func _on_resize_handle_gui_input(event):
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+		if event.pressed:
+			is_resizing = true
+			bring_to_front()
+			EventBus.window_focused.emit(self)
+			get_viewport().set_input_as_handled()
+		else:
+			is_resizing = false
+	elif event is InputEventMouseMotion and is_resizing:
+		var parent_rect = get_viewport_rect()
+		if get_parent() is Control:
+			parent_rect = get_parent().get_global_rect()
+			
+		var min_size = custom_minimum_size
+		if min_size.x < 300: min_size.x = 300
+		if min_size.y < 200: min_size.y = 200
+		
+		# Calculate new size based on mouse delta
+		var new_size = size + event.relative
+		
+		# Clamp size to reasonable limits
+		new_size.x = clamp(new_size.x, min_size.x, parent_rect.size.x - position.x)
+		new_size.y = clamp(new_size.y, min_size.y, parent_rect.size.y - position.y)
+		
+		size = new_size
+		get_viewport().set_input_as_handled()
 
 func _on_title_bar_gui_input(event):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
@@ -49,21 +93,38 @@ func _on_title_bar_gui_input(event):
 			is_dragging = false
 			_apply_snapping()
 	elif event is InputEventMouseMotion and is_dragging:
-		global_position += event.relative
+		var parent_rect = get_viewport_rect()
+		if get_parent() is Control:
+			parent_rect = get_parent().get_global_rect()
+			
+		var new_pos = global_position + event.relative
+		
+		# Real-time clamping during drag
+		new_pos.x = clamp(new_pos.x, parent_rect.position.x, parent_rect.position.x + parent_rect.size.x - size.x)
+		new_pos.y = clamp(new_pos.y, parent_rect.position.y, parent_rect.position.y + parent_rect.size.y - size.y)
+		
+		global_position = new_pos
 		get_viewport().set_input_as_handled()
 
+const SNAP_MARGIN: float = 20.0
+
 func _apply_snapping():
-	var viewport_rect = get_viewport().get_visible_rect()
+	# Visual snapping only (magnetic edges)
+	var parent_rect = get_viewport_rect()
+	if get_parent() is Control:
+		parent_rect = get_parent().get_global_rect()
+	
 	var new_pos = global_position
 	
-	if abs(new_pos.x) < SNAP_MARGIN: new_pos.x = 0
-	if abs(new_pos.y) < SNAP_MARGIN: new_pos.y = 35 # Top bar offset
+	# Snap to Left/Right
+	if abs(new_pos.x - parent_rect.position.x) < SNAP_MARGIN: new_pos.x = parent_rect.position.x
+	elif abs(new_pos.x + size.x - (parent_rect.position.x + parent_rect.size.x)) < SNAP_MARGIN:
+		new_pos.x = parent_rect.position.x + parent_rect.size.x - size.x
 		
-	if abs(new_pos.x + size.x - viewport_rect.size.x) < SNAP_MARGIN:
-		new_pos.x = viewport_rect.size.x - size.x
-		
-	if abs(new_pos.y + size.y - (viewport_rect.size.y - 70)) < SNAP_MARGIN:
-		new_pos.y = viewport_rect.size.y - 70 - size.y
+	# Snap to Top/Bottom
+	if abs(new_pos.y - parent_rect.position.y) < SNAP_MARGIN: new_pos.y = parent_rect.position.y
+	elif abs(new_pos.y + size.y - (parent_rect.position.y + parent_rect.size.y)) < SNAP_MARGIN:
+		new_pos.y = parent_rect.position.y + parent_rect.size.y - size.y
 		
 	if new_pos != global_position:
 		var tween = create_tween()

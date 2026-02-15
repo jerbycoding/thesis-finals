@@ -85,6 +85,24 @@ func _discover_shifts():
 		
 	print("🎬 NARRATIVE_DEBUG: Library ready: %d shifts." % shift_library.size())
 
+func prepare_shift(shift_id: String):
+	if not shift_library.has(shift_id):
+		push_error("NarrativeDirector: Cannot prepare unknown shift ID: " + shift_id)
+		return
+		
+	var shift_res = shift_library[shift_id]
+	print("NarrativeDirector: Preparing shift: ", shift_id)
+	
+	# DECISION LOGIC: 
+	# If the shift has a briefing dialogue, we trigger THAT. 
+	# If not, we start the live shift timers immediately.
+	if shift_res.briefing_dialogue_id != "" and shift_res.briefing_dialogue_id != "default":
+		print("NarrativeDirector: Shift requires briefing. Triggering...")
+		trigger_briefing(shift_id)
+	else:
+		print("NarrativeDirector: No briefing required. Starting live shift.")
+		start_shift(shift_id)
+
 func start_shift(shift_id: String):
 	print("NarrativeDirector: Attempting to start shift: ", shift_id)
 	
@@ -123,8 +141,23 @@ func trigger_briefing(shift_id: String):
 	if get_tree().current_scene.name != "BriefingRoom":
 		TransitionManager.change_scene_to("res://scenes/3d/BriefingRoom.tscn")
 		await EventBus.transition_completed
+		
+		# Wait for the CISO to be ready in the new scene
+		# We use a lambda to check if the incoming ID matches our target
+		var is_ciso_ready = false
+		var check_ready = func(id): if id == GlobalConstants.NPC_ID.CISO: is_ciso_ready = true
+		EventBus.npc_ready.connect(check_ready)
+		
+		# Give it up to 2 seconds to load, checking every frame
+		var timeout = 2.0
+		while not is_ciso_ready and timeout > 0:
+			await get_tree().process_frame
+			timeout -= get_process_delta_time()
+		
+		EventBus.npc_ready.disconnect(check_ready)
 	
-	# Trigger the dialogue via signal (CISO is usually the one speaking)
+	# Trigger the dialogue via signal
+	print("NarrativeDirector: Broadcasting interaction request for CISO: ", shift_res.briefing_dialogue_id)
 	EventBus.npc_interaction_requested.emit(GlobalConstants.NPC_ID.CISO, shift_res.briefing_dialogue_id)
 
 func _on_event_timer_timeout():
@@ -202,7 +235,7 @@ func _on_consequence_triggered(consequence_id: String, _details: Dictionary):
 
 func _on_campaign_ended(type: String):
 	print("NarrativeDirector: Campaign ended with result: ", type)
-	var scene_path = ENDING_SCENES.get(type, "res://scenes/ui/TitleScreen.tscn")
+	var scene_path = ENDING_SCENES.get(type, "res://scenes/3d/MainMenu3D.tscn")
 	
 	if TransitionManager:
 		TransitionManager.change_scene_to(scene_path)

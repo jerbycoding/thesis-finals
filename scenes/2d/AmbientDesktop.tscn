@@ -1,0 +1,168 @@
+[gd_scene load_steps=7 format=3 uid="uid://c6ddnqoskkxa2"]
+
+[ext_resource type="Script" uid="uid://c28t6vqktfrln" path="res://scripts/2d/DesktopClock.gd" id="1_0l3ag"]
+[ext_resource type="Script" uid="uid://cj224q24ol6oc" path="res://scripts/2d/AmbientDesktop.gd" id="1_ambient"]
+[ext_resource type="Texture2D" uid="uid://dk37ymi787rod" path="res://assets/wallpapers/Microsoft_Surface_Duo.jpg" id="3_wallpaper"]
+[ext_resource type="Theme" uid="uid://dny3rlbltexc7" path="res://assets/themes/EnterpriseTheme.tres" id="4_theme"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_TaskbarGlass"]
+bg_color = Color(0.0196078, 0.0196078, 0.0196078, 0.705882)
+border_width_top = 1
+border_color = Color(1, 1, 1, 0.117647)
+shadow_color = Color(0, 0, 0, 0.117647)
+shadow_size = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_PillTray"]
+bg_color = Color(1, 1, 1, 0.0588235)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 0.0784314)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[node name="AmbientDesktop" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("4_theme")
+script = ExtResource("1_ambient")
+
+[node name="Background" type="ColorRect" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+color = Color(0.01, 0.01, 0.01, 1)
+
+[node name="DesktopBackground" type="TextureRect" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("3_wallpaper")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="GridPattern" type="ColorRect" parent="DesktopBackground"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(1, 1, 1, 0.0156863)
+
+[node name="ScreenSafeArea" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 25
+theme_override_constants/margin_top = 25
+theme_override_constants/margin_right = 25
+theme_override_constants/margin_bottom = 65
+
+[node name="AppWindowContainer" type="Control" parent="ScreenSafeArea"]
+unique_name_in_owner = true
+clip_contents = true
+layout_mode = 2
+mouse_filter = 1
+
+[node name="Taskbar" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_TaskbarGlass")
+
+[node name="Margin" type="MarginContainer" parent="Taskbar"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_right = 10
+
+[node name="HBox" type="HBoxContainer" parent="Taskbar/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="StartMenuButton" type="Button" parent="Taskbar/Margin/HBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_colors/font_hover_color = Color(0.2, 0.6, 1, 1)
+theme_override_font_sizes/font_size = 22
+text = "❄"
+flat = true
+
+[node name="VSeparator" type="VSeparator" parent="Taskbar/Margin/HBox"]
+layout_mode = 2
+theme_override_constants/separation = 1
+
+[node name="ActiveTasksContainer" type="HBoxContainer" parent="Taskbar/Margin/HBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="SystemTrayPill" type="PanelContainer" parent="Taskbar/Margin/HBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 34)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_PillTray")
+
+[node name="Margin" type="MarginContainer" parent="Taskbar/Margin/HBox/SystemTrayPill"]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_right = 10
+
+[node name="SystemTray" type="HBoxContainer" parent="Taskbar/Margin/HBox/SystemTrayPill/Margin"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="StatusLabel" type="Label" parent="Taskbar/Margin/HBox/SystemTrayPill/Margin/SystemTray"]
+layout_mode = 2
+theme_type_variation = &"TechnicalHeader"
+theme_override_colors/font_color = Color(0.863978, 0.7928, 1, 1)
+theme_override_font_sizes/font_size = 10
+text = "ONLINE"
+
+[node name="DesktopClock" type="Label" parent="Taskbar/Margin/HBox/SystemTrayPill/Margin/SystemTray"]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+theme_type_variation = &"TechnicalHeader"
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 11
+text = "12:00"
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("1_0l3ag")
+
+[node name="ControlPadding" type="Control" parent="Taskbar/Margin/HBox/SystemTrayPill/Margin/SystemTray"]
+custom_minimum_size = Vector2(5, 0)
+layout_mode = 2

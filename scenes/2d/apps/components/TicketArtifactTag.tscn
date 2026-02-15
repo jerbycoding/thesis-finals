@@ -1,0 +1,51 @@
+[gd_scene load_steps=4 format=3 uid="uid://b2yay001a2b3c"]
+
+[ext_resource type="Script" uid="uid://c8w0aibcjpmal" path="res://scripts/2d/apps/components/TicketArtifactTag.gd" id="1_script"]
+[ext_resource type="Theme" uid="uid://dny3rlbltexc7" path="res://assets/themes/EnterpriseTheme.tres" id="2_theme"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Tag"]
+bg_color = Color(1, 1, 1, 0.0588235)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 0.117647)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[node name="TicketArtifactTag" type="PanelContainer"]
+offset_right = 120.0
+offset_bottom = 28.0
+theme = ExtResource("2_theme")
+theme_override_styles/panel = SubResource("StyleBoxFlat_Tag")
+script = ExtResource("1_script")
+
+[node name="Margin" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_right = 4
+
+[node name="HBox" type="HBoxContainer" parent="Margin"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="LogIDLabel" type="Label" parent="Margin/HBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 10
+text = "LOG-ID-102"
+vertical_alignment = 1
+
+[node name="RemoveButton" type="Button" parent="Margin/HBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_colors/font_hover_color = Color(1, 0.2, 0.2, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 0.4)
+theme_override_font_sizes/font_size = 10
+text = "✕"
+flat = true

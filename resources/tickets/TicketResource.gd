@@ -41,6 +41,12 @@ func attach_log(log_id: String) -> bool:
 	attached_log_ids.append(log_id)
 	return true
 
+func detach_log(log_id: String) -> bool:
+	if log_id in attached_log_ids:
+		attached_log_ids.erase(log_id)
+		return true
+	return false
+
 func get_evidence_count() -> Dictionary:
 	# Returns {attached: X, required: Y}
 	return {

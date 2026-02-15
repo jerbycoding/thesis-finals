@@ -1,44 +1,29 @@
-[gd_scene load_steps=17 format=3 uid="uid://c4xkfk6xo2ycf"]
+[gd_scene load_steps=8 format=3 uid="uid://c4xkfk6xo2ycf"]
 
 [ext_resource type="Script" uid="uid://b22xof43jxemv" path="res://scripts/2d/ComputerDesktop.gd" id="1_0kbkv"]
 [ext_resource type="Script" uid="uid://c28t6vqktfrln" path="res://scripts/2d/DesktopClock.gd" id="1_0l3ag"]
 [ext_resource type="Script" uid="uid://cbi6smmdpx4yu" path="res://scripts/2d/ExitButton.gd" id="2_0kbkv"]
-[ext_resource type="PackedScene" uid="uid://c8x6y708bab0e" path="res://scenes/ui/UnifiedHUD.tscn" id="3_unified"]
-[ext_resource type="Texture2D" uid="uid://c0auxrvmfy530" path="res://assets/icons/handbook.png" id="4_71q3h"]
-[ext_resource type="Texture2D" uid="uid://h3tu8o7rvs7x" path="res://assets/icons/siem.png" id="4_i1hx7"]
+[ext_resource type="Texture2D" uid="uid://dk37ymi787rod" path="res://assets/wallpapers/Microsoft_Surface_Duo.jpg" id="3_r1l77"]
 [ext_resource type="Theme" uid="uid://dny3rlbltexc7" path="res://assets/themes/EnterpriseTheme.tres" id="4_theme"]
-[ext_resource type="Texture2D" uid="uid://dgcoa15chnepm" path="res://assets/icons/network.png" id="5_pghwf"]
-[ext_resource type="Texture2D" uid="uid://2aycp68ixmm2" path="res://assets/icons/decryption.png" id="6_b2npl"]
-[ext_resource type="Texture2D" uid="uid://bdtv8qmysl64d" path="res://assets/icons/resources.png" id="7_qy5y3"]
-[ext_resource type="Texture2D" uid="uid://b1usuitntodq6" path="res://assets/icons/email.png" id="9_e71pk"]
-[ext_resource type="Texture2D" uid="uid://dubvuit4hatsf" path="res://assets/icons/terminal.png" id="10_pct8o"]
-[ext_resource type="Texture2D" uid="uid://dacgsh2j7mt2g" path="res://assets/icons/ticket.png" id="11_3hg8b"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_TopBar"]
-bg_color = Color(0.0196078, 0.0196078, 0.0196078, 0.901961)
-border_width_bottom = 1
-border_color = Color(1, 1, 1, 0.0784314)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_TaskbarGlass"]
+bg_color = Color(0.0196078, 0.0196078, 0.0196078, 0.705882)
+border_width_top = 1
+border_color = Color(1, 1, 1, 0.117647)
+shadow_color = Color(0, 0, 0, 0.117647)
+shadow_size = 4
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_IconHover"]
-bg_color = Color(1, 1, 1, 0.0784314)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Dock"]
-bg_color = Color(0.0196078, 0.0196078, 0.0196078, 0.862745)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_PillTray"]
+bg_color = Color(1, 1, 1, 0.0588235)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
 border_color = Color(1, 1, 1, 0.0784314)
-corner_radius_top_left = 10
-corner_radius_top_right = 10
-corner_radius_bottom_right = 10
-corner_radius_bottom_left = 10
-shadow_color = Color(0, 0, 0, 0.235294)
-shadow_size = 8
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
 
 [node name="ComputerDesktop" type="Control"]
 layout_mode = 3
@@ -50,17 +35,51 @@ grow_vertical = 2
 theme = ExtResource("4_theme")
 script = ExtResource("1_0kbkv")
 
-[node name="Background" type="ColorRect" parent="."]
+[node name="MonitorAssembly" type="Control" parent="."]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 1
-color = Color(0.0509804, 0.0823529, 0.141176, 1)
+mouse_filter = 2
 
-[node name="GridPattern" type="ColorRect" parent="Background"]
+[node name="LCD_Group" type="Control" parent="MonitorAssembly"]
+unique_name_in_owner = true
+clip_contents = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="DesktopBackground" type="TextureRect" parent="MonitorAssembly/LCD_Group"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("3_r1l77")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="ScreenGlow" type="ColorRect" parent="MonitorAssembly/LCD_Group/DesktopBackground"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.2, 0.4, 1, 0.02)
+
+[node name="GridPattern" type="ColorRect" parent="MonitorAssembly/LCD_Group/DesktopBackground"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -70,7 +89,7 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(1, 1, 1, 0.0156863)
 
-[node name="AppWindowContainer" type="Control" parent="."]
+[node name="ScreenSafeArea" type="MarginContainer" parent="MonitorAssembly/LCD_Group"]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 15
@@ -78,60 +97,85 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 25
+theme_override_constants/margin_top = 25
+theme_override_constants/margin_right = 25
+theme_override_constants/margin_bottom = 65
+
+[node name="AppWindowContainer" type="Control" parent="MonitorAssembly/LCD_Group/ScreenSafeArea"]
+unique_name_in_owner = true
+clip_contents = true
+layout_mode = 2
 mouse_filter = 1
 
-[node name="TopSystemBar" type="PanelContainer" parent="."]
+[node name="Taskbar" type="PanelContainer" parent="MonitorAssembly/LCD_Group"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 48)
 layout_mode = 1
-anchors_preset = 10
+anchors_preset = 12
+anchor_top = 1.0
 anchor_right = 1.0
-offset_bottom = 32.0
+anchor_bottom = 1.0
 grow_horizontal = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_TopBar")
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_TaskbarGlass")
 
-[node name="Margin" type="MarginContainer" parent="TopSystemBar"]
+[node name="Margin" type="MarginContainer" parent="MonitorAssembly/LCD_Group/Taskbar"]
 layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_right = 10
 
-[node name="HBox" type="HBoxContainer" parent="TopSystemBar/Margin"]
+[node name="HBox" type="HBoxContainer" parent="MonitorAssembly/LCD_Group/Taskbar/Margin"]
 layout_mode = 2
+theme_override_constants/separation = 15
 
-[node name="AppMenuButton" type="Button" parent="TopSystemBar/Margin/HBox"]
+[node name="StartMenuButton" type="Button" parent="MonitorAssembly/LCD_Group/Taskbar/Margin/HBox"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
-theme_type_variation = &"TechnicalHeader"
-theme_override_font_sizes/font_size = 11
-text = "❄ APPLICATIONS"
+size_flags_vertical = 4
+theme_override_colors/font_hover_color = Color(0.2, 0.6, 1, 1)
+theme_override_font_sizes/font_size = 22
+text = "❄"
 flat = true
 
-[node name="VSeparator" type="VSeparator" parent="TopSystemBar/Margin/HBox"]
+[node name="VSeparator" type="VSeparator" parent="MonitorAssembly/LCD_Group/Taskbar/Margin/HBox"]
 layout_mode = 2
-theme_override_constants/separation = 15
+theme_override_constants/separation = 1
 
-[node name="StatusLabel" type="Label" parent="TopSystemBar/Margin/HBox"]
-layout_mode = 2
-theme_type_variation = &"TechnicalHeader"
-theme_override_colors/font_color = Color(0.2, 1, 0.2, 1)
-theme_override_font_sizes/font_size = 10
-text = "NETWORK_ONLINE"
-
-[node name="Spacer" type="Control" parent="TopSystemBar/Margin/HBox"]
+[node name="ActiveTasksContainer" type="HBoxContainer" parent="MonitorAssembly/LCD_Group/Taskbar/Margin/HBox"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_constants/separation = 8
 
-[node name="UserLabel" type="Label" parent="TopSystemBar/Margin/HBox"]
+[node name="SystemTrayPill" type="PanelContainer" parent="MonitorAssembly/LCD_Group/Taskbar/Margin/HBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 34)
 layout_mode = 2
-theme_type_variation = &"TechnicalHeader"
-theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
-theme_override_font_sizes/font_size = 10
-text = "ANALYST_ Hammond, B."
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_PillTray")
 
-[node name="VSeparator2" type="VSeparator" parent="TopSystemBar/Margin/HBox"]
+[node name="Margin" type="MarginContainer" parent="MonitorAssembly/LCD_Group/Taskbar/Margin/HBox/SystemTrayPill"]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_right = 10
+
+[node name="SystemTray" type="HBoxContainer" parent="MonitorAssembly/LCD_Group/Taskbar/Margin/HBox/SystemTrayPill/Margin"]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 15
 
-[node name="DesktopClock" type="Label" parent="TopSystemBar/Margin/HBox"]
+[node name="StatusLabel" type="Label" parent="MonitorAssembly/LCD_Group/Taskbar/Margin/HBox/SystemTrayPill/Margin/SystemTray"]
+layout_mode = 2
+theme_type_variation = &"TechnicalHeader"
+theme_override_colors/font_color = Color(0.870878, 0.791014, 0.993602, 1)
+theme_override_font_sizes/font_size = 10
+text = "ONLINE"
+
+[node name="DesktopClock" type="Label" parent="MonitorAssembly/LCD_Group/Taskbar/Margin/HBox/SystemTrayPill/Margin/SystemTray"]
+custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
 theme_type_variation = &"TechnicalHeader"
 theme_override_colors/font_color = Color(1, 1, 1, 1)
@@ -141,231 +185,18 @@ horizontal_alignment = 1
 vertical_alignment = 1
 script = ExtResource("1_0l3ag")
 
-[node name="LeftUtilityBar" type="VBoxContainer" parent="."]
+[node name="VSeparator" type="VSeparator" parent="MonitorAssembly/LCD_Group/Taskbar/Margin/HBox/SystemTrayPill/Margin/SystemTray"]
+layout_mode = 2
+
+[node name="ExitButton" type="Button" parent="MonitorAssembly/LCD_Group/Taskbar/Margin/HBox/SystemTrayPill/Margin/SystemTray"]
 unique_name_in_owner = true
-layout_mode = 0
-offset_left = 20.0
-offset_top = 50.0
-offset_right = 100.0
-offset_bottom = 450.0
-theme_override_constants/separation = 15
-
-[node name="Handbook_Icon" type="Button" parent="LeftUtilityBar"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(70, 75)
+custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
-theme_override_styles/hover = SubResource("StyleBoxFlat_IconHover")
-icon = ExtResource("4_71q3h")
-flat = true
-
-[node name="VBox" type="VBoxContainer" parent="LeftUtilityBar/Handbook_Icon"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_bottom = 20.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-theme_override_constants/separation = 2
-alignment = 1
-
-[node name="IconText" type="Label" parent="LeftUtilityBar/Handbook_Icon/VBox"]
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 32
-horizontal_alignment = 1
-
-[node name="Label" type="Label" parent="LeftUtilityBar/Handbook_Icon/VBox"]
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 10
-text = "Handbook"
-horizontal_alignment = 1
-
-[node name="Network_Icon" type="Button" parent="LeftUtilityBar"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(70, 75)
-layout_mode = 2
-theme_override_styles/hover = SubResource("StyleBoxFlat_IconHover")
-icon = ExtResource("5_pghwf")
-flat = true
-
-[node name="VBox" type="VBoxContainer" parent="LeftUtilityBar/Network_Icon"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_bottom = 20.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-theme_override_constants/separation = 2
-alignment = 1
-
-[node name="IconText" type="Label" parent="LeftUtilityBar/Network_Icon/VBox"]
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 32
-horizontal_alignment = 1
-
-[node name="Label" type="Label" parent="LeftUtilityBar/Network_Icon/VBox"]
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 10
-text = "Network Map"
-horizontal_alignment = 1
-vertical_alignment = 2
-
-[node name="Decrypt_Icon" type="Button" parent="LeftUtilityBar"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(70, 75)
-layout_mode = 2
-theme_override_styles/hover = SubResource("StyleBoxFlat_IconHover")
-icon = ExtResource("6_b2npl")
-flat = true
-
-[node name="VBox" type="VBoxContainer" parent="LeftUtilityBar/Decrypt_Icon"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_right = 5.0
-offset_bottom = 10.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-theme_override_constants/separation = 2
-alignment = 2
-
-[node name="IconText" type="Label" parent="LeftUtilityBar/Decrypt_Icon/VBox"]
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 32
-horizontal_alignment = 1
-
-[node name="Label" type="Label" parent="LeftUtilityBar/Decrypt_Icon/VBox"]
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 10
-text = "Decryption"
-horizontal_alignment = 1
-
-[node name="TaskManager_Icon" type="Button" parent="LeftUtilityBar"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(70, 75)
-layout_mode = 2
-theme_override_styles/hover = SubResource("StyleBoxFlat_IconHover")
-icon = ExtResource("7_qy5y3")
-flat = true
-
-[node name="VBox" type="VBoxContainer" parent="LeftUtilityBar/TaskManager_Icon"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-theme_override_constants/separation = 2
-alignment = 1
-
-[node name="IconText" type="Label" parent="LeftUtilityBar/TaskManager_Icon/VBox"]
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 32
-horizontal_alignment = 1
-
-[node name="Label" type="Label" parent="LeftUtilityBar/TaskManager_Icon/VBox"]
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 10
-text = "Resources"
-horizontal_alignment = 1
-
-[node name="BottomDock" type="PanelContainer" parent="."]
-unique_name_in_owner = true
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -225.0
-offset_top = -80.0
-offset_right = 225.0
-offset_bottom = -20.0
-grow_horizontal = 2
-grow_vertical = 0
-theme_override_styles/panel = SubResource("StyleBoxFlat_Dock")
-
-[node name="Margin" type="MarginContainer" parent="BottomDock"]
-layout_mode = 2
-theme_override_constants/margin_left = 15
-theme_override_constants/margin_right = 15
-
-[node name="DockIcons" type="HBoxContainer" parent="BottomDock/Margin"]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_constants/separation = 25
-alignment = 1
-
-[node name="SIEM_Icon" type="Button" parent="BottomDock/Margin/DockIcons"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(50, 50)
-layout_mode = 2
-tooltip_text = "SIEM Log Viewer"
-theme_override_font_sizes/font_size = 24
-icon = ExtResource("4_i1hx7")
-flat = true
-
-[node name="Email_Icon" type="Button" parent="BottomDock/Margin/DockIcons"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(50, 50)
-layout_mode = 2
-tooltip_text = "Email Analyzer"
-theme_override_font_sizes/font_size = 24
-icon = ExtResource("9_e71pk")
-flat = true
-
-[node name="Terminal_Icon" type="Button" parent="BottomDock/Margin/DockIcons"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(50, 50)
-layout_mode = 2
-tooltip_text = "Terminal"
-theme_override_font_sizes/font_size = 24
-icon = ExtResource("10_pct8o")
-flat = true
-
-[node name="Tickets_Icon" type="Button" parent="BottomDock/Margin/DockIcons"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(50, 50)
-layout_mode = 2
-tooltip_text = "Ticket Queue"
-theme_override_font_sizes/font_size = 24
-icon = ExtResource("11_3hg8b")
-flat = true
-
-[node name="ExitButton" type="Button" parent="BottomDock/Margin/DockIcons"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(50, 50)
-layout_mode = 2
-tooltip_text = "Terminate Session (Exit to Office)"
+size_flags_vertical = 4
+tooltip_text = "Terminate Session"
 theme_override_colors/font_hover_color = Color(1, 0.2, 0.2, 1)
 theme_override_colors/font_color = Color(1, 1, 1, 0.6)
-theme_override_colors/font_pressed_color = Color(0.8, 0, 0, 1)
-theme_override_font_sizes/font_size = 22
+theme_override_font_sizes/font_size = 16
 text = "⏻"
 flat = true
 script = ExtResource("2_0kbkv")
-
-[node name="UnifiedHUD" parent="." instance=ExtResource("3_unified")]
-layout_mode = 1
-anchors_preset = 1
-anchor_top = 0.0
-anchor_bottom = 0.0
-offset_left = -260.0
-offset_top = 50.0
-offset_right = -20.0
-offset_bottom = 200.0
-grow_vertical = 1

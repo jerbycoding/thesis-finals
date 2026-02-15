@@ -1,0 +1,25 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://cgo3rvxw6817q"
+path="res://.godot/imported/RFan_B.obj-2ece1c5a03920895c9904a8bc551d1fd.mesh"
+
+[deps]
+
+files=["res://.godot/imported/RFan_B.obj-2ece1c5a03920895c9904a8bc551d1fd.mesh"]
+
+source_file="res://assets/props/OBJ/Separated/RFan_B.obj"
+dest_files=["res://.godot/imported/RFan_B.obj-2ece1c5a03920895c9904a8bc551d1fd.mesh", "res://.godot/imported/RFan_B.obj-2ece1c5a03920895c9904a8bc551d1fd.mesh"]
+
+[params]
+
+generate_tangents=true
+generate_lods=true
+generate_shadow_mesh=true
+generate_lightmap_uv2=false
+generate_lightmap_uv2_texel_size=0.2
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+force_disable_mesh_compression=false
