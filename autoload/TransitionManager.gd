@@ -126,17 +126,24 @@ func exit_desktop_mode():
 	is_transitioning = false
 	EventBus.transition_completed.emit()
 
-func change_scene_to(path: String, narrative_to_start_after: String = "", title_card: String = ""):
+func change_scene_to(path: String, narrative_to_start_after: String = "", title_card: String = "", force: bool = false):
 	if not overlay_instance:
 		push_error("TransitionManager: Overlay instance is null!")
 		return
-	if is_transitioning:
+	if is_transitioning and not force:
 		push_warning("TransitionManager: change_scene_to blocked (Another transition in progress). Target: " + path)
 		return
 	
-	print(">>> TRANSITION START: To '", path, "'")
+	print(">>> TRANSITION START: To '", path, "' (Forced: ", force, ")")
 	is_transitioning = true
 	EventBus.transition_started.emit()
+	
+	# IMMERSION CHECK: If in 2D mode (at computer), force exit before fading out
+	if GameState.is_in_2d_mode():
+		print(">>> TRANSITION IMMERSION: Forcing exit from desktop before scene change.")
+		# We don't call exit_desktop_mode() directly to avoid its internal transition lock
+		_force_stand_up()
+		await get_tree().create_timer(0.8).timeout # Wait for stand up animation
 	
 	# CLEANUP: Explicitly destroy the persistent desktop before changing scenes
 	if GameState.desktop_instance and is_instance_valid(GameState.desktop_instance):
@@ -147,8 +154,9 @@ func change_scene_to(path: String, narrative_to_start_after: String = "", title_
 	# CLEANUP SIGNAL: Let persistent UIs (like Desktop) kill themselves
 	EventBus.prepare_for_scene_change.emit()
 	
-	# Force mode reset to 3D for the next scene
-	GameState.set_mode(GameState.GameMode.MODE_3D)
+	# Force mode reset and reference cleanup
+	if GameState:
+		GameState.reset_to_default()
 
 	# TITLE CARD LOGIC
 	if not title_card.is_empty():
@@ -268,3 +276,18 @@ func play_secure_login(target_path: String, narrative: String = ""):
 	if not narrative.is_empty():
 		if NarrativeDirector:
 			NarrativeDirector.prepare_shift(narrative)
+
+# INTERNAL HELPERS
+
+func _force_stand_up():
+	# Master Advice: Silent version of exit_desktop_mode for critical scene changes
+	if GameState.active_bridge:
+		GameState.active_bridge.deactivate()
+		GameState.active_bridge = null
+		
+	var player = get_tree().root.find_child("Player3D", true, false)
+	if player and player.has_method("stand_up"):
+		player.stand_up()
+	
+	GameState.set_mode(GameState.GameMode.MODE_3D)
+	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)

@@ -1,7 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://d1p8yg2i867ip"]
+[gd_scene load_steps=6 format=3 uid="uid://d1p8yg2i867ip"]
 
 [ext_resource type="Script" uid="uid://cpmyqjpoeam4k" path="res://scripts/3d/NPC_SeniorAnalyst.gd" id="1_npc"]
-[ext_resource type="Script" path="res://scripts/3d/PlayerAnimator.gd" id="2_animator"]
+[ext_resource type="Script" uid="uid://clra78uil2mle" path="res://scripts/3d/PlayerAnimator.gd" id="2_animator"]
 [ext_resource type="PackedScene" uid="uid://c67sml5y1uxgf" path="res://assets/npc/Man.glb" id="3_vwxg8"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_senior"]

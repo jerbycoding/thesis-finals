@@ -78,3 +78,11 @@ func test_restore_integrity():
 	integrity_manager.current_integrity = 50.0
 	integrity_manager.restore_integrity(15.0)
 	assert_float(integrity_manager.current_integrity).is_equal(65.0)
+
+func test_critical_failure_signal():
+	integrity_manager.current_integrity = 5.0
+	
+	integrity_manager._apply_change(-10.0)
+	
+	assert_float(integrity_manager.current_integrity).is_equal(0.0)
+	assert_signal(integrity_manager).is_emitted("integrity_critical")

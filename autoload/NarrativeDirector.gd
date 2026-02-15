@@ -238,7 +238,7 @@ func _on_campaign_ended(type: String):
 	var scene_path = ENDING_SCENES.get(type, "res://scenes/3d/MainMenu3D.tscn")
 	
 	if TransitionManager:
-		TransitionManager.change_scene_to(scene_path)
+		TransitionManager.change_scene_to(scene_path, "", "", true) # Force transition
 	else:
 		get_tree().change_scene_to_file(scene_path)
 
@@ -253,17 +253,19 @@ func _trigger_event(event_data: Dictionary):
 				# Wait a moment for the camera to settle
 				await get_tree().create_timer(0.5).timeout
 			
-			# Fallback for remote NPCs (like CISO who is no longer in the office)
-			if event_data.npc_id == GlobalConstants.NPC_ID.CISO and DialogueManager:
-				var path = "res://resources/dialogue/ciso_" + event_data.dialogue_id + ".tres"
-				if ResourceLoader.exists(path):
-					var res = load(path)
-					if res:
-						print("NarrativeDirector: Starting remote CISO dialogue.")
-						DialogueManager.start_dialogue(null, res)
-						return # Skip the signal emission since we started it manually
+			# 1. Check if the NPC is physically present in the current scene
+			var is_npc_present = false
+			for node in get_tree().get_nodes_in_group("npcs"):
+				if node.get("npc_id") == event_data.npc_id:
+					is_npc_present = true
+					break
 			
-			EventBus.npc_interaction_requested.emit(event_data.npc_id, event_data.dialogue_id)
+			if is_npc_present:
+				print("NarrativeDirector: Local NPC '%s' found. Broadcasting interaction." % event_data.npc_id)
+				EventBus.npc_interaction_requested.emit.call_deferred(event_data.npc_id, event_data.dialogue_id)
+			else:
+				print("NarrativeDirector: NPC '%s' not in scene. Triggering REMOTE fallback." % event_data.npc_id)
+				_trigger_remote_dialogue(event_data.npc_id, event_data.dialogue_id)
 		GlobalConstants.NARRATIVE_EVENT_TYPE.SPAWN_TICKET:
 			EventBus.narrative_spawn_ticket.emit(event_data.ticket_id)
 		GlobalConstants.NARRATIVE_EVENT_TYPE.SPAWN_CONSEQUENCE:
@@ -378,3 +380,18 @@ func get_weekend_hint() -> Dictionary:
 			return {"socket_id": "NONE", "req_type": "DONE"}
 			
 	return {}
+
+func _trigger_remote_dialogue(npc_id: String, dialogue_id: String):
+	if not DialogueManager: return
+	
+	# Convention-based path: res://resources/dialogue/[npc_id]_[dialogue_id].tres
+	var path = "res://resources/dialogue/" + npc_id + "_" + dialogue_id + ".tres"
+	
+	if ResourceLoader.exists(path):
+		var res = load(path)
+		if res:
+			print("NarrativeDirector: Starting remote dialogue from resource: ", path)
+			# We pass null as the NPC node to signify it's a remote call
+			DialogueManager.call_deferred("start_dialogue", null, res)
+	else:
+		push_error("NarrativeDirector: Remote fallback failed. Dialogue resource not found: " + path)

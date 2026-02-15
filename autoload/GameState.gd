@@ -71,3 +71,12 @@ func is_in_3d_mode():
 
 func is_in_2d_mode():
 	return current_mode == GameMode.MODE_2D
+
+func reset_to_default():
+	print("GameState: Resetting node references for scene change.")
+	current_computer = null
+	active_bridge = null
+	desktop_instance = null
+	is_paused = false
+	is_guided_mode = false
+	set_mode(GameMode.MODE_3D)

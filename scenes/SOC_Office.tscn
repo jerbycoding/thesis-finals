@@ -1,18 +1,25 @@
-[gd_scene load_steps=17 format=3 uid="uid://dfhgvlt5s46je"]
+[gd_scene load_steps=20 format=3 uid="uid://dfhgvlt5s46je"]
 
 [ext_resource type="PackedScene" uid="uid://b2d35yngg7u75" path="res://scenes/Player3D.tscn" id="1"]
 [ext_resource type="PackedScene" uid="uid://bckc0uyxlcl5a" path="res://scenes/3d/NPC_ITSupport.tscn" id="4"]
 [ext_resource type="PackedScene" uid="uid://cbtxaxbi3vfve" path="res://scenes/3d/NPC_Auditor.tscn" id="5"]
 [ext_resource type="PackedScene" uid="uid://51dxnshn20xb" path="res://scenes/3d/NPC_Helpdesk.tscn" id="6"]
-[ext_resource type="PackedScene" uid="uid://b78xk57l146ve" path="res://scenes/InteractableComputer.tscn" id="8"]
+[ext_resource type="PackedScene" uid="uid://byh82hlg10odp" path="res://scenes/3d/props/graybox/Graybox_Elevator.tscn" id="6_oiq0f"]
 [ext_resource type="Script" uid="uid://dh3hcvpwq0ufa" path="res://scripts/3d/RoomTeleporter.gd" id="9"]
+[ext_resource type="Script" uid="uid://bo2wtbo786bid" path="res://scripts/3d/WorkstationTeleporter.gd" id="10"]
+[ext_resource type="PackedScene" uid="uid://d1p8yg2i867ip" path="res://scenes/3d/NPC_SeniorAnalyst.tscn" id="11"]
 [ext_resource type="PackedScene" uid="uid://b8j8y76543210" path="res://scenes/3d/NPC_JuniorAnalyst.tscn" id="13"]
-[ext_resource type="PackedScene" uid="uid://dxoqc0xiclftv" path="res://assets/props/FBX/Separated/WhiteBoard_Big.fbx" id="29_ca7a5"]
 [ext_resource type="Script" uid="uid://depawy1mgva8" path="res://scripts/3d/TutorialTrigger.gd" id="32_tut"]
 [ext_resource type="PackedScene" uid="uid://dgkhv2v8v8v8w" path="res://scenes/3d/TutorialWaypoint.tscn" id="33_way"]
+[ext_resource type="PackedScene" uid="uid://n28x3hn5cby1" path="res://assets/props/glb files/Doorway Front.glb" id="34_door"]
 
 [sub_resource type="Environment" id="Environment_kx6w4"]
-background_energy_multiplier = 0.0
+background_mode = 1
+background_color = Color(0.129412, 0.14902, 0.180392, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.329412, 0.360784, 0.407843, 1)
+ambient_light_energy = 0.8
+tonemap_mode = 2
 volumetric_fog_enabled = true
 volumetric_fog_density = 0.001
 volumetric_fog_emission_energy = 0.0
@@ -29,7 +36,10 @@ albedo_color = Color(0.593134, 0.593134, 0.593134, 1)
 data = PackedVector3Array(1, 0, 1, -1, 0, 1, 1, 0, -1, -1, 0, 1, -1, 0, -1, 1, 0, -1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_teleport"]
-size = Vector3(4, 4, 4)
+size = Vector3(2, 4, 1.29498)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wbdk5"]
+size = Vector3(2, 2.76648, 1.29498)
 
 [node name="SocRoom" type="Node3D"]
 
@@ -58,14 +68,11 @@ light_energy = 2.0
 omni_range = 4096.0
 omni_attenuation = 1.635
 
-[node name="WhiteBoard_Big" parent="." instance=ExtResource("29_ca7a5")]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -29.6366, 4.33664, 12.195)
-
-[node name="SpotLight3D" type="SpotLight3D" parent="WhiteBoard_Big"]
-transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -0.452781, 0.0325375, 1.95372)
-
 [node name="NPC_JuniorAnalyst" parent="." instance=ExtResource("13")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 0)
+
+[node name="NPC_SeniorAnalyst" parent="." instance=ExtResource("11")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0, 0)
 
 [node name="NPC_ITSupport" parent="." instance=ExtResource("4")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 0)
@@ -75,9 +82,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 0)
 
 [node name="NPC_Helpdesk" parent="." instance=ExtResource("6")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, 0)
-
-[node name="InteractableComputer" parent="." instance=ExtResource("8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.237291, 0, 5)
 
 [node name="ElevatorTeleport" type="Area3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.84459, 0, 3.5)
@@ -89,6 +93,20 @@ is_elevator = true
 [node name="CollisionShape3D" type="CollisionShape3D" parent="ElevatorTeleport"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 shape = SubResource("BoxShape3D_teleport")
+
+[node name="Graybox_Elevator" parent="ElevatorTeleport" instance=ExtResource("6_oiq0f")]
+transform = Transform3D(0.00439821, 0, 0.99999, 0, 1, 0, -0.99999, 0, 0.00439821, -2.20933, 0, -0.858695)
+
+[node name="WorkstationTeleport" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.845, 0, 3.5)
+script = ExtResource("10")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WorkstationTeleport"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.38324, -0.560121)
+shape = SubResource("BoxShape3D_wbdk5")
+
+[node name="Door" parent="WorkstationTeleport" instance=ExtResource("34_door")]
+transform = Transform3D(-1.09278e-07, 0, -2.5, 0, 2.5, 0, 2.5, 0, -1.09278e-07, 0, 0, 0)
 
 [node name="TutorialWaypoint_OfficeC" parent="." instance=ExtResource("33_way")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)

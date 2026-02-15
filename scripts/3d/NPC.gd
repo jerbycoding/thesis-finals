@@ -42,6 +42,7 @@ func set_highlight(active: bool):
 		mesh.transparency = 0.0
 
 func _ready():
+	add_to_group("npcs")
 	# Find animator in children
 	for child in get_children():
 		if child.has_method("update_movement"):

@@ -174,7 +174,7 @@ func handle_key(event: InputEventKey):
 	subviewport.push_input(event)
 
 func _flush_stuck_keys():
-	if not subviewport: return
+	if not subviewport or not is_instance_valid(subviewport): return
 	for sc in pressed_keys.keys():
 		var ev = InputEventKey.new()
 		ev.physical_keycode = sc

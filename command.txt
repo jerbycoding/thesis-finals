@@ -1,0 +1,1 @@
+.\addons\gdUnit4\runtest.cmd -a res://tests/unit --godot_bin "C:\Users\Lander\OneDrive\Desktop\Godot\godot.exe"
