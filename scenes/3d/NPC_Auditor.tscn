@@ -1,8 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://cbtxaxbi3vfve"]
+[gd_scene load_steps=5 format=3 uid="uid://cbtxaxbi3vfve"]
 
 [ext_resource type="Script" uid="uid://dyfwcs8exxajl" path="res://scripts/3d/NPC_Auditor.gd" id="1_npc"]
-[ext_resource type="Script" uid="uid://clra78uil2mle" path="res://scripts/3d/PlayerAnimator.gd" id="2_animator"]
-[ext_resource type="PackedScene" uid="uid://1svy0ofeo0qh" path="res://assets/npc/Woman.glb" id="3_model"]
+[ext_resource type="PackedScene" uid="uid://jay67tuecgcw" path="res://assets/npc/NPC_OfficeLady2.fbx" id="2_3upte"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_aud"]
 radius = 0.4
@@ -22,9 +21,8 @@ shape = SubResource("CapsuleShape3D_aud")
 
 [node name="InteractionArea" type="Area3D" parent="."]
 
+[node name="NPC_OfficeLady2" parent="InteractionArea" instance=ExtResource("2_3upte")]
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 1.5, 0)
+
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="InteractionArea"]
 shape = SubResource("BoxShape3D_interact")
-
-[node name="Model" parent="." instance=ExtResource("3_model")]
-transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
-script = ExtResource("2_animator")

@@ -82,6 +82,42 @@ const HOST_STATUS = {
 	"ISOLATED": 3
 }
 
+# --- Physical World & Interaction ---
+const PHYSICS_LAYERS = {
+	"DEFAULT": 1,
+	"WORLD": 2,
+	"PLAYER": 3,
+	"INTERACTABLE": 4,
+	"NPC": 5,
+	"MONITOR": 20
+}
+
+# --- Player Physics & Animation ---
+const PLAYER = {
+	"EYE_HEIGHT": 1.75,
+	"SEATED_HEIGHT": 1.35,
+	"CAMERA_OFFSET_Z": -0.23,
+	"BOB_FREQ": 2.0,
+	"BOB_AMP": 0.04,
+	"FOOTSTEP_INTERVAL": 0.5,
+	"CARRY_SPEED_PENALTY": 0.75,
+	"LOOK_LIMIT_X": 1.5,
+	"FLOOR_RAYCAST_DIST": 2.0
+}
+
+# --- Organizational Integrity Balance ---
+const INTEGRITY = {
+	"DELTA_COMPLIANT": 5.0,
+	"DELTA_EFFICIENT": -2.0,
+	"DELTA_EMERGENCY": -5.0,
+	"DELTA_TIMEOUT": -10.0,
+	"DELTA_BREACH": -40.0,
+	"DELTA_VIOLATION": -15.0,
+	"THRESHOLD_CRITICAL": 0.0,
+	"THRESHOLD_WARNING": 20.0,
+	"BASE_DECAY_PER_HOUR": 1.0
+}
+
 # --- Visual Foundation Palette (Enterprise-Clean) ---
 
 const UI_COLORS = {

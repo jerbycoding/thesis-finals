@@ -1,7 +1,6 @@
-[gd_scene load_steps=12 format=3 uid="uid://kix0ll2kuom7"]
+[gd_scene load_steps=11 format=3 uid="uid://kix0ll2kuom7"]
 
 [ext_resource type="Script" uid="uid://dsgmawdx1kl61" path="res://scripts/3d/InteractableAuditNode.gd" id="1_audit"]
-[ext_resource type="Resource" path="res://resources/minigames/DefaultCalibrationConfig.tres" id="2_config"]
 [ext_resource type="PackedScene" uid="uid://c8v2y708bab0g" path="res://scenes/ui/RouterTechnicalTable.tscn" id="2_table"]
 [ext_resource type="PackedScene" uid="uid://o4j48sgqeknw" path="res://scenes/3d/props/Prop_Router.tscn" id="3_model"]
 
@@ -36,7 +35,6 @@ viewport_path = NodePath("ViewportContainer")
 
 [node name="Prop_AuditRouter" type="StaticBody3D"]
 script = ExtResource("1_audit")
-config = ExtResource("2_config")
 
 [node name="Prop_Router" parent="." instance=ExtResource("3_model")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.02, 0)

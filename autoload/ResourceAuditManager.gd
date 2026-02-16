@@ -21,9 +21,12 @@ func run_audit():
 	
 	var total_errors = 0
 	
-	# 1. Map all existing IDs
-	var ticket_ids = []
-	for t in tickets: ticket_ids.append(t.ticket_id)
+	# 1. Map all existing IDs and Clean Filenames (matching TicketManager logic)
+	var ticket_valid_keys = []
+	for t in tickets: 
+		ticket_valid_keys.append(t.ticket_id.to_lower())
+		var file_id = t.resource_path.get_file().get_basename().replace("Ticket", "").to_lower().trim_prefix("_")
+		ticket_valid_keys.append(file_id)
 	
 	var log_ids = []
 	for l in logs: log_ids.append(l.log_id)
@@ -32,9 +35,9 @@ func run_audit():
 	print("\n[Step 1: Shift Connectivity]")
 	for s in shifts:
 		for event in s.event_sequence:
-			if event.get("type") == "spawn_ticket":
-				var tid = event.get("ticket_id")
-				if tid not in ticket_ids:
+			if event.get("type") == GlobalConstants.NARRATIVE_EVENT_TYPE.SPAWN_TICKET:
+				var tid = event.get("ticket_id", "").to_lower()
+				if tid not in ticket_valid_keys:
 					print("  ❌ ERROR: Shift '%s' spawns non-existent Ticket '%s'" % [s.shift_name, tid])
 					total_errors += 1
 					
@@ -50,7 +53,7 @@ func run_audit():
 	print("\n[Step 3: Log Context Verification]")
 	for l in logs:
 		if not l.related_ticket.is_empty() and l.related_ticket != "GENERIC" and l.related_ticket != "NONE":
-			if l.related_ticket not in ticket_ids:
+			if l.related_ticket.to_lower() not in ticket_valid_keys:
 				print("  ⚠️ WARNING: Log '%s' points to dead Ticket ID '%s'" % [l.log_id, l.related_ticket])
 	
 	print("\n--- 🏁 AUDIT COMPLETE: %d CRITICAL ERRORS FOUND ---" % total_errors)

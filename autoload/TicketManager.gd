@@ -17,7 +17,7 @@ var max_active_tickets: int = 5
 var is_ambient_spawning_enabled: bool = false
 # ----------------------------------
 
-var ticket_id_map: Dictionary = {} # Narrative ID -> Resource
+var ticket_id_map: Dictionary = {} # Standardized ID -> Resource
 
 func _ready():
 	print("========================================")
@@ -30,7 +30,7 @@ func _ready():
 	ambient_spawn_timer.timeout.connect(_on_ambient_spawn_timeout)
 	add_child(ambient_spawn_timer)
 	
-	# Discover all tickets (Internal logic is safe)
+	# Discover all tickets
 	_prepare_library()
 	
 	# Connect to other systems safely after they've had a chance to initialize
@@ -113,87 +113,60 @@ func _prepare_library():
 	var loaded_tickets = FileUtil.load_and_validate_resources(TICKET_DIR, "TicketResource")
 	
 	for res in loaded_tickets:
-		# The resource is already a validated TicketResource, so we can proceed.
-		# 1. Map by Ticket ID (e.g. PHISH-001)
+		# 1. Map by Ticket ID (Primary key)
 		var tid = res.ticket_id.to_lower()
 		ticket_id_map[tid] = res
-		# Also map with underscores replaced (fuzzy match for ransom_001)
-		ticket_id_map[tid.replace("-", "_")] = res
 		
-		# 2. Map by File Name (narrative ID fallback, e.g. phishing_intro)
-		var file_id = res.resource_path.get_file().get_basename().replace("Ticket", "").to_lower()
+		# 2. Map by Clean Filename (Secondary key for narrative convenience)
+		var file_id = res.resource_path.get_file().get_basename().replace("Ticket", "").to_lower().trim_prefix("_")
 		ticket_id_map[file_id] = res
-		# Also fuzzy match file name
-		ticket_id_map[file_id.replace("_", "-")] = res
-		ticket_id_map[file_id.replace("-", "_")] = res
 		
-		# ADD TO LIBRARY (Fix for F9 spawn)
 		ticket_library.append(res)
 		
 		# 3. Add to noise pool if generic
 		if "GENERIC" in res.ticket_id:
 			noise_library.append(res)
-			print("  - Added to Noise Pool: %s" % res.ticket_id)
 		
-		print("  - Registered Ticket: %s" % res.ticket_id)
+		print("  - Registered Ticket: %s (Map keys: %s, %s)" % [res.ticket_id, tid, file_id])
 			
-	print("🎫 TICKET_DEBUG: Registered %d map entries and %d noise tickets." % [ticket_id_map.size(), noise_library.size()])
+	print("🎫 TICKET_DEBUG: Library ready. %d tickets registered." % ticket_id_map.size())
 
-func _on_email_decision_processed(email: EmailResource, decision: String, inspection_state: Dictionary):
-	# Handles logging or updating state when an email is processed.
+func _on_email_decision_processed(email: EmailResource, decision: String, _state: Dictionary):
 	if email.is_malicious and decision == GlobalConstants.EMAIL_DECISION.QUARANTINE:
 		if not email.related_ticket.is_empty():
-			print("TicketManager: Task for ticket %s completed (Email Quarantined). Manual resolution required." % email.related_ticket)
-			# We no longer auto-complete here to allow player strategy choice.
-
+			print("TicketManager: Task for ticket %s completed via Email Quarantine." % email.related_ticket)
 
 func load_state(active_ids: Array, completed_ids: Array):
 	active_tickets.clear()
-	# Clean up any existing timers before loading
 	for timer in active_timers.values():
 		timer.queue_free()
 	active_timers.clear()
-	
 	completed_tickets.clear()
 	
-	for ticket_id in active_ids:
-		var ticket_path = _get_ticket_path_by_id(ticket_id)
-		if not ticket_path.is_empty():
-			var ticket_res = load(ticket_path)
-			if ticket_res and ticket_res is TicketResource:
-				var ticket_instance = ticket_res.duplicate()
-				if ticket_instance.validate():
-					# Use a quiet add, since we don't want to trigger "new ticket" notifications
-					active_tickets.append(ticket_instance)
-					_create_ticket_timer(ticket_instance)
+	for tid in active_ids:
+		var res = ticket_id_map.get(tid.to_lower())
+		if res:
+			var instance = res.duplicate()
+			active_tickets.append(instance)
+			_create_ticket_timer(instance)
 	
-	for ticket_id in completed_ids:
-		var ticket_path = _get_ticket_path_by_id(ticket_id)
-		if not ticket_path.is_empty():
-			var ticket_res = load(ticket_path)
-			if ticket_res and ticket_res is TicketResource:
-				var ticket_instance = ticket_res.duplicate()
-				if ticket_instance.validate():
-					completed_tickets.append(ticket_instance)
+	for tid in completed_ids:
+		var res = ticket_id_map.get(tid.to_lower())
+		if res:
+			completed_tickets.append(res.duplicate())
 	
-	print("TicketManager state loaded. Active: ", active_tickets.size(), ", Completed: ", completed_tickets.size())
+	print("TicketManager state loaded. Active: %d, Completed: %d" % [active_tickets.size(), completed_tickets.size()])
 
 func _create_ticket_timer(ticket: TicketResource):
-	# Cleanup existing timer for this ID if it somehow exists
 	if active_timers.has(ticket.ticket_id):
-		var old_timer = active_timers[ticket.ticket_id]
-		if is_instance_valid(old_timer):
-			old_timer.queue_free()
+		var old = active_timers[ticket.ticket_id]
+		if is_instance_valid(old): old.queue_free()
 	
 	var base_time = max(0.1, ticket.base_time)
-	var final_time = base_time
+	var final_time = HeatManager.get_scaled_time(base_time) if HeatManager else base_time
 	
-	# TUTORIAL SAFETY: Remove all time pressure
 	if GameState and GameState.is_guided_mode:
 		final_time = 9999.0 
-	# HEAT SCALING: Reduce time allowed based on week
-	elif HeatManager:
-		final_time = HeatManager.get_scaled_time(base_time)
 	
 	var timer = Timer.new()
 	timer.one_shot = true
@@ -205,18 +178,8 @@ func _create_ticket_timer(ticket: TicketResource):
 	active_timers[ticket.ticket_id] = timer
 
 func _get_ticket_path_by_id(ticket_id: String) -> String:
-	# First, check the map (case-insensitive)
-	var lookup = ticket_id.to_lower()
-	if ticket_id_map.has(lookup):
-		return ticket_id_map[lookup].resource_path
-			
-	# If not in the map, search the full library explicitly
-	for ticket_res in ticket_library:
-		if ticket_res and ticket_res.ticket_id == ticket_id:
-			return ticket_res.resource_path
-			
-	print("ERROR: Could not find ticket path for ID: ", ticket_id)
-	return ""
+	var res = ticket_id_map.get(ticket_id.to_lower())
+	return res.resource_path if res else ""
 
 func spawn_ticket_by_id(ticket_id: String):
 	var lookup_id = ticket_id.to_lower()
@@ -226,17 +189,13 @@ func spawn_ticket_by_id(ticket_id: String):
 		return
 
 	var ticket_res = ticket_id_map[lookup_id]
-	if ticket_res:
-		var ticket = ticket_res.duplicate()
-		add_ticket(ticket)
-	else:
-		_spawn_fallback_error_ticket(ticket_id)
+	add_ticket(ticket_res.duplicate())
 
 func _spawn_fallback_error_ticket(original_id: String):
 	var fallback = TicketResource.new()
 	fallback.ticket_id = "SYS-ERR-" + str(randi() % 999)
 	fallback.title = "CRITICAL: Narrative Sequence Error"
-	fallback.description = "URGENT: The SOC Narrative Director requested a ticket that does not exist: [" + original_id + "].\n\nThis is a system-level anomaly. Resolve this ticket immediately using 'Emergency' protocol to bypass and resume normal operations."
+	fallback.description = "URGENT: Ticket [" + original_id + "] not found. Please resolve via Emergency protocol."
 	fallback.severity = "Critical"
 	fallback.category = "System"
 	fallback.base_time = 60.0
@@ -244,124 +203,61 @@ func _spawn_fallback_error_ticket(original_id: String):
 	fallback.required_tool = "none"
 	add_ticket(fallback)
 
-func _load_initial_tickets():
-	print("📋 Loading initial tickets...")
-	
-	# Load all tickets from the library
-	for ticket_res in ticket_library:
-		if ticket_res:
-			var ticket = ticket_res.duplicate()
-			
-			print("  - Ticket ID: ", ticket.ticket_id)
-			print("  - Title: ", ticket.title)
-			print("  - Severity: ", ticket.severity)
-			print("  - Required Tool: ", ticket.required_tool)
-			
-			add_ticket(ticket)
-		else:
-			print("  ❌ ERROR: Failed to load ticket resource from library")
-
-	print("📋 Total tickets loaded: ", active_tickets.size())
-
-
 func clear_active_data():
 	print("📋 TicketManager: Purging all active tickets and timers.")
-	# Stop and remove all timers
 	for tid in active_timers:
 		var timer = active_timers[tid]
 		if is_instance_valid(timer):
 			timer.stop()
 			timer.queue_free()
 	active_timers.clear()
-	
 	active_tickets.clear()
-	# We don't necessarily clear completed_tickets here as they are history, 
-	# but for a hard shift reset, it's safer to clear everything.
 	completed_tickets.clear()
 
 func add_ticket(ticket: TicketResource):
-	if not ticket:
-		print(CorporateVoice.get_phrase("adding_null_ticket_error"))
+	if not ticket or not ticket.validate():
+		push_error("TicketManager: Rejected invalid ticket resource.")
 		return
 	
-	if not ticket.validate():
-		if ticket.ticket_id.is_empty():
-			push_error("TicketManager: Rejected ticket with missing ID.")
-		elif ticket.steps.size() > 3:
-			push_error("TicketManager: Rejected ticket %s (Too many steps: %d)." % [ticket.ticket_id, ticket.steps.size()])
-		elif ticket.base_time <= 0:
-			push_error("TicketManager: Rejected ticket %s (Invalid time: %.1f)." % [ticket.ticket_id, ticket.base_time])
-		else:
-			push_error("TicketManager: Rejected invalid ticket: " + str(ticket.ticket_id))
-		return
+	for t in active_tickets:
+		if t.ticket_id == ticket.ticket_id: return
 	
-	# Check if already in queue
-	for existing_ticket in active_tickets:
-		if existing_ticket.ticket_id == ticket.ticket_id:
-			print(CorporateVoice.get_formatted_phrase("ticket_already_in_queue_warning", {"ticket_id": ticket.ticket_id}))
-			return
-	
-	# Set spawn time for metrics
 	ticket.spawn_timestamp = Time.get_ticks_msec()
-	# Set expiry timestamp for UI display
 	ticket.expiry_timestamp = ticket.spawn_timestamp + (ticket.base_time * 1000.0)
 	
-	# PROCEDURAL TRUTH: Generate packet if empty
 	if VariableRegistry and ticket.truth_packet.is_empty():
-		# INHERITANCE CHECK: If this is an escalation-type ticket, try to pull from the buffer
-		var inherited_context = {}
-		if ticket.category in ["Malware", "Data Breach", "Ransomware"] and HeatManager:
-			inherited_context = HeatManager.pop_vulnerability()
-		
-		if not inherited_context.is_empty():
-			# Reuse attacker and victim host from previous mistake
+		var context = HeatManager.pop_vulnerability() if HeatManager else {}
+		if not context.is_empty() and ticket.category in ["Malware", "Data Breach", "Ransomware"]:
 			ticket.truth_packet = VariableRegistry.generate_truth_packet(ticket.ticket_id)
-			ticket.truth_packet["attacker_ip"] = inherited_context.attacker_ip
-			ticket.truth_packet["victim_host"] = inherited_context.victim_host
-			ticket.truth_packet["inherited_from"] = inherited_context.original_id
-			print("⛓ INHERITANCE: Ticket %s inherited threat data from %s" % [ticket.ticket_id, inherited_context.original_id])
+			ticket.truth_packet["attacker_ip"] = context.attacker_ip
+			ticket.truth_packet["victim_host"] = context.victim_host
+			ticket.truth_packet["inherited_from"] = context.original_id
 		else:
 			ticket.truth_packet = VariableRegistry.generate_truth_packet(ticket.ticket_id)
 	
-	# Add to active tickets
 	active_tickets.append(ticket)
-	
-	print("========================================")
-	print("📋 " + CorporateVoice.get_phrase("new_ticket_added_header"))
-	print("  ID: ", ticket.ticket_id)
-	print("  Title: ", ticket.title)
-	print("  Severity: ", ticket.severity)
-	print("  Category: ", ticket.category)
-	print("  Time: ", ticket.base_time, " seconds")
-	print("  Steps: ", ticket.steps.size())
-	print("========================================")
-	
-	# Create and start the node-based timer
 	_create_ticket_timer(ticket)
-	
-	# GLOBAL EMIT
 	EventBus.ticket_added.emit(ticket)
 	
-	# Automatically reveal related emails and logs
-	if EmailSystem and EmailSystem.has_method("reveal_emails_for_ticket"):
+	_reveal_evidence_for_ticket(ticket)
+	_apply_procedural_network_state(ticket)
+
+func _reveal_evidence_for_ticket(ticket: TicketResource):
+	if EmailSystem:
 		EmailSystem.reveal_emails_for_ticket(ticket.ticket_id)
-		# PROCEDURAL TRUTH: Inject context into the tools' backend resources
 		for email in EmailSystem.get_emails_for_ticket(ticket.ticket_id):
 			email.truth_packet = ticket.truth_packet
 	
-	if LogSystem and LogSystem.has_method("reveal_logs_for_ticket"):
+	if LogSystem:
 		LogSystem.reveal_logs_for_ticket(ticket.ticket_id)
 		for log in LogSystem.get_logs_for_ticket(ticket.ticket_id):
 			log.truth_packet = ticket.truth_packet
-			
-	# PROCEDURAL TRUTH: Update NetworkState if host is specified
+
+func _apply_procedural_network_state(ticket: TicketResource):
 	if NetworkState and not ticket.truth_packet.is_empty():
-		var victim_host = ticket.truth_packet.get("victim_host", "")
-		if not victim_host.is_empty() and victim_host != "WS-UNKNOWN":
-			# If it's a malware/ransomware ticket, ensure the host is actually infected
-			if ticket.category in ["Malware", "Ransomware"]:
-				print("📋 TicketManager: Infecting procedural host: ", victim_host)
-				NetworkState.update_host_state(victim_host, {"status": "INFECTED"})
+		var victim = ticket.truth_packet.get("victim_host", "")
+		if not victim.is_empty() and victim != "WS-UNKNOWN" and ticket.category in ["Malware", "Ransomware"]:
+			NetworkState.update_host_state(victim, {"status": "INFECTED"})
 
 func _on_ticket_timeout_timer(ticket_id: String):
 	var active_ticket = get_ticket_by_id(ticket_id)
@@ -372,144 +268,68 @@ func _on_ticket_timeout_timer(ticket_id: String):
 		complete_ticket(ticket_id, GlobalConstants.COMPLETION_TYPE.TIMEOUT)
 
 func complete_ticket(ticket_id: String, completion_type: String = "compliant"):
-	# Valid completion types: "compliant", "efficient", "emergency"
 	if completion_type not in [GlobalConstants.COMPLETION_TYPE.COMPLIANT, GlobalConstants.COMPLETION_TYPE.EFFICIENT, GlobalConstants.COMPLETION_TYPE.EMERGENCY, GlobalConstants.COMPLETION_TYPE.TIMEOUT]:
-		print(CorporateVoice.get_phrase("invalid_completion_type_warning"))
 		completion_type = GlobalConstants.COMPLETION_TYPE.COMPLIANT
 	
-	# Cleanup the timer if it exists
 	if active_timers.has(ticket_id):
 		var timer = active_timers[ticket_id]
-		if is_instance_valid(timer):
-			timer.stop()
-			timer.queue_free()
+		if is_instance_valid(timer): timer.queue_free()
 		active_timers.erase(ticket_id)
 
 	for i in range(active_tickets.size()):
 		var ticket = active_tickets[i]
 		if ticket.ticket_id == ticket_id:
-			# --- VALIDATION STEP ---
-			# Use central ValidationManager
 			if completion_type == GlobalConstants.COMPLETION_TYPE.COMPLIANT and not ValidationManager.can_complete_compliant(ticket):
-				push_warning("TicketManager: %s attempted compliant completion without evidence. Downgrading." % ticket_id)
 				completion_type = GlobalConstants.COMPLETION_TYPE.EFFICIENT
 
-			# Calculate time taken
 			var time_taken = (Time.get_ticks_msec() - ticket.spawn_timestamp) / 1000.0
-			
-			# Move to completed
 			active_tickets.remove_at(i)
 			completed_tickets.append(ticket)
 			
-			print("========================================")
-			print("✓ " + CorporateVoice.get_phrase("ticket_completed_header"))
-			print("  ID: ", ticket_id)
-			print("  Type: ", completion_type)
-			print("  Time Taken: %.1fs" % time_taken)
-			print("========================================")
-			
-			# GLOBAL EMIT
+			print("✓ Ticket Completed: %s (%s) in %.1fs" % [ticket_id, completion_type, time_taken])
 			EventBus.ticket_completed.emit(ticket, completion_type, time_taken)
 			
-			# --- Response Buffer Rewards ---
-			if completion_type == GlobalConstants.COMPLETION_TYPE.EFFICIENT:
-				print("TicketManager: Efficient reward - Pausing noise for 60s.")
-				pause_ambient_spawning(60.0)
-			elif completion_type == GlobalConstants.COMPLETION_TYPE.EMERGENCY:
-				print("TicketManager: Emergency reward - System Lockdown for 120s.")
-				# Lockdown pauses ambient noise AND blocks narrative spawns (if we add a check)
-				pause_ambient_spawning(120.0)
-				# We could add a 'lockdown' flag here if we want to block NarrativeDirector
-			
+			# Broadcast reward event for external systems (e.g. ConsequenceEngine)
+			if completion_type in [GlobalConstants.COMPLETION_TYPE.EFFICIENT, GlobalConstants.COMPLETION_TYPE.EMERGENCY]:
+				var reward_duration = 60.0 if completion_type == GlobalConstants.COMPLETION_TYPE.EFFICIENT else 120.0
+				pause_ambient_spawning(reward_duration)
 			return
-	
-	print(CorporateVoice.get_formatted_phrase("ticket_not_found_for_completion_warning", {"ticket_id": ticket_id}))
 
 func get_active_tickets() -> Array[TicketResource]:
-	print(CorporateVoice.get_formatted_phrase("getting_active_tickets_count", {"count": active_tickets.size()}))
 	return active_tickets
 
-
 func get_ticket_by_id(ticket_id: String) -> TicketResource:
-	for ticket in active_tickets:
-		if ticket.ticket_id == ticket_id:
-			return ticket
-	
-	print(CorporateVoice.get_formatted_phrase("ticket_not_found_by_id", {"ticket_id": ticket_id}))
+	for t in active_tickets:
+		if t.ticket_id == ticket_id: return t
 	return null
 
 func has_active_tickets() -> bool:
 	return active_tickets.size() > 0
 
-func get_ticket_count() -> int:
-	return active_tickets.size()
-
-# Optional: Add a new random ticket from the library
-func spawn_random_ticket():
-	if ticket_library.is_empty():
-		print(CorporateVoice.get_phrase("no_tickets_in_library_warning"))
-		return
-	
-	var ticket_res = ticket_library.pick_random()
-	
-	if ticket_res:
-		var ticket = ticket_res.duplicate()
-		add_ticket(ticket)
-	else:
-		# This case should not happen if the library is populated correctly
-		print(CorporateVoice.get_formatted_phrase("ticket_script_not_found", {"path": "random"}))
-
-
 func attach_log_to_ticket(ticket_id: String, log_id: String) -> bool:
-	# Attach a log to a ticket as evidence
 	var ticket = get_ticket_by_id(ticket_id)
-	if not ticket:
-		print(CorporateVoice.get_formatted_phrase("cannot_attach_log_ticket_not_found", {"ticket_id": ticket_id}))
-		return false
-	
-	if ticket.attach_log(log_id):
-		# Concise notification
-		print(CorporateVoice.get_formatted_phrase("log_attached_success", {"log_id": log_id, "ticket_id": ticket_id}))
+	if ticket and ticket.attach_log(log_id):
 		if NotificationManager:
-			NotificationManager.show_notification(CorporateVoice.get_notification("log_attached") + " to " + ticket_id, "success")
-		
-		# GLOBAL EMIT
+			NotificationManager.show_notification("Log evidence attached to " + ticket_id, "success")
 		EventBus.log_attached_to_ticket.emit(ticket_id, log_id)
 		return true
-	else:
-		print(CorporateVoice.get_formatted_phrase("log_already_attached_warning", {"log_id": log_id, "ticket_id": ticket_id}))
-		return false
+	return false
 
 func detach_log_from_ticket(ticket_id: String, log_id: String) -> bool:
 	var ticket = get_ticket_by_id(ticket_id)
-	if not ticket: return false
-	
-	if ticket.detach_log(log_id):
-		print("TicketManager: Detached log %s from %s" % [log_id, ticket_id])
+	if ticket and ticket.detach_log(log_id):
 		EventBus.log_detached_from_ticket.emit(ticket_id, log_id)
 		return true
 	return false
 
-func get_ticket_evidence(ticket_id: String) -> Dictionary:
-	# Get evidence count for a ticket
-	var ticket = get_ticket_by_id(ticket_id)
-	if not ticket:
-		return {"attached": 0, "required": 0}
-	return ticket.get_evidence_count()
-
 func _on_terminal_command_run(command_name: String, args: Array):
 	if command_name == "isolate" and not args.is_empty():
 		var isolated_host = args[0].to_upper()
-		
-		# Check all active tickets for a matching technical requirement
 		for ticket in active_tickets:
 			if ticket.required_host_isolation != "":
-				# Resolve procedural hostname if it's a variable
 				var target = ticket.required_host_isolation
 				if target.begins_with("{") and not ticket.truth_packet.is_empty():
 					target = target.format(ticket.truth_packet)
 				
 				if isolated_host == target.to_upper():
-					print(CorporateVoice.get_phrase("ticket_update_host_isolated"))
-					print("TicketManager: Technical requirement met for %s (Host Isolated). Manual resolution required." % ticket.ticket_id)
-					# Optionally: set a flag on the ticket or reveal further data
+					print("TicketManager: Technical requirement met for %s (Host Isolated)." % ticket.ticket_id)

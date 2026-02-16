@@ -130,3 +130,22 @@ func get_link_analysis() -> Dictionary:
 		report.text += "Action: Cross-reference with SIEM logs for lateral movement.\n"
 		
 	return report
+
+func is_spear_phishing() -> bool:
+	"""Returns true if this email exhibits characteristics of a targeted spear-phishing attack."""
+	if "spear" in email_id.to_lower():
+		return true
+	
+	if not related_ticket.is_empty() and "spear" in related_ticket.to_lower():
+		return true
+	
+	# Spear phishing often spoofs executives
+	if sender in ["CEO", "CFO", "CTO", "Executive"] and is_malicious:
+		if clues.has("spoofed_sender") or clues.has("bad_attachment"):
+			return true
+	
+	# Check subject for spear phishing patterns
+	if "spear" in subject.to_lower() or "targeted" in subject.to_lower():
+		return true
+	
+	return false

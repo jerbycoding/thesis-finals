@@ -44,10 +44,7 @@ func set_highlight(active: bool):
 func _ready():
 	add_to_group("npcs")
 	# Find animator in children
-	for child in get_children():
-		if child.has_method("update_movement"):
-			animator = child
-			break
+	_discover_animator()
 			
 	# Find interaction area
 	interaction_area = get_node_or_null("InteractionArea")
@@ -60,6 +57,36 @@ func _ready():
 	
 	# Announce readiness for narrative triggers
 	EventBus.npc_ready.emit(npc_id)
+	
+	# Initial idle
+	if animator and animator.has_method("force_idle"):
+		animator.force_idle()
+
+func _discover_animator():
+	for child in get_children():
+		if child.has_method("update_movement"):
+			animator = child
+			return
+		# Check deeper if it's an instantiated FBX
+		for gchild in child.get_children():
+			if gchild.has_method("update_movement"):
+				animator = gchild
+				return
+
+func play_animation(anim_name: String):
+	if animator and animator.has_method("play_action"):
+		animator.play_action(anim_name)
+	elif animator:
+		var p = _find_animation_player(animator)
+		if p and p.has_animation(anim_name):
+			p.play(anim_name)
+
+func _find_animation_player(node: Node) -> AnimationPlayer:
+	if node is AnimationPlayer: return node
+	for child in node.get_children():
+		var found = _find_animation_player(child)
+		if found: return found
+	return null
 
 func _on_body_entered(body):
 	if body.name == "Player3D":

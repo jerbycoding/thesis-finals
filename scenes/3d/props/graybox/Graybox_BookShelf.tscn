@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://b0yssn23aaupa"]
+
+[ext_resource type="PackedScene" uid="uid://dnkml5lfuophp" path="res://assets/props/glb files/Bookshelf2.glb" id="1_5j4o5"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_5j4o5"]
+size = Vector3(4.44958, 1.90186, 1)
+
+[node name="Node3D" type="Node3D"]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0381542, 1.06391, 0.193815)
+shape = SubResource("BoxShape3D_5j4o5")
+
+[node name="Bookshelf2" parent="." instance=ExtResource("1_5j4o5")]
+transform = Transform3D(-0.98803, 0, -0.154262, 0, 1, 0, 0.154262, 0, -0.98803, 0, 2.07283, 0)

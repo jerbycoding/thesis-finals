@@ -1,9 +1,14 @@
-[gd_scene load_steps=11 format=3 uid="uid://d1w2x3y405a6b"]
+[gd_scene load_steps=16 format=3 uid="uid://d1w2x3y405a6b"]
 
 [ext_resource type="PackedScene" uid="uid://b2d35yngg7u75" path="res://scenes/Player3D.tscn" id="1_player"]
 [ext_resource type="Script" uid="uid://dh3hcvpwq0ufa" path="res://scripts/3d/RoomTeleporter.gd" id="2_teleport"]
 [ext_resource type="PackedScene" uid="uid://n28x3hn5cby1" path="res://assets/props/glb files/Doorway Front.glb" id="3_door"]
 [ext_resource type="PackedScene" uid="uid://b78xk57l146ve" path="res://scenes/InteractableComputer.tscn" id="5_computer"]
+[ext_resource type="PackedScene" uid="uid://b0yssn23aaupa" path="res://scenes/3d/props/graybox/Graybox_BookShelf.tscn" id="5_ffwe3"]
+[ext_resource type="PackedScene" uid="uid://bkj0kh10aipl5" path="res://assets/props/office_pack/FBX/Separated FBX files/Painting.fbx" id="6_mmubc"]
+[ext_resource type="PackedScene" uid="uid://ciscr6kwnpufy" path="res://assets/props/FBX/Separated/Painting_Small.fbx" id="7_ttfq6"]
+[ext_resource type="PackedScene" uid="uid://dtc3v3ufo5y87" path="res://scenes/3d/props/graybox/Graybox_Sofa.tscn" id="8_ttfq6"]
+[ext_resource type="PackedScene" uid="uid://u3cbxyg0evr3" path="res://scenes/3d/props/graybox/Graybox_Plant.tscn" id="9_7o13b"]
 
 [sub_resource type="Environment" id="Environment_workstation"]
 background_mode = 1
@@ -85,7 +90,7 @@ material = SubResource("StandardMaterial3D_wall")
 [node name="Props" type="Node3D" parent="."]
 
 [node name="InteractableComputer" parent="Props" instance=ExtResource("5_computer")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -2.45949, 0, -2.21802)
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -2.82506, 0, -2.06387)
 
 [node name="Lighting" type="Node3D" parent="."]
 
@@ -109,3 +114,21 @@ transform = Transform3D(3.5, 0, 0, 0, 3.5, 0, 0, 0, 3.5, 1.00902, 0, 0)
 
 [node name="Player3D" parent="." instance=ExtResource("1_player")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
+
+[node name="Painting" parent="." instance=ExtResource("6_mmubc")]
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 1.05481, 3.059, -3.95989)
+
+[node name="Painting_Small" parent="." instance=ExtResource("7_ttfq6")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 2.83088, 3.43234, -3.97347)
+
+[node name="Painting_Small2" parent="." instance=ExtResource("7_ttfq6")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 2.8359, 2.61133, -3.97531)
+
+[node name="Node3D" parent="." instance=ExtResource("5_ffwe3")]
+transform = Transform3D(-0.032318, 0, 0.999478, 0, 1, 0, -0.999478, 0, -0.032318, -3.71887, 0.284284, 1.69342)
+
+[node name="Graybox_Sofa" parent="." instance=ExtResource("8_ttfq6")]
+transform = Transform3D(-0.0381046, 0, 1.7996, 0, 1.8, 0, -1.7996, 0, -0.0381046, 3.46766, 0.0600598, -2.24429)
+
+[node name="GrayboxPlant" parent="." instance=ExtResource("9_7o13b")]
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 3.178, 0.0753334, 3.29332)

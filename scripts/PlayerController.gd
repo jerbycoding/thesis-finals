@@ -9,7 +9,7 @@ var near_computer = null
 var near_npc = null
 var movement_enabled = true
 var carried_object: Node3D = null
-var current_target_height: float = 1.75 # Default to eye height
+var current_target_height: float = GlobalConstants.PLAYER.EYE_HEIGHT # Default to eye height
 var modal_active: bool = false # NEW: Flag to block input
 var is_seated: bool = false # NEW: Track if camera is detached from pivot
 var stored_camera_transform: Transform3D
@@ -55,7 +55,7 @@ func _tween_camera_to(target: Transform3D, is_standing_up: bool = false):
 		if is_standing_up:
 			movement_enabled = true
 			# Snap back to local coords to ensure headbob works
-			camera.position = Vector3(0, EYE_HEIGHT, -0.23)
+			camera.position = Vector3(0, GlobalConstants.PLAYER.EYE_HEIGHT, GlobalConstants.PLAYER.CAMERA_OFFSET_Z)
 			camera.rotation = Vector3.ZERO
 			# Restore rotation vars from the pivot's current state
 			camera_rotation.y = $CameraPivot.rotation.y
@@ -65,7 +65,7 @@ func _tween_camera_to(target: Transform3D, is_standing_up: bool = false):
 func _on_game_mode_changed(mode):
 	if mode == GameState.GameMode.MODE_2D or mode == GameState.GameMode.MODE_DIALOGUE or mode == GameState.GameMode.MODE_MINIGAME:
 		movement_enabled = false
-		current_target_height = SEATED_HEIGHT
+		current_target_height = GlobalConstants.PLAYER.SEATED_HEIGHT
 		EventBus.request_prompt.emit("", false)
 		if animator and animator.has_method("force_idle"):
 			animator.force_idle()
@@ -78,7 +78,7 @@ func _on_game_mode_changed(mode):
 				movement_enabled = true
 		
 		# movement_enabled is re-enabled by stand_up() tween callback OR directly above
-		current_target_height = EYE_HEIGHT
+		current_target_height = GlobalConstants.PLAYER.EYE_HEIGHT
 
 func _try_toggle_tablet():
 	var is_minigame_mode = false
@@ -99,12 +99,21 @@ func _try_toggle_tablet():
 			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 func _input(event):
-	# Pure 3D Input Forwarding
+	if _handle_bridge_input(event):
+		return
+
+	if not movement_enabled or tablet_active or modal_active: 
+		return
+		
+	_handle_camera_input(event)
+
+func _handle_bridge_input(event) -> bool:
+	# Pure 3D Input Forwarding to interactive monitors
 	if GameState and GameState.active_bridge:
 		if event is InputEventMouseButton:
 			GameState.active_bridge.handle_mouse_button(event)
 			get_viewport().set_input_as_handled()
-			return
+			return true
 		elif event is InputEventKey:
 			if event.is_action_pressed("ui_cancel"):
 				# SMART ESCAPE: Only stand up if no apps are open
@@ -115,17 +124,18 @@ func _input(event):
 				if not has_open_apps:
 					TransitionManager.exit_desktop_mode()
 					get_viewport().set_input_as_handled()
-					return
+					return true
 			
 			# Otherwise forward to bridge
 			GameState.active_bridge.handle_key(event)
 			get_viewport().set_input_as_handled()
-			return
+			return true
+	return false
 
-	if not movement_enabled or tablet_active or modal_active: return
+func _handle_camera_input(event):
 	if event is InputEventMouseMotion:
 		camera_rotation.y -= event.relative.x * mouse_sensitivity
-		camera_rotation.x = clamp(camera_rotation.x - event.relative.y * mouse_sensitivity, -1.5, 1.5)
+		camera_rotation.x = clamp(camera_rotation.x - event.relative.y * mouse_sensitivity, -GlobalConstants.PLAYER.LOOK_LIMIT_X, GlobalConstants.PLAYER.LOOK_LIMIT_X)
 		$CameraPivot.rotation.y = camera_rotation.y
 		$CameraPivot/Camera3D.rotation.x = camera_rotation.x
 
@@ -149,11 +159,6 @@ func _physics_process(_delta):
 var tablet_active: bool = false
 var bob_time = 0.0
 var footstep_timer = 0.0
-const BOB_FREQ = 2.0 # Slightly slower for more "weight"
-const BOB_AMP = 0.04 # Slightly subtler
-const FOOTSTEP_INTERVAL = 0.5
-const EYE_HEIGHT = 1.75 # True eye level
-const SEATED_HEIGHT = 1.35 # Seated eye level
 
 func _process(delta):
 	if not movement_enabled or modal_active: 
@@ -162,20 +167,29 @@ func _process(delta):
 		
 	_handle_headbob(delta)
 	_handle_footsteps(delta)
-	
-	if Input.is_action_just_pressed("ui_focus_next"): _try_toggle_tablet()
-	
+	_handle_tablet_input()
+	_handle_interaction_logic()
+
+func _handle_tablet_input():
+	if Input.is_action_just_pressed("ui_focus_next"): 
+		_try_toggle_tablet()
+
+func _handle_interaction_logic():
 	# Dedicated Drop Key (Q)
 	if Input.is_action_just_pressed("drop") and carried_object:
 		_drop_object()
 	
 	if Input.is_action_just_pressed("interact"):
-		if carried_object: _drop_object()
-		elif near_computer: TransitionManager.enter_desktop_mode(near_computer)
+		if carried_object: 
+			_drop_object()
+		elif near_computer: 
+			TransitionManager.enter_desktop_mode(near_computer)
 		elif near_npc:
-			if near_npc.has_method("start_dialogue"): near_npc.start_dialogue("default")
+			if near_npc.has_method("start_dialogue"): 
+				near_npc.start_dialogue("default")
 			# EXPLICIT CHECK: Only pick up if it belongs to 'carriable' group
-			elif near_npc.is_in_group("carriable"): _pickup_object()
+			elif near_npc.is_in_group("carriable"): 
+				_pickup_object()
 
 func _handle_footsteps(delta):
 	if velocity.length() > 0.1 and is_on_floor():
@@ -183,7 +197,7 @@ func _handle_footsteps(delta):
 		footstep_timer -= delta * multiplier
 		if footstep_timer <= 0:
 			if AudioManager: AudioManager.play_footstep()
-			footstep_timer = FOOTSTEP_INTERVAL
+			footstep_timer = GlobalConstants.PLAYER.FOOTSTEP_INTERVAL
 	else:
 		footstep_timer = 0.0
 		if AudioManager: AudioManager.stop_footstep()
@@ -191,7 +205,7 @@ func _handle_footsteps(delta):
 func _handle_headbob(delta):
 	if velocity.length() > 0.1:
 		bob_time += delta * velocity.length() * (sprint_multiplier if Input.is_action_pressed("sprint") else 1.0)
-		var target_y = current_target_height + sin(bob_time * BOB_FREQ) * BOB_AMP
+		var target_y = current_target_height + sin(bob_time * GlobalConstants.PLAYER.BOB_FREQ) * GlobalConstants.PLAYER.BOB_AMP
 		$CameraPivot/Camera3D.position.y = lerp($CameraPivot/Camera3D.position.y, target_y, delta * 10.0)
 	else:
 		bob_time = 0.0
@@ -206,7 +220,7 @@ func _pickup_object():
 	# Add a slight "held" tilt
 	carried_object.rotation = Vector3(deg_to_rad(-15), deg_to_rad(10), 0)
 	if carried_object.has_node("CollisionShape3D"): carried_object.get_node("CollisionShape3D").disabled = true
-	speed *= 0.75
+	speed *= GlobalConstants.PLAYER.CARRY_SPEED_PENALTY
 	EventBus.request_prompt.emit("Drop " + carried_object.name, true)
 
 func _drop_object():
@@ -226,7 +240,7 @@ func _drop_object():
 			carried_object.get_node("CollisionShape3D").disabled = false
 		
 		_plug_into_socket(carried_object, socket)
-		speed /= 0.75
+		speed /= GlobalConstants.PLAYER.CARRY_SPEED_PENALTY
 		carried_object = null
 		EventBus.request_prompt.emit("", false)
 		return
@@ -239,7 +253,7 @@ func _drop_object():
 	# Raycast down from marker to find the floor
 	var space_state = get_world_3d().direct_space_state
 	var origin = carry_marker.global_position
-	var end = origin + Vector3.DOWN * 2.0
+	var end = origin + Vector3.DOWN * GlobalConstants.PLAYER.FLOOR_RAYCAST_DIST
 	var query = PhysicsRayQueryParameters3D.create(origin, end)
 	var result = space_state.intersect_ray(query)
 	
@@ -251,7 +265,7 @@ func _drop_object():
 	if carried_object.has_node("CollisionShape3D"): 
 		carried_object.get_node("CollisionShape3D").disabled = false
 		
-	speed /= 0.75
+	speed /= GlobalConstants.PLAYER.CARRY_SPEED_PENALTY
 	carried_object = null
 	EventBus.request_prompt.emit("", false)
 

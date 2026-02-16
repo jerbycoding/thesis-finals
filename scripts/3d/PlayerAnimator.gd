@@ -1,22 +1,24 @@
 # PlayerAnimator.gd
-# Handles character animations with auto-detection for different GLB naming conventions.
+# Handles character animations with auto-detection for different GLB/FBX naming conventions.
 extends Node3D
 
 @export var is_player: bool = false
+@export var load_external_actions: bool = true
 
-# Lists of possible animation names used by different GLB models
+# Lists of possible animation names used by different GLB/FBX models
 const IDLE_VARIANTS = [
+	"mixamo_com", "mixamo.com", "mixamorig|mixamo.com", "Armature|mixamo.com",
 	"HumanArmature|Man_Idle", "HumanArmature|Female_Idle", 
 	"CharacterArmature|Idle", "CharacterArmature|Idle_Neutral", 
 	"CharacterArmature|Idle_Standing", "Armature|Iddle", "Armature|Idle", "Idle"
 ]
 const WALK_VARIANTS = [
-	"HumanArmature|Man_Walk", "HumanArmature|Female_Walk", 
-	"CharacterArmature|Walk", "Armature|Walk", "Walk"
+	"mixamo_com", "Walk", "HumanArmature|Man_Walk", "HumanArmature|Female_Walk", 
+	"CharacterArmature|Walk", "Armature|Walk"
 ]
 const RUN_VARIANTS = [
-	"HumanArmature|Man_Run", "HumanArmature|Female_Run", 
-	"CharacterArmature|Run", "Armature|Run", "Run"
+	"mixamo_com", "Run", "HumanArmature|Man_Run", "HumanArmature|Female_Run", 
+	"CharacterArmature|Run", "Armature|Run"
 ]
 const CARRY_IDLE_VARIANTS = [
 	"CharacterArmature|Interact", "CharacterArmature|Idle_Gun", 
@@ -44,6 +46,8 @@ func _ready():
 	
 	if anim_player:
 		_discover_animations()
+		if load_external_actions:
+			_load_external_animations()
 		_setup_looping()
 	
 	if skeleton and is_player:
@@ -56,6 +60,47 @@ func _process(delta):
 	
 	if carry_weight > 0.01:
 		_update_procedural_hands()
+
+func _load_external_animations():
+	# This allows applying animations from the ANIMATION folder to any NPC/Player
+	var anim_dir = "res://assets/Animations Godot/ANIMATION/"
+	var library = AnimationLibrary.new()
+	
+	# List of common action animations to try and bridge
+	var actions = {
+		"Talking": "Talking.fbx",
+		"Typing": "Typing.fbx",
+		"Victory": "Victory.fbx",
+		"Meeting": "Having A Meeting, Male.fbx",
+		"Sit_Male": "Sit Male.fbx",
+		"Sit_Female": "Sit Female.fbx"
+	}
+	
+	for action_name in actions:
+		var path = anim_dir + actions[action_name]
+		if FileAccess.file_exists(path):
+			var scene = load(path)
+			if scene:
+				var instance = scene.instantiate()
+				var p = _find_animation_player(instance)
+				if p:
+					# Mixamo animations in separate files are usually named "mixamo.com"
+					var internal_name = "mixamo.com"
+					if not p.has_animation(internal_name):
+						# Try some fallback names if not the default
+						for n in p.get_animation_list():
+							if "mixamo" in n.to_lower():
+								internal_name = n
+								break
+					
+					if p.has_animation(internal_name):
+						var anim = p.get_animation(internal_name)
+						library.add_animation(action_name, anim)
+				instance.free()
+	
+	if library.get_animation_list().size() > 0:
+		anim_player.add_animation_library("actions", library)
+		print("[PlayerAnimator] Loaded %d external actions into 'actions' library for %s" % [library.get_animation_list().size(), get_parent().name])
 
 func _update_procedural_hands():
 	if not skeleton or active_carry_idle != "": 
@@ -116,6 +161,17 @@ func update_movement(velocity: Vector3, is_sprinting: bool, is_carrying: bool = 
 	
 	if target_anim != "" and anim_player.current_animation != target_anim:
 		anim_player.play(target_anim, 0.2)
+
+func play_action(action_name: String, blend: float = 0.2):
+	if not anim_player: return
+	
+	# Try from the actions library first
+	if anim_player.has_animation("actions/" + action_name):
+		anim_player.play("actions/" + action_name, blend)
+	elif anim_player.has_animation(action_name):
+		anim_player.play(action_name, blend)
+	else:
+		push_warning("[PlayerAnimator] Action '%s' not found on %s" % [action_name, get_parent().name])
 
 func force_idle():
 	if anim_player and active_idle != "":

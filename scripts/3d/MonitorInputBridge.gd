@@ -9,9 +9,6 @@ class_name MonitorInputBridge
 @export var screen_mesh: MeshInstance3D
 @export var interaction_area: Area3D
 
-@export_group("Config")
-@export var physics_layer: int = 20 # Layer 20 for monitors
-
 # State
 var is_active: bool = false
 var last_uv: Vector2 = Vector2.ZERO
@@ -33,14 +30,14 @@ func _update_mesh_size():
 			current_mesh_size = screen_mesh.mesh.size
 		else:
 			var aabb = screen_mesh.get_aabb()
-			current_mesh_size = Vector2(aabb.size.x, aabb.size.y)
+			current_mesh_size = Vector2(aabb.size.x, aabb.size.z if aabb.size.z > aabb.size.y else aabb.size.y)
 
 func _setup_collision():
 	if not interaction_area: return
 	
-	# Set dedicated physics layer for occlusion-proof raycasting
+	# Set dedicated physics layer for occlusion-proof raycasting from GlobalConstants
 	interaction_area.collision_layer = 0
-	interaction_area.set_collision_layer_value(physics_layer, true)
+	interaction_area.set_collision_layer_value(GlobalConstants.PHYSICS_LAYERS.MONITOR, true)
 	interaction_area.collision_mask = 0
 	
 	# Metadata for raycast detection
@@ -51,12 +48,10 @@ func activate():
 	is_active = true
 	pressed_keys.clear()
 	
-	# Force SubViewport to recognize mouse entry immediately (Master Advice #3)
 	if subviewport:
 		subviewport.notification(Viewport.NOTIFICATION_VP_MOUSE_ENTER)
 		
-		# Find the virtual cursor if it exists in the viewport
-		# It's inside a CanvasLayer named 'CursorLayer'
+		# Cursor layer detection
 		var cursor_layer = subviewport.find_child("CursorLayer", true, false)
 		if cursor_layer:
 			virtual_cursor = cursor_layer.find_child("VirtualCursor", true, false)
@@ -70,7 +65,6 @@ func deactivate():
 	if not is_active: return
 	is_active = false
 	
-	# Flush stuck keys (Master Advice #4)
 	_flush_stuck_keys()
 	
 	if subviewport:
@@ -80,21 +74,18 @@ func deactivate():
 		virtual_cursor.visible = false
 
 func _sync_initial_mouse_state():
-	# Push a synthetic motion event to the current mouse position
 	var mouse_pos = get_viewport().get_mouse_position()
 	var uv = _get_uv_from_screen_pos(mouse_pos)
 	if uv != Vector2(-1, -1):
 		_inject_mouse_motion(uv)
 		last_uv = uv
 	else:
-		# Fallback to center if raycast misses during init
 		_inject_mouse_motion(Vector2(0.5, 0.5))
 		last_uv = Vector2(0.5, 0.5)
 
 func _process(_delta):
 	if not is_active: return
 	
-	# Real-time raycasting for smooth mouse movement
 	var mouse_pos = get_viewport().get_mouse_position()
 	var uv = _get_uv_from_screen_pos(mouse_pos)
 	
@@ -107,16 +98,16 @@ func _get_uv_from_screen_pos(screen_pos: Vector2) -> Vector2:
 	if not camera: return Vector2(-1, -1)
 	
 	var from = camera.project_ray_origin(screen_pos)
-	var to = from + camera.project_ray_normal(screen_pos) * 5.0
+	var to = from + camera.project_ray_normal(screen_pos) * 10.0 # Extended range
 	
 	var space = get_world_3d().direct_space_state
 	var query = PhysicsRayQueryParameters3D.create(from, to)
-	query.collision_mask = 1 << (physics_layer - 1)
+	query.collision_mask = 1 << (GlobalConstants.PHYSICS_LAYERS.MONITOR - 1)
 	query.collide_with_areas = true
 	
 	var result = space.intersect_ray(query)
 	if result and result.collider == interaction_area:
-		# Convert hit to local UV
+		# Convert hit to local UV based on mesh size
 		var local_hit = screen_mesh.to_local(result.position)
 		var uv = Vector2(
 			(local_hit.x / current_mesh_size.x) + 0.5,
@@ -132,11 +123,9 @@ func _inject_mouse_motion(uv: Vector2):
 	var pixel_pos = uv * Vector2(subviewport.size)
 	var prev_pixel_pos = last_uv * Vector2(subviewport.size)
 	
-	# Update Virtual Cursor
 	if virtual_cursor:
 		virtual_cursor.position = pixel_pos
 	
-	# Forward to Viewport with current button state (Crucial for Drag & Drop)
 	var ev = InputEventMouseMotion.new()
 	ev.position = pixel_pos
 	ev.global_position = pixel_pos
@@ -147,11 +136,9 @@ func _inject_mouse_motion(uv: Vector2):
 func handle_mouse_button(event: InputEventMouseButton):
 	if not is_active or not subviewport: return
 	
-	# Update state tracking mask
 	if event.pressed:
 		current_button_mask |= (1 << (event.button_index - 1))
 	else:
-		# Use Bitwise XOR to remove, but only if it was present
 		var bit = (1 << (event.button_index - 1))
 		if current_button_mask & bit:
 			current_button_mask ^= bit
@@ -165,7 +152,6 @@ func handle_mouse_button(event: InputEventMouseButton):
 func handle_key(event: InputEventKey):
 	if not is_active or not subviewport: return
 	
-	# Track for flushing
 	if event.pressed:
 		pressed_keys[event.physical_keycode] = true
 	else:

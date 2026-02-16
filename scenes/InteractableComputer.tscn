@@ -1,9 +1,10 @@
-[gd_scene load_steps=8 format=3 uid="uid://b78xk57l146ve"]
+[gd_scene load_steps=9 format=3 uid="uid://b78xk57l146ve"]
 
 [ext_resource type="Script" uid="uid://ypme8lcwjfib" path="res://scripts/InteractableComputer.gd" id="1_57yv1"]
 [ext_resource type="PackedScene" uid="uid://bjy8b0vcfuc0r" path="res://scenes/3d/props/graybox/Prop_ComputerSet.tscn" id="3_compset"]
 [ext_resource type="PackedScene" uid="uid://byfr15ei8bwp6" path="res://assets/props/glb files/Boss Table.glb" id="3_yg1ix"]
 [ext_resource type="PackedScene" uid="uid://iyjyew21g2r4" path="res://assets/props/graybox/Mug.glb" id="4_anowx"]
+[ext_resource type="PackedScene" uid="uid://dbu7rn0d7neqy" path="res://assets/props/glb files/from unity/chair.glb" id="5_03afn"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_kxh54"]
 
@@ -38,3 +39,6 @@ transform = Transform3D(-0.022226, 0, -1.49984, 0, 1.5, 0, 1.49984, 0, -0.022226
 
 [node name="Mug2" parent="." instance=ExtResource("4_anowx")]
 transform = Transform3D(0.005, 0, 0, 0, 0.005, 0, 0, 0, 0.005, 0.642128, 1.45071, -0.877962)
+
+[node name="chair2" parent="." instance=ExtResource("5_03afn")]
+transform = Transform3D(0.970003, 0, -1.27244, 0, 1.6, 0, 1.27244, 0, 0.970003, -0.902574, 0, 0.08)

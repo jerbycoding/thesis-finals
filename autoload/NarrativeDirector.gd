@@ -24,6 +24,15 @@ var _is_shift_active: bool = false
 var event_timer: Timer
 var chaos_timer: Timer
 
+# Event Handlers Mapping
+@onready var _event_handlers = {
+	GlobalConstants.NARRATIVE_EVENT_TYPE.NPC_INTERACTION: _handle_npc_interaction,
+	GlobalConstants.NARRATIVE_EVENT_TYPE.SPAWN_TICKET: _handle_spawn_ticket,
+	GlobalConstants.NARRATIVE_EVENT_TYPE.SPAWN_CONSEQUENCE: _handle_spawn_consequence,
+	GlobalConstants.NARRATIVE_EVENT_TYPE.SYSTEM_EVENT: _handle_system_event,
+	GlobalConstants.NARRATIVE_EVENT_TYPE.SHIFT_END: _handle_shift_end
+}
+
 func is_weekend() -> bool:
 	if current_shift_resource:
 		return current_shift_resource.minigame_type != "NONE"
@@ -39,9 +48,9 @@ func _ready():
 	_discover_shifts()
 	
 	# Connect to EventBus for critical failures
-	EventBus.narrative_spawn_consequence.connect(func(id): _trigger_event({"type": "spawn_consequence", "consequence_id": id}))
+	EventBus.narrative_spawn_consequence.connect(func(id): _trigger_event({"type": GlobalConstants.NARRATIVE_EVENT_TYPE.SPAWN_CONSEQUENCE, "consequence_id": id}))
 	EventBus.consequence_triggered.connect(_on_consequence_triggered)
-	EventBus.shift_end_requested.connect(func(): _trigger_event({"type": "shift_end"}))
+	EventBus.shift_end_requested.connect(func(): _trigger_event({"type": GlobalConstants.NARRATIVE_EVENT_TYPE.SHIFT_END}))
 	
 	EventBus.campaign_ended.connect(_on_campaign_ended)
 	
@@ -243,115 +252,111 @@ func _on_campaign_ended(type: String):
 		get_tree().change_scene_to_file(scene_path)
 
 func _trigger_event(event_data: Dictionary):
-	print("NarrativeDirector: Triggering event - ", event_data.get("event", "N/A"))
-	match event_data.type:
-		GlobalConstants.NARRATIVE_EVENT_TYPE.NPC_INTERACTION:
-			if GameState.is_in_2d_mode():
-				print("NarrativeDirector: NPC interaction triggered. Transitioning to 3D for dialogue.")
-				TransitionManager.exit_desktop_mode()
-				await EventBus.transition_completed
-				# Wait a moment for the camera to settle
-				await get_tree().create_timer(0.5).timeout
-			
-			# 1. Check if the NPC is physically present in the current scene
-			var is_npc_present = false
-			for node in get_tree().get_nodes_in_group("npcs"):
-				if node.get("npc_id") == event_data.npc_id:
-					is_npc_present = true
-					break
-			
-			if is_npc_present:
-				print("NarrativeDirector: Local NPC '%s' found. Broadcasting interaction." % event_data.npc_id)
-				EventBus.npc_interaction_requested.emit.call_deferred(event_data.npc_id, event_data.dialogue_id)
-			else:
-				print("NarrativeDirector: NPC '%s' not in scene. Triggering REMOTE fallback." % event_data.npc_id)
-				_trigger_remote_dialogue(event_data.npc_id, event_data.dialogue_id)
-		GlobalConstants.NARRATIVE_EVENT_TYPE.SPAWN_TICKET:
-			EventBus.narrative_spawn_ticket.emit(event_data.ticket_id)
-		GlobalConstants.NARRATIVE_EVENT_TYPE.SPAWN_CONSEQUENCE:
-			EventBus.narrative_spawn_consequence.emit(event_data.consequence_id)
-		GlobalConstants.NARRATIVE_EVENT_TYPE.SYSTEM_EVENT:
-			EventBus.world_event_triggered.emit(event_data.event_id, true, event_data.get("duration", 10.0))
-			# Auto-clear after duration
-			get_tree().create_timer(event_data.get("duration", 10.0)).timeout.connect(
-				func(): EventBus.world_event_triggered.emit(event_data.event_id, false, 0.0)
-			)
-		GlobalConstants.NARRATIVE_EVENT_TYPE.SHIFT_END:
-			print("NarrativeDirector: Executing shift_end sequence...")
-			stop_shift()
-			var failure_type = event_data.get("failure_type", "")
-			
-			if ArchetypeAnalyzer:
-				print("NarrativeDirector: Fetching analyst results...")
-				var results = ArchetypeAnalyzer.get_analysis_results()
-				print("NarrativeDirector: Results calculated. Archetype: ", results.get("archetype", "Unknown"))
+	var type = event_data.get("type", "")
+	if _event_handlers.has(type):
+		print("NarrativeDirector: Triggering event - ", event_data.get("event", type))
+		_event_handlers[type].call(event_data)
+	else:
+		push_warning("NarrativeDirector: No handler defined for event type: " + str(type))
 
-				# If in 2D mode, exit to 3D first.
-				if GameState.is_in_2d_mode():
-					print("NarrativeDirector: Exiting desktop mode before report.")
-					TransitionManager.exit_desktop_mode()
-					await EventBus.transition_completed
+# --- Dedicated Event Handlers ---
 
-				# Handle Instant Failures (Bankrupt/Fired)
-				if failure_type != "":
-					print("NarrativeDirector: Campaign ended via failure: ", failure_type)
-					EventBus.campaign_ended.emit(failure_type)
-					return
-				
-				# Check for 'Fired' via archetype
-				if results.get("archetype") == GlobalConstants.ARCHETYPE.NEGLIGENT:
-					print("NarrativeDirector: Player fired for negligence.")
-					EventBus.campaign_ended.emit("fired")
-					return
+func _handle_npc_interaction(event_data: Dictionary):
+	if GameState.is_in_2d_mode():
+		print("NarrativeDirector: NPC interaction triggered. Transitioning to 3D for dialogue.")
+		TransitionManager.exit_desktop_mode()
+		await EventBus.transition_completed
+		# Wait a moment for the camera to settle
+		await get_tree().create_timer(0.5).timeout
+	
+	# 1. Check if the NPC is physically present in the current scene
+	var is_npc_present = false
+	for node in get_tree().get_nodes_in_group("npcs"):
+		if node.get("npc_id") == event_data.npc_id:
+			is_npc_present = true
+			break
+	
+	if is_npc_present:
+		print("NarrativeDirector: Local NPC '%s' found. Broadcasting interaction." % event_data.npc_id)
+		EventBus.npc_interaction_requested.emit.call_deferred(event_data.npc_id, event_data.dialogue_id)
+	else:
+		print("NarrativeDirector: NPC '%s' not in scene. Triggering REMOTE fallback." % event_data.npc_id)
+		_trigger_remote_dialogue(event_data.npc_id, event_data.dialogue_id)
 
-				# Check for campaign completion (Victory)
-				# Only trigger victory if there is NO next shift defined in the resource.
-				if current_shift_resource and current_shift_resource.next_shift_id == "":
-					print("NarrativeDirector: Final shift in sequence reached. Triggering Victory.")
-					EventBus.campaign_ended.emit("victory")
-					return
+func _handle_spawn_ticket(event_data: Dictionary):
+	EventBus.narrative_spawn_ticket.emit(event_data.ticket_id)
 
-				# Normal shift end - show report
-				print("NarrativeDirector: Showing shift report overlay...")
-				var report_layer = CanvasLayer.new()
-				report_layer.layer = 125 # Top priority
-				get_tree().root.add_child(report_layer)
-				
-				var report_instance = shift_report_scene.instantiate()
-				report_layer.add_child(report_instance)
-				report_instance.show_report(results)
-				
-				# Pass the next shift ID to the report for continuation
-				if current_shift_resource and not current_shift_resource.next_shift_id.is_empty():
-					print("NarrativeDirector: Next shift defined: ", current_shift_resource.next_shift_id)
-					report_instance.set_next_shift(current_shift_resource.next_shift_id)
-				
-				EventBus.shift_ended.emit(results)
-				print("NarrativeDirector: Shift report sequence complete.")
-			else:
-				print("ERROR: ArchetypeAnalyzer not found!")
-				EventBus.shift_ended.emit({})
+func _handle_spawn_consequence(event_data: Dictionary):
+	EventBus.narrative_spawn_consequence.emit(event_data.consequence_id)
+
+func _handle_system_event(event_data: Dictionary):
+	var event_id = event_data.event_id
+	var duration = event_data.get("duration", 10.0)
+	EventBus.world_event_triggered.emit(event_id, true, duration)
+	# Auto-clear after duration
+	get_tree().create_timer(duration).timeout.connect(
+		func(): EventBus.world_event_triggered.emit(event_id, false, 0.0)
+	)
+
+func _handle_shift_end(event_data: Dictionary):
+	print("NarrativeDirector: Executing shift_end sequence...")
+	stop_shift()
+	var failure_type = event_data.get("failure_type", "")
+	
+	if ArchetypeAnalyzer:
+		print("NarrativeDirector: Fetching analyst results...")
+		var results = ArchetypeAnalyzer.get_analysis_results()
+		print("NarrativeDirector: Results calculated. Archetype: ", results.get("archetype", "Unknown"))
+
+		# If in 2D mode, exit to 3D first.
+		if GameState.is_in_2d_mode():
+			print("NarrativeDirector: Exiting desktop mode before report.")
+			TransitionManager.exit_desktop_mode()
+			await EventBus.transition_completed
+
+		# Handle Instant Failures (Bankrupt/Fired)
+		if failure_type != "":
+			print("NarrativeDirector: Campaign ended via failure: ", failure_type)
+			EventBus.campaign_ended.emit(failure_type)
+			return
+		
+		# Check for 'Fired' via archetype
+		if results.get("archetype") == GlobalConstants.ARCHETYPE.NEGLIGENT:
+			print("NarrativeDirector: Player fired for negligence.")
+			EventBus.campaign_ended.emit("fired")
+			return
+
+		# Check for campaign completion (Victory)
+		# Only trigger victory if there is NO next shift defined in the resource.
+		if current_shift_resource and current_shift_resource.next_shift_id == "":
+			print("NarrativeDirector: Final shift in sequence reached. Triggering Victory.")
+			EventBus.campaign_ended.emit("victory")
+			return
+
+		# Normal shift end - show report
+		print("NarrativeDirector: Showing shift report overlay...")
+		var report_layer = CanvasLayer.new()
+		report_layer.layer = 125 # Top priority
+		get_tree().root.add_child(report_layer)
+		
+		var report_instance = shift_report_scene.instantiate()
+		report_layer.add_child(report_instance)
+		report_instance.show_report(results)
+		
+		# Pass the next shift ID to the report for continuation
+		if current_shift_resource and not current_shift_resource.next_shift_id.is_empty():
+			print("NarrativeDirector: Next shift defined: ", current_shift_resource.next_shift_id)
+			report_instance.set_next_shift(current_shift_resource.next_shift_id)
+		
+		EventBus.shift_ended.emit(results)
+		print("NarrativeDirector: Shift report sequence complete.")
+	else:
+		print("ERROR: ArchetypeAnalyzer not found!")
+		EventBus.shift_ended.emit({})
 
 
 func _on_ticket_completed(ticket: TicketResource, completion_type: String, _time_taken: float):
 	pass
-
-# --- Deprecated specific briefing methods - Use trigger_briefing(id) instead ---
-
-func start_briefing():
-	trigger_briefing("shift_monday")
-
-func start_tuesday_briefing():
-	trigger_briefing("shift_tuesday")
-
-func start_wednesday_briefing():
-	trigger_briefing("shift_wednesday")
-
-func start_thursday_briefing():
-	trigger_briefing("shift_thursday")
-
-func start_friday_briefing():
-	trigger_briefing("shift_friday")
 
 # --- Dynamic Guidance Engine (Sprint 11) ---
 
