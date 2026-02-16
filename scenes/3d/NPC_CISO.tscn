@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://ceta2wna3gome"]
+[gd_scene load_steps=6 format=3 uid="uid://ceta2wna3gome"]
 
 [ext_resource type="Script" uid="uid://c04nuo4vx3swt" path="res://scripts/3d/NPC_CISO.gd" id="1_npc"]
-[ext_resource type="PackedScene" uid="uid://c5asbd8lwl2gl" path="res://assets/npc/NPC_CISO.fbx" id="2_qoc3a"]
+[ext_resource type="PackedScene" uid="uid://dpeaev8gkv35a" path="res://assets/Animations Godot/NPC/NPC_OLD.fbx" id="2_qoc3a"]
+[ext_resource type="Script" uid="uid://clra78uil2mle" path="res://scripts/3d/PlayerAnimator.gd" id="3_animator"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ciso"]
 radius = 0.4
@@ -24,5 +25,6 @@ shape = SubResource("CapsuleShape3D_ciso")
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="InteractionArea"]
 shape = SubResource("BoxShape3D_interact")
 
-[node name="NPC_CISO" parent="." instance=ExtResource("2_qoc3a")]
-transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 0.92289174, 0)
+[node name="NPC_OLD" parent="." instance=ExtResource("2_qoc3a")]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 0, 0)
+script = ExtResource("3_animator")

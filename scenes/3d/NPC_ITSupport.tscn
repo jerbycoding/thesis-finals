@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://bckc0uyxlcl5a"]
+[gd_scene load_steps=6 format=3 uid="uid://bckc0uyxlcl5a"]
 
 [ext_resource type="Script" uid="uid://byi0voyi5w5et" path="res://scripts/3d/NPC_ITSupport.gd" id="1_npc"]
-[ext_resource type="PackedScene" uid="uid://c0hudmu0b07km" path="res://assets/npc/NPC_IT2.fbx" id="2_55uuj"]
+[ext_resource type="PackedScene" uid="uid://bcirfgqkqmtjc" path="res://assets/Animations Godot/NPC/NPC_IT_GUY_1.fbx" id="2_55uuj"]
+[ext_resource type="Script" uid="uid://clra78uil2mle" path="res://scripts/3d/PlayerAnimator.gd" id="3_animator"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_it"]
 radius = 0.4
@@ -11,6 +12,7 @@ height = 1.8
 size = Vector3(3, 3, 3)
 
 [node name="NPC_ITSupport" type="CharacterBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0626372, 0)
 script = ExtResource("1_npc")
 npc_id = "it_support"
 npc_name = "IT Support"
@@ -27,5 +29,6 @@ shape = SubResource("CapsuleShape3D_it")
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="InteractionArea"]
 shape = SubResource("BoxShape3D_interact")
 
-[node name="NPC_IT2" parent="InteractionArea" instance=ExtResource("2_55uuj")]
-transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 1.5, 0)
+[node name="NPC_IT_GUY_1" parent="InteractionArea" instance=ExtResource("2_55uuj")]
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0)
+script = ExtResource("3_animator")

@@ -8,7 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://bgk20yi3egwfp" path="res://scenes/ui/TabletHUD.tscn" id="5_tablet"]
 [ext_resource type="Resource" uid="uid://dny42b338pxg0" path="res://resources/minigames/DefaultRecoveryConfig.tres" id="6_config"]
 [ext_resource type="Resource" path="res://resources/minigames/DefaultCalibrationConfig.tres" id="7_audit"]
-[ext_resource type="PackedScene" uid="uid://c67sml5y1uxgf" path="res://assets/npc/Man.glb" id="8_man_model"]
+[ext_resource type="PackedScene" uid="uid://bcsmu50suq5yh" path="res://assets/Animations Godot/NPC/NPC_HOODIE.fbx" id="8_nv2py"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_jib20"]
 radius = 0.4
@@ -43,12 +43,12 @@ config = ExtResource("6_config")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
 shape = SubResource("CapsuleShape3D_jib20")
 
-[node name="CameraPivot" type="Node3D" parent="."]
-
-[node name="BodyModel" parent="CameraPivot" instance=ExtResource("8_man_model")]
-transform = Transform3D(-0.5, 0, -7.54979e-08, 0, 0.5, 0, 7.54979e-08, 0, -0.5, 0, 0, 0)
+[node name="NPC_HOODIE" parent="." instance=ExtResource("8_nv2py")]
+transform = Transform3D(-2.99515, 0, 0.170601, 0, 3, 0, -0.170601, 0, -2.99515, 0, 0, 0)
 script = ExtResource("2_animator")
 is_player = true
+
+[node name="CameraPivot" type="Node3D" parent="."]
 
 [node name="Camera3D" type="Camera3D" parent="CameraPivot"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.11456, -0.230708)
