@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://byi0voyi5w5et" path="res://scripts/3d/NPC_ITSupport.gd" id="1_npc"]
 [ext_resource type="PackedScene" uid="uid://bcirfgqkqmtjc" path="res://assets/Animations Godot/NPC/NPC_IT_GUY_1.fbx" id="2_55uuj"]
-[ext_resource type="Script" uid="uid://clra78uil2mle" path="res://scripts/3d/PlayerAnimator.gd" id="3_animator"]
+[ext_resource type="Script" uid="uid://d1uxcww1mbc73" path="res://scripts/3d/MixamoAnimator.gd" id="3_animator"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_it"]
 radius = 0.4
@@ -29,6 +29,6 @@ shape = SubResource("CapsuleShape3D_it")
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="InteractionArea"]
 shape = SubResource("BoxShape3D_interact")
 
-[node name="NPC_IT_GUY_1" parent="InteractionArea" instance=ExtResource("2_55uuj")]
-transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0)
+[node name="NPC_IT_GUY_1" parent="." instance=ExtResource("2_55uuj")]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 0, 0)
 script = ExtResource("3_animator")

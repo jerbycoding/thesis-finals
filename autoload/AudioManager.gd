@@ -200,4 +200,3 @@ var SFX = {
 	"music_standard": "res://assets/music/theme-standard.ogg",
 	"music_emergency": "res://assets/music/theme-emergency.ogg"
 }
-

@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=3 uid="uid://hfamqvjno2xl"]
+[gd_scene load_steps=34 format=3 uid="uid://hfamqvjno2xl"]
 
 [ext_resource type="PackedScene" uid="uid://cteip62nveuo7" path="res://assets/props/glb files/4 Bulb Grey Light - LRG Tubes.glb" id="1_jiiix"]
 [ext_resource type="PackedScene" uid="uid://brbwiujepsoub" path="res://assets/props/New Inherit props/doorway_front.tscn" id="2_54q5v"]
@@ -25,7 +25,6 @@
 [ext_resource type="PackedScene" uid="uid://bdys54uwli5r" path="res://assets/props/FBX/Separated/computer_mouse_2.tscn" id="23_i7j6l"]
 [ext_resource type="PackedScene" uid="uid://cv8w6k2rvnv3k" path="res://assets/props/FBX/Separated/cylinder_2.tscn" id="24_flu6a"]
 [ext_resource type="PackedScene" uid="uid://ceta2wna3gome" path="res://scenes/3d/NPC_CISO.tscn" id="25_67j22"]
-[ext_resource type="PackedScene" uid="uid://b2d35yngg7u75" path="res://scenes/Player3D.tscn" id="26_0aykk"]
 [ext_resource type="Script" uid="uid://dh3hcvpwq0ufa" path="res://scripts/3d/RoomTeleporter.gd" id="27_na8gc"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_wg387"]
@@ -43,11 +42,6 @@ albedo_color = Color(0.894922, 0.894922, 0.894922, 1)
 
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_k1yw3"]
 data = PackedVector3Array(1, 0, 1, -1, 0, 1, 1, 0, -1, -1, 0, 1, -1, 0, -1, 1, 0, -1)
-
-[sub_resource type="BoxMesh" id="BoxMesh_3gxth"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hoi6x"]
-albedo_color = Color(0.385493, 0.385492, 0.385492, 1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_trigger"]
 size = Vector3(2, 3, 2)
@@ -76,6 +70,7 @@ surface_material_override/0 = SubResource("StandardMaterial3D_up011")
 [node name="StaticBody3D" type="StaticBody3D" parent="RoomSetup/ceiling"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="RoomSetup/ceiling/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, -7.10543e-15, 1, 0.000889444, 0, -0.00128752)
 shape = SubResource("ConcavePolygonShape3D_k1yw3")
 
 [node name="bulbs" type="Node3D" parent="RoomSetup/ceiling"]
@@ -185,9 +180,6 @@ transform = Transform3D(40, 0, 2.54019e-13, 0, 9.99912, 0, 7.20775e-11, 0, 0.199
 operation = 2
 size = Vector3(0.0730991, 0.65625, 2.38403)
 
-[node name="Doorway Front3" parent="RoomSetup/Walls/Eastwall2" instance=ExtResource("2_54q5v")]
-transform = Transform3D(6.30206, 0, 7.81597e-14, 0, 6.62471, 0, 8.52651e-14, 0, 1.97349, 6.05065, -2.67222, 51.0286)
-
 [node name="Eastwall3" type="CSGCombiner3D" parent="RoomSetup/Walls"]
 transform = Transform3D(1.01343, 0, 0, 0, 1, 0, 0, 0, 1, 1.15205, 2.5, -51.6318)
 use_collision = true
@@ -197,11 +189,6 @@ transform = Transform3D(40, 0, 9.05942e-14, 0, 9.99942, 0, 2.16003e-11, 0, 0.199
 size = Vector3(0.673115, 1, 1)
 
 [node name="Elevator" type="Node3D" parent="RoomSetup"]
-
-[node name="Elevator placeholder" type="MeshInstance3D" parent="RoomSetup/Elevator"]
-transform = Transform3D(2, 0, 0, 0, 7, 0, 0, 0, 6, 20.2548, 3.58306, 0)
-mesh = SubResource("BoxMesh_3gxth")
-surface_material_override/0 = SubResource("StandardMaterial3D_hoi6x")
 
 [node name="Orientation Room" type="Node3D" parent="."]
 
@@ -287,10 +274,11 @@ transform = Transform3D(-2.03823e-07, -3.51815, -1.8302e-07, 0, -1.53783e-07, 4.
 transform = Transform3D(-6.57239e-07, 5.41856e-06, 11.3444, 1.16868e-13, 13.5012, -4.55297e-06, -15.0359, -1.31913e-13, -4.95881e-07, -15.0344, 3.86223, 6.74575)
 
 [node name="NPC_CISO" parent="." instance=ExtResource("25_67j22")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -13.067, 0, 7)
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -13.067, 1.87765, 7)
 
-[node name="Player3D" parent="." instance=ExtResource("26_0aykk")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -9.14206, 0, 7)
+[node name="BriefingCamera" type="Camera3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -9.14206, 2.78601, 7)
+current = true
 
 [node name="Elevator_Area" type="Area3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.25, 0, 0)

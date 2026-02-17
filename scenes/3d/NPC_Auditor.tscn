@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dyfwcs8exxajl" path="res://scripts/3d/NPC_Auditor.gd" id="1_npc"]
 [ext_resource type="PackedScene" uid="uid://bdqlmaf1svcw8" path="res://assets/Animations Godot/NPC/NPC_COAT.fbx" id="2_3upte"]
-[ext_resource type="Script" uid="uid://clra78uil2mle" path="res://scripts/3d/PlayerAnimator.gd" id="3_animator"]
+[ext_resource type="Script" uid="uid://d1uxcww1mbc73" path="res://scripts/3d/MixamoAnimator.gd" id="3_animator"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_aud"]
 radius = 0.4
@@ -16,15 +16,15 @@ script = ExtResource("1_npc")
 npc_id = "auditor"
 npc_name = "Compliance Auditor"
 
+[node name="NPC_COAT" parent="." instance=ExtResource("2_3upte")]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 0, 0)
+script = ExtResource("3_animator")
+
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
 shape = SubResource("CapsuleShape3D_aud")
 
 [node name="InteractionArea" type="Area3D" parent="."]
-
-[node name="NPC_COAT" parent="InteractionArea" instance=ExtResource("2_3upte")]
-transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0)
-script = ExtResource("3_animator")
 
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="InteractionArea"]
 shape = SubResource("BoxShape3D_interact")

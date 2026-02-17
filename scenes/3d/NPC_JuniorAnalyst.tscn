@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dofxrnxhxiapm" path="res://scripts/3d/NPC_JuniorAnalyst.gd" id="1_npc"]
 [ext_resource type="PackedScene" uid="uid://pnd15fcpkn1u" path="res://assets/Animations Godot/NPC/NPC_MARK.fbx" id="2_ur513"]
-[ext_resource type="Script" uid="uid://clra78uil2mle" path="res://scripts/3d/PlayerAnimator.gd" id="3_animator"]
+[ext_resource type="Script" uid="uid://d1uxcww1mbc73" path="res://scripts/3d/MixamoAnimator.gd" id="3_animator"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_junior"]
 radius = 0.4
@@ -25,6 +25,6 @@ shape = SubResource("CapsuleShape3D_junior")
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="InteractionArea"]
 shape = SubResource("BoxShape3D_interact")
 
-[node name="NPC_MARK" parent="InteractionArea" instance=ExtResource("2_ur513")]
-transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0.0222921, 0, 0)
+[node name="NPC_MARK" parent="." instance=ExtResource("2_ur513")]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0.0222921, 0, 0)
 script = ExtResource("3_animator")

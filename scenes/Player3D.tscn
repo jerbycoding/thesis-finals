@@ -40,18 +40,18 @@ offset_bottom = 1.0
 config = ExtResource("6_config")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 shape = SubResource("CapsuleShape3D_jib20")
 
 [node name="NPC_HOODIE" parent="." instance=ExtResource("8_nv2py")]
-transform = Transform3D(-2.99515, 0, 0.170601, 0, 3, 0, -0.170601, 0, -2.99515, 0, 0, 0)
+transform = Transform3D(-4, 0, -3.49691e-07, 0, 4, 0, 3.49691e-07, 0, -4, 0, 0, 0)
 script = ExtResource("2_animator")
 is_player = true
 
 [node name="CameraPivot" type="Node3D" parent="."]
 
 [node name="Camera3D" type="Camera3D" parent="CameraPivot"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.11456, -0.230708)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, -0.230708)
 
 [node name="InteractionRay" type="RayCast3D" parent="CameraPivot/Camera3D"]
 unique_name_in_owner = true
@@ -61,3 +61,5 @@ collide_with_areas = true
 [node name="CarryMarker3D" type="Marker3D" parent="CameraPivot/Camera3D"]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, -0.45, -0.6)
+
+[editable path="NPC_HOODIE"]

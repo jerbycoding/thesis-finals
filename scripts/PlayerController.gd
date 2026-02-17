@@ -17,14 +17,28 @@ var stored_camera_transform: Transform3D
 @onready var carry_marker: Marker3D = %CarryMarker3D
 @onready var tablet_hud: Control = $TabletHUD
 # Delegate animation logic to the child component
-@onready var animator = $CameraPivot/BodyModel
+@onready var animator = _find_animator()
 @onready var camera = $CameraPivot/Camera3D
+
+func _find_animator():
+	# Try specific paths first
+	var a = get_node_or_null("NPC_HOODIE")
+	if not a: a = get_node_or_null("CameraPivot/BodyModel")
+	
+	# Fallback: search children for the script
+	if not a:
+		for child in get_children():
+			if child.has_method("update_movement"):
+				return child
+	return a
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	EventBus.game_mode_changed.connect(_on_game_mode_changed)
-	# Initialize POV
+	# Initialize POV and rotation variables from current state
 	camera.fov = 80
+	camera_rotation.y = rotation.y
+	camera_rotation.x = $CameraPivot/Camera3D.rotation.x
 
 func sit_down(target_node: Node3D):
 	if not target_node or is_seated: return
@@ -57,8 +71,8 @@ func _tween_camera_to(target: Transform3D, is_standing_up: bool = false):
 			# Snap back to local coords to ensure headbob works
 			camera.position = Vector3(0, GlobalConstants.PLAYER.EYE_HEIGHT, GlobalConstants.PLAYER.CAMERA_OFFSET_Z)
 			camera.rotation = Vector3.ZERO
-			# Restore rotation vars from the pivot's current state
-			camera_rotation.y = $CameraPivot.rotation.y
+			# Restore rotation vars from the root node's current state
+			camera_rotation.y = rotation.y
 			camera_rotation.x = 0.0
 	)
 
@@ -79,6 +93,8 @@ func _on_game_mode_changed(mode):
 		
 		# movement_enabled is re-enabled by stand_up() tween callback OR directly above
 		current_target_height = GlobalConstants.PLAYER.EYE_HEIGHT
+		# Re-sync rotation variables after mode change
+		camera_rotation.y = rotation.y
 
 func _try_toggle_tablet():
 	var is_minigame_mode = false
@@ -136,13 +152,16 @@ func _handle_camera_input(event):
 	if event is InputEventMouseMotion:
 		camera_rotation.y -= event.relative.x * mouse_sensitivity
 		camera_rotation.x = clamp(camera_rotation.x - event.relative.y * mouse_sensitivity, -GlobalConstants.PLAYER.LOOK_LIMIT_X, GlobalConstants.PLAYER.LOOK_LIMIT_X)
-		$CameraPivot.rotation.y = camera_rotation.y
+		# Rotate the root horizontally
+		rotation.y = camera_rotation.y
+		# Rotate the camera node vertically
 		$CameraPivot/Camera3D.rotation.x = camera_rotation.x
 
 func _physics_process(_delta):
 	if not movement_enabled or modal_active: return
 	var input_dir = Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
-	var direction = ($CameraPivot.global_transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
+	# Direction is now based on root transform since root rotates horizontally
+	var direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	var current_speed = speed * (sprint_multiplier if Input.is_action_pressed("sprint") else 1.0)
 	if direction:
 		velocity.x = direction.x * current_speed

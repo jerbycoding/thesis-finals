@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://c04nuo4vx3swt" path="res://scripts/3d/NPC_CISO.gd" id="1_npc"]
 [ext_resource type="PackedScene" uid="uid://dpeaev8gkv35a" path="res://assets/Animations Godot/NPC/NPC_OLD.fbx" id="2_qoc3a"]
-[ext_resource type="Script" uid="uid://clra78uil2mle" path="res://scripts/3d/PlayerAnimator.gd" id="3_animator"]
+[ext_resource type="Script" uid="uid://d1uxcww1mbc73" path="res://scripts/3d/MixamoAnimator.gd" id="3_animator"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ciso"]
 radius = 0.4

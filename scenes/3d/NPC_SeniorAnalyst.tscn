@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cpmyqjpoeam4k" path="res://scripts/3d/NPC_SeniorAnalyst.gd" id="1_npc"]
 [ext_resource type="PackedScene" uid="uid://dh3dsro6fvt7e" path="res://assets/Animations Godot/NPC/NPC_IT_GUY_2.fbx" id="2_vwxg8"]
-[ext_resource type="Script" uid="uid://clra78uil2mle" path="res://scripts/3d/PlayerAnimator.gd" id="3_animator"]
+[ext_resource type="Script" uid="uid://d1uxcww1mbc73" path="res://scripts/3d/MixamoAnimator.gd" id="3_animator"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_senior"]
 radius = 0.4
@@ -26,5 +26,5 @@ shape = SubResource("CapsuleShape3D_senior")
 shape = SubResource("BoxShape3D_interact")
 
 [node name="NPC_IT_GUY_2" parent="." instance=ExtResource("2_vwxg8")]
-transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0)
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 0, 0)
 script = ExtResource("3_animator")
