@@ -12,7 +12,7 @@
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_jib20"]
 radius = 0.4
-height = 1.8
+height = 2.80991
 
 [node name="Player3D" type="CharacterBody3D"]
 script = ExtResource("1_15gk4")

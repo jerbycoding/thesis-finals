@@ -64,13 +64,13 @@ emission = Color(0, 0.5, 0.7, 1)
 emission_energy_multiplier = 2.0
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_wall"]
-noise_type = 2
+noise_type = 0
 seed = 42
 frequency = 0.2
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_wall"]
 as_normal_map = true
-bump_strength = 0.5
+bump_strength = 0.3
 noise = SubResource("FastNoiseLite_wall")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ax7jg"]
@@ -87,10 +87,10 @@ metallic = 0.8
 roughness = 0.2
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_teleport"]
-size = Vector3(2, 4, 3.46097)
+size = Vector3(1.22998, 4, 2.08986)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_wbdk5"]
-size = Vector3(2, 2.76648, 1.29498)
+size = Vector3(1.31323, 2.76648, 1.29498)
 
 [node name="SocRoom" type="Node3D"]
 
@@ -290,7 +290,7 @@ transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 1.3663, 0, -1.63923)
 [node name="WallProps" type="Node3D" parent="."]
 
 [node name="MessageBoard" parent="WallProps" instance=ExtResource("17")]
-transform = Transform3D(-8.74228e-10, 0, -0.02, 0, 0.02, 0, 0.02, 0, -8.74228e-10, 1.89699, 1.52294, -1.32097)
+transform = Transform3D(-8.74228e-10, 0, -0.02, 0, 0.02, 0, 0.02, 0, -8.74228e-10, 1.89699, 1.52294, -1.85725)
 
 [node name="AirVent1" parent="WallProps" instance=ExtResource("18")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.2, 12)
@@ -342,17 +342,37 @@ transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 14.5, 
 script = ExtResource("9")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="WorkstationTeleport"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.38324, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.776245, 1.38324, 0)
 shape = SubResource("BoxShape3D_wbdk5")
 
 [node name="Door" parent="WorkstationTeleport" instance=ExtResource("19")]
 transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0)
 
+[node name="JuniorAnalystTeleport" type="Area3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 1.73169, 0, 6)
+script = ExtResource("7")
+target_scene_path = "res://scenes/3d/JuniorAnalystRoom.tscn"
+interaction_text = "Enter Junior Analyst Room"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="JuniorAnalystTeleport"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.740108, 1.5, 0.524325)
+shape = SubResource("BoxShape3D_teleport")
+
+[node name="Door" parent="JuniorAnalystTeleport" instance=ExtResource("19")]
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0)
+
+[node name="Label_Junior" type="Label3D" parent="JuniorAnalystTeleport"]
+transform = Transform3D(-0.999876, 0, -0.0157422, 0, 1, 0, 0.0157422, 0, -0.999876, -0.765903, 3.5, 0.168001)
+pixel_size = 0.002
+text = "WORKSTATION 02"
+font_size = 120
+outline_size = 20
+
 [node name="TutorialWaypoint_OfficeC" parent="." instance=ExtResource("12")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 2)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.4659, 0.846397, 0.832036)
 
 [node name="TutorialTrigger_OfficeC" type="Area3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 2)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, -0.574919)
 script = ExtResource("11")
 objective_id = "office_c"
 

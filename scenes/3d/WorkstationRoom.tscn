@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://d1w2x3y405a6b"]
+[gd_scene load_steps=18 format=3 uid="uid://d1w2x3y405a6b"]
 
 [ext_resource type="PackedScene" uid="uid://b2d35yngg7u75" path="res://scenes/Player3D.tscn" id="1_player"]
 [ext_resource type="Script" uid="uid://dh3hcvpwq0ufa" path="res://scripts/3d/RoomTeleporter.gd" id="2_teleport"]
@@ -37,9 +37,22 @@ normal_enabled = true
 normal_texture = SubResource("NoiseTexture2D_floor")
 uv1_scale = Vector3(4, 4, 4)
 
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_wall"]
+noise_type = 0
+seed = 42
+frequency = 0.2
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_wall"]
+as_normal_map = true
+bump_strength = 0.3
+noise = SubResource("FastNoiseLite_wall")
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wall"]
 albedo_color = Color(0.4, 0.42, 0.45, 1)
-roughness = 0.6
+roughness = 0.8
+normal_enabled = true
+normal_texture = SubResource("NoiseTexture2D_wall")
+uv1_scale = Vector3(10, 10, 10)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_trigger"]
 size = Vector3(2, 3, 2)
@@ -113,7 +126,7 @@ shape = SubResource("BoxShape3D_trigger")
 transform = Transform3D(3.5, 0, 0, 0, 3.5, 0, 0, 0, 3.5, 1.00902, 0, 0)
 
 [node name="Player3D" parent="." instance=ExtResource("1_player")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.40392, 2)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 2)
 
 [node name="Painting" parent="." instance=ExtResource("6_mmubc")]
 transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 1.05481, 3.059, -3.95989)
