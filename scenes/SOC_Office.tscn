@@ -1,42 +1,93 @@
-[gd_scene load_steps=20 format=3 uid="uid://dfhgvlt5s46je"]
+[gd_scene load_steps=31 format=3 uid="uid://dfhgvlt5s46je"]
 
 [ext_resource type="PackedScene" uid="uid://b2d35yngg7u75" path="res://scenes/Player3D.tscn" id="1"]
-[ext_resource type="PackedScene" uid="uid://bckc0uyxlcl5a" path="res://scenes/3d/NPC_ITSupport.tscn" id="4"]
-[ext_resource type="PackedScene" uid="uid://cbtxaxbi3vfve" path="res://scenes/3d/NPC_Auditor.tscn" id="5"]
-[ext_resource type="PackedScene" uid="uid://51dxnshn20xb" path="res://scenes/3d/NPC_Helpdesk.tscn" id="6"]
-[ext_resource type="PackedScene" uid="uid://byh82hlg10odp" path="res://scenes/3d/props/graybox/Graybox_Elevator.tscn" id="6_oiq0f"]
-[ext_resource type="Script" uid="uid://dh3hcvpwq0ufa" path="res://scripts/3d/RoomTeleporter.gd" id="9"]
-[ext_resource type="Script" uid="uid://bo2wtbo786bid" path="res://scripts/3d/WorkstationTeleporter.gd" id="10"]
-[ext_resource type="PackedScene" uid="uid://d1p8yg2i867ip" path="res://scenes/3d/NPC_SeniorAnalyst.tscn" id="11"]
-[ext_resource type="PackedScene" uid="uid://b8j8y76543210" path="res://scenes/3d/NPC_JuniorAnalyst.tscn" id="13"]
-[ext_resource type="Script" uid="uid://depawy1mgva8" path="res://scripts/3d/TutorialTrigger.gd" id="32_tut"]
-[ext_resource type="PackedScene" uid="uid://dgkhv2v8v8v8w" path="res://scenes/3d/TutorialWaypoint.tscn" id="33_way"]
-[ext_resource type="PackedScene" uid="uid://n28x3hn5cby1" path="res://assets/props/glb files/Doorway Front.glb" id="34_door"]
+[ext_resource type="PackedScene" uid="uid://bckc0uyxlcl5a" path="res://scenes/3d/NPC_ITSupport.tscn" id="2"]
+[ext_resource type="PackedScene" uid="uid://cbtxaxbi3vfve" path="res://scenes/3d/NPC_Auditor.tscn" id="3"]
+[ext_resource type="PackedScene" uid="uid://51dxnshn20xb" path="res://scenes/3d/NPC_Helpdesk.tscn" id="4"]
+[ext_resource type="PackedScene" uid="uid://byh82hlg10odp" path="res://scenes/3d/props/graybox/Graybox_Elevator.tscn" id="5"]
+[ext_resource type="Script" uid="uid://dh3hcvpwq0ufa" path="res://scripts/3d/RoomTeleporter.gd" id="7"]
+[ext_resource type="PackedScene" uid="uid://u3cbxyg0evr3" path="res://scenes/3d/props/graybox/Graybox_Plant.tscn" id="8"]
+[ext_resource type="Script" uid="uid://bo2wtbo786bid" path="res://scripts/3d/WorkstationTeleporter.gd" id="9"]
+[ext_resource type="PackedScene" uid="uid://d1p8yg2i867ip" path="res://scenes/3d/NPC_SeniorAnalyst.tscn" id="10"]
+[ext_resource type="PackedScene" uid="uid://bdvy7nngneys2" path="res://assets/props/FBX/Separated/Clock.fbx" id="10_dhgqp"]
+[ext_resource type="Script" uid="uid://depawy1mgva8" path="res://scripts/3d/TutorialTrigger.gd" id="11"]
+[ext_resource type="PackedScene" uid="uid://dgkhv2v8v8v8w" path="res://scenes/3d/TutorialWaypoint.tscn" id="12"]
+[ext_resource type="PackedScene" uid="uid://ciscr6kwnpufy" path="res://assets/props/FBX/Separated/Painting_Small.fbx" id="14"]
+[ext_resource type="PackedScene" uid="uid://vokjpeqaekwc" path="res://assets/props/glb files/Message board.glb" id="17"]
+[ext_resource type="PackedScene" uid="uid://cr3bl3upt5unc" path="res://assets/props/office_pack/FBX/Separated FBX files/Sofa_1_Alt.fbx" id="17_dhgqp"]
+[ext_resource type="PackedScene" uid="uid://btnu8a43ektel" path="res://assets/props/glb files/Air Vent.glb" id="18"]
+[ext_resource type="PackedScene" uid="uid://n28x3hn5cby1" path="res://assets/props/glb files/Doorway Front.glb" id="19"]
 
 [sub_resource type="Environment" id="Environment_kx6w4"]
 background_mode = 1
-background_color = Color(0.129412, 0.14902, 0.180392, 1)
+background_color = Color(0.08, 0.09, 0.11, 1)
 ambient_light_source = 2
 ambient_light_color = Color(0.329412, 0.360784, 0.407843, 1)
-ambient_light_energy = 0.8
+ambient_light_energy = 0.2
 tonemap_mode = 2
 volumetric_fog_enabled = true
-volumetric_fog_density = 0.001
+volumetric_fog_density = 0.005
 volumetric_fog_emission_energy = 0.0
 volumetric_fog_sky_affect = 0.0
 
 [sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_3uoj8"]
 
-[sub_resource type="PlaneMesh" id="PlaneMesh_kx6w4"]
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_floor"]
+noise_type = 2
+frequency = 0.1
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_floor"]
+as_normal_map = true
+bump_strength = 2.0
+noise = SubResource("FastNoiseLite_floor")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hub_floor"]
+albedo_color = Color(0.08, 0.09, 0.12, 1)
+metallic = 0.5
+roughness = 0.2
+normal_enabled = true
+normal_texture = SubResource("NoiseTexture2D_floor")
+uv1_scale = Vector3(10, 10, 10)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_floor"]
+albedo_color = Color(0.12, 0.14, 0.18, 1)
+metallic = 0.3
+roughness = 0.4
+normal_enabled = true
+normal_texture = SubResource("NoiseTexture2D_floor")
+uv1_scale = Vector3(10, 10, 10)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_guidance"]
+albedo_color = Color(0, 0.8, 1, 1)
+emission_enabled = true
+emission = Color(0, 0.5, 0.7, 1)
+emission_energy_multiplier = 2.0
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_wall"]
+noise_type = 2
+seed = 42
+frequency = 0.2
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_wall"]
+as_normal_map = true
+bump_strength = 0.5
+noise = SubResource("FastNoiseLite_wall")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ax7jg"]
-albedo_color = Color(0.593134, 0.593134, 0.593134, 1)
+albedo_color = Color(0.65, 0.67, 0.7, 1)
+metallic = 0.05
+roughness = 0.8
+normal_enabled = true
+normal_texture = SubResource("NoiseTexture2D_wall")
+uv1_scale = Vector3(20, 20, 20)
 
-[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_kx6w4"]
-data = PackedVector3Array(1, 0, 1, -1, 0, 1, 1, 0, -1, -1, 0, 1, -1, 0, -1, 1, 0, -1)
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_trim"]
+albedo_color = Color(0.15, 0.16, 0.18, 1)
+metallic = 0.8
+roughness = 0.2
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_teleport"]
-size = Vector3(2, 4, 1.29498)
+size = Vector3(2, 4, 3.46097)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_wbdk5"]
 size = Vector3(2, 2.76648, 1.29498)
@@ -47,73 +98,262 @@ size = Vector3(2, 2.76648, 1.29498)
 environment = SubResource("Environment_kx6w4")
 camera_attributes = SubResource("CameraAttributesPractical_3uoj8")
 
-[node name="outerwalls group" type="MultiMeshInstance3D" parent="."]
+[node name="Architecture" type="Node3D" parent="."]
 
-[node name="floor" type="MeshInstance3D" parent="outerwalls group"]
-transform = Transform3D(10, 0, 0, 0, 2.858, 0, 0, 0, 7.142, -0.0286751, 0.00211859, -0.246949)
-mesh = SubResource("PlaneMesh_kx6w4")
-skeleton = NodePath("../..")
-surface_material_override/0 = SubResource("StandardMaterial3D_ax7jg")
+[node name="Floor_Hub" type="CSGBox3D" parent="Architecture"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, 0)
+use_collision = true
+size = Vector3(4, 0.1, 4)
+material = SubResource("StandardMaterial3D_hub_floor")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="outerwalls group/floor"]
+[node name="Floor_Entry" type="CSGBox3D" parent="Architecture"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, 8.5)
+use_collision = true
+size = Vector3(4, 0.1, 13)
+material = SubResource("StandardMaterial3D_floor")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="outerwalls group/floor/StaticBody3D"]
-shape = SubResource("ConcavePolygonShape3D_kx6w4")
+[node name="Floor_Analyst" type="CSGBox3D" parent="Architecture"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.5, -0.05, 0)
+use_collision = true
+size = Vector3(13, 0.1, 4)
+material = SubResource("StandardMaterial3D_floor")
+
+[node name="Guidance_Entry" type="CSGBox3D" parent="Architecture"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.01, 8.5)
+size = Vector3(0.15, 0.02, 13)
+material = SubResource("StandardMaterial3D_guidance")
+
+[node name="Guidance_Analyst" type="CSGBox3D" parent="Architecture"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.5, 0.01, 0)
+size = Vector3(13, 0.02, 0.15)
+material = SubResource("StandardMaterial3D_guidance")
+
+[node name="Ceiling" type="CSGCombiner3D" parent="Architecture"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+
+[node name="Ceiling_Hub" type="CSGBox3D" parent="Architecture/Ceiling"]
+size = Vector3(4, 0.1, 4)
+material = SubResource("StandardMaterial3D_ax7jg")
+
+[node name="Ceiling_Entry" type="CSGBox3D" parent="Architecture/Ceiling"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 8.5)
+size = Vector3(4, 0.1, 13)
+material = SubResource("StandardMaterial3D_ax7jg")
+
+[node name="Ceiling_Analyst" type="CSGBox3D" parent="Architecture/Ceiling"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.5, 0, 0)
+size = Vector3(13, 0.1, 4)
+material = SubResource("StandardMaterial3D_ax7jg")
+
+[node name="Walls" type="CSGCombiner3D" parent="Architecture"]
+use_collision = true
+
+[node name="Wall_Outer_Z" type="CSGBox3D" parent="Architecture/Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 2.5, 6.5)
+size = Vector3(0.1, 5, 17)
+material = SubResource("StandardMaterial3D_ax7jg")
+
+[node name="Wall_Outer_X" type="CSGBox3D" parent="Architecture/Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.5, 2.5, -2)
+size = Vector3(17, 5, 0.1)
+material = SubResource("StandardMaterial3D_ax7jg")
+
+[node name="Wall_Inner_Z" type="CSGBox3D" parent="Architecture/Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 2.5, 8.5)
+size = Vector3(0.1, 5, 13)
+material = SubResource("StandardMaterial3D_ax7jg")
+
+[node name="Wall_Inner_X" type="CSGBox3D" parent="Architecture/Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.5, 2.5, 2)
+size = Vector3(13, 5, 0.1)
+material = SubResource("StandardMaterial3D_ax7jg")
+
+[node name="Wall_End_Elevator" type="CSGBox3D" parent="Architecture/Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 15)
+size = Vector3(4, 5, 0.1)
+material = SubResource("StandardMaterial3D_ax7jg")
+
+[node name="Wall_End_Analyst" type="CSGBox3D" parent="Architecture/Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 2.5, 0)
+size = Vector3(0.1, 5, 4)
+material = SubResource("StandardMaterial3D_ax7jg")
+
+[node name="Trims" type="CSGCombiner3D" parent="Architecture"]
+
+[node name="Trim_Outer_Z" type="CSGBox3D" parent="Architecture/Trims"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.9, 0.1, 6.5)
+size = Vector3(0.1, 0.2, 17)
+material = SubResource("StandardMaterial3D_trim")
+
+[node name="Trim_Outer_X" type="CSGBox3D" parent="Architecture/Trims"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.5, 0.1, -1.9)
+size = Vector3(17, 0.2, 0.1)
+material = SubResource("StandardMaterial3D_trim")
+
+[node name="Trim_Inner_Z" type="CSGBox3D" parent="Architecture/Trims"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.9, 0.1, 8.5)
+size = Vector3(0.1, 0.2, 13)
+material = SubResource("StandardMaterial3D_trim")
+
+[node name="Trim_Inner_X" type="CSGBox3D" parent="Architecture/Trims"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.5, 0.1, 1.9)
+size = Vector3(13, 0.2, 0.1)
+material = SubResource("StandardMaterial3D_trim")
+
+[node name="DataRails" type="CSGCombiner3D" parent="Architecture"]
+
+[node name="Rail_Outer_Z" type="CSGBox3D" parent="Architecture/DataRails"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.95, 1.2, 6.5)
+size = Vector3(0.05, 0.1, 17)
+material = SubResource("StandardMaterial3D_trim")
+
+[node name="Rail_Outer_X" type="CSGBox3D" parent="Architecture/DataRails"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.5, 1.2, -1.95)
+size = Vector3(17, 0.1, 0.05)
+material = SubResource("StandardMaterial3D_trim")
+
+[node name="Rail_Inner_Z" type="CSGBox3D" parent="Architecture/DataRails"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.95, 1.2, 8.5)
+size = Vector3(0.05, 0.1, 13)
+material = SubResource("StandardMaterial3D_trim")
+
+[node name="Rail_Inner_X" type="CSGBox3D" parent="Architecture/DataRails"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.5, 1.2, 1.95)
+size = Vector3(13, 0.1, 0.05)
+material = SubResource("StandardMaterial3D_trim")
+
+[node name="Seams" type="CSGCombiner3D" parent="Architecture"]
+
+[node name="Seam_Z1" type="CSGBox3D" parent="Architecture/Seams"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.95, 2.5, 5)
+size = Vector3(0.12, 5, 0.05)
+material = SubResource("StandardMaterial3D_trim")
+
+[node name="Seam_Z2" type="CSGBox3D" parent="Architecture/Seams"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.95, 2.5, 10)
+size = Vector3(0.12, 5, 0.05)
+material = SubResource("StandardMaterial3D_trim")
+
+[node name="Seam_X1" type="CSGBox3D" parent="Architecture/Seams"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 2.5, -1.95)
+size = Vector3(0.05, 5, 0.12)
+material = SubResource("StandardMaterial3D_trim")
+
+[node name="Seam_X2" type="CSGBox3D" parent="Architecture/Seams"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 2.5, -1.95)
+size = Vector3(0.05, 5, 0.12)
+material = SubResource("StandardMaterial3D_trim")
 
 [node name="Room Light Source" type="Node3D" parent="."]
 
-[node name="OmniLight3D" type="OmniLight3D" parent="Room Light Source"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
-light_energy = 2.0
-omni_range = 4096.0
-omni_attenuation = 1.635
+[node name="SpotLight_Elevator" type="SpotLight3D" parent="Room Light Source"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 4.8, 14)
+light_energy = 5.0
+spot_range = 10.0
 
-[node name="NPC_JuniorAnalyst" parent="." instance=ExtResource("13")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 1.94456, 0)
+[node name="SpotLight_Entry" type="SpotLight3D" parent="Room Light Source"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 4.8, 8)
+light_energy = 5.0
+spot_range = 10.0
 
-[node name="NPC_SeniorAnalyst" parent="." instance=ExtResource("11")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 1.94456, 0)
+[node name="SpotLight_Hub" type="SpotLight3D" parent="Room Light Source"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 4.8, 0)
+light_energy = 5.0
+spot_range = 10.0
+spot_angle = 60.0
 
-[node name="NPC_ITSupport" parent="." instance=ExtResource("4")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 1.94456, 0)
+[node name="SpotLight_Analyst" type="SpotLight3D" parent="Room Light Source"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 8, 4.8, 0)
+light_energy = 5.0
+spot_range = 10.0
 
-[node name="NPC_Auditor" parent="." instance=ExtResource("5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 1.96323, 0)
+[node name="SpotLight_Workstation" type="SpotLight3D" parent="Room Light Source"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 14, 4.8, 0)
+light_energy = 5.0
+spot_range = 10.0
 
-[node name="NPC_Helpdesk" parent="." instance=ExtResource("6")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 1.94456, 0)
+[node name="NPC_SeniorAnalyst" parent="." instance=ExtResource("10")]
+transform = Transform3D(-0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, -0.707107, 1.5, 1.07408, 1.5)
+
+[node name="NPC_ITSupport" parent="." instance=ExtResource("2")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 1, 1.07408, 10)
+
+[node name="NPC_Auditor" parent="." instance=ExtResource("3")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 10, 1.07408, -1)
+
+[node name="NPC_Helpdesk" parent="." instance=ExtResource("4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 1.07408, 6)
+
+[node name="Graybox_Plant" parent="." instance=ExtResource("8")]
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 1.3663, 0, -1.63923)
+
+[node name="WallProps" type="Node3D" parent="."]
+
+[node name="MessageBoard" parent="WallProps" instance=ExtResource("17")]
+transform = Transform3D(-8.74228e-10, 0, -0.02, 0, 0.02, 0, 0.02, 0, -8.74228e-10, 1.89699, 1.52294, -1.32097)
+
+[node name="AirVent1" parent="WallProps" instance=ExtResource("18")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.2, 12)
+
+[node name="AirVent2" parent="WallProps" instance=ExtResource("18")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 12, 4.2, 0)
+
+[node name="CorporateArt1" parent="WallProps" instance=ExtResource("14")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 14.9, 2.8, 0.5)
+
+[node name="CorporateArt2" parent="WallProps" instance=ExtResource("14")]
+transform = Transform3D(0.00568977, 0, -0.999984, 0, 1, 0, 0.999984, 0, 0.00568977, 14.9, 2.8, -1)
+
+[node name="Clock" parent="WallProps" instance=ExtResource("10_dhgqp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.21648, 3.55876, -1.50205)
+
+[node name="Signage" type="Node3D" parent="."]
+
+[node name="Label_Exit" type="Label3D" parent="Signage"]
+transform = Transform3D(-0.999959, 0, 0.00911048, 0, 1, 0, -0.00911048, 0, -0.999959, 0.124618, 3.5, 14.9)
+pixel_size = 0.002
+text = "EXIT / ELEVATOR"
+font_size = 120
+outline_size = 20
+
+[node name="Label_Station" type="Label3D" parent="Signage"]
+transform = Transform3D(-0.0458511, 0, -0.998948, 0, 1, 0, 0.998948, 0, -0.0458511, 14.9, 3.5, 0)
+pixel_size = 0.002
+text = "STATION 01"
+font_size = 120
+outline_size = 20
 
 [node name="ElevatorTeleport" type="Area3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.84459, 0, 3.5)
-script = ExtResource("9")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.178782, 14.5)
+script = ExtResource("7")
 target_scene_path = "res://scenes/3d/BriefingRoom.tscn"
 interaction_text = "Use Elevator"
 is_elevator = true
 
+[node name="Graybox_Elevator" parent="ElevatorTeleport" instance=ExtResource("5")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
+
 [node name="CollisionShape3D" type="CollisionShape3D" parent="ElevatorTeleport"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -1.08299)
 shape = SubResource("BoxShape3D_teleport")
 
-[node name="Graybox_Elevator" parent="ElevatorTeleport" instance=ExtResource("6_oiq0f")]
-transform = Transform3D(0.00439821, 0, 0.99999, 0, 1, 0, -0.99999, 0, 0.00439821, -2.20933, 0, -0.858695)
-
 [node name="WorkstationTeleport" type="Area3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.845, 0, 3.5)
-script = ExtResource("10")
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 14.5, 0, 0)
+script = ExtResource("9")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="WorkstationTeleport"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.38324, -0.560121)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.38324, 0)
 shape = SubResource("BoxShape3D_wbdk5")
 
-[node name="Door" parent="WorkstationTeleport" instance=ExtResource("34_door")]
-transform = Transform3D(-1.09278e-07, 0, -2.5, 0, 2.5, 0, 2.5, 0, -1.09278e-07, 0, 0, 0)
+[node name="Door" parent="WorkstationTeleport" instance=ExtResource("19")]
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0)
 
-[node name="TutorialWaypoint_OfficeC" parent="." instance=ExtResource("33_way")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+[node name="TutorialWaypoint_OfficeC" parent="." instance=ExtResource("12")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 2)
 
 [node name="TutorialTrigger_OfficeC" type="Area3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
-script = ExtResource("32_tut")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 2)
+script = ExtResource("11")
 objective_id = "office_c"
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="TutorialTrigger_OfficeC"]
@@ -121,4 +361,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
 shape = SubResource("BoxShape3D_teleport")
 
 [node name="Player3D" parent="." instance=ExtResource("1")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.000183821, 1.0148, 2.23281)
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 1.24052, 3.38926)
+
+[node name="Sofa_1_Alt" parent="." instance=ExtResource("17_dhgqp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.37193, 7.07805e-08, -1.36144)
+
+[node name="Sofa_1_Alt2" parent="." instance=ExtResource("17_dhgqp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0655966, 7.07805e-08, -1.39967)

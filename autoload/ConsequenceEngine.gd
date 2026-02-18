@@ -45,6 +45,7 @@ func _initialize_engine():
 	# Use EventBus for decoupled communication
 	EventBus.narrative_spawn_consequence.connect(trigger_consequence)
 	EventBus.ticket_ignored.connect(_on_ticket_ignored)
+	EventBus.ticket_completed.connect(_on_ticket_completed)
 	EventBus.email_decision_processed.connect(_on_email_decision_processed)
 	EventBus.critical_host_isolated.connect(_on_critical_host_isolated)
 	EventBus.consequence_triggered.connect(_on_consequence_triggered_globally)
@@ -99,6 +100,18 @@ func _on_ticket_ignored(ticket: TicketResource):
 		update_npc_relationship(GlobalConstants.NPC_ID.IT_SUPPORT, -0.05)
 
 	EventBus.consequence_triggered.emit("ticket_ignored", {"ticket_id": ticket.ticket_id, "severity": ticket.severity})
+
+func _on_ticket_completed(ticket: TicketResource, completion_type: String, time_taken: float):
+	print("🚨 ConsequenceEngine: Ticket COMPLETED: ", ticket.ticket_id, " as ", completion_type)
+	
+	log_player_choice("ticket_completed", {
+		"ticket_id": ticket.ticket_id,
+		"completion_type": completion_type,
+		"time_taken": time_taken,
+		"severity": ticket.severity
+	})
+	
+	_evaluate_kill_chain_escalation(ticket, completion_type)
 
 func _on_email_decision_processed(email: EmailResource, decision: String, inspection_state: Dictionary):
 	log_email_decision(email.email_id, decision, email)
@@ -305,6 +318,17 @@ func log_email_decision(email_id: String, decision: String, email: EmailResource
 		"related_ticket": email.related_ticket
 	}
 	choice_log.append(choice_data)
+
+func get_choice_history() -> Array:
+	return choice_log
+
+func get_average_npc_approval() -> float:
+	if npc_relationships.is_empty():
+		return 0.0
+	var total = 0.0
+	for npc_id in npc_relationships:
+		total += npc_relationships[npc_id]
+	return total / npc_relationships.size()
 
 func load_state(relationships: Dictionary, choices: Array):
 	if relationships: npc_relationships = relationships

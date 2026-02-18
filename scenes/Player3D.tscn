@@ -44,7 +44,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 shape = SubResource("CapsuleShape3D_jib20")
 
 [node name="NPC_HOODIE" parent="." instance=ExtResource("8_nv2py")]
-transform = Transform3D(-4, 0, -3.49691e-07, 0, 4, 0, 3.49691e-07, 0, -4, 0, 0, 0)
+transform = Transform3D(-2.25, 0, -1.96701e-07, 0, 2.25, 0, 1.96701e-07, 0, -2.25, 0, 0, 0)
 script = ExtResource("2_animator")
 is_player = true
 

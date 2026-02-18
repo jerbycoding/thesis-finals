@@ -94,7 +94,7 @@ const PHYSICS_LAYERS = {
 
 # --- Player Physics & Animation ---
 const PLAYER = {
-	"EYE_HEIGHT":1.65,
+	"EYE_HEIGHT":1.15,
 	"SEATED_HEIGHT": 1.35,
 	"CAMERA_OFFSET_Z": -0.23,
 	"BOB_FREQ": 2.0,

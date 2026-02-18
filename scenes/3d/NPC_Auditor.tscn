@@ -17,7 +17,7 @@ npc_id = "auditor"
 npc_name = "Compliance Auditor"
 
 [node name="NPC_COAT" parent="." instance=ExtResource("2_3upte")]
-transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 0, 0)
+transform = Transform3D(2.25, 0, 0, 0, 2.25, 0, 0, 0, 2.25, 0, 0, 0)
 script = ExtResource("3_animator")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
