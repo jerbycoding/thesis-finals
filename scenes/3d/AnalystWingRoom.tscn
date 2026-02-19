@@ -1,0 +1,226 @@
+[gd_scene load_steps=21 format=3 uid="uid://d2e3f4g5h6i7j"]
+
+[ext_resource type="PackedScene" uid="uid://b2d35yngg7u75" path="res://scenes/Player3D.tscn" id="1"]
+[ext_resource type="Script" uid="uid://dh3hcvpwq0ufa" path="res://scripts/3d/RoomTeleporter.gd" id="2"]
+[ext_resource type="PackedScene" uid="uid://bckc0uyxlcl5a" path="res://scenes/3d/NPC_ITSupport.tscn" id="3"]
+[ext_resource type="PackedScene" uid="uid://cbtxaxbi3vfve" path="res://scenes/3d/NPC_Auditor.tscn" id="4"]
+[ext_resource type="PackedScene" uid="uid://51dxnshn20xb" path="res://scenes/3d/NPC_Helpdesk.tscn" id="5"]
+[ext_resource type="PackedScene" uid="uid://dwbve6j0xiv10" path="res://assets/props/graybox/L-Sofa.glb" id="6_2aqga"]
+[ext_resource type="PackedScene" uid="uid://n28x3hn5cby1" path="res://assets/props/glb files/Doorway Front.glb" id="8"]
+[ext_resource type="PackedScene" uid="uid://cr3bl3upt5unc" path="res://assets/props/office_pack/FBX/Separated FBX files/Sofa_1_Alt.fbx" id="9"]
+[ext_resource type="PackedScene" uid="uid://u3cbxyg0evr3" path="res://scenes/3d/props/graybox/Graybox_Plant.tscn" id="10"]
+[ext_resource type="PackedScene" uid="uid://dm7k8map0o1n2" path="res://scenes/3d/NPC_VaultTechnician.tscn" id="11"]
+[ext_resource type="PackedScene" uid="uid://btnu8a43ektel" path="res://assets/props/glb files/Air Vent.glb" id="13"]
+[ext_resource type="PackedScene" uid="uid://djpxbstsc0q6s" path="res://assets/props/glb files/server rack.glb" id="14"]
+
+[sub_resource type="Environment" id="Environment_bullpen"]
+background_mode = 1
+background_color = Color(0.08, 0.09, 0.11, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.35, 0.38, 0.45, 1)
+ambient_light_energy = 0.5
+tonemap_mode = 2
+ssao_enabled = true
+glow_enabled = true
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_floor"]
+noise_type = 2
+frequency = 0.1
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_floor"]
+as_normal_map = true
+bump_strength = 2.0
+noise = SubResource("FastNoiseLite_floor")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_floor"]
+albedo_color = Color(0.12, 0.14, 0.18, 1)
+metallic = 0.3
+roughness = 0.4
+normal_enabled = true
+normal_texture = SubResource("NoiseTexture2D_floor")
+uv1_scale = Vector3(8, 8, 8)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_wall"]
+noise_type = 0
+seed = 42
+frequency = 0.2
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_wall"]
+as_normal_map = true
+bump_strength = 0.3
+noise = SubResource("FastNoiseLite_wall")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wall"]
+albedo_color = Color(0.65, 0.67, 0.7, 1)
+metallic = 0.05
+roughness = 0.8
+normal_enabled = true
+normal_texture = SubResource("NoiseTexture2D_wall")
+uv1_scale = Vector3(12, 12, 12)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_trigger"]
+size = Vector3(2, 4, 2)
+
+[node name="AnalystWingRoom" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_bullpen")
+
+[node name="Architecture" type="Node3D" parent="."]
+
+[node name="Floor" type="CSGBox3D" parent="Architecture"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, 0)
+use_collision = true
+size = Vector3(12, 0.1, 10)
+material = SubResource("StandardMaterial3D_floor")
+
+[node name="Ceiling" type="CSGBox3D" parent="Architecture"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.95, 0)
+use_collision = true
+size = Vector3(12, 0.1, 10)
+material = SubResource("StandardMaterial3D_wall")
+
+[node name="Wall_Front" type="CSGBox3D" parent="Architecture"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, -5)
+use_collision = true
+size = Vector3(12.1, 5, 0.1)
+material = SubResource("StandardMaterial3D_wall")
+
+[node name="Wall_Back" type="CSGBox3D" parent="Architecture"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 5)
+use_collision = true
+size = Vector3(12.1, 5, 0.1)
+material = SubResource("StandardMaterial3D_wall")
+
+[node name="Wall_Left" type="CSGBox3D" parent="Architecture"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -6, 2.5, 0)
+use_collision = true
+size = Vector3(10.1, 5, 0.1)
+material = SubResource("StandardMaterial3D_wall")
+
+[node name="Wall_Right" type="CSGBox3D" parent="Architecture"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 6, 2.5, 0)
+use_collision = true
+size = Vector3(10.1, 5, 0.1)
+material = SubResource("StandardMaterial3D_wall")
+
+[node name="Props" type="Node3D" parent="."]
+
+[node name="Desk1" parent="Props"]
+_import_path = NodePath("")
+unique_name_in_owner = false
+process_mode = 0
+process_priority = 0
+process_physics_priority = 0
+process_thread_group = 0
+physics_interpolation_mode = 0
+auto_translate_mode = 0
+editor_description = ""
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, -2)
+script = null
+
+[node name="Desk2" parent="Props"]
+_import_path = NodePath("")
+unique_name_in_owner = false
+process_mode = 0
+process_priority = 0
+process_physics_priority = 0
+process_thread_group = 0
+physics_interpolation_mode = 0
+auto_translate_mode = 0
+editor_description = ""
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 2.5, 0, 1)
+script = null
+
+[node name="Desk3" parent="Props"]
+_import_path = NodePath("")
+unique_name_in_owner = false
+process_mode = 0
+process_priority = 0
+process_physics_priority = 0
+process_thread_group = 0
+physics_interpolation_mode = 0
+auto_translate_mode = 0
+editor_description = ""
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -2.5, 0, 1)
+script = null
+
+[node name="ServerRow" type="Node3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.5, 0, 0)
+
+[node name="Server1" parent="Props/ServerRow" instance=ExtResource("14")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="Server2" parent="Props/ServerRow" instance=ExtResource("14")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+
+[node name="Server3" parent="Props/ServerRow" instance=ExtResource("14")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
+
+[node name="Server4" parent="Props/ServerRow" instance=ExtResource("14")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3)
+
+[node name="Sofa" parent="Props" instance=ExtResource("9")]
+transform = Transform3D(-0.894207, 0, -1.78896, 0, 2, 0, 1.78896, 0, -0.894207, 4.5, 0, 3.5)
+
+[node name="Plant" parent="Props" instance=ExtResource("10")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 5.2, 0, -4.2)
+
+[node name="Clock" parent="Props" instance=ExtResource("11")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.8, 3.5, 0)
+
+[node name="AirVent" parent="Props" instance=ExtResource("13")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.8, 0)
+
+[node name="Root Scene" parent="Props" instance=ExtResource("6_2aqga")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.207722, 0.0176114, -4.44051)
+
+[node name="NPCs" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1942, 0)
+
+[node name="NPC_ITSupport" parent="NPCs" instance=ExtResource("3")]
+transform = Transform3D(1.03107, 0, -0.613911, 0, 1.2, 0, 0.613911, 0, 1.03107, 3.12599, -0.0666337, -2.67286)
+
+[node name="NPC_Helpdesk" parent="NPCs" instance=ExtResource("5")]
+transform = Transform3D(-5.24537e-08, 0, -1.2, 0, 1.2, 0, 1.2, 0, -5.24537e-08, 2.99924, 0.126081, 0.997708)
+
+[node name="NPC_Auditor" parent="NPCs" instance=ExtResource("4")]
+transform = Transform3D(-5.24537e-08, 0, 1.2, 0, 1.2, 0, -1.2, 0, -5.24537e-08, -3.00609, 0.0306815, 0.993222)
+
+[node name="SOC_Exit" type="Area3D" parent="."]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 4.8)
+script = ExtResource("2")
+target_scene_path = "res://scenes/SOC_Office.tscn"
+interaction_text = "Exit to SOC"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SOC_Exit"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+shape = SubResource("BoxShape3D_trigger")
+
+[node name="Door" parent="SOC_Exit" instance=ExtResource("8")]
+transform = Transform3D(3.5, 0, 0, 0, 3.5, 0, 0, 0, 3.5, 0, 0, 0)
+
+[node name="Player3D" parent="." instance=ExtResource("1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.23092, 3.5)
+
+[node name="Lighting" type="Node3D" parent="."]
+
+[node name="Spot1" type="SpotLight3D" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -3, 4.5, -2.5)
+light_energy = 5.0
+spot_range = 10.0
+
+[node name="Spot2" type="SpotLight3D" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 3, 4.5, -2.5)
+light_energy = 5.0
+spot_range = 10.0
+
+[node name="Spot3" type="SpotLight3D" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -3, 4.5, 2.5)
+light_energy = 5.0
+spot_range = 10.0
+
+[node name="Spot4" type="SpotLight3D" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 3, 4.5, 2.5)
+light_energy = 5.0
+spot_range = 10.0
