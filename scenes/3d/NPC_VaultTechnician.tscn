@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://dm7k8map0o1n2"]
 
 [ext_resource type="Script" uid="uid://dnv32n1oolnhr" path="res://scripts/3d/NPC.gd" id="1_npc"]
-[ext_resource type="Script" uid="uid://clra78uil2mle" path="res://scripts/3d/PlayerAnimator.gd" id="2_animator"]
+[ext_resource type="Script" uid="uid://d1uxcww1mbc73" path="res://scripts/3d/MixamoAnimator.gd" id="2_animator"]
 [ext_resource type="PackedScene" uid="uid://o4piepg3a5q5" path="res://assets/npc/Hoodie Character.glb" id="3_hoodie"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_npc"]

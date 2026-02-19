@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://d2e3f4g5h6i7j"]
+[gd_scene load_steps=20 format=3 uid="uid://d2e3f4g5h6i7j"]
 
 [ext_resource type="PackedScene" uid="uid://b2d35yngg7u75" path="res://scenes/Player3D.tscn" id="1"]
 [ext_resource type="Script" uid="uid://dh3hcvpwq0ufa" path="res://scripts/3d/RoomTeleporter.gd" id="2"]
@@ -7,56 +7,45 @@
 [ext_resource type="PackedScene" uid="uid://51dxnshn20xb" path="res://scenes/3d/NPC_Helpdesk.tscn" id="5"]
 [ext_resource type="PackedScene" uid="uid://dwbve6j0xiv10" path="res://assets/props/graybox/L-Sofa.glb" id="6_2aqga"]
 [ext_resource type="PackedScene" uid="uid://n28x3hn5cby1" path="res://assets/props/glb files/Doorway Front.glb" id="8"]
-[ext_resource type="PackedScene" uid="uid://cr3bl3upt5unc" path="res://assets/props/office_pack/FBX/Separated FBX files/Sofa_1_Alt.fbx" id="9"]
 [ext_resource type="PackedScene" uid="uid://u3cbxyg0evr3" path="res://scenes/3d/props/graybox/Graybox_Plant.tscn" id="10"]
-[ext_resource type="PackedScene" uid="uid://dm7k8map0o1n2" path="res://scenes/3d/NPC_VaultTechnician.tscn" id="11"]
-[ext_resource type="PackedScene" uid="uid://btnu8a43ektel" path="res://assets/props/glb files/Air Vent.glb" id="13"]
+[ext_resource type="PackedScene" uid="uid://bdvy7nngneys2" path="res://assets/props/FBX/Separated/Clock.fbx" id="11"]
 [ext_resource type="PackedScene" uid="uid://djpxbstsc0q6s" path="res://assets/props/glb files/server rack.glb" id="14"]
+[ext_resource type="PackedScene" uid="uid://byfr15ei8bwp6" path="res://assets/props/glb files/Boss Table.glb" id="15"]
+[ext_resource type="Script" uid="uid://cpgbiq11dtsg8" path="res://scripts/3d/ScrollingMaterial.gd" id="16"]
+[ext_resource type="Script" uid="uid://dy166yjkmbgmk" path="res://scripts/3d/WarWall.gd" id="17"]
 
-[sub_resource type="Environment" id="Environment_bullpen"]
+[sub_resource type="Environment" id="Environment_warroom"]
 background_mode = 1
-background_color = Color(0.08, 0.09, 0.11, 1)
+background_color = Color(0.04, 0.04, 0.06, 1)
 ambient_light_source = 2
-ambient_light_color = Color(0.35, 0.38, 0.45, 1)
-ambient_light_energy = 0.5
+ambient_light_color = Color(0.2, 0.25, 0.35, 1)
+ambient_light_energy = 0.4
 tonemap_mode = 2
 ssao_enabled = true
 glow_enabled = true
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_floor"]
-noise_type = 2
-frequency = 0.1
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_floor"]
-as_normal_map = true
-bump_strength = 2.0
-noise = SubResource("FastNoiseLite_floor")
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_floor"]
-albedo_color = Color(0.12, 0.14, 0.18, 1)
-metallic = 0.3
-roughness = 0.4
-normal_enabled = true
-normal_texture = SubResource("NoiseTexture2D_floor")
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_floor_dark"]
+albedo_color = Color(0.1, 0.11, 0.13, 1)
+metallic = 0.8
+roughness = 0.2
 uv1_scale = Vector3(8, 8, 8)
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_wall"]
-noise_type = 0
-seed = 42
-frequency = 0.2
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_wall"]
-as_normal_map = true
-bump_strength = 0.3
-noise = SubResource("FastNoiseLite_wall")
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wall"]
-albedo_color = Color(0.65, 0.67, 0.7, 1)
-metallic = 0.05
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wall_meeting"]
+albedo_color = Color(0.4, 0.42, 0.45, 1)
+metallic = 0.1
 roughness = 0.8
-normal_enabled = true
-normal_texture = SubResource("NoiseTexture2D_wall")
-uv1_scale = Vector3(12, 12, 12)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_warwall"]
+albedo_color = Color(0, 0, 0, 1)
+emission_enabled = true
+emission = Color(0, 0.2, 0.4, 1)
+emission_energy_multiplier = 0.5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cyan_vein"]
+albedo_color = Color(0, 1, 1, 1)
+emission_enabled = true
+emission = Color(0, 0.6, 1, 1)
+emission_energy_multiplier = 4.0
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_trigger"]
 size = Vector3(2, 4, 2)
@@ -64,128 +53,105 @@ size = Vector3(2, 4, 2)
 [node name="AnalystWingRoom" type="Node3D"]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_bullpen")
+environment = SubResource("Environment_warroom")
 
-[node name="Architecture" type="Node3D" parent="."]
+[node name="Architecture" type="CSGCombiner3D" parent="."]
+use_collision = true
 
 [node name="Floor" type="CSGBox3D" parent="Architecture"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, 0)
-use_collision = true
 size = Vector3(12, 0.1, 10)
-material = SubResource("StandardMaterial3D_floor")
+material = SubResource("StandardMaterial3D_floor_dark")
+
+[node name="Vein_Cut" type="CSGBox3D" parent="Architecture"]
+operation = 2
+size = Vector3(0.4, 0.2, 10.1)
 
 [node name="Ceiling" type="CSGBox3D" parent="Architecture"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.95, 0)
-use_collision = true
 size = Vector3(12, 0.1, 10)
-material = SubResource("StandardMaterial3D_wall")
+material = SubResource("StandardMaterial3D_wall_meeting")
 
-[node name="Wall_Front" type="CSGBox3D" parent="Architecture"]
+[node name="Wall_North" type="CSGBox3D" parent="Architecture"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, -5)
-use_collision = true
 size = Vector3(12.1, 5, 0.1)
-material = SubResource("StandardMaterial3D_wall")
+material = SubResource("StandardMaterial3D_wall_meeting")
 
-[node name="Wall_Back" type="CSGBox3D" parent="Architecture"]
+[node name="WarWall_Screen" type="CSGBox3D" parent="Architecture/Wall_North"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0.06)
+size = Vector3(8, 3, 0.05)
+material = SubResource("StandardMaterial3D_warwall")
+
+[node name="Wall_South" type="CSGBox3D" parent="Architecture"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 5)
-use_collision = true
 size = Vector3(12.1, 5, 0.1)
-material = SubResource("StandardMaterial3D_wall")
+material = SubResource("StandardMaterial3D_wall_meeting")
 
 [node name="Wall_Left" type="CSGBox3D" parent="Architecture"]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -6, 2.5, 0)
-use_collision = true
 size = Vector3(10.1, 5, 0.1)
-material = SubResource("StandardMaterial3D_wall")
+material = SubResource("StandardMaterial3D_wall_meeting")
 
 [node name="Wall_Right" type="CSGBox3D" parent="Architecture"]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 6, 2.5, 0)
-use_collision = true
 size = Vector3(10.1, 5, 0.1)
-material = SubResource("StandardMaterial3D_wall")
+material = SubResource("StandardMaterial3D_wall_meeting")
+
+[node name="DataVein" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.04, 0)
+size = Vector3(0.2, 0.02, 10)
+material = SubResource("StandardMaterial3D_cyan_vein")
+
+[node name="VeinPhaser" type="Node3D" parent="DataVein" node_paths=PackedStringArray("csg_instance")]
+script = ExtResource("16")
+csg_instance = NodePath("..")
 
 [node name="Props" type="Node3D" parent="."]
 
-[node name="Desk1" parent="Props"]
-_import_path = NodePath("")
-unique_name_in_owner = false
-process_mode = 0
-process_priority = 0
-process_physics_priority = 0
-process_thread_group = 0
-physics_interpolation_mode = 0
-auto_translate_mode = 0
-editor_description = ""
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, -2)
-script = null
+[node name="MeetingTable" type="Node3D" parent="Props"]
 
-[node name="Desk2" parent="Props"]
-_import_path = NodePath("")
-unique_name_in_owner = false
-process_mode = 0
-process_priority = 0
-process_physics_priority = 0
-process_thread_group = 0
-physics_interpolation_mode = 0
-auto_translate_mode = 0
-editor_description = ""
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 2.5, 0, 1)
-script = null
+[node name="TablePart1" parent="Props/MeetingTable" instance=ExtResource("15")]
+transform = Transform3D(1.5, 0, 0, 0, 1.2, 0, 0, 0, 1.5, 1.00077, -0.00279486, -0.999264)
 
-[node name="Desk3" parent="Props"]
-_import_path = NodePath("")
-unique_name_in_owner = false
-process_mode = 0
-process_priority = 0
-process_physics_priority = 0
-process_thread_group = 0
-physics_interpolation_mode = 0
-auto_translate_mode = 0
-editor_description = ""
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -2.5, 0, 1)
-script = null
+[node name="TablePart2" parent="Props/MeetingTable" instance=ExtResource("15")]
+transform = Transform3D(1.5, 0, 0, 0, 1.2, 0, 0, 0, 1.5, -1, 0, -1)
 
-[node name="ServerRow" type="Node3D" parent="Props"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.5, 0, 0)
+[node name="TablePart3" parent="Props/MeetingTable" instance=ExtResource("15")]
+transform = Transform3D(-1.5, 0, -1.31134e-07, 0, 1.2, 0, 1.31134e-07, 0, -1.5, 1, 0, 0.268033)
 
-[node name="Server1" parent="Props/ServerRow" instance=ExtResource("14")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+[node name="TablePart4" parent="Props/MeetingTable" instance=ExtResource("15")]
+transform = Transform3D(-1.5, 0, -1.31134e-07, 0, 1.2, 0, 1.31134e-07, 0, -1.5, -1, 0, 0.268033)
 
-[node name="Server2" parent="Props/ServerRow" instance=ExtResource("14")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+[node name="WarWall_Label" type="Label3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, -4.9)
+text = "INCIDENT TRIAGE: ACTIVE
+THREAT LEVEL: ELEVATED"
+font_size = 64
+script = ExtResource("17")
 
-[node name="Server3" parent="Props/ServerRow" instance=ExtResource("14")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
-
-[node name="Server4" parent="Props/ServerRow" instance=ExtResource("14")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3)
-
-[node name="Sofa" parent="Props" instance=ExtResource("9")]
-transform = Transform3D(-0.894207, 0, -1.78896, 0, 2, 0, 1.78896, 0, -0.894207, 4.5, 0, 3.5)
+[node name="ServerRack_Background" parent="Props" instance=ExtResource("14")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 5.2, 0, -4.2)
 
 [node name="Plant" parent="Props" instance=ExtResource("10")]
-transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 5.2, 0, -4.2)
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 5.2, 0, 4.2)
 
 [node name="Clock" parent="Props" instance=ExtResource("11")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.8, 3.5, 0)
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -5.9, 3.5, 0)
 
-[node name="AirVent" parent="Props" instance=ExtResource("13")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.8, 0)
-
-[node name="Root Scene" parent="Props" instance=ExtResource("6_2aqga")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.207722, 0.0176114, -4.44051)
+[node name="L-Sofa" parent="Props" instance=ExtResource("6_2aqga")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 4.5, 0, 0)
 
 [node name="NPCs" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1942, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.788625, 0)
 
 [node name="NPC_ITSupport" parent="NPCs" instance=ExtResource("3")]
-transform = Transform3D(1.03107, 0, -0.613911, 0, 1.2, 0, 0.613911, 0, 1.03107, 3.12599, -0.0666337, -2.67286)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.140887, 0.330526, -2.5)
 
 [node name="NPC_Helpdesk" parent="NPCs" instance=ExtResource("5")]
-transform = Transform3D(-5.24537e-08, 0, -1.2, 0, 1.2, 0, 1.2, 0, -5.24537e-08, 2.99924, 0.126081, 0.997708)
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -3.08052, 0.292264, 0)
 
 [node name="NPC_Auditor" parent="NPCs" instance=ExtResource("4")]
-transform = Transform3D(-5.24537e-08, 0, 1.2, 0, 1.2, 0, -1.2, 0, -5.24537e-08, -3.00609, 0.0306815, 0.993222)
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 2.8786, 0.121648, 0)
 
 [node name="SOC_Exit" type="Area3D" parent="."]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 4.8)
@@ -201,26 +167,19 @@ shape = SubResource("BoxShape3D_trigger")
 transform = Transform3D(3.5, 0, 0, 0, 3.5, 0, 0, 0, 3.5, 0, 0, 0)
 
 [node name="Player3D" parent="." instance=ExtResource("1")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.23092, 3.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 3.5)
 
 [node name="Lighting" type="Node3D" parent="."]
 
-[node name="Spot1" type="SpotLight3D" parent="Lighting"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -3, 4.5, -2.5)
-light_energy = 5.0
-spot_range = 10.0
+[node name="TableSpot" type="SpotLight3D" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 4, 0)
+light_color = Color(0.8, 0.9, 1, 1)
+light_energy = 8.0
+spot_range = 8.0
+spot_angle = 50.0
 
-[node name="Spot2" type="SpotLight3D" parent="Lighting"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 3, 4.5, -2.5)
-light_energy = 5.0
-spot_range = 10.0
-
-[node name="Spot3" type="SpotLight3D" parent="Lighting"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -3, 4.5, 2.5)
-light_energy = 5.0
-spot_range = 10.0
-
-[node name="Spot4" type="SpotLight3D" parent="Lighting"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 3, 4.5, 2.5)
-light_energy = 5.0
-spot_range = 10.0
+[node name="Omni_Fill" type="OmniLight3D" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 3)
+light_color = Color(0.2, 0.3, 0.5, 1)
+light_energy = 0.5
+omni_range = 10.0

@@ -187,7 +187,17 @@ func _process(delta):
 	_handle_headbob(delta)
 	_handle_footsteps(delta)
 	_handle_tablet_input()
+	_handle_flashlight_input()
 	_handle_interaction_logic()
+
+func _handle_flashlight_input():
+	if Input.is_action_just_pressed("flashlight"):
+		var is_vault = get_tree().current_scene.name == "ServerVault"
+		if is_vault and has_node("%Flashlight"):
+			var fl = get_node("%Flashlight")
+			fl.visible = !fl.visible
+			if AudioManager:
+				AudioManager.play_ui_click()
 
 func _handle_tablet_input():
 	if Input.is_action_just_pressed("ui_focus_next"): 

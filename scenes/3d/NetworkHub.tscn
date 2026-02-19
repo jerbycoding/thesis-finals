@@ -1,42 +1,72 @@
-[gd_scene load_steps=15 format=3 uid="uid://bot2u23kyxdxc"]
+[gd_scene load_steps=19 format=3 uid="uid://bot2u23kyxdxc"]
 
 [ext_resource type="PackedScene" uid="uid://b2d35yngg7u75" path="res://scenes/Player3D.tscn" id="1_player"]
 [ext_resource type="Script" uid="uid://dh3hcvpwq0ufa" path="res://scripts/3d/RoomTeleporter.gd" id="2_teleport"]
 [ext_resource type="PackedScene" uid="uid://kix0ll2kuom7" path="res://scenes/3d/props/graybox/Prop_AuditRouter.tscn" id="3_router"]
-[ext_resource type="PackedScene" uid="uid://byh82hlg10odp" path="res://scenes/3d/props/graybox/Graybox_Elevator.tscn" id="4_elevator"]
 [ext_resource type="PackedScene" uid="uid://cbr4jn67g1n0l" path="res://scenes/3d/props/graybox/Graybox_HVAC.tscn" id="5_hvac"]
 [ext_resource type="PackedScene" path="res://scenes/3d/props/graybox/Graybox_UPS.tscn" id="6_ups"]
 [ext_resource type="PackedScene" uid="uid://bcxiimotr1s2a" path="res://scenes/3d/props/graybox/Graybox_CeilingLight.tscn" id="7_light"]
-[ext_resource type="PackedScene" uid="uid://q38i1bbfyp7y" path="res://scenes/3d/props/graybox/Graybox_Window.tscn" id="8_window"]
 [ext_resource type="PackedScene" uid="uid://c8n7m6l5k4j32" path="res://scenes/3d/NPC_NetworkSpecialist.tscn" id="9_npc"]
+[ext_resource type="PackedScene" uid="uid://byh82hlg10odp" path="res://scenes/3d/props/graybox/Graybox_Elevator.tscn" id="10_lvnf6"]
+[ext_resource type="Script" uid="uid://cpgbiq11dtsg8" path="res://scripts/3d/ScrollingMaterial.gd" id="10_scroll"]
 
 [sub_resource type="Environment" id="Environment_hub"]
 background_mode = 1
-background_color = Color(0.01, 0.01, 0.02, 1)
+background_color = Color(0.005, 0.005, 0.01, 1)
 ambient_light_source = 2
-ambient_light_color = Color(0.1, 0.1, 0.2, 1)
+ambient_light_color = Color(0.15, 0.1, 0.25, 1)
+ambient_light_energy = 0.5
 tonemap_mode = 2
 ssao_enabled = true
 glow_enabled = true
-glow_intensity = 1.2
+glow_intensity = 1.5
+glow_strength = 1.1
+glow_bloom = 0.2
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.01
+volumetric_fog_albedo = Color(0.2, 0.1, 0.4, 1)
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_hub"]
 geometry_parsed_geometry_type = 1
 agent_height = 1.8
 agent_radius = 0.4
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_floor"]
-albedo_color = Color(0.1, 0.1, 0.12, 1)
-metallic = 0.2
-roughness = 0.5
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_floor"]
+noise_type = 2
+frequency = 0.2
+cellular_distance_function = 1
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_floor"]
+as_normal_map = true
+noise = SubResource("FastNoiseLite_floor")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_floor_nexus"]
+albedo_color = Color(0.08, 0.08, 0.1, 1)
+metallic = 0.9
+roughness = 0.2
+normal_enabled = true
+normal_texture = SubResource("NoiseTexture2D_floor")
+uv1_scale = Vector3(10, 10, 10)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wall"]
-albedo_color = Color(0.15, 0.15, 0.18, 1)
-metallic = 0.1
-roughness = 0.8
+albedo_color = Color(0.12, 0.12, 0.15, 1)
+metallic = 0.3
+roughness = 0.7
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_core"]
+albedo_color = Color(0, 0.8, 1, 1)
+emission_enabled = true
+emission = Color(0, 0.5, 1, 1)
+emission_energy_multiplier = 5.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vein"]
+albedo_color = Color(0.5, 0, 1, 1)
+emission_enabled = true
+emission = Color(0.4, 0, 0.8, 1)
+emission_energy_multiplier = 4.0
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_trigger"]
-size = Vector3(4, 4, 4)
+size = Vector3(3.36548, 4, 3.05859)
 
 [node name="NetworkHub" type="Node3D"]
 
@@ -46,43 +76,78 @@ environment = SubResource("Environment_hub")
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
 navigation_mesh = SubResource("NavigationMesh_hub")
 
-[node name="Architecture" type="Node3D" parent="NavigationRegion3D"]
+[node name="Architecture" type="CSGCombiner3D" parent="NavigationRegion3D"]
+use_collision = true
 
 [node name="Floor" type="CSGBox3D" parent="NavigationRegion3D/Architecture"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
-use_collision = true
 size = Vector3(16, 0.2, 16)
-material = SubResource("StandardMaterial3D_floor")
+material = SubResource("StandardMaterial3D_floor_nexus")
+
+[node name="Core_Cut" type="CSGCylinder3D" parent="NavigationRegion3D/Architecture"]
+operation = 2
+radius = 1.5
+height = 0.25
+
+[node name="Vein_Cut_1" type="CSGBox3D" parent="NavigationRegion3D/Architecture"]
+transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, -2, 0, -1.2)
+operation = 2
+size = Vector3(0.3, 0.25, 4)
+
+[node name="Vein_Cut_2" type="CSGBox3D" parent="NavigationRegion3D/Architecture"]
+transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, 2, 0, -1.2)
+operation = 2
+size = Vector3(0.3, 0.25, 4)
+
+[node name="Vein_Cut_3" type="CSGBox3D" parent="NavigationRegion3D/Architecture"]
+transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, 2.2, 0, 1.1)
+operation = 2
+size = Vector3(0.3, 0.25, 4)
+
+[node name="Vein_Cut_4" type="CSGBox3D" parent="NavigationRegion3D/Architecture"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.5)
+operation = 2
+size = Vector3(0.3, 0.25, 4)
+
+[node name="Vein_Cut_5" type="CSGBox3D" parent="NavigationRegion3D/Architecture"]
+transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, -2.2, 0, 1.1)
+operation = 2
+size = Vector3(0.3, 0.25, 4)
+
+[node name="Vein_Cut_6" type="CSGBox3D" parent="NavigationRegion3D/Architecture"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.5)
+operation = 2
+size = Vector3(0.3, 0.25, 4)
 
 [node name="Ceiling" type="CSGBox3D" parent="NavigationRegion3D/Architecture"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.1, 0)
-use_collision = true
 size = Vector3(16, 0.2, 16)
 material = SubResource("StandardMaterial3D_wall")
 
 [node name="NorthWall" type="CSGBox3D" parent="NavigationRegion3D/Architecture"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -8.1)
-use_collision = true
 size = Vector3(16, 4, 0.2)
 material = SubResource("StandardMaterial3D_wall")
 
 [node name="SouthWall" type="CSGBox3D" parent="NavigationRegion3D/Architecture"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 8.1)
-use_collision = true
 size = Vector3(16, 4, 0.2)
 material = SubResource("StandardMaterial3D_wall")
 
 [node name="EastWall" type="CSGBox3D" parent="NavigationRegion3D/Architecture"]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 8.1, 2, 0)
-use_collision = true
 size = Vector3(16, 4, 0.2)
 material = SubResource("StandardMaterial3D_wall")
 
 [node name="WestWall" type="CSGBox3D" parent="NavigationRegion3D/Architecture"]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -8.1, 2, 0)
-use_collision = true
 size = Vector3(16, 4, 0.2)
 material = SubResource("StandardMaterial3D_wall")
+
+[node name="ElevatorCutout" type="CSGBox3D" parent="NavigationRegion3D/Architecture"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.137, 2, 8.1)
+operation = 2
+size = Vector3(2.5, 4, 1)
 
 [node name="Routers" type="Node3D" parent="NavigationRegion3D"]
 
@@ -121,15 +186,71 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.5, 0, -6.5)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6.5)
 
 [node name="NPC_NetworkSpecialist" parent="NavigationRegion3D" instance=ExtResource("9_npc")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.0512, 0, -2.32807)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.27522, -0.336015, -2.32807)
+
+[node name="Nexus_Core" type="Node3D" parent="."]
+
+[node name="Core_Glow" type="CSGCylinder3D" parent="Nexus_Core"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.08, 0)
+radius = 1.4
+height = 0.05
+material = SubResource("StandardMaterial3D_core")
+
+[node name="Vein_1" type="CSGBox3D" parent="Nexus_Core"]
+transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, -2, -0.08, -1.2)
+size = Vector3(0.15, 0.02, 4)
+material = SubResource("StandardMaterial3D_vein")
+
+[node name="Scroll_1" type="Node3D" parent="Nexus_Core/Vein_1" node_paths=PackedStringArray("csg_instance")]
+script = ExtResource("10_scroll")
+csg_instance = NodePath("..")
+
+[node name="Vein_2" type="CSGBox3D" parent="Nexus_Core"]
+transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, 2, -0.08, -1.2)
+size = Vector3(0.15, 0.02, 4)
+material = SubResource("StandardMaterial3D_vein")
+
+[node name="Scroll_2" type="Node3D" parent="Nexus_Core/Vein_2" node_paths=PackedStringArray("csg_instance")]
+script = ExtResource("10_scroll")
+csg_instance = NodePath("..")
+
+[node name="Vein_3" type="CSGBox3D" parent="Nexus_Core"]
+transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, 2.2, -0.08, 1.1)
+size = Vector3(0.15, 0.02, 4)
+material = SubResource("StandardMaterial3D_vein")
+
+[node name="Scroll_3" type="Node3D" parent="Nexus_Core/Vein_3" node_paths=PackedStringArray("csg_instance")]
+script = ExtResource("10_scroll")
+csg_instance = NodePath("..")
+
+[node name="Vein_4" type="CSGBox3D" parent="Nexus_Core"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.08, 2.5)
+size = Vector3(0.15, 0.02, 4)
+material = SubResource("StandardMaterial3D_vein")
+
+[node name="Scroll_4" type="Node3D" parent="Nexus_Core/Vein_4" node_paths=PackedStringArray("csg_instance")]
+script = ExtResource("10_scroll")
+csg_instance = NodePath("..")
+
+[node name="Vein_5" type="CSGBox3D" parent="Nexus_Core"]
+transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, -2.2, -0.08, 1.1)
+size = Vector3(0.15, 0.02, 4)
+material = SubResource("StandardMaterial3D_vein")
+
+[node name="Scroll_5" type="Node3D" parent="Nexus_Core/Vein_5" node_paths=PackedStringArray("csg_instance")]
+script = ExtResource("10_scroll")
+csg_instance = NodePath("..")
+
+[node name="Vein_6" type="CSGBox3D" parent="Nexus_Core"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.08, -2.5)
+size = Vector3(0.15, 0.02, 4)
+material = SubResource("StandardMaterial3D_vein")
+
+[node name="Scroll_6" type="Node3D" parent="Nexus_Core/Vein_6" node_paths=PackedStringArray("csg_instance")]
+script = ExtResource("10_scroll")
+csg_instance = NodePath("..")
 
 [node name="Ceiling_Details" type="Node3D" parent="."]
-
-[node name="Window_L" parent="Ceiling_Details" instance=ExtResource("8_window")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -7.9, 3, 0)
-
-[node name="Window_R" parent="Ceiling_Details" instance=ExtResource("8_window")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 7.9, 3, 0)
 
 [node name="Lights" type="Node3D" parent="Ceiling_Details"]
 
@@ -166,15 +287,17 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 3.9, 4)
 [node name="Elevator_Area" type="Area3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 7.56086)
 script = ExtResource("2_teleport")
+target_scene_path = "res://scenes/SOC_Office.tscn"
+interaction_text = "Return to SOC"
 is_elevator = true
 current_floor = -2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Elevator_Area"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.125366, 2, 0.470703)
 shape = SubResource("BoxShape3D_trigger")
 
-[node name="Graybox_Elevator" parent="Elevator_Area" instance=ExtResource("4_elevator")]
-transform = Transform3D(-0.998903, 0, 0.0468274, 0, 1, 0, -0.0468274, 0, -0.998903, 0, 0, 0)
-
 [node name="Player3D" parent="." instance=ExtResource("1_player")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 6)
+transform = Transform3D(0.275419, 0, -0.961324, 0, 1, 0, 0.961324, 0, 0.275419, -5.45403, -0.0884317, 6)
+
+[node name="Graybox_Elevator" parent="." instance=ExtResource("10_lvnf6")]
+transform = Transform3D(-0.799679, 0, 0.0226724, 0, 0.8, 0, -0.0226724, 0, -0.799679, 0.104142, -0.0207722, 9.65525)

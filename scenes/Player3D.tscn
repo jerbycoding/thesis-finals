@@ -40,11 +40,11 @@ offset_bottom = 1.0
 config = ExtResource("6_config")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.22174, 0)
 shape = SubResource("CapsuleShape3D_jib20")
 
 [node name="NPC_HOODIE" parent="." instance=ExtResource("8_nv2py")]
-transform = Transform3D(-2.25, 0, -1.96701e-07, 0, 2.25, 0, 1.96701e-07, 0, -2.25, 0, 0, 0)
+transform = Transform3D(-2.25, 0, -1.96701e-07, 0, 2.25, 0, 1.96701e-07, 0, -2.25, 0, 1.1894, 0)
 script = ExtResource("2_animator")
 is_player = true
 
@@ -61,5 +61,14 @@ collide_with_areas = true
 [node name="CarryMarker3D" type="Marker3D" parent="CameraPivot/Camera3D"]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, -0.45, -0.6)
+
+[node name="Flashlight" type="SpotLight3D" parent="CameraPivot/Camera3D"]
+unique_name_in_owner = true
+visible = false
+light_color = Color(1, 1, 0.9, 1)
+light_energy = 5.0
+light_volumetric_fog_energy = 2.0
+spot_range = 15.0
+spot_angle = 35.0
 
 [editable path="NPC_HOODIE"]

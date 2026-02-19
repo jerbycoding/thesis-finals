@@ -1,89 +1,69 @@
 # WarWall.gd
-# Reactive monitoring wall that changes color based on SOC load
-extends MeshInstance3D
+# Manages the high-fidelity data display in the Incident War Room.
+# Displays real-time organizational metrics and threat status.
+extends Label3D
 
-@export var pulse_speed: float = 1.5
-@export var min_energy: float = 1.0
-@export var max_energy: float = 2.5
-
-var time: float = 0.0
-var target_color: Color = Color.CYAN
-var is_crisis_active: bool = false
-var crisis_flicker: float = 0.0
-
-var _cached_monitor_materials: Array = []
-var _monitors_cached: bool = false
+@export var update_interval: float = 1.5
+var _time_since_update: float = 0.0
 
 func _ready():
-	# Connect to EventBus signals to update color
-	EventBus.ticket_added.connect(_update_status)
-	EventBus.ticket_completed.connect(func(_t, _type, _time): _update_status())
-	EventBus.ticket_timeout.connect(func(_id): _update_status())
-	EventBus.world_event_triggered.connect(_on_world_event)
-	
-	# Invalidate cache on scene changes
-	EventBus.transition_completed.connect(func(): _monitors_cached = false)
-	
-	# Initial check
-	_update_status()
-
-func _on_world_event(event_id: String, active: bool, _duration: float):
-	if event_id in [GlobalConstants.EVENTS.DDOS_ATTACK, GlobalConstants.EVENTS.CRYPTO_SPIKE, GlobalConstants.EVENTS.ZERO_DAY]:
-		is_crisis_active = active
-		if active:
-			target_color = Color.ORANGE if event_id == GlobalConstants.EVENTS.ZERO_DAY else Color.RED
-		else:
-			_update_status()
-
-func _update_status(_trash = null):
-	if is_crisis_active: return # Crisis overrides normal load colors
-	
-	if not TicketManager: return
-	
-	var count = TicketManager.get_active_tickets().size()
-	
-	if count <= 1:
-		target_color = Color(0.0, 1.0, 1.0) # Nominal (Cyan/Green)
-	elif count <= 3:
-		target_color = Color(1.0, 0.8, 0.0) # Warning (Yellow)
-	else:
-		target_color = Color(1.0, 0.2, 0.1) # Critical (Red)
+	# Initial update
+	_update_display()
 
 func _process(delta):
-	time += delta * pulse_speed
+	_time_since_update += delta
+	if _time_since_update >= update_interval:
+		_time_since_update = 0.0
+		_update_display()
 	
-	# Handle Crisis Flicker
-	var flicker_mod = 1.0
-	if is_crisis_active:
-		crisis_flicker += delta * 15.0
-		if randf() < 0.3:
-			flicker_mod = randf_range(0.2, 1.5)
-	
-	var energy = lerp(min_energy, max_energy, (sin(time) + 1.0) / 2.0) * flicker_mod
-	
-	var mat = get_active_material(0)
-	if mat is StandardMaterial3D:
-		# Smoothly lerp the color for a high-tech transition
-		mat.albedo_color = mat.albedo_color.lerp(target_color * 0.5, delta * 2.0)
-		mat.emission = mat.emission.lerp(target_color, delta * 2.0)
-		mat.emission_energy_multiplier = energy
-	
-	# Sync other monitors in the office pattern
-	if is_crisis_active or flicker_mod != 1.0:
-		_sync_office_monitors(target_color, energy)
+	# Add a slight "digital flicker" effect
+	if randf() < 0.02:
+		modulate.a = randf_range(0.7, 1.0)
+	else:
+		modulate.a = lerp(modulate.a, 1.0, delta * 10.0)
 
-func _sync_office_monitors(color: Color, energy: float):
-	if not _monitors_cached:
-		_cached_monitor_materials.clear()
-		for node in get_tree().get_nodes_in_group("office_monitors"):
-			if node is MeshInstance3D:
-				var mat = node.get_active_material(0)
-				if mat is StandardMaterial3D:
-					_cached_monitor_materials.append(mat)
-		_monitors_cached = true
-
-	for mat in _cached_monitor_materials:
-		if is_instance_valid(mat):
-			mat.emission_enabled = true
-			mat.emission = color
-			mat.emission_energy_multiplier = energy
+func _update_display():
+	var integrity = 100.0
+	if IntegrityManager:
+		integrity = IntegrityManager.current_integrity
+		
+	var heat = 1.0
+	if HeatManager:
+		heat = HeatManager.heat_multiplier
+		
+	var active_count = 0
+	var critical_count = 0
+	if TicketManager:
+		var tickets = TicketManager.active_tickets
+		active_count = tickets.size()
+		for t in tickets:
+			if t.severity.to_lower() == "critical":
+				critical_count += 1
+				
+	# Build the technical readout string
+	var text_output = ""
+	text_output += "[ SYSTEM STATUS ]\n"
+	text_output += "INTEGRITY: %d%%\n" % int(integrity)
+	text_output += "THREAT LEVEL: %.2fx\n" % heat
+	text_output += "------------------\n"
+	text_output += "[ INCIDENT QUEUE ]\n"
+	text_output += "ACTIVE: %d\n" % active_count
+	text_output += "CRITICAL: %d\n" % critical_count
+	text_output += "------------------\n"
+	
+	# Status message based on integrity
+	if integrity <= 20:
+		text_output += "!!! CRITICAL FAILURE IMMINENT !!!"
+		outline_render_priority = 1
+		outline_modulate = Color.RED
+	elif integrity <= 50:
+		text_output += "STATUS: UNSTABLE - DEGRADED"
+		outline_modulate = Color.ORANGE
+	elif critical_count > 0:
+		text_output += "STATUS: ACTIVE ENGAGEMENT"
+		outline_modulate = Color.YELLOW
+	else:
+		text_output += "STATUS: OPERATIONAL - SECURE"
+		outline_modulate = Color.CYAN
+		
+	text = text_output
