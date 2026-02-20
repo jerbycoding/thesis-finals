@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="TicketResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/tickets/TicketResource.gd" id="1_ticket"]
+
+[resource]
+script = ExtResource("1_ticket")
+ticket_id = "ADMIN-LOCKOUT-001"
+title = "Account Takeover: Root Access Lost"
+description = "Alert: Your administrative privileges have been revoked by an external user. The attacker is locking us out of the mitigation tools.
+
+You must bypass the lock. Use the Decryption Tool to crack the new root password and regain control of the SOC."
+severity = "Critical"
+category = "Authentication"
+steps = ["Launch Decryption Tool", "Crack new root password", "Restore admin access"]
+required_tool = "decrypt"
+base_time = 150.0
+hidden_risks = ["Failure to decrypt = Game Over"]
+required_log_ids = []
+kill_chain_path = "Total Collapse"
+kill_chain_stage = 3

@@ -142,7 +142,7 @@ outline_size = 20
 script = ExtResource("17")
 
 [node name="ServerRack_Background" parent="Props" instance=ExtResource("14")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 5.2, 0, -4.2)
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 5.2, 0, -3.89184)
 
 [node name="Plant" parent="Props" instance=ExtResource("10")]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 5.2, 0, 4.2)
@@ -174,7 +174,7 @@ target_scene_path = "res://scenes/SOC_Office.tscn"
 interaction_text = "Exit to SOC"
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="SOC_Exit"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.723759, 2, 0)
 shape = SubResource("BoxShape3D_trigger")
 
 [node name="Door" parent="SOC_Exit" instance=ExtResource("8")]

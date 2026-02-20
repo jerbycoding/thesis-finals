@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="TicketResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/tickets/TicketResource.gd" id="1_ticket"]
+
+[resource]
+script = ExtResource("1_ticket")
+ticket_id = "SABOTAGE-001"
+title = "Security Service Disabling"
+description = "CRITICAL: The Endpoint Protection Service (EDR) is being manually disabled on critical servers. The attacker is preparing for a massive deployment (likely Ransomware).
+
+You must intervene. Trace the command source and block the admin session attempting to kill the service."
+severity = "Critical"
+category = "System"
+steps = ["Trace source of 'service stop' command", "Block user session", "Restart EDR service"]
+required_tool = "terminal"
+base_time = 120.0
+hidden_risks = ["Allowing EDR to go offline"]
+required_log_ids = []
+kill_chain_path = "Insider Sabotage"
+kill_chain_stage = 3

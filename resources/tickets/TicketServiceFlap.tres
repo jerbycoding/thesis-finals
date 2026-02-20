@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="TicketResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/tickets/TicketResource.gd" id="1_ticket"]
+
+[resource]
+script = ExtResource("1_ticket")
+ticket_id = "SERVICE-FLAP-001"
+title = "Service Flapping Instability"
+description = "A backup server is flapping (rapidly connecting and disconnecting). This behavior often masks data exfiltration attempts during the 'up' cycles.
+
+Monitor the Network Map. Locate the host that is blinking ORANGE/RED and Isolate it before it stabilizes."
+severity = "Medium"
+category = "System"
+steps = ["Open Network Map", "Identify unstable host", "Isolate via Map context menu"]
+required_tool = "network"
+base_time = 150.0
+hidden_risks = ["Ignoring the flap"]
+required_log_ids = []
+kill_chain_path = "Data Exfiltration"
+kill_chain_stage = 2

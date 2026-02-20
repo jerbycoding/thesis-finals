@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="ShiftResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/ShiftResource.gd" id="1_shift"]
+
+[resource]
+script = ExtResource("1_shift")
+shift_name = "Shift 11: Thursday (Paranoia)"
+shift_id = "shift_week2_thursday"
+briefing_dialogue_id = "default"
+event_sequence = [
+	{"time": 30, "event": "spawn_mole_hunt", "type": "spawn_ticket", "ticket_id": "MOLE-HUNT-001"},
+	{"time": 60, "event": "analyst_accusation", "type": "npc_interaction", "npc_id": "senior_analyst", "dialogue_id": "accusation"},
+	{"time": 90, "event": "spawn_log_wiper", "type": "spawn_ticket", "ticket_id": "LOG-WIPER-001"},
+	{"time": 150, "event": "spawn_sabotage", "type": "spawn_ticket", "ticket_id": "SABOTAGE-001"},
+	{"time": 300, "event": "shift_end", "type": "shift_end"}
+]
+random_event_pool = [
+	{"event": "false_flag_logs", "type": "system_event", "event_id": "FALSE_FLAG", "duration": 45.0},
+	{"event": "gossip_mole", "type": "system_event", "event_id": "GOSSIP_FLOOD", "duration": 60.0}
+]
+next_shift_id = "shift_week2_friday"

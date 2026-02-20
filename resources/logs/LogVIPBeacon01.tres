@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="LogResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/logs/LogResource.gd" id="1_log"]
+
+[resource]
+script = ExtResource("1_log")
+log_id = "LOG-VIP-BEACON-01"
+timestamp = "11:05:22"
+source = "IDS"
+category = "Security"
+message = "Anomalous outbound traffic detected from CFO-MOBILE-01 to 45.12.88.1 (Tokyo, JP)."
+severity = 5
+related_ticket = "VIP-LAPTOP-001"
+ip_address = "45.12.88.1"
+hostname = "CFO-MOBILE-01"

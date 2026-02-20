@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="TicketResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/tickets/TicketResource.gd" id="1_ticket"]
+
+[resource]
+script = ExtResource("1_ticket")
+ticket_id = "LOG-WIPER-001"
+title = "Active Evidence Destruction"
+description = "Alert: High-volume file deletion detected in /var/log/audit. An active process is scrubbing security logs to hide tracks.
+
+This is a defensive counter-measure by the attacker. You must identify the host executing the wiper script and isolate it immediately to preserve forensic history."
+severity = "High"
+category = "Forensics"
+steps = ["Identify host deleting logs", "Isolate host to stop the wiper", "Recover deleted fragments (Simulated)"]
+required_tool = "terminal"
+base_time = 140.0
+hidden_risks = ["Waiting too long (Evidence lost)"]
+required_log_ids = []
+kill_chain_path = "Insider Sabotage"
+kill_chain_stage = 2

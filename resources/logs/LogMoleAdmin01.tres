@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="LogResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/logs/LogResource.gd" id="1_log"]
+
+[resource]
+script = ExtResource("1_log")
+log_id = "LOG-MOLE-ADMIN-01"
+timestamp = "02:00:15"
+source = "VPN-Gateway"
+category = "Authentication"
+message = "Admin session initiated for user 'admin' from IP 91.200.12.5 (External)."
+severity = 5
+related_ticket = "MOLE-HUNT-001"
+ip_address = "91.200.12.5"
+hostname = "VPN-CON-01"

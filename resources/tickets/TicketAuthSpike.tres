@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="TicketResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/tickets/TicketResource.gd" id="1_ticket"]
+
+[resource]
+script = ExtResource("1_ticket")
+ticket_id = "AUTH-SPIKE-001"
+title = "Distributed Brute Force"
+description = "Authentication logs show a low-and-slow brute force attack targeting multiple service accounts. The attack is distributed across 20+ IPs to evade rate limiting.
+
+Identify the primary controller IP and block it at the firewall."
+severity = "High"
+category = "Authentication"
+steps = ["Identify the controller IP in SIEM", "Verify successful logins", "Block controller IP"]
+required_tool = "siem"
+base_time = 180.0
+hidden_risks = ["Blocking innocent proxy IPs"]
+required_log_ids = []
+kill_chain_path = "Account Takeover"
+kill_chain_stage = 2

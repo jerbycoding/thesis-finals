@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="TicketResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/tickets/TicketResource.gd" id="1_ticket"]
+
+[resource]
+script = ExtResource("1_ticket")
+ticket_id = "SUPPLY-CHAIN-004"
+title = "Corrupted Firmware Notification"
+description = "A vendor (NetCore) has issued a recall for firmware v4.4.2 due to a 'logic error'. However, an email has just circulated to IT staff encouraging them to 'force update' to this exact version.
+
+The SIEM is currently experiencing high latency. Inspect the email headers to determine if this 'force update' directive is legitimate or a sabotage attempt."
+severity = "High"
+category = "Phishing"
+steps = ["Inspect email headers", "Check sender reputation", "Quarantine email"]
+required_tool = "email"
+base_time = 200.0
+hidden_risks = ["Approving malicious firmware"]
+required_log_ids = []
+kill_chain_path = "Supply Chain"
+kill_chain_stage = 1

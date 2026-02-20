@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="TicketResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/tickets/TicketResource.gd" id="1_ticket"]
+
+[resource]
+script = ExtResource("1_ticket")
+ticket_id = "WHALING-001"
+title = "VIP ALERT: Legal Subpoena for CEO"
+description = "The CEO has received an email marked 'URGENT: FEDERAL SUBPOENA' demanding immediate handover of credentials for e-discovery.
+
+The email originates from 'doj-goverment-official.com' (Typosquatting). This is a Whaling attack targeting executive access. Verify the domain reputation and block it immediately."
+severity = "Critical"
+category = "Phishing"
+steps = ["Inspect email headers for typosquatting", "Confirm sender is NOT government", "Block domain"]
+required_tool = "email"
+base_time = 120.0
+hidden_risks = ["Approving request due to fear of authority"]
+required_log_ids = []
+kill_chain_path = "Executive Compromise"
+kill_chain_stage = 1

@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="TicketResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/tickets/TicketResource.gd" id="1_ticket"]
+
+[resource]
+script = ExtResource("1_ticket")
+ticket_id = "RANSOM-VIP-001"
+title = "CTO Vault: Key Exfiltration"
+description = "Alert: The CTO's private key vault is being accessed by an unauthorized process. If these keys are stolen, the attackers can decrypt all company communication.
+
+This is a Stage 3 Impact event. You must TRACE the exfiltration stream and break the encryption lock."
+severity = "Critical"
+category = "Data Breach"
+steps = ["Trace exfiltration source IP", "Isolate compromised host", "Run Decryption to re-secure vault"]
+required_tool = "decrypt"
+base_time = 180.0
+hidden_risks = ["Partial completion"]
+required_log_ids = []
+kill_chain_path = "Executive Compromise"
+kill_chain_stage = 3

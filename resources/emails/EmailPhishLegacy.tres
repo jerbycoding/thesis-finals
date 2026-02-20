@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="EmailResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/EmailResource.gd" id="1_email"]
+
+[resource]
+script = ExtResource("1_email")
+email_id = "EMAIL-LEGACY-PHISH"
+sender = "Security-Updates@verify-corp.net"
+subject = "REQUIRED: Final Security Validation for {victim_name}"
+body = "Analyst,
+
+Our records indicate your workstation {victim_host} has not completed the mandatory Week 1 validation. 
+
+Please click the link below to verify your credentials and avoid account suspension.
+
+[http://verify-update.net/validate-session]
+
+This is a final notice."
+attachments = []
+headers = {"status": {"dkim": "FAIL", "dmarc": "FAIL", "spf": "FAIL"}}
+is_malicious = true
+is_urgent = true
+clues = ["suspicious_link", "suspicious_domain", "spoofed_sender"]
+related_ticket = "PHISH-LEGACY-001"
+suspicious_domain = "verify-update.net"

@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="TicketResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/tickets/TicketResource.gd" id="1_ticket"]
+
+[resource]
+script = ExtResource("1_ticket")
+ticket_id = "DNS-SPOOF-001"
+title = "Internal DNS Redirection"
+description = "Multiple users report that accessing 'intranet.portal' redirects them to a gambling site. This indicates an internal host is poisoning the DNS cache.
+
+The SIEM is unreliable. Use the Terminal to TRACE the route to 'intranet.portal' and identify the rogue internal host hijacking the traffic."
+severity = "High"
+category = "Network"
+steps = ["Open Terminal", "Run 'trace intranet.portal'", "Isolate the hijacker host"]
+required_tool = "terminal"
+base_time = 180.0
+hidden_risks = ["Isolating the real DNS server"]
+required_log_ids = []
+kill_chain_path = "Network Sabotage"
+kill_chain_stage = 2

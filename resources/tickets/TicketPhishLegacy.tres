@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="TicketResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/tickets/TicketResource.gd" id="1_ticket"]
+
+[resource]
+script = ExtResource("1_ticket")
+ticket_id = "PHISH-LEGACY-001"
+title = "Recurring Phishing Campaign"
+description = "SIEM has flagged a new email campaign that matches the heuristics of last week's attack. The sender domain has rotated, but the payload signature is identical.
+
+Verify if this is a new breach attempt or a persistence mechanism."
+severity = "Medium"
+category = "Phishing"
+steps = ["Inspect headers for rotated domain", "Check SIEM for matching legacy IP", "Block sender"]
+required_tool = "siem"
+base_time = 150.0
+hidden_risks = ["Dismissing as 'just another phish'"]
+required_log_ids = []
+kill_chain_path = "Malware Persistence"
+kill_chain_stage = 1

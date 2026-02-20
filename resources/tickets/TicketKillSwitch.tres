@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="TicketResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/tickets/TicketResource.gd" id="1_ticket"]
+
+[resource]
+script = ExtResource("1_ticket")
+ticket_id = "KILL-SWITCH-001"
+title = "CRITICAL: Backup Wipe Initiated"
+description = "Alert: A recursive delete command 'rm -rf /mnt/backups' has been issued on the primary Tape Library. The attacker is attempting to destroy our ability to recover.
+
+This is an extinction-level event. Trace the session ID immediately and terminate the connection."
+severity = "Critical"
+category = "Data Breach"
+steps = ["Trace 'rm -rf' command source", "Kill active SSH session", "Verify backup integrity"]
+required_tool = "terminal"
+base_time = 90.0
+hidden_risks = ["Hesitation"]
+required_log_ids = []
+kill_chain_path = "Total Collapse"
+kill_chain_stage = 3

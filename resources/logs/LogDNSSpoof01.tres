@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="LogResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/logs/LogResource.gd" id="1_log"]
+
+[resource]
+script = ExtResource("1_log")
+log_id = "LOG-DNS-SPOOF-01"
+timestamp = "10:12:44"
+source = "Workstation-88"
+category = "Network"
+message = "Inbound DNS response for 'intranet.portal' from internal IP 10.0.5.15 (Modified)."
+severity = 4
+related_ticket = "DNS-SPOOF-001"
+ip_address = "10.0.5.15"
+hostname = "WORKSTATION-88"

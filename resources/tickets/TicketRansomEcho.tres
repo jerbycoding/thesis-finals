@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="TicketResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/tickets/TicketResource.gd" id="1_ticket"]
+
+[resource]
+script = ExtResource("1_ticket")
+ticket_id = "RANSOM-ECHO-001"
+title = "Ransomware Encrypted Cache"
+description = "A backup server (BACKUP-NAS-02) has reported file integrity errors. It appears a dormant ransomware strain was backed up last week and has now executed.
+
+This is a critical failure of our containment protocols. Isolate the backup server immediately before it syncs to the cloud."
+severity = "Critical"
+category = "Ransomware"
+steps = ["Isolate BACKUP-NAS-02", "Run Decryption Tool on the backup volume", "Verify integrity"]
+required_tool = "decrypt"
+base_time = 240.0
+hidden_risks = ["Allowing cloud sync to complete"]
+required_log_ids = []
+kill_chain_path = "Malware Persistence"
+kill_chain_stage = 3

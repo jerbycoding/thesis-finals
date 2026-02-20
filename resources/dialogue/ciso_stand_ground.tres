@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="DialogueDataResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/dialogue/DialogueDataResource.gd" id="1_dialogue"]
+
+[resource]
+script = ExtResource("1_dialogue")
+npc_name = "CISO"
+portrait = "👔"
+lines = [
+	{"choices": [], "text": "They're burning it down, analyst. They know they can't steal the data, so they're trying to destroy it."},
+	{"choices": [
+		{"text": "I can stop them.", "effect": {"npc": "ciso", "relationship_change": 0.5}},
+		{"text": "Should we shut down the grid?", "effect": {"npc": "ciso", "relationship_change": -0.2}}
+	], "text": "We don't retreat. You have full authorization to use aggressive countermeasures. Isolate anything that looks suspicious. Save the backups at all costs."},
+	{"choices": [], "text": "If the building melts, it melts. Just save the data. Go."}
+]

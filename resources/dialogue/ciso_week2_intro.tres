@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="DialogueDataResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/dialogue/DialogueDataResource.gd" id="1_dialogue"]
+
+[resource]
+script = ExtResource("1_dialogue")
+npc_name = "CISO"
+portrait = "👔"
+lines = [
+	{"choices": [], "text": "Welcome to Week 2, Analyst. You survived the initial onslaught, but don't get comfortable."},
+	{"choices": [{"effect": {"change_scene": "res://scenes/SOC_Office.tscn", "then_start_narrative": "shift_week2_monday"}, "text": "I'm ready for the next wave."}], "text": "Our intelligence indicates that the attackers from last week haven't left. They've just gone dormant. Expect them to resurface with more sophisticated tools today."}
+]

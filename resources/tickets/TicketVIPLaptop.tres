@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="TicketResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/tickets/TicketResource.gd" id="1_ticket"]
+
+[resource]
+script = ExtResource("1_ticket")
+ticket_id = "VIP-LAPTOP-001"
+title = "CFO Laptop: Anomalous Beacon"
+description = "The Chief Financial Officer's laptop (CFO-MOBILE-01) is beaconing to a known C2 IP address in a non-extradition country.
+
+The CFO is currently in a board meeting presentation. Isolating this device will kill their presentation stream. However, data exfiltration is imminent. You must make the call."
+severity = "Critical"
+category = "Malware"
+steps = ["Confirm C2 traffic in SIEM", "Isolate CFO-MOBILE-01", "Weather the political fallout"]
+required_tool = "terminal"
+base_time = 150.0
+hidden_risks = ["Delaying isolation to 'wait for meeting end'"]
+required_log_ids = []
+kill_chain_path = "Executive Compromise"
+kill_chain_stage = 2

@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="LogResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/logs/LogResource.gd" id="1_log"]
+
+[resource]
+script = ExtResource("1_log")
+log_id = "LOG-AUTH-SPIKE-02"
+timestamp = "08:45:15"
+source = "Domain-Ctrl-01"
+category = "Authentication"
+message = "Failed login: 'svc_backup' from {attacker_ip}. Reason: Invalid credentials."
+severity = 4
+related_ticket = "AUTH-SPIKE-001"
+ip_address = "{attacker_ip}"
+hostname = "DOMAIN-CTRL-01"

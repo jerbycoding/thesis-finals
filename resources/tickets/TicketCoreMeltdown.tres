@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="TicketResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/tickets/TicketResource.gd" id="1_ticket"]
+
+[resource]
+script = ExtResource("1_ticket")
+ticket_id = "CORE-MELTDOWN-001"
+title = "HVAC Override: Thermal Critical"
+description = "IoT Alert: The Server Room cooling system has been manually disabled via remote command. Temperature sensors report a rapid spike to 95°C.
+
+If the servers overheat, the hardware will physically melt. You must reset the IoT controller immediately via the Terminal."
+severity = "Critical"
+category = "System"
+steps = ["Scan IOT-THERMOSTAT-01", "Isolate compromised controller", "Reboot HVAC service"]
+required_tool = "terminal"
+base_time = 120.0
+hidden_risks = ["Scanning wrong IoT device"]
+required_log_ids = []
+kill_chain_path = "Infrastructure Attack"
+kill_chain_stage = 3

@@ -12,6 +12,6 @@ event_sequence = [
 	{"time": 300, "event": "shift_end", "type": "shift_end"}
 ]
 random_event_pool = []
-next_shift_id = "shift_monday"
+next_shift_id = "shift_week2_monday"
 minigame_type = "RECOVERY"
 required_floor = -1

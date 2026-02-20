@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="ShiftResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/ShiftResource.gd" id="1_shift"]
+
+[resource]
+script = ExtResource("1_shift")
+shift_name = "Shift 10: Wednesday (Executive Targets)"
+shift_id = "shift_week2_wednesday"
+briefing_dialogue_id = "default"
+event_sequence = [
+	{"time": 30, "event": "spawn_whaling", "type": "spawn_ticket", "ticket_id": "WHALING-001"},
+	{"time": 60, "event": "spawn_vip_laptop", "type": "spawn_ticket", "ticket_id": "VIP-LAPTOP-001"},
+	{"time": 150, "event": "spawn_vip_ransom", "type": "spawn_ticket", "ticket_id": "RANSOM-VIP-001"},
+	{"time": 300, "event": "shift_end", "type": "shift_end"}
+]
+random_event_pool = [
+	{"event": "vip_complaint", "type": "spawn_ticket", "ticket_id": "USER-COMPLAINT-FOLLOWUP"},
+	{"event": "meeting_interruption", "type": "system_event", "event_id": "GOSSIP_FLOOD", "duration": 45.0}
+]
+next_shift_id = "shift_week2_thursday"

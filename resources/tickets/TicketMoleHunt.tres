@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="TicketResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/tickets/TicketResource.gd" id="1_ticket"]
+
+[resource]
+script = ExtResource("1_ticket")
+ticket_id = "MOLE-HUNT-001"
+title = "Conflicting Access Logs"
+description = "User 'admin' initiated a system reboot at 02:00 AM. IT Support claims this was scheduled maintenance. However, SIEM logs show the command originated from an external VPN IP.
+
+Verify the source IP. If it is external, IT Support's account has been compromised (or they are lying)."
+severity = "High"
+category = "Insider Threat"
+steps = ["Check SIEM for 02:00 AM login", "Verify IP location (Internal vs External)", "Flag account for review"]
+required_tool = "siem"
+base_time = 180.0
+hidden_risks = ["Trusting IT Support without verification"]
+required_log_ids = []
+kill_chain_path = "Insider Sabotage"
+kill_chain_stage = 2
