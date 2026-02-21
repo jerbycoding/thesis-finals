@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="HostResource" load_steps=2 format=3]
+[ext_resource type="Script" path="res://resources/HostResource.gd" id="1_script"]
+[resource]
+script = ExtResource("1_script")
+hostname = "WORKSTATION-C"
+ip_address = "10.0.99.2"
+is_critical = false
+os_type = "Windows"
+initial_status = "CLEAN"

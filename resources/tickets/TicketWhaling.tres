@@ -15,6 +15,6 @@ steps = ["Inspect email headers for typosquatting", "Confirm sender is NOT gover
 required_tool = "email"
 base_time = 120.0
 hidden_risks = ["Approving request due to fear of authority"]
-required_log_ids = []
+required_log_ids = ["LOG-VIP-BEACON-01"]
 kill_chain_path = "Executive Compromise"
 kill_chain_stage = 1

@@ -107,7 +107,7 @@ light_energy = 0.05
 shadow_enabled = true
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.960537, 0.278153, 0, -0.278153, 0.960537, 0.0326597, 1.3823, 0.609173)
+transform = Transform3D(1, 0, 0, 0, 0.960537, 0.278153, 0, -0.278153, 0.960537, 0.0326597, 1.34245, 0.515697)
 
 [node name="Prop_Desk" parent="." instance=ExtResource("2_desk")]
 
@@ -115,6 +115,7 @@ transform = Transform3D(1, 0, 0, 0, 0.960537, 0.278153, 0, -0.278153, 0.960537, 
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.82, 0)
 
 [node name="Prop_Monitor" parent="Prop_ComputerSet" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.327614, -0.2)
 use_crt_shader = true
 
 [node name="StickyNote" type="CSGBox3D" parent="Prop_ComputerSet/Prop_Monitor" index="5"]
@@ -128,9 +129,6 @@ pixel_size = 0.001
 modulate = Color(0, 0, 0, 1)
 text = "PASS: admin123"
 font_size = 14
-
-[node name="Keyboard" parent="Prop_ComputerSet" index="1"]
-transform = Transform3D(1, 0, 0, 0, 0.996477, 0.0838691, 0, -0.0838691, 0.996477, -0.0721762, 0.05, 0.3)
 
 [node name="Prop_Mug" parent="." instance=ExtResource("4_mug")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0.82, 0.2)
@@ -162,7 +160,7 @@ transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -2, 0,
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, -2)
 
 [node name="OmniLight3D" type="OmniLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.15, -0.1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.46596, -0.1)
 light_color = Color(0, 1, 0.2, 1)
 light_energy = 0.2
 omni_range = 3.0

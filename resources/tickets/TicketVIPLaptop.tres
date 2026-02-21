@@ -15,6 +15,6 @@ steps = ["Confirm C2 traffic in SIEM", "Isolate CFO-MOBILE-01", "Weather the pol
 required_tool = "terminal"
 base_time = 150.0
 hidden_risks = ["Delaying isolation to 'wait for meeting end'"]
-required_log_ids = []
+required_log_ids = ["LOG-VIP-BEACON-01"]
 kill_chain_path = "Executive Compromise"
 kill_chain_stage = 2

@@ -6,19 +6,19 @@
 script = ExtResource("1_shift")
 shift_name = "Shift 12: Friday (Total War)"
 shift_id = "shift_week2_friday"
-briefing_dialogue_id = "default"
+briefing_dialogue_id = "week2_friday"
 event_sequence = [
-	{"time": 10, "event": "start_apocalypse", "type": "system_event", "event_id": "ZERO_DAY", "duration": 300.0},
-	{"time": 10, "event": "start_lag", "type": "system_event", "event_id": "SIEM_LAG", "duration": 300.0},
-	{"time": 10, "event": "start_ddos", "type": "system_event", "event_id": "DDOS_ATTACK", "duration": 300.0},
-	{"time": 30, "event": "spawn_kill_switch", "type": "spawn_ticket", "ticket_id": "KILL-SWITCH-001"},
-	{"time": 60, "event": "ciso_speech", "type": "npc_interaction", "npc_id": "ciso", "dialogue_id": "stand_ground"},
-	{"time": 90, "event": "spawn_meltdown", "type": "spawn_ticket", "ticket_id": "CORE-MELTDOWN-001"},
-	{"time": 150, "event": "spawn_admin_lock", "type": "spawn_ticket", "ticket_id": "ADMIN-LOCKOUT-001"},
-	{"time": 300, "event": "shift_end", "type": "shift_end", "failure_type": "victory"} 
+	{"time": 10, "event": "start_apocalypse", "type": "system_event", "event_id": "ZERO_DAY", "duration": 540.0},
+	{"time": 10, "event": "start_lag", "type": "system_event", "event_id": "SIEM_LAG", "duration": 540.0},
+	{"time": 10, "event": "start_ddos", "type": "system_event", "event_id": "DDOS_ATTACK", "duration": 540.0},
+	{"time": 60, "event": "spawn_kill_switch", "type": "spawn_ticket", "ticket_id": "KILL-SWITCH-001"},
+	{"time": 150, "event": "ciso_speech", "type": "npc_interaction", "npc_id": "ciso", "dialogue_id": "stand_ground"},
+	{"time": 240, "event": "spawn_meltdown", "type": "spawn_ticket", "ticket_id": "CORE-MELTDOWN-001"},
+	{"time": 360, "event": "spawn_admin_lock", "type": "spawn_ticket", "ticket_id": "ADMIN-LOCKOUT-001"},
+	{"time": 600, "event": "shift_end", "type": "shift_end", "failure_type": "victory"} 
 ]
 random_event_pool = [
 	{"event": "panic_noise", "type": "spawn_ticket", "ticket_id": "TICKET-NOISE-002"},
-	{"event": "power_surge", "type": "system_event", "event_id": "POWER_FLICKER", "duration": 5.0}
+	{"event": "power_surge", "type": "system_event", "event_id": "POWER_FLICKER", "duration": 3.0}
 ]
 next_shift_id = "" # End of Content (Victory)

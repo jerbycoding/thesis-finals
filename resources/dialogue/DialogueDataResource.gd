@@ -9,6 +9,9 @@ extends Resource
 # The character/emoji to display as a portrait.
 @export var portrait: String = "👤"
 
+## If true, the dialogue will start at a random line from the array.
+@export var is_randomized: bool = false
+
 # An array of dialogue lines. Each line is a dictionary that must contain a "text" key.
 # It can also optionally contain a "choices" key, which is an array of choice dictionaries.
 #

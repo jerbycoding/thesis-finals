@@ -2,6 +2,8 @@
 extends Resource
 class_name EmailResource
 
+enum ThreatCategory { BENIGN, PHISHING, SPEAR_PHISH, MALWARE }
+
 @export var email_id: String
 @export var sender: String # "CEO", "IT Dept", "External", "Security Team"
 @export var subject: String
@@ -10,6 +12,7 @@ class_name EmailResource
 @export var headers: Dictionary = {} # SPF, DKIM, DMARC results
 @export var is_malicious: bool = false
 @export var is_urgent: bool = false
+@export var threat_category: ThreatCategory = ThreatCategory.BENIGN
 @export var clues: Array[String] = [] # "suspicious_link", "bad_attachment", "spoofed_sender", "suspicious_domain"
 @export var related_ticket: String = "" # Optional ticket_id this email relates to
 @export var suspicious_ip: String = "" # IP address found in headers (for cross-tool integration)
@@ -105,7 +108,7 @@ func get_attachment_analysis() -> Dictionary:
 			report.text += "[color=red]⚠ %s - CRITICAL: Executable payload detected![/color]\n" % attachment
 			report.has_malware = true
 		elif ext in ["pdf", "doc", "docx", "zip"]:
-			report.text += "[color=yellow]⚠ %s - Potential macro/container risk.[/color]\n" % attachment
+			report.text += "[b][bgcolor=yellow][color=black] ⚠ %s - Potential macro/container risk. [/color][/bgcolor][/b]\n" % attachment
 		else:
 			report.text += "✓ %s - Analysis clean.\n" % attachment
 			
@@ -126,13 +129,17 @@ func get_link_analysis() -> Dictionary:
 		report.text += "No suspicious external links identified.\n"
 		
 	if not suspicious_ip.is_empty():
-		report.text += "\n[color=yellow]Embedded IP: %s[/color]\n" % suspicious_ip
+		report.text += "\n[b][bgcolor=yellow][color=black] Embedded IP: %s [/color][/bgcolor][/b]\n" % suspicious_ip
 		report.text += "Action: Cross-reference with SIEM logs for lateral movement.\n"
 		
 	return report
 
 func is_spear_phishing() -> bool:
 	"""Returns true if this email exhibits characteristics of a targeted spear-phishing attack."""
+	if threat_category == ThreatCategory.SPEAR_PHISH:
+		return true
+		
+	# Fallback for older resources or procedural generation
 	if "spear" in email_id.to_lower():
 		return true
 	

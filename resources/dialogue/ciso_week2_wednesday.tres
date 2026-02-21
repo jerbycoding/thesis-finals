@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="DialogueDataResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/dialogue/DialogueDataResource.gd" id="1_dialogue"]
+
+[resource]
+script = ExtResource("1_dialogue")
+npc_name = "CISO"
+portrait = "👔"
+lines = [
+	{"choices": [], "text": "They've changed tactics. It's no longer a broad sweep—it's a laser-focused hunt for executive credentials. They're going after the C-Suite."},
+	{"choices": [{"effect": {"change_scene": "res://scenes/SOC_Office.tscn", "then_start_narrative": "shift_week2_wednesday"}, "text": "I'll prioritize the VIP alerts."}], "text": "If they get into the CEO's vault, the company is effectively theirs. Every laptop, every mobile device associated with an executive must be treated as a zero-trust liability. Move."}
+]

@@ -49,8 +49,14 @@ func save_game():
 		"npc_relationships": ConsequenceEngine.npc_relationships,
 		"network_state": NetworkState.host_states,
 		"integrity_score": IntegrityManager.current_integrity,
+		"current_week": HeatManager.current_week,
 		"heat_multiplier": HeatManager.heat_multiplier,
 		"vulnerability_buffer": HeatManager.vulnerability_buffer,
+		
+		# --- Persistence State ---
+		"reviewed_logs": LogSystem.reviewed_logs,
+		"processed_emails": EmailSystem.processed_emails,
+		"scheduled_consequences": ConsequenceEngine.scheduled_consequences,
 		
 		# --- Progress State ---
 		"active_tickets": _get_ticket_ids_from_array(TicketManager.get_active_tickets()),
@@ -113,16 +119,26 @@ func new_game_setup():
 	if has_save_file():
 		DirAccess.remove_absolute(SAVE_PATH)
 		print("💾 SaveSystem: Save file purged.")
+	
+	loaded_shift_id = ""
+
+var loaded_shift_id: String = ""
 
 # Calls the 'load_state' function on each manager with its relevant data slice.
 func _distribute_loaded_data(data: Dictionary):
 	# ArchetypeAnalyzer is stateless (derived from ConsequenceEngine), no load_state needed.
 	
 	if ConsequenceEngine and data.has("npc_relationships"):
-		ConsequenceEngine.load_state(data.npc_relationships, data.get("choice_log", []))
+		ConsequenceEngine.load_state(data.npc_relationships, data.get("choice_log", []), data.get("scheduled_consequences", []))
 		
 	if NetworkState and data.has("network_state"):
 		NetworkState.load_state(data.network_state)
+		
+	if LogSystem and data.has("reviewed_logs"):
+		LogSystem.reviewed_logs.assign(data.get("reviewed_logs", []))
+		
+	if EmailSystem and data.has("processed_emails"):
+		EmailSystem.processed_emails.assign(data.get("processed_emails", []))
 		
 	if TicketManager and data.has("active_tickets"):
 		TicketManager.load_state(data.active_tickets, data.get("completed_tickets", []))
@@ -132,16 +148,15 @@ func _distribute_loaded_data(data: Dictionary):
 	
 	if HeatManager and data.has("heat_multiplier"):
 		HeatManager.load_state({
+			"current_week": data.get("current_week", 1),
 			"heat_multiplier": data.heat_multiplier,
 			"vulnerability_buffer": data.get("vulnerability_buffer", [])
 		})
 	
-	print("Save data distributed to all managers.")
-
-	# After restoring state, start the next narrative arc.
-	if NarrativeDirector and data.has("next_shift_name"):
-		# Use call_deferred to ensure all nodes are ready after scene transition
-		NarrativeDirector.call_deferred("start_shift", data.next_shift_name)
+	if data.has("next_shift_name"):
+		loaded_shift_id = data.next_shift_name
+	
+	print("Save data distributed to all managers. Loaded Shift: ", loaded_shift_id)
 
 # Helper function to convert an array of TicketResource objects to an array of their IDs.
 func _get_ticket_ids_from_array(tickets: Array) -> Array[String]:

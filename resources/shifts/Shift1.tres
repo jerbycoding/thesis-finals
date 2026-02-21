@@ -1,27 +1,78 @@
-[gd_resource type="Resource" script_class="ShiftResource" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="ShiftResource" load_steps=2 format=3 uid="uid://b3eg2snqt6wls"]
 
-[ext_resource type="Script" path="res://resources/ShiftResource.gd" id="1_shift"]
+[ext_resource type="Script" uid="uid://d0o2ouygja3cr" path="res://resources/ShiftResource.gd" id="1_shift"]
 
 [resource]
 script = ExtResource("1_shift")
 shift_name = "Shift 1: Monday (Active Monitoring)"
 shift_id = "shift_monday"
 briefing_dialogue_id = "briefing_01"
-event_sequence = [
-	{"time": 15, "event": "spawn_phish", "type": "spawn_ticket", "ticket_id": "PHISH-001"},
-	{"time": 45, "event": "analyst_checkin", "type": "npc_interaction", "npc_id": "senior_analyst", "dialogue_id": "monday_morning"},
-	{"time": 60, "event": "spawn_auth", "type": "spawn_ticket", "ticket_id": "AUTH-FAIL-GENERIC"},
-	{"time": 120, "event": "spawn_maint", "type": "spawn_ticket", "ticket_id": "SYS-MAINT-GENERIC"},
-	{"time": 180, "event": "spawn_spear", "type": "spawn_ticket", "ticket_id": "SPEAR-PHISH-001"},
-	{"time": 300, "event": "ciso_end", "type": "npc_interaction", "npc_id": "ciso", "dialogue_id": "shift_end"},
-	{"time": 330, "event": "shift_end", "type": "shift_end"}
-]
-random_event_pool = [
-	{"event": "random_login_fail", "type": "spawn_ticket", "ticket_id": "AUTH-FAIL-GENERIC"},
-	{"event": "account_lockout_noise", "type": "spawn_ticket", "ticket_id": "TICKET-NOISE-001"},
-	{"event": "minor_siem_lag", "type": "system_event", "event_id": "SIEM_LAG", "duration": 15.0},
-	{"event": "isp_blip", "type": "system_event", "event_id": "ISP_THROTTLING", "duration": 30.0},
-	{"event": "internal_gossip", "type": "system_event", "event_id": "GOSSIP_FLOOD", "duration": 60.0},
-	{"event": "peer_checkin", "type": "npc_interaction", "npc_id": "senior_analyst", "dialogue_id": "default"}
-]
+event_sequence = Array[Dictionary]([{
+"event": "spawn_phish",
+"ticket_id": "PHISH-001",
+"time": 30,
+"type": "spawn_ticket"
+}, {
+"dialogue_id": "monday_morning",
+"event": "analyst_checkin",
+"npc_id": "senior_analyst",
+"time": 90,
+"type": "npc_interaction"
+}, {
+"event": "spawn_auth",
+"ticket_id": "AUTH-FAIL-GENERIC",
+"time": 150,
+"type": "spawn_ticket"
+}, {
+"event": "spawn_maint",
+"ticket_id": "SYS-MAINT-GENERIC",
+"time": 270,
+"type": "spawn_ticket"
+}, {
+"event": "spawn_spear",
+"ticket_id": "SPEAR-PHISH-001",
+"time": 360,
+"type": "spawn_ticket"
+}, {
+"dialogue_id": "shift_end",
+"event": "ciso_end",
+"npc_id": "ciso",
+"time": 420,
+"type": "npc_interaction"
+}, {
+"event": "shift_end",
+"time": 600,
+"type": "shift_end"
+}])
+random_event_pool = Array[Dictionary]([{
+"event": "random_login_fail",
+"ticket_id": "AUTH-FAIL-GENERIC",
+"type": "spawn_ticket"
+}, {
+"event": "account_lockout_noise",
+"ticket_id": "TICKET-NOISE-001",
+"type": "spawn_ticket"
+}, {
+"duration": 15.0,
+"event": "minor_siem_lag",
+"event_id": "SIEM_LAG",
+"type": "system_event"
+}, {
+"duration": 30.0,
+"event": "isp_blip",
+"event_id": "ISP_THROTTLING",
+"type": "system_event"
+}, {
+"duration": 60.0,
+"event": "internal_gossip",
+"event_id": "GOSSIP_FLOOD",
+"type": "system_event"
+}, {
+"dialogue_id": "default",
+"event": "peer_checkin",
+"npc_id": "senior_analyst",
+"type": "npc_interaction"
+}])
 next_shift_id = "shift_tuesday"
+minigame_type = "NONE"
+required_floor = 1

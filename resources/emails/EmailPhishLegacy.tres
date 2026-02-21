@@ -6,10 +6,10 @@
 script = ExtResource("1_email")
 email_id = "EMAIL-LEGACY-PHISH"
 sender = "Security-Updates@verify-corp.net"
-subject = "REQUIRED: Final Security Validation for {victim_name}"
+subject = "REQUIRED: Final Security Validation for {victim}"
 body = "Analyst,
 
-Our records indicate your workstation {victim_host} has not completed the mandatory Week 1 validation. 
+Our records indicate your workstation {host} has not completed the mandatory Week 1 validation. 
 
 Please click the link below to verify your credentials and avoid account suspension.
 

@@ -9,18 +9,18 @@ shift_id = "shift_tuesday"
 briefing_dialogue_id = "briefing_second_shift"
 event_sequence = [
 	{"time": 30, "event": "spawn_social", "type": "spawn_ticket", "ticket_id": "SOCIAL-001"},
-	{"time": 60, "event": "it_checkin", "type": "npc_interaction", "npc_id": "it_support", "dialogue_id": "tuesday_complaint"},
-	{"time": 90, "event": "spawn_supply_chain_1", "type": "spawn_ticket", "ticket_id": "SUPPLY-CHAIN-001"},
-	{"time": 120, "event": "log_flood", "type": "system_event", "event_id": "FALSE_FLAG", "duration": 90.0},
-	{"time": 150, "event": "spawn_spear_2", "type": "spawn_ticket", "ticket_id": "SPEAR-PHISH-002"},
-	{"time": 300, "event": "shift_end_talk", "type": "npc_interaction", "npc_id": "ciso", "dialogue_id": "shift_end"},
-	{"time": 330, "event": "shift_end", "type": "shift_end"}
+	{"time": 90, "event": "it_checkin", "type": "npc_interaction", "npc_id": "it_support", "dialogue_id": "tuesday_complaint"},
+	{"time": 150, "event": "spawn_supply_chain_1", "type": "spawn_ticket", "ticket_id": "SUPPLY-CHAIN-001"},
+	{"time": 240, "event": "log_flood", "type": "system_event", "event_id": "FALSE_FLAG", "duration": 90.0},
+	{"time": 330, "event": "spawn_spear_2", "type": "spawn_ticket", "ticket_id": "SPEAR-PHISH-002"},
+	{"time": 420, "event": "shift_end_talk", "type": "npc_interaction", "npc_id": "ciso", "dialogue_id": "shift_end"},
+	{"time": 600, "event": "shift_end", "type": "shift_end"}
 ]
 random_event_pool = [
 	{"event": "routine_patching", "type": "spawn_ticket", "ticket_id": "SYS-MAINT-GENERIC"},
 	{"event": "siem_bottleneck", "type": "system_event", "event_id": "SIEM_LAG", "duration": 30.0},
 	{"event": "gossip_distraction", "type": "system_event", "event_id": "GOSSIP_FLOOD", "duration": 45.0},
-	{"event": "unstable_power", "type": "system_event", "event_id": "POWER_FLICKER", "duration": 5.0},
+	{"event": "unstable_power", "type": "system_event", "event_id": "POWER_FLICKER", "duration": 3.0},
 	{"event": "unauthorized_script_noise", "type": "spawn_ticket", "ticket_id": "MALWARE-002"},
 	{"event": "it_complaint", "type": "npc_interaction", "npc_id": "it_support", "dialogue_id": "default"}
 ]

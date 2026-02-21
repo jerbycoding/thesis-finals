@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://b1k8p8v2j1sy"]
 
 [ext_resource type="Theme" uid="uid://dny3rlbltexc7" path="res://assets/themes/EnterpriseTheme.tres" id="1_theme"]
-[ext_resource type="Script" uid="uid://c5k8p8v2j1sy" path="res://scripts/2d/StartMenuAppButton.gd" id="2_script"]
+[ext_resource type="Script" uid="uid://dhjtqbi1ie4ca" path="res://scripts/2d/StartMenuAppButton.gd" id="2_script"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Hover"]
 bg_color = Color(1, 1, 1, 0.0588235)

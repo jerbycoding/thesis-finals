@@ -101,3 +101,6 @@ func set_highlight(active: bool):
 			style.bg_color = Color(0, 0, 0, 0)
 			style.border_width_left = 0
 		add_theme_stylebox_override("panel", style)
+
+func get_log_data() -> LogResource:
+	return log_data

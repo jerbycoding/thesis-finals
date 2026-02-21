@@ -12,7 +12,7 @@ const TICKET_DIR = "res://resources/tickets/"
 var noise_library: Array[TicketResource] = []
 var ticket_library: Array[TicketResource] = [] # Unique list of all discovered tickets
 var ambient_spawn_timer: Timer
-var ambient_spawn_interval: float = 45.0 # Seconds between noise tickets
+var ambient_spawn_interval: float = 120.0 # Seconds between noise tickets
 var max_active_tickets: int = 5
 var is_ambient_spawning_enabled: bool = false
 # ----------------------------------
@@ -123,8 +123,8 @@ func _prepare_library():
 		
 		ticket_library.append(res)
 		
-		# 3. Add to noise pool if generic
-		if "GENERIC" in res.ticket_id:
+		# 3. Add to noise pool if flag is set
+		if res.is_ambient_noise:
 			noise_library.append(res)
 		
 		print("  - Registered Ticket: %s (Map keys: %s, %s)" % [res.ticket_id, tid, file_id])
@@ -143,15 +143,26 @@ func load_state(active_ids: Array, completed_ids: Array):
 	active_timers.clear()
 	completed_tickets.clear()
 	
-	for tid in active_ids:
-		var res = ticket_id_map.get(tid.to_lower())
+	# Standardize IDs to ensure they match our internal map
+	var standardized_active = []
+	for id in active_ids: standardized_active.append(id.to_lower())
+	
+	var standardized_completed = []
+	for id in completed_ids: standardized_completed.append(id.to_lower())
+	
+	for tid in standardized_active:
+		var res = ticket_id_map.get(tid)
 		if res:
 			var instance = res.duplicate()
 			active_tickets.append(instance)
 			_create_ticket_timer(instance)
+			
+			# RE-SEED EVIDENCE VISIBILITY (Fixes Ghost Queue bug)
+			_reveal_evidence_for_ticket(instance)
+			_apply_procedural_network_state(instance)
 	
-	for tid in completed_ids:
-		var res = ticket_id_map.get(tid.to_lower())
+	for tid in standardized_completed:
+		var res = ticket_id_map.get(tid)
 		if res:
 			completed_tickets.append(res.duplicate())
 	
@@ -219,21 +230,26 @@ func add_ticket(ticket: TicketResource):
 		push_error("TicketManager: Rejected invalid ticket resource.")
 		return
 	
-	for t in active_tickets:
-		if t.ticket_id == ticket.ticket_id: return
-	
-	ticket.spawn_timestamp = Time.get_ticks_msec()
-	ticket.expiry_timestamp = ticket.spawn_timestamp + (ticket.base_time * 1000.0)
-	
+	# 1. GENERATE TRUTH PACKET IMMEDIATELY
 	if VariableRegistry and ticket.truth_packet.is_empty():
 		var context = HeatManager.pop_vulnerability() if HeatManager else {}
 		if not context.is_empty() and ticket.category in ["Malware", "Data Breach", "Ransomware"]:
 			ticket.truth_packet = VariableRegistry.generate_truth_packet(ticket.ticket_id)
 			ticket.truth_packet["attacker_ip"] = context.attacker_ip
+			ticket.truth_packet["ip"] = context.attacker_ip # Sync Alias
 			ticket.truth_packet["victim_host"] = context.victim_host
+			ticket.truth_packet["host"] = context.victim_host # Sync Alias
 			ticket.truth_packet["inherited_from"] = context.original_id
 		else:
 			ticket.truth_packet = VariableRegistry.generate_truth_packet(ticket.ticket_id)
+
+	# 2. CHECK FOR DUPLICATES
+	for t in active_tickets:
+		if t.ticket_id == ticket.ticket_id: return
+	
+	# 3. SET TIMESTAMPS
+	ticket.spawn_timestamp = Time.get_ticks_msec()
+	ticket.expiry_timestamp = ticket.spawn_timestamp + (ticket.base_time * 1000.0)
 	
 	active_tickets.append(ticket)
 	_create_ticket_timer(ticket)
@@ -323,13 +339,21 @@ func detach_log_from_ticket(ticket_id: String, log_id: String) -> bool:
 	return false
 
 func _on_terminal_command_run(command_name: String, args: Array):
-	if command_name == "isolate" and not args.is_empty():
-		var isolated_host = args[0].to_upper()
-		for ticket in active_tickets:
-			if ticket.required_host_isolation != "":
-				var target = ticket.required_host_isolation
-				if target.begins_with("{") and not ticket.truth_packet.is_empty():
-					target = target.format(ticket.truth_packet)
-				
-				if isolated_host == target.to_upper():
-					print("TicketManager: Technical requirement met for %s (Host Isolated)." % ticket.ticket_id)
+	if args.is_empty(): return
+	var target_host = args[0].to_upper()
+	
+	for ticket in active_tickets:
+		var req_iso = ticket.required_host_isolation
+		var req_res = ticket.required_host_restoration
+		
+		# Resolve placeholders in requirements
+		if req_iso.begins_with("{") and not ticket.truth_packet.is_empty(): req_iso = req_iso.format(ticket.truth_packet)
+		if req_res.begins_with("{") and not ticket.truth_packet.is_empty(): req_res = req_res.format(ticket.truth_packet)
+		
+		if command_name == "isolate" and req_iso != "" and target_host == req_iso.to_upper():
+			ticket.is_technically_fulfilled = true
+			print("TicketManager: Technical requirement met for %s (Host Isolated)." % ticket.ticket_id)
+			
+		elif command_name == "restore" and req_res != "" and target_host == req_res.to_upper():
+			ticket.is_technically_fulfilled = true
+			print("TicketManager: Technical requirement met for %s (Host Restored)." % ticket.ticket_id)

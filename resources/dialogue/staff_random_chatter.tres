@@ -6,6 +6,7 @@
 script = ExtResource("1_dialogue_data")
 npc_name = "Staff"
 portrait = "👥"
+is_randomized = true
 lines = [
     {"choices": [], "text": "Did you see that email from HR? Something about a policy update for cloud storage. Glad I'm not in Marketing."},
     {"choices": [], "text": "The coffee in the breakroom tastes like liquid copper today. IT Support says it's 'within nominal parameters'."},

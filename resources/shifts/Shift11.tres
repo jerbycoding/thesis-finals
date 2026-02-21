@@ -6,13 +6,13 @@
 script = ExtResource("1_shift")
 shift_name = "Shift 11: Thursday (Paranoia)"
 shift_id = "shift_week2_thursday"
-briefing_dialogue_id = "default"
+briefing_dialogue_id = "week2_thursday"
 event_sequence = [
 	{"time": 30, "event": "spawn_mole_hunt", "type": "spawn_ticket", "ticket_id": "MOLE-HUNT-001"},
-	{"time": 60, "event": "analyst_accusation", "type": "npc_interaction", "npc_id": "senior_analyst", "dialogue_id": "accusation"},
-	{"time": 90, "event": "spawn_log_wiper", "type": "spawn_ticket", "ticket_id": "LOG-WIPER-001"},
-	{"time": 150, "event": "spawn_sabotage", "type": "spawn_ticket", "ticket_id": "SABOTAGE-001"},
-	{"time": 300, "event": "shift_end", "type": "shift_end"}
+	{"time": 90, "event": "analyst_accusation", "type": "npc_interaction", "npc_id": "senior_analyst", "dialogue_id": "accusation"},
+	{"time": 210, "event": "spawn_log_wiper", "type": "spawn_ticket", "ticket_id": "LOG-WIPER-001"},
+	{"time": 330, "event": "spawn_sabotage", "type": "spawn_ticket", "ticket_id": "SABOTAGE-001"},
+	{"time": 600, "event": "shift_end", "type": "shift_end"}
 ]
 random_event_pool = [
 	{"event": "false_flag_logs", "type": "system_event", "event_id": "FALSE_FLAG", "duration": 45.0},

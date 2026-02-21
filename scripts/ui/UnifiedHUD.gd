@@ -39,15 +39,21 @@ func _process(delta):
 		timer_label.visible = true
 		var time_elapsed = NarrativeDirector.get_shift_timer()
 		var shift_duration = NarrativeDirector.get_current_shift_duration()
-		var time_remaining = max(0, shift_duration - time_elapsed)
 		
-		var m = int(time_remaining) / 60
-		var s = int(time_remaining) % 60
-		timer_label.text = "%02d:%02d" % [m, s]
+		# Only show time if duration is valid (> 0)
+		if shift_duration > 0:
+			var time_remaining = max(0, shift_duration - time_elapsed)
+			var m = int(time_remaining) / 60
+			var s = int(time_remaining) % 60
+			timer_label.text = "%02d:%02d" % [m, s]
+		else:
+			timer_label.text = "00:00"
+			
 		status_label.text = "SHIFT_STATUS: ACTIVE"
 		status_label.add_theme_color_override("font_color", Color.BLACK)
 	else:
-		timer_label.text = "--:--"
+		timer_label.text = "00:00"
+		timer_label.visible = true
 		status_label.text = "SHIFT_STATUS: STANDBY"
 		status_label.add_theme_color_override("font_color", GlobalConstants.UI_COLORS.TEXT_SECONDARY)
 

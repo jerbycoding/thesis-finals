@@ -15,6 +15,6 @@ steps = ["Open Terminal", "Run 'trace intranet.portal'", "Isolate the hijacker h
 required_tool = "terminal"
 base_time = 180.0
 hidden_risks = ["Isolating the real DNS server"]
-required_log_ids = []
+required_log_ids = ["LOG-DNS-SPOOF-01"]
 kill_chain_path = "Network Sabotage"
 kill_chain_stage = 2

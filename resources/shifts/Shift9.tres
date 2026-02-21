@@ -6,16 +6,16 @@
 script = ExtResource("1_shift")
 shift_name = "Shift 9: Tuesday (System Instability)"
 shift_id = "shift_week2_tuesday"
-briefing_dialogue_id = "default"
+briefing_dialogue_id = "week2_tuesday"
 event_sequence = [
-	{"time": 10, "event": "siem_crash", "type": "system_event", "event_id": "SIEM_LAG", "duration": 120.0},
-	{"time": 30, "event": "spawn_supply_corrupt", "type": "spawn_ticket", "ticket_id": "SUPPLY-CHAIN-004"},
-	{"time": 90, "event": "spawn_dns_spoof", "type": "spawn_ticket", "ticket_id": "DNS-SPOOF-001"},
-	{"time": 180, "event": "spawn_service_flap", "type": "spawn_ticket", "ticket_id": "SERVICE-FLAP-001"},
-	{"time": 300, "event": "shift_end", "type": "shift_end"}
+	{"time": 15, "event": "siem_crash", "type": "system_event", "event_id": "SIEM_LAG", "duration": 300.0},
+	{"time": 60, "event": "spawn_supply_corrupt", "type": "spawn_ticket", "ticket_id": "SUPPLY-CHAIN-004"},
+	{"time": 180, "event": "spawn_dns_spoof", "type": "spawn_ticket", "ticket_id": "DNS-SPOOF-001"},
+	{"time": 330, "event": "spawn_service_flap", "type": "spawn_ticket", "ticket_id": "SERVICE-FLAP-001"},
+	{"time": 600, "event": "shift_end", "type": "shift_end"}
 ]
 random_event_pool = [
 	{"event": "ghost_log", "type": "spawn_ticket", "ticket_id": "TICKET-NOISE-001"},
-	{"event": "terminal_glitch", "type": "system_event", "event_id": "POWER_FLICKER", "duration": 5.0}
+	{"event": "terminal_glitch", "type": "system_event", "event_id": "POWER_FLICKER", "duration": 3.0}
 ]
 next_shift_id = "shift_week2_wednesday"

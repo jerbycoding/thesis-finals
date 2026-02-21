@@ -56,8 +56,8 @@ func get_forensic_report() -> String:
 		"color": get_severity_color().to_html(),
 		"risk": get_severity_text(),
 		"source": source,
-		"ip": truth_packet.get("attacker_ip", ip_address) if not truth_packet.is_empty() else (ip_address if ip_address != "" else "N/A"),
-		"host": truth_packet.get("victim_host", hostname) if not truth_packet.is_empty() else (hostname if hostname != "" else "N/A"),
+		"ip": truth_packet.get("ip", ip_address) if not truth_packet.is_empty() else (ip_address if ip_address != "" else "N/A"),
+		"host": truth_packet.get("host", hostname) if not truth_packet.is_empty() else (hostname if hostname != "" else "N/A"),
 		"message": get_formatted_message()
 	}
 	

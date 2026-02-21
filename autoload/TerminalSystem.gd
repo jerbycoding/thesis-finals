@@ -30,6 +30,11 @@ var commands: Dictionary = {
 		"syntax": "isolate [hostname]",
 		"risk_level": 5
 	},
+	"restore": {
+		"description": "Reconnect an isolated host to the network",
+		"syntax": "restore [hostname]",
+		"risk_level": 1
+	},
 	"status": {
 		"description": "Show system status",
 		"syntax": "status",
@@ -108,6 +113,8 @@ func _execute_command_internal(command_name: String, args: Array) -> Dictionary:
 			result = await _cmd_trace(args)
 		"isolate":
 			result = _cmd_isolate(args)
+		"restore":
+			result = _cmd_restore(args)
 		"status":
 			result = _cmd_status()
 		"logs":
@@ -155,7 +162,7 @@ func _cmd_scan(args: Array) -> Dictionary:
 		}
 
 	# Calculate scan time
-	var base_scan_time = 3.0
+	var base_scan_time = 10.0
 	var total_scan_time = base_scan_time * scan_multiplier * isp_multiplier
 	
 	# Wait for scan to complete
@@ -208,6 +215,29 @@ func _cmd_isolate(args: Array) -> Dictionary:
 		output += "\n[color=red]" + CorporateVoice.get_formatted_phrase("critical_server_offline", {"hostname": hostname}) + "[/color]"
 		EventBus.critical_host_isolated.emit(hostname)
 
+	
+	return {"success": true, "output": output}
+
+func _cmd_restore(args: Array) -> Dictionary:
+	if args.is_empty():
+		return {"success": false, "output": CorporateVoice.get_formatted_phrase("command_requires_hostname", {"command": "restore"})}
+	
+	var hostname = args[0].to_upper()
+	var host_info = NetworkState.get_host_state(hostname)
+	
+	if host_info.is_empty():
+		return {"success": false, "output": CorporateVoice.get_phrase("unknown_host")}
+	
+	if not host_info.get("isolated", false):
+		return {"success": true, "output": "Host %s is already connected to the network." % hostname}
+
+	# --- Perform Restoration ---
+	NetworkState.update_host_state(hostname, {"isolated": false, "status": "CLEAN"})
+	var output = "[b]" + CorporateVoice.get_formatted_phrase("restoring_host", {"hostname": hostname}) + "[/b]\n"
+	output += CorporateVoice.get_formatted_phrase("host_restored", {"hostname": hostname}) + "\n"
+
+	# Global signal for ticket verification (matches the TicketManager listener for 'isolate')
+	EventBus.terminal_command_run.emit("restore", [hostname])
 	
 	return {"success": true, "output": output}
 

@@ -137,11 +137,16 @@ func _on_shift_ended(_results: Dictionary):
 	if GameState: GameState.is_guided_mode = false
 	
 	# CLEAR FILTERS
-	if LogSystem: LogSystem.active_filter = null
-	if EmailSystem: EmailSystem.active_filter = null
+	if LogSystem: 
+		LogSystem.active_filter = null
+		LogSystem.reveal_logs_for_ticket("") # Restore default noise
+	if EmailSystem: 
+		EmailSystem.active_filter = null
+		EmailSystem.reveal_emails_for_ticket("") # Restore default noise
 	
 	# CLEAR PERMISSIONS
-	if DesktopWindowManager: DesktopWindowManager.active_permission_profile = null
+	if DesktopWindowManager: 
+		DesktopWindowManager.active_permission_profile = null
 	
 	_toggle_live_hud(true)
 	if overlay: overlay.hide_overlay()

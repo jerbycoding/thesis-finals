@@ -15,6 +15,6 @@ steps = ["Identify the controller IP in SIEM", "Verify successful logins", "Bloc
 required_tool = "siem"
 base_time = 180.0
 hidden_risks = ["Blocking innocent proxy IPs"]
-required_log_ids = []
+required_log_ids = ["LOG-AUTH-SPIKE-01", "LOG-AUTH-SPIKE-02"]
 kill_chain_path = "Account Takeover"
 kill_chain_stage = 2

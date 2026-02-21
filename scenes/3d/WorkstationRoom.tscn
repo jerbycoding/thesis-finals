@@ -126,7 +126,7 @@ shape = SubResource("BoxShape3D_trigger")
 transform = Transform3D(3.5, 0, 0, 0, 3.5, 0, 0, 0, 3.5, 1.00902, 0, 0)
 
 [node name="Player3D" parent="." instance=ExtResource("1_player")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 2)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0189527, 2)
 
 [node name="Painting" parent="." instance=ExtResource("6_mmubc")]
 transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 1.05481, 3.059, -3.95989)

@@ -39,6 +39,7 @@ func _ready():
 	EventBus.app_closed.connect(_on_app_closed)
 	EventBus.window_focused.connect(_on_window_focused)
 	EventBus.ticket_added.connect(_on_ticket_added)
+	EventBus.world_event_triggered.connect(_on_world_event)
 	
 	if start_menu_button:
 		start_menu_button.pressed.connect(_on_start_menu_pressed)
@@ -106,11 +107,19 @@ func _on_window_focused(_window: Control):
 		start_menu_instance.visible = false
 
 func _on_world_event(event_id: String, active: bool, _duration: float):
-	if event_id == GlobalConstants.EVENTS.POWER_FLICKER and active:
-		visible = false
-		await get_tree().create_timer(0.2).timeout
-		visible = true
-		if DesktopWindowManager: DesktopWindowManager.close_all_windows()
+	if event_id == GlobalConstants.EVENTS.POWER_FLICKER:
+		if active:
+			# Station Crash
+			visible = false
+			if DesktopWindowManager: 
+				DesktopWindowManager.close_all_windows()
+			if AudioManager: 
+				AudioManager.play_terminal_beep(-5.0)
+		else:
+			# Power Restored
+			visible = true
+			if AudioManager: 
+				AudioManager.play_notification("success")
 
 func _on_ticket_added(ticket_data: TicketResource):
 	# PASSIVE NOTIFICATION: Instead of opening the app, show a toast

@@ -396,7 +396,7 @@ outline_size = 20
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.4659, 0.846397, 0.832036)
 
 [node name="TutorialTrigger_OfficeC" type="Area3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, -0.574919)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.3401, 0, 0.270639)
 script = ExtResource("11")
 objective_id = "office_c"
 

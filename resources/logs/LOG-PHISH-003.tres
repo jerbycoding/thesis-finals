@@ -11,4 +11,4 @@ category = "Security"
 message = "User reported a suspicious 'System Performance' email with a link to 'corp-monitoring.net'."
 severity = 2
 related_ticket = "PHISH-003"
-hostname = "{victim_host}"
+hostname = "{host}"

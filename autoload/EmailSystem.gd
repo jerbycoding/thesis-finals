@@ -66,19 +66,27 @@ func reveal_emails_for_ticket(ticket_id: String):
 				should_reveal = true
 		
 		if should_reveal:
-			if email not in active_emails:
-				active_emails.append(email)
-				EventBus.email_added.emit(email)
+			if not _is_email_active(email.email_id):
+				var instance = email.duplicate()
+				active_emails.append(instance)
+				EventBus.email_added.emit(instance)
 				count += 1
-				print("  - Revealed Email: ID=%s | Subject=%s" % [email.email_id, email.subject])
+				print("  - Revealed Email: ID=%s | Subject=%s" % [instance.email_id, instance.subject])
 	
 	if count > 0:
 		print("📧 EmailSystem: Revealed ", count, " new emails")
+
+func _is_email_active(id: String) -> bool:
+	for e in active_emails:
+		if e.email_id == id: return true
+	return false
 
 func clear_active_data():
 	print("📧 EmailSystem: Purging all active email data.")
 	active_emails.clear()
 	processed_emails.clear()
+	# Ensure basic corporate noise returns after purge
+	reveal_emails_for_ticket("") 
 
 func add_email(email: EmailResource):
 	if not email: return
@@ -102,10 +110,10 @@ func get_emails_for_ticket(ticket_id: String) -> Array[EmailResource]:
 	return filtered
 
 func get_email_by_id(email_id: String) -> EmailResource:
-	for email in all_emails:
+	for email in active_emails:
 		if email.email_id == email_id:
 			return email
-	for email in active_emails:
+	for email in all_emails:
 		if email.email_id == email_id:
 			return email
 	return null

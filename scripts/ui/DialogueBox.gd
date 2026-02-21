@@ -24,6 +24,10 @@ func show_dialogue(dialogue_data: Dictionary, npc: String = ""):
 	current_dialogue = dialogue_data
 	current_line_index = 0
 	
+	# Handle Randomized Gossip Entry
+	if dialogue_data.get("is_randomized", false) and dialogue_data.has("lines"):
+		current_line_index = randi() % dialogue_data["lines"].size()
+	
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	show()
 	modulate.a = 0
@@ -109,6 +113,12 @@ func _on_hover():
 
 func _on_continue_pressed():
 	if AudioManager: AudioManager.play_ui_click()
+	
+	# If this was a randomized gossip line, end the conversation here
+	if current_dialogue.get("is_randomized", false):
+		_close_dialogue()
+		return
+		
 	current_line_index += 1
 	_show_current_line()
 

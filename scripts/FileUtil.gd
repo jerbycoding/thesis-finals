@@ -36,9 +36,15 @@ static func load_and_validate_resources(dir_path: String, expected_class: String
 		if res:
 			# Check if it's a built-in class or a custom class_name
 			var matches_class = res.is_class(expected_class)
-			if not matches_class and res.get_script():
-				if res.get_script().get_global_name() == expected_class:
-					matches_class = true
+			
+			if not matches_class:
+				# Godot 4 custom class_name lookup
+				for cls_data in ProjectSettings.get_global_class_list():
+					if cls_data.class == expected_class:
+						var cls_script = load(cls_data.path)
+						if res.get_script() == cls_script:
+							matches_class = true
+							break
 			
 			if matches_class:
 				if res.has_method("validate") and not res.validate():

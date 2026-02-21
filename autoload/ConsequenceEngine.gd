@@ -78,10 +78,10 @@ func trigger_consequence(consequence_id: String):
 func _on_consequence_triggered_globally(type: String, details: Dictionary):
 	if type == GlobalConstants.CONSEQUENCE_ID.PROCEDURAL_VIOLATION:
 		var hostname = details.get("hostname", "Unknown")
-		_schedule_followup_ticket("AUDIT-PROC-001", 10.0, "Procedural violation: Unjustified isolation of " + hostname)
+		_schedule_followup_ticket("AUDIT-PROC-001", 10.0, "Procedural violation: Unjustified isolation of " + hostname, "N/A", hostname)
 
 func _on_critical_host_isolated(hostname: String):
-	_schedule_followup_ticket(GlobalConstants.CONSEQUENCE_ID.SERVICE_OUTAGE, 20.0, "Service outage on " + hostname + " due to network isolation.")
+	_schedule_followup_ticket(GlobalConstants.CONSEQUENCE_ID.SERVICE_OUTAGE, 20.0, "Service outage on " + hostname + " due to network isolation.", "N/A", hostname)
 
 func _on_ticket_ignored(ticket: TicketResource):
 	print("🚨 ConsequenceEngine: Ticket IGNORED (Timed out): ", ticket.ticket_id)
@@ -270,12 +270,13 @@ func _trigger_kill_chain_escalation(ticket: TicketResource):
 			if TicketManager: TicketManager.add_ticket(next_ticket)
 		)
 
-func _schedule_followup_ticket(ticket_id: String, delay_seconds: float, reason: String, original_id: String = "N/A"):
+func _schedule_followup_ticket(ticket_id: String, delay_seconds: float, reason: String, original_id: String = "N/A", target_host: String = ""):
 	var consequence_data = {
 		"ticket_id": ticket_id,
 		"delay": delay_seconds,
 		"reason": reason,
 		"original_id": original_id,
+		"target_host": target_host,
 		"trigger_time": Time.get_ticks_msec() + (delay_seconds * 1000)
 	}
 	
@@ -284,15 +285,23 @@ func _schedule_followup_ticket(ticket_id: String, delay_seconds: float, reason: 
 
 	if TimeManager:
 		var timer_id = "followup_" + ticket_id + "_" + original_id + "_" + str(Time.get_ticks_msec())
-		TimeManager.register_timer(timer_id, delay_seconds, _spawn_followup_ticket.bind(ticket_id, reason, original_id))
+		TimeManager.register_timer(timer_id, delay_seconds, _spawn_followup_ticket.bind(ticket_id, reason, original_id, target_host))
 
-func _spawn_followup_ticket(ticket_id: String, reason: String, original_id: String = "N/A"):
+func _spawn_followup_ticket(ticket_id: String, reason: String, original_id: String = "N/A", target_host: String = ""):
 	if not TicketManager: return
 	
 	var template = TicketManager.ticket_id_map.get(ticket_id.to_lower())
 	if template:
 		var followup_ticket = template.duplicate()
 		followup_ticket.ticket_id = ticket_id + "-" + str(randi() % 999)
+		
+		# Set technical fulfillment target (Sprint 13 Fix)
+		if target_host != "":
+			if "AUDIT" in ticket_id:
+				followup_ticket.required_host_isolation = target_host
+			else:
+				followup_ticket.required_host_restoration = target_host
+		
 		if original_id != "N/A" and not original_id in followup_ticket.description:
 			followup_ticket.description += "\n\n[ Context ]\nRelated: " + original_id + "\nReason: " + reason
 			
@@ -330,11 +339,20 @@ func get_average_npc_approval() -> float:
 		total += npc_relationships[npc_id]
 	return total / npc_relationships.size()
 
-func load_state(relationships: Dictionary, choices: Array):
+func load_state(relationships: Dictionary, choices: Array, scheduled: Array = []):
 	if relationships: npc_relationships = relationships
 	if choices: choice_log = choices
+	
 	scheduled_consequences.clear()
 	if TimeManager: TimeManager.clear_all_timers()
+	
+	# Re-register pending consequences
+	var current_time = Time.get_ticks_msec()
+	for cons in scheduled:
+		var delay = (cons.trigger_time - current_time) / 1000.0
+		# Clamp to minimum 0.5s to ensure timer actually fires if it was just about to
+		if delay > -5.0: # Even if slightly in the past, trigger it shortly after load
+			_schedule_followup_ticket(cons.ticket_id, max(0.5, delay), cons.reason, cons.original_id)
 
 func reset_to_default():
 	choice_log.clear()

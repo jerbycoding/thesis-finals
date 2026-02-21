@@ -61,4 +61,6 @@ func reset_to_default():
 func load_state(data: Dictionary):
 	current_week = data.get("current_week", 1)
 	heat_multiplier = data.get("heat_multiplier", 1.0)
-	vulnerability_buffer = data.get("vulnerability_buffer", [])
+	
+	if data.has("vulnerability_buffer"):
+		vulnerability_buffer.assign(data["vulnerability_buffer"])

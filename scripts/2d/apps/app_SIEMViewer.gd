@@ -8,12 +8,22 @@ extends Control
 @onready var inspector_pane: Control = %InspectorPane
 @onready var log_detail_label: RichTextLabel = %LogDetailLabel
 
+# NEW UI REFERENCES
+@onready var search_edit: LineEdit = %SearchEdit
+@onready var filter_critical: Button = %FilterCritical
+@onready var filter_auth: Button = %FilterAuth
+@onready var filter_malware: Button = %FilterMalware
+
 var log_entry_scene = preload("res://scenes/2d/apps/components/LogEntry.tscn")
 var pool: UIObjectPool
 
 var selected_log: LogResource = null
 var log_history_data: Array[int] = [] # For the graph
 const GRAPH_MAX_POINTS = 60
+
+# Filter State
+var current_filter_text: String = ""
+var only_critical: bool = false
 
 func _ready():
 	print("======= App_SIEMViewer (Forensics Redesign) Ready =======")
@@ -23,6 +33,12 @@ func _ready():
 	
 	volume_graph.draw.connect(_draw_graph)
 	close_inspector_button.pressed.connect(_on_close_inspector_pressed)
+	
+	# Connect Search & Filters
+	search_edit.text_changed.connect(_on_search_changed)
+	filter_critical.toggled.connect(_on_filter_critical_toggled)
+	filter_auth.pressed.connect(func(): search_edit.text = "auth"; _on_search_changed("auth"))
+	filter_malware.pressed.connect(func(): search_edit.text = "malware"; _on_search_changed("malware"))
 	
 	# Connect to EventBus
 	EventBus.log_added.connect(_on_log_added)
@@ -39,6 +55,33 @@ func _ready():
 	timer.timeout.connect(_update_graph_data)
 	add_child(timer)
 	timer.start()
+
+func _on_search_changed(new_text: String):
+	current_filter_text = new_text.to_lower()
+	_apply_filters()
+
+func _on_filter_critical_toggled(button_pressed: bool):
+	only_critical = button_pressed
+	_apply_filters()
+
+func _apply_filters():
+	var visible_count = 0
+	for child in log_list.get_children():
+		if child.has_method("get_log_data"):
+			var log = child.get_log_data()
+			var matches_text = current_filter_text == "" or \
+				current_filter_text in log.message.to_lower() or \
+				current_filter_text in log.hostname.to_lower() or \
+				current_filter_text in log.ip_address.to_lower() or \
+				current_filter_text in log.source.to_lower()
+			
+			var matches_critical = not only_critical or log.severity >= 4
+			
+			child.visible = matches_text and matches_critical
+			if child.visible:
+				visible_count += 1
+	
+	stats_label.text = "FILTERED: %d events matching criteria" % visible_count
 
 func _update_graph_data():
 	log_history_data.pop_front()
@@ -78,9 +121,12 @@ func _refresh_logs():
 	
 	for log in logs:
 		_add_log_entry(log)
+	
+	_apply_filters()
 
 func _on_log_added(log: LogResource):
 	_add_log_entry(log, true)
+	_apply_filters()
 	# Spike the graph
 	log_history_data[log_history_data.size()-1] += 5
 	volume_graph.queue_redraw()
@@ -117,7 +163,10 @@ func _on_log_selected(log: LogResource, instance: Control):
 
 	selected_log = log
 	inspector_pane.visible = true
-	log_detail_label.text = log.get_forensic_report()
+	
+	# Format forensic report with extra metadata
+	var report = log.get_forensic_report()
+	log_detail_label.text = report
 	
 	for child in log_list.get_children():
 		if child.has_method("set_highlight"):

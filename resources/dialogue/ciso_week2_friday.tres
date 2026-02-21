@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="DialogueDataResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/dialogue/DialogueDataResource.gd" id="1_dialogue"]
+
+[resource]
+script = ExtResource("1_dialogue")
+npc_name = "CISO"
+portrait = "👔"
+lines = [
+	{"choices": [], "text": "This is it. The logic bomb has detonated. Systems are lagging, the firewall is being shredded, and our backups are being wiped in real-time."},
+	{"choices": [{"effect": {"change_scene": "res://scenes/SOC_Office.tscn", "then_start_narrative": "shift_week2_friday"}, "text": "I'll hold the line."}], "text": "This isn't an investigation anymore—it's active warfare. If you blink, we lose the company. You have full emergency authorization. Isolate everything that moves. Save the data. Good luck."}
+]

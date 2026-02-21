@@ -18,6 +18,35 @@ func _ready():
 	EventBus.consequence_triggered.connect(_on_consequence_triggered)
 	EventBus.followup_ticket_scheduled.connect(_on_followup_ticket_scheduled)
 	EventBus.email_decision_processed.connect(_on_email_decision_processed)
+	EventBus.shift_ended.connect(_on_shift_ended)
+	EventBus.world_event_triggered.connect(_on_world_event)
+
+func _on_world_event(event_id: String, active: bool, _duration: float):
+	if not active: return # Only notify on start
+	
+	var message = ""
+	match event_id:
+		"SIEM_LAG": message = "SYSTEM ALERT: SIEM Database Latency High"
+		"GOSSIP_FLOOD": message = "NETWORK NOTICE: Internal Email Surge"
+		"ISP_THROTTLING": message = "CRITICAL: ISP Bandwidth Throttling Active"
+		"POWER_FLICKER": message = "FACILITY ALERT: Power Grid Instability"
+		"FALSE_FLAG": message = "SECURITY ALERT: Log Obfuscation Detected"
+		"CRYPTO_SPIKE": message = "SYSTEM WARNING: Abnormal CPU Heat Spike"
+		"LATERAL_MOVEMENT": message = "CRITICAL ALERT: Lateral Movement Detected"
+		_: return # Don't notify for generic/narrative events
+		
+	show_notification(message, "warning", 5.0)
+
+func _on_shift_ended(_results: Dictionary):
+	clear_all_notifications()
+	desktop_instance = null
+
+func clear_all_notifications():
+	for notif in active_notifications:
+		if is_instance_valid(notif):
+			notif.queue_free()
+	active_notifications.clear()
+	notification_queue.clear()
 
 func _on_email_decision_processed(email: EmailResource, decision: String, inspection_state: Dictionary):
 	# This new handler shows notifications based on the email decision event.
@@ -80,6 +109,10 @@ func show_notification(text: String, type: String = "info", duration: float = 4.
 	# Wait a frame for size to be calculated
 	await get_tree().process_frame
 	
+	# CRITICAL SAFETY: Check if node was freed during await (e.g. by shift restart)
+	if not is_instance_valid(notification) or not is_instance_valid(desktop_instance):
+		return
+		
 	var viewport_size = get_viewport().get_visible_rect().size
 	var y_offset = active_notifications.size() * notification_spacing
 	notification.position = Vector2(
@@ -108,6 +141,16 @@ func _on_notification_finished(notification: Control):
 	_update_notification_positions()
 
 func _update_notification_positions():
+	# Cleanup any invalid nodes first
+	var valid_notifications: Array[Control] = []
+	for n in active_notifications:
+		if is_instance_valid(n):
+			valid_notifications.append(n)
+	active_notifications.assign(valid_notifications)
+
+	if not is_inside_tree() or not get_viewport():
+		return
+
 	var viewport_size = get_viewport().get_visible_rect().size
 	for i in range(active_notifications.size()):
 		var notif = active_notifications[i]

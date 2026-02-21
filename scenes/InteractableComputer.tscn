@@ -68,7 +68,7 @@ shape = SubResource("BoxShape3D_kxh54")
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.284374, 1.55024, -0.159997)
 
 [node name="ViewAnchor" type="Marker3D" parent="."]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -0.0659295, 1.85498, -0.10843)
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.0863189, 1.85498, -0.160087)
 
 [node name="Root Scene" parent="." instance=ExtResource("3_yg1ix")]
 transform = Transform3D(-0.022226, 0, -1.49984, 0, 1.5, 0, 1.49984, 0, -0.022226, 0.475614, 0.180593, 0)

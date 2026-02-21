@@ -15,6 +15,6 @@ steps = ["Identify host deleting logs", "Isolate host to stop the wiper", "Recov
 required_tool = "terminal"
 base_time = 140.0
 hidden_risks = ["Waiting too long (Evidence lost)"]
-required_log_ids = []
+required_log_ids = ["LOG-WIPER-DELETE-01"]
 kill_chain_path = "Insider Sabotage"
 kill_chain_stage = 2

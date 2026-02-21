@@ -13,8 +13,14 @@ class_name TicketResource
 @export var hidden_risks: Array[String] = []
 @export var required_log_ids: Array[String] = [] # Log IDs that should be attached for compliant completion
 
+## If set, this ticket is considered 'ambient noise' and can be spawned randomly during shifts.
+@export var is_ambient_noise: bool = false
+
 ## If set, isolating this host will trigger a 'technical verification' for this ticket.
 @export var required_host_isolation: String = ""
+
+## If set, restoring this host will trigger a 'technical verification' for this ticket.
+@export var required_host_restoration: String = ""
 
 ## The event ID to trigger in NarrativeDirector when this ticket is completed
 @export var on_complete_event: String = ""
@@ -28,6 +34,7 @@ class_name TicketResource
 
 var attached_log_ids: Array[String] = [] # Log IDs that player has attached
 var truth_packet: Dictionary = {} # Procedural data generated at spawn
+var is_technically_fulfilled: bool = false # NEW: Track terminal actions
 var spawn_timestamp: float = 0.0
 var expiry_timestamp: float = 0.0
 
@@ -55,9 +62,14 @@ func get_evidence_count() -> Dictionary:
 	}
 
 func has_sufficient_evidence() -> bool:
+	# Check for technical requirements first
+	if required_host_isolation != "" or required_host_restoration != "":
+		if not is_technically_fulfilled:
+			return false
+
 	# Check if all required logs are attached
 	if required_log_ids.is_empty():
-		return true  # No requirements
+		return true  # No log requirements
 	
 	for required_id in required_log_ids:
 		if required_id not in attached_log_ids:

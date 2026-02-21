@@ -9,11 +9,11 @@ shift_id = "shift_thursday"
 briefing_dialogue_id = "briefing_thursday"
 event_sequence = [
 	{"time": 30, "event": "spawn_auth_3", "type": "spawn_ticket", "ticket_id": "AUTH-003"},
-	{"time": 60, "event": "ciso_checkin", "type": "npc_interaction", "npc_id": "ciso", "dialogue_id": "thursday_betrayal"},
-	{"time": 120, "event": "spawn_insider", "type": "spawn_ticket", "ticket_id": "INSIDER-001"},
-	{"time": 210, "event": "spawn_shadow_it_1", "type": "spawn_ticket", "ticket_id": "SHADOW-IT-001"},
-	{"time": 300, "event": "spawn_spear_3", "type": "spawn_ticket", "ticket_id": "SPEAR-PHISH-003"},
-	{"time": 420, "event": "shift_end", "type": "shift_end"}
+	{"time": 90, "event": "ciso_checkin", "type": "npc_interaction", "npc_id": "ciso", "dialogue_id": "thursday_betrayal"},
+	{"time": 180, "event": "spawn_insider", "type": "spawn_ticket", "ticket_id": "INSIDER-001"},
+	{"time": 270, "event": "spawn_shadow_it_1", "type": "spawn_ticket", "ticket_id": "SHADOW-IT-001"},
+	{"time": 390, "event": "spawn_spear_3", "type": "spawn_ticket", "ticket_id": "SPEAR-PHISH-003"},
+	{"time": 600, "event": "shift_end", "type": "shift_end"}
 ]
 random_event_pool = [
 	{"event": "credentials_leak_noise", "type": "spawn_ticket", "ticket_id": "TICKET-NOISE-001"},

@@ -100,6 +100,7 @@ func prepare_shift(shift_id: String):
 		return
 		
 	var shift_res = shift_library[shift_id]
+	current_shift_resource = shift_res # Set resource early for Debug/UI
 	print("NarrativeDirector: Preparing shift: ", shift_id)
 	
 	# DECISION LOGIC: 
@@ -121,7 +122,7 @@ func start_shift(shift_id: String):
 		
 	current_shift_resource = shift_library[shift_id]
 	current_shift_name = shift_id
-	current_active_arc = current_shift_resource.event_sequence
+	current_active_arc = current_shift_resource.event_sequence.duplicate()
 
 	_is_shift_active = true
 	shift_start_time = Time.get_ticks_msec()
@@ -144,6 +145,7 @@ func trigger_briefing(shift_id: String):
 		return
 		
 	var shift_res = shift_library[shift_id]
+	current_shift_resource = shift_res # Set resource early for Debug/UI
 	print("NarrativeDirector: Starting briefing for: ", shift_id)
 	
 	# Transition to Briefing Room if not already there
@@ -214,6 +216,29 @@ func reset_to_default():
 	current_active_arc.clear()
 	current_event_index = 0
 
+func force_random_event():
+	# DEBUG: Allow forced events if a resource is loaded, even if not 'active' yet.
+	if not current_shift_resource:
+		print("NarrativeDirector: Cannot force event - no shift resource loaded.")
+		if NotificationManager:
+			NotificationManager.show_notification("DEBUG: No shift resource loaded to pull events from.", "error")
+		return
+		
+	if current_shift_resource.random_event_pool.is_empty():
+		print("NarrativeDirector: Current shift has no random events.")
+		if NotificationManager:
+			NotificationManager.show_notification("DEBUG: This shift has an EMPTY random pool.", "warning")
+		return
+		
+	var event = current_shift_resource.random_event_pool.pick_random()
+	var event_name = event.get("event", event.get("type", "Unknown Event"))
+	
+	print("🎲 DEBUG: Manually triggering random event: ", event_name)
+	if NotificationManager:
+		NotificationManager.show_notification("DEBUG: Triggered [" + event_name + "]", "info")
+		
+	_trigger_event(event)
+
 func get_shift_timer() -> float:
 	if not _is_shift_active:
 		return 0.0
@@ -223,13 +248,13 @@ func is_shift_active() -> bool:
 	return _is_shift_active
 
 func get_current_shift_duration() -> float:
-	if current_active_arc.is_empty():
+	if not current_active_arc or current_active_arc.is_empty():
 		return 0.0
 	
 	# The last event in the arc should be the shift_end
 	var last_event = current_active_arc.back()
 	if last_event.has("time"):
-		return last_event.time
+		return float(last_event.time)
 	return 0.0
 
 func _on_critical_consequence(consequence_id: String, _details: Dictionary):
@@ -252,12 +277,36 @@ func _on_campaign_ended(type: String):
 		get_tree().change_scene_to_file(scene_path)
 
 func _trigger_event(event_data: Dictionary):
+	if event_data.is_empty():
+		push_warning("NarrativeDirector: Received empty event dictionary.")
+		return
+
 	var type = event_data.get("type", "")
-	if _event_handlers.has(type):
-		print("NarrativeDirector: Triggering event - ", event_data.get("event", type))
-		_event_handlers[type].call(event_data)
-	else:
+	var event_debug_name = event_data.get("event", type)
+	
+	if not _event_handlers.has(type):
 		push_warning("NarrativeDirector: No handler defined for event type: " + str(type))
+		if NotificationManager:
+			NotificationManager.show_notification("DEBUG: Unknown event type: " + str(type), "error")
+		return
+
+	# CRASH PROTECTION: Validate basic keys based on type before calling handler
+	match type:
+		GlobalConstants.NARRATIVE_EVENT_TYPE.SPAWN_TICKET:
+			if not event_data.has("ticket_id"):
+				push_error("NarrativeDirector: 'spawn_ticket' event missing 'ticket_id'!")
+				return
+		GlobalConstants.NARRATIVE_EVENT_TYPE.NPC_INTERACTION:
+			if not event_data.has("npc_id") or not event_data.has("dialogue_id"):
+				push_error("NarrativeDirector: 'npc_interaction' event missing 'npc_id' or 'dialogue_id'!")
+				return
+		GlobalConstants.NARRATIVE_EVENT_TYPE.SYSTEM_EVENT:
+			if not event_data.has("event_id"):
+				push_error("NarrativeDirector: 'system_event' event missing 'event_id'!")
+				return
+
+	print("NarrativeDirector: Triggering event - ", event_debug_name)
+	_event_handlers[type].call(event_data)
 
 # --- Dedicated Event Handlers ---
 
@@ -290,9 +339,18 @@ func _handle_spawn_consequence(event_data: Dictionary):
 	EventBus.narrative_spawn_consequence.emit(event_data.consequence_id)
 
 func _handle_system_event(event_data: Dictionary):
+	if not event_data.has("event_id"):
+		push_error("NarrativeDirector: 'system_event' missing 'event_id'!")
+		return
+		
 	var event_id = event_data.event_id
 	var duration = event_data.get("duration", 10.0)
 	EventBus.world_event_triggered.emit(event_id, true, duration)
+	
+	# Safety check for unit tests/orphaned nodes
+	if not is_inside_tree():
+		return
+
 	# Auto-clear after duration
 	get_tree().create_timer(duration).timeout.connect(
 		func(): EventBus.world_event_triggered.emit(event_id, false, 0.0)

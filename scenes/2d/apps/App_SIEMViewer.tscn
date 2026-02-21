@@ -1,7 +1,7 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=4 format=3 uid="uid://gacemu2at0jm"]
 
-[ext_resource type="Script" path="res://scripts/2d/apps/App_SIEMViewer.gd" id="1_siem"]
-[ext_resource type="Theme" path="res://assets/themes/EnterpriseTheme.tres" id="2_theme"]
+[ext_resource type="Script" uid="uid://cxaow56baqegs" path="res://scripts/2d/apps/App_SIEMViewer.gd" id="1_siem"]
+[ext_resource type="Theme" uid="uid://dny3rlbltexc7" path="res://assets/themes/EnterpriseTheme.tres" id="2_theme"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_TopBar"]
 bg_color = Color(0.0196078, 0.0196078, 0.0196078, 1)
@@ -77,6 +77,49 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 0
+
+[node name="SearchBarArea" type="PanelContainer" parent="Layout/MainSplit/StreamArea"]
+layout_mode = 2
+theme_type_variation = &"HeaderPanel"
+
+[node name="HBox" type="HBoxContainer" parent="Layout/MainSplit/StreamArea/SearchBarArea"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="SearchIcon" type="Label" parent="Layout/MainSplit/StreamArea/SearchBarArea/HBox"]
+layout_mode = 2
+text = "Search"
+
+[node name="SearchEdit" type="LineEdit" parent="Layout/MainSplit/StreamArea/SearchBarArea/HBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Search logs by message, IP, or username..."
+clear_button_enabled = true
+flat = true
+
+[node name="FilterTags" type="HBoxContainer" parent="Layout/MainSplit/StreamArea/SearchBarArea/HBox"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="FilterCritical" type="Button" parent="Layout/MainSplit/StreamArea/SearchBarArea/HBox/FilterTags"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+toggle_mode = true
+text = "CRITICAL"
+
+[node name="FilterAuth" type="Button" parent="Layout/MainSplit/StreamArea/SearchBarArea/HBox/FilterTags"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+text = "#AUTH"
+
+[node name="FilterMalware" type="Button" parent="Layout/MainSplit/StreamArea/SearchBarArea/HBox/FilterTags"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+text = "#MALWARE"
 
 [node name="TableHeader" type="PanelContainer" parent="Layout/MainSplit/StreamArea"]
 layout_mode = 2

@@ -21,6 +21,12 @@ func _ready():
 	_initialize_context_menu()
 	EventBus.host_status_changed.connect(_on_host_status_changed)
 	
+	if NetworkState:
+		NetworkState.hosts_updated.connect(_generate_map)
+	
+	# Auto-refresh when window is re-opened (visible)
+	visibility_changed.connect(func(): if visible: _generate_map())
+	
 	# Initial Map Generation
 	_generate_map()
 	
@@ -36,28 +42,67 @@ func _initialize_context_menu():
 	context_menu.index_pressed.connect(_on_context_item_pressed)
 
 func _generate_map():
+	# Skip if not yet in tree to avoid size calculation issues
+	if not is_inside_tree(): return
+	
 	for child in nodes_container.get_children(): child.queue_free()
 	node_instances.clear()
 	
-	var hosts = NetworkState.get_all_hosts() if NetworkState else []
-	if hosts.is_empty(): return
+	var all_hosts = NetworkState.get_all_hosts() if NetworkState else []
+	if all_hosts.is_empty(): return
 	
-	var center = nodes_container.size / 2
-	if center == Vector2.ZERO: center = Vector2(350, 300)
+	# CATEGORIZE BY ROLE (Hierarchical Logic)
+	var core_infra = [] # Gateways, DCs, Mail, VPN
+	var business_srv = [] # Finance, Web, DB, VoIP
+	var end_user = [] # Workstations, IoT, Research
 	
-	var radius = 220.0
-	for i in range(hosts.size()):
-		var host = hosts[i]
-		var angle = i * (TAU / hosts.size())
-		var pos = center + Vector2(cos(angle), sin(angle)) * radius
+	for host in all_hosts:
+		var name = host.hostname.to_upper()
+		if "GATEWAY" in name or "CTRL" in name or "MAIL" in name or "VPN" in name or "DC-" in name:
+			core_infra.append(host)
+		elif "SRV" in name or "SERVER" in name or "VOIP" in name or "DATABASE" in name:
+			business_srv.append(host)
+		else:
+			end_user.append(host)
+	
+	# LAYOUT CONSTANTS (Explicit Spacing)
+	var start_x = 80.0
+	var start_y = 60.0
+	var row_height = 140.0
+	var col_width = 150.0
+	var max_map_width = 650.0 # Prevents clipping into inspector
+	
+	# TIER 1: CORE INFRASTRUCTURE
+	for i in range(core_infra.size()):
+		var pos = Vector2(start_x + (i * col_width), start_y)
+		_create_node_at(core_infra[i], pos)
 		
-		var inst = node_scene.instantiate()
-		nodes_container.add_child(inst)
-		inst.position = pos - (inst.size / 2)
-		inst.set_host_data(host)
+	# TIER 2: BUSINESS SERVERS
+	for i in range(business_srv.size()):
+		var pos = Vector2(start_x + (i * col_width), start_y + row_height)
+		_create_node_at(business_srv[i], pos)
 		
-		inst.pressed.connect(_on_node_pressed.bind(host))
-		node_instances[host.hostname] = inst
+	# TIER 3: END-USER ASSETS (Grid Layout)
+	var assets_per_row = 4
+	var last_y = start_y
+	for i in range(end_user.size()):
+		var col = i % assets_per_row
+		var row = i / assets_per_row
+		var pos = Vector2(start_x + (col * col_width), start_y + (row_height * 2) + (row * row_height))
+		_create_node_at(end_user[i], pos)
+		last_y = pos.y
+		
+	# ENABLE SCROLLING: Set minimum size to encompass all nodes plus padding
+	nodes_container.custom_minimum_size.y = last_y + row_height + 50.0
+
+func _create_node_at(host: HostResource, pos: Vector2):
+	var inst = node_scene.instantiate()
+	nodes_container.add_child(inst)
+	# 센터링 및 패딩 보정
+	inst.position = pos
+	inst.set_host_data(host)
+	inst.pressed.connect(_on_node_pressed.bind(host))
+	node_instances[host.hostname] = inst
 
 func _on_node_pressed(host: HostResource):
 	if AudioManager: AudioManager.play_ui_click()
@@ -124,12 +169,19 @@ func _on_context_item_pressed(index: int):
 	pass
 
 func _draw():
-	# Procedural connection lines between nodes
-	var hosts = node_instances.keys()
-	for i in range(hosts.size()):
-		var p1 = node_instances[hosts[i]].position + (node_instances[hosts[i]].size / 2)
-		# Draw lines to next 2 nodes to create a mesh look
-		for j in [1, 2]:
-			var target_idx = (i + j) % hosts.size()
-			var p2 = node_instances[hosts[target_idx]].position + (node_instances[hosts[target_idx]].size / 2)
-			draw_line(p1, p2, Color(1, 1, 1, 0.05), 1.0)
+	# Procedural connection lines to show network flow (Subtle mesh)
+	var crit_pos = []
+	var standard_pos = []
+	
+	for hostname in node_instances:
+		var inst = node_instances[hostname]
+		var center = inst.position + (inst.size / 2)
+		if inst.host_data.is_critical: crit_pos.append(center)
+		else: standard_pos.append(center)
+			
+	# Connect Core to Rows below
+	for cp in crit_pos:
+		for sp in standard_pos:
+			# Only draw if roughly in the same vertical column area
+			if abs(cp.x - sp.x) < 100:
+				draw_line(cp, sp, Color(1, 1, 1, 0.02), 1.0)

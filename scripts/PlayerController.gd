@@ -131,6 +131,9 @@ func _handle_bridge_input(event) -> bool:
 			get_viewport().set_input_as_handled()
 			return true
 		elif event is InputEventKey:
+			# EXCEPTION: Do not "handle" F-keys so DebugManager can still capture them
+			var is_debug_key = event.keycode >= KEY_F1 and event.keycode <= KEY_F12
+			
 			if event.is_action_pressed("ui_cancel"):
 				# SMART ESCAPE: Only stand up if no apps are open
 				var has_open_apps = false
@@ -144,8 +147,15 @@ func _handle_bridge_input(event) -> bool:
 			
 			# Otherwise forward to bridge
 			GameState.active_bridge.handle_key(event)
-			get_viewport().set_input_as_handled()
-			return true
+			
+			# If it's a debug key, we DON'T mark as handled so it propagates to Autoloads
+			if not is_debug_key:
+				get_viewport().set_input_as_handled()
+				return true
+			else:
+				# We forwarded it, but we return false/don't consume so 
+				# other scripts (like DebugManager) get a crack at it.
+				return false
 	return false
 
 func _handle_camera_input(event):

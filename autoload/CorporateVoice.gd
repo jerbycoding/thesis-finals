@@ -38,6 +38,8 @@ static var corporate_phrases = {
 	"host_already_isolated": "Host {hostname} already in isolated status. No further action required.",
 	"isolating_host": "Host {hostname} isolation sequence initiated. Network interfaces decoupling.",
 	"host_quarantined": "Host {hostname} successfully quarantined.",
+	"restoring_host": "Host {hostname} reconnection sequence initiated. Re-establishing network interfaces.",
+	"host_restored": "Host {hostname} successfully restored to the network.",
 	"critical_server_offline": "CRITICAL ALERT: Production server {hostname} has been taken offline due to network isolation. Service impact high.",
 	"system_status": "System Operational Status:",
 	"network_status_online": "Network Connectivity: Online",

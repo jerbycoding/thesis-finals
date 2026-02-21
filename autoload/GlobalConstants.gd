@@ -82,6 +82,17 @@ const HOST_STATUS = {
 	"ISOLATED": 3
 }
 
+# --- Scene Paths ---
+const SCENES = {
+	"SOC": "res://scenes/3d/WorkstationRoom.tscn",
+	"EXEC": "res://scenes/3d/ExecutiveSuite.tscn",
+	"VAULT": "res://scenes/3d/ServerVault.tscn",
+	"HUB": "res://scenes/3d/NetworkHub.tscn",
+	"BRIEFING": "res://scenes/3d/BriefingRoom.tscn",
+	"TITLE": "res://scenes/ui/TitleScreen.tscn",
+	"MAIN_MENU": "res://scenes/3d/MainMenu3D.tscn"
+}
+
 # --- Physical World & Interaction ---
 const PHYSICS_LAYERS = {
 	"DEFAULT": 1,

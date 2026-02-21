@@ -100,19 +100,27 @@ func reveal_logs_for_ticket(ticket_id: String):
 				should_reveal = true
 		
 		if should_reveal:
-			if log not in active_logs:
-				active_logs.append(log)
-				EventBus.log_added.emit(log)
+			if not _is_log_active(log.log_id):
+				var instance = log.duplicate()
+				active_logs.append(instance)
+				EventBus.log_added.emit(instance)
 				count += 1
-				print("  - Revealed Log: ID=%s | Msg=%s" % [log.log_id, log.message])
+				print("  - Revealed Log: ID=%s | Msg=%s" % [instance.log_id, instance.message])
 	
 	if count > 0:
 		print("📋 LogSystem: Revealed ", count, " new logs")
+
+func _is_log_active(id: String) -> bool:
+	for l in active_logs:
+		if l.log_id == id: return true
+	return false
 
 func clear_active_data():
 	print("📋 LogSystem: Purging all active log data.")
 	active_logs.clear()
 	reviewed_logs.clear()
+	# Ensure basic corporate noise returns after purge
+	reveal_logs_for_ticket("") 
 
 func add_log(log: LogResource):
 	if not log: return
@@ -179,12 +187,12 @@ func get_logs_for_ticket(ticket_id: String) -> Array[LogResource]:
 	return filtered
 
 func get_log_by_id(log_id: String) -> LogResource:
-	# Search all_logs first (the library)
-	for log in all_logs:
+	# Search active_logs first (the live instances)
+	for log in active_logs:
 		if log.log_id == log_id:
 			return log
-	# Then check active_logs
-	for log in active_logs:
+	# Then check the library (the templates)
+	for log in all_logs:
 		if log.log_id == log_id:
 			return log
 	return null

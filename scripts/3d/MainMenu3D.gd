@@ -46,6 +46,17 @@ func _ready():
 	# Activate Input Bridge for mouse interaction
 	if input_bridge:
 		input_bridge.activate()
+	
+	# Connect to save system feedback
+	EventBus.game_loaded.connect(_on_game_loaded)
+
+func _on_game_loaded():
+	if is_transitioning: return
+	is_transitioning = true
+	
+	if TransitionManager:
+		var shift_to_load = SaveSystem.loaded_shift_id if SaveSystem else ""
+		TransitionManager.play_secure_login("res://scenes/SOC_Office.tscn", shift_to_load)
 
 func _input(event):
 	# Forward mouse clicks to the input bridge

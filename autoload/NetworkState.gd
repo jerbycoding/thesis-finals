@@ -2,6 +2,8 @@
 # Autoload singleton to manage the state of all hosts in the simulated network.
 extends Node
 
+signal hosts_updated()
+
 # Centralized constants for critical system hosts (used for code logic)
 const HOSTS = {
 	"FINANCE": "FINANCE-SRV-01",
@@ -54,6 +56,7 @@ func _register_hosts_from_folder():
 		print("  ✓ Registered Host: %s [%s]" % [res.hostname, res.ip_address])
 	
 	print("🌐 NetworkState: Library ready: %d hosts." % host_states.size())
+	hosts_updated.emit()
 
 var lateral_movement_active: bool = false
 

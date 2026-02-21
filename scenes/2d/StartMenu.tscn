@@ -1,6 +1,6 @@
-[gd_scene load_steps=4 format=3 uid="uid://cxk8p8v2j1sy"]
+[gd_scene load_steps=5 format=3 uid="uid://cxk8p8v2j1sy"]
 
-[ext_resource type="Script" path="res://scripts/2d/StartMenu.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://b27qlb4stdilg" path="res://scripts/2d/StartMenu.gd" id="1_script"]
 [ext_resource type="Theme" uid="uid://dny3rlbltexc7" path="res://assets/themes/EnterpriseTheme.tres" id="2_theme"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Menu"]

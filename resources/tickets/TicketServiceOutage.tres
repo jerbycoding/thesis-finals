@@ -15,5 +15,6 @@ Action Required:
 severity = "High"
 category = "System"
 steps = ["Identify isolated critical host", "Determine if isolation was justified", "Escalate to infrastructure team"]
-required_tool = "network"
+required_tool = "terminal"
 base_time = 120.0
+required_host_isolation = "" # We don't have a 'required_host_restoration' field, but the steps mention it.

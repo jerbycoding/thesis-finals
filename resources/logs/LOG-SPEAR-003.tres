@@ -11,4 +11,4 @@ category = "Security"
 message = "Employee reported receiving a confidential-looking email from an unknown external domain: corp-mail.io."
 severity = 3
 related_ticket = "SPEAR-PHISH-003"
-hostname = "{victim_host}"
+hostname = "{host}"
