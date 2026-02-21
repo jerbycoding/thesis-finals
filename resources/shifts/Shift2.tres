@@ -6,6 +6,8 @@
 script = ExtResource("1_shift")
 shift_name = "Shift 2: Tuesday (Noise)"
 shift_id = "shift_tuesday"
+shift_summary = "An increase in operational noise. Attackers use Social Engineering and False Flag logs to overwhelm and distract the analyst from real threats."
+cyber_context = "Log Obfuscation is a defensive counter-measure used by attackers to hide their tracks. In a high-noise environment, analysts must rely on specific search queries rather than manual scrolling to maintain situational awareness."
 briefing_dialogue_id = "briefing_second_shift"
 event_sequence = [
 	{"time": 30, "event": "spawn_social", "type": "spawn_ticket", "ticket_id": "SOCIAL-001"},

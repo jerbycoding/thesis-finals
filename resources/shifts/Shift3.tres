@@ -6,6 +6,8 @@
 script = ExtResource("1_shift")
 shift_name = "Shift 3: Wednesday (Outbreak)"
 shift_id = "shift_wednesday"
+shift_summary = "An active outbreak scenario. Malware has entered the network and is attempting to move laterally across workstations while a Ransomware payload targets the Finance servers."
+cyber_context = "Lateral Movement is the process where an attacker pivots from a compromised workstation to a high-value server. Rapid containment (Isolation) is necessary to stop the pivot before data exfiltration occurs."
 briefing_dialogue_id = "briefing_third_shift"
 event_sequence = [
 	{"time": 30, "event": "spawn_malware", "type": "spawn_ticket", "ticket_id": "MALWARE-CONTAIN-001"},

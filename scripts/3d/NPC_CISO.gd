@@ -3,12 +3,14 @@
 extends BaseNPC
 
 func start_dialogue(dialogue_id: String = "default"):
-	# Priority 1: Weekend Guidance (Saturday)
-	if NarrativeDirector and NarrativeDirector.current_shift_resource:
-		if NarrativeDirector.current_shift_resource.minigame_type == "AUDIT":
-			var hint = NarrativeDirector.get_weekend_hint()
-			var res = get_dialogue("saturday_guide")
+	# Priority 1: Weekend Guidance (Saturday/Sunday) - ONLY trigger if shift is actually LIVE
+	if NarrativeDirector and NarrativeDirector.is_shift_active() and NarrativeDirector.current_shift_resource:
+		if NarrativeDirector.current_shift_resource.minigame_type != "NONE" and dialogue_id == "default":
+			# Determine which guide to use
+			var guide_id = "saturday_guide" if NarrativeDirector.current_shift_resource.minigame_type == "AUDIT" else "sunday_guide"
+			var res = get_dialogue(guide_id)
 			if res and DialogueManager:
+				var hint = NarrativeDirector.get_weekend_hint()
 				DialogueManager.start_dialogue(self, res, hint)
 				return
 

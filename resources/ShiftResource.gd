@@ -6,6 +6,10 @@ class_name ShiftResource
 @export var shift_name: String = "New Shift"
 @export var shift_id: String = "shift_001"
 
+@export_group("Documentation")
+@export_multiline var shift_summary: String = "" # Brief mission brief
+@export_multiline var cyber_context: String = "" # Educational "Why"
+
 ## The dialogue ID to trigger during the pre-shift briefing.
 @export var briefing_dialogue_id: String = "default"
 

@@ -6,6 +6,8 @@
 script = ExtResource("1_shift")
 shift_name = "Shift 11: Thursday (Paranoia)"
 shift_id = "shift_week2_thursday"
+shift_summary = "Active sabotage. An internal mole is using Wiper scripts to delete security logs in real-time. The analyst must move fast to preserve forensic evidence."
+cyber_context = "Anti-Forensics techniques, such as Wipers, are used by attackers to delete logs and hide their presence. Analysts must use rapid containment (Isolation) to freeze the system state before the evidence is permanently erased."
 briefing_dialogue_id = "week2_thursday"
 event_sequence = [
 	{"time": 30, "event": "spawn_mole_hunt", "type": "spawn_ticket", "ticket_id": "MOLE-HUNT-001"},

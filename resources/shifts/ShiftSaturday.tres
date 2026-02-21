@@ -6,6 +6,8 @@
 script = ExtResource("1_shift")
 shift_name = "Shift 6: Saturday (Infrastructure Audit)"
 shift_id = "shift_saturday"
+shift_summary = "A scheduled physical infrastructure audit. The analyst must navigate the 3D Network Hub to verify router integrity and calibrate signal nodes."
+cyber_context = "Cybersecurity isn't just digital. Physical Access Controls and Infrastructure Audits ensure that network hardware hasn't been tampered with or bypassed by an on-site adversary."
 briefing_dialogue_id = "briefing_saturday"
 event_sequence = [
 	{"time": 10, "event": "audit_start", "type": "system_event", "event_id": "MAINTENANCE_WINDOW", "duration": 300.0},

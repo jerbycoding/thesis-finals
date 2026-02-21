@@ -6,6 +6,8 @@
 script = ExtResource("1_shift")
 shift_name = "Shift 9: Tuesday (System Instability)"
 shift_id = "shift_week2_tuesday"
+shift_summary = "Technical disruptions across the subnet. The SIEM is reporting inconsistent 'Ghost Logs' and a major software vendor has reported a supply chain compromise."
+cyber_context = "Integrity Monitoring ensures that logs and files are original and untampered. Supply Chain attacks are devastating because they exploit the trust between a company and its software providers (e.g., NetCore recall)."
 briefing_dialogue_id = "week2_tuesday"
 event_sequence = [
 	{"time": 15, "event": "siem_crash", "type": "system_event", "event_id": "SIEM_LAG", "duration": 300.0},

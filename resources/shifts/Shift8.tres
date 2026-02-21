@@ -6,6 +6,8 @@
 script = ExtResource("1_shift")
 shift_name = "Shift 8: Monday (Inheritance)"
 shift_id = "shift_week2_monday"
+shift_summary = "Persistence identified. Threats from the previous week reappear in more sophisticated forms. The analyst must identify inherited indicators of compromise."
+cyber_context = "Persistence is the goal of Advanced Persistent Threats (APTs). If an analyst only cleans the symptoms (Malware) but misses the root cause (Backdoor), the attacker will inevitably return with evolved tools."
 briefing_dialogue_id = "week2_intro"
 event_sequence = [
 	{"time": 30, "event": "spawn_legacy_phish", "type": "spawn_ticket", "ticket_id": "PHISH-LEGACY-001"},

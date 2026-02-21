@@ -6,6 +6,8 @@
 script = ExtResource("1_shift")
 shift_name = "Shift 7: Sunday (Hardware Recovery)"
 shift_id = "shift_sunday"
+shift_summary = "Emergency hardware recovery. Following the Friday crisis, several server blades have failed. The analyst must manually replace hardware and synchronize the RAID parity."
+cyber_context = "Disaster Recovery (DR) and High Availability are vital for business continuity. Rebuilding storage arrays (RAID) ensures that forensic data and operational backups are restored after a destructive attack."
 briefing_dialogue_id = "briefing_sunday"
 event_sequence = [
 	{"time": 10, "event": "recovery_start", "type": "system_event", "event_id": "RECOVERY_WINDOW", "duration": 300.0},

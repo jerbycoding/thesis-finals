@@ -6,6 +6,8 @@
 script = ExtResource("1_shift")
 shift_name = "Shift 4: Thursday (Betrayal)"
 shift_id = "shift_thursday"
+shift_summary = "Internal anomalies detected. The analyst must investigate potential insider threats and the use of unsanctioned Shadow IT cloud storage on the marketing subnet."
+cyber_context = "Insider Threats are among the most difficult to detect because they involve legitimate credentials. Shadow IT represents a major data leak risk as corporate data moves to unmanaged personal accounts outside SOC visibility."
 briefing_dialogue_id = "briefing_thursday"
 event_sequence = [
 	{"time": 30, "event": "spawn_auth_3", "type": "spawn_ticket", "ticket_id": "AUTH-003"},

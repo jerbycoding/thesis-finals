@@ -51,6 +51,11 @@ func _on_quit_pressed():
 func show_menu():
 	show()
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	
+	# Sync values with Config
+	if ConfigManager:
+		master_slider.value = ConfigManager.settings.audio.master_volume
+		
 	# Animate in
 	modulate.a = 0
 	var tween = create_tween()

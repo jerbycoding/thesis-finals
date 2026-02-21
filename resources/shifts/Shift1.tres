@@ -6,6 +6,8 @@
 script = ExtResource("1_shift")
 shift_name = "Shift 1: Monday (Active Monitoring)"
 shift_id = "shift_monday"
+shift_summary = "Standard entry monitoring. Analysts must triage reported phishing emails and manually verify technical indicators in the SIEM logs."
+cyber_context = "Phishing is the #1 threat vector for corporate breaches. Understanding how to differentiate between a spoofed external sender and an internal service account is the foundation of a SOC analyst's career."
 briefing_dialogue_id = "briefing_01"
 event_sequence = Array[Dictionary]([{
 "event": "spawn_phish",

@@ -115,10 +115,11 @@ func new_game_setup():
 	if LogSystem: LogSystem.clear_active_data()
 	if EmailSystem: EmailSystem.clear_active_data()
 	
-	# 3. Delete physical save file
-	if has_save_file():
-		DirAccess.remove_absolute(SAVE_PATH)
-		print("💾 SaveSystem: Save file purged.")
+	# 3. Preservation Logic: Do not delete physical file until a NEW save is issued.
+	# This prevents accidental data loss if 'Start Game' is clicked by mistake.
+	# if has_save_file():
+	# 	DirAccess.remove_absolute(SAVE_PATH)
+	# 	print("💾 SaveSystem: Save file purged.")
 	
 	loaded_shift_id = ""
 

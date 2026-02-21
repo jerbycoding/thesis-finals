@@ -6,6 +6,8 @@
 script = ExtResource("1_shift")
 shift_name = "Shift 12: Friday (Total War)"
 shift_id = "shift_week2_friday"
+shift_summary = "Total systemic collapse. The SOC is under full siege with terminal lockouts and backup deletions. The analyst must use all available tools to hold the line."
+cyber_context = "Incident Response at scale requires resilience. When automated systems (firewalls, EDR) are overwhelmed, the final line of defense is the analyst's ability to manually verify and isolate threats under extreme pressure."
 briefing_dialogue_id = "week2_friday"
 event_sequence = [
 	{"time": 10, "event": "start_apocalypse", "type": "system_event", "event_id": "ZERO_DAY", "duration": 540.0},

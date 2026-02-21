@@ -35,13 +35,13 @@ This document details the random event pools for each shift. Use the **Debug HUD
 ## 📅 Shift 3: Wednesday (Outbreak)
 *Focus: Lateral movement and hardware performance metrics.*
 
-| Debug Key (HUD)             | Technical ID           | Type   | Effect / Description                                         |
-|:----------------------------|:-----------------------|:-------|:-------------------------------------------------------------|
-| **`crypto_outbreak`**       | `CRYPTOMINER-HUNT-001` | Ticket | Spawns alert for unauthorized cryptomining on the subnet.    |
-| **`cpu_thermal_spike`**     | `CRYPTO_SPIKE`         | System | Triggers artificial load spikes in the **Task Manager** app. |
-| **`infrastructure_strain`** | `ISP_THROTTLING`       | System | Slows down network-dependent Terminal commands for 45 seconds.|
-| **`db_query_lag`**          | `SIEM_LAG`             | System | Increases log retrieval delay for 20 seconds.                |
-| **`analyst_tip`**           | `senior_analyst`       | NPC    | Triggers a remote forensic hint from the Senior Analyst.     |
+| Debug Key (HUD)             | Technical ID           | Type   | Effect / Description                                           |
+|:----------------------------|:-----------------------|:-------|:---------------------------------------------------------------|
+| **`crypto_outbreak`**       | `CRYPTOMINER-HUNT-001` | Ticket | Spawns alert for unauthorized cryptomining on the subnet.      |
+| **`cpu_thermal_spike`**     | `CRYPTO_SPIKE`         | System | Triggers artificial load spikes in the **Task Manager** app.   |
+| **`infrastructure_strain`** | `ISP_THROTTLING`       | System | Slows down network-dependent Terminal commands for 45 seconds. |
+| **`db_query_lag`**          | `SIEM_LAG`             | System | Increases log retrieval delay for 20 seconds.                  |
+| **`analyst_tip`**           | `senior_analyst`       | NPC    | Triggers a remote forensic hint from the Senior Analyst.       |
 
 > **💡 TACTICAL NOTE (SHIFT 3):** 
 > Wednesday introduces **Lateral Movement**. If a single infected host remains un-isolated during this 180s window, the malware will spread to clean hosts every 10 seconds. 
@@ -52,17 +52,34 @@ This document details the random event pools for each shift. Use the **Debug HUD
 ## 📅 Shift 4: Thursday (Betrayal)
 *Focus: Insider threats, log obfuscation, and social pressure.*
 
-| Debug Key (HUD) | Technical ID | Type | Effect / Description |
-| :--- | :--- | :--- | :--- |
-| **`credentials_leak_noise`** | `TICKET-NOISE-001` | Ticket | Spawns a routine password reset request to clog the queue. |
-| **`log_obfuscation`** | `FALSE_FLAG` | System | Floods the SIEM with thousands of fake logs for 45 seconds. |
-| **`rumor_mill`** | `GOSSIP_FLOOD` | System | Triggers an internal email surge about suspected leaks (60s). |
-| **`unexplained_blackout`** | `POWER_FLICKER` | System | 3-second blackout; forces all open windows to close. |
-| **`senior_analyst_suspicion`**| `senior_analyst` | NPC | Triggers a dialogue hint regarding internal credential use. |
+| Debug Key (HUD)                | Technical ID       | Type   | Effect / Description                                          |
+|:-------------------------------|:-------------------|:-------|:--------------------------------------------------------------|
+| **`credentials_leak_noise`**   | `TICKET-NOISE-001` | Ticket | Spawns a routine password reset request to clog the queue.    |
+| **`log_obfuscation`**          | `FALSE_FLAG`       | System | Floods the SIEM with thousands of fake logs for 45 seconds.   |
+| **`rumor_mill`**               | `GOSSIP_FLOOD`     | System | Triggers an internal email surge about suspected leaks (60s). |
+| **`unexplained_blackout`**     | `POWER_FLICKER`    | System | 3-second blackout; forces all open windows to close.          |
+| **`senior_analyst_suspicion`** | `senior_analyst`   | NPC    | Triggers a dialogue hint regarding internal credential use.   |
 
 > **💡 TACTICAL NOTE (SHIFT 4):** 
 > Thursday is about **filtering**. The `FALSE_FLAG` event is designed to hide the "Insider" logs among thousands of routine system events. 
 > **Strategy**: Use the SIEM's **Search Bar** immediately. If you search for specific keywords like `HR-PRIVATE` or `DATA-MOVE`, the "False Flag" logs will be hidden and the real evidence will surface.
+
+---
+
+## 📅 Shift 5: Friday (Zero Day)
+*Focus: Maximum operational friction and crisis management.*
+
+| Debug Key (HUD)            | Technical ID       | Type   | Effect / Description                                             |
+|:---------------------------|:-------------------|:-------|:-----------------------------------------------------------------|
+| **`system_panic_glitch`**  | `SIEM_LAG`         | System | Increases SIEM log retrieval delay for 20 seconds.               |
+| **`packet_storm`**         | `DDOS_ATTACK`      | System | Slows down network operations and Terminal responsiveness (60s). |
+| **`grid_instability`**     | `POWER_FLICKER`    | System | 3-second blackout; forces all open windows to close.             |
+| **`global_latency_spike`** | `ISP_THROTTLING`   | System | Slows down network-dependent Terminal commands for 30 seconds.   |
+| **`urgent_noise`**         | `TICKET-NOISE-002` | Ticket | Spawns a high-volume hardware request ticket to distract.        |
+
+> **💡 TACTICAL NOTE (SHIFT 5):** 
+> Friday is designed to break your workflow. The combination of `SIEM_LAG` and `DDOS_ATTACK` means your primary investigative tools will be at their slowest. 
+> **Strategy**: Prioritize the **Ransomware** and **Exfiltration** tickets. Let the `urgent_noise` (Hardware Requests) time out if necessary; the integrity penalty for a low-priority hardware request is worth the time saved to stop a data breach.
 
 ---
 

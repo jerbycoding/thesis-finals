@@ -6,6 +6,8 @@
 script = ExtResource("1_shift")
 shift_name = "Shift 10: Wednesday (Executive Targets)"
 shift_id = "shift_week2_wednesday"
+shift_summary = "A targeted campaign against the C-Suite. The analyst must triage high-priority device alerts for the CEO and CFO to prevent a Stage 3 exfiltration event."
+cyber_context = "Whaling is a form of Spear Phishing that targets high-profile executives. These users have the most sensitive access (keys, vault data), making their devices the ultimate prize for a sophisticated attacker."
 briefing_dialogue_id = "week2_wednesday"
 event_sequence = [
 	{"time": 30, "event": "spawn_whaling", "type": "spawn_ticket", "ticket_id": "WHALING-001"},

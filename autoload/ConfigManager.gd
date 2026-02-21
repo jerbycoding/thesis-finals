@@ -6,6 +6,8 @@ const CONFIG_PATH = "user://settings.cfg"
 
 var config = ConfigFile.new()
 
+signal setting_changed(section: String, key: String, value: Variant)
+
 # Default settings
 var settings = {
 	"audio": {
@@ -15,7 +17,14 @@ var settings = {
 	},
 	"display": {
 		"fullscreen": true,
-		"borderless": false
+		"borderless": false,
+		"crt_enabled": true
+	},
+	"input": {
+		"mouse_sensitivity": 0.002
+	},
+	"gameplay": {
+		"fov": 80.0
 	}
 }
 
@@ -75,3 +84,4 @@ func set_setting(section: String, key: String, value):
 		settings[section][key] = value
 		save_settings()
 		apply_settings()
+		setting_changed.emit(section, key, value)

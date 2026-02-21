@@ -11,7 +11,6 @@ signal closed()
 
 # Floor Data based on FULLGAME.md
 const FLOORS = {
-	2: {"label": "2", "name": "EXECUTIVE SUITE", "scene": "res://scenes/3d/ExecutiveSuite.tscn"},
 	1: {"label": "1", "name": "MAIN SOC OFFICE", "scene": "res://scenes/SOC_Office.tscn"},
 	-1: {"label": "B1", "name": "SERVER VAULT", "scene": "res://scenes/3d/ServerVault.tscn"},
 	-2: {"label": "B2", "name": "NETWORK HUB", "scene": "res://scenes/3d/NetworkHub.tscn"}
@@ -47,8 +46,8 @@ func _update_display(floor_id: int):
 	direction_arrow.text = "●" # Stable
 
 func _setup_buttons():
-	# Display in logical order: 2, 1, B1, B2
-	var order = [2, 1, -1, -2]
+	# Display in logical order: 1, B1, B2
+	var order = [1, -1, -2]
 	for f_id in order:
 		var info = FLOORS[f_id]
 		var btn = Button.new()

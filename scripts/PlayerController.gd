@@ -35,10 +35,25 @@ func _find_animator():
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	EventBus.game_mode_changed.connect(_on_game_mode_changed)
-	# Initialize POV and rotation variables from current state
-	camera.fov = 80
+	
+	# Load Initial Config
+	if ConfigManager:
+		mouse_sensitivity = ConfigManager.settings.input.mouse_sensitivity
+		camera.fov = ConfigManager.settings.gameplay.fov
+		ConfigManager.setting_changed.connect(_on_config_changed)
+	else:
+		camera.fov = 80
+		
+	# Initialize rotation variables from current state
 	camera_rotation.y = rotation.y
 	camera_rotation.x = $CameraPivot/Camera3D.rotation.x
+
+func _on_config_changed(section: String, key: String, value: Variant):
+	match key:
+		"mouse_sensitivity":
+			mouse_sensitivity = value
+		"fov":
+			camera.fov = value
 
 func sit_down(target_node: Node3D):
 	if not target_node or is_seated: return

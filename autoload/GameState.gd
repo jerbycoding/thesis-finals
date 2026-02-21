@@ -22,7 +22,9 @@ func _ready():
 
 func _input(event):
 	if event.is_action_pressed("ui_cancel"): # Usually ESC
-		if get_tree().current_scene.name == "TitleScreen":
+		# SCENE GUARD: Prevent pausing in menus
+		var current_scene = get_tree().current_scene.name
+		if current_scene == "MainMenu3D" or current_scene == "TitleScreen":
 			return
 		
 		# Prevent pausing during critical tutorial sequences

@@ -8,5 +8,5 @@ npc_name = "CISO"
 portrait = "👔"
 lines = [
     {"choices": [], "text": "Analyst, today is Saturday. The main office is offline for cleaning, but we have a scheduled infrastructure audit."},
-    {"choices": [{"effect": {"change_scene": "res://scenes/SOC_Office.tscn", "then_start_narrative": "shift_saturday"}, "text": "Understood. Proceeding to Network Hub."}], "text": "You are required to physically inspect the Network Hub on Floor -2. Verify the router integrity and ensure no physical tampering has occurred."}
+    {"choices": [{"effect": {"change_scene": "res://scenes/3d/NetworkHub.tscn", "then_start_narrative": "shift_saturday"}, "text": "Understood. Proceeding to Network Hub."}], "text": "You are required to physically inspect the Network Hub on Floor -2. Verify the router integrity and ensure no physical tampering has occurred."}
 ]

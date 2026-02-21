@@ -85,7 +85,6 @@ const HOST_STATUS = {
 # --- Scene Paths ---
 const SCENES = {
 	"SOC": "res://scenes/3d/WorkstationRoom.tscn",
-	"EXEC": "res://scenes/3d/ExecutiveSuite.tscn",
 	"VAULT": "res://scenes/3d/ServerVault.tscn",
 	"HUB": "res://scenes/3d/NetworkHub.tscn",
 	"BRIEFING": "res://scenes/3d/BriefingRoom.tscn",

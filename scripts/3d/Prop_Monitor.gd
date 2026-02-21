@@ -18,6 +18,18 @@ func _ready():
 	# Wait a frame to ensure viewport is initialized
 	await get_tree().process_frame
 	
+	if ConfigManager:
+		ConfigManager.setting_changed.connect(_on_config_changed)
+		use_crt_shader = ConfigManager.settings.display.crt_enabled
+	
+	_update_screen_material()
+
+func _on_config_changed(_section: String, key: String, value: Variant):
+	if key == "crt_enabled":
+		use_crt_shader = value
+		_update_screen_material()
+
+func _update_screen_material():
 	if viewport:
 		viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
 	
@@ -30,31 +42,13 @@ func _ready():
 			mat.set_shader_parameter("screen_texture", tex)
 			screen_mesh.material_override = mat
 		else:
-			# For MeshInstance3D, we use material_override or get_active_material
-			var current_mat = screen_mesh.get_active_material(0)
-			
-			if current_mat:
-				# Duplicate material so each monitor is unique
-				var new_mat = current_mat.duplicate()
-				
-				new_mat.albedo_texture = tex
-				new_mat.albedo_color = Color.WHITE 
-				
-				# PRO RENDERING: High fidelity for text (Master Advice #2)
-				new_mat.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
-				new_mat.anisotropy_enabled = true
-				new_mat.anisotropy_strength = 16.0
-				
-				# MAKE IT LOOK LIKE A REAL SCREEN: Unshaded means it's not affected by room lights
-				# and won't wash out into "just white"
-				new_mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-				
-				# FIX: Orientation for QuadMesh
-				new_mat.uv1_scale = Vector3(1, 1, 1)
-				new_mat.uv1_offset = Vector3(0, 0, 0)
-				
-				new_mat.emission_enabled = false # Unshaded doesn't need emission to be bright
-				
-				screen_mesh.material_override = new_mat
+			# Use unshaded high-fidelity material for clarity
+			var new_mat = StandardMaterial3D.new()
+			new_mat.albedo_texture = tex
+			new_mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+			new_mat.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
+			new_mat.anisotropy_enabled = true
+			new_mat.anisotropy_strength = 16.0
+			screen_mesh.material_override = new_mat
 	else:
 		push_warning("Prop_Monitor: Missing nodes for screen projection")
