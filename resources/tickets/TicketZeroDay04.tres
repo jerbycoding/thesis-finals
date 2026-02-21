@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="TicketResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/tickets/TicketResource.gd" id="1_ticket"]
+
+[resource]
+script = ExtResource("1_ticket")
+ticket_id = "ZERODAY-004"
+title = "Obfuscated Payload Executing in Memory — Supply Chain"
+description = "EDR caught an obfuscated PowerShell payload executing dynamically in memory on {host}, assigned to {victim}. Threat intel suggests a compromised Node.js package from {malicious_url} is downloading a secondary stager to communicate with {ip}."
+severity = "High"
+category = "Malware"
+steps = ["Query SysMon for encoded PowerShell execution strings.", "Identify the compromised dependency repository.", "Block the outbound C2 communication at the firewall level."]
+required_tool = "siem"
+base_time = 300.0
+hidden_risks = ["backdoor_persistence"]
+required_log_ids = ["LOG-ZD-02B"]
+is_ambient_noise = false
+required_host_isolation = ""
+required_host_restoration = ""
+on_complete_event = ""
+kill_chain_path = "Zero-Day Apocalypse"
+kill_chain_stage = 2

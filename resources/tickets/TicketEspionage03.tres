@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="TicketResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/tickets/TicketResource.gd" id="1_ticket"]
+
+[resource]
+script = ExtResource("1_ticket")
+ticket_id = "ESPIONAGE-003"
+title = "Unauthorized Encrypted Data Exfiltration Detected"
+description = "DLP sensors have flagged anomalous outbound traffic originating from {host}, assigned to {victim}. Massive volumes of encrypted archives are being routed to a drop-server at {ip} following a suspicious redirect from {malicious_url}."
+severity = "High"
+category = "Insider Threat"
+steps = ["Analyze firewall telemetry for sustained outbound connections.", "Verify the reputation of the external drop-server.", "Isolate the workstation to halt the active data sync."]
+required_tool = "siem"
+base_time = 300.0
+hidden_risks = ["data_loss_critical"]
+required_log_ids = ["LOG-ESP-03A"]
+is_ambient_noise = false
+required_host_isolation = ""
+required_host_restoration = ""
+on_complete_event = ""
+kill_chain_path = "Corporate Espionage"
+kill_chain_stage = 2

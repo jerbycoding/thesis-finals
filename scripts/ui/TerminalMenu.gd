@@ -1,12 +1,14 @@
+# TerminalMenu.gd
 extends Control
 
 @onready var text_label: RichTextLabel = %TerminalLabel
 @onready var input_timer: Timer = $InputTimer
 
-enum MenuState { BOOTING, MAIN, CONFIRMING, ARCHIVE, CONFIGING, CREDITS }
+enum MenuState { BOOTING, MAIN, CONFIRMING, ARCHIVE, CONFIGING, CREDITS, DIFFICULTY, LEVEL_SELECT }
 var current_state = MenuState.BOOTING
 var pending_action: String = ""
 var has_save: bool = false
+var is_veteran: bool = false
 var boot_sequence = []
 var shift_list: Array[ShiftResource] = []
 
@@ -16,6 +18,7 @@ func _ready():
 	current_state = MenuState.BOOTING
 	text_label.text = ""
 	has_save = SaveSystem.has_save_file() if SaveSystem else false
+	is_veteran = ConfigManager.settings.gameplay.campaign_completed if ConfigManager else false
 	_load_shift_data()
 	_build_boot_sequence()
 	_start_boot_sequence()
@@ -53,44 +56,50 @@ func _get_shift_weight(id: String) -> int:
 	return 99
 
 func _build_boot_sequence():
+	# HIGH-TECH IR WORKSTATION STYLE
 	boot_sequence = [
-		"VERIFY WORKSTATION v4.7.2",
-		"BIOS: Phoenix Technologies Ltd.",
-		"Initializing security modules... [ OK ]",
-		"Checking integrity... [ OK ]",
+		"VERIFY_OS [Version 10.0.19045.SOC]",
+		"(c) 2024 Verify Corp. All rights reserved.",
 		" ",
-		"SHIFT TRANSITION PROTOCOL ACTIVE",
-		"===========================================================",
-		"PREVIOUS OPERATOR: ANALYST_7734 [VERIFIED]",
-		"SESSION END: 2024-02-10 22:47:11 UTC",
-		"SYSTEM STATUS: NOMINAL",
-		"-----------------------------------------------------------",
-		"AWAITING REPLACEMENT OPERATOR...",
+		"[ OK ] Mapped kernel memory (0x000000 - 0x00FFFF)",
+		"[ OK ] Initialized EDR Endpoint Agent [PID: 104]",
+		"[ OK ] Established connection to SIEM_CENTRAL",
 		" ",
-		"> AUTHENTICATION REQUIRED",
-		"> ANALYST CLEARANCE VERIFIED",
+		"LAST_LOGIN: 2024-02-11 04:12:11 from 10.0.4.2",
+		"STATION_ID: SOC-ALPHA-09",
+		"ASSIGNED_SUBNET: 192.168.100.0/24",
 		" ",
-		"> SELECT ACTION:"
+		"SYSTEM_STATUS: NOMINAL",
+		"ACTIVE_THREAT_INTEL: SYNCHRONIZED",
+		" ",
+		"> ACCESS_CONTROL_ENTRY_POINT",
+		"> AWAITING ANALYST_CREDENTIALS...",
+		" ",
+		"> SELECT_OPERATIONAL_MODE:"
 	]
 	
 	if has_save:
-		boot_sequence.append("  [1] START_NEW_SHIFT")
-		boot_sequence.append("  [2] RESUME_PROTOCOL")
+		boot_sequence.append("  [1] START_NEW_CAMPAIGN")
+		boot_sequence.append("  [2] RESUME_ACTIVE_SESSION")
 		boot_sequence.append("  [3] TRAINING_SIMULATION")
 		boot_sequence.append("  [4] TERMINATE_SESSION")
 		boot_sequence.append("  [5] CAMPAIGN_ARCHIVE")
 		boot_sequence.append("  [6] SYSTEM_CONFIGURATION")
 		boot_sequence.append("  [7] CREDITS_INFO")
+		if is_veteran:
+			boot_sequence.append("  [8] SHIFT_OVERRIDE (VETERAN_ACCESS)")
 	else:
-		boot_sequence.append("  [1] START_NEW_SHIFT")
+		boot_sequence.append("  [1] START_NEW_CAMPAIGN")
 		boot_sequence.append("  [2] TRAINING_SIMULATION")
 		boot_sequence.append("  [3] TERMINATE_SESSION")
 		boot_sequence.append("  [4] CAMPAIGN_ARCHIVE")
 		boot_sequence.append("  [5] SYSTEM_CONFIGURATION")
 		boot_sequence.append("  [6] CREDITS_INFO")
+		if is_veteran:
+			boot_sequence.append("  [7] SHIFT_OVERRIDE (VETERAN_ACCESS)")
 	
 	boot_sequence.append(" ")
-	boot_sequence.append("> AWAITING INPUT_")
+	boot_sequence.append("> AWAITING_INPUT_")
 
 func _start_boot_sequence():
 	current_state = MenuState.BOOTING
@@ -117,6 +126,10 @@ func _input(event):
 			_handle_config_input(event.keycode)
 		elif current_state == MenuState.CREDITS:
 			_show_main_menu()
+		elif current_state == MenuState.DIFFICULTY:
+			_handle_difficulty_input(event.keycode)
+		elif current_state == MenuState.LEVEL_SELECT:
+			_handle_level_select_input(event.keycode)
 
 func _handle_main_menu_input(keycode: int):
 	if has_save:
@@ -128,20 +141,45 @@ func _handle_main_menu_input(keycode: int):
 			KEY_5: _show_archive()
 			KEY_6: _show_config()
 			KEY_7: _show_credits()
+			KEY_8: if is_veteran: _show_level_select()
 	else:
 		match keycode:
-			KEY_1: _on_action_selected("start")
-			KEY_2: _on_action_selected("training")
+			KEY_1: _try_action("start")
+			KEY_2: _try_action("training")
 			KEY_3: _on_action_selected("quit")
 			KEY_4: _show_archive()
 			KEY_5: _show_config()
 			KEY_6: _show_credits()
+			KEY_7: if is_veteran: _show_level_select()
 
 func _try_action(action_id: String):
 	if has_save:
 		_show_overwrite_warning(action_id)
 	else:
-		_on_action_selected(action_id)
+		if action_id == "start" or action_id == "training":
+			pending_action = action_id
+			_show_difficulty_selection()
+		else:
+			_on_action_selected(action_id)
+
+func _show_difficulty_selection():
+	current_state = MenuState.DIFFICULTY
+	text_label.text = "MISSION_PROTOCOL :: SELECT OPERATIONAL RIGOR\n===========================================================\n\n"
+	for i in range(3):
+		var data = GlobalConstants.DIFFICULTY_DATA[i]
+		text_label.text += "  [%d] %s\n      > %s\n\n" % [i+1, data.label, data.description]
+	text_label.text += "  [ESC] ABORT_MISSION_START\n\n> SELECT RIGOR_LEVEL:"
+
+func _handle_difficulty_input(keycode: int):
+	if keycode == KEY_ESCAPE: _show_main_menu(); return
+	var tier = -1
+	match keycode:
+		KEY_1: tier = 0
+		KEY_2: tier = 1
+		KEY_3: tier = 2
+	if tier != -1:
+		if ConfigManager: ConfigManager.set_setting("gameplay", "difficulty_level", tier)
+		_on_action_selected(pending_action)
 
 func _show_overwrite_warning(action_id: String):
 	current_state = MenuState.CONFIRMING
@@ -159,9 +197,7 @@ func _refresh_config_display():
 	text_label.text = "SYSTEM_CONFIGURATION :: OPERATIONAL_PARAMETERS\n===========================================================\n\n  [1] VIDEO_MODE: %s\n  [2] CRT_EMULATION: [%s]\n  [3] MOUSE_SENSITIVITY: %.4f\n  [4] MASTER_VOLUME: %d%%\n  [5] CAMPAIGN_PURGE\n\n  [ESC] RETURN_TO_ROOT\n\n> SELECT PARAM_ID:" % ["FULLSCREEN" if s.display.fullscreen else "WINDOWED", "ON" if s.display.crt_enabled else "OFF", s.input.mouse_sensitivity, int(s.audio.master_volume * 100)]
 
 func _handle_config_input(keycode: int):
-	if keycode == KEY_ESCAPE:
-		_show_main_menu()
-		return
+	if keycode == KEY_ESCAPE: _show_main_menu(); return
 	match keycode:
 		KEY_1: ConfigManager.set_setting("display", "fullscreen", !ConfigManager.settings.display.fullscreen); _refresh_config_display()
 		KEY_2: ConfigManager.set_setting("display", "crt_enabled", !ConfigManager.settings.display.crt_enabled); _refresh_config_display()
@@ -195,6 +231,26 @@ func _handle_archive_input(keycode: int):
 
 func _show_shift_details(shift: ShiftResource):
 	text_label.text = "TECHNICAL_BRIEFING :: %s\n===========================================================\n\n[ MISSION_SUMMARY ]\n%s\n\n[ CYBERSECURITY_CONTEXT ]\n%s\n\n-----------------------------------------------------------\n  [ANY_KEY] RETURN_TO_ARCHIVE" % [shift.shift_name.to_upper(), shift.shift_summary, shift.cyber_context]
+
+func _show_level_select():
+	current_state = MenuState.LEVEL_SELECT
+	text_label.text = "OVERRIDE_PROTOCOL :: DIRECT_MISSION_INSERTION\n===========================================================\n\n"
+	for i in range(min(9, shift_list.size())):
+		text_label.text += "  [%d] INSERT_INTO: %s\n" % [i+1, shift_list[i].shift_name]
+	text_label.text += "\n  [ESC] ABORT_OVERRIDE\n\n> SELECT TARGET MISSION_ID:"
+
+func _handle_level_select_input(keycode: int):
+	if keycode == KEY_ESCAPE: _show_main_menu(); return
+	if keycode >= KEY_1 and keycode <= KEY_9:
+		var idx = keycode - KEY_1
+		if idx < shift_list.size(): _execute_override_jump(shift_list[idx].shift_id)
+
+func _execute_override_jump(shift_id: String):
+	text_label.text = "\n\n  OVERRIDE_VERIFIED. BYPASSING STANDARD TIMELINE...\n  INITIALIZING DIRECT INSERTION INTO [%s]" % shift_id.to_upper()
+	if AudioManager: AudioManager.play_terminal_beep()
+	await get_tree().create_timer(1.0).timeout
+	if SaveSystem: SaveSystem.new_game_setup()
+	if NarrativeDirector: NarrativeDirector.trigger_briefing(shift_id)
 
 func _show_credits():
 	current_state = MenuState.BOOTING
@@ -246,6 +302,7 @@ func _handle_confirmation_input(keycode: int):
 	match keycode:
 		KEY_1:
 			if text_label.text.contains("DESTRUCTION"): _execute_purge()
+			elif text_label.text.contains("WARNING") and pending_action == "start": _show_difficulty_selection()
 			else: _on_action_selected(pending_action)
 		KEY_2: _show_main_menu()
 

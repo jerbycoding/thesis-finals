@@ -19,16 +19,30 @@ func _ready():
 	EventBus.ticket_completed.connect(_on_ticket_completed)
 	integrity_bar.modulate = GlobalConstants.UI_COLORS.SUCCESS_FLAT
 
+var pulse_time = 0.0
+
 func _process(delta):
 	# Smooth Transition
 	if integrity_bar:
 		integrity_bar.value = move_toward(integrity_bar.value, target_integrity, delta * 30.0)
+		
+		# DYNAMIC COLOR & PULSE
 		if integrity_bar.value < 25:
 			integrity_bar.modulate = GlobalConstants.UI_COLORS.ERROR_FLAT
+			# PULSE EFFECT: Visual Heartbeat
+			pulse_time += delta * 5.0
+			var pulse = (sin(pulse_time) + 1.0) / 2.0
+			integrity_bar.modulate.a = lerp(0.4, 1.0, pulse)
+			
+			# AUDIO HEARTBEAT
+			if Engine.get_frames_drawn() % 120 == 0:
+				if AudioManager: AudioManager.play_terminal_beep(-10.0)
 		elif integrity_bar.value < 50:
 			integrity_bar.modulate = GlobalConstants.UI_COLORS.WARNING_FLAT
+			integrity_bar.modulate.a = 1.0
 		else:
 			integrity_bar.modulate = GlobalConstants.UI_COLORS.SUCCESS_FLAT
+			integrity_bar.modulate.a = 1.0
 
 	# Update Timer
 	if GameState and GameState.is_guided_mode:

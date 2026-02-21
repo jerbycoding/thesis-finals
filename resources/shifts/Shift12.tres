@@ -13,10 +13,15 @@ event_sequence = [
 	{"time": 10, "event": "start_apocalypse", "type": "system_event", "event_id": "ZERO_DAY", "duration": 540.0},
 	{"time": 10, "event": "start_lag", "type": "system_event", "event_id": "SIEM_LAG", "duration": 540.0},
 	{"time": 10, "event": "start_ddos", "type": "system_event", "event_id": "DDOS_ATTACK", "duration": 540.0},
+	{"time": 30, "event": "spawn_patient_zero", "type": "spawn_ticket", "ticket_id": "ZERODAY-001"},
 	{"time": 60, "event": "spawn_kill_switch", "type": "spawn_ticket", "ticket_id": "KILL-SWITCH-001"},
+	{"time": 120, "event": "spawn_poisoned_deps", "type": "spawn_ticket", "ticket_id": "ZERODAY-004"},
 	{"time": 150, "event": "ciso_speech", "type": "npc_interaction", "npc_id": "ciso", "dialogue_id": "stand_ground"},
+	{"time": 210, "event": "spawn_gateway_breach", "type": "spawn_ticket", "ticket_id": "ZERODAY-002"},
 	{"time": 240, "event": "spawn_meltdown", "type": "spawn_ticket", "ticket_id": "CORE-MELTDOWN-001"},
+	{"time": 330, "event": "spawn_cascade", "type": "spawn_ticket", "ticket_id": "ZERODAY-003"},
 	{"time": 360, "event": "spawn_admin_lock", "type": "spawn_ticket", "ticket_id": "ADMIN-LOCKOUT-001"},
+	{"time": 480, "event": "spawn_zero_click", "type": "spawn_ticket", "ticket_id": "ZERODAY-005"},
 	{"time": 600, "event": "shift_end", "type": "shift_end", "failure_type": "victory"} 
 ]
 random_event_pool = [

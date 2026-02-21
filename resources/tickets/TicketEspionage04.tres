@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="TicketResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/tickets/TicketResource.gd" id="1_ticket"]
+
+[resource]
+script = ExtResource("1_ticket")
+ticket_id = "ESPIONAGE-004"
+title = "Lateral Movement via Compromised Third-Party VPN Credential"
+description = "A VPN session authenticated under a contractor account associated with {victim} has been active for 19 hours. Session traffic originates from {ip}, a Bulgarian exit node, and {host} has recorded lateral movement attempts against internal subnets."
+severity = "High"
+category = "Unauthorized Access"
+steps = ["Use Terminal to run a geolocation and ASN lookup on {ip}.", "Isolate {host} from the network to sever the active session.", "Search SIEM IDS logs for SMB enumeration signatures."]
+required_tool = "terminal"
+base_time = 300.0
+hidden_risks = ["premature_isolation_no_scan"]
+required_log_ids = ["LOG-ESP-004A", "LOG-ESP-004B"]
+is_ambient_noise = false
+required_host_isolation = "{host}"
+required_host_restoration = ""
+on_complete_event = ""
+kill_chain_path = "Corporate Espionage"
+kill_chain_stage = 3

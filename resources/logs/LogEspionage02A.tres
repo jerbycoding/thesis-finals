@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="LogResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/logs/LogResource.gd" id="1_log"]
+
+[resource]
+script = ExtResource("1_log")
+log_id = "LOG-ESP-002A"
+timestamp = "02:17:44"
+source = "CloudTrail"
+category = "Security"
+message = "API_CALL | Actor={victim} | Action=GetObject | Resource=s3://corp-src-prod/* | ObjectCount=1,847 | SrcIP={ip} | UserAgent=aws-cli/2.13 | Note=Off-hours_access"
+severity = 4
+related_ticket = "ESPIONAGE-002"
+ip_address = "{ip}"
+hostname = ""
+is_revealed = false

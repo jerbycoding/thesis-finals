@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="LogResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/logs/LogResource.gd" id="1_log"]
+
+[resource]
+script = ExtResource("1_log")
+log_id = "LOG-ESP-002B"
+timestamp = "02:31:09"
+source = "SysMon"
+category = "Security"
+message = "PROCESS_CREATE | Host={host} | User={victim} | Image=C:\Windows\System32\cmd.exe | CommandLine='robocopy \corp-nas\engineering\src D:\USB_TRANSFER /E /COPYALL'"
+severity = 5
+related_ticket = "ESPIONAGE-002"
+ip_address = ""
+hostname = "{host}"
+is_revealed = false

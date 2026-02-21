@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="EmailResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/EmailResource.gd" id="1_email"]
+
+[resource]
+script = ExtResource("1_email")
+email_id = "EMAIL-ZD-004"
+sender = "CI/CD Pipeline"
+subject = "Automated Build Failure Alert"
+body = "CI/CD Pipeline build failed for {victim}. Please review the build logs and update the deprecated dependencies listed in the repository documentation at {malicious_url} to resolve the conflict."
+attachments = []
+headers = {"status": {"spf": "PASS", "dkim": "PASS", "dmarc": "PASS"}}
+is_malicious = true
+is_urgent = true
+threat_category = 3
+clues = ["suspicious_domain"]
+related_ticket = "ZERODAY-004"
+suspicious_ip = "{ip}"
+suspicious_domain = "{malicious_url}"
+quarantine_hidden_risks = {"links": "backdoor_persistence"}

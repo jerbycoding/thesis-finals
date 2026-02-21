@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="LogResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/logs/LogResource.gd" id="1_log"]
+
+[resource]
+script = ExtResource("1_log")
+log_id = "LOG-ESP-001A"
+timestamp = "08:42:17"
+source = "Office365"
+category = "Security"
+message = "MessageReceived | Recipient={victim} | Sender=careers@{malicious_url} | Subject='Confidential Offer — Senior Principal Engineer' | AttachmentName='NDA_Draft_2024.docm' | SPF=FAIL | DKIM=FAIL | UserAction=Opened"
+severity = 4
+related_ticket = "ESPIONAGE-001"
+ip_address = ""
+hostname = ""
+is_revealed = false

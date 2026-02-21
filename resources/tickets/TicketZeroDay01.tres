@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="TicketResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/tickets/TicketResource.gd" id="1_ticket"]
+
+[resource]
+script = ExtResource("1_ticket")
+ticket_id = "ZERODAY-001"
+title = "Unpatched RCE Exploit — Active In-Memory Payload"
+description = "IDS has flagged a memory injection event on {host}, attributed to {victim}'s active session. The payload exhibits fileless characteristics and has established a persistent C2 heartbeat to {ip} over DNS over HTTPS (DoH). The exploit vector is consistent with a newly disclosed zero-day in the enterprise PDF renderer."
+severity = "Critical"
+category = "Malware"
+steps = ["Use Terminal to dump the running process list on {host}.", "Search SIEM for DNS query logs with abnormal TTL values.", "Isolate {host} immediately to sever C2."]
+required_tool = "terminal"
+base_time = 300.0
+hidden_risks = ["missed_process_injection_before_isolate"]
+required_log_ids = ["LOG-ZD-001A", "LOG-ZD-001B"]
+is_ambient_noise = false
+required_host_isolation = "{host}"
+required_host_restoration = ""
+on_complete_event = ""
+kill_chain_path = "Zero-Day Apocalypse"
+kill_chain_stage = 1

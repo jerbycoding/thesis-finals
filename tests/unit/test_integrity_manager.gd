@@ -12,6 +12,14 @@ func before_test():
 	# Disable _ready auto-connection to avoid singleton dependencies during unit tests
 	integrity_manager.set_script(IntegrityManagerScript)
 	integrity_manager.current_integrity = 100.0
+	
+	# ENSURE BASE MULTIPLIER (1.0) for unit tests
+	if ConfigManager:
+		ConfigManager.settings.gameplay.difficulty_level = GlobalConstants.DIFFICULTY.ANALYST
+	
+	# ENSURE BASE MULTIPLIER (1.0) for unit tests
+	if ConfigManager:
+		ConfigManager.settings.gameplay.difficulty_level = GlobalConstants.DIFFICULTY.ANALYST
 
 func after_test():
 	integrity_manager.free()

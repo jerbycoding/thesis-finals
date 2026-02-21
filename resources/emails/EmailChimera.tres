@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="EmailResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/EmailResource.gd" id="1_email"]
+
+[resource]
+script = ExtResource("1_email")
+email_id = "EMAIL-ESP-003"
+sender = "Internal Services"
+subject = "Project Chimera - Final Specs & NDA"
+body = "Hey {victim},
+
+The external contractors finally approved the design docs. Grab the encrypted specs here before the meeting: {malicious_url}. Password is in the secure vault.
+
+Regards,
+Project Management Office"
+attachments = []
+headers = {"status": {"spf": "PASS", "dkim": "PASS", "dmarc": "PASS"}}
+is_malicious = true
+is_urgent = true
+threat_category = 2
+clues = ["suspicious_link"]
+related_ticket = "ESPIONAGE-003"
+suspicious_ip = "{ip}"
+suspicious_domain = "{malicious_url}"
+quarantine_hidden_risks = {"links": "data_loss_critical"}

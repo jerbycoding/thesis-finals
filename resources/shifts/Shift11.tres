@@ -12,8 +12,11 @@ briefing_dialogue_id = "week2_thursday"
 event_sequence = [
 	{"time": 30, "event": "spawn_mole_hunt", "type": "spawn_ticket", "ticket_id": "MOLE-HUNT-001"},
 	{"time": 90, "event": "analyst_accusation", "type": "npc_interaction", "npc_id": "senior_analyst", "dialogue_id": "accusation"},
+	{"time": 120, "event": "spawn_headhunter", "type": "spawn_ticket", "ticket_id": "ESPIONAGE-001"},
 	{"time": 210, "event": "spawn_log_wiper", "type": "spawn_ticket", "ticket_id": "LOG-WIPER-001"},
+	{"time": 270, "event": "spawn_phantom_sync", "type": "spawn_ticket", "ticket_id": "ESPIONAGE-003"},
 	{"time": 330, "event": "spawn_sabotage", "type": "spawn_ticket", "ticket_id": "SABOTAGE-001"},
+	{"time": 450, "event": "spawn_trusted_contractor", "type": "spawn_ticket", "ticket_id": "ESPIONAGE-004"},
 	{"time": 600, "event": "shift_end", "type": "shift_end"}
 ]
 random_event_pool = [

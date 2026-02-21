@@ -132,8 +132,14 @@ func start_shift(shift_id: String):
 	
 	_schedule_next_event()
 	
-	# Start chaos engine (check every 45 seconds)
-	chaos_timer.start(45.0)
+	# Start chaos engine
+	var base_interval = 45.0
+	if ConfigManager and GlobalConstants:
+		var tier = ConfigManager.settings.gameplay.difficulty_level
+		var multipliers = GlobalConstants.DIFFICULTY_DATA.get(tier, GlobalConstants.DIFFICULTY_DATA[GlobalConstants.DIFFICULTY.ANALYST])
+		base_interval = multipliers.chaos_interval
+		
+	chaos_timer.start(base_interval)
 
 func trigger_briefing(shift_id: String):
 	if _is_shift_active: 
@@ -347,6 +353,16 @@ func _handle_system_event(event_data: Dictionary):
 	var duration = event_data.get("duration", 10.0)
 	EventBus.world_event_triggered.emit(event_id, true, duration)
 	
+	# VISUAL SIDE EFFECTS: Physical feedback
+	match event_id:
+		"POWER_FLICKER":
+			_apply_power_flicker(duration)
+			if TransitionManager: TransitionManager.overlay_instance.shake_screen(15.0, 0.5)
+		"ZERO_DAY":
+			if TransitionManager: TransitionManager.overlay_instance.shake_screen(25.0, 1.0)
+		"DDOS_ATTACK":
+			if TransitionManager: TransitionManager.overlay_instance.shake_screen(5.0, duration)
+	
 	# Safety check for unit tests/orphaned nodes
 	if not is_inside_tree():
 		return
@@ -388,6 +404,8 @@ func _handle_shift_end(event_data: Dictionary):
 		# Only trigger victory if there is NO next shift defined in the resource.
 		if current_shift_resource and current_shift_resource.next_shift_id == "":
 			print("NarrativeDirector: Final shift in sequence reached. Triggering Victory.")
+			if ConfigManager:
+				ConfigManager.set_setting("gameplay", "campaign_completed", true)
 			EventBus.campaign_ended.emit("victory")
 			return
 
@@ -443,6 +461,18 @@ func get_weekend_hint() -> Dictionary:
 			return {"socket_id": "NONE", "req_type": "DONE"}
 			
 	return {}
+
+func _apply_power_flicker(duration: float):
+	print("NarrativeDirector: Applying POWER FLICKER effect...")
+	if DesktopWindowManager:
+		DesktopWindowManager.close_all_windows()
+	
+	if AudioManager:
+		AudioManager.play_sfx(AudioManager.SFX.electrical_crackle)
+		
+	# Visual flicker handled by TransitionManager/Shader
+	if TransitionManager and TransitionManager.overlay_instance:
+		TransitionManager.overlay_instance.flash_black(duration)
 
 func _trigger_remote_dialogue(npc_id: String, dialogue_id: String):
 	if not DialogueManager: return

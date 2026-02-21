@@ -8,6 +8,8 @@ var scan_multiplier: float = 1.0 # Multiplier for scan time (affected by ZERO_DA
 var ddos_multiplier: float = 1.0 # Multiplier for network ops (affected by DDOS_ATTACK)
 var isp_multiplier: float = 1.0 # Multiplier for network latency (affected by ISP_THROTTLING)
 
+signal command_output_received(text: String, is_partial: bool)
+
 # Available commands
 var commands: Dictionary = {
 	"help": {
@@ -129,6 +131,10 @@ func _execute_command_internal(command_name: String, args: Array) -> Dictionary:
 		EventBus.terminal_command_run.emit(command_name, args)
 		
 	EventBus.terminal_command_executed.emit(command_name, result.get("success", false), result.get("output", ""))
+	
+	# If we have an output but didn't stream it, emit it now as final
+	if not result.get("output", "").is_empty():
+		command_output_received.emit(result.output, false)
 		
 	return result
 
@@ -162,18 +168,37 @@ func _cmd_scan(args: Array) -> Dictionary:
 		}
 
 	# Calculate scan time
-	var base_scan_time = 10.0
+	var base_scan_time = 6.0 # Reduced base time slightly for better feel
 	var total_scan_time = base_scan_time * scan_multiplier * isp_multiplier
 	
-	# Wait for scan to complete
-	await get_tree().create_timer(total_scan_time).timeout
+	command_output_received.emit("[b]INITIALIZING ENDPOINT SCAN: " + hostname + "[/b]\n", true)
+	
+	# SIMULATED PROGRESS LOOP
+	var steps = [
+		"Establishing secure socket...",
+		"Querying process list...",
+		"Analyzing PE header entropy...",
+		"Checking mutex signatures...",
+		"Finalizing forensic report..."
+	]
+	
+	for i in range(steps.size()):
+		var progress = (float(i+1) / steps.size()) * 100
+		var bar = "["
+		for j in range(10):
+			if j < (i+1) * 2: bar += "#"
+			else: bar += "."
+		bar += "]"
+		
+		var line = "%s %d%% - %s\n" % [bar, int(progress), steps[i]]
+		command_output_received.emit(line, true)
+		
+		await get_tree().create_timer(total_scan_time / steps.size()).timeout
 
 	# Update scanned status in NetworkState
 	NetworkState.update_host_state(hostname, {"scanned": true})
 
-	var output = "[b]" + CorporateVoice.get_formatted_phrase("scanning_host", {"hostname": hostname}) + "[/b]\n"
-	output += "Analysis Complete (%.1fs)...\n\n" % total_scan_time
-	
+	var output = "\n"
 	if host_info.get("status") == "INFECTED":
 		output += "[color=red]⚠ " + CorporateVoice.get_phrase("malware_detected") + "[/color]\n"
 		output += CorporateVoice.get_phrase("recommendation_isolate_host")
@@ -270,9 +295,14 @@ func _cmd_logs(args: Array) -> Dictionary:
 		return {"success": false, "output": CorporateVoice.get_phrase("unknown_host")}
 		
 	# Simulate fetch delay
-	await get_tree().create_timer(1.0 * isp_multiplier).timeout
+	command_output_received.emit("[b]RETRIEVING REMOTE LOGS: " + hostname + "[/b]\n", true)
+	command_output_received.emit("[####......] 40% - Requesting packet capture...\n", true)
+	await get_tree().create_timer(0.5 * isp_multiplier).timeout
+	command_output_received.emit("[#######...] 70% - Parsing event stream...\n", true)
+	await get_tree().create_timer(0.5 * isp_multiplier).timeout
+	command_output_received.emit("[##########] 100% - Transfer complete.\n\n", true)
 
-	var output = "[b]" + CorporateVoice.get_formatted_phrase("fetching_logs_for_host", {"hostname": hostname}) + "[/b]\n\n"
+	var output = ""
 	
 	# Fetch actual historical logs from LogSystem
 	var historical_logs: Array[LogResource] = []
@@ -322,28 +352,27 @@ func _cmd_trace(args: Array) -> Dictionary:
 		return {"success": false, "output": "Syntax Error: trace [ip_address] required."}
 	
 	var target_ip = args[0]
-	var output = "Tracing route to %s...\n\n" % target_ip
+	command_output_received.emit("Tracing route to " + target_ip + "...\n\n", true)
 	
 	# Simulate hop delay (affected by DDOS and ISP throttling)
-	var hop_delay = 0.8 * ddos_multiplier * isp_multiplier
+	var hop_delay = 0.6 * ddos_multiplier * isp_multiplier
 	var max_hops = 4
 	
 	# Generate fake intermediate hops
 	for i in range(1, max_hops):
 		if ddos_multiplier > 1.0 or isp_multiplier > 1.0:
-			output += "[color=orange][!] PACKET LOSS DETECTED... RETRYING...[/color]\n"
+			command_output_received.emit("[color=orange][!] PACKET LOSS DETECTED... RETRYING...[/color]\n", true)
+		
 		await get_tree().create_timer(hop_delay).timeout
 		var fake_ip = "192.168.%d.%d" % [randi()%255, randi()%255]
-		output += "  %d    %d ms    %s\n" % [i, randi_range(10, 50) * ddos_multiplier * isp_multiplier, fake_ip]
-		
-		# If traceroute is executed via command_run/command_executed signal, we might want to update partial output
-		# But since this function returns the final output, we just wait.
+		var line = "  %d    %d ms    %s\n" % [i, randi_range(10, 50) * ddos_multiplier * isp_multiplier, fake_ip]
+		command_output_received.emit(line, true)
 	
 	await get_tree().create_timer(hop_delay).timeout
 	
 	# Resolve final hop
 	var resolved_host = NetworkState.get_host_by_ip(target_ip)
-	
+	var output = ""
 	if resolved_host != "":
 		output += "  %d    %d ms    %s [%s]\n" % [max_hops, randi_range(10, 40) * ddos_multiplier, target_ip, resolved_host]
 		output += "\n[color=green]Trace complete. Origin identified: " + resolved_host + "[/color]"

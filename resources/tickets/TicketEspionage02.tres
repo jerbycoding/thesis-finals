@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="TicketResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/tickets/TicketResource.gd" id="1_ticket"]
+
+[resource]
+script = ExtResource("1_ticket")
+ticket_id = "ESPIONAGE-002"
+title = "Insider Threat — Privileged Access Abuse Prior to Voluntary Termination"
+description = "The DLP system triggered on a bulk export of source code repositories from {host}, operated by {victim}, who submitted resignation paperwork 72 hours prior. Access patterns show off-hours queries against the IP Registry and anomalous CloudTrail API calls originating from {ip}. The volume and specificity of data accessed points to deliberate pre-departure exfiltration."
+severity = "High"
+category = "Insider Threat"
+steps = ["Pull SIEM timeline for {victim}'s account activity in the last 72 hours.", "Identify CloudTrail GetObject API calls tied to {host} targeting repositories.", "Correlate outbound data transfer volume against DLP policy thresholds."]
+required_tool = "siem"
+base_time = 300.0
+hidden_risks = ["missed_dlp_exfil_volume"]
+required_log_ids = ["LOG-ESP-002A", "LOG-ESP-002B"]
+is_ambient_noise = false
+required_host_isolation = ""
+required_host_restoration = ""
+on_complete_event = ""
+kill_chain_path = "Corporate Espionage"
+kill_chain_stage = 2

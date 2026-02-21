@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="EmailResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/EmailResource.gd" id="1_email"]
+
+[resource]
+script = ExtResource("1_email")
+email_id = "EMAIL-ZD-002"
+sender = "IT Advisory"
+subject = "IT Advisory: Mandatory VPN Client Patch"
+body = "{victim},
+
+Please apply the urgent zero-day patch using the silent installer hosted on our emergency CDN: {malicious_url}. Failure to comply will result in network quarantine by EOD."
+attachments = ["VPN_Patch_Update.exe"]
+headers = {"status": {"spf": "PASS", "dkim": "FAIL", "dmarc": "FAIL"}}
+is_malicious = true
+is_urgent = true
+threat_category = 3
+clues = ["bad_attachment", "suspicious_domain"]
+related_ticket = "ZERODAY-002"
+suspicious_ip = "{ip}"
+suspicious_domain = "{malicious_url}"
+quarantine_hidden_risks = {"attachments": "ransomware_encryption_start"}

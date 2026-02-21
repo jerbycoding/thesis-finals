@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites id="2026-02-22" name="report_36" tests="43" failures="0" skipped="0" flaky="0" time="0.000">
+	<testsuite id="0" name="test_archetype_analyzer" package="tests/unit" timestamp="2026-02-21T16:53:44" hostname="localhost" tests="4" failures="0" errors="0" skipped="0" flaky="0" time="0.267">
+		<testcase name="test_calculate_archetype_negligent" classname="test_archetype_analyzer" time="0.027">
+		</testcase>
+		<testcase name="test_calculate_archetype_cowboy" classname="test_archetype_analyzer" time="0.022">
+		</testcase>
+		<testcase name="test_calculate_archetype_compliant" classname="test_archetype_analyzer" time="0.021">
+		</testcase>
+		<testcase name="test_calculate_archetype_pragmatic" classname="test_archetype_analyzer" time="0.027">
+		</testcase>
+	</testsuite>
+	<testsuite id="1" name="test_difficulty_scaling" package="tests/unit" timestamp="2026-02-21T16:53:44" hostname="localhost" tests="2" failures="0" errors="0" skipped="0" flaky="0" time="0.141">
+		<testcase name="test_multiplier_calculation" classname="test_difficulty_scaling" time="0.048">
+		</testcase>
+		<testcase name="test_ticket_time_scaling" classname="test_difficulty_scaling" time="0.034">
+		</testcase>
+	</testsuite>
+	<testsuite id="2" name="test_email_system" package="tests/unit" timestamp="2026-02-21T16:53:45" hostname="localhost" tests="6" failures="0" errors="0" skipped="0" flaky="0" time="0.283">
+		<testcase name="test_add_email" classname="test_email_system" time="0.055">
+		</testcase>
+		<testcase name="test_reveal_emails_for_ticket_exact_match" classname="test_email_system" time="0.023">
+		</testcase>
+		<testcase name="test_reveal_emails_for_ticket_generic" classname="test_email_system" time="0.037">
+		</testcase>
+		<testcase name="test_make_decision_processing_state" classname="test_email_system" time="0.025">
+		</testcase>
+		<testcase name="test_make_decision_invalid_input" classname="test_email_system" time="0.030">
+		</testcase>
+		<testcase name="test_get_unprocessed_emails" classname="test_email_system" time="0.026">
+		</testcase>
+	</testsuite>
+	<testsuite id="3" name="test_event_engine" package="tests/unit" timestamp="2026-02-21T16:53:45" hostname="localhost" tests="5" failures="0" errors="0" skipped="0" flaky="0" time="0.235">
+		<testcase name="test_chaos_tick_empty_pool" classname="test_event_engine" time="0.021">
+		</testcase>
+		<testcase name="test_chaos_tick_selection" classname="test_event_engine" time="0.030">
+		</testcase>
+		<testcase name="test_event_handler_missing_data_protection" classname="test_event_engine" time="0.025">
+		</testcase>
+		<testcase name="test_variable_pool_robustness" classname="test_event_engine" time="0.045">
+		</testcase>
+		<testcase name="test_shift_end_victory_logic" classname="test_event_engine" time="0.030">
+		</testcase>
+	</testsuite>
+	<testsuite id="4" name="test_integrity_manager" package="tests/unit" timestamp="2026-02-21T16:53:45" hostname="localhost" tests="10" failures="0" errors="0" skipped="0" flaky="0" time="0.431">
+		<testcase name="test_initial_state" classname="test_integrity_manager" time="0.034">
+		</testcase>
+		<testcase name="test_apply_change_positive" classname="test_integrity_manager" time="0.020">
+		</testcase>
+		<testcase name="test_apply_change_negative" classname="test_integrity_manager" time="0.023">
+		</testcase>
+		<testcase name="test_apply_change_clamp_max" classname="test_integrity_manager" time="0.011">
+		</testcase>
+		<testcase name="test_apply_change_clamp_min" classname="test_integrity_manager" time="0.024">
+		</testcase>
+		<testcase name="test_decay_logic" classname="test_integrity_manager" time="0.019">
+		</testcase>
+		<testcase name="test_ticket_completion_deltas" classname="test_integrity_manager" time="0.020">
+		</testcase>
+		<testcase name="test_breach_consequence" classname="test_integrity_manager" time="0.035">
+		</testcase>
+		<testcase name="test_restore_integrity" classname="test_integrity_manager" time="0.020">
+		</testcase>
+		<testcase name="test_critical_failure_signal" classname="test_integrity_manager" time="0.021">
+		</testcase>
+	</testsuite>
+	<testsuite id="5" name="test_network_state" package="tests/unit" timestamp="2026-02-21T16:53:46" hostname="localhost" tests="4" failures="0" errors="0" skipped="0" flaky="0" time="0.204">
+		<testcase name="test_update_host_state_new_host" classname="test_network_state" time="0.025">
+		</testcase>
+		<testcase name="test_get_host_by_ip" classname="test_network_state" time="0.031">
+		</testcase>
+		<testcase name="test_lateral_movement_simulation" classname="test_network_state" time="0.039">
+		</testcase>
+		<testcase name="test_lateral_movement_blocked_by_isolation" classname="test_network_state" time="0.011">
+		</testcase>
+	</testsuite>
+	<testsuite id="6" name="test_npc_animator_diagnostics" package="tests/unit" timestamp="2026-02-21T16:53:46" hostname="localhost" tests="1" failures="0" errors="0" skipped="0" flaky="0" time="0.763">
+		<testcase name="test_diagnostic_npc_hierarchies" classname="test_npc_animator_diagnostics" time="0.743">
+		</testcase>
+	</testsuite>
+	<testsuite id="7" name="test_procedural_generation" package="tests/unit" timestamp="2026-02-21T16:53:47" hostname="localhost" tests="5" failures="0" errors="0" skipped="0" flaky="0" time="0.228">
+		<testcase name="test_truth_packet_generation" classname="test_procedural_generation" time="0.035">
+		</testcase>
+		<testcase name="test_ticket_description_formatting" classname="test_procedural_generation" time="0.013">
+		</testcase>
+		<testcase name="test_ticket_title_formatting" classname="test_procedural_generation" time="0.012">
+		</testcase>
+		<testcase name="test_manager_injects_packet_on_add" classname="test_procedural_generation" time="0.042">
+		</testcase>
+		<testcase name="test_randomness_variety" classname="test_procedural_generation" time="0.029">
+		</testcase>
+	</testsuite>
+	<testsuite id="8" name="test_ticket_manager" package="tests/unit" timestamp="2026-02-21T16:53:47" hostname="localhost" tests="6" failures="0" errors="0" skipped="0" flaky="0" time="0.310">
+		<testcase name="test_add_ticket" classname="test_ticket_manager" time="0.051">
+		</testcase>
+		<testcase name="test_complete_ticket_removal" classname="test_ticket_manager" time="0.027">
+		</testcase>
+		<testcase name="test_attach_log_logic" classname="test_ticket_manager" time="0.037">
+		</testcase>
+		<testcase name="test_detach_log_logic" classname="test_ticket_manager" time="0.027">
+		</testcase>
+		<testcase name="test_get_ticket_by_id" classname="test_ticket_manager" time="0.037">
+		</testcase>
+		<testcase name="test_clear_active_data" classname="test_ticket_manager" time="0.036">
+		</testcase>
+	</testsuite>
+</testsuites>

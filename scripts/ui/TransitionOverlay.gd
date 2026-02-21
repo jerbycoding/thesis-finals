@@ -48,3 +48,21 @@ func flash_green():
 	tween.tween_property(flash, "modulate:a", 0.0, 0.3)
 	await tween.finished
 	flash.queue_free()
+
+func flash_black(duration: float = 0.5):
+	var flash = ColorRect.new()
+	flash.set_anchors_preset(Control.PRESET_FULL_RECT)
+	flash.color = Color.BLACK
+	add_child(flash)
+	show() # Ensure the layer is visible
+	
+	var tween = create_tween()
+	# Flickering effect
+	for i in range(3):
+		tween.tween_property(flash, "modulate:a", 0.8, duration / 6.0)
+		tween.tween_property(flash, "modulate:a", 0.2, duration / 6.0)
+	
+	tween.tween_property(flash, "modulate:a", 0.0, 0.1)
+	await tween.finished
+	flash.queue_free()
+	if not $AnimationPlayer.is_playing(): hide()

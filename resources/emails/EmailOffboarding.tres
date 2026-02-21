@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="EmailResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/EmailResource.gd" id="1_email"]
+
+[resource]
+script = ExtResource("1_email")
+email_id = "EMAIL-ESP-002"
+sender = "Marcus Webb | People Operations"
+subject = "Re: Knowledge Transfer Plan — Please Confirm Checklist"
+body = "Hi {victim},
+
+Per our conversation with HR, I'm sending over the standard offboarding knowledge transfer checklist. Could you compile the relevant documentation and repository references for your successor? Please include any architecture diagrams, internal wikis, and config templates you own.
+
+IT has provisioned temporary elevated access to ensure a smooth handoff — this expires at EOD Friday.
+
+Let me know if you hit any snags.
+
+Best,
+Marcus Webb
+People Operations | IT Transition Team"
+attachments = []
+headers = {"status": {"spf": "PASS", "dkim": "PASS", "dmarc": "PASS"}}
+is_malicious = true
+is_urgent = false
+threat_category = 3
+clues = []
+related_ticket = "ESPIONAGE-002"
+suspicious_ip = "{ip}"
+suspicious_domain = ""
+quarantine_hidden_risks = {"links": "missed_dlp_exfil_volume"}

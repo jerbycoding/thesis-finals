@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://c5w2u5m3q5j2j"]
 
-[ext_resource type="Script" path="res://scripts/ui/TerminalMenu.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://g8e76u36ht3i" path="res://scripts/ui/TerminalMenu.gd" id="1_script"]
 
 [node name="TerminalMenu2D" type="Control"]
 layout_mode = 3

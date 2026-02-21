@@ -148,7 +148,12 @@ func _update_debug_hud():
 		
 	if HeatManager:
 		text += "[b]Week:[/b] %d\n" % HeatManager.current_week
-		text += "[b]Heat Multiplier:[/b] %.2fx\n" % HeatManager.heat_multiplier
+		text += "[b]Base Heat:[/b] %.2fx\n" % HeatManager.heat_multiplier
+		
+		var effective = HeatManager.get_effective_multiplier()
+		var color = "green" if effective < 1.0 else ("orange" if effective < 1.5 else "red")
+		text += "[b]Effective Pressure:[/b] [color=%s]%.2fx[/color]\n" % [color, effective]
+		
 		text += "[b]Vulnerability Buffer:[/b] %d / 10\n" % HeatManager.vulnerability_buffer.size()
 
 	text += "[color=gray]------------------------------------[/color]\n"

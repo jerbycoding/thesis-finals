@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="EmailResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/EmailResource.gd" id="1_email"]
+
+[resource]
+script = ExtResource("1_email")
+email_id = "EMAIL-ESP-004"
+sender = "External Contractor | Mercer Systems Integration"
+subject = "Action Required: VPN Token Expiry — Re-Authenticate to Continue Work"
+body = "Hi IT Support,
+
+I'm getting a 'Session Token Expired' error on my VPN client tonight. I'm working late to hit the deliverable deadline for the Mercer integration and need this resolved ASAP.
+
+I've already re-entered my credentials three times. Can you reset my session token or extend my access window? I'm connecting from {malicious_url}/vpn-token-reset if you need to push a fix remotely.
+
+Thanks for the quick turnaround — deadline is in 4 hours.
+
+{victim}
+External Contractor"
+attachments = []
+headers = {"status": {"spf": "FAIL", "dkim": "PASS", "dmarc": "FAIL"}}
+is_malicious = true
+is_urgent = true
+threat_category = 2
+clues = ["suspicious_link", "spoofed_sender"]
+related_ticket = "ESPIONAGE-004"
+suspicious_ip = "{ip}"
+suspicious_domain = "{malicious_url}"
+quarantine_hidden_risks = {"links": "premature_isolation_no_scan"}

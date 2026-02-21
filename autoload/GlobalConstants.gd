@@ -130,6 +130,32 @@ const INTEGRITY = {
 
 # --- Visual Foundation Palette (Enterprise-Clean) ---
 
+enum DIFFICULTY { JUNIOR, ANALYST, LEAD }
+
+const DIFFICULTY_DATA = {
+	DIFFICULTY.JUNIOR: {
+		"label": "JUNIOR",
+		"time_mult": 1.5,
+		"damage_mult": 0.5,
+		"chaos_interval": 65.0,
+		"description": "REDUCED PRESSURE :: EXTENDED RESPONSE WINDOWS"
+	},
+	DIFFICULTY.ANALYST: {
+		"label": "ANALYST",
+		"time_mult": 1.0,
+		"damage_mult": 1.0,
+		"chaos_interval": 45.0,
+		"description": "STANDARD PROTOCOL :: BALANCED OPERATIONAL RIGOR"
+	},
+	DIFFICULTY.LEAD: {
+		"label": "LEAD",
+		"time_mult": 0.7,
+		"damage_mult": 1.5,
+		"chaos_interval": 25.0,
+		"description": "ZERO TOLERANCE :: HIGH-STRESS SIMULATION"
+	}
+}
+
 const UI_COLORS = {
 	"PAGE_BG": Color("#FDFDFD"),      # Off-white background
 	"DARK_BG": Color("#0E1117"),      # Deep charcoal for dark dashboards

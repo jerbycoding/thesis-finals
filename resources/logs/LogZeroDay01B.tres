@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="LogResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/logs/LogResource.gd" id="1_log"]
+
+[resource]
+script = ExtResource("1_log")
+log_id = "LOG-ZD-001B"
+timestamp = "11:03:58"
+source = "Firewall"
+category = "Network"
+message = "DNS_OVER_HTTPS_BEACON | SrcHost={host} | DstIP={ip} | Query={malicious_url} | QueryInterval=30s | Technique=T1071.004_DoH_C2"
+severity = 5
+related_ticket = "ZERODAY-001"
+ip_address = "{ip}"
+hostname = "{host}"
+is_revealed = false

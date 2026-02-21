@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="EmailResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/EmailResource.gd" id="1_email"]
+
+[resource]
+script = ExtResource("1_email")
+email_id = "EMAIL-ESP-005"
+sender = "SSO Provider"
+subject = "Action Required: Outstanding Password Reset Request"
+body = "Dear {victim},
+
+Our automated system detected a failed login attempt on your account. To maintain compliance, you must verify your credentials immediately. Click here to confirm: {malicious_url}/sso-login.
+
+Failure to do so will result in mailbox suspension."
+attachments = []
+headers = {"status": {"spf": "PASS", "dkim": "PASS", "dmarc": "PASS"}}
+is_malicious = true
+is_urgent = true
+threat_category = 2
+clues = ["suspicious_link", "suspicious_domain"]
+related_ticket = "ESP-023"
+suspicious_ip = "{ip}"
+suspicious_domain = "{malicious_url}"
+quarantine_hidden_risks = {"links": "compromised_vendor_account"}

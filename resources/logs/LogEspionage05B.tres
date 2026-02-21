@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="LogResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/logs/LogResource.gd" id="1_log"]
+
+[resource]
+script = ExtResource("1_log")
+log_id = "LOG-SYS-089"
+timestamp = "09:15:42"
+source = "SysMon"
+category = "Security"
+message = "Process Creation (Rule: PowerShell). User: {victim}. CommandLine: powershell -enc [Encoded Script connecting to {malicious_url}]"
+severity = 5
+related_ticket = "ESP-023"
+ip_address = ""
+hostname = "{host}"
+is_revealed = false

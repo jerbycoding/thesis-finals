@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="EmailResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/EmailResource.gd" id="1_email"]
+
+[resource]
+script = ExtResource("1_email")
+email_id = "EMAIL-ESP-001"
+sender = "Rachel Holt | Nexbridge Executive Search"
+subject = "Confidential Offer — Senior Principal Engineer | Exclusive Opportunity"
+body = "Dear {victim},
+
+My name is Rachel Holt, and I'm a Senior Talent Partner at Nexbridge Executive Search. We've been retained by a Fortune 100 client to identify a candidate of your exact profile for a Principal Engineering role.
+
+Compensation band: $340,000 – $410,000 base, plus equity.
+
+I've attached a mutual NDA so we can speak freely. Please review and return at your earliest convenience. Given client timelines, I do need a response by EOD Friday.
+
+Warm regards,
+Rachel Holt | Nexbridge Executive Search
+careers@{malicious_url}"
+attachments = ["NDA_Draft_2024.docm"]
+headers = {"status": {"spf": "FAIL", "dkim": "FAIL", "dmarc": "FAIL"}}
+is_malicious = true
+is_urgent = true
+threat_category = 2
+clues = ["spoofed_sender", "bad_attachment", "suspicious_domain"]
+related_ticket = "ESPIONAGE-001"
+suspicious_ip = "{ip}"
+suspicious_domain = "{malicious_url}"
+quarantine_hidden_risks = {"attachments": "missed_c2_macro_exec"}

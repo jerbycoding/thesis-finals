@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="TicketResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/tickets/TicketResource.gd" id="1_ticket"]
+
+[resource]
+script = ExtResource("1_ticket")
+ticket_id = "ESPIONAGE-001"
+title = "Suspected IP Exfiltration via Spear-Phish — R&D Personnel"
+description = "HR flagged an anomalous message received by {victim} from a domain impersonating a recruiting firm. Shortly after the email was opened, {host} initiated an outbound HTTPS session to {malicious_url}, a domain registered 48 hours prior. Forensics suspects credential harvesting linked to a competitor-sponsored APT group."
+severity = "Critical"
+category = "Phishing"
+steps = ["Inspect email headers on the recruiting message for SPF/DKIM/DMARC alignment failures.", "Correlate the timestamp of email open event with the first outbound beacon from {host} to {malicious_url}.", "Use Terminal to run a passive DNS scan on {malicious_url}."]
+required_tool = "email"
+base_time = 300.0
+hidden_risks = ["missed_c2_macro_exec"]
+required_log_ids = ["LOG-ESP-001A", "LOG-ESP-001B"]
+is_ambient_noise = false
+required_host_isolation = ""
+required_host_restoration = ""
+on_complete_event = ""
+kill_chain_path = "Corporate Espionage"
+kill_chain_stage = 1

@@ -12,7 +12,9 @@ briefing_dialogue_id = "week2_wednesday"
 event_sequence = [
 	{"time": 30, "event": "spawn_whaling", "type": "spawn_ticket", "ticket_id": "WHALING-001"},
 	{"time": 150, "event": "spawn_vip_laptop", "type": "spawn_ticket", "ticket_id": "VIP-LAPTOP-001"},
+	{"time": 210, "event": "spawn_silent_harvest", "type": "spawn_ticket", "ticket_id": "ESP-023"},
 	{"time": 330, "event": "spawn_vip_ransom", "type": "spawn_ticket", "ticket_id": "RANSOM-VIP-001"},
+	{"time": 450, "event": "spawn_ghost_code", "type": "spawn_ticket", "ticket_id": "ESPIONAGE-002"},
 	{"time": 600, "event": "shift_end", "type": "shift_end"}
 ]
 random_event_pool = [

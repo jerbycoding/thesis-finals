@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="LogResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/logs/LogResource.gd" id="1_log"]
+
+[resource]
+script = ExtResource("1_log")
+log_id = "LOG-ZD-03C"
+timestamp = "14:22:55"
+source = "Firewall"
+category = "Network"
+message = "Outbound data exfiltration to {ip} detected from {host} via non-standard port 4444. Payload signature matches known web shell behavior."
+severity = 5
+related_ticket = "ZERODAY-005"
+ip_address = "{ip}"
+hostname = "{host}"
+is_revealed = false

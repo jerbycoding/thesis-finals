@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="TicketResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/tickets/TicketResource.gd" id="1_ticket"]
+
+[resource]
+script = ExtResource("1_ticket")
+ticket_id = "ZERODAY-002"
+title = "Unauthenticated RCE via VPN Client Exploit"
+description = "A newly disclosed zero-day vulnerability in our VPN architecture is actively being exploited against {victim}. We are observing reverse shell beacons from {host} establishing a C2 heartbeat with {ip} after a drive-by payload delivery from {malicious_url}."
+severity = "Critical"
+category = "Ransomware"
+steps = ["Identify the malicious heartbeat frequency in IDS logs.", "Trace the parent process of the reverse shell.", "Terminate the active C2 connection via terminal commands."]
+required_tool = "terminal"
+base_time = 300.0
+hidden_risks = ["ransomware_encryption_start"]
+required_log_ids = ["LOG-ZD-01A"]
+is_ambient_noise = false
+required_host_isolation = "{host}"
+required_host_restoration = ""
+on_complete_event = ""
+kill_chain_path = "Zero-Day Apocalypse"
+kill_chain_stage = 1

@@ -84,6 +84,8 @@ This document maps every Incident Ticket to its specific shift, required logs, a
 |:---------------------|:---------------------|:---------------:|:------------------|:--------:|
 | **`WHALING-001`**    | `LOG-VIP-BEACON-01`  |     **YES**     | NO                |    NO    |
 | **`VIP-LAPTOP-001`** | `LOG-VIP-BEACON-01`  |       NO        | **YES** (isolate) |    NO    |
+| **`ESP-023`**        | `LOG-O365-001`       |     **YES**     | NO                |    NO    |
+| **`ESPIONAGE-002`**  | `LOG-ESP-002A`, `B`  |       NO        | NO                |    NO    |
 | **`RANSOM-VIP-001`** | N/A                  |       NO        | **YES** (isolate) | **YES**  |
 
 ---
@@ -92,17 +94,25 @@ This document maps every Incident Ticket to its specific shift, required logs, a
 | Ticket ID           | SIEM Logs (Evidence)  | Email Analyzer? | SOC Terminal      | Decrypt? |
 |:--------------------|:----------------------|:---------------:|:------------------|:--------:|
 | **`MOLE-HUNT-001`** | `LOG-MOLE-ADMIN-01`   |       NO        | NO                |    NO    |
+| **`ESPIONAGE-001`** | `LOG-ESP-001A`, `B`   |     **YES**     | **YES** (scan)    |    NO    |
 | **`LOG-WIPER-001`** | `LOG-WIPER-DELETE-01` |       NO        | **YES** (isolate) |    NO    |
+| **`ESPIONAGE-003`** | `LOG-ESP-03A`         |     **YES**     | NO                |    NO    |
 | **`SABOTAGE-001`**  | N/A                   |       NO        | **YES** (trace)   |    NO    |
+| **`ESPIONAGE-004`** | `LOG-ESP-004A`, `B`   |     **YES**     | **YES** (isolate) |    NO    |
 
 ---
 
 ## 📅 Shift 12: Friday (Total War)
 | Ticket ID                     | SIEM Logs (Evidence) | Email Analyzer? | SOC Terminal         | Decrypt? |
 |:------------------------------|:---------------------|:---------------:|:---------------------|:--------:|
+| **`ZERODAY-001`**             | `LOG-ZD-001A`, `B`   |     **YES**     | **YES** (scan/iso)   |    NO    |
 | **`KILL-SWITCH-001`**         | N/A                  |       NO        | **YES** (trace/term) |    NO    |
+| **`ZERODAY-004`**             | `LOG-ZD-02B`         |     **YES**     | NO                   |    NO    |
+| **`ZERODAY-002`**             | `LOG-ZD-01A`         |     **YES**     | **YES** (term)       |    NO    |
 | **`CORE-MELTDOWN-001`**       | N/A                  |       NO        | **YES** (isolate)    |    NO    |
+| **`ZERODAY-003`**             | `LOG-ZD-002A`, `B`   |     **YES**     | **YES** (isolate)    |    NO    |
 | **`ADMIN-LOCKOUT-001`**       | N/A                  |       NO        | NO                   | **YES**  |
+| **`ZERODAY-005`**             | `LOG-ZD-03C`         |     **YES**     | **YES** (isolate)    |    NO    |
 | **`BLACK-TICKET-REDEMPTION`** | All Indicators       |       NO        | NO                   |    NO    |
 
 ---

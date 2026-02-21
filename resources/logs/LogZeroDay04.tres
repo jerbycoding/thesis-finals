@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="LogResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/logs/LogResource.gd" id="1_log"]
+
+[resource]
+script = ExtResource("1_log")
+log_id = "LOG-ZD-02B"
+timestamp = "09:42:11"
+source = "SysMon"
+category = "Security"
+message = "Event ID 1: powershell.exe -NoProfile -ExecutionPolicy Bypass -EncodedCommand executed on {host} establishing connection to {ip}."
+severity = 4
+related_ticket = "ZERODAY-004"
+ip_address = "{ip}"
+hostname = "{host}"
+is_revealed = false

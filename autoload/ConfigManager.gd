@@ -24,7 +24,9 @@ var settings = {
 		"mouse_sensitivity": 0.002
 	},
 	"gameplay": {
-		"fov": 80.0
+		"fov": 80.0,
+		"difficulty_level": 1, # 0=Junior, 1=Analyst, 2=Lead
+		"campaign_completed": false
 	}
 }
 

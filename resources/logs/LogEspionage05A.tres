@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="LogResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/logs/LogResource.gd" id="1_log"]
+
+[resource]
+script = ExtResource("1_log")
+log_id = "LOG-O365-001"
+timestamp = "09:03:15"
+source = "Office365"
+category = "Security"
+message = "Impossible travel detected for user {victim}. Successful login from legitimate IP at 09:02:00 and simultaneous login from {ip} at 09:03:15."
+severity = 4
+related_ticket = "ESP-023"
+ip_address = "{ip}"
+hostname = ""
+is_revealed = false

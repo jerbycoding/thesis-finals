@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="LogResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/logs/LogResource.gd" id="1_log"]
+
+[resource]
+script = ExtResource("1_log")
+log_id = "LOG-ZD-002B"
+timestamp = "08:00:41"
+source = "IDS"
+category = "Security"
+message = "C2_HEARTBEAT | SrcHost={host} | DstIP={ip} | Protocol=HTTPS/443 | Signature=ET.RANSOM.LockBit3_C2_Pattern | ActiveDuration=6h12m"
+severity = 5
+related_ticket = "ZERODAY-003"
+ip_address = "{ip}"
+hostname = "{host}"
+is_revealed = false

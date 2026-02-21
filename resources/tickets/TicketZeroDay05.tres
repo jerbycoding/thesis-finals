@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="TicketResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/tickets/TicketResource.gd" id="1_ticket"]
+
+[resource]
+script = ExtResource("1_ticket")
+ticket_id = "ZERODAY-005"
+title = "Anomalous Web Shell Activity on Exchange Server"
+description = "The mail server {host} is exhibiting severe post-exploitation behavior linked to an inbox belonging to {victim}. An unauthenticated zero-click exploit delivered via {malicious_url} dropped a web shell, staging internal infrastructure data for exfiltration to {ip}."
+severity = "Critical"
+category = "Unauthorized Access"
+steps = ["Scan firewall logs for non-standard port exfiltration.", "Review IIS/Exchange logs for abnormal POST requests.", "Quarantine the web shell directory and block the threat actor IP."]
+required_tool = "terminal"
+base_time = 300.0
+hidden_risks = ["server_root_compromise"]
+required_log_ids = ["LOG-ZD-03C"]
+is_ambient_noise = false
+required_host_isolation = "{host}"
+required_host_restoration = ""
+on_complete_event = ""
+kill_chain_path = "Zero-Day Apocalypse"
+kill_chain_stage = 3

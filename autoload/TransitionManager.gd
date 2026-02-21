@@ -169,6 +169,15 @@ func change_scene_to(path: String, narrative_to_start_after: String = "", title_
 	await overlay_instance.fade_finished
 	print(">>> TRANSITION FADE_IN: Complete.")
 	
+	# AMBIENT AUDIO SWITCH: Determine floor from path
+	if AudioManager:
+		if "SOC_Office" in path or "WorkstationRoom" in path:
+			AudioManager.update_ambient_audio(1)
+		elif "ServerVault" in path:
+			AudioManager.update_ambient_audio(-1)
+		elif "NetworkHub" in path:
+			AudioManager.update_ambient_audio(-2)
+	
 	print(">>> TRANSITION SCENE_CHANGE: Changing scene in tree to '", path, "'...")
 	get_tree().change_scene_to_file(path)
 	

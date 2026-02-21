@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="LogResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/logs/LogResource.gd" id="1_log"]
+
+[resource]
+script = ExtResource("1_log")
+log_id = "LOG-ESP-004A"
+timestamp = "03:12:55"
+source = "IDS"
+category = "Network"
+message = "LATERAL_MOVEMENT_DETECTED | SrcHost={host} | Protocol=SMB/445 | Signature=ET.POLICY.SMB_Enum_Attempt | TargetSubnets=10.10.20.0/24 | SessionUser={victim} | SrcIP={ip}"
+severity = 4
+related_ticket = "ESPIONAGE-004"
+ip_address = "{ip}"
+hostname = "{host}"
+is_revealed = false

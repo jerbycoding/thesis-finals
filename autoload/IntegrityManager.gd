@@ -36,8 +36,16 @@ func _process(delta):
 		_apply_change(-hourly_decay, true)
 
 func _apply_change(delta: float, silent: bool = false):
+	var adjusted_delta = delta
+	
+	# APPLY DIFFICULTY SCALING (Skip for minor decay)
+	if not silent and ConfigManager and GlobalConstants:
+		var tier = ConfigManager.settings.gameplay.difficulty_level
+		var multipliers = GlobalConstants.DIFFICULTY_DATA.get(tier, GlobalConstants.DIFFICULTY_DATA[GlobalConstants.DIFFICULTY.ANALYST])
+		adjusted_delta *= multipliers.damage_mult
+	
 	var old_integrity = current_integrity
-	current_integrity = clamp(current_integrity + delta, 0.0, max_integrity)
+	current_integrity = clamp(current_integrity + adjusted_delta, 0.0, max_integrity)
 	
 	# Only emit signals if value actually changed (optimization)
 	if old_integrity != current_integrity:

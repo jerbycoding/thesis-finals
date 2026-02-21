@@ -17,10 +17,22 @@ func _ready():
 	EventBus.ticket_completed.connect(_on_ticket_completed)
 	print("HeatManager initialized.")
 
+func get_effective_multiplier() -> float:
+	var rigor_mult = 1.0
+	if ConfigManager and GlobalConstants:
+		var tier = ConfigManager.settings.gameplay.difficulty_level
+		var data = GlobalConstants.DIFFICULTY_DATA.get(tier, GlobalConstants.DIFFICULTY_DATA[GlobalConstants.DIFFICULTY.ANALYST])
+		# Convert time_mult (where 1.5 is slower) to a pressure_mult (where >1.0 is harder)
+		# analyst (1.0) -> 1.0
+		# junior (1.5) -> 0.66
+		# lead (0.7) -> 1.42
+		rigor_mult = 1.0 / data.time_mult
+		
+	return heat_multiplier * rigor_mult
+
 func get_scaled_time(base_time: float) -> float:
-	# Scaling: T_scaled = base_time / (1.0 + (heat - 1.0))
-	# Higher heat = less time
-	return base_time / heat_multiplier
+	# Use the effective multiplier for all time scaling
+	return base_time / get_effective_multiplier()
 
 func _on_shift_ended(_results):
 	# If designated transition shift ends, increment week and heat

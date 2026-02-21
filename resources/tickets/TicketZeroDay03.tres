@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="TicketResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/tickets/TicketResource.gd" id="1_ticket"]
+
+[resource]
+script = ExtResource("1_ticket")
+ticket_id = "ZERODAY-003"
+title = "Ransomware Pre-Encryption Stage — Shadow Copy Deletion"
+description = "SysMon has detected vssadmin.exe delete shadows /all execution on {host} under {victim}'s session — a canonical pre-encryption ransomware behavior. The payload arrived via a weaponized link in a vendor invoice pointing to {malicious_url}. Encryption has NOT yet begun."
+severity = "Critical"
+category = "Ransomware"
+steps = ["Search SIEM for the vssadmin execution event and preceding PowerShell activity.", "Identify any additional hosts that have connected to {ip}.", "Immediately escalate to Terminal for host isolation."]
+required_tool = "siem"
+base_time = 300.0
+hidden_risks = ["no_blast_radius_check_before_isolate"]
+required_log_ids = ["LOG-ZD-002A", "LOG-ZD-002B"]
+is_ambient_noise = false
+required_host_isolation = "{host}"
+required_host_restoration = ""
+on_complete_event = ""
+kill_chain_path = "Zero-Day Apocalypse"
+kill_chain_stage = 2

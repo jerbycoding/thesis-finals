@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<testsuites id="2026-02-16" name="report_14" tests="1" failures="0" skipped="0" flaky="0" time="0.000">
-	<testsuite id="0" name="test_npc_animator_diagnostics" package="tests/unit" timestamp="2026-02-16T15:28:22" hostname="localhost" tests="1" failures="0" errors="0" skipped="0" flaky="0" time="0.792">
-		<testcase name="test_diagnostic_npc_hierarchies" classname="test_npc_animator_diagnostics" time="0.739">
-		</testcase>
-	</testsuite>
-</testsuites>

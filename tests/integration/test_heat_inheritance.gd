@@ -19,6 +19,10 @@ func before_test():
 	heat_mgr.current_week = 1
 	heat_mgr.vulnerability_buffer.clear()
 	ticket_mgr.active_tickets.clear()
+	
+	# ENSURE BASE MULTIPLIER (1.0)
+	if ConfigManager:
+		ConfigManager.settings.gameplay.difficulty_level = GlobalConstants.DIFFICULTY.ANALYST
 
 func test_heat_time_scaling():
 	# 1. Base Week (Heat 1.0)

@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="EmailResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/EmailResource.gd" id="1_email"]
+
+[resource]
+script = ExtResource("1_email")
+email_id = "EMAIL-ZD-003"
+sender = "Accounts Receivable"
+subject = "Invoice #INV-2024-00892 — Payment Due Overdue: Immediate Action Required"
+body = "Dear {victim},
+
+Please find attached Invoice #INV-2024-00892 for services rendered in February. This payment is now 14 days overdue and subject to our late fee policy.
+
+To view the itemized breakdown and submit payment authorization, please access the secure invoice portal here: {malicious_url}/invoice/INV-2024-00892.pdf
+
+Accounts Receivable
+Vanterra Solutions Group"
+attachments = []
+headers = {"status": {"spf": "FAIL", "dkim": "FAIL", "dmarc": "FAIL"}}
+is_malicious = true
+is_urgent = true
+threat_category = 1
+clues = ["suspicious_link", "suspicious_domain"]
+related_ticket = "ZERODAY-003"
+suspicious_ip = "{ip}"
+suspicious_domain = "{malicious_url}"
+quarantine_hidden_risks = {"links": "no_blast_radius_check_before_isolate"}
