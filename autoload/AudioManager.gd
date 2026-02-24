@@ -39,7 +39,7 @@ func _ready():
 func _on_ticket_completed(_ticket: TicketResource, completion_type: String, _time: float):
 	match completion_type:
 		"compliant":
-			play_notification("success")
+			play_success_sound()
 		"emergency":
 			play_alert()
 		"timeout":
@@ -47,15 +47,20 @@ func _on_ticket_completed(_ticket: TicketResource, completion_type: String, _tim
 		"efficient":
 			play_notification("warning")
 
+func play_success_sound():
+	# Alternate between success sounds for variety
+	var sound = SFX.notification_success if randf() > 0.5 else SFX.success_variant
+	play_sfx(sound)
+
 func _on_email_decision_processed(email: EmailResource, decision: String, _state: Dictionary):
 	if decision == "approve":
 		if email.is_malicious:
 			play_notification("error") # Approved malicious email
 		else:
-			play_notification("success") # Approved legitimate email
+			play_success_sound() # Approved legitimate email
 	elif decision == "quarantine":
 		if email.is_malicious:
-			play_notification("success") # Quarantined malicious email
+			play_success_sound() # Quarantined malicious email
 		else:
 			play_notification("warning") # Quarantined legitimate email
 	elif decision == "escalate":
@@ -121,6 +126,7 @@ func update_ambient_audio(floor_num: int):
 	var target_path = ""
 	match floor_num:
 		1: target_path = SFX.ambient_office
+		0: target_path = SFX.ambient_desktop
 		-1: target_path = SFX.ambient_vault
 		-2: target_path = SFX.ambient_hub
 		
@@ -182,6 +188,7 @@ func play_hardware_slot():
 var SFX = {
 	"notification_info": "res://assets/sfx/notification_info.ogg",
 	"notification_success": "res://assets/sfx/notification_success.ogg",
+	"success_variant": "res://assets/sfx/success2.ogg",
 	"notification_warning": "res://assets/sfx/notification_warning.ogg",
 	"notification_error": "res://assets/sfx/notification_error.ogg",
 	"button_click": "res://assets/sfx/button_click.ogg",
@@ -192,6 +199,7 @@ var SFX = {
 	"footsteps_tile": "res://assets/sfx/footstep-tile.ogg",
 	"hardware_slot": "res://assets/sfx/hardware-slot.ogg",
 	"ambient_office": "res://assets/sfx/ambient_office.ogg",
+	"ambient_desktop": "res://assets/sfx/ambient_desktop.ogg",
 	"ambient_vault": "res://assets/sfx/ambient_vault.ogg",
 	"ambient_hub": "res://assets/sfx/ambient_hub.ogg",
 	"electrical_crackle": "res://assets/sfx/electrical_crackle.ogg",

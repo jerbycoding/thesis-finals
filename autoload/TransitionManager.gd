@@ -72,6 +72,10 @@ func enter_desktop_mode(computer_node):
 			bridge.activate()
 			GameState.active_bridge = bridge
 	
+	# AUDIO SWITCH: Focus desktop hum
+	if AudioManager:
+		AudioManager.update_ambient_audio(0)
+	
 	# Set mode (enables mouse tracking)
 	GameState.set_mode(GameState.GameMode.MODE_2D)
 	GameState.current_computer = computer_node
@@ -118,6 +122,10 @@ func exit_desktop_mode():
 	# Return to 3D mode (Triggers Player stand_up() via signal)
 	GameState.set_mode(GameState.GameMode.MODE_3D)
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	
+	# AUDIO RESTORE: Office hum
+	if AudioManager:
+		AudioManager.update_ambient_audio(1)
 
 	# Wait for stand animation (0.8s)
 	await get_tree().create_timer(0.8).timeout
