@@ -20,6 +20,7 @@ script = ExtResource("1_15gk4")
 [node name="UnifiedHUD" parent="." instance=ExtResource("2_unified")]
 unique_name_in_owner = true
 offset_left = -240.0
+offset_top = -39.0
 offset_right = 0.0
 
 [node name="InteractionPrompt" parent="." instance=ExtResource("3_prompt")]

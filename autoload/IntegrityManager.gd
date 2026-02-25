@@ -45,6 +45,13 @@ func _apply_change(delta: float, silent: bool = false):
 		adjusted_delta *= multipliers.damage_mult
 	
 	var old_integrity = current_integrity
+	
+	# SANDBOX INTERCEPTION (Section 5: Failure Resilience)
+	if delta < 0 and GameState and GameState.is_guided_mode:
+		print("🛡️ IntegrityManager: Intercepted violation during certification. Emitting warning.")
+		EventBus.consequence_triggered.emit("procedural_warning", {"delta": delta})
+		return # Do not reduce health in sandbox
+		
 	current_integrity = clamp(current_integrity + adjusted_delta, 0.0, max_integrity)
 	
 	# Only emit signals if value actually changed (optimization)
@@ -110,6 +117,14 @@ func stop_decay():
 func restore_integrity(amount: float):
 	print("IntegrityManager: Manual Restore -> %+.1f" % amount)
 	_apply_change(amount)
+
+func debug_modify_integrity(amount: float):
+	# Bypass scaling for debug tools
+	var old_integrity = current_integrity
+	current_integrity = clamp(current_integrity + amount, 0.0, max_integrity)
+	if old_integrity != current_integrity:
+		integrity_changed.emit(current_integrity, amount)
+		print("IntegrityManager [DEBUG]: Integrity modified to %.1f%%" % current_integrity)
 
 func reset_to_default():
 	print("IntegrityManager: Resetting to default state.")

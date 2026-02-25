@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://c28t6vqktfrln" path="res://scripts/2d/DesktopClock.gd" id="1_0l3ag"]
 [ext_resource type="Script" uid="uid://cbi6smmdpx4yu" path="res://scripts/2d/ExitButton.gd" id="2_0kbkv"]
 [ext_resource type="Texture2D" uid="uid://dk37ymi787rod" path="res://assets/wallpapers/Microsoft_Surface_Duo.jpg" id="3_r1l77"]
+[ext_resource type="PackedScene" uid="uid://b7v8y1r2l3m4n" path="res://scenes/ui/RunbookSidebar.tscn" id="5_runbook"]
 [ext_resource type="Theme" uid="uid://dny3rlbltexc7" path="res://assets/themes/EnterpriseTheme.tres" id="4_theme"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_TaskbarGlass"]
@@ -88,6 +89,11 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 color = Color(1, 1, 1, 0.0156863)
+
+[node name="RunbookSidebar" parent="MonitorAssembly/LCD_Group" instance=ExtResource("5_runbook")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
 
 [node name="ScreenSafeArea" type="MarginContainer" parent="MonitorAssembly/LCD_Group"]
 unique_name_in_owner = true

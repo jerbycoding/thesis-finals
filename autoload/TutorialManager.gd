@@ -42,6 +42,8 @@ var hud_scene = preload("res://scenes/ui/TutorialHUD.tscn")
 var overlay_scene = preload("res://scenes/ui/TutorialOverlay.tscn")
 var summary_scene = preload("res://scenes/ui/CertificationSummary.tscn")
 
+var training_profile: AppPermissionProfile = null
+
 func _ready():
 	_load_sequence()
 	
@@ -65,13 +67,34 @@ func _input(event):
 		if TicketManager: TicketManager.spawn_ticket_by_id("TRN-003")
 		_advance_step(17) # Index 17 is Step 18
 
-func _on_consequence_triggered(type: String, _details: Dictionary):
+func _on_consequence_triggered(type: String, details: Dictionary):
 	if not is_tutorial_active: return
 	
+	if type == "procedural_warning":
+		_handle_remediation("PROTOCOL_VIOLATION: UNJUSTIFIED_ACTION_DETECTED")
+		return
+
 	if type == GlobalConstants.CONSEQUENCE_ID.PROCEDURAL_VIOLATION:
 		# If we are on the 'Forced Failure' step, advance to explanation
 		if current_step == 18:
 			_advance_step(18) # Move to Step 19 (indices are 0-based, so 18 is Step 19)
+
+func _handle_remediation(reason: String):
+	print("TutorialManager: Remediation triggered: ", reason)
+	
+	if GameState and GameState.desktop_instance:
+		var sidebar = GameState.desktop_instance.get_node_or_null("%RunbookSidebar")
+		if sidebar:
+			sidebar.set_warning_mode(true)
+			sidebar.update_task(-99, "REMEDIATION: RESTORE_SYSTEM_STATE | REASON: " + reason)
+			
+	if NotificationManager:
+		NotificationManager.show_notification("CRITICAL: SOP VIOLATION. RECOVERY REQUIRED.", "error", 8.0)
+	
+	# CISO Feedback
+	if DialogueManager:
+		# We can trigger a remote audio ping or a specific line here later
+		pass
 
 func _load_sequence():
 	var path = "res://resources/TutorialSequence.tres"
@@ -99,9 +122,14 @@ func _on_shift_started(shift_id: String):
 			EmailSystem.active_filter = func(email: EmailResource, t_id: String):
 				return email.email_id.begins_with("EMAIL-TRN") or email.related_ticket == t_id
 		
-		# INJECT PERMISSIONS
+		# INITIAL DYNAMIC PERMISSIONS (Section 4: Provisioning)
+		training_profile = AppPermissionProfile.new()
+		training_profile.profile_name = "Dynamic Certification"
+		training_profile.allowed_apps = ["tickets", "email", "handbook"]
+		training_profile.restricted_message = "RESTRICTED: AUTHORIZATION PENDING SOP CLEARANCE."
+		
 		if DesktopWindowManager:
-			DesktopWindowManager.active_permission_profile = load("res://resources/training_permissions.tres")
+			DesktopWindowManager.active_permission_profile = training_profile
 		
 		_toggle_live_hud(false)
 		_create_hud()
@@ -237,7 +265,26 @@ func _on_log_attached(t_id, l_id):
 
 func _on_terminal_executed(cmd: String, success: bool, _out: String):
 	if success:
-		_check_trigger(TutorialStepResource.TriggerType.COMMAND_RUN, cmd.split(" ")[0])
+		var cmd_name = cmd.split(" ")[0].to_lower()
+		
+		# REMEDIATION RESOLUTION
+		if cmd_name == "restore":
+			_resolve_remediation()
+			
+		_check_trigger(TutorialStepResource.TriggerType.COMMAND_RUN, cmd_name)
+
+func _resolve_remediation():
+	if GameState and GameState.desktop_instance:
+		var sidebar = GameState.desktop_instance.get_node_or_null("%RunbookSidebar")
+		if sidebar:
+			sidebar.set_warning_mode(false)
+			# Restore the actual current step instruction
+			var step_data = sequence.get_step(current_step_index)
+			if step_data:
+				sidebar.update_task(current_step, step_data.instruction_text)
+	
+	if NotificationManager:
+		NotificationManager.show_notification("SYSTEM RESTORED. RESUMING CERTIFICATION.", "success", 4.0)
 
 func _on_host_selected(host: HostResource):
 	_check_trigger(TutorialStepResource.TriggerType.HOST_SELECTED, host.hostname)
@@ -249,12 +296,23 @@ func _on_ticket_completed(ticket: TicketResource, completion_type: String, _time
 # --- Core Lifecycle ---
 
 func _advance_step(new_index: int):
+	# Mark previous task as complete in Sidebar if advancing
+	if current_step_index >= 0:
+		_complete_sidebar_task(current_step_index + 1)
+		
 	current_step_index = new_index
 	var step_data = sequence.get_step(current_step_index)
 	
 	if not step_data:
 		# Final Step reached
 		return
+
+	# PROGRESSIVE PROVISIONING (Section 4)
+	if current_step == 7:
+		_provision_app("siem")
+	elif current_step == 11:
+		_provision_app("terminal")
+		_provision_app("network")
 
 	# Update HUD
 	step_changed.emit(current_step_index + 1)
@@ -284,6 +342,14 @@ func _advance_step(new_index: int):
 	# Complete Logic: Immediately trigger if this is the final step
 	if current_step_index == sequence.steps.size() - 1:
 		_show_final_summary()
+
+func _provision_app(app_id: String):
+	if training_profile and app_id not in training_profile.allowed_apps:
+		training_profile.allowed_apps.append(app_id)
+		# Re-assign to trigger the setter/signal in DesktopWindowManager
+		if DesktopWindowManager:
+			DesktopWindowManager.active_permission_profile = training_profile
+		print("TutorialManager: Provisioned app access: ", app_id)
 
 func _show_final_summary():
 	if summary_shown: return
@@ -350,47 +416,65 @@ func _update_visual_focus():
 
 	# Handle Highlight Path
 	if step_data.highlight_path.begins_with("%%") and desktop:
-		overlay.highlight_node(desktop.get_node_or_null(step_data.highlight_path.replace("%%", "%")))
+		overlay.highlight_node(desktop.get_node_or_null(step_data.highlight_path.replace("%%", "%")), step_data.highlight_tier)
 	elif step_data.highlight_path.begins_with("[DYNAMIC]"):
-		_highlight_dynamic(step_data.highlight_path)
+		_highlight_dynamic(step_data.highlight_path, step_data.highlight_tier)
 	else:
 		overlay.hide_overlay()
 
-func _highlight_dynamic(path: String):
+func _highlight_dynamic(path: String, tier: int = 3):
 	match path:
 		"[DYNAMIC]TICKET_LIST_0":
 			var win = DesktopWindowManager._find_window_by_app("tickets")
 			if win:
 				var list = win.get_node_or_null("%TicketList")
-				if list and list.get_child_count() > 0: overlay.highlight_node(list.get_child(0))
+				if list and list.get_child_count() > 0: overlay.highlight_node(list.get_child(0), tier)
 		"[DYNAMIC]TICKET_0_COMPLETE":
 			var win = DesktopWindowManager._find_window_by_app("tickets")
 			if win:
 				var list = win.get_node_or_null("%TicketList")
 				if list and list.get_child_count() > 0: 
-					overlay.highlight_node(list.get_child(0).get_node_or_null("%CompleteButton"))
+					overlay.highlight_node(list.get_child(0).get_node_or_null("%CompleteButton"), tier)
 		"[DYNAMIC]EMAIL_LIST_0":
 			var win = DesktopWindowManager._find_window_by_app("email")
 			if win:
 				var list = win.get_node_or_null("%EmailList")
-				if list and list.get_child_count() > 0: overlay.highlight_node(list.get_child(0))
+				if list and list.get_child_count() > 0: overlay.highlight_node(list.get_child(0), tier)
 		"[DYNAMIC]LOG_LIST_0":
 			var win = DesktopWindowManager._find_window_by_app("siem")
 			if win:
 				var list = win.get_node_or_null("%LogList")
-				if list and list.get_child_count() > 0: overlay.highlight_node(list.get_child(0))
+				if list and list.get_child_count() > 0: overlay.highlight_node(list.get_child(0), tier)
 		"[DYNAMIC]MAP_NODE_T":
 			var win = DesktopWindowManager._find_window_by_app("network")
 			if win:
 				var nodes = win.get_node_or_null("%NodesContainer")
 				if nodes and nodes.get_child_count() > 0:
-					overlay.highlight_node(nodes.get_child(nodes.get_child_count()-1))
+					overlay.highlight_node(nodes.get_child(nodes.get_child_count()-1), tier)
+
+func _show_instruction(text: String):
+	if text == "": return
+	
+	# Diegetic Sidebar Integration
+	if GameState and GameState.is_in_2d_mode() and GameState.desktop_instance:
+		var sidebar = GameState.desktop_instance.get_node_or_null("%RunbookSidebar")
+		if sidebar:
+			sidebar.show()
+			sidebar.update_task(current_step, text)
+			if hud: hud.hide() # Hide meta-HUD when diegetic is active
+			return # Exit early, we don't need notification if sidebar is up
+	
+	# Meta-HUD Fallback (Notification Toast / HUD)
+	if NotificationManager: NotificationManager.show_notification(text, "info", 12.0)
+	if hud: hud.show()
+
+func _complete_sidebar_task(step_id: int):
+	if GameState and GameState.desktop_instance:
+		var sidebar = GameState.desktop_instance.get_node_or_null("%RunbookSidebar")
+		if sidebar:
+			sidebar.complete_task(step_id)
 
 func _get_instruction_for_step(step_idx: int) -> String:
 	if sequence and step_idx >= 0 and step_idx < sequence.steps.size():
 		return sequence.steps[step_idx].instruction_text
 	return ""
-
-func _show_instruction(text: String):
-	if text == "": return
-	if NotificationManager: NotificationManager.show_notification(text, "info", 12.0)

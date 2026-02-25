@@ -56,6 +56,7 @@ signal audit_node_selected(node_id: String)
 signal request_prompt(text: String, active: bool)
 signal game_loaded()
 signal timer_finished(timer_id: String)
+signal permissions_updated()
 
 # --- Transition Signals ---
 signal transition_started()

@@ -37,7 +37,11 @@ func _load_app_configs():
 
 
 ## The currently active permission profile. If null, all apps are allowed.
-var active_permission_profile: AppPermissionProfile = null
+var active_permission_profile: AppPermissionProfile = null:
+	set(val):
+		active_permission_profile = val
+		EventBus.permissions_updated.emit()
+		print("DesktopWindowManager: Permission profile updated to: ", val.profile_name if val else "NONE")
 
 func can_open_app(app_name: String) -> Dictionary:
 	"""Returns {'allowed': bool, 'reason': String}"""

@@ -1,154 +1,29 @@
-### Incident 1: Week 3 - Corporate Espionage (Phishing Spearhead)
+### Strategic Recommendation: What's the Best Tutorial Design?
 
-#### A. The Ticket (TicketResource)
-- **Ticket ID**: ESPIONAGE-001
-- **Title**: Suspicious Executive Impersonation and Data Leak
-- **Description**: {victim} reported receiving a targeted email mimicking the CEO, urging immediate review of a confidential merger document via {malicious_url}. Subsequent network logs indicate outbound connections from {host} to {ip}, suggesting potential credential harvesting and exfiltration of proprietary files. Immediate investigation is required to contain the breach and assess stolen intellectual property.
-- **Severity**: High
-- **Category**: Phishing
-- **Analysis Steps**:
-  - 1. Inspect email headers for spoofing indicators.
-  - 2. Correlate user click events with anomalous outbound traffic.
-  - 3. Trace C2 callbacks to confirm actor attribution.
-- **Required Tool**: email
-- **Required Log IDs**: LOG-EXFIL-01, LOG-C2-01
+For "VERIFY.EXE", the best tutorial design is **B) The "First Day on the Job"**, potentially with hybrid elements from C for optional deeper exploration after the guided phase. This approach is most effective because it immerses beginners in a narrative-driven experience, making them feel like a "Pro Analyst" from the start without the detachment of a separate module (A), which could feel like mandatory homework and disrupt the game's flow. By weaving the tutorial into the campaign via an NPC mentor (e.g., a senior analyst character), guidance feels organic and supportive, using plain English dialogues and real-world analogies to build confidence gradually. This avoids overwhelming players—common in pure sandbox modes (C)—by providing structured hand-holding initially, while teaching consequences naturally through escalating in-game events tied to the "Kill Chain" mechanic. The NPC can highlight mistakes in real-time, turning them into "Aha!" moments that emphasize logic and repercussions, fostering a sense of growth. After core lessons, hybrid sandbox hints/tooltips can encourage free experimentation, reinforcing skills without railroading.
 
-#### B. The Evidence Log (LogResource)
-- **Log ID**: LOG-EXFIL-01
-- **Source**: Firewall
-- **Message**: Outbound exfiltration attempt detected: {host} transferring encrypted archives to {ip} over HTTPS, volume exceeding 500MB.
-- **Severity**: 4
-
-- **Log ID**: LOG-C2-01
-- **Source**: IDS
-- **Message**: C2 heartbeat from {host} to {malicious_url} observed, with obfuscated PowerShell payload injection.
-- **Severity**: 5
-
-#### C. The Email (EmailResource)
-- **Subject**: Urgent: Review Attached Merger Proposal Before Board Meeting
-- **Body**: Dear {victim},  
-As discussed in our last call, please review the attached confidential merger details immediately via this secure link: {malicious_url}. Your input is critical for tomorrow's decision. Best, CEO Johnathan Hale.
-- **Headers (SPF/DKIM/DMARC)**: SPF: FAIL, DKIM: PASS, DMARC: FAIL
-- **Hidden Risk**: missed_exfil_trigger
-
-### Incident 2: Week 3 - Corporate Espionage (Insider-Assisted Malware)
-
-#### A. The Ticket (TicketResource)
-- **Ticket ID**: ESPIONAGE-002
-- **Title**: Internal Compromise via Malicious Insider Payload
-- **Description**: Anomalous activity on {host} points to an insider threat where {victim} unwittingly executed a trojanized update from {malicious_url}, enabling lateral movement. Logs show unauthorized access to R&D servers from {ip}, risking theft of trade secrets. Containment must prioritize isolating the vector to prevent further espionage.
-- **Severity**: Critical
-- **Category**: Insider Threat
-- **Analysis Steps**:
-  - 1. Scan for persistence mechanisms like scheduled tasks.
-  - 2. Identify lateral pivots using SysMon process chains.
-  - 3. Block C2 domains and monitor for callback flares.
-- **Required Tool**: terminal
-- **Required Log IDs**: LOG-PERSIST-02
-
-#### B. The Evidence Log (LogResource)
-- **Log ID**: LOG-PERSIST-02
-- **Source**: SysMon
-- **Message**: Persistence established on {host}: Malicious executable from {malicious_url} spawned by {victim}, connecting to {ip} for command retrieval.
-- **Severity**: 5
-
-#### C. The Email (EmailResource)
-- **Subject**: Critical Software Patch for Your Workstation
-- **Body**: Hi {victim},  
-IT has identified a vulnerability on {host}. Download and run the patch from {malicious_url} ASAP to avoid downtime. Thanks, IT Support Team.
-- **Headers (SPF/DKIM/DMARC)**: SPF: PASS, DKIM: FAIL, DMARC: PASS
-- **Hidden Risk**: overlooked_lateral_hop
-
-### Incident 3: Week 3 - Corporate Espionage (Unauthorized Access Chain)
-
-#### A. The Ticket (TicketResource)
-- **Ticket ID**: ESPIONAGE-003
-- **Title**: Credential Theft and Shadow IT Infiltration
-- **Description**: {victim}'s credentials were compromised via a phishing lure from {malicious_url}, leading to unauthorized access on {host} and queries to sensitive databases from {ip}. This appears part of a broader espionage campaign targeting competitor intelligence. Rapid response is essential to revoke access and audit exposed data.
-- **Severity**: High
-- **Category**: Unauthorized Access
-- **Analysis Steps**:
-  - 1. Query SIEM for failed login spikes.
-  - 2. Analyze CloudTrail for anomalous API calls.
-  - 3. Isolate {host} to halt ongoing sessions.
-- **Required Tool**: siem
-- **Required Log IDs**: LOG-AUTH-03, LOG-API-03
-
-#### B. The Evidence Log (LogResource)
-- **Log ID**: LOG-AUTH-03
-- **Source**: Office365
-- **Message**: Unauthorized authentication success: {victim}'s account from {ip} accessing {host} post-phish click on {malicious_url}.
-- **Severity**: 4
-
-- **Log ID**: LOG-API-03
-- **Source**: CloudTrail
-- **Message**: Anomalous API exfiltration: {host} querying proprietary datasets to {ip}, bypassing standard MFA.
-- **Severity**: 5
-
-#### C. The Email (EmailResource)
-- **Subject**: Account Verification Required - Action Needed
-- **Body**: Hello {victim},  
-Your account on {host} requires immediate verification. Click here to confirm: {malicious_url}. Failure to do so may lock you out. Regards, Security Team.
-- **Headers (SPF/DKIM/DMARC)**: SPF: FAIL, DKIM: FAIL, DMARC: FAIL
-- **Hidden Risk**: ignored_cred_dump
-
-### Incident 4: Week 4 - Zero-Day Apocalypse (Ransomware Outbreak)
-
-#### A. The Ticket (TicketResource)
-- **Ticket ID**: ZERO-001
-- **Title**: Zero-Day Exploit Triggering Widespread Encryption
-- **Description**: A zero-day vulnerability in core software allowed entry via {malicious_url}, encrypting files on {host} and demanding ransom from {ip}. {victim} is the initial vector in what could cascade into a full network lockdown. Urgent decryption analysis and isolation are needed to avert total data loss.
-- **Severity**: Critical
-- **Category**: Ransomware
-- **Analysis Steps**:
-  - 1. Identify exploit signatures in IDS logs.
-  - 2. Scan for encrypted file patterns on {host}.
-  - 3. Block ransom C2 channels to prevent propagation.
-- **Required Tool**: terminal
-- **Required Log IDs**: LOG-ENCRYPT-04
-
-#### B. The Evidence Log (LogResource)
-- **Log ID**: LOG-ENCRYPT-04
-- **Source**: IDS
-- **Message**: Zero-day exploit detected: {host} vulnerable to CVE-pending, leading to ransomware deployment from {ip} via {malicious_url} accessed by {victim}.
-- **Severity**: 5
-
-#### C. The Email (EmailResource)
-- **Subject**: Emergency Update: Install Now to Prevent Data Loss
-- **Body**: {victim},  
-A critical zero-day threat is active. Install this emergency patch from {malicious_url} on {host} immediately. IT Department.
-- **Headers (SPF/DKIM/DMARC)**: SPF: PASS, DKIM: PASS, DMARC: FAIL
-- **Hidden Risk**: premature_quarantine_loss
-
-### Incident 5: Week 4 - Zero-Day Apocalypse (Malware Pandemic)
-
-#### A. The Ticket (TicketResource)
-- **Ticket ID**: ZERO-002
-- **Title**: Cascading Zero-Day Malware Infection
-- **Description**: {victim} triggered a zero-day malware chain from {malicious_url} on {host}, resulting in self-replicating code contacting {ip} for updates. This could lead to an apocalyptic network overload if not contained. Focus on tracing the infection tree to eradicate the threat.
-- **Severity**: Critical
-- **Category**: Malware
-- **Analysis Steps**:
-  - 1. Filter SIEM for PowerShell obfuscation events.
-  - 2. Map propagation paths from initial compromise.
-  - 3. Quarantine C2 beacons to starve the worm.
-- **Required Tool**: siem
-- **Required Log IDs**: LOG-PROPAGATE-05, LOG-OBFUSCATE-05
-
-#### B. The Evidence Log (LogResource)
-- **Log ID**: LOG-PROPAGATE-05
-- **Source**: Firewall
-- **Message**: Malware propagation: {host} spreading zero-day payload to internal peers, sourced from {ip} after {victim}'s interaction with {malicious_url}.
-- **Severity**: 5
-
-- **Log ID**: LOG-OBFUSCATE-05
-- **Source**: SysMon
-- **Message**: Obfuscated PowerShell execution on {host}: Command from {malicious_url} evading AV, beaconing to {ip}.
-- **Severity**: 4
-
-#### C. The Email (EmailResource)
-- **Subject**: Alert: New Vulnerability Discovered - Update Required
-- **Body**: Dear {victim},  
-We've detected a zero-day issue on {host}. Click {malicious_url} to apply the fix before it spreads. Urgent action needed. Security Ops.
-- **Headers (SPF/DKIM/DMARC)**: SPF: FAIL, DKIM: PASS, DMARC: PASS
-- **Hidden Risk**: missed_worm_vector
+| Step | Human Instruction | Real-World Explanation (Analogy) | The "Aha!" Moment (Logic) |
+|------|-------------------|----------------------------------|---------------------------|
+| 1 | Welcome to your first day! I'm your mentor, Alex. Head over to Office C—it's marked on your map. | Starting a new job is like arriving at a new school; you need to find your classroom first to get oriented. | Getting situated in your workspace is the foundation—without it, you can't access the tools needed for analysis. |
+| 2 | Great, you're here. Sit at the desk and log in with the credentials on the sticky note: username 'newbie', password 'soc123'. | Logging in is like unlocking your front door—it's the basic step to enter your secure home base where all the action happens. | Secure access ensures only authorized users can handle sensitive incidents, preventing unauthorized interference. |
+| 3 | Now that you're in, open the Ticket Queue app on your desktop—it's the icon that looks like a checklist. | The Ticket Queue is like your email inbox at work; it's where all the urgent messages (incidents) pile up for you to triage. | Prioritizing incidents starts here—ignoring the queue lets threats build up, like unanswered emails turning into crises. |
+| 4 | Select the first training ticket, TRN-001. It's highlighted for you. | Picking a ticket is like choosing which fire to put out first in a kitchen—start with the obvious one to practice. | Triage logic: Assess urgency based on descriptions; low-hanging fruit builds skills before complex cases. |
+| 5 | To investigate, open the Email Analyzer app—icon looks like an envelope with a magnifying glass. | This tool is like a detective's kit for suspicious mail; it lets you inspect the envelope, stamps, and contents without opening a bomb. | Emails are common attack vectors—analyzing them reveals hidden dangers like forged senders or malicious payloads. |
+| 6 | In the Email Analyzer, use the Link Check tool on the suspicious URL in the email body. | Checking a link is like tasting food before eating it fully—test if it's poisoned without committing. | Malicious links can lead to infections; verification tools confirm if they're safe or lead to phishing sites. |
+| 7 | Cross-reference this with the SIEM Log Viewer—open it now, the icon is a graph with logs. | SIEM is like a security camera footage archive; it records every movement in the network for review. | Logs provide timeline evidence—correlating email events with logs proves if an action caused a breach. |
+| 8 | Find the matching malicious log entry in SIEM and drag it over to attach to ticket TRN-001. | Attaching evidence is like clipping a photo to a police report—it makes your case solid and documented. | Documentation builds a chain of proof; without it, resolutions lack accountability and can lead to oversights. |
+| 9 | Based on the evidence, close the case as "Compliant" in the Ticket Queue. | Closing a ticket is like signing off on a repaired car—confirm it's fixed before driving away. | Resolution verifies the threat is neutralized; misclassifying can allow persistence, escalating risks. |
+| 10 | Next up: Select ticket TRN-002 from the queue—it's about a potential infected workstation. | Escalating tickets mimic real incidents chaining together, like one leaky pipe flooding the whole house if ignored. | Incidents aren't isolated—handling one poorly can spawn related threats, introducing the Kill Chain concept early. |
+| 11 | Open the Terminal app—it's the black screen icon for command-line actions. | The Terminal is like a mechanic's toolbox; you type commands to diagnose and fix under the hood. | Active defense requires precise inputs—commands enable scanning and isolation beyond passive viewing. |
+| 12 | In the Terminal, type 'scan WORKSTATION-T' and hit enter to check for threats. | Scanning is like running a virus check on your phone—it pings for hidden bugs without disrupting everything. | Scans reveal infections; skipping this step risks acting on incomplete info, leading to false positives/negatives. |
+| 13 | Now, type 'isolate WORKSTATION-T' to quarantine the host. | Isolating is like putting a sick person in a separate room—contains the illness without affecting others. | Containment halts spread; it's a key step in the Kill Chain to break progression from initial compromise to full breach. |
+| 14 | Switch to the Network Mapper app—icon is a web of nodes—to view the topology. | The Network Map is like a city map showing traffic jams; it visualizes connections and statuses at a glance. | Visual aids clarify relationships—seeing isolation confirms your action's impact on the broader network. |
+| 15 | Check that WORKSTATION-T now shows as "Gray" (isolated) on the map. | Confirming status is like double-checking a locked door—ensures your fix actually worked. | Verification loops back to evidence; without it, assumptions can leave vulnerabilities open. |
+| 16 | Attach the scan log from Terminal to TRN-002 and close the case. | Documentation here is like keeping repair receipts—it proves your work for audits or future reference. | Complete records prevent repeat issues; partial ones create gaps that threats exploit. |
+| 17 | Uh oh, new ticket TRN-003 just popped up. Open it—it's a server alert. | Real jobs have surprises; this is like a small leak turning into a flood if you cut corners earlier. | Incidents evolve—introducing consequences where prior shortcuts (if simulated) lead to escalations. |
+| 18 | For this one, try isolating the server without scanning first—see what happens. | Skipping steps is like driving without checking gas—you might stall out midway. | Shortcuts break logic; isolating blindly risks disrupting innocents, teaching procedural importance. |
+| 19 | Notice the "Integrity" penalty popping up—your SOC score dropped because of the unverified action. | Penalties are like getting a speeding ticket—it reminds you rules exist for safety, not bureaucracy. | Consequences enforce diligence; ignoring verification harms trust and efficiency in the long run. |
+| 20 | Wrap up by reviewing your actions in the SOC Handbook (PDF icon) and confirm certification. | The Handbook is like a recipe book—reference it to avoid kitchen disasters. | Certification solidifies basics; it's the checkpoint before real threats test your skills. |
+| 21 | Alright, rookie, here's an easy phishing ticket—close it efficiently without full evidence attachment, just mark it resolved. | Taking shortcuts is like skipping veggies in a meal—feels quick, but leaves you unhealthy later. | Efficiency vs. thoroughness: Partial handling seems fast but allows threats to linger and evolve. |
+| 22 | A few minutes later: New "Malware" ticket arrives. Investigate using Email Analyzer and SIEM—trace it back to the prior phishing. | This is like ignoring a small cut that gets infected—now it's a bigger problem requiring antibiotics. | Kill Chain revelation: Threats progress (recon → delivery → exploitation); unhandled steps chain into severe incidents. |
+| 23 | Clean it up using Terminal's advanced commands (trace and purge), then read the pop-up about the Kill Chain. | Fixing escalations is like cleaning a messy room after a party—more work than preventing the mess. | "Aha!": Shortcuts create chains; full procedures break them, saving time and reducing damage overall. |

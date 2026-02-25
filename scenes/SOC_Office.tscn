@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://dfhgvlt5s46je"]
+[gd_scene load_steps=28 format=3 uid="uid://dfhgvlt5s46je"]
 
 [ext_resource type="PackedScene" uid="uid://b2d35yngg7u75" path="res://scenes/Player3D.tscn" id="1"]
 [ext_resource type="PackedScene" uid="uid://byh82hlg10odp" path="res://scenes/3d/props/graybox/Graybox_Elevator.tscn" id="5"]
@@ -13,6 +13,7 @@
 [ext_resource type="PackedScene" uid="uid://cr3bl3upt5unc" path="res://assets/props/office_pack/FBX/Separated FBX files/Sofa_1_Alt.fbx" id="17_dhgqp"]
 [ext_resource type="PackedScene" uid="uid://btnu8a43ektel" path="res://assets/props/glb files/Air Vent.glb" id="18"]
 [ext_resource type="PackedScene" uid="uid://n28x3hn5cby1" path="res://assets/props/glb files/Doorway Front.glb" id="19"]
+[ext_resource type="Script" uid="uid://b1qbl70qyl3bl" path="res://scripts/EnvironmentDirector.gd" id="20"]
 
 [sub_resource type="Environment" id="Environment_kx6w4"]
 background_mode = 1
@@ -89,6 +90,9 @@ size = Vector3(2.198, 4, 3.10352)
 size = Vector3(1.31323, 2.76648, 1.29498)
 
 [node name="SocRoom" type="Node3D"]
+
+[node name="EnvironmentDirector" type="Node" parent="."]
+script = ExtResource("20")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_kx6w4")

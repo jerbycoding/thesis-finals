@@ -10,13 +10,16 @@ extends Node
 # Dynamic Typing Cache
 var typing_stream: AudioStream = null
 
+var ambient_bus_index: int = -1
+var lpf_effect: AudioEffectLowPassFilter = null
+
 func _ready():
 	add_child(sfx_player)
 	add_child(music_player)
 	add_child(ambient_player)
 	add_child(footstep_player)
 	
-	ambient_player.bus = "Ambient" # Ensure you have an Ambient bus or it defaults to Master
+	_setup_ambient_bus()
 	
 	print("AudioManager initialized.")
 	
@@ -35,6 +38,38 @@ func _ready():
 	
 	# Start initial atmosphere (SOC Office)
 	update_ambient_audio(1)
+
+func _setup_ambient_bus():
+	ambient_bus_index = AudioServer.get_bus_index("Ambient")
+	
+	# Fallback: If no Ambient bus, use Master or create one if possible (though creating is complex at runtime)
+	if ambient_bus_index == -1:
+		ambient_bus_index = AudioServer.get_bus_index("Master")
+	
+	ambient_player.bus = AudioServer.get_bus_name(ambient_bus_index)
+	
+	# Check for existing LPF or add one
+	for i in range(AudioServer.get_bus_effect_count(ambient_bus_index)):
+		if AudioServer.get_bus_effect(ambient_bus_index, i) is AudioEffectLowPassFilter:
+			lpf_effect = AudioServer.get_bus_effect(ambient_bus_index, i)
+			break
+	
+	if not lpf_effect:
+		lpf_effect = AudioEffectLowPassFilter.new()
+		lpf_effect.cutoff_hz = 20000.0 # Effectively off
+		AudioServer.add_bus_effect(ambient_bus_index, lpf_effect)
+
+func set_focus_mode(active: bool):
+	if not lpf_effect: return
+	
+	var target_hz = 600.0 if active else 20000.0
+	var target_db = -20.0 if active else -15.0
+	
+	var tween = create_tween().set_parallel(true)
+	tween.tween_property(lpf_effect, "cutoff_hz", target_hz, 0.8).set_trans(Tween.TRANS_SINE)
+	tween.tween_property(ambient_player, "volume_db", target_db, 0.8)
+	
+	print("AudioManager: Focus Mode ", "ACTIVE" if active else "INACTIVE")
 
 func _on_ticket_completed(_ticket: TicketResource, completion_type: String, _time: float):
 	match completion_type:

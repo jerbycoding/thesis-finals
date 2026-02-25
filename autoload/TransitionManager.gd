@@ -72,9 +72,13 @@ func enter_desktop_mode(computer_node):
 			bridge.activate()
 			GameState.active_bridge = bridge
 	
-	# AUDIO SWITCH: Focus desktop hum
+	# AUDIO SWITCH: Focus desktop hum and apply LPF
 	if AudioManager:
 		AudioManager.update_ambient_audio(0)
+		AudioManager.set_focus_mode(true)
+	
+	# Visual Blur
+	_set_environmental_blur(true)
 	
 	# Set mode (enables mouse tracking)
 	GameState.set_mode(GameState.GameMode.MODE_2D)
@@ -123,9 +127,13 @@ func exit_desktop_mode():
 	GameState.set_mode(GameState.GameMode.MODE_3D)
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	
-	# AUDIO RESTORE: Office hum
+	# AUDIO RESTORE: Office hum and clear LPF
 	if AudioManager:
 		AudioManager.update_ambient_audio(1)
+		AudioManager.set_focus_mode(false)
+
+	# Visual Restore
+	_set_environmental_blur(false)
 
 	# Wait for stand animation (0.8s)
 	await get_tree().create_timer(0.8).timeout
@@ -133,6 +141,26 @@ func exit_desktop_mode():
 	print("EXIT DESKTOP (3D): Complete")
 	is_transitioning = false
 	EventBus.transition_completed.emit()
+
+func _set_environmental_blur(active: bool):
+	var env_node = get_tree().current_scene.find_child("WorldEnvironment", true, false)
+	if not env_node or not env_node.environment:
+		return
+		
+	var env = env_node.environment
+	var target_dist = 1.2 if active else 10.0
+	
+	if active:
+		env.set("dof_blur_far_enabled", true)
+		
+	var tween = create_tween()
+	var current_dist = env.get("dof_blur_far_distance")
+	if current_dist == null: current_dist = 10.0 # Fallback
+	
+	tween.tween_method(func(val): env.set("dof_blur_far_distance", val), current_dist, target_dist, 0.8).set_trans(Tween.TRANS_SINE)
+	
+	if not active:
+		tween.finished.connect(func(): if is_instance_valid(env): env.set("dof_blur_far_enabled", false))
 
 func change_scene_to(path: String, narrative_to_start_after: String = "", title_card: String = "", force: bool = false):
 	if not overlay_instance:

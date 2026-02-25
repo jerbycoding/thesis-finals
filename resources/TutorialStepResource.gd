@@ -23,7 +23,16 @@ enum TriggerType {
 ## The message sent to the Comms Sidebar.
 @export_multiline var comms_text: String = ""
 
+enum HighlightTier { 
+	NONE, 
+	AMBIENT_HINT,   # Subtle icon glow only
+	ALERT_FLASH,    # Sharp dashed box flash
+	FULL_ATG_FOCUS  # Screen dim + scanlines + box
+}
+
 @export_group("Visuals")
+## The level of visual guidance for this step.
+@export var highlight_tier: HighlightTier = HighlightTier.FULL_ATG_FOCUS
 ## The node path (relative to Desktop) or Unique Name to highlight.
 @export var highlight_path: String = ""
 ## Whether to make the icon glow (if applicable).

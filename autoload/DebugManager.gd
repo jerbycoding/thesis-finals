@@ -16,6 +16,7 @@ func _ready():
 	print("DebugManager: Hybrid Navigation & HUD Active")
 	print("  - F1 / F2: Previous / Next Shift")
 	print("  - F9: Trigger Random Pool Event (Chaos)")
+	print("  - F10 / F11: Decrease / Increase Integrity (10%)")
 	print("  - F12: Toggle Debug HUD")
 	print("  - Shift + F1-F7: Week 1 Jumps")
 	print("  - Ctrl + F1-F5: Week 2 Jumps")
@@ -80,6 +81,12 @@ func _input(event):
 		elif event.keycode == KEY_F9:
 			print("DEBUG: F9 pressed - Attempting to trigger Chaos Event")
 			_trigger_chaos_event()
+		elif event.keycode == KEY_F10:
+			if IntegrityManager:
+				IntegrityManager.debug_modify_integrity(-10.0)
+		elif event.keycode == KEY_F11:
+			if IntegrityManager:
+				IntegrityManager.debug_modify_integrity(10.0)
 		return
 
 	# Direct Week 1 Jumps (Shift + F1-F7)
@@ -157,7 +164,7 @@ func _update_debug_hud():
 		text += "[b]Vulnerability Buffer:[/b] %d / 10\n" % HeatManager.vulnerability_buffer.size()
 
 	text += "[color=gray]------------------------------------[/color]\n"
-	text += "[i][size=12]F1/F2: Prev/Next | F9: Chaos | F12: Close[/size][/i]"
+	text += "[i][size=12]F1/F2: Prev/Next | F9: Chaos | F10/F11: Integrity | F12: HUD[/size][/i]"
 	
 	debug_label.text = text
 

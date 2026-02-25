@@ -1,219 +1,73 @@
-Here are 5 high-fidelity Incident Packages designed for *VERIFY.EXE*. They are meticulously formatted to match your Godot Variable Registry constraints, utilizing authentic SOC terminology to ensure your simulation feels like a genuine, high-stakes Incident Response environment.
+This is a compelling technical foundation for "VERIFY.EXE". The hybrid 3D/2D diegetic interface is a classic immersive sim trope (think *Doom 3* or *Prey*) that works perfectly for a SOC simulator. However, the "Information Density" you mentioned is the "final boss" of UX design in this genre.
+
+Here is a professional game design review focused on bridging the gap between high-level simulation and player accessibility.
 
 ---
 
-## Theme: Week 3 - Corporate Espionage
+## A. Onboarding Flow: The "First Shift" Transition
 
-### Incident 1: The Phantom Sync
+To bridge the 3D/2D gap, you should treat the 2D workstation not as a separate menu, but as a **physical destination.**
 
-This incident introduces the player to insider threats and data exfiltration, requiring them to correlate network traffic with compromised internal communications.
-
-**A. The Ticket (TicketResource)**
-
-* **Ticket ID**: ESPIONAGE-001
-* **Title**: Unauthorized Encrypted Data Exfiltration Detected
-* **Description**: DLP sensors have flagged anomalous outbound traffic originating from `{host}`, assigned to `{victim}`. Massive volumes of encrypted archives are being routed to a drop-server at `{ip}` following a suspicious redirect from `{malicious_url}`.
-* **Severity**: High
-* **Category**: Insider Threat
-* **Analysis Steps**:
-* 1. Analyze firewall telemetry for sustained outbound connections.
+* **The Transition:** Use a "Focus Zoom" instead of a camera cut. When the player interacts with the chair, the 3D camera should lerp to a fixed position perfectly framing the monitor.
+* **The HUD Placement:** The tutorial HUD should be **Hybrid Diegetic.** * **The "Why":** A pure meta-overlay (on the screen glass) feels like a game; a pure monitor-only tutorial feels too small.
+* **The Solution:** Use an "AR Contact Lens" or "Workplace HUD" aesthetic. Instructions appear as if projected slightly in front of the player's eyes. When the player zooms into the 2D monitor, these instructions can "snap" to the corner of the monitor frame.
 
 
-* 2. Verify the reputation of the external drop-server.
+* **The First Objective:** Make the first task physical. "Pick up your HID badge" -> "Walk to Station 4" -> "Log in." This establishes the 3D space as the "Real World" where consequences happen.
+
+## B. Instructional Style: The SOP Approach
+
+Since your theme is "Professionalism," avoid "Press E to scan." Instead, frame instructions as **Standard Operating Procedures (SOPs).**
+
+* **Phasing:** Use a **"Command -> Action"** format.
+* *Bad:* "Click the Terminal icon and type 'scan'."
+* *Good:* "SOP 1.2: Initialize a local network sweep via the Terminal. (Keybind: [E])"
 
 
-* 3. Isolate the workstation to halt the active data sync.
+* **The CISO’s Voice:** The CISO shouldn't feel like a tutorial bot. They should sound like a busy manager.
+* *Example:* "I’ve provisioned your credentials for the SIEM. Check the Ticket Queue—don't keep the client waiting."
 
 
+* **Technical Literacy:** Don't be afraid of jargon, but always provide a "Hover for Tooltip" definition. This builds the player's identity as an expert.
+
+## C. Handling Failure: The "Incident Report"
+
+In a SOC, failure isn't death; it's a **Compliance Breach** or a **Productivity Loss.**
+
+* **The "Soft Fail":** If a player isolates the wrong host, don't show a "Retry" screen. Have the CISO send an urgent, annoyed "Ping" (audio cue: Slack-style notification).
+* *CISO:* "Wait—why did you just kick the CEO off the network? Re-verify that IP immediately."
 
 
-* **Required Tool**: siem
-* **Required Log IDs**: LOG-ESP-01A
+* **The Paper Trail:** Create a "Correction Task." If they fail, they must fill out a "Misconfiguration Report" (a simple 2-click form). This makes failure feel like a bureaucratic headache rather than a mechanical "Game Over," which heightens the simulation's realism.
 
-**B. The Evidence Log (LogResource)**
+## D. Visual Language: The "System Diagnostic" Aesthetic
 
-* **Log ID**: LOG-ESP-01A
-* **Source**: SysMon
-* **Message**: `Event ID 3: Network connection detected. Process svchost.exe on {host} spawned curl.exe for sustained bulk upload to destination {ip}.`
-* **Severity**: 4
+Your Focus Mask shader is your most powerful tool to prevent "Where do I click?" frustration.
 
-**C. The Email (EmailResource)**
-
-* **Subject**: Project Chimera - Final Specs & NDA
-* **Body**: Hey `{victim}`, the external contractors finally approved the design docs. Grab the encrypted specs here before the meeting: `{malicious_url}`. Password is in the secure vault.
-* **Headers**: SPF (PASS), DKIM (PASS), DMARC (PASS) *(Note: Sent from a compromised internal account)*
-* **Hidden Risk**: `data_loss_critical` (Triggered if the player isolates the host without blacklisting the destination IP, allowing the script to failover to a secondary network).
-
----
-
-### Incident 2: The C-Suite Proxy
-
-A highly targeted spear-phishing campaign designed to steal executive credentials for lateral movement toward the Domain Controller.
-
-**A. The Ticket (TicketResource)**
-
-* **Ticket ID**: ESPIONAGE-002
-* **Title**: Impossible Travel & Suspicious Lateral Movement
-* **Description**: An identity protection anomaly was flagged for the account belonging to `{victim}`. Following a visit to `{malicious_url}`, logs show lateral movement originating from `{host}` targeting the corporate Domain Controller via `{ip}`.
-* **Severity**: Critical
-* **Category**: Unauthorized Access
-* **Analysis Steps**:
-* 1. Review Office365 logs for MFA bypass or session token theft.
+* **The "Eye-Tracker" Effect:** Instead of a static yellow arrow, have the Focus Mask "pulse" or "glitch" into view only when the player has been idle on a step for more than 10 seconds.
+* **Color Theory for Guidance:**
+* **Blue/Cyan:** General info/Story.
+* **Amber/Orange:** Interactive elements required for the current SOP.
+* **Red:** Critical errors or "Kill Chain" indicators.
 
 
-* 2. Track lateral movement attempts using Windows Event Logs.
+* **Ghost Typing:** In the Terminal, if a player is stuck, use a "Ghost Text" effect where the correct command is faintly visible in the prompt, guiding their input without typing it for them.
 
+## E. Scaffolding: The "Provisioning" Model
 
-* 3. Scrutinize the original email payload for credential harvesting domains.
+To avoid "Dashboard Fatigue," do not give the player all 5 apps at once. Use a **"Technical Onboarding"** narrative.
 
+| Stage | New App | Learning Objective |
+| --- | --- | --- |
+| **Step 1** | **Ticket Queue** | How to read a narrative and extract "Key Indicators" (IPs, Emails). |
+| **Step 2** | **Email Client** | Header analysis. Finding the "Trace" from the ticket. |
+| **Step 3** | **SIEM** | Log correlation. Matching the Email timestamp to server logs. |
+| **Step 4** | **Terminal** | Taking action. Using the `ISOLATE` command on the verified IP. |
 
-
-
-* **Required Tool**: email
-* **Required Log IDs**: LOG-ESP-02B
-
-**B. The Evidence Log (LogResource)**
-
-* **Log ID**: LOG-ESP-02B
-* **Source**: Office365
-* **Message**: `Azure AD Risk Detection: Multiple failed login attempts followed by anomalous Session Cookie reuse for {victim} from external proxy {ip} targeting {host}.`
-* **Severity**: 5
-
-**C. The Email (EmailResource)**
-
-* **Subject**: URGENT: Q3 Board Deck Revision Needed
-* **Body**: `{victim}`, the board needs these financial changes applied to the deck immediately. Review the redline markup on the secure portal: `{malicious_url}`. Do not forward this.
-* **Headers**: SPF (FAIL), DKIM (FAIL), DMARC (FAIL)
-* **Hidden Risk**: `lateral_movement_dc` (Triggered if the player deletes the email without revoking the user's active session tokens).
+**The "Boot Sequence" Pattern:** Every time a new app is introduced, play a brief "Installing/Provisioning..." animation on the 2D desktop. This creates a psychological "Checkpoint" and gives the player a moment to breathe before learning a new UI.
 
 ---
 
-## Theme: Week 4 - Zero-Day Apocalypse
+### Next Step for You
 
-### Incident 3: The Gateway Breach
-
-The player must react to an actively exploited zero-day vulnerability in the corporate VPN client, leading directly to a ransomware precursor.
-
-**A. The Ticket (TicketResource)**
-
-* **Ticket ID**: ZERODAY-001
-* **Title**: Unauthenticated RCE via VPN Client Exploit
-* **Description**: A newly disclosed zero-day vulnerability in our VPN architecture is actively being exploited against `{victim}`. We are observing reverse shell beacons from `{host}` establishing a C2 heartbeat with `{ip}` after a drive-by payload delivery from `{malicious_url}`.
-* **Severity**: Critical
-* **Category**: Ransomware
-* **Analysis Steps**:
-* 1. Identify the malicious heartbeat frequency in IDS logs.
-
-
-* 2. Trace the parent process of the reverse shell.
-
-
-* 3. Terminate the active C2 connection via terminal commands.
-
-
-
-
-* **Required Tool**: terminal
-* **Required Log IDs**: LOG-ZD-01A
-
-**B. The Evidence Log (LogResource)**
-
-* **Log ID**: LOG-ZD-01A
-* **Source**: IDS
-* **Message**: `ET EXPLOIT VPN Gateway Buffer Overflow RCE detected originating from {ip} targeting {host}, resulting in anomalous outbound traffic.`
-* **Severity**: 5
-
-**C. The Email (EmailResource)**
-
-* **Subject**: IT Advisory: Mandatory VPN Client Patch
-* **Body**: `{victim}`, please apply the urgent zero-day patch using the silent installer hosted on our emergency CDN: `{malicious_url}`. Failure to comply will result in network quarantine by EOD.
-* **Headers**: SPF (PASS), DKIM (FAIL), DMARC (FAIL)
-* **Hidden Risk**: `ransomware_encryption_start` (Triggered if the player isolates the host without killing the malicious process first, allowing the ransomware to execute offline).
-
----
-
-### Incident 4: Poisoned Dependencies
-
-A complex supply-chain attack where developers are targeted via malicious NPM packages, executing obfuscated fileless malware.
-
-**A. The Ticket (TicketResource)**
-
-* **Ticket ID**: ZERODAY-002
-* **Title**: Obfuscated Payload Executing in Memory
-* **Description**: EDR caught an obfuscated PowerShell payload executing dynamically in memory on `{host}`, assigned to `{victim}`. Threat intel suggests a compromised Node.js package from `{malicious_url}` is downloading a secondary stager to communicate with `{ip}`.
-* **Severity**: High
-* **Category**: Malware
-* **Analysis Steps**:
-* 1. Query SysMon for encoded PowerShell execution strings.
-
-
-* 2. Identify the compromised dependency repository.
-
-
-* 3. Block the outbound C2 communication at the firewall level.
-
-
-
-
-* **Required Tool**: siem
-* **Required Log IDs**: LOG-ZD-02B
-
-**B. The Evidence Log (LogResource)**
-
-* **Log ID**: LOG-ZD-02B
-* **Source**: SysMon
-* **Message**: `Event ID 1: powershell.exe -NoProfile -ExecutionPolicy Bypass -EncodedCommand executed on {host} establishing connection to {ip}.`
-* **Severity**: 4
-
-**C. The Email (EmailResource)**
-
-* **Subject**: Automated Build Failure Alert
-* **Body**: CI/CD Pipeline build failed for `{victim}`. Please review the build logs and update the deprecated dependencies listed in the repository documentation at `{malicious_url}` to resolve the conflict.
-* **Headers**: SPF (PASS), DKIM (PASS), DMARC (PASS) *(Note: Spoofed automated system notification)*
-* **Hidden Risk**: `backdoor_persistence` (Triggered if the player flags the email as spam but fails to comb the SIEM logs for the scheduled task persistence mechanism).
-
----
-
-### Incident 5: The Zero-Click Web Shell
-
-The climax of the week, simulating an aggressive Exchange Server vulnerability that requires zero user interaction.
-
-**A. The Ticket (TicketResource)**
-
-* **Ticket ID**: ZERODAY-003
-* **Title**: Anomalous Web Shell Activity on Exchange Server
-* **Description**: The mail server `{host}` is exhibiting severe post-exploitation behavior linked to an inbox belonging to `{victim}`. An unauthenticated zero-click exploit delivered via `{malicious_url}` dropped a web shell, staging internal infrastructure data for exfiltration to `{ip}`.
-* **Severity**: Critical
-* **Category**: Unauthorized Access
-* **Analysis Steps**:
-* 1. Scan firewall logs for non-standard port exfiltration.
-
-
-* 2. Review IIS/Exchange logs for abnormal POST requests.
-
-
-* 3. Quarantine the web shell directory and block the threat actor IP.
-
-
-
-
-* **Required Tool**: terminal
-* **Required Log IDs**: LOG-ZD-03C
-
-**B. The Evidence Log (LogResource)**
-
-* **Log ID**: LOG-ZD-03C
-* **Source**: Firewall
-* **Message**: `Outbound data exfiltration to {ip} detected from {host} via non-standard port 4444. Payload signature matches known web shell behavior.`
-* **Severity**: 5
-
-**C. The Email (EmailResource)**
-
-* **Subject**: Quarantined Messages Release Notification
-* **Body**: Hello `{victim}`, our security filters have held 3 unread messages in quarantine. To review and release these legitimate communications, authenticate via the secure mail portal: `{malicious_url}`.
-* **Headers**: SPF (FAIL), DKIM (FAIL), DMARC (PASS)
-* **Hidden Risk**: `server_root_compromise` (Triggered if the player attempts to delete the email without using the terminal to sever the active reverse shell connection, granting the attacker root privileges).
-
----
-
-Would you like me to generate a corresponding `GDScript` dictionary or array structure containing these exact variables, so you can easily copy-paste them directly into your Godot project's script files?
+Would you like me to draft a **Tutorial Sequence Script** for the first 5 minutes of the game, specifically showing how the CISO's dialogue interacts with your `TutorialStepResource` logic?

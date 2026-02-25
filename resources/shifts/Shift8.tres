@@ -18,7 +18,7 @@ event_sequence = [
 	{"time": 600, "event": "shift_end", "type": "shift_end"}
 ]
 random_event_pool = [
-	{"event": "polymorphic_noise", "type": "spawn_ticket", "ticket_id": "TICKET-NOISE-POLY-001"},
+	{"event": "polymorphic_noise", "type": "spawn_ticket", "ticket_id": "MALWARE-POLY-001"},
 	{"event": "siem_glitch", "type": "system_event", "event_id": "SIEM_LAG", "duration": 45.0},
 	{"event": "isp_throttling", "type": "system_event", "event_id": "ISP_THROTTLING", "duration": 60.0}
 ]
