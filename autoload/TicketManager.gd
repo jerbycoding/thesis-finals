@@ -177,7 +177,7 @@ func _create_ticket_timer(ticket: TicketResource):
 	var final_time = HeatManager.get_scaled_time(base_time) if HeatManager else base_time
 	
 	if GameState and GameState.is_guided_mode:
-		final_time = 9999.0 
+		final_time = 99999.0 # Effectively infinite for tutorial
 	
 	var timer = Timer.new()
 	timer.one_shot = true
@@ -337,6 +337,14 @@ func detach_log_from_ticket(ticket_id: String, log_id: String) -> bool:
 		EventBus.log_detached_from_ticket.emit(ticket_id, log_id)
 		return true
 	return false
+
+func submit_root_cause(ticket_id: String, value: String):
+	var ticket = get_ticket_by_id(ticket_id)
+	if ticket:
+		ticket.input_root_cause = value
+		print("TicketManager: Root Cause submitted for %s: %s" % [ticket_id, value])
+		# Signal that the ticket state has changed (UI will refresh the 'Close' button)
+		EventBus.ticket_state_updated.emit(ticket)
 
 func _on_terminal_command_run(command_name: String, args: Array):
 	if args.is_empty(): return

@@ -6,8 +6,10 @@ signal log_selected(log: LogResource, instance: Control)
 @onready var status_dot: ColorRect = %StatusDot
 @onready var time_label: Label = %TimeLabel
 @onready var message_label: RichTextLabel = %MessageLabel
+@onready var glow_frame: Panel = %GlowFrame
 
 var log_data: LogResource
+var _glow_tween: Tween = null
 
 func _ready():
 	mouse_entered.connect(func(): if AudioManager: AudioManager.play_ui_hover())
@@ -48,6 +50,7 @@ func _gui_input(event: InputEvent):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 		if log_data:
 			log_selected.emit(log_data, self)
+			EventBus.log_read.emit(log_data)
 
 func _get_drag_data(_at_position: Vector2):
 	if not log_data: return null
@@ -101,6 +104,22 @@ func set_highlight(active: bool):
 			style.bg_color = Color(0, 0, 0, 0)
 			style.border_width_left = 0
 		add_theme_stylebox_override("panel", style)
+
+func set_tutorial_glow(active: bool):
+	if _glow_tween:
+		_glow_tween.kill()
+		_glow_tween = null
+	
+	if not active:
+		if glow_frame: glow_frame.visible = false
+		return
+		
+	if glow_frame:
+		glow_frame.visible = true
+		glow_frame.modulate.a = 1.0
+		_glow_tween = create_tween().set_loops()
+		_glow_tween.tween_property(glow_frame, "modulate:a", 0.2, 0.6).set_trans(Tween.TRANS_SINE)
+		_glow_tween.tween_property(glow_frame, "modulate:a", 1.0, 0.6).set_trans(Tween.TRANS_SINE)
 
 func get_log_data() -> LogResource:
 	return log_data

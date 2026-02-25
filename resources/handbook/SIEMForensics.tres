@@ -5,5 +5,14 @@
 [resource]
 script = ExtResource("1_page")
 page_id = "siem"
-title = "SIEM FORENSIC LOG VIEWER"
-content = "[b][color=#006CFF]EVIDENCE COLLECTION[/color][/b]\nThe SIEM aggregates logs for cross-referenced investigation.\n\n[b]PROCEDURE:[/b]\n1. Select log in the main stream.\n2. Review technical report in the Inspector Pane.\n3. [b]Drag log[/b] onto a ticket in the queue to attach evidence.\n\n[i]Note: Compliant resolution requires all listed evidence IDs to be attached.[/i]"
+title = "SIEM FORENSIC ANALYSIS"
+content = "[b][color=#006CFF]DIGITAL CCTV[/color][/b]
+The SIEM records every 'event' on our network. Think of logs as footprints in the digital snow. If an attacker moves, they leave a record here.
+
+[b]HOW TO INVESTIGATE:[/b]
+1. [b]Search[/b]: Use IPs or keywords found in emails to filter the noise.
+2. [b]Analyze[/b]: Check the 'Forensic Report' panel for technical details.
+3. [b]Document[/b]: Drag and drop relevant logs onto the Ticket Queue to build your case.
+
+[b]VOLUME GRAPHS:[/b]
+The graph at the top shows traffic spikes. A sudden vertical wall usually means a [b]DDoS Attack[/b] or a large [b]Data Breach[/b] has started."

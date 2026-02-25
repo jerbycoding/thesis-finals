@@ -10,9 +10,11 @@ signal completion_requested(ticket: TicketResource)
 @onready var evidence_label: Label = %EvidenceLabel
 @onready var complete_button: Button = %CompleteButton
 @onready var severity_bar: ColorRect = %SeverityBar
+@onready var glow_frame: Panel = %GlowFrame
 
 var ticket: TicketResource
 var update_timer: Timer
+var _glow_tween: Tween = null
 
 func _ready():
 	visible = true
@@ -113,3 +115,23 @@ func set_highlight(active: bool):
 			style.bg_color = Color(0, 0, 0, 0)
 			style.border_width_left = 0
 		add_theme_stylebox_override("panel", style)
+
+func set_tutorial_glow(active: bool):
+	if _glow_tween:
+		_glow_tween.kill()
+		_glow_tween = null
+	
+	if not active:
+		if glow_frame: glow_frame.visible = false
+		return
+		
+	if glow_frame:
+		glow_frame.visible = true
+		glow_frame.modulate.a = 1.0
+		_glow_tween = create_tween().set_loops()
+		_glow_tween.tween_property(glow_frame, "modulate:a", 0.2, 0.6).set_trans(Tween.TRANS_SINE)
+		_glow_tween.tween_property(glow_frame, "modulate:a", 1.0, 0.6).set_trans(Tween.TRANS_SINE)
+
+func get_ticket_id() -> String:
+	return ticket.ticket_id if ticket else ""
+		

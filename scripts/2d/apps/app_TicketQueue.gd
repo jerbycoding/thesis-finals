@@ -15,6 +15,9 @@ var artifact_tag_scene = preload("res://scenes/2d/apps/components/TicketArtifact
 @onready var steps_container: VBoxContainer = %StepsContainer
 @onready var evidence_box: VBoxContainer = %EvidenceBox
 @onready var artifact_container: HFlowContainer = %ArtifactContainer
+@onready var root_cause_box: VBoxContainer = %RootCauseBox
+@onready var root_cause_edit: LineEdit = %RootCauseEdit
+@onready var root_cause_status: Label = %RootCauseStatus
 @onready var completion_modal: Control = %CompletionModal
 @onready var required_tool_label: Label = %RequiredToolLabel
 
@@ -30,14 +33,26 @@ func _ready():
 	if completion_modal:
 		completion_modal.completion_selected.connect(_on_completion_selected)
 	
+	if root_cause_edit:
+		root_cause_edit.text_changed.connect(_on_root_cause_text_changed)
+	
 	# Connect signals
 	EventBus.ticket_added.connect(_on_ticket_added)
 	EventBus.ticket_completed.connect(_on_ticket_completed)
 	EventBus.log_attached_to_ticket.connect(_on_log_attached)
 	EventBus.log_detached_from_ticket.connect(_on_log_detached)
+	EventBus.ticket_state_updated.connect(_on_ticket_state_updated)
 	
 	_refresh_list()
 	_update_detail_view(null)
+
+func _on_root_cause_text_changed(new_text: String):
+	if selected_ticket and TicketManager:
+		TicketManager.submit_root_cause(selected_ticket.ticket_id, new_text)
+
+func _on_ticket_state_updated(ticket: TicketResource):
+	if selected_ticket and selected_ticket.ticket_id == ticket.ticket_id:
+		_update_root_cause_status()
 
 func _update_detail_view(ticket: TicketResource):
 	selected_ticket = ticket
@@ -67,8 +82,34 @@ func _update_detail_view(ticket: TicketResource):
 			lbl.add_theme_font_size_override("font_size", 12)
 			steps_container.add_child(lbl)
 			
+		# Root Cause View
+		if root_cause_box:
+			root_cause_box.visible = not selected_ticket.required_root_cause.is_empty()
+			if root_cause_box.visible:
+				root_cause_edit.text = selected_ticket.input_root_cause
+				_update_root_cause_status()
+			
 		# Evidence Artifacts
 		_update_artifact_list()
+
+func _update_root_cause_status():
+	if not selected_ticket: return
+	
+	var is_valid = selected_ticket.has_sufficient_evidence() # This now includes root cause check
+	
+	# Actually, let's check root cause specifically for the status label
+	var target = selected_ticket.required_root_cause
+	if target.begins_with("{") and not selected_ticket.truth_packet.is_empty():
+		target = target.format(selected_ticket.truth_packet)
+	
+	var root_cause_met = selected_ticket.input_root_cause.strip_edges().to_lower() == target.strip_edges().to_lower()
+	
+	if root_cause_met:
+		root_cause_status.text = "VERIFIED"
+		root_cause_status.add_theme_color_override("font_color", Color(0.3, 1.0, 0.3, 1))
+	else:
+		root_cause_status.text = "REQUIRED"
+		root_cause_status.add_theme_color_override("font_color", Color(1, 0.3, 0.3, 1))
 
 func _update_artifact_list():
 	if not selected_ticket: return
@@ -155,3 +196,7 @@ func _on_log_attached(ticket_id: String, _log_id: String):
 		for child in ticket_list.get_children():
 			if child.has_method("_update_evidence_display"):
 				child._update_evidence_display()
+
+func set_modal_glow(active: bool):
+	if completion_modal and completion_modal.has_method("set_glow"):
+		completion_modal.set_glow(active)

@@ -62,6 +62,10 @@ func can_open_app(app_name: String) -> Dictionary:
 	if not config.is_restricted:
 		return {"allowed": true, "reason": ""}
 		
+	# TUTORIAL BYPASS: If in guided mode, ignore context checks for restricted apps
+	if GameState and GameState.is_guided_mode:
+		return {"allowed": true, "reason": ""}
+		
 	var allowed = false
 	if TicketManager:
 		for ticket in TicketManager.get_active_tickets():
@@ -77,7 +81,7 @@ func can_open_app(app_name: String) -> Dictionary:
 func open_app(app_name: String, force_new: bool = false):
 	if not app_configs.has(app_name):
 		print("ERROR: DesktopWindowManager: Unknown app: ", app_name)
-		return
+		return null
 		
 	var config = app_configs[app_name]
 		
@@ -89,7 +93,7 @@ func open_app(app_name: String, force_new: bool = false):
 			NotificationManager.show_notification(permission.reason, "warning")
 		if AudioManager:
 			AudioManager.play_notification("error")
-		return
+		return null
 	
 	# Check if already open (only if not forcing new instance)
 	if not force_new:
@@ -103,14 +107,14 @@ func open_app(app_name: String, force_new: bool = false):
 			var desktop = get_tree().root.find_child("ComputerDesktop", true, false)
 			if desktop and "start_menu_instance" in desktop:
 				if desktop.start_menu_instance: desktop.start_menu_instance.visible = false
-			return
+			return existing_window.content_instance
 		else:
 			print("DesktopWindowManager: No existing window found for app: ", app_name)
 	
 	# FIND CONTAINER
 	if not is_instance_valid(active_window_container):
 		print("ERROR: DesktopWindowManager: No active window container registered!")
-		return
+		return null
 		
 	var container = active_window_container
 
@@ -136,25 +140,26 @@ func open_app(app_name: String, force_new: bool = false):
 	# Double-check window is valid after await
 	if not is_instance_valid(window):
 		open_windows.erase(window_id)
-		return
+		return null
 	
 	# Load app content
 	var app_scene_path = config.scene_path
+	var app_instance: Control = null
 	
 	if ResourceLoader.exists(app_scene_path):
 		var app_scene = load(app_scene_path)
 		if app_scene:
-			window.load_content(app_scene)
+			app_instance = await window.load_content(app_scene)
 			# Wait a frame to ensure content is loaded
 			await get_tree().process_frame
 		else:
 			print("ERROR: DesktopWindowManager: Failed to load app scene resource")
 			_cleanup_failed_window(window_id)
-			return
+			return null
 	else:
 		print("ERROR: DesktopWindowManager: App scene not found: ", app_scene_path)
 		_cleanup_failed_window(window_id)
-		return
+		return null
 	
 	# SMART STAGGER: Quadrant-based fanning
 	var count = open_windows.size()
@@ -173,6 +178,7 @@ func open_app(app_name: String, force_new: bool = false):
 	
 	EventBus.app_opened.emit(app_name, window_id)
 	print("DesktopWindowManager: Opened app: ", app_name, " at position: ", window.position)
+	return app_instance
 
 func _cleanup_failed_window(window_id: String):
 	if window_id in open_windows:

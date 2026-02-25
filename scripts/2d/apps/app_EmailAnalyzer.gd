@@ -20,6 +20,11 @@ var entry_scene = preload("res://scenes/2d/apps/components/EmailListEntry.tscn")
 @onready var approve_button: Button = %ApproveButton
 @onready var quarantine_button: Button = %QuarantineButton
 @onready var escalate_button: Button = %EscalateButton
+@onready var glow_headers: Panel = %GlowHeaders
+@onready var glow_attachments: Panel = %GlowAttachments
+@onready var glow_links: Panel = %GlowLinks
+
+var _tool_glow_tweens: Dictionary = {}
 
 func _ready():
 	print("======= App_EmailAnalyzer (SaaS Redesign) Ready =======")
@@ -42,6 +47,7 @@ func _ready():
 	
 	# Connect to EventBus
 	EventBus.email_added.connect(_on_email_added)
+	EventBus.emails_cleared.connect(_refresh_emails)
 	
 	_refresh_emails()
 
@@ -132,3 +138,28 @@ func _make_decision(decision: String):
 		placeholder_label.visible = true
 		email_detail_view.visible = false
 		_refresh_emails()
+
+func set_tool_glow(tool_id: String, active: bool):
+	var target_glow: Panel = null
+	match tool_id:
+		"headers": target_glow = glow_headers
+		"attachments": target_glow = glow_attachments
+		"links": target_glow = glow_links
+	
+	if not target_glow: return
+	
+	# Stop existing tween
+	if _tool_glow_tweens.has(tool_id):
+		_tool_glow_tweens[tool_id].kill()
+		_tool_glow_tweens.erase(tool_id)
+	
+	if not active:
+		target_glow.visible = false
+		return
+		
+	target_glow.visible = true
+	target_glow.modulate.a = 1.0
+	var tween = create_tween().set_loops()
+	tween.tween_property(target_glow, "modulate:a", 0.2, 0.6).set_trans(Tween.TRANS_SINE)
+	tween.tween_property(target_glow, "modulate:a", 1.0, 0.6).set_trans(Tween.TRANS_SINE)
+	_tool_glow_tweens[tool_id] = tween

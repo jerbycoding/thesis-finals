@@ -22,6 +22,9 @@ class_name TicketResource
 ## If set, restoring this host will trigger a 'technical verification' for this ticket.
 @export var required_host_restoration: String = ""
 
+## If set, this ticket requires the player to identify and input a specific root cause string (e.g. an IP) to close.
+@export var required_root_cause: String = ""
+
 ## The event ID to trigger in NarrativeDirector when this ticket is completed
 @export var on_complete_event: String = ""
 
@@ -33,6 +36,7 @@ class_name TicketResource
 # ----------------------------
 
 var attached_log_ids: Array[String] = [] # Log IDs that player has attached
+var input_root_cause: String = "" # The value input by the player in the UI
 var truth_packet: Dictionary = {} # Procedural data generated at spawn
 var is_technically_fulfilled: bool = false # NEW: Track terminal actions
 var spawn_timestamp: float = 0.0
@@ -62,12 +66,21 @@ func get_evidence_count() -> Dictionary:
 	}
 
 func has_sufficient_evidence() -> bool:
-	# Check for technical requirements first
+	# 1. Check Root Cause Lock (if applicable)
+	if not required_root_cause.is_empty():
+		var target = required_root_cause
+		if target.begins_with("{") and not truth_packet.is_empty():
+			target = target.format(truth_packet)
+		
+		if input_root_cause.strip_edges().to_lower() != target.strip_edges().to_lower():
+			return false
+
+	# 2. Check for technical requirements (Isolation)
 	if required_host_isolation != "" or required_host_restoration != "":
 		if not is_technically_fulfilled:
 			return false
 
-	# Check if all required logs are attached
+	# 3. Check if all required logs are attached
 	if required_log_ids.is_empty():
 		return true  # No log requirements
 	

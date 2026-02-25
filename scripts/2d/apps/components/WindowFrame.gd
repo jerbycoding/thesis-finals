@@ -8,6 +8,7 @@ var drag_offset: Vector2 = Vector2.ZERO
 var window_id: String = ""
 var window_title: String = "Window"
 var content_scene: PackedScene = null
+var content_instance: Control = null
 
 @onready var title_bar: HBoxContainer = $Border/VBoxContainer/TitleBarPanel/TitleBar
 @onready var title_label: Label = $Border/VBoxContainer/TitleBarPanel/TitleBar/TitleLabel
@@ -141,28 +142,29 @@ func _on_close_pressed():
 	queue_free()
 
 func load_content(scene: PackedScene):
-	if not scene: return
+	if not scene: return null
 	
 	for child in content_container.get_children():
 		child.queue_free()
 	
-	var content = scene.instantiate()
-	content_container.add_child(content)
+	content_instance = scene.instantiate()
+	content_container.add_child(content_instance)
 	
-	content.visible = true
-	content.modulate = Color.WHITE
+	content_instance.visible = true
+	content_instance.modulate = Color.WHITE
 	
-	if content is Control:
-		content.set_anchors_preset(Control.PRESET_FULL_RECT)
-		content.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		content.size_flags_vertical = Control.SIZE_EXPAND_FILL
-		content.clip_contents = true
+	if content_instance is Control:
+		content_instance.set_anchors_preset(Control.PRESET_FULL_RECT)
+		content_instance.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		content_instance.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		content_instance.clip_contents = true
 		
-		if not content.minimum_size_changed.is_connected(_on_content_minimum_size_changed):
-			content.minimum_size_changed.connect(_on_content_minimum_size_changed.bind(content))
+		if not content_instance.minimum_size_changed.is_connected(_on_content_minimum_size_changed):
+			content_instance.minimum_size_changed.connect(_on_content_minimum_size_changed.bind(content_instance))
 	
 	await get_tree().process_frame
-	_resize_to_fit_content(content)
+	_resize_to_fit_content(content_instance)
+	return content_instance
 
 func _on_content_minimum_size_changed(content: Control):
 	_resize_to_fit_content(content)

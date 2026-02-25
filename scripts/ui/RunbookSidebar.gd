@@ -3,6 +3,8 @@ extends PanelContainer
 
 @onready var task_container = %TaskContainer
 @onready var status_label = %StatusLabel
+@onready var mentor_label = %MentorLabel
+@onready var tip_label = %TipLabel
 @onready var animation_player = $AnimationPlayer
 
 var active_tasks: Dictionary = {}
@@ -12,13 +14,20 @@ func _ready():
 	clear_tasks()
 	_set_status("READY", Color.GREEN)
 
-func update_task(step_id: int, instruction: String):
+func update_task(step_id: int, instruction: String, mentor: String = "RIVERA", tip: String = ""):
 	# Play "Receiving" animation
 	_set_status("RECEIVING_DIRECTIVE...", Color.ORANGE)
 	animation_player.play("receiving")
 	
 	# Clear previous and add new SOP directive
 	clear_tasks()
+	
+	if mentor_label:
+		mentor_label.text = "[color=cyan]COMMS_FROM: [/color]" + mentor.to_upper()
+	
+	if tip_label:
+		tip_label.text = "[i]" + tip + "[/i]"
+		tip_label.visible = not tip.is_empty()
 	
 	var label = Label.new()
 	label.text = "[ ] " + instruction.to_upper()

@@ -5,6 +5,17 @@
 [resource]
 script = ExtResource("1_page")
 page_id = "terminal"
-title = "TERMINAL COMMANDS & NETWORK RESPONSE"
-content = "[b][color=#006CFF]OVERVIEW[/color][/b]\nThe terminal is your primary tool for network-level response.\n\n[b]COMMANDS:[/b]\n• [b]help[/b] - Lists all available forensic modules.\n• [b]scan [hostname][/b] - Performs a host analysis. Required before isolation.\n• [b]trace [ip][/b] - Identifies internal origin host for external traffic.\n• [b]isolate [hostname][/b] - Disconnects host from network.\n\n[b][color=#C62828]WARNING:[/color][/b] Unauthorized isolation of critical servers will trigger a system lockout."
+title = "TERMINAL COMMAND REFERENCE"
+content = "[b][color=#006CFF]ACTIVE DEFENSE MODULES[/color][/b]
+The Terminal provides direct system-level access to all network nodes.
 
+[b]COMMANDS:[/b]
+• [b]help[/b]: Display this manual in the terminal.
+• [b]list[/b]: List all reachable hostnames on the local network.
+• [b]scan [hostname][/b]: Run a diagnostic to find hidden malware processes.
+• [b]netstat [hostname][/b]: View active outbound connections. Used to find C2 (Command & Control) servers.
+• [b]trace [ip][/b]: Follow the 'digital trail' of an IP to identify its origin.
+• [b]isolate [hostname][/b]: Digitally sever a computer from the network.
+• [b]restore [hostname][/b]: Reconnect an isolated computer after cleanup.
+
+[b][color=#C62828]PRO TIP:[/color][/b] If you find a suspicious IP in an email, use [b]trace[/b] to see if it belongs to one of our internal servers."

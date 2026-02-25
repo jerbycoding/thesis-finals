@@ -90,6 +90,14 @@ theme_override_colors/font_color = Color(0.2, 0.6, 1, 1)
 theme_override_font_sizes/font_size = 12
 text = "SOP_RUNBOOK_v4.4"
 
+[node name="MentorLabel" type="RichTextLabel" parent="VBox/Header"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/normal_font_size = 10
+bbcode_enabled = true
+text = "[color=cyan]COMMS_FROM: [/color]RIVERA"
+fit_content = true
+
 [node name="HSeparator" type="HSeparator" parent="VBox/Header"]
 layout_mode = 2
 
@@ -97,6 +105,15 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 10
+
+[node name="TipLabel" type="RichTextLabel" parent="VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/default_color = Color(1, 1, 1, 0.6)
+theme_override_font_sizes/normal_font_size = 10
+bbcode_enabled = true
+text = "[i]Analyst Tip: Check the headers first.[/i]"
+fit_content = true
 
 [node name="Spacer" type="Control" parent="VBox"]
 layout_mode = 2

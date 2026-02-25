@@ -8,12 +8,14 @@ signal app_closed(app_name: String, window_id: String)
 var shift_report_scene = preload("res://scenes/2d/apps/App_ShiftReport.tscn")
 
 @onready var start_menu_button: Button = %StartMenuButton
+@onready var start_glow_frame: Panel = %GlowFrame
 @onready var tasks_container: HBoxContainer = %ActiveTasksContainer
 @onready var app_window_container: Control = %AppWindowContainer
 
 var taskbar_icon_scene = preload("res://scenes/2d/TaskbarIcon.tscn")
 var start_menu_scene = preload("res://scenes/2d/StartMenu.tscn")
 var start_menu_instance = null
+var _start_glow_tween: Tween = null
 
 func _ready():
 	# Set as background layer
@@ -60,7 +62,7 @@ func _on_start_menu_pressed():
 
 func _on_app_selected(app_id: String):
 	if DesktopWindowManager:
-		DesktopWindowManager.open_app(app_id)
+		await DesktopWindowManager.open_app(app_id)
 	if AudioManager:
 		AudioManager.play_ui_click()
 	# Start menu handles its own visibility on selection, but we ensure it here
@@ -146,3 +148,50 @@ func _input(event):
 			if fw.has_method("_on_close_pressed"): fw._on_close_pressed()
 			else: fw.queue_free()
 		get_viewport().set_input_as_handled()
+
+func set_icon_glow(app_id: String, active: bool):
+	# Special case for start menu itself
+	if app_id == "start":
+		_pulse_start_menu(active)
+		return
+		
+	# Forward to start menu instance for internal highlighting
+	if start_menu_instance and start_menu_instance.has_method("set_app_glow"):
+		start_menu_instance.set_app_glow(app_id, active)
+		
+	# Logic: If the app is NOT open, we must glow the Start Menu to show where to find it.
+	# If it IS open, we glow the taskbar icon.
+	var is_open = false
+	if DesktopWindowManager:
+		for wid in DesktopWindowManager.open_windows:
+			if wid.begins_with(app_id):
+				is_open = true
+				break
+	
+	if not is_open:
+		_pulse_start_menu(active)
+	else:
+		# Stop start menu glow if we were glowing it for this app
+		_pulse_start_menu(false)
+		# Find and glow the taskbar icon
+		for child in tasks_container.get_children():
+			if child.has_method("get_target_window") and is_instance_valid(child.target_window):
+				if child.target_window.window_id.begins_with(app_id):
+					if child.has_method("set_glow"):
+						child.set_glow(active)
+
+func _pulse_start_menu(active: bool):
+	if _start_glow_tween:
+		_start_glow_tween.kill()
+		_start_glow_tween = null
+	
+	if not active:
+		if start_glow_frame: start_glow_frame.visible = false
+		return
+		
+	if start_glow_frame:
+		start_glow_frame.visible = true
+		start_glow_frame.modulate.a = 1.0
+		_start_glow_tween = create_tween().set_loops()
+		_start_glow_tween.tween_property(start_glow_frame, "modulate:a", 0.2, 0.6).set_trans(Tween.TRANS_SINE)
+		_start_glow_tween.tween_property(start_glow_frame, "modulate:a", 1.0, 0.6).set_trans(Tween.TRANS_SINE)

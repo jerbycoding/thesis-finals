@@ -68,6 +68,11 @@ func reveal_emails_for_ticket(ticket_id: String):
 		if should_reveal:
 			if not _is_email_active(email.email_id):
 				var instance = email.duplicate()
+				
+				# Focus Logic: Emails tied to specific active tickets are focused.
+				# Generic emails or noise are not.
+				instance.is_focused = not ticket_id.is_empty() and ticket_id != "GENERIC"
+				
 				active_emails.append(instance)
 				EventBus.email_added.emit(instance)
 				count += 1
@@ -85,8 +90,11 @@ func clear_active_data():
 	print("📧 EmailSystem: Purging all active email data.")
 	active_emails.clear()
 	processed_emails.clear()
-	# Ensure basic corporate noise returns after purge
-	reveal_emails_for_ticket("") 
+	EventBus.emails_cleared.emit()
+	
+	# Ensure basic corporate noise returns after purge, UNLESS in tutorial
+	if GameState and not GameState.is_guided_mode:
+		reveal_emails_for_ticket("") 
 
 func add_email(email: EmailResource):
 	if not email: return
@@ -122,6 +130,20 @@ func get_unprocessed_emails() -> Array[EmailResource]:
 	var filtered: Array[EmailResource] = []
 	for email in active_emails:
 		if email.email_id not in processed_emails:
+			filtered.append(email)
+	return filtered
+
+func get_focused_emails() -> Array[EmailResource]:
+	var filtered: Array[EmailResource] = []
+	for email in active_emails:
+		if email.is_focused and email.email_id not in processed_emails:
+			filtered.append(email)
+	return filtered
+
+func get_other_emails() -> Array[EmailResource]:
+	var filtered: Array[EmailResource] = []
+	for email in active_emails:
+		if not email.is_focused and email.email_id not in processed_emails:
 			filtered.append(email)
 	return filtered
 

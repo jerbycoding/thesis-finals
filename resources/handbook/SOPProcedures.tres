@@ -5,5 +5,17 @@
 [resource]
 script = ExtResource("1_page")
 page_id = "procedures"
-title = "INCIDENT RESPONSE PROCEDURES (SOP)"
-content = "[b][color=#006CFF]RESOLUTION STRATEGIES[/color][/b]\n\n• [b]Compliant[/b]: Procedural verification confirmed. Lowest risk posture.\n• [b]Efficient[/b]: Speed priority. High risk of missing hidden consequences.\n• [b]Emergency[/b]: Crisis override. Use only for catastrophic outbreaks."
+title = "SOP: STANDARD OPERATING PROCEDURES"
+content = "[b][color=#006CFF]THE GOLDEN RULE[/color][/b]
+[b]VERIFY BEFORE ACTION[/b]. Always [color=cyan]SCAN[/color] a host to confirm infection before using the [color=red]ISOLATE[/color] command. Skipping this step on [b]CRITICAL ASSETS[/b] causes massive service outages and severe [b]Integrity Penalties[/b].
+
+[b][color=#006CFF]RESOLUTION STRATEGIES[/color][/b]
+• [b]COMPLIANT[/b]: Full evidence gathered. [i](+Integrity, -Risk)[/i]. Required for all training and high-severity cases.
+• [b]EFFICIENT[/b]: Rapid closure. [i](-Integrity, +Risk)[/i]. Use only when the queue is overflowing. Risks missing the [b]Kill Chain[/b].
+• [b]EMERGENCY[/b]: Immediate override. [i](--Integrity, +++Risk)[/i]. Use only during catastrophic outbreaks.
+
+[b][color=#006CFF]TECHNICAL GLOSSARY[/color][/b]
+• [b]IP Address[/b]: The digital street address of a computer on our network.
+• [b]SIEM[/b]: 'Security Information and Event Management'. Our digital CCTV system.
+• [b]Kill Chain[/b]: The sequence of steps an attacker takes. Stopping them early saves work later.
+• [b]Phishing[/b]: Digital social engineering used to steal credentials or plant malware."

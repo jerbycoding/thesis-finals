@@ -47,6 +47,21 @@ corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Glow"]
+bg_color = Color(0, 1, 1, 0.0392157)
+draw_center = false
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 1, 1, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+shadow_color = Color(0, 1, 1, 0.313726)
+shadow_size = 8
+
 [node name="CompletionModal" type="Control"]
 layout_mode = 3
 anchors_preset = 15
@@ -128,6 +143,18 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_Efficient")
 text = "⚡ EFFICIENT RESOLUTION
 Rapid closure with partial verification.
 [ Procedural Integrity: MED | Risk: MED ]"
+
+[node name="GlowFrame" type="Panel" parent="MainPanel/VBox/ButtonContainer/EfficientButton"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_Glow")
 
 [node name="EmergencyButton" type="Button" parent="MainPanel/VBox/ButtonContainer"]
 unique_name_in_owner = true

@@ -8,6 +8,10 @@ var scan_multiplier: float = 1.0 # Multiplier for scan time (affected by ZERO_DA
 var ddos_multiplier: float = 1.0 # Multiplier for network ops (affected by DDOS_ATTACK)
 var isp_multiplier: float = 1.0 # Multiplier for network latency (affected by ISP_THROTTLING)
 
+# Narrative Simulation Overrides (Used by Tutorial/Events)
+var active_connections: Dictionary = {} # Hostname -> Array of strings (Remote IPs)
+var trace_overrides: Dictionary = {} # IP -> String (Resolved Name)
+
 signal command_output_received(text: String, is_partial: bool)
 
 # Available commands
@@ -20,6 +24,11 @@ var commands: Dictionary = {
 	"scan": {
 		"description": "Scan host for malware",
 		"syntax": "scan [hostname]",
+		"risk_level": 1
+	},
+	"netstat": {
+		"description": "Show active network connections",
+		"syntax": "netstat [hostname]",
 		"risk_level": 1
 	},
 	"trace": {
@@ -111,6 +120,8 @@ func _execute_command_internal(command_name: String, args: Array) -> Dictionary:
 			result = _cmd_help()
 		"scan":
 			result = await _cmd_scan(args)
+		"netstat":
+			result = await _cmd_netstat(args)
 		"trace":
 			result = await _cmd_trace(args)
 		"isolate":
@@ -206,6 +217,34 @@ func _cmd_scan(args: Array) -> Dictionary:
 		output += "[color=green]✓ " + CorporateVoice.get_phrase("no_malware_detected") + "[/color]\n"
 		output += CorporateVoice.get_formatted_phrase("host_clean", {"hostname": hostname})
 	
+	return {"success": true, "output": output}
+
+func _cmd_netstat(args: Array) -> Dictionary:
+	if args.is_empty():
+		return {"success": false, "output": CorporateVoice.get_formatted_phrase("command_requires_hostname", {"command": "netstat"})}
+	
+	var hostname = args[0].to_upper()
+	var host_info = NetworkState.get_host_state(hostname)
+	
+	if host_info.is_empty():
+		return {"success": false, "output": CorporateVoice.get_phrase("unknown_host")}
+
+	command_output_received.emit("[b]ANALYZING NETWORK INTERFACES: " + hostname + "[/b]\n", true)
+	await get_tree().create_timer(1.0 * isp_multiplier).timeout
+	
+	var output = "[b]Proto  Local Address          Foreign Address        State[/b]\n"
+	
+	# Default Loopback
+	output += "TCP    127.0.0.1:5354         127.0.0.1:49673        ESTABLISHED\n"
+	output += "TCP    192.168.1.105:139      0.0.0.0:0              LISTENING\n"
+	
+	# Inject Narrative Connections (e.g. Malware C2)
+	if active_connections.has(hostname):
+		for remote_ip in active_connections[hostname]:
+			# Randomize local port for realism
+			var local_port = randi_range(49152, 65535) 
+			output += "[color=red]TCP    192.168.1.105:%d      %s:443       ESTABLISHED[/color]\n" % [local_port, remote_ip]
+
 	return {"success": true, "output": output}
 
 func _cmd_isolate(args: Array) -> Dictionary:
@@ -373,7 +412,13 @@ func _cmd_trace(args: Array) -> Dictionary:
 	# Resolve final hop
 	var resolved_host = NetworkState.get_host_by_ip(target_ip)
 	var output = ""
-	if resolved_host != "":
+	
+	# Check for Narrative Override (Tutorial/Events)
+	if trace_overrides.has(target_ip):
+		var override_name = trace_overrides[target_ip]
+		output += "  %d    %d ms    %s [%s]\n" % [max_hops, randi_range(10, 40) * ddos_multiplier, target_ip, override_name]
+		output += "\n[color=red]Trace complete. TARGET IDENTIFIED: " + override_name + "[/color]"
+	elif resolved_host != "":
 		output += "  %d    %d ms    %s [%s]\n" % [max_hops, randi_range(10, 40) * ddos_multiplier, target_ip, resolved_host]
 		output += "\n[color=green]Trace complete. Origin identified: " + resolved_host + "[/color]"
 	else:

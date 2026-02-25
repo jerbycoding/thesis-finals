@@ -15,6 +15,7 @@ extends Control
 @onready var target_list = %TargetList 
 # -------------------------------
 
+var is_guided_mode: bool = false
 var is_locked_down: bool = false
 var puzzle_active: bool = false
 var time_remaining: float = 60.0
@@ -128,6 +129,10 @@ func _show_target_selection(tickets: Array):
 		btn.pressed.connect(func(): _start_decryption(ticket.ticket_id))
 		target_list.add_child(btn)
 
+func enable_guided_mode():
+	is_guided_mode = true
+	print("DecryptionTool: Guided Mode ENABLED")
+
 func _start_decryption(ticket_id: String):
 	target_ticket_id = ticket_id
 	selection_container.visible = false
@@ -135,7 +140,11 @@ func _start_decryption(ticket_id: String):
 	
 	if ArchetypeAnalyzer: ArchetypeAnalyzer.log_tool_used("decryption")
 	
-	if HeatManager:
+	if is_guided_mode:
+		time_remaining = 120.0
+		sequence_length = 3
+		time_penalty = 0.0
+	elif HeatManager:
 		var multiplier = HeatManager.heat_multiplier
 		time_remaining = max(30.0, 60.0 / multiplier)
 		sequence_length = 4 + int(multiplier - 1)
@@ -156,13 +165,22 @@ func _generate_puzzle():
 	current_sequence.clear()
 	player_progress = 0
 	
-	for i in range(sequence_length):
-		var code = hex_chars.pick_random() + hex_chars.pick_random()
-		current_sequence.append(code)
-		var lbl = Label.new()
-		lbl.text = code
-		lbl.add_theme_font_size_override("font_size", 32)
-		target_sequence_container.add_child(lbl)
+	# Tutorial hardcoded sequence
+	if is_guided_mode:
+		current_sequence = ["A4", "F2", "09"]
+		for code in current_sequence:
+			var lbl = Label.new()
+			lbl.text = code
+			lbl.add_theme_font_size_override("font_size", 32)
+			target_sequence_container.add_child(lbl)
+	else:
+		for i in range(sequence_length):
+			var code = hex_chars.pick_random() + hex_chars.pick_random()
+			current_sequence.append(code)
+			var lbl = Label.new()
+			lbl.text = code
+			lbl.add_theme_font_size_override("font_size", 32)
+			target_sequence_container.add_child(lbl)
 	
 	_update_target_display()
 	var grid_items = []
@@ -177,6 +195,21 @@ func _generate_puzzle():
 		btn.custom_minimum_size = Vector2(80, 80)
 		btn.pressed.connect(_on_grid_button_pressed.bind(code, btn))
 		grid_container.add_child(btn)
+	
+	if is_guided_mode:
+		_highlight_next_correct_button()
+
+func _highlight_next_correct_button():
+	if not is_guided_mode or player_progress >= current_sequence.size(): return
+	
+	var target = current_sequence[player_progress]
+	for btn in grid_container.get_children():
+		if btn is Button and btn.text == target and not btn.disabled:
+			btn.modulate = Color(0, 1, 1, 1) # Cyan highlight
+			var tween = create_tween().set_loops()
+			tween.tween_property(btn, "modulate:a", 0.3, 0.5)
+			tween.tween_property(btn, "modulate:a", 1.0, 0.5)
+			break
 
 func _update_target_display():
 	var targets = target_sequence_container.get_children()
@@ -194,7 +227,10 @@ func _on_grid_button_pressed(code: String, btn: Button):
 		btn.modulate = Color.GREEN
 		player_progress += 1
 		_update_target_display()
-		if player_progress >= current_sequence.size(): _win_puzzle()
+		if player_progress >= current_sequence.size(): 
+			_win_puzzle()
+		elif is_guided_mode:
+			_highlight_next_correct_button()
 	else:
 		if AudioManager: AudioManager.play_notification("error")
 		time_remaining -= time_penalty
@@ -205,8 +241,10 @@ func _win_puzzle():
 	timer_container.visible = false
 	grid_container.visible = false
 	if AudioManager: AudioManager.play_sfx(AudioManager.SFX.notification_success)
+	EventBus.decryption_completed.emit(target_ticket_id)
 	if TicketManager: TicketManager.complete_ticket(target_ticket_id, "compliant")
 	target_ticket_id = ""
+	is_guided_mode = false # Reset for future use
 
 func _fail_puzzle():
 	puzzle_active = false

@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3 uid="uid://bl81gxshfy21t"]
+[gd_scene load_steps=4 format=3 uid="uid://bl81gxshfy21t"]
 
 [ext_resource type="Script" uid="uid://e3getwdtdogp" path="res://scripts/2d/apps/components/EmailListEntry.gd" id="1_email_entry"]
 
@@ -7,6 +7,21 @@ bg_color = Color(1, 1, 1, 0.0392157)
 border_width_bottom = 1
 border_color = Color(1, 1, 1, 0.0784314)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Glow"]
+bg_color = Color(0, 1, 1, 0.0392157)
+draw_center = false
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 1, 1, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+shadow_color = Color(0, 1, 1, 0.313726)
+shadow_size = 8
+
 [node name="EmailListEntry" type="PanelContainer"]
 custom_minimum_size = Vector2(0, 100)
 offset_right = 350.0
@@ -14,6 +29,13 @@ offset_bottom = 100.0
 size_flags_horizontal = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_Card")
 script = ExtResource("1_email_entry")
+
+[node name="GlowFrame" type="Panel" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_Glow")
 
 [node name="Layout" type="HBoxContainer" parent="."]
 layout_mode = 2
@@ -39,6 +61,14 @@ theme_override_constants/separation = 4
 
 [node name="Header" type="HBoxContainer" parent="Layout/Margin/Content"]
 layout_mode = 2
+
+[node name="PriorityBadge" type="Label" parent="Layout/Margin/Content/Header"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 1, 1, 1)
+theme_override_font_sizes/font_size = 9
+text = "[ FOCUS ]"
 
 [node name="SubjectLabel" type="Label" parent="Layout/Margin/Content/Header"]
 unique_name_in_owner = true

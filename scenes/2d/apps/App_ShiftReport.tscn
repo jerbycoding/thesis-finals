@@ -1,20 +1,20 @@
 [gd_scene load_steps=4 format=3 uid="uid://cy8j1fgu48puc"]
 
-[ext_resource type="Script" path="res://scripts/2d/apps/App_ShiftReport.gd" id="1_abcde"]
+[ext_resource type="Script" uid="uid://b7fmbt1rr1q0" path="res://scripts/2d/apps/App_ShiftReport.gd" id="1_abcde"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Header"]
-bg_color = Color(0.0196078, 0.0196078, 0.0196078, 1)
 content_margin_left = 20.0
 content_margin_right = 20.0
+bg_color = Color(0.0196078, 0.0196078, 0.0196078, 1)
 border_width_bottom = 1
 border_color = Color(0.2, 0.6, 1, 0.3)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Continue"]
-bg_color = Color(0.2, 0.6, 1, 0.117647)
 content_margin_left = 25.0
 content_margin_top = 12.0
 content_margin_right = 25.0
 content_margin_bottom = 12.0
+bg_color = Color(0.2, 0.6, 1, 0.117647)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1

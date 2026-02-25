@@ -119,8 +119,11 @@ func clear_active_data():
 	print("📋 LogSystem: Purging all active log data.")
 	active_logs.clear()
 	reviewed_logs.clear()
-	# Ensure basic corporate noise returns after purge
-	reveal_logs_for_ticket("") 
+	EventBus.logs_cleared.emit()
+	
+	# Ensure basic corporate noise returns after purge, UNLESS in tutorial
+	if GameState and not GameState.is_guided_mode:
+		reveal_logs_for_ticket("") 
 
 func add_log(log: LogResource):
 	if not log: return

@@ -9,6 +9,8 @@ shader_parameter/target_uv_pos = Vector2(0, 0)
 shader_parameter/target_uv_size = Vector2(0, 0)
 shader_parameter/dim_alpha = 0.7
 shader_parameter/softness = 5.0
+shader_parameter/scanline_intensity = 0.15
+shader_parameter/aberration_amount = 0.002
 
 [node name="TutorialOverlay" type="ColorRect"]
 material = SubResource("ShaderMaterial_mask")

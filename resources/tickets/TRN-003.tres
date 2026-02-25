@@ -5,17 +5,15 @@
 [resource]
 script = ExtResource("1_ticket")
 ticket_id = "TRN-003"
-title = "TRAINING: Emergency Pressure"
-description = "URGENT: Automated systems suggest a breach on DB-SRV-01. 
+title = "CRITICAL: Database Anomaly"
+description = "High-priority alert: DB-SRV-01 is exhibiting unusual CPU spikes and high network traffic. 
 
-[b]Executive Order:[/b] Skip the scan. Isolate the server immediately to prevent data loss. 
-
-[i]Note: This will violate SOP, but we need to see how the system handles 'Cowboy' resolutions.[/i]"
+[b]Senior Analyst Note:[/b] It looks like a breach! We might need to isolate it fast. But wait—that's a critical server. Always check your [color=cyan]Handbook[/color] before acting on Critical Assets."
 severity = "Critical"
 category = "Unauthorized Access"
-steps = ["Isolate DB-SRV-01 immediately", "Observe Integrity Impact"]
-required_tool = "terminal"
-base_time = 30.0
+steps = ["Consult Handbook", "Verify DB-SRV-01 via Scan", "Resolve Case"]
+required_tool = "handbook"
+base_time = 600.0
 hidden_risks = []
 required_log_ids = []
 kill_chain_path = ""

@@ -85,6 +85,6 @@ func _on_pressed():
 	if app_id != "":
 		activated.emit(app_id)
 		if DesktopWindowManager:
-			DesktopWindowManager.open_app(app_id)
+			await DesktopWindowManager.open_app(app_id)
 		if AudioManager:
 			AudioManager.play_ui_click()

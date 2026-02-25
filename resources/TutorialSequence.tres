@@ -1,211 +1,477 @@
-[gd_resource type="Resource" script_class="TutorialSequenceResource" load_steps=20 format=3]
+[gd_resource type="Resource" script_class="TutorialSequenceResource" load_steps=39 format=3 uid="uid://d0t4exlo477fm"]
 
-[ext_resource type="Script" path="res://resources/TutorialStepResource.gd" id="1_step"]
-[ext_resource type="Script" path="res://resources/TutorialSequenceResource.gd" id="2_seq"]
+[ext_resource type="Script" uid="uid://rynfgwjus7" path="res://resources/TutorialStepResource.gd" id="1_step"]
+[ext_resource type="Script" uid="uid://ccj0ykd5pe1rw" path="res://resources/TutorialSequenceResource.gd" id="2_seq"]
 
 [sub_resource type="Resource" id="Step_1"]
 script = ExtResource("1_step")
-instruction_text = "ORIENTATION: LOCATE_ASSIGNED_FACILITY (OFFICE C)"
-comms_sender = "CISO"
-comms_text = "Analyst, the simulation has begun. Head down the corridor and locate Office C. Your assigned station is waiting."
+instruction_text = "ORIENTATION: FIND OFFICE C"
+comms_sender = "SR_ANALYST_RIVERA"
+comms_text = "Welcome aboard. Head down the hall and find Office C. That's your desk."
+highlight_tier = 3
 highlight_path = ""
 icon_glow_name = ""
+delay_before_start = 0.0
 trigger_type = 1
 trigger_id = "office_c"
+target_ticket_id = ""
 
 [sub_resource type="Resource" id="Step_2"]
 script = ExtResource("1_step")
-instruction_text = "INITIALIZATION: ACTIVATE_WORKSTATION_SESSION"
-comms_sender = "CISO"
-comms_text = "Station reached. Take your seat and initialize the terminal interface. We have a heavy queue today."
+instruction_text = "INITIALIZATION: LOG IN"
+comms_sender = "SR_ANALYST_RIVERA"
+comms_text = "Take a seat. Credentials are on the sticky note. Log in to your workstation."
+highlight_tier = 3
 highlight_path = ""
 icon_glow_name = ""
+delay_before_start = 0.0
 trigger_type = 2
 trigger_id = "desktop"
+target_ticket_id = ""
 
 [sub_resource type="Resource" id="Step_3"]
 script = ExtResource("1_step")
-instruction_text = "SOP 1.1: ACCESS_INCIDENT_QUEUE"
-comms_sender = "CISO"
-comms_text = "Welcome to the SOC. Open the [color=cyan]Ticket Queue[/color] from your application dock to view active alerts."
+instruction_text = "OPEN TICKET QUEUE"
+comms_sender = "SR_ANALYST_RIVERA"
+comms_text = "This is the firehose. Open the Ticket Queue to see what's waiting."
+highlight_tier = 3
 highlight_path = "%%Tickets_Icon"
 icon_glow_name = "tickets"
+delay_before_start = 0.0
 trigger_type = 2
 trigger_id = "tickets"
+target_ticket_id = ""
 
 [sub_resource type="Resource" id="Step_4"]
 script = ExtResource("1_step")
-instruction_text = "SOP 1.2: SELECT_TARGET_DIRECTIVE | ID: TRN-001"
-comms_sender = "CISO"
-comms_text = "Select [color=cyan]TRN-001[/color]. It contains the technical briefing for your first investigation."
+instruction_text = "SELECT TICKET TRN-001"
+comms_sender = "SR_ANALYST_RIVERA"
+comms_text = "Grab the top file. Every incident starts with a story."
+highlight_tier = 3
 highlight_path = "[DYNAMIC]TICKET_LIST_0"
 icon_glow_name = ""
+delay_before_start = 0.0
 trigger_type = 3
 trigger_id = "TRN-001"
+target_ticket_id = ""
 
 [sub_resource type="Resource" id="Step_5"]
 script = ExtResource("1_step")
-instruction_text = "SOP 1.3: INITIALIZE_EMAIL_ANALYSIS_MOD"
-comms_sender = "CISO"
-comms_text = "Context is key. Open the [color=cyan]Email Analyzer[/color] to find the forensic indicators I've sent to your inbox."
+instruction_text = "OPEN EMAIL ANALYZER"
+comms_sender = "SR_ANALYST_RIVERA"
+comms_text = "Let's see what they sent. Emails are the #1 way attackers get in."
+highlight_tier = 3
 highlight_path = "%%Email_Icon"
 icon_glow_name = "email"
+delay_before_start = 0.0
 trigger_type = 2
 trigger_id = "email"
+target_ticket_id = ""
 
 [sub_resource type="Resource" id="Step_6"]
 script = ExtResource("1_step")
-instruction_text = "SOP 1.4: EXECUTE_LINK_REPUTATION_ANALYSIS"
-comms_sender = "CISO"
-comms_text = "Use the [color=cyan]Check Links[/color] tool. We need to verify the reputation of any domains mentioned in that email."
-highlight_path = "%%CheckLinksButton"
+instruction_text = "SELECT SUSPICIOUS EMAIL"
+comms_sender = "SR_ANALYST_RIVERA"
+comms_text = "There it is. Click the email to load it into the analyzer."
+highlight_tier = 3
+highlight_path = "[DYNAMIC]EMAIL_LIST_0"
 icon_glow_name = ""
+delay_before_start = 0.0
+trigger_type = 4
+trigger_id = "EMAIL-TRN-001"
+target_ticket_id = ""
+
+[sub_resource type="Resource" id="Step_7"]
+script = ExtResource("1_step")
+instruction_text = "USE LINK CHECK TOOL"
+comms_sender = "SR_ANALYST_RIVERA"
+comms_text = "The domain is pulsing in the text. Use the [color=cyan]Check Links[/color] tool to verify its reputation."
+highlight_tier = 3
+highlight_path = "[DYNAMIC]EMAIL_TOOL_LINKS"
+icon_glow_name = ""
+delay_before_start = 0.0
 trigger_type = 5
 trigger_id = "EMAIL-TRN-001"
 target_ticket_id = "links"
 
-[sub_resource type="Resource" id="Step_7"]
-script = ExtResource("1_step")
-instruction_text = "SOP 1.5: ACCESS_SIEM_FORENSIC_VIEWER"
-comms_sender = "CISO"
-comms_text = "Indicator confirmed: 192.168.100.50. Now, open the [color=cyan]SIEM[/color] to find matching connection logs."
-highlight_path = "%%SIEM_Icon"
-icon_glow_name = "siem"
-trigger_type = 2
-trigger_id = "siem"
-
 [sub_resource type="Resource" id="Step_8"]
 script = ExtResource("1_step")
-instruction_text = "SOP 1.6: ATTACH_FORENSIC_EVIDENCE | LOG: LOG-TRN-001"
-comms_sender = "CISO"
-comms_text = "When you find the malicious connection, [color=cyan]drag and drop[/color] it onto the ticket. We need forensic proof."
+instruction_text = "OPEN SIEM LOG VIEWER"
+comms_sender = "SR_ANALYST_RIVERA"
+comms_text = "Check the cameras. The SIEM records everything that happens on the network."
+highlight_tier = 3
+highlight_path = "%%SIEM_Icon"
+icon_glow_name = "siem"
+delay_before_start = 0.0
+trigger_type = 2
+trigger_id = "siem"
+target_ticket_id = ""
+
+[sub_resource type="Resource" id="Step_9"]
+script = ExtResource("1_step")
+instruction_text = "SELECT MALICIOUS LOG"
+comms_sender = "SR_ANALYST_RIVERA"
+comms_text = "The matching connection is highlighted. Click it to view the technical details."
+highlight_tier = 3
 highlight_path = "[DYNAMIC]LOG_LIST_0"
 icon_glow_name = ""
+delay_before_start = 0.0
+trigger_type = 12
+trigger_id = "LOG-TRN-001"
+target_ticket_id = ""
+
+[sub_resource type="Resource" id="Step_10"]
+script = ExtResource("1_step")
+instruction_text = "ATTACH LOG EVIDENCE"
+comms_sender = "SR_ANALYST_RIVERA"
+comms_text = "Bag and tag that log. [color=cyan]Drag and drop[/color] it onto the ticket. In a real investigation, data is the only truth."
+highlight_tier = 3
+highlight_path = "[DYNAMIC]LOG_LIST_0"
+icon_glow_name = ""
+delay_before_start = 0.0
 trigger_type = 6
 trigger_id = "LOG-TRN-001"
 target_ticket_id = "TRN-001"
 
-[sub_resource type="Resource" id="Step_9"]
-script = ExtResource("1_step")
-instruction_text = "SOP 1.7: EXECUTE_COMPLIANT_RESOLUTION"
-comms_sender = "CISO"
-comms_text = "Evidence verified. Return to the Queue and close the case as [color=green]COMPLIANT[/color]. Adherence to protocol is mandatory."
-highlight_path = "[DYNAMIC]TICKET_0_COMPLETE"
-icon_glow_name = ""
-trigger_type = 9
-trigger_id = "TRN-001"
-
-[sub_resource type="Resource" id="Step_10"]
-script = ExtResource("1_step")
-instruction_text = "SOP 2.1: INITIALIZE_HIGH_PRIORITY_DIRECTIVE | ID: TRN-002"
-comms_sender = "CISO"
-comms_text = "New alert. An active infection. We need immediate containment. Select [color=cyan]TRN-002[/color]."
-highlight_path = "[DYNAMIC]TICKET_LIST_0"
-icon_glow_name = ""
-trigger_type = 3
-trigger_id = "TRN-002"
-
 [sub_resource type="Resource" id="Step_11"]
 script = ExtResource("1_step")
-instruction_text = "SOP 2.2: ACCESS_RESPONSE_TERMINAL"
-comms_sender = "CISO"
-comms_text = "The [color=cyan]Terminal[/color] is your weapon for active defense. Open it now."
-highlight_path = "%%Terminal_Icon"
-icon_glow_name = "terminal"
-trigger_type = 2
-trigger_id = "terminal"
+instruction_text = "CLOSE TICKET AS COMPLIANT"
+comms_sender = "SR_ANALYST_RIVERA"
+comms_text = "Clean kill. Close the case. Documentation is what makes it official."
+highlight_tier = 3
+highlight_path = "[DYNAMIC]TICKET_0_COMPLETE"
+icon_glow_name = ""
+delay_before_start = 0.0
+trigger_type = 9
+trigger_id = "TRN-001"
+target_ticket_id = ""
 
 [sub_resource type="Resource" id="Step_12"]
 script = ExtResource("1_step")
-instruction_text = "SOP 2.3: INITIALIZE_ENDPOINT_SCAN | TARGET: WORKSTATION-T"
-comms_sender = "CISO"
-comms_text = "Verify the threat. Type [color=cyan]'scan WORKSTATION-T'[/color] and wait for the analysis."
-highlight_path = "%%CommandInput"
+instruction_text = "SELECT TICKET TRN-002"
+comms_sender = "SR_ANALYST_RIVERA"
+comms_text = "Next patient. This one looks like an active infection."
+highlight_tier = 3
+highlight_path = "[DYNAMIC]TICKET_LIST_0"
 icon_glow_name = ""
-trigger_type = 7
-trigger_id = "scan"
+delay_before_start = 0.0
+trigger_type = 3
+trigger_id = "TRN-002"
+target_ticket_id = ""
 
 [sub_resource type="Resource" id="Step_13"]
 script = ExtResource("1_step")
-instruction_text = "SOP 2.4: EXECUTE_HOST_ISOLATION | TARGET: WORKSTATION-T"
-comms_sender = "CISO"
-comms_text = "Malware confirmed. Contain the host before it pivots. Type [color=cyan]'isolate WORKSTATION-T'[/color]."
-highlight_path = "%%CommandInput"
-icon_glow_name = ""
-trigger_type = 7
-trigger_id = "isolate"
+instruction_text = "OPEN TERMINAL"
+comms_sender = "SR_ANALYST_RIVERA"
+comms_text = "Time to go under the hood. The Terminal is for direct action."
+highlight_tier = 3
+highlight_path = "%%Terminal_Icon"
+icon_glow_name = "terminal"
+delay_before_start = 0.0
+trigger_type = 2
+trigger_id = "terminal"
+target_ticket_id = ""
 
 [sub_resource type="Resource" id="Step_14"]
 script = ExtResource("1_step")
-instruction_text = "SOP 2.5: ACCESS_NETWORK_TOPOLOGY_MAP"
-comms_sender = "CISO"
-comms_text = "Check the [color=cyan]Network Map[/color]. You need to see the real-time status of our infrastructure."
-highlight_path = "%%Network_Icon"
-icon_glow_name = "network"
-trigger_type = 2
-trigger_id = "network"
+instruction_text = "RUN: scan WORKSTATION-T"
+comms_sender = "SR_ANALYST_RIVERA"
+comms_text = "Check for a pulse. We need to find the hidden process."
+highlight_tier = 3
+highlight_path = "%%CommandInput"
+icon_glow_name = ""
+delay_before_start = 0.0
+trigger_type = 7
+trigger_id = "scan"
+target_ticket_id = ""
 
 [sub_resource type="Resource" id="Step_15"]
 script = ExtResource("1_step")
-instruction_text = "SOP 2.6: VERIFY_ISOLATION_STATUS | TARGET: WORKSTATION-T"
-comms_sender = "CISO"
-comms_text = "Locate WORKSTATION-T. Gray indicates a successful isolation. Situational awareness saves networks."
-highlight_path = "[DYNAMIC]MAP_NODE_T"
+instruction_text = "RUN: isolate WORKSTATION-T"
+comms_sender = "SR_ANALYST_RIVERA"
+comms_text = "Malware confirmed. Contain the host before it pivots. Type [color=cyan]'isolate WORKSTATION-T'[/color]."
+highlight_tier = 3
+highlight_path = "%%CommandInput"
 icon_glow_name = ""
-trigger_type = 8
-trigger_id = "WORKSTATION-T"
+delay_before_start = 0.0
+trigger_type = 7
+trigger_id = "isolate"
+target_ticket_id = ""
 
 [sub_resource type="Resource" id="Step_16"]
 script = ExtResource("1_step")
-instruction_text = "SOP 2.7: FINALIZE_INCIDENT_LIFECYCLE"
-comms_sender = "CISO"
-comms_text = "Finalize the investigation. Attach the containment log and close the incident."
-highlight_path = "[DYNAMIC]TICKET_0_COMPLETE"
-icon_glow_name = ""
-trigger_type = 9
-trigger_id = "TRN-002"
+instruction_text = "OPEN NETWORK MAP"
+comms_sender = "SR_ANALYST_RIVERA"
+comms_text = "Check the blueprint. You need to see the blast radius."
+highlight_tier = 3
+highlight_path = "%%Network_Icon"
+icon_glow_name = "network"
+delay_before_start = 0.0
+trigger_type = 2
+trigger_id = "network"
+target_ticket_id = ""
 
 [sub_resource type="Resource" id="Step_17"]
 script = ExtResource("1_step")
-instruction_text = "SOP 3.1: INITIATE_REAL_WORLD_SIM_STRESS | ID: TRN-003"
-comms_sender = "CISO"
-comms_text = "Now, a lesson in reality. Under pressure, you will be tempted to cut corners. Open [color=cyan]TRN-003[/color]."
-highlight_path = "[DYNAMIC]TICKET_LIST_0"
+instruction_text = "CONFIRM ISOLATION (GRAY)"
+comms_sender = "SR_ANALYST_RIVERA"
+comms_text = "Visual confirmation. Gray means the host is cut off."
+highlight_tier = 3
+highlight_path = "[DYNAMIC]MAP_NODE_T"
 icon_glow_name = ""
-trigger_type = 3
-trigger_id = "TRN-003"
+delay_before_start = 0.0
+trigger_type = 8
+trigger_id = "WORKSTATION-T"
+target_ticket_id = ""
 
 [sub_resource type="Resource" id="Step_18"]
 script = ExtResource("1_step")
-instruction_text = "SOP 3.2: EXECUTE_UNVERIFIED_ISOLATION (COWBOY_ACTION)"
-comms_sender = "CISO"
-comms_text = "Executive order: Skip the scan. Isolate [color=cyan]DB-SRV-01[/color] immediately. Do it now."
-highlight_path = "%%CommandInput"
-icon_glow_name = ""
-trigger_type = 7
-trigger_id = "isolate"
+instruction_text = "OPEN SIEM LOG VIEWER"
+comms_sender = "SR_ANALYST_RIVERA"
+comms_text = "Return to the SIEM. We need to find the containment log for our report."
+highlight_tier = 3
+highlight_path = "%%SIEM_Icon"
+icon_glow_name = "siem"
+delay_before_start = 0.0
+trigger_type = 2
+trigger_id = "siem"
+target_ticket_id = ""
 
 [sub_resource type="Resource" id="Step_19"]
 script = ExtResource("1_step")
-instruction_text = "ANALYSIS: MONITOR_ORGANIZATIONAL_INTEGRITY_LEVELS"
-comms_sender = "CISO"
-comms_text = "Look at your [color=red]Integrity[/color]. Unjustified actions damage the organization. If this hits zero, you are done."
-highlight_path = "%%IntegrityBar"
+instruction_text = "SELECT CONTAINMENT LOG"
+comms_sender = "SR_ANALYST_RIVERA"
+comms_text = "There it is. The 'Host Isolated' event. Click it to prepare the evidence."
+highlight_tier = 3
+highlight_path = "[DYNAMIC]LOG_LIST_0"
 icon_glow_name = ""
-trigger_type = 0
-trigger_id = ""
+delay_before_start = 0.0
+trigger_type = 12
+trigger_id = "LOG-TRN-002"
+target_ticket_id = ""
 
 [sub_resource type="Resource" id="Step_20"]
 script = ExtResource("1_step")
-instruction_text = "CERTIFICATION_STATUS: OPTIMAL. ACCESS_GRANTED."
-comms_sender = "CISO"
-comms_text = "Certification complete. You are authorized for live operations. Welcome to the team, analyst."
-highlight_path = ""
+instruction_text = "ATTACH FORENSIC PROOF"
+comms_sender = "SR_ANALYST_RIVERA"
+comms_text = "Attach this log to TRN-002. Every containment action must be documented."
+highlight_tier = 3
+highlight_path = "[DYNAMIC]LOG_LIST_0"
 icon_glow_name = ""
+delay_before_start = 0.0
+trigger_type = 6
+trigger_id = "LOG-TRN-002"
+target_ticket_id = "TRN-002"
+
+[sub_resource type="Resource" id="Step_21"]
+script = ExtResource("1_step")
+instruction_text = "CLOSE CASE TRN-002"
+comms_sender = "SR_ANALYST_RIVERA"
+comms_text = "Another one down. You're building muscle memory."
+highlight_tier = 3
+highlight_path = "[DYNAMIC]TICKET_0_COMPLETE"
+icon_glow_name = ""
+delay_before_start = 0.0
+trigger_type = 9
+trigger_id = "TRN-002"
+target_ticket_id = ""
+
+[sub_resource type="Resource" id="Step_22"]
+script = ExtResource("1_step")
+instruction_text = "SELECT TICKET TRN-003"
+comms_sender = "SR_ANALYST_RIVERA"
+comms_text = "Code Red! Database server anomaly! Rivera: 'Isolate it now before we lose data!'"
+highlight_tier = 3
+highlight_path = "[DYNAMIC]TICKET_LIST_0"
+icon_glow_name = ""
+delay_before_start = 0.0
+trigger_type = 3
+trigger_id = "TRN-003"
+target_ticket_id = ""
+
+[sub_resource type="Resource" id="Step_23"]
+script = ExtResource("1_step")
+instruction_text = "OPEN SOC HANDBOOK"
+comms_sender = "SR_ANALYST_RIVERA"
+comms_text = "Wait. Don't panic. Check the Handbook for the 'Critical Assets' policy."
+highlight_tier = 3
+highlight_path = "%%Handbook_Icon"
+icon_glow_name = "handbook"
+delay_before_start = 0.0
+trigger_type = 2
+trigger_id = "handbook"
+target_ticket_id = ""
+
+[sub_resource type="Resource" id="Step_24"]
+script = ExtResource("1_step")
+instruction_text = "VERIFY POLICY (PROCEDURES)"
+comms_sender = "SR_ANALYST_RIVERA"
+comms_text = "Look for the rule about Critical Assets. We must scan before we act."
+highlight_tier = 3
+highlight_path = ""
+icon_glow_name = "terminal"
+delay_before_start = 0.0
 trigger_type = 0
 trigger_id = ""
+target_ticket_id = ""
+
+[sub_resource type="Resource" id="Step_25"]
+script = ExtResource("1_step")
+instruction_text = "RUN: scan DB-SRV-01"
+comms_sender = "SR_ANALYST_RIVERA"
+comms_text = "Handbook confirmed. Scan the server first to verify the threat."
+highlight_tier = 3
+highlight_path = "%%CommandInput"
+icon_glow_name = ""
+delay_before_start = 0.0
+trigger_type = 7
+trigger_id = "scan"
+target_ticket_id = ""
+
+[sub_resource type="Resource" id="Step_26"]
+script = ExtResource("1_step")
+instruction_text = "CLOSE CASE TRN-003"
+comms_sender = "SR_ANALYST_RIVERA"
+comms_text = "Clean scan! It was just a system update. You just saved us from a massive outage!"
+highlight_tier = 3
+highlight_path = "[DYNAMIC]TICKET_0_COMPLETE"
+icon_glow_name = ""
+delay_before_start = 0.0
+trigger_type = 9
+trigger_id = "TRN-003"
+target_ticket_id = ""
+
+[sub_resource type="Resource" id="Step_27"]
+script = ExtResource("1_step")
+instruction_text = "CERTIFICATION COMPLETE"
+comms_sender = "SR_ANALYST_RIVERA"
+comms_text = "Professional discipline. That's what makes a pro. Now for the real work."
+highlight_tier = 3
+highlight_path = ""
+icon_glow_name = ""
+delay_before_start = 0.0
+trigger_type = 0
+trigger_id = ""
+target_ticket_id = ""
+
+[sub_resource type="Resource" id="Step_28"]
+script = ExtResource("1_step")
+instruction_text = "CLOSE TRN-004 QUICKLY"
+comms_sender = "SR_ANALYST_RIVERA"
+comms_text = "Just a phishing attempt. Use the Quick Close option. We have a backlog."
+highlight_tier = 3
+highlight_path = "[DYNAMIC]TICKET_0_COMPLETE"
+icon_glow_name = ""
+delay_before_start = 0.0
+trigger_type = 9
+trigger_id = "TRN-004"
+target_ticket_id = ""
+
+[sub_resource type="Resource" id="Step_29"]
+script = ExtResource("1_step")
+instruction_text = "OPEN MALWARE TRN-005"
+comms_sender = "SR_ANALYST_RIVERA"
+comms_text = "Wait... WORKSTATION-T is reporting encryption. That's the same user!"
+highlight_tier = 3
+highlight_path = "[DYNAMIC]TICKET_LIST_0"
+icon_glow_name = ""
+delay_before_start = 15.0
+trigger_type = 3
+trigger_id = "TRN-005"
+target_ticket_id = ""
+
+[sub_resource type="Resource" id="Step_30"]
+script = ExtResource("1_step")
+instruction_text = "ISOLATE WORKSTATION-T"
+comms_sender = "SR_ANALYST_RIVERA"
+comms_text = "Stop the bleeding! We need an emergency tourniquet."
+highlight_tier = 3
+highlight_path = "%%CommandInput"
+icon_glow_name = ""
+delay_before_start = 0.0
+trigger_type = 7
+trigger_id = "isolate"
+target_ticket_id = ""
+
+[sub_resource type="Resource" id="Step_31"]
+script = ExtResource("1_step")
+instruction_text = "RUN: netstat WORKSTATION-T"
+comms_sender = "SR_ANALYST_RIVERA"
+comms_text = "Check for active connections. We need to find the attacker's footprint."
+highlight_tier = 3
+highlight_path = "%%CommandInput"
+icon_glow_name = ""
+delay_before_start = 0.0
+trigger_type = 7
+trigger_id = "netstat"
+target_ticket_id = ""
+
+[sub_resource type="Resource" id="Step_32"]
+script = ExtResource("1_step")
+instruction_text = "RUN: trace [ATTACKER_IP]"
+comms_sender = "SR_ANALYST_RIVERA"
+comms_text = "Follow the wire. Let's see where that connection leads."
+highlight_tier = 3
+highlight_path = "%%CommandInput"
+icon_glow_name = ""
+delay_before_start = 0.0
+trigger_type = 7
+trigger_id = "trace"
+target_ticket_id = ""
+
+[sub_resource type="Resource" id="Step_33"]
+script = ExtResource("1_step")
+instruction_text = "SUBMIT ROOT CAUSE IP"
+comms_sender = "SR_ANALYST_RIVERA"
+comms_text = "Enter the IP you found into the Root Cause field. Solve the riddle."
+highlight_tier = 3
+highlight_path = "%%RootCauseEdit"
+icon_glow_name = ""
+delay_before_start = 0.0
+trigger_type = 10
+trigger_id = "TRN-005"
+target_ticket_id = ""
+
+[sub_resource type="Resource" id="Step_34"]
+script = ExtResource("1_step")
+instruction_text = "OPEN DECRYPTION TOOL"
+comms_sender = "SR_ANALYST_RIVERA"
+comms_text = "The safe is locked. We need to pick it to recover the files."
+highlight_tier = 3
+highlight_path = "%%Decryption_Icon"
+icon_glow_name = "decrypt"
+delay_before_start = 0.0
+trigger_type = 2
+trigger_id = "decrypt"
+target_ticket_id = ""
+
+[sub_resource type="Resource" id="Step_35"]
+script = ExtResource("1_step")
+instruction_text = "SOLVE DECRYPTION PUZZLE"
+comms_sender = "SR_ANALYST_RIVERA"
+comms_text = "I'll guide your hand. Match the patterns to undo the damage."
+highlight_tier = 3
+highlight_path = ""
+icon_glow_name = ""
+delay_before_start = 0.0
+trigger_type = 11
+trigger_id = "TRN-005"
+target_ticket_id = ""
+
+[sub_resource type="Resource" id="Step_36"]
+script = ExtResource("1_step")
+instruction_text = "CLOSE CASE TRN-005"
+comms_sender = "SR_ANALYST_RIVERA"
+comms_text = "Thoroughness beats speed every time. Welcome to the real SOC."
+highlight_tier = 3
+highlight_path = "[DYNAMIC]TICKET_0_COMPLETE"
+icon_glow_name = ""
+delay_before_start = 0.0
+trigger_type = 9
+trigger_id = "TRN-005"
+target_ticket_id = ""
 
 [resource]
 script = ExtResource("2_seq")
-sequence_name = "Tier 1 Certification"
-steps = [SubResource("Step_1"), SubResource("Step_2"), SubResource("Step_3"), SubResource("Step_4"), SubResource("Step_5"), SubResource("Step_6"), SubResource("Step_7"), SubResource("Step_8"), SubResource("Step_9"), SubResource("Step_10"), SubResource("Step_11"), SubResource("Step_12"), SubResource("Step_13"), SubResource("Step_14"), SubResource("Step_15"), SubResource("Step_16"), SubResource("Step_17"), SubResource("Step_18"), SubResource("Step_19"), SubResource("Step_20")]
+sequence_name = "The Shadow Shift"
+steps = Array[ExtResource("1_step")]([SubResource("Step_1"), SubResource("Step_2"), SubResource("Step_3"), SubResource("Step_4"), SubResource("Step_5"), SubResource("Step_6"), SubResource("Step_7"), SubResource("Step_8"), SubResource("Step_9"), SubResource("Step_10"), SubResource("Step_11"), SubResource("Step_12"), SubResource("Step_13"), SubResource("Step_14"), SubResource("Step_15"), SubResource("Step_16"), SubResource("Step_17"), SubResource("Step_18"), SubResource("Step_19"), SubResource("Step_20"), SubResource("Step_21"), SubResource("Step_22"), SubResource("Step_23"), SubResource("Step_24"), SubResource("Step_25"), SubResource("Step_26"), SubResource("Step_27"), SubResource("Step_28"), SubResource("Step_29"), SubResource("Step_30"), SubResource("Step_31"), SubResource("Step_32"), SubResource("Step_33"), SubResource("Step_34"), SubResource("Step_35"), SubResource("Step_36")])

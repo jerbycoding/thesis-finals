@@ -2,12 +2,14 @@ extends Button
 
 @onready var icon_rect = %IconRect
 @onready var label = %Label
+@onready var glow_frame = %GlowFrame
 
 var app_id: String = ""
 var cached_title: String = ""
 var greyscale_shader = preload("res://shaders/greyscale.gdshader")
 var is_authorized: bool = true
 var is_provisioning: bool = false
+var _glow_tween: Tween = null
 
 func setup(_app_id: String, title: String):
 	app_id = _app_id
@@ -69,3 +71,19 @@ func _apply_visuals():
 	var icon_path = "res://assets/icons/" + icon_name + ".png"
 	if ResourceLoader.exists(icon_path) and icon_rect:
 		icon_rect.texture = load(icon_path)
+
+func set_glow(active: bool):
+	if _glow_tween:
+		_glow_tween.kill()
+		_glow_tween = null
+	
+	if not active:
+		if glow_frame: glow_frame.visible = false
+		return
+		
+	if glow_frame:
+		glow_frame.visible = true
+		glow_frame.modulate.a = 1.0
+		_glow_tween = create_tween().set_loops()
+		_glow_tween.tween_property(glow_frame, "modulate:a", 0.2, 0.6).set_trans(Tween.TRANS_SINE)
+		_glow_tween.tween_property(glow_frame, "modulate:a", 1.0, 0.6).set_trans(Tween.TRANS_SINE)

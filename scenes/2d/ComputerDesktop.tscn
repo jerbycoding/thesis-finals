@@ -1,11 +1,11 @@
-[gd_scene load_steps=8 format=3 uid="uid://c4xkfk6xo2ycf"]
+[gd_scene load_steps=10 format=3 uid="uid://c4xkfk6xo2ycf"]
 
 [ext_resource type="Script" uid="uid://b22xof43jxemv" path="res://scripts/2d/ComputerDesktop.gd" id="1_0kbkv"]
 [ext_resource type="Script" uid="uid://c28t6vqktfrln" path="res://scripts/2d/DesktopClock.gd" id="1_0l3ag"]
 [ext_resource type="Script" uid="uid://cbi6smmdpx4yu" path="res://scripts/2d/ExitButton.gd" id="2_0kbkv"]
 [ext_resource type="Texture2D" uid="uid://dk37ymi787rod" path="res://assets/wallpapers/Microsoft_Surface_Duo.jpg" id="3_r1l77"]
-[ext_resource type="PackedScene" uid="uid://b7v8y1r2l3m4n" path="res://scenes/ui/RunbookSidebar.tscn" id="5_runbook"]
 [ext_resource type="Theme" uid="uid://dny3rlbltexc7" path="res://assets/themes/EnterpriseTheme.tres" id="4_theme"]
+[ext_resource type="PackedScene" path="res://scenes/ui/RunbookSidebar.tscn" id="5_runbook"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_TaskbarGlass"]
 bg_color = Color(0.0196078, 0.0196078, 0.0196078, 0.705882)
@@ -13,6 +13,21 @@ border_width_top = 1
 border_color = Color(1, 1, 1, 0.117647)
 shadow_color = Color(0, 0, 0, 0.117647)
 shadow_size = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Glow"]
+bg_color = Color(0, 1, 1, 0.0392157)
+draw_center = false
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 1, 1, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+shadow_color = Color(0, 1, 1, 0.313726)
+shadow_size = 8
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_PillTray"]
 bg_color = Color(1, 1, 1, 0.0588235)
@@ -143,8 +158,20 @@ layout_mode = 2
 size_flags_vertical = 4
 theme_override_colors/font_hover_color = Color(0.2, 0.6, 1, 1)
 theme_override_font_sizes/font_size = 22
-text = "❄"
+text = "⊞"
 flat = true
+
+[node name="GlowFrame" type="Panel" parent="MonitorAssembly/LCD_Group/Taskbar/Margin/HBox/StartMenuButton"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_Glow")
 
 [node name="VSeparator" type="VSeparator" parent="MonitorAssembly/LCD_Group/Taskbar/Margin/HBox"]
 layout_mode = 2

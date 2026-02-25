@@ -5,5 +5,12 @@
 [resource]
 script = ExtResource("1_page")
 page_id = "email"
-title = "EMAIL THREAT ANALYSIS"
-content = "[b][color=#006CFF]TRIAGE[/color][/b]\nAnalyze communication headers and artifacts for spoofing.\n\n[b]TOOLS:[/b]\n• [b]Headers[/b]: Verification of SPF/DKIM/DMARC status.\n• [b]Attachments[/b]: Sandbox analysis for executable payloads.\n• [b]Links[/b]: Domain reputation and blacklist verification."
+title = "EMAIL FORENSIC PROTOCOL"
+content = "[b][color=#006CFF]INVESTIGATIVE CHECKLIST[/color][/b]
+Email is the #1 threat vector. Follow this checklist for every suspected phishing alert:
+
+1. [b]Verify Headers[/b]: Check if the sender's address matches the display name. Look for SPF failures.
+2. [b]Scan Attachments[/b]: Never download a file without running it through the sandbox scan.
+3. [b]Check Links[/b]: Scan domains for reputation. If a domain is pulsing Cyan, it is already blacklisted.
+
+[b][color=#C62828]PRO TIP:[/color][/b] After you find a malicious IP or Domain in an email, you must go to the SIEM to see if anyone clicked it."

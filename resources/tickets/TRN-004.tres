@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="TicketResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/tickets/TicketResource.gd" id="1_ticket"]
+
+[resource]
+script = ExtResource("1_ticket")
+ticket_id = "TRN-004"
+title = "TRAINING: Suspected Phishing"
+description = "A user reports a suspicious email. It looks like a standard newsletter. Perform a quick review and resolve. Analyst efficiency is prioritized for low-severity alerts."
+severity = "Low"
+category = "Phishing"
+steps = ["Analyze Email", "Perform Link Check", "Resolve Ticket"]
+required_tool = "email"
+base_time = 600.0
+hidden_risks = ["ESC-MALWARE-01"]
+required_log_ids = []
+kill_chain_path = "Phishing Escalation"
+kill_chain_stage = 1

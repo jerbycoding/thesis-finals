@@ -11,6 +11,9 @@ var current_ticket: TicketResource = null
 @onready var cancel_button: Button = %CancelButton
 @onready var description_label: Label = %DescriptionLabel
 @onready var main_panel: PanelContainer = %MainPanel
+@onready var efficient_glow: Panel = %GlowFrame
+
+var _glow_tween: Tween = null
 
 func _ready():
 	# Start hidden
@@ -84,3 +87,19 @@ func _on_emergency_pressed():
 		AudioManager.play_sfx(AudioManager.SFX.notification_error)
 	completion_selected.emit("emergency")
 	_close_modal()
+
+func set_glow(active: bool):
+	if _glow_tween:
+		_glow_tween.kill()
+		_glow_tween = null
+	
+	if not active:
+		if efficient_glow: efficient_glow.visible = false
+		return
+		
+	if efficient_glow:
+		efficient_glow.visible = true
+		efficient_glow.modulate.a = 1.0
+		_glow_tween = create_tween().set_loops()
+		_glow_tween.tween_property(efficient_glow, "modulate:a", 0.2, 0.6).set_trans(Tween.TRANS_SINE)
+		_glow_tween.tween_property(efficient_glow, "modulate:a", 1.0, 0.6).set_trans(Tween.TRANS_SINE)

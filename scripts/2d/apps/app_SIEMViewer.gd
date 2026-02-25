@@ -42,6 +42,7 @@ func _ready():
 	
 	# Connect to EventBus
 	EventBus.log_added.connect(_on_log_added)
+	EventBus.logs_cleared.connect(_refresh_logs)
 	
 	# Initialize graph data
 	for i in range(GRAPH_MAX_POINTS):

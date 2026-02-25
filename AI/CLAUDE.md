@@ -71,3 +71,171 @@ A few flags worth building around this table:
 **For Steps 24-27:** Consider a side-panel "Kill Chain Visualizer" that populates in real time as the player traces the logs — a visual timeline showing each attacker step appearing as the player finds the evidence. This turns abstract log data into a visceral narrative.
 
 **Scoring across the arc:** PHI-007's "Quick Close" should secretly log a `INCOMPLETE_INVESTIGATION` flag. When MAL-019 resolves, the post-game debrief should surface this flag explicitly, showing the player the exact moment the chain could have been broken. This is more powerful than any text explanation.
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+How would you best merge these two ideas? Should the cleanup phase involve both new terminal commands and the Decryption Tool, or would that overwhelm a new player? What is the ideal sequence to be both narratively satisfying and mechanically instructive?
+
+## The Core Tension You're Solving
+
+The cleanup phase has two competing goals that pull in opposite directions:
+
+**Narratively**, you want the player to feel the *full weight* of their mistake — the cleanup should be harder and messier than anything they've done before, because that's the emotional lesson. Effort = consequence.
+
+**Mechanically**, you're still talking to a beginner who just learned these tools 20 minutes ago. Stack too many new interactions at once and the emotional lesson ("I caused this") gets buried under cognitive load ("how do I use this thing again?"). They'll feel *confused*, not *guilty* — and confused doesn't teach.
+
+The good news is these goals aren't actually in conflict. The resolution is **sequencing and framing**, not choosing one over the other.
+
+---
+
+## The Problem With Simultaneous Tool Use
+
+The current draft runs Terminal → Decryption Tool back to back as if they're equal-weight steps. They aren't. The Terminal commands (`scan`, `isolate`) are already familiar from certification — the player has muscle memory for them. The Decryption Tool is entirely new, hex-based, and puzzle-oriented. Treating them as peers in a single cleanup montage creates an uneven experience: the Terminal part feels like recap, the Decryption part feels like a wall, and the emotional throughline — *you caused this* — gets interrupted by "wait, what am I doing here?"
+
+The deeper issue is that both tools, used simultaneously, make the cleanup feel like a *checklist*. Checklists feel like work. You want it to feel like consequence.
+
+---
+
+## The Recommended Sequence: Separate the Acts
+
+Split the cleanup into two emotionally distinct beats, each with its own purpose.
+
+### Beat 1 — Containment (Terminal)
+This should feel *fast and desperate*, not methodical. The player already knows these commands. That's intentional — use that fluency to create urgency. Because they know what to do, there's no UI friction slowing them down, which means the narrative friction (the damage counter, Rivera's clipped instructions, the alert sounds) hits harder. They're running commands they learned in training and it still might not be enough.
+
+**The emotional note here is: panic under competence.** They know the tool. The situation is still out of control. That dissonance is powerful.
+
+This beat should be brief. Three steps maximum: scan, confirm infection, isolate. Done.
+
+### Beat 2 — Reckoning (Decryption Tool)
+*After* containment, when the immediate crisis is stopped, everything slows down. The alarm stops. Rivera goes quiet. Then the game surfaces a new problem: "3 files were encrypted before isolation. Recovery required."
+
+Now the Decryption Tool appears for the first time — not as part of the chaos, but in the eerie calm *after* it. The player has space to breathe, which means space to think, which means the puzzle actually functions as a puzzle rather than an obstacle.
+
+**The emotional note here is: the bill coming due.** The emergency is over. Now you have to do the slow, tedious work that your shortcut created. The hex puzzle isn't fun in the way early tools are fun. It's deliberate. It takes time. That's the point.
+
+Crucially, frame this moment explicitly. Don't just open the Decryption Tool cold. Have Rivera say something like: *"The ransomware got to three files before you contained it. If you'd flagged the phishing link at PHI-007, the dropper never installs. But here we are."* Then the tool opens. The player does the work knowing exactly why they're doing it.
+
+---
+
+## The Full Merged Sequence
+
+Here's how the three original steps (25, 26, 27) should be restructured into five tighter beats:
+
+| Step | Phase | What Happens | Why It Works |
+|------|-------|--------------|--------------|
+| 25A | **Containment — Scan** | Player types `scan WORKSTATION-04`. Results show active ransomware process. The screen displays: *"Encryption in progress. Files affected: 3."* | The scan confirms the damage in real time. The player watches the number. It doesn't go up because they acted fast enough to isolate — but it doesn't go to zero either. |
+| 25B | **Containment — Isolate** | Player types `isolate WORKSTATION-04`. Network Map goes Gray. Alarm stops. Silence. | The silence is the beat. Let it breathe for 2-3 seconds before Rivera speaks. That pause is where the guilt lives. |
+| 26 | **Reckoning — Rivera's Line** | Rivera: *"Three files got encrypted before you contained it. Open the Decryption Tool. Let's see if we got lucky."* A subtle line — "see if we got lucky" — signals that recovery is not guaranteed, which raises the stakes even on a tutorial puzzle. | Separating this as its own step, even briefly, ensures the player registers the *reason* they're opening a new tool. They're not learning the Decryption Tool because it's next in the tutorial. They're here because of PHI-007. |
+| 27 | **Recovery — Hex Puzzle** | The Decryption Tool opens. The puzzle is pre-scaffolded for a first-time player — Rivera's panel shows a hint system ("This strain uses a known key pattern — check the header bytes"). The puzzle is solvable in 2-3 minutes but requires genuine engagement. Files are marked "Recovered." | The difficulty level here should be deliberately set one notch *above* what a fully hand-held tutorial would use. Not punishing, but not trivial. The slight friction is intentional. Easy recovery would undercut the consequence. |
+| 28 | **Closure — Full Report** | Player attaches the Kill Chain log trail, the scan results, and the decryption confirmation to MAL-019. They close the ticket. Rivera's debrief fires. | Documentation as the final act is thematically important. The last thing the player does isn't the exciting tool — it's the unglamorous paperwork. That's intentional: it mirrors real SOC work and makes the point that *thoroughness* is the job. |
+
+---
+
+## On the Decryption Tool's Difficulty Calibration
+
+This is worth calling out separately because it's the most likely place the sequence breaks down in practice.
+
+The hex puzzle needs to thread a specific needle. It should be **solvable without prior knowledge** (Rivera's hints cover the conceptual gap) but **not instantly obvious** (the player should have to actually look at the hex values and think). If it's too easy, recovery feels fine — the consequence evaporates. If it's too hard, a beginner bounces off it and the emotional arc collapses into frustration.
+
+The practical solution is a **two-layer hint system**:
+
+- **Layer 1 (passive):** Rivera's panel shows a conceptual hint automatically — something like *"Ransomware keys are often embedded in the file header. Look at the first 8 bytes."* This appears immediately and requires no action to see.
+- **Layer 2 (on-demand):** A "Request Assistance" button that costs the player an Integrity point but gives them the exact byte pattern to look for. The cost is small but real — it adds a micro-consequence to struggling, which reinforces the theme without punishing new players into quitting.
+
+This structure respects players at both ends of the skill curve without watering down the experience for anyone.
+
+---
+
+## The Shape of the Whole Arc
+
+Zoom out and the merged sequence now has a clear emotional geometry:
+
+**Panic → Containment → Silence → Reckoning → Slow Work → Closure**
+
+Each phase has a distinct feeling. None of them overlap. The Terminal and Decryption Tool are no longer competing for attention in the same moment — they're doing different narrative jobs in different emotional registers. That's what makes the sequence both mechanically instructive (each tool gets its own focused moment) and narratively satisfying (the player lives through a complete emotional arc, not just a feature tour).
+
+The beginner never feels overwhelmed because they're only ever doing one thing. But by the end, they've done five things — and they remember all of them, because each one *felt different*.
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+QUESTION : Do you envision Rivera's guidance appearing in a dedicated, separate UI panel, or do you agree that integrating her messages into the existing in-game applications would better maintain the "OS-simulation" feel?
+
+
+ANSWER: 
+## The Honest Answer First
+
+Integrating Rivera into the existing apps is the more *aesthetically* appealing idea — and it's also the one most likely to break the tutorial in practice. The OS-simulation purity is worth protecting, but not at the cost of the one thing the tutorial cannot afford to lose: clarity about what the player is supposed to do next.
+
+The real question isn't "panel vs. integrated" — it's **what job Rivera is actually doing at any given moment**, because she's doing at least three distinct jobs throughout the tutorial, and they don't all have the same UI requirements.
+
+---
+
+## Rivera's Three Distinct Roles
+
+### Role 1 — Directional Guidance
+*"Open the Ticket Queue. Select TRN-001."*
+
+This is pure wayfinding. The player needs to know what to do next without ambiguity. This content cannot be buried inside an app they haven't opened yet, and it cannot disappear when they switch apps. If Rivera tells them to open the Email Analyzer via a message *inside* the Ticket Queue, and they close the Ticket Queue to follow the instruction, the message is gone. That's a UX failure regardless of how good it looks.
+
+**Verdict: This content needs persistent, always-visible placement.**
+
+### Role 2 — Contextual Commentary
+*"That server was a critical authentication node."* / *"See if we got lucky."*
+
+This is flavor and emotional framing. It enriches the moment but doesn't block progress. The player can miss it and still complete the step. This content is actually *well-suited* to appearing inside the relevant app — a message in the SIEM log viewer, a note appended to the ticket, a terminal response line.
+
+**Verdict: This content belongs inside the apps. It rewards players who read carefully and doesn't penalize those who don't.**
+
+### Role 3 — The Kill Chain Debrief
+*"You had the thread in your hands at PHI-007."*
+
+This is a cinematic beat. It requires the player's full attention and shouldn't compete with interactive UI elements. It needs a moment that feels deliberately *outside* the normal workflow — a signal that the game is pausing to speak to them directly.
+
+**Verdict: This content needs its own space, but not necessarily a permanent panel.**
+
+---
+
+## The Recommended Hybrid Architecture
+
+Rather than choosing one solution, give Rivera a **mode-switching presence** that matches her role at each moment.
+
+### The Persistent Comms Strip (Roles 1 + passive Role 2)
+A slim, single-line bar anchored to the bottom of the screen — think a status bar that's been repurposed for human communication. It's narrow enough that it doesn't feel like a separate panel imposing on the OS aesthetic, but it's always visible regardless of which app is open.
+
+Directional guidance lives here. It updates as steps complete. The player always has their current instruction in peripheral vision without needing to open anything.
+
+The key detail: style it to look like an internal chat client notification — something that plausibly exists within the OS fiction. A blinking avatar icon, a timestamp, Rivera's handle. It reads as *part of the OS*, not as a tutorial overlay, because within the world of the game, a senior analyst pinging a trainee over internal comms is exactly what would happen.
+
+### In-App Contextual Messages (Role 2)
+When Rivera's commentary is tied to a specific tool, surface it *inside that tool* as a system-generated annotation.
+
+In the SIEM, her note appears as a pinned log entry with a different color flag — styled like an analyst comment in a real log review system. In the Terminal, her guidance appears as a response line after a command executes, indistinguishable in format from system output until the player reads it. In the Ticket Queue, her notes appear as internal comments on the ticket thread.
+
+This approach does something the dedicated panel never can: it teaches the player *where to look* in each app. By the time the tutorial ends, they've learned the information architecture of every tool not just by using it, but by finding Rivera's messages within it.
+
+### The Full-Screen Debrief Modal (Role 3)
+For the Kill Chain debrief and certification moments only, a modal overlay takes the screen. This is used *at most three times* in the entire tutorial — sparingly enough that when it fires, the player recognizes it as significant. It's styled as an official internal communication: a formatted incident review document, Rivera's analyst ID at the top, timestamp, formal language with one human line at the bottom.
+
+The rarity is the feature. If the modal appears constantly, it becomes the tutorial popup players click through without reading. If it appears twice, players stop and read it both times.
+
+---
+
+## What This Solves Architecturally
+
+The hybrid approach resolves a problem that neither pure solution handles well.
+
+A **dedicated panel** that's always visible solves the clarity problem but creates an aesthetic one — it reads as "game tutorial mode," which subtly tells the player they're being hand-held rather than doing real work. It also competes for screen space with the tools the player is actually using.
+
+**Full integration** into apps solves the aesthetic problem but creates a functional one — when a player needs to know what to do next, they can't be expected to open the right app to find out. Onboarding that requires the user to already know where to look has already failed.
+
+The comms strip threads this needle. It's persistent without being dominant. It's styled as diegetic — *a real thing that exists in this OS* — rather than as a tutorial overlay floating above the simulation. And it frees the in-app integrations to do the more interesting work of making Rivera feel like a genuine colleague rather than a floating instruction box.
+
+---
+
+## One Detail Worth Protecting
+
+However you implement it, Rivera's messages inside the apps should **never auto-close or time out**. The comms strip can update and move on. But an analyst comment attached to a SIEM log entry or a ticket thread should persist exactly as a real comment would — available to re-read, reference, and return to. 
+
+This has a practical benefit during the Kill Chain arc: when the player is tracing MAL-019 back to PHI-007, Rivera's original comment on that ticket ("Low severity. These are usually nothing.") is still there, unchanged. The player re-reads it in a completely different context and it hits differently the second time. That retroactive recontextualization is one of the most powerful tools in tutorial design — and it only works if the message was never cleaned up.

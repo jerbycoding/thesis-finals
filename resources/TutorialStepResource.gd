@@ -12,7 +12,10 @@ enum TriggerType {
 	LOG_ATTACHED, 
 	COMMAND_RUN, 
 	HOST_SELECTED,
-	TICKET_COMPLETED
+	TICKET_COMPLETED,
+	ROOT_CAUSE_SUBMITTED,
+	DECRYPTION_COMPLETED,
+	LOG_READ
 }
 
 @export_group("Narrative")
@@ -39,6 +42,8 @@ enum HighlightTier {
 @export var icon_glow_name: String = ""
 
 @export_group("Logic")
+## Optional delay before this step's instructions are shown and trigger is active.
+@export var delay_before_start: float = 0.0
 ## The type of event that advances this step.
 @export var trigger_type: TriggerType = TriggerType.NONE
 ## The specific ID needed to trigger (e.g., 'tickets', 'TRN-001', 'scan').

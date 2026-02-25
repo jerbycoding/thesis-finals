@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="TicketResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/tickets/TicketResource.gd" id="1_ticket"]
+
+[resource]
+script = ExtResource("1_ticket")
+ticket_id = "TRN-005"
+title = "CRITICAL: Ransomware Detected"
+description = "URGENT: WORKSTATION-T is reporting a critical file encryption event. This matches the phishing indicators from the previous report. You MUST identify the Command & Control (C2) server and recover the files."
+severity = "Critical"
+category = "Ransomware"
+steps = ["Isolate WORKSTATION-T", "Identify C2 IP using netstat", "Recover files via Decryption"]
+required_tool = "decrypt"
+base_time = 900.0
+hidden_risks = []
+required_log_ids = []
+required_host_isolation = "WORKSTATION-T"
+required_root_cause = "{attacker_ip}"
+kill_chain_path = "Phishing Escalation"
+kill_chain_stage = 3

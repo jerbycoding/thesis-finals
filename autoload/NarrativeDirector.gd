@@ -195,8 +195,8 @@ func _schedule_next_event():
 		# until the TutorialManager says we are finished.
 		if TutorialManager and TutorialManager.is_tutorial_active:
 			if next_event.get("type") == GlobalConstants.NARRATIVE_EVENT_TYPE.SHIFT_END:
-				if TutorialManager.current_step != TutorialManager.TutorialStep.COMPLETE:
-					# Hold the shift open!
+				# Keep the shift open until the final debrief is COMPLETED (not just reached)
+				if TutorialManager.current_step_index < TutorialManager.sequence.steps.size() - 1:
 					return
 
 		if next_event.has("time"):

@@ -228,6 +228,35 @@ layout_mode = 2
 theme_override_constants/h_separation = 10
 theme_override_constants/v_separation = 10
 
+[node name="RootCauseBox" type="VBoxContainer" parent="Background/VBox/Content/DetailPanel/DetailView/DetailMargin/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Label" type="Label" parent="Background/VBox/Content/DetailPanel/DetailView/DetailMargin/VBox/RootCauseBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.75)
+theme_override_font_sizes/font_size = 11
+text = "ROOT CAUSE IDENTIFICATION"
+
+[node name="HBox" type="HBoxContainer" parent="Background/VBox/Content/DetailPanel/DetailView/DetailMargin/VBox/RootCauseBox"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="RootCauseEdit" type="LineEdit" parent="Background/VBox/Content/DetailPanel/DetailView/DetailMargin/VBox/RootCauseBox/HBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "ENTER DISCOVERED INDICATOR (IP/DOMAIN)..."
+alignment = 1
+
+[node name="RootCauseStatus" type="Label" parent="Background/VBox/Content/DetailPanel/DetailView/DetailMargin/VBox/RootCauseBox/HBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.3, 0.3, 1)
+theme_override_font_sizes/font_size = 10
+text = "REQUIRED"
+
 [node name="CompletionModal" parent="." instance=ExtResource("2_modal")]
 unique_name_in_owner = true
 visible = false

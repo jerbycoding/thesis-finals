@@ -1,6 +1,7 @@
 # TutorialHUD.gd
 extends Control
 
+@onready var task_container: Control = $TaskContainer
 @onready var task_label: Label = %TaskLabel
 @onready var step_counter: Label = %StepCounter
 @onready var progress_bar: ProgressBar = %ProgressBar
@@ -15,12 +16,29 @@ func _ready():
 	
 	if TutorialManager:
 		TutorialManager.step_changed.connect(_on_step_changed)
+	
+	EventBus.game_mode_changed.connect(_on_game_mode_changed_internal)
+	_update_layout()
 
 func show_hud():
 	show()
 	var tween = create_tween()
 	tween.tween_property(self, "modulate:a", 1.0, 0.5)
 	animation_player.play("slide_in")
+	_update_layout()
+
+func _on_game_mode_changed_internal(_mode: int):
+	_update_layout()
+
+func _update_layout():
+	if not task_container: return
+	
+	if GameState and GameState.is_in_2d_mode():
+		# Hide the objective block because the Computer Sidebar handles it
+		task_container.hide()
+	else:
+		# Show the objective block when roaming the 3D office
+		task_container.show()
 
 func hide_hud():
 	var tween = create_tween()

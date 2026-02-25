@@ -23,6 +23,21 @@ corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Glow"]
+bg_color = Color(0, 1, 1, 0.0392157)
+draw_center = false
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 1, 1, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+shadow_color = Color(0, 1, 1, 0.313726)
+shadow_size = 8
+
 [node name="TicketCard" type="PanelContainer"]
 custom_minimum_size = Vector2(0, 120)
 offset_right = 350.0
@@ -31,6 +46,13 @@ size_flags_horizontal = 3
 mouse_filter = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_Card")
 script = ExtResource("1_coujv")
+
+[node name="GlowFrame" type="Panel" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_Glow")
 
 [node name="Layout" type="HBoxContainer" parent="."]
 layout_mode = 2

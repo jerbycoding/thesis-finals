@@ -4,6 +4,21 @@
 [ext_resource type="PackedScene" path="res://scenes/2d/apps/components/ForensicReportModal.tscn" id="2_modal"]
 [ext_resource type="Theme" uid="uid://dny3rlbltexc7" path="res://assets/themes/EnterpriseTheme.tres" id="3_theme"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Glow"]
+bg_color = Color(0, 1, 1, 0.0588235)
+draw_center = false
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0, 1, 1, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+shadow_color = Color(0, 1, 1, 0.470588)
+shadow_size = 12
+
 [node name="App_EmailAnalyzer" type="Control"]
 custom_minimum_size = Vector2(850, 600)
 layout_mode = 3
@@ -137,17 +152,53 @@ layout_mode = 2
 size_flags_horizontal = 3
 text = "View Headers"
 
+[node name="GlowHeaders" type="Panel" parent="MainLayout/DetailPanel/Margin/VBox/EmailDetailView/InspectionTools/ViewHeadersButton"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_Glow")
+
 [node name="ScanAttachmentsButton" type="Button" parent="MainLayout/DetailPanel/Margin/VBox/EmailDetailView/InspectionTools"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Scan Attachments"
 
+[node name="GlowAttachments" type="Panel" parent="MainLayout/DetailPanel/Margin/VBox/EmailDetailView/InspectionTools/ScanAttachmentsButton"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_Glow")
+
 [node name="CheckLinksButton" type="Button" parent="MainLayout/DetailPanel/Margin/VBox/EmailDetailView/InspectionTools"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Check Links"
+
+[node name="GlowLinks" type="Panel" parent="MainLayout/DetailPanel/Margin/VBox/EmailDetailView/InspectionTools/CheckLinksButton"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_Glow")
 
 [node name="DecisionButtons" type="HBoxContainer" parent="MainLayout/DetailPanel/Margin/VBox/EmailDetailView"]
 unique_name_in_owner = true

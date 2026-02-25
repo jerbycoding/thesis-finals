@@ -1,77 +1,99 @@
-[gd_scene load_steps=10 format=3 uid="uid://dd8xpqqoldorn"]
+[gd_scene load_steps=12 format=3 uid="uid://dd8xpqqoldorn"]
 
 [ext_resource type="Script" uid="uid://co0dk525653jw" path="res://scripts/ui/CertificationSummary.gd" id="1_script"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_BG"]
-bg_color = Color(0, 0, 0, 0.4)
+bg_color = Color(0, 0.02, 0.05, 0.85)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Panel"]
-content_margin_left = 40.0
-content_margin_top = 40.0
-content_margin_right = 40.0
-content_margin_bottom = 40.0
-bg_color = Color(0.992157, 0.992157, 0.992157, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0, 0, 0, 1)
-corner_radius_top_left = 2
-corner_radius_top_right = 2
-corner_radius_bottom_right = 2
-corner_radius_bottom_left = 2
-shadow_color = Color(0, 0, 0, 0.1)
-shadow_size = 8
-shadow_offset = Vector2(0, 4)
-
-[sub_resource type="StyleBoxLine" id="StyleBoxLine_Header"]
-thickness = 2
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_TabContent"]
-content_margin_left = 20.0
-content_margin_top = 20.0
-content_margin_right = 20.0
-content_margin_bottom = 20.0
-bg_color = Color(1, 1, 1, 1)
+content_margin_left = 2.0
+content_margin_top = 2.0
+content_margin_right = 2.0
+content_margin_bottom = 2.0
+bg_color = Color(0.02, 0.05, 0.08, 1)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.866667, 0.866667, 0.866667, 1)
+border_color = Color(0, 0.6, 1, 0.3)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+shadow_color = Color(0, 0.4, 1, 0.05)
+shadow_size = 20
+shadow_offset = Vector2(0, 4)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_TabActive"]
-content_margin_left = 15.0
-content_margin_right = 15.0
-bg_color = Color(0, 0, 0, 1)
-corner_radius_top_left = 2
-corner_radius_top_right = 2
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Header"]
+bg_color = Color(0, 0.423529, 1, 0.117647)
+border_width_bottom = 2
+border_color = Color(0, 0.6, 1, 0.5)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_TabInactive"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Badge"]
+bg_color = Color(0, 1, 0.4, 0.0392157)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 1, 0.4, 0.4)
+corner_radius_top_left = 100
+corner_radius_top_right = 100
+corner_radius_bottom_right = 100
+corner_radius_bottom_left = 100
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Metric"]
 content_margin_left = 15.0
+content_margin_top = 10.0
 content_margin_right = 15.0
-bg_color = Color(0.933333, 0.933333, 0.933333, 1)
-border_width_bottom = 1
-border_color = Color(0, 0, 0, 1)
-corner_radius_top_left = 2
-corner_radius_top_right = 2
+content_margin_bottom = 10.0
+bg_color = Color(0.05, 0.08, 0.12, 1)
+border_width_left = 3
+border_color = Color(0, 0.6, 1, 0.8)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Ticker"]
+bg_color = Color(0, 0, 0, 0.392157)
+border_width_top = 1
+border_color = Color(1, 1, 1, 0.05)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_Focus"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ButtonHover"]
-content_margin_left = 30.0
-content_margin_top = 12.0
-content_margin_right = 30.0
+content_margin_left = 40.0
+content_margin_top = 15.0
+content_margin_right = 40.0
+content_margin_bottom = 15.0
+bg_color = Color(0, 0.6, 1, 1)
+skew = Vector2(0.1, 0)
+border_width_bottom = 4
+border_color = Color(0, 0.3, 0.7, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+shadow_color = Color(0, 0.4, 1, 0.2)
+shadow_size = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ButtonPressed"]
+content_margin_left = 40.0
+content_margin_top = 18.0
+content_margin_right = 40.0
 content_margin_bottom = 12.0
-bg_color = Color(0.101961, 0.101961, 0.101961, 1)
+bg_color = Color(0, 0.3, 0.6, 1)
+skew = Vector2(0.1, 0)
 corner_radius_top_left = 2
 corner_radius_top_right = 2
 corner_radius_bottom_right = 2
 corner_radius_bottom_left = 2
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Button"]
-content_margin_left = 30.0
-content_margin_top = 12.0
-content_margin_right = 30.0
-content_margin_bottom = 12.0
-bg_color = Color(0, 0, 0, 1)
+content_margin_left = 40.0
+content_margin_top = 15.0
+content_margin_right = 40.0
+content_margin_bottom = 15.0
+bg_color = Color(0, 0.4, 0.8, 1)
+skew = Vector2(0.1, 0)
+border_width_bottom = 4
+border_color = Color(0, 0.2, 0.5, 1)
 corner_radius_top_left = 2
 corner_radius_top_right = 2
 corner_radius_bottom_right = 2
@@ -90,112 +112,211 @@ script = ExtResource("1_script")
 layout_mode = 2
 
 [node name="MainPanel" type="PanelContainer" parent="Center"]
-custom_minimum_size = Vector2(850, 550)
+custom_minimum_size = Vector2(950, 600)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_Panel")
 
 [node name="VBox" type="VBoxContainer" parent="Center/MainPanel"]
 layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Header" type="PanelContainer" parent="Center/MainPanel/VBox"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_Header")
+
+[node name="HBox" type="HBoxContainer" parent="Center/MainPanel/VBox/Header"]
+layout_mode = 2
 theme_override_constants/separation = 20
 
-[node name="Header" type="VBoxContainer" parent="Center/MainPanel/VBox"]
+[node name="Padding" type="Control" parent="Center/MainPanel/VBox/Header/HBox"]
+custom_minimum_size = Vector2(20, 0)
 layout_mode = 2
-theme_override_constants/separation = 4
 
-[node name="Title" type="Label" parent="Center/MainPanel/VBox/Header"]
+[node name="TitleVBox" type="VBoxContainer" parent="Center/MainPanel/VBox/Header/HBox"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="Title" type="Label" parent="Center/MainPanel/VBox/Header/HBox/TitleVBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 28
-text = "OPERATIONS READINESS BRIEFING"
-horizontal_alignment = 1
+text = "PERSONNEL CLEARANCE DOSSIER"
+vertical_alignment = 1
 
-[node name="Subtitle" type="Label" parent="Center/MainPanel/VBox/Header"]
+[node name="ID" type="Label" parent="Center/MainPanel/VBox/Header/HBox/TitleVBox"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.4, 0.4, 0.4, 1)
-theme_override_font_sizes/font_size = 13
-text = "TIER 1 CERTIFICATION COMPLETE // INITIALIZING LIVE DEPLOYMENT"
-horizontal_alignment = 1
+theme_override_colors/font_color = Color(0, 0.6, 1, 0.8)
+theme_override_font_sizes/font_size = 12
+text = "STATUS: GRANTED // CLEARANCE: TIER 1 JUNIOR ANALYST // UID: 07-SHADOW"
+vertical_alignment = 1
 
-[node name="HSeparator" type="HSeparator" parent="Center/MainPanel/VBox/Header"]
+[node name="Badge" type="Panel" parent="Center/MainPanel/VBox/Header/HBox"]
+custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
-theme_override_styles/separator = SubResource("StyleBoxLine_Header")
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_Badge")
 
-[node name="TabContainer" type="TabContainer" parent="Center/MainPanel/VBox"]
+[node name="Label" type="Label" parent="Center/MainPanel/VBox/Header/HBox/Badge"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 1, 0.4, 1)
+theme_override_font_sizes/font_size = 10
+text = "LEVEL 1
+VALID"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Padding2" type="Control" parent="Center/MainPanel/VBox/Header/HBox"]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+
+[node name="ContentArea" type="HBoxContainer" parent="Center/MainPanel/VBox"]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_colors/font_unselected_color = Color(0.4, 0.4, 0.4, 1)
-theme_override_colors/font_selected_color = Color(1, 1, 1, 1)
-theme_override_styles/panel = SubResource("StyleBoxFlat_TabContent")
-theme_override_styles/tab_selected = SubResource("StyleBoxFlat_TabActive")
-theme_override_styles/tab_unselected = SubResource("StyleBoxFlat_TabInactive")
-current_tab = 0
+theme_override_constants/separation = 0
 
-[node name="THE TOOLS" type="RichTextLabel" parent="Center/MainPanel/VBox/TabContainer"]
+[node name="LeftColumn" type="VBoxContainer" parent="Center/MainPanel/VBox/ContentArea"]
 layout_mode = 2
-theme_override_colors/default_color = Color(0.101961, 0.101961, 0.101961, 1)
-theme_override_constants/line_separation = 6
+size_flags_horizontal = 3
+theme_override_constants/separation = 15
+
+[node name="Padding" type="Control" parent="Center/MainPanel/VBox/ContentArea/LeftColumn"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="SecHeader" type="Label" parent="Center/MainPanel/VBox/ContentArea/LeftColumn"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.6, 1, 1)
+theme_override_font_sizes/font_size = 16
+text = "  [ PERFORMANCE METRICS ]"
+
+[node name="Metric1" type="PanelContainer" parent="Center/MainPanel/VBox/ContentArea/LeftColumn"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_Metric")
+
+[node name="VBox" type="VBoxContainer" parent="Center/MainPanel/VBox/ContentArea/LeftColumn/Metric1"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Center/MainPanel/VBox/ContentArea/LeftColumn/Metric1/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.6, 0.8, 1, 1)
+theme_override_font_sizes/font_size = 11
+text = "OPERATIONAL ACCURACY"
+
+[node name="Value" type="Label" parent="Center/MainPanel/VBox/ContentArea/LeftColumn/Metric1/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 20
+text = "100% - SUPERIOR"
+
+[node name="Metric2" type="PanelContainer" parent="Center/MainPanel/VBox/ContentArea/LeftColumn"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_Metric")
+
+[node name="VBox" type="VBoxContainer" parent="Center/MainPanel/VBox/ContentArea/LeftColumn/Metric2"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Center/MainPanel/VBox/ContentArea/LeftColumn/Metric2/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.6, 0.8, 1, 1)
+theme_override_font_sizes/font_size = 11
+text = "PROCEDURAL DISCIPLINE"
+
+[node name="Value" type="Label" parent="Center/MainPanel/VBox/ContentArea/LeftColumn/Metric2/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 20
+text = "SOP_COMPLIANT"
+
+[node name="Metric3" type="PanelContainer" parent="Center/MainPanel/VBox/ContentArea/LeftColumn"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_Metric")
+
+[node name="VBox" type="VBoxContainer" parent="Center/MainPanel/VBox/ContentArea/LeftColumn/Metric3"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Center/MainPanel/VBox/ContentArea/LeftColumn/Metric3/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.6, 0.8, 1, 1)
+theme_override_font_sizes/font_size = 11
+text = "THREAT NEUTRALIZATION"
+
+[node name="Value" type="Label" parent="Center/MainPanel/VBox/ContentArea/LeftColumn/Metric3/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 20
+text = "5 / 5 OBJECTIVES"
+
+[node name="RightColumn" type="VBoxContainer" parent="Center/MainPanel/VBox/ContentArea"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 15
+
+[node name="Padding" type="Control" parent="Center/MainPanel/VBox/ContentArea/RightColumn"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="SecHeader" type="Label" parent="Center/MainPanel/VBox/ContentArea/RightColumn"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.6, 1, 1)
+theme_override_font_sizes/font_size = 16
+text = "  [ ACTIVE AUTHORIZATIONS ]"
+
+[node name="Authorizations" type="RichTextLabel" parent="Center/MainPanel/VBox/ContentArea/RightColumn"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/default_color = Color(0.8, 0.9, 1, 1)
+theme_override_constants/line_separation = 8
+theme_override_font_sizes/normal_font_size = 14
 bbcode_enabled = true
-text = "[b][color=#000000]SIEM LOG VIEWER[/color][/b]
-The source of forensic truth. Locate events that match your investigation. [color=#666666]DRAG[/color] logs onto tickets to build a case.
+text = "[b]✓ SIEM FORENSICS[/b]
+Full ring-buffer access granted.
 
-[b][color=#000000]EMAIL ANALYZER[/color][/b]
-Where threats are first identified. Don't just read—analyze. Use [i]Check Links[/i] and [i]View Headers[/i] to find hidden IPs and hostnames.
+[b]✓ ENDPOINT TERMINAL[/b]
+Level 1 command execution enabled.
 
-[b][color=#000000]TERMINAL[/color][/b]
-Your active defense system. 
-- [code]scan [hostname][/code]: Verify if a host is actually infected.
-- [code]isolate [hostname][/code]: Disconnect a threat from the network immediately.
+[b]✓ DECRYPTION PROTOCOLS[/b]
+Auth-key usage authorized for Ransomware recovery.
 
-[b][color=#000000]NETWORK MAP[/color][/b]
-Real-time topology. Monitor host statuses (Clean, Suspicious, Infected, Isolated) to maintain situational awareness."
-metadata/_tab_index = 0
+[b]✓ NETWORK TOPOLOGY[/b]
+Real-time host monitoring authorized.
 
-[node name="THE RULES" type="RichTextLabel" parent="Center/MainPanel/VBox/TabContainer"]
-visible = false
+[color=#006CFF]> [i]Your account has been migrated to the Live SOC environment. Prepare for deployment.[/i][/color]"
+
+[node name="Ticker" type="PanelContainer" parent="Center/MainPanel/VBox"]
+custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
-theme_override_colors/default_color = Color(0.101961, 0.101961, 0.101961, 1)
-theme_override_constants/line_separation = 6
-bbcode_enabled = true
-text = "[b][color=#2E7D32]COMPLIANT RESOLUTION[/color][/b]
-Slow but perfect. Requires all evidence. [color=#2E7D32]+ Integrity Bonus.[/color]
+theme_override_styles/panel = SubResource("StyleBoxFlat_Ticker")
 
-[b][color=#F57C00]EFFICIENT RESOLUTION[/color][/b]
-Fast but risky. Resolves the ticket quickly but may miss hidden threats. No integrity bonus.
-
-[b][color=#C62828]EMERGENCY PROTOCOL[/color][/b]
-Instant containment. Forces the ticket closed immediately. Use only when the network is collapsing. [color=#C62828]Large Integrity Penalty.[/color]
-
-[b][color=#006CFF]PROCEDURAL VIOLATIONS[/color][/b]
-Executing high-risk commands (like Isolate) without forensic justification (Scan) will damage organization stability and trigger internal audits."
-metadata/_tab_index = 1
-
-[node name="THE KILL CHAIN" type="RichTextLabel" parent="Center/MainPanel/VBox/TabContainer"]
-visible = false
+[node name="Label" type="Label" parent="Center/MainPanel/VBox/Ticker"]
 layout_mode = 2
-theme_override_colors/default_color = Color(0.101961, 0.101961, 0.101961, 1)
-theme_override_constants/line_separation = 6
-bbcode_enabled = true
-text = "[b]THREAT EVOLUTION[/b]
-If a ticket is ignored or resolved incorrectly, the threat matures.
+theme_override_colors/font_color = Color(0, 0.6, 1, 0.5)
+theme_override_font_sizes/font_size = 11
+text = "  LOG: SYNCING_USER_PROFILE... OK | CLEARING_CACHE... OK | INITIALIZING_SHIFT_ONE... STANDBY..."
+vertical_alignment = 1
 
-[b]Stage 1: INFILTRATION[/b] - Initial access. Low impact.
-[b]Stage 2: PROPAGATION[/b] - Malware spreads to other hosts.
-[b]Stage 3: EXFILTRATION[/b] - Critical data loss. Huge integrity hit.
-[b]Stage 4: IMPACT[/b] - Systems go offline. Termination imminent.
-
-[b][color=#F57C00]BLACK TICKETS[/color][/b]
-Rare, high-stakes recovery assignments that offer a final chance to prevent organization bankruptcy after major breaches."
-metadata/_tab_index = 2
-
-[node name="Footer" type="CenterContainer" parent="Center/MainPanel/VBox"]
+[node name="Footer" type="PanelContainer" parent="Center/MainPanel/VBox"]
+custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
 
-[node name="StartButton" type="Button" parent="Center/MainPanel/VBox/Footer"]
+[node name="Center" type="CenterContainer" parent="Center/MainPanel/VBox/Footer"]
+layout_mode = 2
+
+[node name="StartButton" type="Button" parent="Center/MainPanel/VBox/Footer/Center"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_hover_color = Color(0.9, 0.9, 0.9, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 16
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 18
+theme_override_styles/focus = SubResource("StyleBoxEmpty_Focus")
 theme_override_styles/hover = SubResource("StyleBoxFlat_ButtonHover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_ButtonPressed")
 theme_override_styles/normal = SubResource("StyleBoxFlat_Button")
-text = "ACCEPT ASSIGNMENT & BEGIN SHIFT"
+text = "INITIALIZE LIVE OPERATIONS"

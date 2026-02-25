@@ -5,6 +5,16 @@
 [resource]
 script = ExtResource("1_page")
 page_id = "incidents"
-title = "INCIDENT CATALOG"
-content = "[b][color=#006CFF]RECOGNIZED THREATS[/color][/b]\n\n• [b]PHISH-001[/b]: Standard credential harvesting attempt.\n• [b]RANSOM-001[/b]: Host encryption. Requires Decryption module.\n• [b]INSIDER-001[/b]: Unauthorized project data access.\n• [b]DDOS-001[/b]: UDP flood. Requires immediate trace/isolate."
+title = "THREAT RECOGNITION CATALOG"
+content = "[b][color=#006CFF]COMMON ATTACK PATTERNS[/color][/b]
 
+• [b]PHISHING[/b]: Look for 'typosquatted' domains (e.g., [i]micros0ft.com[/i]) or urgent requests from 'Executives' using external email addresses.
+• [b]MALWARE[/b]: General malicious software. Detected via [color=cyan]Terminal Scan[/color]. Simple infections require isolation and clean-up.
+• [b]RANSOMWARE[/b]: A critical sub-type of Malware. Characterized by file encryption. Requires [color=cyan]Root Cause Verification[/color] and the [color=cyan]Decryption Tool[/color] to resolve.
+• [b]DATA EXFILTRATION[/b]: Watch the SIEM Volume Graphs for massive, sustained outbound traffic spikes to unknown external IPs.
+• [b]INSIDER THREAT[/b]: Unauthorized access attempts to high-value assets (Finance/Vault) by standard user accounts.
+
+[b][color=#006CFF]EMERGENCY RESPONSE CODES[/color][/b]
+• [b]CODE BLUE[/b]: Normal operations. 
+• [b]CODE RED[/b]: Active breach or data loss in progress. 
+• [b]CODE BLACK[/b]: Total SOC lockout / Administrative compromise."

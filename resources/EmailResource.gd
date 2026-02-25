@@ -15,6 +15,7 @@ enum ThreatCategory { BENIGN, PHISHING, SPEAR_PHISH, MALWARE }
 @export var threat_category: ThreatCategory = ThreatCategory.BENIGN
 @export var clues: Array[String] = [] # "suspicious_link", "bad_attachment", "spoofed_sender", "suspicious_domain"
 @export var related_ticket: String = "" # Optional ticket_id this email relates to
+@export var is_focused: bool = false # NEW: If true, shows in the 'Focused' inbox tab
 @export var suspicious_ip: String = "" # IP address found in headers (for cross-tool integration)
 @export var suspicious_domain: String = "" # Domain from links (for cross-tool integration)
 
@@ -33,9 +34,16 @@ func get_formatted_subject() -> String:
 	return subject.format(truth_packet)
 
 func get_formatted_body() -> String:
-	if truth_packet.is_empty():
-		return body
-	return body.format(truth_packet)
+	var text = body
+	if not truth_packet.is_empty():
+		text = body.format(truth_packet)
+	
+	# Tutorial Highlighting: Make the suspicious domain pop if we are in guided mode
+	if GameState and GameState.is_guided_mode and not suspicious_domain.is_empty():
+		var highlight = "[b][color=#00FFFF][pulse]%s[/pulse][/color][/b]" % suspicious_domain
+		text = text.replace(suspicious_domain, highlight)
+		
+	return text
 
 func get_sender_color() -> Color:
 	var s = sender.to_lower()

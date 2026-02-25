@@ -15,7 +15,8 @@ func _ready():
 	
 	print("DebugManager: Hybrid Navigation & HUD Active")
 	print("  - F1 / F2: Previous / Next Shift")
-	print("  - F9: Trigger Random Pool Event (Chaos)")
+	print("  - F7: Trigger Random Pool Event (Chaos)")
+	print("  - F8 / F9: Previous / Next Tutorial Step")
 	print("  - F10 / F11: Decrease / Increase Integrity (10%)")
 	print("  - F12: Toggle Debug HUD")
 	print("  - Shift + F1-F7: Week 1 Jumps")
@@ -65,6 +66,20 @@ func _input(event):
 	if event.keycode >= KEY_F1 and event.keycode <= KEY_F12:
 		print("DEBUG_INPUT: Captured %s (Shift: %s, Ctrl: %s)" % [OS.get_keycode_string(event.keycode), event.shift_pressed, event.ctrl_pressed])
 
+	# Tutorial Step Scrubbing (F8 / F9)
+	if event.keycode == KEY_F9:
+		if TutorialManager and TutorialManager.is_tutorial_active:
+			TutorialManager.debug_skip_step(1)
+			return
+	elif event.keycode == KEY_F8:
+		if TutorialManager and TutorialManager.is_tutorial_active:
+			TutorialManager.debug_skip_step(-1)
+			return
+	elif event.keycode == KEY_F6:
+		if TutorialManager and TutorialManager.is_tutorial_active:
+			TutorialManager.debug_skip_to_step(28)
+			return
+
 	# Toggle HUD (F12)
 	if event.keycode == KEY_F12:
 		is_hud_visible = !is_hud_visible
@@ -72,14 +87,14 @@ func _input(event):
 			debug_hud.visible = is_hud_visible
 		return
 
-	# sequential Navigation (F1 / F2) and Chaos Event (F9)
+	# sequential Navigation (F1 / F2) and Chaos Event (F7)
 	if not event.shift_pressed and not event.ctrl_pressed:
 		if event.keycode == KEY_F1:
 			_jump_previous_shift()
 		elif event.keycode == KEY_F2:
 			_jump_next_shift()
-		elif event.keycode == KEY_F9:
-			print("DEBUG: F9 pressed - Attempting to trigger Chaos Event")
+		elif event.keycode == KEY_F7:
+			print("DEBUG: F7 pressed - Attempting to trigger Chaos Event")
 			_trigger_chaos_event()
 		elif event.keycode == KEY_F10:
 			if IntegrityManager:
@@ -163,8 +178,15 @@ func _update_debug_hud():
 		
 		text += "[b]Vulnerability Buffer:[/b] %d / 10\n" % HeatManager.vulnerability_buffer.size()
 
+	# TUTORIAL INFO
+	if TutorialManager and TutorialManager.is_tutorial_active:
+		text += "[color=cyan]------------------------------------[/color]\n"
+		text += "[b]Tutorial:[/b] ACTIVE\n"
+		text += "[b]Step:[/b] %d / %d\n" % [TutorialManager.current_step, TutorialManager.sequence.steps.size() if TutorialManager.sequence else 0]
+		text += "[i][size=12]F8 / F9: Skip Back / Forward[/size][/i]\n"
+
 	text += "[color=gray]------------------------------------[/color]\n"
-	text += "[i][size=12]F1/F2: Prev/Next | F9: Chaos | F10/F11: Integrity | F12: HUD[/size][/i]"
+	text += "[i][size=12]F1/F2: Shifts | F7: Chaos | F8/F9: Tut | F12: HUD[/size][/i]"
 	
 	debug_label.text = text
 

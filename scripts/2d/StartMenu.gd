@@ -2,11 +2,9 @@ extends PanelContainer
 
 signal app_selected(app_id: String)
 
-@onready var app_list = %AppList
-@onready var pinned_grid = %PinnedGrid
+@onready var app_grid = %AppGrid
 
 var app_button_scene = preload("res://scenes/2d/StartMenuAppButton.tscn")
-var pinned_apps = ["siem", "email", "terminal", "network"]
 
 func _ready():
 	visible = false
@@ -52,8 +50,7 @@ func _populate_apps():
 	if not DesktopWindowManager: return
 	
 	# Clear
-	for child in app_list.get_children(): child.queue_free()
-	for child in pinned_grid.get_children(): child.queue_free()
+	for child in app_grid.get_children(): child.queue_free()
 		
 	# Get sorted apps
 	var apps = DesktopWindowManager.app_configs.keys()
@@ -62,14 +59,9 @@ func _populate_apps():
 	for app_id in apps:
 		var config = DesktopWindowManager.app_configs[app_id]
 		
-		# Create regular list button
+		# Create grid button
 		var btn = _create_app_button(app_id, config.title)
-		app_list.add_child(btn)
-		
-		# If pinned, add to grid too
-		if app_id in pinned_apps:
-			var p_btn = _create_app_button(app_id, config.title)
-			pinned_grid.add_child(p_btn)
+		app_grid.add_child(btn)
 
 func _create_app_button(app_id: String, title: String) -> Control:
 	var btn = app_button_scene.instantiate()
@@ -86,3 +78,11 @@ func _create_app_button(app_id: String, title: String) -> Control:
 	btn.setup(app_id, title)
 	
 	return btn
+
+func set_app_glow(app_id: String, active: bool):
+	# Search in unified Grid
+	for child in app_grid.get_children():
+		if "app_id" in child and child.app_id == app_id:
+			if child.has_method("set_glow"):
+				child.set_glow(active)
+				return # Found it

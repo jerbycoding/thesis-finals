@@ -5,6 +5,15 @@
 [resource]
 script = ExtResource("1_page")
 page_id = "network"
-title = "NETWORK TOPOLOGY MAPPING"
-content = "[b][color=#006CFF]VISUALIZATION[/color][/b]\nThe map visualizes organizational assets and real-time status.\n\n[b]INDICATORS:[/b]\n• [color=#2E7D32]Green/Cyan[/color]: Nominal status.\n• [color=#C62828]Red[/color]: Malware infection detected.\n• [color=#F57C00]Orange[/color]: Anomalous activity suspected.\n• [color=#666666]Gray[/color]: Host isolated from network."
+title = "NETWORK MAP GUIDE"
+content = "[b][color=#006CFF]ASSET MONITORING[/color][/b]
+The Network Mapper provides a real-time topology of our infrastructure. Use it to verify the results of your terminal commands.
 
+[b]NODE COLOR CODES:[/b]
+• [color=#2E7D32]GREEN[/color]: Asset is clean and communicating normally.
+• [color=#C62828]RED[/color]: Critical alert. Malware infection confirmed via scan.
+• [color=#F57C00]ORANGE[/color]: Suspicious activity detected. Needs investigation.
+• [color=#666666]GRAY[/color]: Asset is isolated. No traffic can enter or leave.
+
+[b][color=#006CFF]CRITICALITY INDICATORS[/color][/b]
+Servers with a larger icon represent [b]Critical Assets[/b]. Breaking these results in maximum Integrity loss."

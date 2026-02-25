@@ -8,6 +8,7 @@ signal ticket_selected(ticket: TicketResource)
 signal ticket_completed(ticket: TicketResource, completion_type: String, time_taken: float)
 signal ticket_ignored(ticket: TicketResource)
 signal ticket_timeout(ticket_id: String)
+signal ticket_state_updated(ticket: TicketResource)
 signal log_attached_to_ticket(ticket_id: String, log_id: String)
 signal log_detached_from_ticket(ticket_id: String, log_id: String)
 signal followup_ticket_creation_requested(ticket: TicketResource)
@@ -15,10 +16,13 @@ signal followup_ticket_creation_requested(ticket: TicketResource)
 # --- Log/Forensic Signals ---
 signal log_added(log: LogResource)
 signal log_reviewed(log_id: String)
+signal log_read(log: LogResource)
+signal logs_cleared()
 
 # --- Email Signals ---
 signal email_added(email: EmailResource)
 signal email_read(email: EmailResource)
+signal emails_cleared()
 signal email_inspected(email: EmailResource, type: String) # type: "headers", "attachments", "links"
 signal email_decision_processed(email: EmailResource, decision: String, inspection_state: Dictionary)
 
@@ -62,3 +66,6 @@ signal permissions_updated()
 signal transition_started()
 signal transition_completed()
 signal prepare_for_scene_change()
+
+# --- Tool Specific Signals ---
+signal decryption_completed(ticket_id: String)
