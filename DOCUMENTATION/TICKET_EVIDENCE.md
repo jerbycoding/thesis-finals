@@ -40,7 +40,7 @@ This document maps every Incident Ticket to its specific shift, required logs, a
 | Ticket ID             | SIEM Logs (Evidence)               | Email Analyzer? | SOC Terminal | Decrypt? |
 |:----------------------|:-----------------------------------|:---------------:|:-------------|:--------:|
 | **`AUTH-003`**        | `LOG-AUTH-004`                     |       NO        | NO           |    NO    |
-| **`INSIDER-001`**     | `LOG-JANE-DOE-A`, `LOG-EXFIL-JANE` |       NO        | NO           |    NO    |
+| **`INSIDER-001`**     | `LOG-JANE-DOE-ACCESS`, `LOG-EXFIL-JANE-DOE` |       NO        | NO           |    NO    |
 | **`SHADOW-IT-001`**   | `LOG-SHADOW-001`                   |       NO        | NO           |    NO    |
 | **`SPEAR-PHISH-003`** | `LOG-SPEAR-003`                    |     **YES**     | NO           |    NO    |
 
@@ -70,7 +70,7 @@ This document maps every Incident Ticket to its specific shift, required logs, a
 |:-----------------------|:---------------------|:---------------:|:------------------------|:--------:|
 | **`SUPPLY-CHAIN-004`** | `LOG-SYS-004`        |     **YES**     | NO                      |    NO    |
 | **`DNS-SPOOF-001`**    | `LOG-DNS-SPOOF-01`   |       NO        | **YES** (trace/isolate) |    NO    |
-| **`SERVICE-FLAP-001`** | N/A                  |       NO        | NO                      |    NO    |
+| **`SERVICE-FLAP-001`** | **MANDATORY ISOLATION** |       NO        | NO                      |    NO    |
 
 ---
 
@@ -81,7 +81,7 @@ This document maps every Incident Ticket to its specific shift, required logs, a
 | **`VIP-LAPTOP-001`** | `LOG-VIP-BEACON-01`  |       NO        | **YES** (isolate) |    NO    |
 | **`ESP-023`**        | `LOG-O365-001`       |     **YES**     | NO                |    NO    |
 | **`ESPIONAGE-002`**  | `LOG-ESP-002A`, `B`  |       NO        | NO                |    NO    |
-| **`RANSOM-VIP-001`** | N/A                  |       NO        | **YES** (isolate) | **YES**  |
+| **`RANSOM-VIP-001`** | `LOG-RANSOM-VIP-001` |       NO        | **YES** (isolate) | **YES**  |
 
 ---
 
@@ -92,7 +92,7 @@ This document maps every Incident Ticket to its specific shift, required logs, a
 | **`ESPIONAGE-001`** | `LOG-ESP-001A`, `B`   |     **YES**     | **YES** (scan)    |    NO    |
 | **`LOG-WIPER-001`** | `LOG-WIPER-DELETE-01` |       NO        | **YES** (isolate) |    NO    |
 | **`ESPIONAGE-003`** | `LOG-ESP-03A`         |     **YES**     | NO                |    NO    |
-| **`SABOTAGE-001`**  | N/A                   |       NO        | **YES** (trace)   |    NO    |
+| **`SABOTAGE-001`**  | `LOG-SABOTAGE-001`    |       NO        | **YES** (trace)   |    NO    |
 | **`ESPIONAGE-004`** | `LOG-ESP-004A`, `B`   |     **YES**     | **YES** (isolate) |    NO    |
 
 ---
@@ -101,10 +101,10 @@ This document maps every Incident Ticket to its specific shift, required logs, a
 | Ticket ID                     | SIEM Logs (Evidence) | Email Analyzer? | SOC Terminal         | Decrypt? |
 |:------------------------------|:---------------------|:---------------:|:---------------------|:--------:|
 | **`ZERODAY-001`**             | `LOG-ZD-001A`, `B`   |     **YES**     | **YES** (scan/iso)   |    NO    |
-| **`KILL-SWITCH-001`**         | N/A                  |       NO        | **YES** (trace/term) |    NO    |
+| **`KILL-SWITCH-001`**         | `LOG-KILL-SWITCH-001` |       NO        | **YES** (trace/term) |    NO    |
 | **`ZERODAY-004`**             | `LOG-ZD-02B`         |     **YES**     | NO                   |    NO    |
 | **`ZERODAY-002`**             | `LOG-ZD-01A`         |     **YES**     | **YES** (term)       |    NO    |
-| **`CORE-MELTDOWN-001`**       | N/A                  |       NO        | **YES** (isolate)    |    NO    |
+| **`CORE-MELTDOWN-001`**       | `LOG-CORE-MELTDOWN-001` |       NO        | **YES** (isolate)    |    NO    |
 | **`ZERODAY-003`**             | `LOG-ZD-002A`, `B`   |     **YES**     | **YES** (isolate)    |    NO    |
 | **`ADMIN-LOCKOUT-001`**       | N/A                  |       NO        | NO                   | **YES**  |
 | **`ZERODAY-005`**             | `LOG-ZD-03C`         |     **YES**     | **YES** (isolate)    |    NO    |

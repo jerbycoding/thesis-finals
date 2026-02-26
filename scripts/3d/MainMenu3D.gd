@@ -56,7 +56,24 @@ func _on_game_loaded():
 	
 	if TransitionManager:
 		var shift_to_load = SaveSystem.loaded_shift_id if SaveSystem else ""
-		TransitionManager.play_secure_login("res://scenes/SOC_Office.tscn", shift_to_load)
+		var title = "[ RESUMING ACTIVE SESSION ]"
+		
+		# SMART TARGETING: Determine target scene based on shift requirements
+		var target_scene = "res://scenes/SOC_Office.tscn" # Default
+		
+		if NarrativeDirector and NarrativeDirector.shift_library.has(shift_to_load):
+			var res = NarrativeDirector.shift_library[shift_to_load]
+			
+			# If the shift requires a briefing, load the room directly to avoid double jumps
+			if res.briefing_dialogue_id != "" and res.briefing_dialogue_id != "default":
+				target_scene = "res://scenes/3d/BriefingRoom.tscn"
+			
+			# Handle physical shifts (Weekends)
+			if res.minigame_type == "AUDIT": target_scene = "res://scenes/3d/NetworkHub.tscn"
+			elif res.minigame_type == "RECOVERY": target_scene = "res://scenes/3d/ServerVault.tscn"
+		
+		# Pass shift_to_load as the narrative ID to trigger Dossier
+		TransitionManager.play_secure_login(target_scene, shift_to_load, title)
 
 func _input(event):
 	# Forward mouse clicks to the input bridge

@@ -49,6 +49,7 @@ func _initialize_engine():
 	EventBus.email_decision_processed.connect(_on_email_decision_processed)
 	EventBus.critical_host_isolated.connect(_on_critical_host_isolated)
 	EventBus.consequence_triggered.connect(_on_consequence_triggered_globally)
+	EventBus.campaign_ended.connect(func(_type): reset_to_default())
 
 	# Start the periodic evaluation loop
 	_start_evaluation_loop()

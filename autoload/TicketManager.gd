@@ -48,6 +48,10 @@ func _setup_system_connections():
 				stop_ambient_spawning()
 	)
 	EventBus.shift_ended.connect(_on_shift_ended)
+	EventBus.campaign_ended.connect(func(_type): 
+		stop_ambient_spawning()
+		clear_active_data()
+	)
 	EventBus.email_decision_processed.connect(_on_email_decision_processed)
 	EventBus.app_opened.connect(_on_app_opened)
 	
@@ -139,7 +143,7 @@ func _on_email_decision_processed(email: EmailResource, decision: String, _state
 func load_state(active_ids: Array, completed_ids: Array):
 	active_tickets.clear()
 	for timer in active_timers.values():
-		timer.queue_free()
+		if is_instance_valid(timer): timer.queue_free()
 	active_timers.clear()
 	completed_tickets.clear()
 	
@@ -154,6 +158,16 @@ func load_state(active_ids: Array, completed_ids: Array):
 		var res = ticket_id_map.get(tid)
 		if res:
 			var instance = res.duplicate()
+			
+			# Sprint 13 Fix: Initialize timestamps on load
+			# Since we don't store exact remaining time in the save yet, 
+			# we reset them to "Freshly Spawned" but difficulty-scaled.
+			var base_time = max(0.1, instance.base_time)
+			var final_time = HeatManager.get_scaled_time(base_time) if HeatManager else base_time
+			
+			instance.spawn_timestamp = Time.get_ticks_msec()
+			instance.expiry_timestamp = instance.spawn_timestamp + (final_time * 1000.0)
+			
 			active_tickets.append(instance)
 			_create_ticket_timer(instance)
 			
@@ -247,9 +261,12 @@ func add_ticket(ticket: TicketResource):
 	for t in active_tickets:
 		if t.ticket_id == ticket.ticket_id: return
 	
-	# 3. SET TIMESTAMPS
+	# 3. SET TIMESTAMPS (Sprint 13 Fix: Use Scaled Time)
+	var base_time = max(0.1, ticket.base_time)
+	var final_time = HeatManager.get_scaled_time(base_time) if HeatManager else base_time
+	
 	ticket.spawn_timestamp = Time.get_ticks_msec()
-	ticket.expiry_timestamp = ticket.spawn_timestamp + (ticket.base_time * 1000.0)
+	ticket.expiry_timestamp = ticket.spawn_timestamp + (final_time * 1000.0)
 	
 	active_tickets.append(ticket)
 	_create_ticket_timer(ticket)

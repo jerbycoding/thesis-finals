@@ -35,9 +35,22 @@ func _ready():
 	EventBus.terminal_command_executed.connect(_on_terminal_command_executed)
 	EventBus.email_decision_processed.connect(_on_email_decision_processed)
 	EventBus.app_opened.connect(func(_a, _w): play_sfx(SFX.ui_window_open, -5.0))
+	EventBus.campaign_ended.connect(func(_type): stop_all())
 	
 	# Start initial atmosphere (SOC Office)
 	update_ambient_audio(1)
+
+func stop_all():
+	print("AudioManager: [KILL SWITCH] Stopping all audio channels.")
+	music_player.stop()
+	ambient_player.stop()
+	footstep_player.stop()
+	
+	# Clean up any orphan SFX players (temporary children)
+	for child in get_children():
+		if child is AudioStreamPlayer and child not in [music_player, ambient_player, footstep_player, sfx_player]:
+			child.stop()
+			child.queue_free()
 
 func _setup_ambient_bus():
 	ambient_bus_index = AudioServer.get_bus_index("Ambient")

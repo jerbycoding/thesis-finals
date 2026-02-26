@@ -24,3 +24,7 @@ random_event_pool = [
 	{"event": "gossip_mole", "type": "system_event", "event_id": "GOSSIP_FLOOD", "duration": 60.0}
 ]
 next_shift_id = "shift_week2_friday"
+threat_title = "ANTI_FORENSICS"
+threat_description = "Active sabotage intended to hide an attacker's presence by deleting, encrypting, or corrupting digital evidence."
+threat_impact = "The 'Smoking Gun' is erased; investigators lose visibility, making it impossible to determine the attacker's origin."
+threat_indicators = ["Real-time SIEM log deletion detected.", "Silent 'Wiper' scripts running on servers.", "Corruption of 'LogReview' metadata flags."]

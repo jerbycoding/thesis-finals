@@ -26,3 +26,7 @@ random_event_pool = [
 	{"event": "urgent_noise", "type": "spawn_ticket", "ticket_id": "TICKET-NOISE-002"}
 ]
 next_shift_id = "shift_saturday"
+threat_title = "ZERO_DAY_EXPLOIT"
+threat_description = "An attack that exploits a previously unknown software vulnerability for which no patch or fix yet exists."
+threat_impact = "Can cause widespread systemic failure. Standard EDR and Antivirus signatures are ineffective during the initial breach."
+threat_indicators = ["Rapid encryption of production servers.", "Simultaneous DDoS traffic on core gateways.", "Unexplained crashes of critical services."]

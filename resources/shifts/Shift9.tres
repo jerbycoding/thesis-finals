@@ -21,3 +21,7 @@ random_event_pool = [
 	{"event": "terminal_glitch", "type": "system_event", "event_id": "POWER_FLICKER", "duration": 3.0}
 ]
 next_shift_id = "shift_week2_wednesday"
+threat_title = "SUPPLY_CHAIN"
+threat_description = "An attack targeting a third-party vendor or software provider to gain access to their downstream corporate clients."
+threat_impact = "Victims unintentionally install 'poisoned' updates from trusted vendors, leading to a massive, trusted breach."
+threat_indicators = ["Checksum mismatches in software updates.", "Unusual traffic to verified vendor domains.", "NetCore device recalls or firmware alerts."]

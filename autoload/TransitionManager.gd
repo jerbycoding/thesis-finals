@@ -1,13 +1,21 @@
 extends Node
 
 var transition_overlay = preload("res://scenes/ui/TransitionOverlay.tscn")
+var dossier_scene = preload("res://scenes/ui/ThreatIntelDossier.tscn")
 var overlay_instance = null
+var dossier_instance = null
 var is_transitioning = false
+var dossier_presented_this_sequence: bool = false # Sprint 13 Fix: Prevent double trigger
 
 func _ready():
 	overlay_instance = transition_overlay.instantiate()
 	get_tree().root.call_deferred("add_child", overlay_instance)
 	overlay_instance.hide()
+	
+	dossier_instance = dossier_scene.instantiate()
+	get_tree().root.call_deferred("add_child", dossier_instance)
+	dossier_instance.hide()
+	
 	print("TransitionManager ready")
 
 func enter_desktop_mode(computer_node):
@@ -174,6 +182,9 @@ func change_scene_to(path: String, narrative_to_start_after: String = "", title_
 	is_transitioning = true
 	EventBus.transition_started.emit()
 	
+	# Sprint 13 Fix: Reset suppression on fresh standard transitions
+	dossier_presented_this_sequence = false
+	
 	# IMMERSION CHECK: If in 2D mode (at computer), force exit before fading out
 	if GameState.is_in_2d_mode():
 		print(">>> TRANSITION IMMERSION: Forcing exit from desktop before scene change.")
@@ -181,38 +192,14 @@ func change_scene_to(path: String, narrative_to_start_after: String = "", title_
 		_force_stand_up()
 		await get_tree().create_timer(0.8).timeout # Wait for stand up animation
 	
-	# CLEANUP: Explicitly destroy the persistent desktop before changing scenes
-	if GameState.desktop_instance and is_instance_valid(GameState.desktop_instance):
-		print(">>> TRANSITION CLEANUP: Destroying persistent desktop session.")
-		GameState.desktop_instance.queue_free()
-		GameState.desktop_instance = null
-	
-	# CLEANUP SIGNAL: Let persistent UIs (like Desktop) kill themselves
-	EventBus.prepare_for_scene_change.emit()
-	
-	# Force mode reset and reference cleanup
-	if GameState:
-		GameState.reset_to_default()
-
-	# TITLE CARD LOGIC
-	if not title_card.is_empty():
-		overlay_instance.set_title_card(title_card)
-	else:
-		overlay_instance.set_title_card("")
+	# PERFORM CORE CLEANUP (Shared with secure login)
+	_perform_scene_cleanup(path, title_card)
 
 	overlay_instance.fade_in()
 	print(">>> TRANSITION FADE_IN: Waiting for fade-in to complete...")
 	await overlay_instance.fade_finished
+	EventBus.transition_obscured.emit()
 	print(">>> TRANSITION FADE_IN: Complete.")
-	
-	# AMBIENT AUDIO SWITCH: Determine floor from path
-	if AudioManager:
-		if "SOC_Office" in path or "WorkstationRoom" in path:
-			AudioManager.update_ambient_audio(1)
-		elif "ServerVault" in path:
-			AudioManager.update_ambient_audio(-1)
-		elif "NetworkHub" in path:
-			AudioManager.update_ambient_audio(-2)
 	
 	print(">>> TRANSITION SCENE_CHANGE: Changing scene in tree to '", path, "'...")
 	get_tree().change_scene_to_file(path)
@@ -237,11 +224,20 @@ func change_scene_to(path: String, narrative_to_start_after: String = "", title_
 		else:
 			push_error("TransitionManager: Cannot start narrative, NarrativeDirector not found!")
 
-func play_secure_login(target_path: String, narrative: String = ""):
+func play_secure_login(target_path: String, narrative: String = "", title_card: String = ""):
 	if is_transitioning: 
 		push_warning("TransitionManager: play_secure_login blocked. Target: " + target_path)
 		return
 	is_transitioning = true
+	EventBus.transition_started.emit()
+	
+	# IMMERSION CHECK: If in 2D mode, force stand up before overlay
+	if GameState.is_in_2d_mode():
+		_force_stand_up()
+		await get_tree().create_timer(0.8).timeout
+	
+	# PERFORM CORE CLEANUP (Shared with change_scene_to)
+	_perform_scene_cleanup(target_path, title_card)
 	
 	overlay_instance.show()
 	var login_ui = overlay_instance.get_node("%LoginContainer")
@@ -259,6 +255,7 @@ func play_secure_login(target_path: String, narrative: String = ""):
 	
 	overlay_instance.fade_in()
 	await overlay_instance.fade_finished
+	EventBus.transition_obscured.emit()
 	
 	# POLISHED LOADING SEQUENCE
 	var steps = [
@@ -309,6 +306,24 @@ func play_secure_login(target_path: String, narrative: String = ""):
 	
 	login_ui.visible = false
 	
+	# --- THREAT INTELLIGENCE DOSSIER PHASE ---
+	if not narrative.is_empty() and NarrativeDirector:
+		var shift_res = NarrativeDirector.shift_library.get(narrative)
+		# Sprint 13 Fix: Check if dossier was already presented in this chain
+		if shift_res and not shift_res.threat_title.is_empty() and not dossier_presented_this_sequence:
+			print(">>> THREAT_INTEL: Interrupting for shift dossier: ", shift_res.threat_title)
+			dossier_presented_this_sequence = true
+			
+			# Enforce UI-only mode for dossier interaction
+			GameState.set_mode(GameState.GameMode.MODE_UI_ONLY)
+			
+			dossier_instance.setup(shift_res)
+			dossier_instance.show_dossier() # Internal logic handles visibility
+			
+			# Wait for player to read and click proceed
+			await dossier_instance.acknowledged
+	# ------------------------------------------
+	
 	# Evaporate Matrix
 	if matrix:
 		await matrix.evaporate()
@@ -317,12 +332,47 @@ func play_secure_login(target_path: String, narrative: String = ""):
 	await overlay_instance.fade_finished
 	
 	is_transitioning = false
+	EventBus.transition_completed.emit()
+	
+	# Sprint 13 Fix: Clear suppression flag after the entire transition chain is complete
+	dossier_presented_this_sequence = false
 	
 	if not narrative.is_empty():
 		if NarrativeDirector:
+			print(">>> TRANSITION ACTION: Starting narrative '", narrative, "' after dossier.")
 			NarrativeDirector.prepare_shift(narrative)
 
 # INTERNAL HELPERS
+
+func _perform_scene_cleanup(target_path: String, title_card: String = ""):
+	# CLEANUP: Explicitly destroy the persistent desktop before changing scenes
+	if GameState.desktop_instance and is_instance_valid(GameState.desktop_instance):
+		print(">>> TRANSITION CLEANUP: Destroying persistent desktop session.")
+		GameState.desktop_instance.queue_free()
+		GameState.desktop_instance = null
+	
+	# CLEANUP SIGNAL: Let persistent UIs (like Desktop) kill themselves
+	EventBus.prepare_for_scene_change.emit()
+	
+	# Force mode reset and reference cleanup
+	if GameState:
+		GameState.reset_to_default()
+
+	# TITLE CARD LOGIC
+	if overlay_instance:
+		if not title_card.is_empty():
+			overlay_instance.set_title_card(title_card)
+		else:
+			overlay_instance.set_title_card("")
+
+	# AMBIENT AUDIO SWITCH: Determine floor from path
+	if AudioManager:
+		if "SOC_Office" in target_path or "WorkstationRoom" in target_path or "BriefingRoom" in target_path:
+			AudioManager.update_ambient_audio(1)
+		elif "ServerVault" in target_path:
+			AudioManager.update_ambient_audio(-1)
+		elif "NetworkHub" in target_path:
+			AudioManager.update_ambient_audio(-2)
 
 func _force_stand_up():
 	# Master Advice: Silent version of exit_desktop_mode for critical scene changes

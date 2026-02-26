@@ -156,7 +156,9 @@ func trigger_briefing(shift_id: String):
 	
 	# Transition to Briefing Room if not already there
 	if get_tree().current_scene.name != "BriefingRoom":
-		TransitionManager.change_scene_to("res://scenes/3d/BriefingRoom.tscn")
+		# Use secure login to trigger Dossier phase (Sprint 13 Fix)
+		var title = "[ " + shift_res.shift_name.to_upper() + " ]"
+		TransitionManager.play_secure_login("res://scenes/3d/BriefingRoom.tscn", shift_id, title)
 		await EventBus.transition_completed
 		
 		# Wait for the CISO to be ready in the new scene
@@ -275,6 +277,11 @@ func _on_consequence_triggered(consequence_id: String, _details: Dictionary):
 
 func _on_campaign_ended(type: String):
 	print("NarrativeDirector: Campaign ended with result: ", type)
+	
+	# Sprint 13 Fix: Force immediate shutdown of narrative logic
+	stop_shift()
+	reset_to_default()
+	
 	var scene_path = ENDING_SCENES.get(type, "res://scenes/3d/MainMenu3D.tscn")
 	
 	if TransitionManager:

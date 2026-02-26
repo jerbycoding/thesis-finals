@@ -15,5 +15,9 @@ event_sequence = [
 ]
 random_event_pool = []
 next_shift_id = "shift_sunday"
+threat_title = "PHYSICAL_BREACH"
+threat_description = "A compromise targeting the physical infrastructure, such as rogue hardware implants or misconfigured signal nodes."
+threat_impact = "Direct network tapping; bypassing all digital security layers by establishing a local physical presence."
+threat_indicators = ["Unidentified hardware attached to routers.", "Signal de-synchronization in secure zones.", "Rogue patch cables detected in restricted ports."]
 minigame_type = "AUDIT"
 required_floor = -2

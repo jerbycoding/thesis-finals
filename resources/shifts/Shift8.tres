@@ -23,3 +23,7 @@ random_event_pool = [
 	{"event": "isp_throttling", "type": "system_event", "event_id": "ISP_THROTTLING", "duration": 60.0}
 ]
 next_shift_id = "shift_week2_tuesday"
+threat_title = "PERSISTENCE"
+threat_description = "Advanced techniques used to maintain a long-term presence in a network despite reboots or standard malware cleanups."
+threat_impact = "Attackers resurface with evolved tools, exploiting the same vulnerabilities multiple times (Inheritance)."
+threat_indicators = ["Modified Registry 'Run' keys.", "Hidden scheduled tasks on workstations.", "Resurfacing of previously cleaned IPs."]

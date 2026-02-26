@@ -64,6 +64,7 @@ signal permissions_updated()
 
 # --- Transition Signals ---
 signal transition_started()
+signal transition_obscured()
 signal transition_completed()
 signal prepare_for_scene_change()
 

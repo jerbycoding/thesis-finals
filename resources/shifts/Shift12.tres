@@ -29,3 +29,7 @@ random_event_pool = [
 	{"event": "power_surge", "type": "system_event", "event_id": "POWER_FLICKER", "duration": 3.0}
 ]
 next_shift_id = "" # End of Content (Victory)
+threat_title = "TOTAL_WAR_SIEGE"
+threat_description = "A multi-vector 'Apocalypse Protocol' assault designed to simultaneously destroy every layer of corporate infrastructure."
+threat_impact = "Total business liquidation; 100% loss of operational capacity and organizational integrity."
+threat_indicators = ["Concurrent DDoS, Wiper, and Ransomware.", "Total administrative lockout from SOC accounts.", "Physical HVAC override causing thermal meltdowns."]

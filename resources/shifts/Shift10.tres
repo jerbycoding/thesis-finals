@@ -22,3 +22,7 @@ random_event_pool = [
 	{"event": "meeting_interruption", "type": "system_event", "event_id": "GOSSIP_FLOOD", "duration": 45.0}
 ]
 next_shift_id = "shift_week2_thursday"
+threat_title = "WHALING"
+threat_description = "A highly targeted form of Phishing aimed specifically at high-profile senior executives (the 'Big Fish' or 'Whales')."
+threat_impact = "Compromise of C-Suite accounts grants the attacker ultimate privilege, including access to vault keys and trade secrets."
+threat_indicators = ["Urgent requests for financial wire transfers.", "Spoofed emails from the CEO/CFO accounts.", "Access attempts on the Executive Vault subnet."]

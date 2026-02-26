@@ -15,5 +15,9 @@ event_sequence = [
 ]
 random_event_pool = []
 next_shift_id = "shift_week2_monday"
+threat_title = "STORAGE_FAILURE"
+threat_description = "The mechanical or logical failure of data storage arrays, often following a destructive Wiper or Ransomware attack."
+threat_impact = "Permanent loss of forensic history and backups; prevents the organization from reconstructing the incident timeline."
+threat_indicators = ["Disk parity errors in RAID configurations.", "Mechanical blade failure alerts in the vault.", "Inability to mount encrypted backup volumes."]
 minigame_type = "RECOVERY"
 required_floor = -1

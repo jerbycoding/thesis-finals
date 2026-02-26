@@ -25,3 +25,7 @@ random_event_pool = [
 	{"event": "senior_analyst_suspicion", "type": "npc_interaction", "npc_id": "senior_analyst", "dialogue_id": "default"}
 ]
 next_shift_id = "shift_friday"
+threat_title = "INSIDER_THREAT"
+threat_description = "Malicious activity conducted by a person with authorized access, or an attacker using stolen legitimate credentials."
+threat_impact = "High risk of data exfiltration; bypasses many external perimeter defenses like firewalls and email filters."
+threat_indicators = ["Accessing sensitive directories outside hours.", "Surges in Cloud Storage usage (Shadow IT).", "Mismatched user locations vs. IP origin."]

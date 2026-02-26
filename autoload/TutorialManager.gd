@@ -551,31 +551,37 @@ func _show_final_summary():
 	await summary.closed
 	layer.queue_free()
 	
-	# TRIGGER CLEANUP: Strip filters, tickets, and tutorial UI state
-	EventBus.shift_ended.emit({})
-	
+	# 1. Start the transition sequence first
 	if GameState and GameState.is_campaign_session:
 		print("TutorialManager: Promoting player to active duty (Shift 1).")
 		
-		# INITIAL CHECKPOINT: Save progress as beginning of Monday
-		if SaveSystem:
-			SaveSystem.save_game()
+		# Define promotion logic to run once screen is obscured
+		var on_obscured = func():
+			# TRIGGER CLEANUP: Strip filters and tutorial state while hidden
+			EventBus.shift_ended.emit({})
 			
-		# TRANSITION: Direct to CISO briefing room for Monday assignment
+			# INITIAL CHECKPOINT: Save progress as beginning of Monday
+			if SaveSystem:
+				SaveSystem.save_game()
+		
+		EventBus.transition_obscured.connect(on_obscured, CONNECT_ONE_SHOT)
+		
 		if TransitionManager:
-			TransitionManager.play_secure_login("res://scenes/3d/BriefingRoom.tscn", "shift_monday")
+			TransitionManager.play_secure_login("res://scenes/3d/BriefingRoom.tscn", "shift_monday", "[ SHIFT 1: MONDAY ]")
 	else:
 		print("TutorialManager: Standalone simulation complete. Returning to HQ.")
 		
-		# TOTAL REFRESH: Purge all training data/memory before returning to Title
-		if SaveSystem:
-			SaveSystem.new_game_setup()
+		var on_obscured = func():
+			# TOTAL REFRESH: Purge all training data/memory before returning to Title
+			if SaveSystem:
+				SaveSystem.new_game_setup()
+			EventBus.shift_ended.emit({})
+			
+		EventBus.transition_obscured.connect(on_obscured, CONNECT_ONE_SHOT)
 		
 		# IMMEDIATE TRANSITION: Back to Title Screen for a clean break
 		if TransitionManager:
 			TransitionManager.change_scene_to("res://scenes/3d/MainMenu3D.tscn")
-		else:
-			get_tree().change_scene_to_file("res://scenes/3d/MainMenu3D.tscn")
 
 func _update_visual_focus():
 	if not is_tutorial_active or not sequence: return

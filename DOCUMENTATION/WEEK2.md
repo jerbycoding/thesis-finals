@@ -46,12 +46,12 @@
 
 ### 🚦 Kill Chain Integrity Check (Week 2 Evolution)
 
-| Chain Name | Stage 1 (Mon/Tue) | Stage 2 (Wed/Thu) | Stage 3 (Fri) | Status |
-| :--- | :--- | :--- | :--- | :--- |
-| **Persistence** | `PHISH-LEGACY` | `MALWARE-POLY` | `RANSOM-ECHO` | **COMPLETE** |
-| **Executive** | `WHALING-001` | `VIP-LAPTOP-001` | `RANSOM-VIP` | **COMPLETE** |
-| **Sabotage** | `SUPPLY-CORRUPT` | `LOG-WIPER` | `KILL-SWITCH` | **COMPLETE** |
-| **Apocalypse** | `DNS-SPOOF` | `SABOTAGE-001` | `CORE-MELTDOWN` | **COMPLETE** |
+| Chain Name      | Stage 1 (Mon/Tue) | Stage 2 (Wed/Thu) | Stage 3 (Fri)   | Status       |
+|:----------------|:------------------|:------------------|:----------------|:-------------|
+| **Persistence** | `PHISH-LEGACY`    | `MALWARE-POLY`    | `RANSOM-ECHO`   | **COMPLETE** |
+| **Executive**   | `WHALING-001`     | `VIP-LAPTOP-001`  | `RANSOM-VIP`    | **COMPLETE** |
+| **Sabotage**    | `SUPPLY-CORRUPT`  | `LOG-WIPER`       | `KILL-SWITCH`   | **COMPLETE** |
+| **Apocalypse**  | `DNS-SPOOF`       | `SABOTAGE-001`    | `CORE-MELTDOWN` | **COMPLETE** |
 
 **Conclusion:**
 Week 2 provides a much higher "floor" for difficulty. The player is expected to handle Stage 2 and 3 threats immediately, with narrative stakes that impact their relationships with the main NPCs.

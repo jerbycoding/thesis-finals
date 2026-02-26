@@ -27,3 +27,7 @@ random_event_pool = [
 	{"event": "it_complaint", "type": "npc_interaction", "npc_id": "it_support", "dialogue_id": "default"}
 ]
 next_shift_id = "shift_wednesday"
+threat_title = "LOG_OBFUSCATION"
+threat_description = "The intentional generation of 'False Flag' events to flood security logs with benign or misleading data."
+threat_impact = "Analysts become distracted by high-volume noise, leading to critical alerts being overlooked or timed out."
+threat_indicators = ["Sudden surge in 'Info' level logs.", "Repeating generic error patterns.", "Alerts originating from non-critical subnets."]

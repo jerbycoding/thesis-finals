@@ -15,6 +15,6 @@ steps = ["Inspect headers for rotated domain", "Check SIEM for matching legacy I
 required_tool = "siem"
 base_time = 150.0
 hidden_risks = ["Dismissing as 'just another phish'"]
-required_log_ids = []
+required_log_ids = ["LOG-PHISH-001"]
 kill_chain_path = "Malware Persistence"
 kill_chain_stage = 1

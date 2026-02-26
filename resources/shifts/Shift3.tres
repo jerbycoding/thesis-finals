@@ -26,3 +26,7 @@ random_event_pool = [
 	{"event": "analyst_tip", "type": "npc_interaction", "npc_id": "senior_analyst", "dialogue_id": "default"}
 ]
 next_shift_id = "shift_thursday"
+threat_title = "LATERAL_MOVEMENT"
+threat_description = "The process by which an attacker pivots from a single compromised host to explore and control other systems in the network."
+threat_impact = "Enables the attacker to bypass internal segmentation and reach high-value targets like Finance or Database servers."
+threat_indicators = ["Active 'netstat' connections between workstations.", "Unusual RDP or SSH attempts.", "Internal IP scanning detected in SIEM."]

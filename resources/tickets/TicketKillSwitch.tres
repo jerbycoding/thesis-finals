@@ -15,6 +15,6 @@ steps = ["Trace 'rm -rf' command source", "Kill active SSH session", "Verify bac
 required_tool = "terminal"
 base_time = 90.0
 hidden_risks = ["Hesitation"]
-required_log_ids = []
+required_log_ids = ["LOG-KILL-SWITCH-001"]
 kill_chain_path = "Total Collapse"
 kill_chain_stage = 3

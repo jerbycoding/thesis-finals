@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="LogResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/logs/LogResource.gd" id="1_log"]
+
+[resource]
+script = ExtResource("1_log")
+log_id = "LOG-RANSOM-VIP-001"
+timestamp = "09:30:12"
+source = "Vault-Audit"
+category = "Security"
+message = "Unauthorized access attempt detected: CTO Private Key Vault. IP Origin: {attacker_ip}."
+severity = 5
+related_ticket = "RANSOM-VIP-001"
+hostname = "VAULT-SRV-01"
+ip_address = "{attacker_ip}"
+is_revealed = false

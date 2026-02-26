@@ -15,6 +15,6 @@ steps = ["Inspect email headers", "Check sender reputation", "Quarantine email"]
 required_tool = "email"
 base_time = 200.0
 hidden_risks = ["Approving malicious firmware"]
-required_log_ids = []
+required_log_ids = ["LOG-SYS-004"]
 kill_chain_path = "Supply Chain"
 kill_chain_stage = 1

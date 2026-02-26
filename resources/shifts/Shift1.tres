@@ -76,5 +76,9 @@ random_event_pool = Array[Dictionary]([{
 "type": "npc_interaction"
 }])
 next_shift_id = "shift_tuesday"
+threat_title = "PHISHING"
+threat_description = "Phishing is a type of social engineering where an attacker sends a fraudulent message designed to trick a person into revealing sensitive information or deploying malicious software on their infrastructure."
+threat_impact = "Phishing campaigns often lead to credential theft, unauthorized network access, and the deployment of ransomware. A single successful phish can compromise an entire corporate hierarchy."
+threat_indicators = Array[String](["Mismatched 'From' display names vs actual email addresses.", "Urgent or threatening language demanding immediate action.", "Links that point to suspicious or non-standard domains.", "Unexpected attachments with unusual file extensions."])
 minigame_type = "NONE"
 required_floor = 1

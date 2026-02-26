@@ -120,6 +120,13 @@ func set_ticket(t: TicketResource):
 
 func _update_time_display():
 	if not ticket or not time_label: return
+	
+	# Sprint 13 Fix: Static display for tutorial
+	if GameState and GameState.is_guided_mode:
+		time_label.text = "--:--"
+		time_label.add_theme_color_override("font_color", Color(0.4, 0.6, 1.0, 1)) # Light Blue
+		return
+
 	var current_time = Time.get_ticks_msec()
 	var remaining_msec = max(0, ticket.expiry_timestamp - current_time)
 	var remaining_time = remaining_msec / 1000.0

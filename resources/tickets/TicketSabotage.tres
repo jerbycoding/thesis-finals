@@ -15,6 +15,6 @@ steps = ["Trace source of 'service stop' command", "Block user session", "Restar
 required_tool = "terminal"
 base_time = 120.0
 hidden_risks = ["Allowing EDR to go offline"]
-required_log_ids = []
+required_log_ids = ["LOG-SABOTAGE-001"]
 kill_chain_path = "Insider Sabotage"
 kill_chain_stage = 3
