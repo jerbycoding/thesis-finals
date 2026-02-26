@@ -92,13 +92,18 @@ func _process(delta):
 
 func _on_terminal_action(action_id: String):
 	match action_id:
-		"start":
+		"start_tutorial":
+			GameState.is_campaign_session = true
+			_start_training_sequence()
+		"training":
+			GameState.is_campaign_session = false
+			_start_training_sequence()
+		"start_campaign":
+			GameState.is_campaign_session = true
 			_start_shift_sequence()
 		"continue":
 			if SaveSystem:
 				SaveSystem.load_game()
-		"training":
-			_start_training_sequence()
 		"quit":
 			_start_quit_sequence()
 

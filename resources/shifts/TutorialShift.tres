@@ -1,16 +1,21 @@
-[gd_resource type="Resource" script_class="ShiftResource" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="ShiftResource" load_steps=2 format=3 uid="uid://2wqddpo4g6br"]
 
-[ext_resource type="Script" path="res://resources/ShiftResource.gd" id="1_shift"]
+[ext_resource type="Script" uid="uid://d0o2ouygja3cr" path="res://resources/ShiftResource.gd" id="1_shift"]
 
 [resource]
 script = ExtResource("1_shift")
 shift_name = "Tutorial: Tier 1 Certification"
 shift_id = "shift_tutorial"
+shift_summary = ""
+cyber_context = ""
 briefing_dialogue_id = "tutorial_intro"
-event_sequence = [
-	{"time": 5, "event": "spawn_trn", "type": "spawn_ticket", "ticket_id": "TRN-001"},
-	{"time": 180, "event": "ciso_end", "type": "npc_interaction", "npc_id": "ciso", "dialogue_id": "shift_end"},
-	{"time": 200, "event": "shift_end", "type": "shift_end"}
-]
-random_event_pool = []
+event_sequence = Array[Dictionary]([{
+"event": "spawn_trn",
+"ticket_id": "TRN-001",
+"time": 5,
+"type": "spawn_ticket"
+}])
+random_event_pool = Array[Dictionary]([])
 next_shift_id = "shift_monday"
+minigame_type = "NONE"
+required_floor = 1

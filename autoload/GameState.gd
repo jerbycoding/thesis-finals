@@ -9,6 +9,7 @@ var active_bridge = null # NEW: Track active 3D monitor bridge
 var is_paused: bool = false
 var pause_menu_instance: Control = null
 var is_guided_mode: bool = false
+var is_campaign_session: bool = false # Tracks if session started via 'New Campaign'
 
 func _ready():
 	# Initial state enforcement

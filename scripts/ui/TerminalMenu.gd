@@ -4,7 +4,7 @@ extends Control
 @onready var text_label: RichTextLabel = %TerminalLabel
 @onready var input_timer: Timer = $InputTimer
 
-enum MenuState { BOOTING, MAIN, CONFIRMING, ARCHIVE, CONFIGING, CREDITS, DIFFICULTY, LEVEL_SELECT }
+enum MenuState { BOOTING, MAIN, CONFIRMING, ARCHIVE, CONFIGING, CREDITS, DIFFICULTY, LEVEL_SELECT, ASK_TUTORIAL }
 var current_state = MenuState.BOOTING
 var pending_action: String = ""
 var has_save: bool = false
@@ -120,6 +120,8 @@ func _input(event):
 			_handle_main_menu_input(event.keycode)
 		elif current_state == MenuState.CONFIRMING:
 			_handle_confirmation_input(event.keycode)
+		elif current_state == MenuState.ASK_TUTORIAL:
+			_handle_tutorial_ask_input(event.keycode)
 		elif current_state == MenuState.ARCHIVE:
 			_handle_archive_input(event.keycode)
 		elif current_state == MenuState.CONFIGING:
@@ -134,7 +136,7 @@ func _input(event):
 func _handle_main_menu_input(keycode: int):
 	if has_save:
 		match keycode:
-			KEY_1: _try_action("start")
+			KEY_1: _try_action("start_new")
 			KEY_2: _on_action_selected("continue")
 			KEY_3: _try_action("training")
 			KEY_4: _on_action_selected("quit")
@@ -144,7 +146,7 @@ func _handle_main_menu_input(keycode: int):
 			KEY_8: if is_veteran: _show_level_select()
 	else:
 		match keycode:
-			KEY_1: _try_action("start")
+			KEY_1: _try_action("start_new")
 			KEY_2: _try_action("training")
 			KEY_3: _on_action_selected("quit")
 			KEY_4: _show_archive()
@@ -156,11 +158,31 @@ func _try_action(action_id: String):
 	if has_save:
 		_show_overwrite_warning(action_id)
 	else:
-		if action_id == "start" or action_id == "training":
-			pending_action = action_id
-			_show_difficulty_selection()
+		if action_id == "start_new":
+			_show_tutorial_ask()
+		elif action_id == "training":
+			# Bypassing difficulty for explicit training request
+			if ConfigManager: ConfigManager.set_setting("gameplay", "difficulty_level", 0) # 0 = Junior
+			_on_action_selected("training")
 		else:
 			_on_action_selected(action_id)
+
+func _show_tutorial_ask():
+	current_state = MenuState.ASK_TUTORIAL
+	text_label.text = "\n\n  [!] SECURE_ONBOARDING_PROTOCOL\n  -----------------------------------------------------------\n  New analyst detected. Execute certification module?\n\n  [1] INITIALIZE_TRAINING (RECOMMENDED)\n  [2] BYPASS_TO_ACTIVE_DUTY (VETERAN_ONLY)\n\n  [ESC] ABORT_MISSION_START\n\n  > SELECT PROTOCOL_"
+	if AudioManager: AudioManager.play_notification("info")
+
+func _handle_tutorial_ask_input(keycode: int):
+	if keycode == KEY_ESCAPE: _show_main_menu(); return
+	match keycode:
+		KEY_1: 
+			# Choice: Tutorial. Set default difficulty and bypass selection screen.
+			if ConfigManager: ConfigManager.set_setting("gameplay", "difficulty_level", 0) # 0 = Junior
+			_on_action_selected("start_tutorial")
+		KEY_2:
+			# Choice: Campaign. Proceed to difficulty selection as usual.
+			pending_action = "start_campaign"
+			_show_difficulty_selection()
 
 func _show_difficulty_selection():
 	current_state = MenuState.DIFFICULTY
@@ -302,8 +324,15 @@ func _handle_confirmation_input(keycode: int):
 	match keycode:
 		KEY_1:
 			if text_label.text.contains("DESTRUCTION"): _execute_purge()
-			elif text_label.text.contains("WARNING") and pending_action == "start": _show_difficulty_selection()
-			else: _on_action_selected(pending_action)
+			elif text_label.text.contains("WARNING"):
+				if pending_action == "start_new":
+					_show_tutorial_ask()
+				elif pending_action == "training":
+					# Handle overwrite confirm for training: bypass difficulty
+					if ConfigManager: ConfigManager.set_setting("gameplay", "difficulty_level", 0)
+					_on_action_selected("training")
+				else:
+					_on_action_selected(pending_action)
 		KEY_2: _show_main_menu()
 
 func _execute_purge():

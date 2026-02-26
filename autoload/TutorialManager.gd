@@ -551,18 +551,31 @@ func _show_final_summary():
 	await summary.closed
 	layer.queue_free()
 	
-	# TOTAL REFRESH: Purge all training data/memory before returning to Title
-	if SaveSystem:
-		SaveSystem.new_game_setup()
-	
-	# TRIGGER CLEANUP: Manually emit shift_ended to clear filters, tickets, and UI
+	# TRIGGER CLEANUP: Strip filters, tickets, and tutorial UI state
 	EventBus.shift_ended.emit({})
 	
-	# IMMEDIATE TRANSITION: Back to Title Screen for a clean break
-	if TransitionManager:
-		TransitionManager.change_scene_to("res://scenes/3d/MainMenu3D.tscn")
+	if GameState and GameState.is_campaign_session:
+		print("TutorialManager: Promoting player to active duty (Shift 1).")
+		
+		# INITIAL CHECKPOINT: Save progress as beginning of Monday
+		if SaveSystem:
+			SaveSystem.save_game()
+			
+		# TRANSITION: Direct to CISO briefing room for Monday assignment
+		if TransitionManager:
+			TransitionManager.play_secure_login("res://scenes/3d/BriefingRoom.tscn", "shift_monday")
 	else:
-		get_tree().change_scene_to_file("res://scenes/3d/MainMenu3D.tscn")
+		print("TutorialManager: Standalone simulation complete. Returning to HQ.")
+		
+		# TOTAL REFRESH: Purge all training data/memory before returning to Title
+		if SaveSystem:
+			SaveSystem.new_game_setup()
+		
+		# IMMEDIATE TRANSITION: Back to Title Screen for a clean break
+		if TransitionManager:
+			TransitionManager.change_scene_to("res://scenes/3d/MainMenu3D.tscn")
+		else:
+			get_tree().change_scene_to_file("res://scenes/3d/MainMenu3D.tscn")
 
 func _update_visual_focus():
 	if not is_tutorial_active or not sequence: return

@@ -4,12 +4,7 @@ This document maps every Incident Ticket to its specific shift, required logs, a
 
 ---
 
-## 🎓 Tutorial: Tier 1 Certification
-| Ticket ID     | SIEM Logs (Evidence) | Email Analyzer? | SOC Terminal           | Decrypt? |
-|:--------------|:---------------------|:---------------:|:-----------------------|:--------:|
-| **`TRN-001`** | `LOG-TRN-001`        |     **YES**     | NO                     |    NO    |
-| **`TRN-002`** | `LOG-TRN-002`        |       NO        | **YES** (scan/isolate) |    NO    |
-| **`TRN-003`** | N/A                  |       NO        | **YES** (isolate)      |    NO    |
+
 
 ---
 
