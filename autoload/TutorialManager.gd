@@ -215,15 +215,6 @@ func _create_hud():
 	else:
 		hud.show()
 
-func _create_overlay():
-	if overlay_layer: return
-	overlay_layer = CanvasLayer.new()
-	overlay_layer.name = "TutorialOverlayLayer"
-	overlay_layer.layer = 110 
-	get_tree().root.add_child(overlay_layer)
-	overlay = overlay_scene.instantiate()
-	overlay_layer.add_child(overlay)
-
 func _on_shift_ended(_results: Dictionary):
 	if not is_tutorial_active: return
 	
