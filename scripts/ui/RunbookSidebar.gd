@@ -1,73 +1,63 @@
 # RunbookSidebar.gd
 extends PanelContainer
 
-@onready var task_container = %TaskContainer
-@onready var status_label = %StatusLabel
-@onready var mentor_label = %MentorLabel
-@onready var tip_label = %TipLabel
+@onready var task_label = %TaskLabel
+@onready var context_label = %ContextLabel
+@onready var progress_bar = %ProgressBar
+@onready var system_status_label = %SystemStatusLabel
+@onready var step_counter = %StepCounter
 @onready var animation_player = $AnimationPlayer
+@onready var action_zone = %ActionZone
 
-var active_tasks: Dictionary = {}
+var current_step_id: int = -1
 
 func _ready():
-	# Start empty
-	clear_tasks()
-	_set_status("READY", Color.GREEN)
+	# Start in standby
+	task_label.text = "AWAITING_DIRECTIVE"
+	context_label.text = "Establish secure link to mission control..."
+	_set_status("STANDBY", Color.GRAY)
 
 func update_task(step_id: int, instruction: String, mentor: String = "RIVERA", tip: String = ""):
-	# Play "Receiving" animation
-	_set_status("RECEIVING_DIRECTIVE...", Color.ORANGE)
+	current_step_id = step_id
+	
+	# 1. Update Content
+	task_label.text = instruction.to_upper()
+	context_label.text = tip
+	
+	# Update Counter
+	var total_steps = 36
+	if TutorialManager and TutorialManager.sequence:
+		total_steps = TutorialManager.sequence.steps.size()
+	step_counter.text = "PHASE %02d/%02d" % [step_id, total_steps]
+	
+	# 2. Glitchy Arrival Animation
+	_set_status("RECEIVING...", Color.ORANGE)
 	animation_player.play("receiving")
 	
-	# Clear previous and add new SOP directive
-	clear_tasks()
-	
-	if mentor_label:
-		mentor_label.text = "[color=cyan]COMMS_FROM: [/color]" + mentor.to_upper()
-	
-	if tip_label:
-		tip_label.text = "[i]" + tip + "[/i]"
-		tip_label.visible = not tip.is_empty()
-	
-	var label = Label.new()
-	label.text = "[ ] " + instruction.to_upper()
-	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	label.add_theme_font_size_override("font_size", 11)
-	label.add_theme_color_override("font_color", Color(0.8, 0.8, 0.8))
-	task_container.add_child(label)
-	
-	active_tasks[step_id] = label
+	if AudioManager:
+		AudioManager.play_terminal_beep()
 	
 	await animation_player.animation_finished
-	_set_status("LIVE_SOP_ACTIVE", Color.CYAN)
+	_set_status("DIRECTIVE_ACTIVE", Color.CYAN)
 
 func complete_task(step_id: int):
-	if active_tasks.has(step_id):
-		var label = active_tasks[step_id]
-		label.text = "[✔] " + label.text.substr(4)
-		label.add_theme_color_override("font_color", GlobalConstants.UI_COLORS.SUCCESS_FLAT)
-		
+	if step_id == current_step_id:
 		_set_status("VERIFIED", Color.GREEN)
 		animation_player.play("task_complete")
-		if AudioManager: AudioManager.play_notification("success")
+		if AudioManager: 
+			AudioManager.play_notification("success")
 
 func set_warning_mode(active: bool):
-	var color = Color.ORANGE if active else Color(0.2, 0.6, 1, 1)
-	$VBox/Header/Label.add_theme_color_override("font_color", color)
-	_set_status("AAR_DRILL_RECOVERY" if active else "LIVE_SOP_ACTIVE", color)
+	var color = Color.ORANGE if active else Color(0, 1, 0, 1)
+	_set_status("REMEDIATION_REQUIRED" if active else "DIRECTIVE_ACTIVE", color)
 	
 	if active:
 		if AudioManager: AudioManager.play_alert()
-		# Flash effect
+		# Visual Glitch
 		var tween = create_tween()
-		tween.tween_property(self, "modulate", Color.ORANGE, 0.1)
-		tween.tween_property(self, "modulate", Color.WHITE, 0.2)
-
-func clear_tasks():
-	active_tasks.clear()
-	for child in task_container.get_children():
-		child.queue_free()
+		tween.tween_property(action_zone, "modulate", Color.ORANGE, 0.1)
+		tween.tween_property(action_zone, "modulate", Color.WHITE, 0.1)
 
 func _set_status(text: String, color: Color):
-	status_label.text = text
-	status_label.modulate = color
+	system_status_label.text = text
+	system_status_label.modulate = color

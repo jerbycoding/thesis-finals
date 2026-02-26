@@ -98,9 +98,37 @@ func _show_email_details(email: EmailResource):
 
 func _update_decision_visibility():
 	var tools_used = ValidationManager.can_action_email(inspection_state) if ValidationManager else true
+	
+	# TUTORIAL ENFORCEMENT: Force link check for Step 7 (TRN-001)
+	if TutorialManager and TutorialManager.is_tutorial_active:
+		var step = TutorialManager.current_step
+		if selected_email and selected_email.email_id == "EMAIL-TRN-001":
+			# If we haven't used the link check tool yet in Step 7
+			if step == 7 and not inspection_state.links:
+				_lock_decisions("RESTRICTED: LINK ANALYSIS REQUIRED (SOP 1.3)")
+				return
+	
 	approve_button.disabled = not tools_used
 	quarantine_button.disabled = not tools_used
 	escalate_button.disabled = not tools_used
+	
+	if not tools_used:
+		var tip = "FORENSIC INVESTIGATION REQUIRED"
+		approve_button.tooltip_text = tip
+		quarantine_button.tooltip_text = tip
+		escalate_button.tooltip_text = tip
+	else:
+		approve_button.tooltip_text = ""
+		quarantine_button.tooltip_text = ""
+		escalate_button.tooltip_text = ""
+
+func _lock_decisions(reason: String):
+	approve_button.disabled = true
+	quarantine_button.disabled = true
+	escalate_button.disabled = true
+	approve_button.tooltip_text = reason
+	quarantine_button.tooltip_text = reason
+	escalate_button.tooltip_text = reason
 
 func _on_view_headers_pressed():
 	if not selected_email: return

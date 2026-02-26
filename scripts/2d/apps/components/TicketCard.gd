@@ -23,6 +23,9 @@ func _ready():
 	if complete_button:
 		complete_button.pressed.connect(_on_complete_pressed)
 	
+	if TutorialManager:
+		TutorialManager.step_changed.connect(func(_id): _update_resolution_lock())
+	
 	mouse_entered.connect(func(): if AudioManager: AudioManager.play_ui_hover())
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	
@@ -31,11 +34,46 @@ func _ready():
 	update_timer.timeout.connect(_on_update_timer_timeout)
 	add_child(update_timer)
 	update_timer.start()
+	
+	# Initial state
+	_update_resolution_lock()
+
+func _update_resolution_lock():
+	if not complete_button: return
+	
+	# RESTRICTION: In Tutorial, TRN-001 cannot be resolved until step 11
+	if TutorialManager and TutorialManager.is_tutorial_active:
+		if ticket and ticket.ticket_id == "TRN-001" and TutorialManager.current_step < 11:
+			complete_button.disabled = true
+			complete_button.tooltip_text = "RESTRICTED: FORENSIC EVIDENCE REQUIRED (SOP 1.2)"
+			return
+			
+		# TRN-002 cannot be resolved until step 21
+		if ticket and ticket.ticket_id == "TRN-002" and TutorialManager.current_step < 21:
+			complete_button.disabled = true
+			complete_button.tooltip_text = "RESTRICTED: CONTAINMENT PROOF REQUIRED (SOP 2.4)"
+			return
+			
+		# TRN-003 cannot be resolved until step 26
+		if ticket and ticket.ticket_id == "TRN-003" and TutorialManager.current_step < 26:
+			complete_button.disabled = true
+			complete_button.tooltip_text = "RESTRICTED: POLICY VERIFICATION REQUIRED (SOP 1.1)"
+			return
+			
+		# TRN-005 cannot be resolved until step 36
+		if ticket and ticket.ticket_id == "TRN-005" and TutorialManager.current_step < 36:
+			complete_button.disabled = true
+			complete_button.tooltip_text = "RESTRICTED: ROOT CAUSE ANALYSIS PENDING"
+			return
+
+	complete_button.disabled = false
+	complete_button.tooltip_text = ""
 
 func _on_update_timer_timeout():
 	if ticket and is_instance_valid(ticket):
 		_update_time_display()
 		_update_evidence_display()
+		_update_resolution_lock()
 
 func _gui_input(event: InputEvent):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:

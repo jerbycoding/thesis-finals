@@ -22,17 +22,26 @@ func _ready():
 
 func show_hud():
 	show()
-	var tween = create_tween()
+	var tween = create_tween().set_parallel(true)
 	tween.tween_property(self, "modulate:a", 1.0, 0.5)
-	animation_player.play("slide_in")
+	
+	# Slide in TaskContainer using Tween to avoid AnimationPlayer conflicts
+	task_container.position.x = -300
+	tween.tween_property(task_container, "position:x", 20.0, 0.5).set_trans(Tween.TRANS_QUINT).set_ease(Tween.EASE_OUT)
+	
 	_update_layout()
 
 func _on_game_mode_changed_internal(_mode: int):
+	if TutorialManager and TutorialManager.is_tutorial_active:
+		if modulate.a < 0.1:
+			show_hud()
+			return # show_hud calls _update_layout
 	_update_layout()
 
 func _update_layout():
 	if not task_container: return
 	
+	# Ensure visibility is correct based on game mode
 	if GameState and GameState.is_in_2d_mode():
 		# Hide the objective block because the Computer Sidebar handles it
 		task_container.hide()
@@ -64,15 +73,20 @@ func _on_step_changed(step_id: int):
 		hide_hud()
 		return
 		
-	if not visible:
+	if not visible or modulate.a < 0.1:
 		show_hud()
+	
+	_update_layout()
 	
 	# Update Task Text
 	var step_data = TutorialManager.sequence.get_step(step_id - 1)
 	if step_data:
 		var full_text = step_data.instruction_text
-		var task_name = full_text.split(": ")[-1]
-		task_label.text = task_name
+		var task_name = full_text
+		if ": " in full_text:
+			task_name = full_text.split(": ")[-1]
+			
+		task_label.text = task_name.to_upper()
 		
 		# Update Subtitle (Long narrative text)
 		update_subtitle(step_data.comms_text)
@@ -90,4 +104,5 @@ func _on_step_changed(step_id: int):
 	p_tween.tween_property(progress_bar, "value", progress, 0.4).set_trans(Tween.TRANS_QUAD)
 	
 	# Visual Pulse on change
-	animation_player.play("pulse")
+	if animation_player.has_animation("pulse"):
+		animation_player.play("pulse")

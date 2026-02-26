@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://c5x6y708bab0c"]
+[gd_scene load_steps=7 format=3 uid="uid://c5x6y708bab0c"]
 
 [ext_resource type="Script" uid="uid://cqrecl4u4gg7o" path="res://scripts/2d/apps/components/CompletionModal.gd" id="1_comp"]
 
@@ -38,15 +38,6 @@ corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Emergency"]
-bg_color = Color(0.15, 0.05, 0.05, 1)
-border_width_left = 2
-border_color = Color(1, 0.2, 0.2, 1)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Glow"]
 bg_color = Color(0, 1, 1, 0.0392157)
 draw_center = false
@@ -61,6 +52,15 @@ corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 shadow_color = Color(0, 1, 1, 0.313726)
 shadow_size = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Emergency"]
+bg_color = Color(0.15, 0.05, 0.05, 1)
+border_width_left = 2
+border_color = Color(1, 0.2, 0.2, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
 
 [node name="CompletionModal" type="Control"]
 layout_mode = 3

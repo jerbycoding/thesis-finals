@@ -53,12 +53,9 @@ var current_step: int:
 
 var sequence: TutorialSequenceResource = null
 
-var overlay: Control = null
 var hud: Control = null
-var overlay_layer: CanvasLayer = null
 
 var hud_scene = preload("res://scenes/ui/TutorialHUD.tscn")
-var overlay_scene = preload("res://scenes/ui/TutorialOverlay.tscn")
 var summary_scene = preload("res://scenes/ui/CertificationSummary.tscn")
 
 var training_profile: AppPermissionProfile = null
@@ -87,7 +84,10 @@ func _ready():
 func _refresh_hud_visibility():
 	if not is_tutorial_active or not hud: return
 	
-	hud.show()
+	if hud.has_method("show_hud"):
+		hud.show_hud()
+	else:
+		hud.show()
 
 func _on_decryption_completed(t_id: String):
 	_check_trigger(TutorialStepResource.TriggerType.DECRYPTION_COMPLETED, t_id)
@@ -172,11 +172,6 @@ func _load_sequence():
 	else:
 		push_error("TutorialManager: Missing TutorialSequence.tres!")
 
-func set_overlay(new_overlay: Control):
-	overlay = new_overlay
-	if is_tutorial_active:
-		_update_visual_focus()
-
 func _on_shift_started(shift_id: String):
 	if shift_id == "shift_tutorial":
 		is_tutorial_active = true
@@ -203,7 +198,6 @@ func _on_shift_started(shift_id: String):
 		
 		_toggle_live_hud(false)
 		_create_hud()
-		_create_overlay()
 		_advance_step(0) # Start at first step
 
 func _create_hud():
@@ -214,8 +208,12 @@ func _create_hud():
 	get_tree().root.add_child(layer)
 	hud = hud_scene.instantiate()
 	layer.add_child(hud)
-	if GameState and not GameState.is_in_2d_mode():
-		hud.hide()
+	
+	# Ensure it starts visible but handles its own internal layout
+	if hud.has_method("show_hud"):
+		hud.show_hud()
+	else:
+		hud.show()
 
 func _create_overlay():
 	if overlay_layer: return
@@ -247,17 +245,12 @@ func _on_shift_ended(_results: Dictionary):
 		DesktopWindowManager.active_permission_profile = null
 	
 	_toggle_live_hud(true)
-	if overlay: overlay.hide_overlay()
 	
 	if hud:
 		var h_layer = hud.get_parent()
 		hud.queue_free()
 		if h_layer: h_layer.queue_free()
 		hud = null
-	if overlay_layer:
-		overlay_layer.queue_free()
-		overlay_layer = null
-		overlay = null
 	
 	# DATA FLUSH: Purge training state using new API
 	if LogSystem:
@@ -400,6 +393,8 @@ func _on_host_selected(host: HostResource):
 	_check_trigger(TutorialStepResource.TriggerType.HOST_SELECTED, host.hostname)
 
 func _on_ticket_completed(ticket: TicketResource, completion_type: String, _time):
+	if not is_tutorial_active: return
+
 	# REWARD: If they correctly finished the False Flag lesson
 	if completion_type == "compliant" and ticket.ticket_id == "TRN-003" and IntegrityManager:
 		IntegrityManager.restore_integrity(10.0)
@@ -407,7 +402,21 @@ func _on_ticket_completed(ticket: TicketResource, completion_type: String, _time
 			NotificationManager.show_notification("INTEGRITY REWARD: SOP ADHERENCE CONFIRMED", "success")
 	
 	# Transition Logic: Advance if this ticket completion was the current objective
-	# (Removed the strict 'compliant' check to allow 'Efficient' shortcuts in the tutorial)
+	var step_enum = current_step_index + 1
+	
+	# VALIDATION: Ensure the correct type was chosen for the current lesson
+	if ticket.ticket_id.begins_with("TRN-"):
+		var expected_type = GlobalConstants.COMPLETION_TYPE.COMPLIANT
+		if step_enum == TutorialStep.THE_SHORTCUT: # Step 28
+			expected_type = GlobalConstants.COMPLETION_TYPE.EFFICIENT
+			
+		if completion_type != expected_type:
+			_handle_remediation("UNAUTHORIZED_RESOLUTION_TYPE: " + completion_type.to_upper())
+			# RE-SPAWN: Ensure the player can try again
+			if TicketManager:
+				TicketManager.spawn_ticket_by_id(ticket.ticket_id)
+			return
+
 	_check_trigger(TutorialStepResource.TriggerType.TICKET_COMPLETED, ticket.ticket_id)
 
 # --- Core Lifecycle ---
@@ -444,7 +453,7 @@ func _advance_step(new_index: int):
 	current_step_index = new_index
 	var step_data = sequence.get_step(current_step_index)
 	var step_enum = current_step_index + 1
-	var desktop = GameState.desktop_instance
+	var desktop = GameState.desktop_instance if GameState else null
 	
 	if not step_data:
 		# Final Step reached - Trigger the certification wrap-up
@@ -456,7 +465,6 @@ func _advance_step(new_index: int):
 
 	if step_data.delay_before_start > 0:
 		# Hide current visual focus while waiting
-		overlay.hide_overlay()
 		if hud: hud.hide()
 		
 		await get_tree().create_timer(step_data.delay_before_start).timeout
@@ -566,11 +574,11 @@ func _show_final_summary():
 		get_tree().change_scene_to_file("res://scenes/3d/MainMenu3D.tscn")
 
 func _update_visual_focus():
-	if not overlay or not is_tutorial_active or not sequence: return
+	if not is_tutorial_active or not sequence: return
 	var step_data = sequence.get_step(current_step_index)
 	if not step_data: return
 	
-	var desktop = GameState.desktop_instance
+	var desktop = GameState.desktop_instance if GameState else null
 	
 	# 1. Reset ALL visual glows (Desktop, Taskbar, Start Menu)
 	if desktop and desktop.has_method("set_icon_glow"):
@@ -581,7 +589,6 @@ func _update_visual_focus():
 	_clear_all_app_highlights()
 
 	if step_data.highlight_path.is_empty():
-		overlay.hide_overlay()
 		return
 
 	# Handle Glow
@@ -589,17 +596,14 @@ func _update_visual_focus():
 		if desktop.has_method("set_icon_glow"):
 			desktop.set_icon_glow(step_data.icon_glow_name, true)
 
-	# Handle Highlight Path
-	if step_data.highlight_path.begins_with("%%") and desktop:
-		overlay.highlight_node(desktop.get_node_or_null(step_data.highlight_path.replace("%%", "%")), step_data.highlight_tier)
-	elif step_data.highlight_path.begins_with("[DYNAMIC]"):
-		_highlight_dynamic(step_data.highlight_path, TutorialStepResource.HighlightTier.AMBIENT_HINT)
-	else:
-		overlay.hide_overlay()
+	if step_data.highlight_path.begins_with("[DYNAMIC]"):
+		_highlight_dynamic(step_data.highlight_path, step_data.highlight_tier)
 
 func _highlight_dynamic(path: String, tier: int = 3):
 	var step_data = sequence.get_step(current_step_index)
 	if not step_data: return
+	
+	var desktop = GameState.desktop_instance if GameState else null
 	
 	match path:
 		"[DYNAMIC]TICKET_LIST_0":
@@ -608,16 +612,24 @@ func _highlight_dynamic(path: String, tier: int = 3):
 				var list = win.content_instance.get_node_or_null("%TicketList")
 				if list:
 					var target_card = null
+					# Look for the card that matches the ID Rivera mentioned
 					for child in list.get_children():
 						if child.has_method("get_ticket_id") and child.get_ticket_id() == step_data.trigger_id:
 							target_card = child
 							break
-					if not target_card and list.get_child_count() > 0: target_card = list.get_child(0)
 					
-					if target_card:
+					# Fallback to first child if no specific match
+					if not target_card and list.get_child_count() > 0: 
+						target_card = list.get_child(0)
+					
+					if target_card and is_instance_valid(target_card):
+						# We MUST highlight the card, not the list!
 						if target_card.has_method("set_tutorial_glow"):
 							target_card.set_tutorial_glow(true)
-						overlay.highlight_node(target_card, tier)
+					else:
+						# If list is empty, pulse the icon on desktop instead
+						if desktop and desktop.has_method("set_icon_glow"):
+							desktop.set_icon_glow("tickets", true)
 		"[DYNAMIC]TICKET_0_COMPLETE":
 			var win = DesktopWindowManager._find_window_by_app("tickets")
 			if win and "content_instance" in win and is_instance_valid(win.content_instance):
@@ -631,11 +643,9 @@ func _highlight_dynamic(path: String, tier: int = 3):
 					if not target_card and list.get_child_count() > 0: target_card = list.get_child(0)
 					
 					if target_card:
-						# Pulse the WHOLE card AND focus the button
+						# Pulse the WHOLE card
 						if target_card.has_method("set_tutorial_glow"):
 							target_card.set_tutorial_glow(true)
-						var btn = target_card.get_node_or_null("%CompleteButton")
-						if btn: overlay.highlight_node(btn, tier)
 		"[DYNAMIC]COMPLETION_EFFICIENT":
 			var win = DesktopWindowManager._find_window_by_app("tickets")
 			if win and "content_instance" in win and is_instance_valid(win.content_instance):
@@ -656,19 +666,13 @@ func _highlight_dynamic(path: String, tier: int = 3):
 					if target_entry:
 						if target_entry.has_method("set_tutorial_glow"):
 							target_entry.set_tutorial_glow(true)
-						overlay.highlight_node(target_entry, tier)
 		"[DYNAMIC]EMAIL_TOOL_LINKS":
 			var win = DesktopWindowManager._find_window_by_app("email")
 			if win and "content_instance" in win and is_instance_valid(win.content_instance):
 				if win.content_instance.has_method("set_tool_glow"):
 					win.content_instance.set_tool_glow("links", true)
-				var btn = win.content_instance.get_node_or_null("%CheckLinksButton")
-				if btn: overlay.highlight_node(btn, tier)
 		"[DYNAMIC]EMAIL_LINK":
-			var win = DesktopWindowManager._find_window_by_app("email")
-			if win and "content_instance" in win and is_instance_valid(win.content_instance):
-				var body = win.content_instance.get_node_or_null("%BodyLabel")
-				if body: overlay.highlight_node(body, tier)
+			pass
 		"[DYNAMIC]LOG_LIST_0":
 			var win = DesktopWindowManager._find_window_by_app("siem")
 			if win and "content_instance" in win and is_instance_valid(win.content_instance):
@@ -686,13 +690,13 @@ func _highlight_dynamic(path: String, tier: int = 3):
 					if target_entry:
 						if target_entry.has_method("set_tutorial_glow"):
 							target_entry.set_tutorial_glow(true)
-						overlay.highlight_node(target_entry, tier)
 		"[DYNAMIC]MAP_NODE_T":
 			var win = DesktopWindowManager._find_window_by_app("network")
 			if win and "content_instance" in win and is_instance_valid(win.content_instance):
 				var nodes = win.content_instance.get_node_or_null("%NodesContainer")
 				if nodes and nodes.get_child_count() > 0:
-					overlay.highlight_node(nodes.get_child(nodes.get_child_count()-1), tier)
+					# Can add highlight logic to node here if needed
+					pass
 
 func _clear_all_app_highlights():
 	# 1. Clear Ticket Card Glows
@@ -735,10 +739,6 @@ func _clear_all_app_highlights():
 		if nodes:
 			for child in nodes.get_children():
 				if child.has_method("set_highlight"): child.set_highlight(false)
-	
-	# 5. Forcibly hide the spotlight overlay
-	if overlay:
-		overlay.hide_overlay()
 
 func _show_instruction(text: String):
 	if text == "": return
@@ -751,7 +751,6 @@ func _show_instruction(text: String):
 		if sidebar:
 			sidebar.show()
 			sidebar.update_task(current_step, text, step_data.comms_sender if step_data else "RIVERA", step_data.comms_text if step_data else "")
-			if hud: hud.hide() # Hide meta-HUD when diegetic is active
 			return # Exit early, we don't need notification if sidebar is up
 	
 	# Meta-HUD Fallback (Notification Toast / HUD)

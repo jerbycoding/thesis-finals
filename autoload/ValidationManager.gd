@@ -14,9 +14,18 @@ func can_complete_compliant(ticket: TicketResource) -> bool:
 func is_resolution_allowed(ticket: TicketResource, type: String) -> bool:
 	if not ticket: return false
 	
-	# During Tutorial / Guided Mode, force 'compliant' only for training tickets
-	if GameState and GameState.is_guided_mode:
+	# During Tutorial / Guided Mode, restrict resolution types based on current step
+	if GameState and GameState.is_guided_mode and TutorialManager:
 		if ticket.ticket_id.begins_with("TRN-"):
+			# Step 28 (Index 27) specifically teaches the 'Efficient' shortcut
+			if TutorialManager.current_step == 28:
+				return type == GlobalConstants.COMPLETION_TYPE.EFFICIENT
+			
+			# All other training tickets MUST be compliant
+			# Explicitly block 'efficient' and 'emergency'
+			if type == GlobalConstants.COMPLETION_TYPE.EFFICIENT or type == GlobalConstants.COMPLETION_TYPE.EMERGENCY:
+				return false
+				
 			return type == GlobalConstants.COMPLETION_TYPE.COMPLIANT
 			
 	return true

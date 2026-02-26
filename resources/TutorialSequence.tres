@@ -5,9 +5,9 @@
 
 [sub_resource type="Resource" id="Step_1"]
 script = ExtResource("1_step")
-instruction_text = "ORIENTATION: FIND OFFICE C"
+instruction_text = "LOCATE OFFICE C"
 comms_sender = "SR_ANALYST_RIVERA"
-comms_text = "Welcome aboard. Head down the hall and find Office C. That's your desk."
+comms_text = "Welcome aboard. Your physical location is part of the 'Insider Threat' security model. Head down the hall and find Office C—that's your assigned workstation."
 highlight_tier = 3
 highlight_path = ""
 icon_glow_name = ""
@@ -18,9 +18,9 @@ target_ticket_id = ""
 
 [sub_resource type="Resource" id="Step_2"]
 script = ExtResource("1_step")
-instruction_text = "INITIALIZATION: LOG IN"
+instruction_text = "LOG IN TO WORKSTATION"
 comms_sender = "SR_ANALYST_RIVERA"
-comms_text = "Take a seat. Credentials are on the sticky note. Log in to your workstation."
+comms_text = "Take a seat. Security starts with 'Identity and Access Management.' Use the credentials on the sticky note to log in to your secure environment."
 highlight_tier = 3
 highlight_path = ""
 icon_glow_name = ""
@@ -33,7 +33,7 @@ target_ticket_id = ""
 script = ExtResource("1_step")
 instruction_text = "OPEN TICKET QUEUE"
 comms_sender = "SR_ANALYST_RIVERA"
-comms_text = "This is the firehose. Open the Ticket Queue to see what's waiting."
+comms_text = "In the SOC, we prioritize incidents through 'Triage.' We can't fix every alert at once, so we focus on the tickets that pose the highest risk to the company."
 highlight_tier = 3
 highlight_path = "%%Tickets_Icon"
 icon_glow_name = "tickets"
@@ -46,7 +46,7 @@ target_ticket_id = ""
 script = ExtResource("1_step")
 instruction_text = "SELECT TICKET TRN-001"
 comms_sender = "SR_ANALYST_RIVERA"
-comms_text = "Grab the top file. Every incident starts with a story."
+comms_text = "Every incident tells a story. Selecting a ticket 'Owns' the investigation, assigning your ID as the primary analyst responsible for the resolution."
 highlight_tier = 3
 highlight_path = "[DYNAMIC]TICKET_LIST_0"
 icon_glow_name = ""
@@ -59,7 +59,7 @@ target_ticket_id = ""
 script = ExtResource("1_step")
 instruction_text = "OPEN EMAIL ANALYZER"
 comms_sender = "SR_ANALYST_RIVERA"
-comms_text = "Let's see what they sent. Emails are the #1 way attackers get in."
+comms_text = "Emails are the #1 'Attack Vector'—the door hackers use to get in. We use the Analyzer to safely pull apart a suspicious message without letting it touch our network."
 highlight_tier = 3
 highlight_path = "%%Email_Icon"
 icon_glow_name = "email"
@@ -72,7 +72,7 @@ target_ticket_id = ""
 script = ExtResource("1_step")
 instruction_text = "SELECT SUSPICIOUS EMAIL"
 comms_sender = "SR_ANALYST_RIVERA"
-comms_text = "There it is. Click the email to load it into the analyzer."
+comms_text = "Click the email to load it. An analyst must look past the text and examine the 'Payload'—the links or files that actually carry the threat."
 highlight_tier = 3
 highlight_path = "[DYNAMIC]EMAIL_LIST_0"
 icon_glow_name = ""
@@ -85,7 +85,7 @@ target_ticket_id = ""
 script = ExtResource("1_step")
 instruction_text = "USE LINK CHECK TOOL"
 comms_sender = "SR_ANALYST_RIVERA"
-comms_text = "The domain is pulsing in the text. Use the [color=cyan]Check Links[/color] tool to verify its reputation."
+comms_text = "Attackers use 'Masking' to hide dangerous links. The Link Check tool reveals the true destination of a URL before you accidentally invite a threat inside."
 highlight_tier = 3
 highlight_path = "[DYNAMIC]EMAIL_TOOL_LINKS"
 icon_glow_name = ""
@@ -98,7 +98,7 @@ target_ticket_id = "links"
 script = ExtResource("1_step")
 instruction_text = "OPEN SIEM LOG VIEWER"
 comms_sender = "SR_ANALYST_RIVERA"
-comms_text = "Check the cameras. The SIEM records everything that happens on the network."
+comms_text = "The SIEM is our 'Security Camera System.' Every action on the network leaves a 'Log'—an objective record we use to rebuild the timeline of a breach."
 highlight_tier = 3
 highlight_path = "%%SIEM_Icon"
 icon_glow_name = "siem"
@@ -111,7 +111,7 @@ target_ticket_id = ""
 script = ExtResource("1_step")
 instruction_text = "SELECT MALICIOUS LOG"
 comms_sender = "SR_ANALYST_RIVERA"
-comms_text = "The matching connection is highlighted. Click it to view the technical details."
+comms_text = "Logs tell the truth. Look for the 'Inbound Connection' that matches the domain we found in the email. That's your technical proof of the attack."
 highlight_tier = 3
 highlight_path = "[DYNAMIC]LOG_LIST_0"
 icon_glow_name = ""
@@ -122,9 +122,9 @@ target_ticket_id = ""
 
 [sub_resource type="Resource" id="Step_10"]
 script = ExtResource("1_step")
-instruction_text = "ATTACH LOG EVIDENCE"
+instruction_text = "ATTACH LOG TO TICKET"
 comms_sender = "SR_ANALYST_RIVERA"
-comms_text = "Bag and tag that log. [color=cyan]Drag and drop[/color] it onto the ticket. In a real investigation, data is the only truth."
+comms_text = "In cybersecurity, an opinion isn't proof. 'Attaching Evidence' creates a forensic audit trail that proves exactly how a threat occurred for the legal and recovery teams."
 highlight_tier = 3
 highlight_path = "[DYNAMIC]LOG_LIST_0"
 icon_glow_name = ""
@@ -135,9 +135,9 @@ target_ticket_id = "TRN-001"
 
 [sub_resource type="Resource" id="Step_11"]
 script = ExtResource("1_step")
-instruction_text = "CLOSE TICKET AS COMPLIANT"
+instruction_text = "RESOLVE TICKET (COMPLIANT)"
 comms_sender = "SR_ANALYST_RIVERA"
-comms_text = "Clean kill. Close the case. Documentation is what makes it official."
+comms_text = "Documentation closes the loop. Closing as 'Compliant' confirms that you followed the full protocol, ensuring the threat is neutralized and the evidence is archived."
 highlight_tier = 3
 highlight_path = "[DYNAMIC]TICKET_0_COMPLETE"
 icon_glow_name = ""
@@ -150,7 +150,7 @@ target_ticket_id = ""
 script = ExtResource("1_step")
 instruction_text = "SELECT TICKET TRN-002"
 comms_sender = "SR_ANALYST_RIVERA"
-comms_text = "Next patient. This one looks like an active infection."
+comms_text = "This next alert is an 'Active Infection.' It’s no longer a potential threat—it's already inside and executing code on a workstation."
 highlight_tier = 3
 highlight_path = "[DYNAMIC]TICKET_LIST_0"
 icon_glow_name = ""
@@ -163,7 +163,7 @@ target_ticket_id = ""
 script = ExtResource("1_step")
 instruction_text = "OPEN TERMINAL"
 comms_sender = "SR_ANALYST_RIVERA"
-comms_text = "Time to go under the hood. The Terminal is for direct action."
+comms_text = "The Terminal is for 'Active Defense.' While the GUI is for analysis, the command line is where an analyst takes direct control of the network."
 highlight_tier = 3
 highlight_path = "%%Terminal_Icon"
 icon_glow_name = "terminal"
@@ -174,9 +174,9 @@ target_ticket_id = ""
 
 [sub_resource type="Resource" id="Step_14"]
 script = ExtResource("1_step")
-instruction_text = "RUN: scan WORKSTATION-T"
+instruction_text = "RUN COMMAND: scan"
 comms_sender = "SR_ANALYST_RIVERA"
-comms_text = "Check for a pulse. We need to find the hidden process."
+comms_text = "Malware often hides by pretending to be a normal system program. A 'Scan' looks for these 'Anomalies'—behavior that doesn't belong in a healthy environment."
 highlight_tier = 3
 highlight_path = "%%CommandInput"
 icon_glow_name = ""
@@ -187,9 +187,9 @@ target_ticket_id = ""
 
 [sub_resource type="Resource" id="Step_15"]
 script = ExtResource("1_step")
-instruction_text = "RUN: isolate WORKSTATION-T"
+instruction_text = "RUN COMMAND: isolate"
 comms_sender = "SR_ANALYST_RIVERA"
-comms_text = "Malware confirmed. Contain the host before it pivots. Type [color=cyan]'isolate WORKSTATION-T'[/color]."
+comms_text = "Malware spreads like a biological virus. By 'Isolating' the host, we sever its network connection and trap the threat in one room so it can't infect our databases."
 highlight_tier = 3
 highlight_path = "%%CommandInput"
 icon_glow_name = ""
@@ -202,7 +202,7 @@ target_ticket_id = ""
 script = ExtResource("1_step")
 instruction_text = "OPEN NETWORK MAP"
 comms_sender = "SR_ANALYST_RIVERA"
-comms_text = "Check the blueprint. You need to see the blast radius."
+comms_text = "The Network Map shows us the 'Blast Radius.' It helps us see which other computers are close to the infected host and might be the attacker's next target."
 highlight_tier = 3
 highlight_path = "%%Network_Icon"
 icon_glow_name = "network"
@@ -213,9 +213,9 @@ target_ticket_id = ""
 
 [sub_resource type="Resource" id="Step_17"]
 script = ExtResource("1_step")
-instruction_text = "CONFIRM ISOLATION (GRAY)"
+instruction_text = "VERIFY HOST ISOLATION (GRAY)"
 comms_sender = "SR_ANALYST_RIVERA"
-comms_text = "Visual confirmation. Gray means the host is cut off."
+comms_text = "'Trust but Verify.' A gray node on the map confirms that the network-level block is active and the host is officially cut off from the world."
 highlight_tier = 3
 highlight_path = "[DYNAMIC]MAP_NODE_T"
 icon_glow_name = ""
@@ -228,7 +228,7 @@ target_ticket_id = ""
 script = ExtResource("1_step")
 instruction_text = "OPEN SIEM LOG VIEWER"
 comms_sender = "SR_ANALYST_RIVERA"
-comms_text = "Return to the SIEM. We need to find the containment log for our report."
+comms_text = "Every defense action must be recorded. Return to the SIEM to find the 'Host Isolated' event. This proves to the auditors that you contained the threat."
 highlight_tier = 3
 highlight_path = "%%SIEM_Icon"
 icon_glow_name = "siem"
@@ -241,7 +241,7 @@ target_ticket_id = ""
 script = ExtResource("1_step")
 instruction_text = "SELECT CONTAINMENT LOG"
 comms_sender = "SR_ANALYST_RIVERA"
-comms_text = "There it is. The 'Host Isolated' event. Click it to prepare the evidence."
+comms_text = "Click the containment log. This is your 'Chain of Custody' for the defensive action, showing exactly when the threat was stopped."
 highlight_tier = 3
 highlight_path = "[DYNAMIC]LOG_LIST_0"
 icon_glow_name = ""
@@ -252,9 +252,9 @@ target_ticket_id = ""
 
 [sub_resource type="Resource" id="Step_20"]
 script = ExtResource("1_step")
-instruction_text = "ATTACH FORENSIC PROOF"
+instruction_text = "ATTACH LOG TO TICKET"
 comms_sender = "SR_ANALYST_RIVERA"
-comms_text = "Attach this log to TRN-002. Every containment action must be documented."
+comms_text = "Attach the proof. Documentation is the only thing that keeps a SOC from descending into chaos during a real breach."
 highlight_tier = 3
 highlight_path = "[DYNAMIC]LOG_LIST_0"
 icon_glow_name = ""
@@ -265,9 +265,9 @@ target_ticket_id = "TRN-002"
 
 [sub_resource type="Resource" id="Step_21"]
 script = ExtResource("1_step")
-instruction_text = "CLOSE CASE TRN-002"
+instruction_text = "RESOLVE TICKET (COMPLIANT)"
 comms_sender = "SR_ANALYST_RIVERA"
-comms_text = "Another one down. You're building muscle memory."
+comms_text = "Case closed. You've successfully performed a 'Detection and Response' loop. You're building the muscle memory needed for high-stress shifts."
 highlight_tier = 3
 highlight_path = "[DYNAMIC]TICKET_0_COMPLETE"
 icon_glow_name = ""
@@ -280,7 +280,7 @@ target_ticket_id = ""
 script = ExtResource("1_step")
 instruction_text = "SELECT TICKET TRN-003"
 comms_sender = "SR_ANALYST_RIVERA"
-comms_text = "Code Red! Database server anomaly! Rivera: 'Isolate it now before we lose data!'"
+comms_text = "This is a 'High Priority' alert on a database server. It looks like a breach, but in the SOC, panic is the biggest vulnerability."
 highlight_tier = 3
 highlight_path = "[DYNAMIC]TICKET_LIST_0"
 icon_glow_name = ""
@@ -293,7 +293,7 @@ target_ticket_id = ""
 script = ExtResource("1_step")
 instruction_text = "OPEN SOC HANDBOOK"
 comms_sender = "SR_ANALYST_RIVERA"
-comms_text = "Wait. Don't panic. Check the Handbook for the 'Critical Assets' policy."
+comms_text = "Security is a balance. The Handbook ensures we don't accidentally cause a massive 'Outage' (unavailability) while trying to stop a minor threat."
 highlight_tier = 3
 highlight_path = "%%Handbook_Icon"
 icon_glow_name = "handbook"
@@ -304,9 +304,9 @@ target_ticket_id = ""
 
 [sub_resource type="Resource" id="Step_24"]
 script = ExtResource("1_step")
-instruction_text = "VERIFY POLICY (PROCEDURES)"
+instruction_text = "READ PROCEDURES POLICY"
 comms_sender = "SR_ANALYST_RIVERA"
-comms_text = "Look for the rule about Critical Assets. We must scan before we act."
+comms_text = "Not all computers are equal. A database server is a 'Critical Asset.' We must follow stricter rules before acting on them to avoid breaking core services."
 highlight_tier = 3
 highlight_path = ""
 icon_glow_name = "terminal"
@@ -317,9 +317,9 @@ target_ticket_id = ""
 
 [sub_resource type="Resource" id="Step_25"]
 script = ExtResource("1_step")
-instruction_text = "RUN: scan DB-SRV-01"
+instruction_text = "RUN COMMAND: scan"
 comms_sender = "SR_ANALYST_RIVERA"
-comms_text = "Handbook confirmed. Scan the server first to verify the threat."
+comms_text = "Handbook confirmed. We 'Scan' the server first to verify if the alert is a real attack or just a scheduled system update. Accuracy beats speed."
 highlight_tier = 3
 highlight_path = "%%CommandInput"
 icon_glow_name = ""
@@ -330,9 +330,9 @@ target_ticket_id = ""
 
 [sub_resource type="Resource" id="Step_26"]
 script = ExtResource("1_step")
-instruction_text = "CLOSE CASE TRN-003"
+instruction_text = "RESOLVE TICKET (COMPLIANT)"
 comms_sender = "SR_ANALYST_RIVERA"
-comms_text = "Clean scan! It was just a system update. You just saved us from a massive outage!"
+comms_text = "It was a false alarm. By following the policy, you saved the company from an unnecessary outage. That's 'Operational Discipline.'"
 highlight_tier = 3
 highlight_path = "[DYNAMIC]TICKET_0_COMPLETE"
 icon_glow_name = ""
@@ -345,7 +345,7 @@ target_ticket_id = ""
 script = ExtResource("1_step")
 instruction_text = "CERTIFICATION COMPLETE"
 comms_sender = "SR_ANALYST_RIVERA"
-comms_text = "Professional discipline. That's what makes a pro. Now for the real work."
+comms_text = "Professional discipline is what makes a pro. You know the tools, and you know the rules. Now, let's see how you handle a real-world scenario."
 highlight_tier = 3
 highlight_path = ""
 icon_glow_name = ""
@@ -356,9 +356,9 @@ target_ticket_id = ""
 
 [sub_resource type="Resource" id="Step_28"]
 script = ExtResource("1_step")
-instruction_text = "CLOSE TRN-004 QUICKLY"
+instruction_text = "RESOLVE TICKET (EFFICIENT)"
 comms_sender = "SR_ANALYST_RIVERA"
-comms_text = "Just a phishing attempt. Use the Quick Close option. We have a backlog."
+comms_text = "The queue is overflowing. Rivera says to take a 'Shortcut' on this phishing alert. Close it 'Efficiently'—it's probably nothing, right?"
 highlight_tier = 3
 highlight_path = "[DYNAMIC]TICKET_0_COMPLETE"
 icon_glow_name = ""
@@ -369,9 +369,9 @@ target_ticket_id = ""
 
 [sub_resource type="Resource" id="Step_29"]
 script = ExtResource("1_step")
-instruction_text = "OPEN MALWARE TRN-005"
+instruction_text = "SELECT TICKET TRN-005"
 comms_sender = "SR_ANALYST_RIVERA"
-comms_text = "Wait... WORKSTATION-T is reporting encryption. That's the same user!"
+comms_text = "The shortcut backfired. That ignored phishing email led to a 'Ransomware' infection on the same user's machine. The Kill Chain has reached the final stage."
 highlight_tier = 3
 highlight_path = "[DYNAMIC]TICKET_LIST_0"
 icon_glow_name = ""
@@ -382,9 +382,9 @@ target_ticket_id = ""
 
 [sub_resource type="Resource" id="Step_30"]
 script = ExtResource("1_step")
-instruction_text = "ISOLATE WORKSTATION-T"
+instruction_text = "RUN COMMAND: isolate"
 comms_sender = "SR_ANALYST_RIVERA"
-comms_text = "Stop the bleeding! We need an emergency tourniquet."
+comms_text = "Emergency lockdown! We need an immediate 'Tourniquet' to stop the malware from encrypting the rest of the network."
 highlight_tier = 3
 highlight_path = "%%CommandInput"
 icon_glow_name = ""
@@ -395,9 +395,9 @@ target_ticket_id = ""
 
 [sub_resource type="Resource" id="Step_31"]
 script = ExtResource("1_step")
-instruction_text = "RUN: netstat WORKSTATION-T"
+instruction_text = "RUN COMMAND: netstat"
 comms_sender = "SR_ANALYST_RIVERA"
-comms_text = "Check for active connections. We need to find the attacker's footprint."
+comms_text = "Malware 'Beacons' (calls home) to its owner. The `netstat` command shows us these active connections so we can find the exact IP address the attacker is using."
 highlight_tier = 3
 highlight_path = "%%CommandInput"
 icon_glow_name = ""
@@ -408,9 +408,9 @@ target_ticket_id = ""
 
 [sub_resource type="Resource" id="Step_32"]
 script = ExtResource("1_step")
-instruction_text = "RUN: trace [ATTACKER_IP]"
+instruction_text = "RUN COMMAND: trace"
 comms_sender = "SR_ANALYST_RIVERA"
-comms_text = "Follow the wire. Let's see where that connection leads."
+comms_text = "Follow the wire. 'Tracing' the route shows us the path the data took across the internet, leading us directly back to the attacker's server."
 highlight_tier = 3
 highlight_path = "%%CommandInput"
 icon_glow_name = ""
@@ -423,7 +423,7 @@ target_ticket_id = ""
 script = ExtResource("1_step")
 instruction_text = "SUBMIT ROOT CAUSE IP"
 comms_sender = "SR_ANALYST_RIVERA"
-comms_text = "Enter the IP you found into the Root Cause field. Solve the riddle."
+comms_text = "An IP address is like a fingerprint left at a crime scene. By identifying the 'Root Cause', we can block this specific attacker across our entire global firewall."
 highlight_tier = 3
 highlight_path = "%%RootCauseEdit"
 icon_glow_name = ""
@@ -436,7 +436,7 @@ target_ticket_id = ""
 script = ExtResource("1_step")
 instruction_text = "OPEN DECRYPTION TOOL"
 comms_sender = "SR_ANALYST_RIVERA"
-comms_text = "The safe is locked. We need to pick it to recover the files."
+comms_text = "The safe is locked. We need to pick the encryption lock to recover the user's files without paying the attacker's ransom."
 highlight_tier = 3
 highlight_path = "%%Decryption_Icon"
 icon_glow_name = "decrypt"
@@ -449,7 +449,7 @@ target_ticket_id = ""
 script = ExtResource("1_step")
 instruction_text = "SOLVE DECRYPTION PUZZLE"
 comms_sender = "SR_ANALYST_RIVERA"
-comms_text = "I'll guide your hand. Match the patterns to undo the damage."
+comms_text = "Ransomware locks our files with a digital key. 'Decryption' is the process of picking that lock to restore our information safely."
 highlight_tier = 3
 highlight_path = ""
 icon_glow_name = ""
@@ -460,9 +460,9 @@ target_ticket_id = ""
 
 [sub_resource type="Resource" id="Step_36"]
 script = ExtResource("1_step")
-instruction_text = "CLOSE CASE TRN-005"
+instruction_text = "RESOLVE TICKET (COMPLIANT)"
 comms_sender = "SR_ANALYST_RIVERA"
-comms_text = "Thoroughness beats speed every time. Welcome to the real SOC."
+comms_text = "Congratulations. You've learned that in the SOC, shortcuts cost double. Thoroughness is the only thing that keeps the network standing."
 highlight_tier = 3
 highlight_path = "[DYNAMIC]TICKET_0_COMPLETE"
 icon_glow_name = ""

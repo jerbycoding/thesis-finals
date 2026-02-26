@@ -5,7 +5,7 @@
 [ext_resource type="Script" uid="uid://cbi6smmdpx4yu" path="res://scripts/2d/ExitButton.gd" id="2_0kbkv"]
 [ext_resource type="Texture2D" uid="uid://dk37ymi787rod" path="res://assets/wallpapers/Microsoft_Surface_Duo.jpg" id="3_r1l77"]
 [ext_resource type="Theme" uid="uid://dny3rlbltexc7" path="res://assets/themes/EnterpriseTheme.tres" id="4_theme"]
-[ext_resource type="PackedScene" path="res://scenes/ui/RunbookSidebar.tscn" id="5_runbook"]
+[ext_resource type="PackedScene" uid="uid://unh4acpyvw0m" path="res://scenes/ui/RunbookSidebar.tscn" id="5_runbook"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_TaskbarGlass"]
 bg_color = Color(0.0196078, 0.0196078, 0.0196078, 0.705882)

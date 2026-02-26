@@ -104,7 +104,7 @@ func open_app(app_name: String, force_new: bool = false):
 			_focus_window(existing_window)
 			existing_window.move_to_front() # Bring to front in scene tree
 			# Ensure start menu closes even if app was already open
-			var desktop = get_tree().root.find_child("ComputerDesktop", true, false)
+			var desktop = GameState.desktop_instance if GameState else null
 			if desktop and "start_menu_instance" in desktop:
 				if desktop.start_menu_instance: desktop.start_menu_instance.visible = false
 			return existing_window.content_instance
@@ -172,7 +172,7 @@ func open_app(app_name: String, force_new: bool = false):
 	window.move_to_front()
 	
 	# Intelligent Dismiss
-	var desktop = get_tree().root.find_child("ComputerDesktop", true, false)
+	var desktop = GameState.desktop_instance if GameState else null
 	if desktop and "start_menu_instance" in desktop:
 		if desktop.start_menu_instance: desktop.start_menu_instance.visible = false
 	
@@ -238,7 +238,7 @@ func _on_window_focused(window: Control):
 	_update_window_z_indices()
 	
 	# Intelligent Dismiss: Close Start Menu when clicking any window
-	var desktop = get_tree().root.find_child("ComputerDesktop", true, false)
+	var desktop = GameState.desktop_instance if GameState else null
 	if desktop and "start_menu_instance" in desktop:
 		if desktop.start_menu_instance and desktop.start_menu_instance.visible:
 			desktop.start_menu_instance.visible = false
