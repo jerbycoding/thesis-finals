@@ -1,6 +1,6 @@
 #Sprint 11: The Certification Phase (Diegetic Onboarding)
 
-
+f
   Section 1: Physical Immersion (The "Deep Focus" Transition)
   Goal: Bridge the 3D/2D gap by simulating human eye focus and physical movement.
    * Camera Dolly: Update TransitionManager.gd to lerp FOV from 80 to 60 during the sit_down animation.
