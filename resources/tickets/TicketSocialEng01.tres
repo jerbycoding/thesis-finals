@@ -6,15 +6,22 @@
 [resource]
 script = ExtResource("1_ticket")
 ticket_id = "SOCIAL-001"
-title = "Social Engineering Attempt Reported"
-description = "A user reported a call from someone impersonating IT Support, asking for their password. Investigate if similar calls were made and alert users."
-severity = "Medium"
+title = "Verify Potential Phone Scam"
+description = "Alert: A user reported a call from someone claiming to be 'IT Support' asking for their password. 
+
+[b]Instruction:[/b] We need to see if the user fell for it. Open the [b]SIEM Viewer[/b] and search for user 'jsmith'. Look for any successful logins that happened around the time of the reported call. Attach the login log to confirm the status."
+severity = "Low"
 category = "Social Engineering"
-steps = Array[String](["Check call logs for similar suspicious calls (SIEM)", "Draft a company-wide security alert (Email)", "Inform Corporate Voice to update security awareness"])
-required_tool = "none"
-base_time = 150.0
-hidden_risks = Array[String](["Ignoring user report", "Misidentifying legitimate IT calls"])
+steps = Array[String](["Search SIEM for 'jsmith'", "Identify successful logins", "Attach log evidence"])
+required_tool = "siem"
+base_time = 240.0
+hidden_risks = Array[String]([])
 required_log_ids = Array[String](["LOG-VOIP-001"])
+is_ambient_noise = false
+required_host_isolation = ""
+required_host_restoration = ""
+required_root_cause = ""
+on_complete_event = ""
 kill_chain_path = "The Data Breach"
 kill_chain_stage = 1
 escalation_ticket = ExtResource("1_insider")

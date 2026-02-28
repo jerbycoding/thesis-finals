@@ -1,20 +1,24 @@
 [gd_resource type="Resource" script_class="TicketResource" load_steps=2 format=3]
 
-[ext_resource type="Script" path="res://resources/tickets/TicketResource.gd" id="1_ticket"]
+[ext_resource type="Script" uid="uid://ccptkdfdnunvq" path="res://resources/tickets/TicketResource.gd" id="1_ticket"]
 
 [resource]
 script = ExtResource("1_ticket")
 ticket_id = "KILL-SWITCH-001"
 title = "CRITICAL: Backup Wipe Initiated"
-description = "Alert: A recursive delete command 'rm -rf /mnt/backups' has been issued on the primary Tape Library. The attacker is attempting to destroy our ability to recover.
+description = "EXTINCTION ALERT: Attackers are deleting our server backups. 
 
-This is an extinction-level event. Trace the session ID immediately and terminate the connection."
+[b]Instruction:[/b] You must act fast. Find the attacker's IP in the SIEM logs and type it into the [b]Root Cause[/b] box below. This will terminate their remote session and save the data."
 severity = "Critical"
 category = "Data Breach"
-steps = ["Trace 'rm -rf' command source", "Kill active SSH session", "Verify backup integrity"]
+steps = Array[String](["Identify 'rm -rf' command in SIEM", "Locate Attacker IP address", "Enter IP in Root Cause box"])
 required_tool = "terminal"
 base_time = 90.0
 hidden_risks = ["Hesitation"]
 required_log_ids = ["LOG-KILL-SWITCH-001"]
+required_host_isolation = ""
+required_host_restoration = ""
+required_root_cause = "{attacker_ip}"
+on_complete_event = ""
 kill_chain_path = "Total Collapse"
 kill_chain_stage = 3

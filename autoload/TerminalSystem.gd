@@ -85,6 +85,31 @@ func _on_world_event(event_id: String, active: bool, _duration: float):
 		isp_multiplier = 3.0 if active else 1.0
 		print("TerminalSystem: ISP_THROTTLING event ", "ACTIVE" if active else "CLEARED", ". Latency multiplier: ", isp_multiplier)
 
+# --- Connection Management (The Forensic Bridge) ---
+
+func register_connection(hostname: String, ip: String):
+	var h = hostname.to_upper()
+	if not active_connections.has(h):
+		active_connections[h] = []
+	
+	if not ip in active_connections[h]:
+		active_connections[h].append(ip)
+		print("📡 Terminal: Registered malicious connection: %s -> %s" % [h, ip])
+
+func unregister_connection(hostname: String, ip: String):
+	var h = hostname.to_upper()
+	if active_connections.has(h):
+		active_connections[h].erase(ip)
+		if active_connections[h].is_empty():
+			active_connections.erase(h)
+		print("📡 Terminal: Unregistered connection: %s -> %s" % [h, ip])
+
+func clear_all_connections():
+	active_connections.clear()
+	trace_overrides.clear()
+	print("📡 Terminal: All forensic connections cleared.")
+
+# --------------------------------------------------
 
 func execute_command(command_line: String) -> Dictionary:
 	# Parse command

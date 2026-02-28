@@ -1,20 +1,23 @@
 [gd_resource type="Resource" script_class="TicketResource" load_steps=3 format=3]
 
 [ext_resource type="Resource" path="res://resources/tickets/TicketDataExfiltration.tres" id="1_exfil"]
-[ext_resource type="Script" path="res://resources/tickets/TicketResource.gd" id="1_ticket"]
+[ext_resource type="Script" uid="uid://ccptkdfdnunvq" path="res://resources/tickets/TicketResource.gd" id="1_ticket"]
 
 [resource]
 script = ExtResource("1_ticket")
 ticket_id = "VPN-ANOMALY-001"
 title = "Impossible Travel Alert"
-description = "User 'j.doe' logged in from New York, and then 5 minutes later from Tokyo. This is physically impossible.\n\nDetermine which login is malicious and lock the account."
+description = "CRITICAL: Credential Theft Suspected. An employee account has logged in from two different countries within minutes. This is physically impossible.\n\n[b]Instruction:[/b] Use the SIEM to compare the two login IPs. Identify the malicious IP (the one from Tokyo) and type it into the [b]Root Cause[/b] box to flag the account for review."
 severity = "High"
 category = "Authentication"
-steps = ["Compare login timestamps in SIEM", "Identify the malicious IP", "Flag account for review"]
+steps = ["Compare login locations in SIEM", "Enter Malicious IP in Root Cause box", "Flag account for administrative review"]
 required_tool = "siem"
 base_time = 200.0
 hidden_risks = ["Locking account while CEO is traveling"]
 required_log_ids = ["LOG-VPN-001", "LOG-VPN-002"]
+required_host_isolation = ""
+required_host_restoration = ""
+required_root_cause = "{ip}"
 on_complete_event = ""
 kill_chain_path = "Account Takeover"
 kill_chain_stage = 2

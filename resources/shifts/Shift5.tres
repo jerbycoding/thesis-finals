@@ -12,10 +12,11 @@ briefing_dialogue_id = "briefing_friday"
 event_sequence = [
 	{"time": 10, "event": "zero_day_start", "type": "system_event", "event_id": "ZERO_DAY", "duration": 300.0},
 	{"time": 60, "event": "spawn_exfil", "type": "spawn_ticket", "ticket_id": "DATA-EXFIL-001"},
+	{"time": 120, "event": "spawn_kill_switch", "type": "spawn_ticket", "ticket_id": "KILL-SWITCH-001"},
 	{"time": 180, "event": "spawn_ransom_2", "type": "spawn_ticket", "ticket_id": "RANSOM-002"},
+	{"time": 240, "event": "spawn_core_meltdown", "type": "spawn_ticket", "ticket_id": "CORE-MELTDOWN-001"},
 	{"time": 300, "event": "ddos_start", "type": "system_event", "event_id": "DDOS_ATTACK", "duration": 180.0},
 	{"time": 300, "event": "spawn_ddos", "type": "spawn_ticket", "ticket_id": "DDOS-MITIGATION-001"},
-	{"time": 420, "event": "maybe_spawn_redemption", "type": "spawn_ticket", "ticket_id": "BLACK-TICKET-REDEMPTION"},
 	{"time": 600, "event": "final_end", "type": "shift_end"}
 ]
 random_event_pool = [

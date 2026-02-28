@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="TicketResource" load_steps=3 format=3 uid="uid://dbe4yrnc1q8ry"]
+[gd_resource type="Resource" script_class="TicketResource" load_steps=3 format=3]
 
 [ext_resource type="Resource" uid="uid://dp0lxogkjh74a" path="res://resources/tickets/TicketMalwareContainment.tres" id="1_malware"]
 [ext_resource type="Script" uid="uid://ccptkdfdnunvq" path="res://resources/tickets/TicketResource.gd" id="1_ticket"]
@@ -7,19 +7,21 @@
 script = ExtResource("1_ticket")
 ticket_id = "PHISH-001"
 title = "Phishing Campaign Alert"
-description = "Multiple users report a suspicious email with the subject 'URGENT: Verify Your Account'. 
+description = "Alert: Multiple users report a suspicious email with the subject 'URGENT: Verify Your Account'. 
 
-[b]Required Action:[/b]
-1. Use the [color=cyan]Email Analyzer[/color] to inspect headers of the 'Verify Your Account' email.
-2. Search [color=cyan]SIEM Logs[/color] for 'LOG-PHISH-001' and 'LOG-EMAIL-002' to verify the campaign scope.
-3. Attach all identified evidence to this ticket."
+[b]Instruction:[/b] Open the [color=cyan]Email Analyzer[/color] and use the [b]Link Check[/b] tool. It will reveal a hidden Malicious IP address. Once you have the IP, open the [b]SIEM Viewer[/b] and search for that IP to see if any users actually clicked it. Attach the log as evidence."
 severity = "Medium"
 category = "Phishing"
-steps = Array[String](["Check SIEM for phishing campaign alerts", "Review email headers for spoofing indicators", "Determine if any user clicked malicious link"])
+steps = Array[String](["Use Link Check in Email Analyzer", "Identify malicious IP address", "Search SIEM for IP and attach log"])
 required_tool = "siem"
-base_time = 180.0
-hidden_risks = Array[String](["User already clicked link → malware installed"])
-required_log_ids = Array[String](["LOG-PHISH-001", "LOG-EMAIL-002"])
+base_time = 300.0
+hidden_risks = Array[String]([])
+required_log_ids = Array[String](["LOG-PHISH-001"])
+is_ambient_noise = false
+required_host_isolation = ""
+required_host_restoration = ""
+required_root_cause = ""
+on_complete_event = ""
 kill_chain_path = "Malware Outbreak"
 kill_chain_stage = 1
 escalation_ticket = ExtResource("1_malware")

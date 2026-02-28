@@ -1,18 +1,24 @@
 [gd_resource type="Resource" script_class="EmailResource" load_steps=2 format=3]
 
-[ext_resource type="Script" path="res://resources/EmailResource.gd" id="1_email"]
+[ext_resource type="Script" uid="uid://fkoqi7e7v8ey" path="res://resources/EmailResource.gd" id="1_email"]
 
 [resource]
 script = ExtResource("1_email")
 email_id = "EMAIL-PHISH-001"
-sender = "External"
+sender = "Security Team <noreply@verify-account-portal.com>"
 subject = "URGENT: Verify Your Account Immediately"
-body = "Dear User,\n\nWe have detected suspicious activity on your account. Please verify your credentials immediately by clicking the link below.\n\n[Click here to verify]\n\nFailure to verify within 24 hours will result in account suspension.\n\nBest regards,\nSecurity Team"
-attachments = []
-headers = {"status": {"spf": "FAIL", "dkim": "FAIL", "dmarc": "FAIL"}, "from_domain": "suspicious-domain.com", "reply_to": "noreply@suspicious-domain.com"}
+body = "Dear User,\n\nWe have detected suspicious activity on your account. Please verify your credentials immediately by clicking the link below.\n\nLink: http://verify-account-portal.com/login\n\nFailure to verify within 24 hours will result in account suspension.\n\nBest regards,\nSecurity Team"
+attachments = Array[String]([])
+headers = {
+"dkim": "FAIL",
+"dmarc": "FAIL",
+"spf": "FAIL"
+}
 is_malicious = true
 is_urgent = true
-clues = ["suspicious_link", "spoofed_sender", "suspicious_domain"]
+threat_category = 1
+clues = Array[String](["suspicious_link", "spoofed_sender", "suspicious_domain"])
 related_ticket = "PHISH-001"
-suspicious_ip = ""
-suspicious_domain = "suspicious-domain.com"
+is_focused = true
+suspicious_ip = "94.156.12.11"
+suspicious_domain = "verify-account-portal.com"

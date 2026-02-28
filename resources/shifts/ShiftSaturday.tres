@@ -1,6 +1,7 @@
-[gd_resource type="Resource" script_class="ShiftResource" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="ShiftResource" load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://resources/ShiftResource.gd" id="1_shift"]
+[ext_resource type="Resource" uid="uid://saturdayauditres1" path="res://resources/minigames/SaturdayAudit.tres" id="2_audit"]
 
 [resource]
 script = ExtResource("1_shift")
@@ -21,3 +22,4 @@ threat_impact = "Direct network tapping; bypassing all digital security layers b
 threat_indicators = ["Unidentified hardware attached to routers.", "Signal de-synchronization in secure zones.", "Rogue patch cables detected in restricted ports."]
 minigame_type = "AUDIT"
 required_floor = -2
+calibration_config = ExtResource("2_audit")

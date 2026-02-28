@@ -1,19 +1,25 @@
 [gd_resource type="Resource" script_class="TicketResource" load_steps=2 format=3]
 
-[ext_resource type="Script" path="res://resources/tickets/TicketResource.gd" id="1_ticket"]
+[ext_resource type="Script" uid="uid://ccptkdfdnunvq" path="res://resources/tickets/TicketResource.gd" id="1_ticket"]
 
 [resource]
 script = ExtResource("1_ticket")
 ticket_id = "TICKET-NOISE-001"
-title = "Account Lockout: Forgotten Password"
-description = "User 'j.doe' reports they have forgotten their password and locked their account after 5 attempts. Verify identity and reset if necessary."
+title = "Routine Request: Password Reset"
+description = "ADMINISTRATIVE REQUEST: User 'j.doe' needs a password reset. 
+
+[b]Instruction:[/b] This is a low-priority 'management' task. You do not need to use the SIEM or Terminal. Simply review the request, click the [b]Complete[/b] button, and select [b]Compliant[/b] to clear it from your queue."
 severity = "Low"
-category = "Authentication"
-steps = ["Verify user identity", "Reset password in AD", "Close ticket"]
-required_tool = "siem"
-base_time = 180.0
-hidden_risks = []
-required_log_ids = ["LOG-NOISE-102"]
+category = "General"
+steps = Array[String](["Review user request", "Acknowledge identity verification", "Complete as Compliant"])
+required_tool = "none"
+base_time = 300.0
+hidden_risks = Array[String]([])
+required_log_ids = Array[String]([])
+is_ambient_noise = true
+required_host_isolation = ""
+required_host_restoration = ""
+required_root_cause = ""
 on_complete_event = ""
 kill_chain_path = ""
 kill_chain_stage = 0

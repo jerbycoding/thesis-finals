@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="TicketResource" load_steps=2 format=3 uid="uid://do1je7de7l2ca"]
+
+[ext_resource type="Script" uid="uid://ccptkdfdnunvq" path="res://resources/tickets/TicketResource.gd" id="1_ticket"]
+
+[resource]
+script = ExtResource("1_ticket")
+ticket_id = "PHISH-INTERNAL-001"
+title = "Investigation: Reported Deceptive Internal Email"
+description = "ALERT: Internal Spoofing Detected. Someone is sending emails that look like they come from our IT department, but the domain is wrong. 
+
+[b]Instruction:[/b] Use the Email Analyzer to find the sender's real domain. Then, search the SIEM logs for that domain to see if any users actually interacted with it. Attach the log as evidence."
+severity = "High"
+category = "Phishing"
+steps = Array[String](["Verify email sender headers", "Identify link interaction in SIEM", "Attach forensic log evidence"])
+required_tool = "siem"
+base_time = 300.0
+hidden_risks = Array[String](["malware_outbreak"])
+required_log_ids = Array[String](["LOG-PHISH-CLICK"])
+is_ambient_noise = false
+required_host_isolation = ""
+required_host_restoration = ""
+required_root_cause = ""
+on_complete_event = ""
+kill_chain_path = "Internal Phish"
+kill_chain_stage = 1

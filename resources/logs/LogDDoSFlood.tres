@@ -1,14 +1,14 @@
 [gd_resource type="Resource" script_class="LogResource" load_steps=2 format=3]
 
-[ext_resource type="Script" path="res://resources/logs/LogResource.gd" id="1_log"]
+[ext_resource type="Script" uid="uid://jcpwo8vm7t0k" path="res://resources/logs/LogResource.gd" id="1_log"]
 
 [resource]
 script = ExtResource("1_log")
-log_id = "LOG-DDOS-001"
-timestamp = "14:00:01"
-source = "Firewall"
+log_id = "LogDDoSFlood"
+timestamp = "15:42:11"
+source = "Edge Gateway"
 category = "Network"
-message = "High inbound traffic volume detected (UDP Flood)."
+message = "High-volume UDP flood detected targeting internal service. Source: {attacker_ip}"
 severity = 4
 related_ticket = "DDOS-MITIGATION-001"
 ip_address = ""

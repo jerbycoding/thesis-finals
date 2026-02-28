@@ -6,15 +6,22 @@
 [resource]
 script = ExtResource("1_ticket")
 ticket_id = "AUTH-FAIL-GENERIC"
-title = "Multiple Authentication Failures"
-description = "System logs indicate multiple failed login attempts for user 'jsmith'. Likely a forgotten password or minor misconfiguration."
+title = "Routine Check: Multiple Failed Logins"
+description = "ROUTINE ALERT: A series of failed login attempts was detected for user 'jsmith' earlier this morning. This likely indicates a forgotten password. 
+
+[b]Instruction:[/b] Open the [b]SIEM Viewer[/b] and search for 'smith'. Identify the cluster of 'Failed Login' events from earlier today and attach one as evidence to clear the alert."
 severity = "Low"
 category = "Authentication"
-steps = Array[String](["Verify user 'jsmith' identity", "Reset password if requested", "Monitor for further failures"])
+steps = Array[String](["Open SIEM Viewer", "Search for 'smith' in historical logs", "Attach one 'Failed Login' log entry"])
 required_tool = "siem"
 base_time = 240.0
 hidden_risks = Array[String]([])
 required_log_ids = Array[String](["LOG-AUTH-003"])
+is_ambient_noise = true
+required_host_isolation = ""
+required_host_restoration = ""
+required_root_cause = ""
+on_complete_event = ""
 kill_chain_path = "Account Takeover"
 kill_chain_stage = 1
 escalation_ticket = ExtResource("1_vpn")

@@ -1,19 +1,24 @@
-[gd_resource type="Resource" script_class="TicketResource" format=3]
+[gd_resource type="Resource" script_class="TicketResource" load_steps=2 format=3]
 
-[ext_resource type="Script" path="res://resources/tickets/TicketResource.gd" id="1_ticket"]
+[ext_resource type="Script" uid="uid://ccptkdfdnunvq" path="res://resources/tickets/TicketResource.gd" id="1_ticket"]
 
 [resource]
 script = ExtResource("1_ticket")
 ticket_id = "DDOS-MITIGATION-001"
-title = "DDoS Attack in Progress"
-description = "Network monitoring detects a massive UDP flood originating from INSIDE the network. An internal host has been compromised and is part of a botnet.\n\nUse the Terminal to TRACE the traffic source and ISOLATE the infected host immediately."
+title = "Emergency: Network Slowness"
+description = "The network is lagging. 
+
+[b]Instruction:[/b] One of our servers is being flooded with traffic. Run the [b]netstat[/b] command on the server in the Terminal. Look for an external IP that has multiple connections. Type that IP into the [b]Root Cause[/b] box below to identify the source of the flood."
 severity = "Critical"
 category = "DDoS"
-steps = ["Open Terminal", "Run 'trace [attacker_ip]' (See logs)", "Run 'isolate [hostname]'"]
+steps = Array[String](["Run 'netstat' on affected server", "Identify high-volume IP address", "Enter IP in Root Cause box"])
 required_tool = "terminal"
 base_time = 180.0
-hidden_risks = ["Isolating gateway instead of host"]
-required_log_ids = ["LOG-DDOS-002"]
+hidden_risks = Array[String](["Isolating gateway instead of host"])
+required_log_ids = Array[String](["LogDDoSFlood"])
+required_host_isolation = ""
+required_host_restoration = ""
+required_root_cause = "{attacker_ip}"
 on_complete_event = ""
 kill_chain_path = "Botnet"
 kill_chain_stage = 1

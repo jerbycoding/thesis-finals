@@ -134,25 +134,25 @@ enum DIFFICULTY { JUNIOR, ANALYST, LEAD }
 
 const DIFFICULTY_DATA = {
 	DIFFICULTY.JUNIOR: {
-		"label": "JUNIOR",
-		"time_mult": 1.5,
-		"damage_mult": 0.5,
-		"chaos_interval": 65.0,
-		"description": "REDUCED PRESSURE :: EXTENDED RESPONSE WINDOWS"
-	},
-	DIFFICULTY.ANALYST: {
 		"label": "ANALYST",
 		"time_mult": 1.0,
 		"damage_mult": 1.0,
 		"chaos_interval": 45.0,
 		"description": "STANDARD PROTOCOL :: BALANCED OPERATIONAL RIGOR"
 	},
-	DIFFICULTY.LEAD: {
+	DIFFICULTY.ANALYST: {
 		"label": "LEAD",
 		"time_mult": 0.7,
 		"damage_mult": 1.5,
 		"chaos_interval": 25.0,
 		"description": "ZERO TOLERANCE :: HIGH-STRESS SIMULATION"
+	},
+	DIFFICULTY.LEAD: {
+		"label": "CHIEF ANALYST",
+		"time_mult": 0.5,
+		"damage_mult": 2.0,
+		"chaos_interval": 15.0,
+		"description": "CRITICAL ENGAGEMENT :: MAXIMUM THREAT ENVIRONMENT"
 	}
 }
 

@@ -5,64 +5,52 @@
 
 ---
 
-#### 📅 **MONDAY: "Active Monitoring"** (Shift 1)
-*   **Narrative Arc:** The player arrives. The CISO demands compliance. A known Phishing campaign is active.
+#### 📅 **MONDAY: "Data Correlation"** (Shift 1)
+*   **Narrative Arc:** The player arrives. The CISO demands compliance. Focus is on learning the relationship between Email and SIEM data.
 *   **Key Tickets:**
-    *   `PHISH-001` (Stage 1): The "Starter" Phish. Sets up the Malware Chain.
-    *   `AUTH-FAIL-GENERIC` (Stage 1): Brute force noise. Sets up Account Takeover.
-    *   `SPEAR-PHISH-001`: High-priority CEO target.
-*   **Mechanic Focus:** Email Analyzer & SIEM.
-*   **Audit / Polish Notes:**
-    *   *Pacing:* Good intro speed.
-    *   *Polish:* `SPEAR-PHISH-001` feels isolated. **Suggestion:** Make the CEO mention this email in a dialogue later if you save him.
+    *   `PHISH-001` (Stage 1): Simple triage.
+    *   `PHISH-INTERNAL-001`: **Simplified Investigation.** Spoofed IT email; requires SIEM correlation to find the 'Click' log.
+    *   `SPEAR-PHISH-001`: CEO target.
+*   **Mechanic Focus:** **Correlation.** Finding SIEM proof for Email indicators.
 
-#### 📅 **TUESDAY: "Noise & Distraction"** (Shift 2)
-*   **Narrative Arc:** Users are complaining. IT Support is overwhelmed. The "Social Engineering" threat begins.
+#### 📅 **TUESDAY: "Terminal Action"** (Shift 2)
+*   **Narrative Arc:** Technical anomalies escalate. Focus moves from just watching to taking active defense measures.
 *   **Key Tickets:**
-    *   `SOCIAL-001` (Stage 1): Phone scam report. Sets up Insider Threat.
-    *   `SUPPLY-CHAIN-001` (Stage 1): The "Fake Patch" email.
-*   **Mechanic Focus:** **Distraction.** The `FALSE_FLAG` event spawns fake noise logs to hide the real threats.
-*   **Audit / Polish Notes:**
-    *   *Logic:* `FALSE_FLAG` duration is 90 seconds. **Suggestion:** Ensure this doesn't overlap with a Critical ticket, or it becomes frustratingly hard for Week 1.
+    *   `SOCIAL-001`: Intro to Social Engineering reports.
+    *   `AUTH-BRUTE-LOCAL`: **Educational Action.** First time using Terminal `isolate` to stop an internal attacker.
+    *   `SUPPLY-CHAIN-001`: Intro to third-party risk.
+*   **Mechanic Focus:** **Containment.** Mastering the SOC Terminal commands (`scan`, `isolate`).
 
-#### 📅 **WEDNESDAY: "The Outbreak"** (Shift 3)
-*   **Narrative Arc:** The threats from Mon/Tue mature. The first Malware/Ransomware appears.
+#### 📅 **WEDNESDAY: "Forensic Logic"** (Shift 3)
+*   **Narrative Arc:** The malware outbreak goes live. The player must move beyond simple actions and start identifying technical sources.
 *   **Key Tickets:**
-    *   `MALWARE-CONTAIN-001` (Stage 2): The result of Monday's Phish. Active Beaconing.
-    *   `RANSOM-001` (Stage 3): Critical Finance Server encryption.
-*   **Mechanic Focus:** **Terminal (Isolation)** & **Decryption Tool**.
-*   **Audit / Polish Notes:**
-    *   *Intensity:* This is the first "Spike" in difficulty.
-    *   *Polish:* The `LATERAL_MOVEMENT` event runs for 120s. Ensure `NetworkState` actually shows infection spreading visually on the Map during this time.
+    *   `MALWARE-POLY-001`: **Root Cause (Hostname).** Find the second victim by identifying their specific machine name.
+    *   `DDOS-MITIGATION-001`: **Root Cause (IP).** Find the botnet controller's external IP address.
+    *   `RANSOM-001`: Climax of the Malware Chain.
+*   **Mechanic Focus:** **Attribution.** Using the 'Root Cause' box to validate technical findings before closure.
 
 #### 📅 **THURSDAY: "Internal Betrayal"** (Shift 4)
-*   **Narrative Arc:** Paranoia. The threat is coming from inside. CISO suspects a leak.
+*   **Narrative Arc:** Paranoia. Attacker credentials suggest IT Support may be compromised.
 *   **Key Tickets:**
-    *   `INSIDER-001` (Stage 2): Result of Tuesday's Social Eng. Jane Doe accessing files.
-    *   `SHADOW-IT-001` (Stage 1): Marketing using Dropbox.
-*   **Mechanic Focus:** **Network Map** & **SIEM (User Analysis)**.
-*   **Audit / Polish Notes:**
-    *   *Narrative:* The CISO dialogue here ("Thursday Betrayal") is strong.
-    *   *Polish:* `SHADOW-IT-001` is "Low" severity. **Suggestion:** Bump to "Medium" or make it escalate faster to `DATA-EXFIL` to heighten the paranoia.
+    *   `MOLE-HUNT-001`: **Investigation.** Trace an admin login back to a specific IP to confirm account takeover.
+    *   `SHADOW-IT-002`: **Containment.** A live 5GB data leak; requires immediate isolation of the Marketing workstation.
+*   **Mechanic Focus:** **Account Forensics.** Validating user alibis against IP geolocations.
 
 #### 📅 **FRIDAY: "Zero Day"** (Shift 5)
-*   **Narrative Arc:** Total Chaos. The "Big One" hits. All systems fail.
+*   **Narrative Arc:** Total Siege. co-ordinated attacks on data, infrastructure, and physical cooling.
 *   **Key Tickets:**
-    *   `DATA-EXFIL-001` (Stage 3): The Insider/Auth threat succeeds. Massive data loss.
-    *   `RANSOM-002` (Stage 3): Web Server down.
-    *   `DDOS-MITIGATION-001` (Stage 3): Infrastructure collapse.
-*   **Mechanic Focus:** **Survival.** The `ZERO_DAY` event forces all scan times to 1.5x.
-*   **Audit / Polish Notes:**
-    *   *Performance:* Heavy load on the EventBus.
-    *   *Polish:* Ensure the `WarWall` turns RED immediately when the shift starts. The atmosphere should feel oppressive.
+    *   `KILL-SWITCH-001`: **Emergency Logic.** Trace and terminate an active SSH session within 90s to save the backups.
+    *   `CORE-MELTDOWN-001`: **Physical Threat.** Isolate a compromised IoT thermostat to prevent server hardware from melting.
+*   **Mechanic Focus:** **Crisis Triage.** Juggling concurrent Critical alerts while environmental effects (shake/lag) are active.
 
 ---
 
 #### 🛠️ **WEEKEND: "Recovery"** (Shift 6 & 7)
-*   **SATURDAY (Audit):** Physical navigation in Network Hub. `AUDIT` Minigame (Signal Slider).
-*   **SUNDAY (Recovery):** Physical navigation in Server Vault. `RECOVERY` Minigame (Hardware Slotting).
+*   **SATURDAY (Audit):** Physical navigation in Network Hub (Floor -2). `AUDIT` tasks linked to `SaturdayAudit.tres`. Requires walking to 3 specific racks to perform technical signal handshakes.
+*   **SUNDAY (Recovery):** Physical navigation in Server Vault (Floor -1). `RECOVERY` tasks linked to `SundayRecovery.tres`. Requires picking up physical blades, slotting them into racks, and performing a 'RAID Sync' on the tablet.
 *   **Audit / Polish Notes:**
-    *   *Transition:* Currently, `ShiftSunday.tres` points `next_shift_id` to `"shift_monday"`. **CRITICAL FIX:** This creates an infinite loop of Week 1. We need to intercept this transition to generate "Week 2."
+    *   *System:* Minigame config system is now fully data-driven.
+    *   *Reward:* Saturday Audit halts Integrity decay; Sunday Recovery restores 15% Integrity.
 
 ---
 

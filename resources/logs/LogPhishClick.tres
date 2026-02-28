@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="LogResource" load_steps=2 format=3 uid="uid://bxwgi5j44assk"]
+
+[ext_resource type="Script" uid="uid://jcpwo8vm7t0k" path="res://resources/logs/LogResource.gd" id="1_log"]
+
+[resource]
+script = ExtResource("1_log")
+log_id = "LOG-PHISH-CLICK"
+timestamp = "09:42:11"
+source = "Corporate Firewall"
+category = "Network"
+message = "Outbound HTTP connection to 104.21.4.22 (verify-corp.support) initiated by WS-FINANCE-09."
+severity = 4
+related_ticket = "PHISH-INTERNAL-001"
+ip_address = "104.21.4.22"
+hostname = "WS-FINANCE-09"
+is_revealed = false

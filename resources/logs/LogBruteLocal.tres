@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="LogResource" load_steps=2 format=3 uid="uid://bxiqu6he63qtk"]
+
+[ext_resource type="Script" uid="uid://jcpwo8vm7t0k" path="res://resources/logs/LogResource.gd" id="1_log"]
+
+[resource]
+script = ExtResource("1_log")
+log_id = "LOG-BRUTE-LOCAL"
+timestamp = "11:05:42"
+source = "Authentication"
+category = "Security"
+message = "Failed login attempt for user 'jdoe' from 192.168.1.45 (MARKETING-WS-02). Count: 52."
+severity = 4
+related_ticket = "AUTH-BRUTE-LOCAL"
+ip_address = "192.168.1.45"
+hostname = "MARKETING-WS-02"
+is_revealed = false

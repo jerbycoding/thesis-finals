@@ -14,6 +14,7 @@ event_sequence = [
 	{"time": 90, "event": "it_checkin", "type": "npc_interaction", "npc_id": "it_support", "dialogue_id": "tuesday_complaint"},
 	{"time": 150, "event": "spawn_supply_chain_1", "type": "spawn_ticket", "ticket_id": "SUPPLY-CHAIN-001"},
 	{"time": 240, "event": "log_flood", "type": "system_event", "event_id": "FALSE_FLAG", "duration": 90.0},
+	{"time": 300, "event": "spawn_vpn_anomaly", "type": "spawn_ticket", "ticket_id": "VPN-ANOMALY-001"},
 	{"time": 330, "event": "spawn_spear_2", "type": "spawn_ticket", "ticket_id": "SPEAR-PHISH-002"},
 	{"time": 420, "event": "shift_end_talk", "type": "npc_interaction", "npc_id": "ciso", "dialogue_id": "shift_end"},
 	{"time": 600, "event": "shift_end", "type": "shift_end"}

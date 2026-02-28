@@ -8,41 +8,49 @@ This document maps every Incident Ticket to its specific shift, required logs, a
 
 ---
 
-## 📅 Shift 1: Monday (Active Monitoring)
-| Ticket ID               | SIEM Logs (Evidence)             | Email Analyzer? | SOC Terminal | Decrypt? |
-|:------------------------|:---------------------------------|:---------------:|:-------------|:--------:|
-| **`PHISH-001`**         | `LOG-PHISH-001`, `LOG-EMAIL-002` |     **YES**     | NO           |    NO    |
-| **`AUTH-FAIL-GENERIC`** | `LOG-AUTH-003`                   |       NO        | NO           |    NO    |
-| **`SYS-MAINT-GENERIC`** | `LOG-SYS-004`                    |       NO        | NO           |    NO    |
-| **`SPEAR-PHISH-001`**   | `LOG-SPEAR-001`                  |     **YES**     | NO           |    NO    |
+## 📅 Shift 1: Monday (Focus: Data Correlation)
+| Ticket ID               | SIEM Logs (Evidence)             | Email Analyzer? | SOC Terminal      | Decrypt? |
+|:------------------------|:---------------------------------|:---------------:|:------------------|:--------:|
+| **`PHISH-001`**         | `LOG-PHISH-001`, `LOG-EMAIL-002` |     **YES**     | NO                |    NO    |
+| **`AUTH-FAIL-GENERIC`** | `LOG-AUTH-003`                   |       NO        | NO                |    NO    |
+| **`PHISH-INTERNAL-001`**| `LOG-PHISH-CLICK`                |     **YES**     | NO                |    NO    |
+| **`SPEAR-PHISH-001`**   | `LOG-SPEAR-001`                  |     **YES**     | NO                |    NO    |
 
 ---
 
-## 📅 Shift 2: Tuesday (Noise)
-| Ticket ID              | SIEM Logs (Evidence)              | Email Analyzer? | SOC Terminal | Decrypt? |
-|:-----------------------|:----------------------------------|:---------------:|:-------------|:--------:|
-| **`SOCIAL-001`**       | `LOG-VOIP-001`                    |     **YES**     | NO           |    NO    |
-| **`SUPPLY-CHAIN-001`** | `LOG-SUPPLY-001`, `LOG-EMAIL-002` |     **YES**     | NO           |    NO    |
-| **`SPEAR-PHISH-002`**  | `LOG-SPEAR-002`                   |     **YES**     | NO           |    NO    |
+## 📅 Shift 2: Tuesday (Focus: Terminal Action)
+| Ticket ID              | SIEM Logs (Evidence)              | Email Analyzer? | SOC Terminal      | Decrypt? |
+|:-----------------------|:----------------------------------|:---------------:|:------------------|:--------:|
+| **`SOCIAL-001`**       | `LOG-VOIP-001`                    |     **YES**     | NO                |    NO    |
+| **`AUTH-BRUTE-LOCAL`** | `LOG-BRUTE-LOCAL`                 |       NO        | **YES** (isolate) |    NO    |
+| **`SUPPLY-CHAIN-001`** | `LogAVScan`                       |     **YES**     | **YES** (scan)    |    NO    |
+| **`SPEAR-PHISH-002`**  | `LOG-SPEAR-002`                   |     **YES**     | NO                |    NO    |
 
 ---
 
-## 📅 Shift 3: Wednesday (Outbreak)
+## 📅 Shift 3: Wednesday (Focus: Forensic Logic)
 | Ticket ID                 | SIEM Logs (Evidence)       | Email Analyzer? | SOC Terminal      | Decrypt? |
 |:--------------------------|:---------------------------|:---------------:|:------------------|:--------:|
 | **`MALWARE-CONTAIN-001`** | `LOG-MALWARE-001`          |       NO        | **YES** (isolate) |    NO    |
-| **`PHISH-003`**           | `LOG-PHISH-003`            |     **YES**     | NO                |    NO    |
+| **`MALWARE-POLY-001`**    | `LOG-MAL-002-A`            |       NO        | **YES** (scan/iso)|    NO    |
+| **`VPN-ANOMALY-001`**     | `LOG-VPN-001`, `002`       |       NO        | NO                |    NO    |
+| **`DDOS-MITIGATION-001`** | `LOG-DDOS-002`             |       NO        | **YES** (trace)   |    NO    |
 | **`RANSOM-001`**          | `LOG-RANSOM-FILE-ACTIVITY` |       NO        | **YES** (isolate) | **YES**  |
+
+> **Note:** `MALWARE-POLY-001` requires entering `{victim_host}` as the Root Cause. `DDOS-MITIGATION-001` requires `{attacker_ip}`. `VPN-ANOMALY-001` requires `{ip}`.
 
 ---
 
-## 📅 Shift 4: Thursday (Betrayal)
+## 📅 Shift 4: Thursday (Focus: Insider Threats)
 | Ticket ID             | SIEM Logs (Evidence)               | Email Analyzer? | SOC Terminal | Decrypt? |
 |:----------------------|:-----------------------------------|:---------------:|:-------------|:--------:|
-| **`AUTH-003`**        | `LOG-AUTH-004`                     |       NO        | NO           |    NO    |
+| **`MOLE-HUNT-001`**   | `LOG-MOLE-ADMIN-01`                |       NO        | NO           |    NO    |
 | **`INSIDER-001`**     | `LOG-JANE-DOE-ACCESS`, `LOG-EXFIL-JANE-DOE` |       NO        | NO           |    NO    |
 | **`SHADOW-IT-001`**   | `LOG-SHADOW-001`                   |       NO        | NO           |    NO    |
+| **`SHADOW-IT-002`**   | `LOG-SHADOW-002`                   |       NO        | **YES** (iso)|    NO    |
 | **`SPEAR-PHISH-003`** | `LOG-SPEAR-003`                    |     **YES**     | NO           |    NO    |
+
+> **Note:** `MOLE-HUNT-001` requires entering `{ip}` as the Root Cause to confirm the compromised admin account.
 
 ---
 
@@ -50,8 +58,12 @@ This document maps every Incident Ticket to its specific shift, required logs, a
 | Ticket ID                 | SIEM Logs (Evidence)               | Email Analyzer? | SOC Terminal            | Decrypt? |
 |:--------------------------|:-----------------------------------|:---------------:|:------------------------|:--------:|
 | **`DATA-EXFIL-001`**      | `LOG-EXFIL-001`, `LOG-NETWORK-001` |     **YES**     | **YES** (trace)         |    NO    |
+| **`KILL-SWITCH-001`**     | `LOG-KILL-SWITCH-001`              |       NO        | **YES** (trace)         |    NO    |
 | **`RANSOM-002`**          | `LOG-RANSOM-002`                   |       NO        | **YES** (isolate)       | **YES**  |
+| **`CORE-MELTDOWN-001`**   | `LOG-CORE-MELTDOWN-001`            |       NO        | **YES** (scan/iso)      |    NO    |
 | **`DDOS-MITIGATION-001`** | `LOG-DDOS-002`                     |       NO        | **YES** (trace/isolate) |    NO    |
+
+> **Note:** `KILL-SWITCH-001` requires entering `{attacker_ip}` as the Root Cause to terminate the malicious SSH session. `CORE-MELTDOWN-001` requires isolating the IoT controller.
 
 ---
 

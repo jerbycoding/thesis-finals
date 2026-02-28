@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="HostResource" load_steps=2 format=3 uid="uid://dohecw3ga173o"]
+
+[ext_resource type="Script" uid="uid://d3rtwuxa1nxr6" path="res://resources/HostResource.gd" id="1_host"]
+
+[resource]
+script = ExtResource("1_host")
+hostname = "WS-FINANCE-09"
+ip_address = "192.168.1.109"
+is_critical = false
+os_type = "Windows"
+initial_status = "CLEAN"

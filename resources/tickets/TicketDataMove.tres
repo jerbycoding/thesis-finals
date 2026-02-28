@@ -1,21 +1,25 @@
 [gd_resource type="Resource" script_class="TicketResource" load_steps=3 format=3]
 
 [ext_resource type="Resource" path="res://resources/tickets/TicketLegalHold.tres" id="1_escalation"]
-[ext_resource type="Script" path="res://resources/tickets/TicketResource.gd" id="2_ticket"]
+[ext_resource type="Script" uid="uid://ccptkdfdnunvq" path="res://resources/tickets/TicketResource.gd" id="2_ticket"]
 
 [resource]
 script = ExtResource("2_ticket")
 ticket_id = "SHADOW-IT-002"
 title = "Escalation: Large Data Transfer"
-description = "Alert: High-volume outbound data transfer detected to 'dropbox.com'. The same workstation (MARKETING-WS-02) previously flagged for unauthorized app use is now uploading several gigabytes of data.
+description = "CRITICAL: Live Data Leak. A workstation is uploading gigabytes of data to a personal cloud account. 
 
-This has exceeded the threshold for a policy reminder. Immediate investigation is required to determine if sensitive data is being exfiltrated."
+[b]Instruction:[/b] This is a policy violation in progress. Open the SOC Terminal and type [b]isolate MARKETING-WS-02[/b] to stop the upload immediately."
 severity = "High"
 category = "Data Breach"
-steps = ["Verify size of outbound transfer in SIEM", "Identify specific files being moved (if possible)", "Isolate Marketing-WS-02 to prevent further loss"]
+steps = Array[String](["Verify transfer size in SIEM", "Identify exfiltrated files", "Isolate MARKETING-WS-02 via Terminal"])
 required_tool = "terminal"
 base_time = 150.0
 required_log_ids = ["LOG-SHADOW-002"]
+required_host_isolation = "MARKETING-WS-02"
+required_host_restoration = ""
+required_root_cause = ""
+on_complete_event = ""
 kill_chain_path = "Shadow IT"
 kill_chain_stage = 2
 escalation_ticket = ExtResource("1_escalation")

@@ -1,20 +1,24 @@
 [gd_resource type="Resource" script_class="TicketResource" load_steps=2 format=3]
 
-[ext_resource type="Script" path="res://resources/tickets/TicketResource.gd" id="1_ticket"]
+[ext_resource type="Script" uid="uid://ccptkdfdnunvq" path="res://resources/tickets/TicketResource.gd" id="1_ticket"]
 
 [resource]
 script = ExtResource("1_ticket")
 ticket_id = "MOLE-HUNT-001"
 title = "Conflicting Access Logs"
-description = "User 'admin' initiated a system reboot at 02:00 AM. IT Support claims this was scheduled maintenance. However, SIEM logs show the command originated from an external VPN IP.
+description = "ALERT: Admin Login Anomaly. A system reboot was triggered using the 'admin' account, but IT Support claims they were asleep. 
 
-Verify the source IP. If it is external, IT Support's account has been compromised (or they are lying)."
+[b]Instruction:[/b] Search the SIEM for 'admin'. Identify the IP address used for the 02:00 AM login. Type that IP into the [b]Root Cause[/b] box below to confirm if it was an external attacker."
 severity = "High"
 category = "Insider Threat"
-steps = ["Check SIEM for 02:00 AM login", "Verify IP location (Internal vs External)", "Flag account for review"]
+steps = Array[String](["Search SIEM for 'admin' activity", "Verify IP location of 02:00 AM login", "Enter IP in Root Cause box"])
 required_tool = "siem"
 base_time = 180.0
 hidden_risks = ["Trusting IT Support without verification"]
 required_log_ids = ["LOG-MOLE-ADMIN-01"]
+required_host_isolation = ""
+required_host_restoration = ""
+required_root_cause = "{ip}"
+on_complete_event = ""
 kill_chain_path = "Insider Sabotage"
 kill_chain_stage = 2

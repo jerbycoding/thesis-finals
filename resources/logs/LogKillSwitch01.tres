@@ -1,15 +1,16 @@
 [gd_resource type="Resource" script_class="LogResource" load_steps=2 format=3]
 
-[ext_resource type="Script" path="res://resources/logs/LogResource.gd" id="1_log"]
+[ext_resource type="Script" uid="uid://jcpwo8vm7t0k" path="res://resources/logs/LogResource.gd" id="1_log"]
 
 [resource]
 script = ExtResource("1_log")
 log_id = "LOG-KILL-SWITCH-001"
-timestamp = "14:02:33"
-source = "FileSystem"
+timestamp = "16:15:00"
+source = "Backup Server"
 category = "Security"
-message = "Recursive delete initiated on volume /mnt/backups. Process owner: root (UID 0)."
+message = "Recursive delete 'rm -rf /mnt/backups' detected. Initiated by session: {attacker_ip}"
 severity = 5
 related_ticket = "KILL-SWITCH-001"
-hostname = "BACKUP-TAPE-01"
+ip_address = ""
+hostname = "TAPE-LIB-01"
 is_revealed = false

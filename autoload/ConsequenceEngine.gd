@@ -7,6 +7,7 @@ const CONSEQUENCE_EVAL_INTERVAL: float = 15.0 # Evaluate every 15 seconds
 var choice_log: Array = []
 var scheduled_consequences: Array[Dictionary] = []
 var npc_relationships: Dictionary = {}
+var ignored_tickets_in_shift: int = 0
 
 # Kill Chain Escalation Probabilities (0.0 to 1.0)
 const ESCALATION_RISKS = {
@@ -49,6 +50,8 @@ func _initialize_engine():
 	EventBus.email_decision_processed.connect(_on_email_decision_processed)
 	EventBus.critical_host_isolated.connect(_on_critical_host_isolated)
 	EventBus.consequence_triggered.connect(_on_consequence_triggered_globally)
+	EventBus.shift_started.connect(func(_id): ignored_tickets_in_shift = 0)
+	EventBus.shift_ended.connect(func(_r): ignored_tickets_in_shift = 0)
 	EventBus.campaign_ended.connect(func(_type): reset_to_default())
 
 	# Start the periodic evaluation loop
@@ -86,6 +89,7 @@ func _on_critical_host_isolated(hostname: String):
 
 func _on_ticket_ignored(ticket: TicketResource):
 	print("🚨 ConsequenceEngine: Ticket IGNORED (Timed out): ", ticket.ticket_id)
+	ignored_tickets_in_shift += 1
 	
 	log_player_choice("ticket_ignored", {
 		"ticket_id": ticket.ticket_id,
@@ -93,6 +97,17 @@ func _on_ticket_ignored(ticket: TicketResource):
 		"category": ticket.category
 	})
 	
+	# CRITICAL NEGLIGENCE CHECK
+	if ticket.severity == "Critical":
+		print("💀 CRITICAL NEGLIGENCE: Immediate termination required.")
+		EventBus.campaign_ended.emit("fired")
+		return
+		
+	if ignored_tickets_in_shift >= 4:
+		print("💀 CUMULATIVE NEGLIGENCE: Too many ignored alerts.")
+		EventBus.campaign_ended.emit("fired")
+		return
+
 	if IGNORE_PENALTIES.has(ticket.severity):
 		var p = IGNORE_PENALTIES[ticket.severity]
 		update_npc_relationship(p.npc, p.hit)

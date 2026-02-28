@@ -1,0 +1,38 @@
+[gd_resource type="Resource" script_class="HardwareRecoveryConfig" load_steps=2 format=3 uid="uid://dpn5gobb61023"]
+
+[ext_resource type="Script" uid="uid://c66wglkeynjnk" path="res://resources/minigames/HardwareRecoveryConfig.gd" id="1_config"]
+
+[resource]
+script = ExtResource("1_config")
+nvme_to_spawn = 2
+sata_to_spawn = 2
+decoy_sata_to_spawn = 1
+decoy_nvme_to_spawn = 1
+spawn_random_clutter = true
+socket_requirements = {
+"RACK_1": "nvme_drive",
+"RACK_2": "nvme_drive",
+"RACK_4": "sata_drive",
+"RACK_5": "sata_drive"
+}
+tasks = Array[Dictionary]([{
+"completes_on_hardware_type": "nvme_drive",
+"completes_on_socket_id": "RACK_1",
+"description": "Replace NVMe Blade [Rack A1]",
+"id": "rep_1"
+}, {
+"completes_on_hardware_type": "nvme_drive",
+"completes_on_socket_id": "RACK_2",
+"description": "Replace NVMe Blade [Rack A2]",
+"id": "rep_2"
+}, {
+"completes_on_hardware_type": "sata_drive",
+"completes_on_socket_id": "RACK_4",
+"description": "Replace SATA Blade [Rack B1]",
+"id": "rep_3"
+}, {
+"completes_on_hardware_type": "sata_drive",
+"completes_on_socket_id": "RACK_5",
+"description": "Replace SATA Blade [Rack B2]",
+"id": "rep_4"
+}])

@@ -1,15 +1,16 @@
 [gd_resource type="Resource" script_class="LogResource" load_steps=2 format=3]
 
-[ext_resource type="Script" path="res://resources/logs/LogResource.gd" id="1_log"]
+[ext_resource type="Script" uid="uid://jcpwo8vm7t0k" path="res://resources/logs/LogResource.gd" id="1_log"]
 
 [resource]
 script = ExtResource("1_log")
-log_id = "LOG-JANE-DOE-ACCESS"
+log_id = "LOG-JSMITH-ACCESS"
 timestamp = "14:22:10"
 source = "Authentication"
 category = "Security"
-message = "User 'jane.doe' accessed restricted file server 'HR-PRIVATE'."
+message = "User 'jsmith' accessed restricted file server 'HR-PRIVATE' (Unauthorized)."
 severity = 3
 related_ticket = "INSIDER-001"
 ip_address = "10.0.5.42"
 hostname = "WORKSTATION-55"
+is_revealed = false

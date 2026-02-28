@@ -1,15 +1,16 @@
 [gd_resource type="Resource" script_class="LogResource" load_steps=2 format=3]
 
-[ext_resource type="Script" path="res://resources/logs/LogResource.gd" id="1_log"]
+[ext_resource type="Script" uid="uid://jcpwo8vm7t0k" path="res://resources/logs/LogResource.gd" id="1_log"]
 
 [resource]
 script = ExtResource("1_log")
 log_id = "LOG-CORE-MELTDOWN-001"
 timestamp = "10:15:00"
-source = "IoT-Manager"
+source = "IoT Manager"
 category = "System"
-message = "Critical: HVAC Cooling Loop disabled. Temperature threshold exceeded on Rack Floor -1."
+message = "ALERT: [b]Thermal Critical[/b]. HVAC Cooling Loop disabled on Rack Floor -1. Device: IOT-THERMOSTAT-01."
 severity = 5
 related_ticket = "CORE-MELTDOWN-001"
+ip_address = "192.168.50.10"
 hostname = "IOT-THERMOSTAT-01"
 is_revealed = false

@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="CalibrationMinigameConfig" load_steps=2 format=3 uid="uid://bsg4drbujtkdq"]
+
+[ext_resource type="Script" uid="uid://u6c4pj5epmts" path="res://resources/minigames/CalibrationMinigameConfig.gd" id="1_config"]
+
+[resource]
+script = ExtResource("1_config")
+difficulty_speed = 450.0
+zone_min_size = 0.08
+zone_max_size = 0.2
+max_handshake_time = 4.0
+typing_time_penalty = 0.8
+codes = Array[String](["ROUTER_SYNC_ALPHA", "GATE_PROTOCOL_09", "UPLINK_ENCRYPT_X", "INFRA_HANDSHAKE_CORE", "SECURE_VPN_GATE"])
+is_critical_probability = 0.6
+tasks = Array[Dictionary]([{
+"description": "Calibrate Router Node Alpha",
+"id": "audit_1"
+}, {
+"description": "Verify Signal Gate 09",
+"id": "audit_2"
+}, {
+"description": "Lock Regional Uplink",
+"id": "audit_3"
+}])

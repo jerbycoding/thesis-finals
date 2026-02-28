@@ -1,21 +1,24 @@
 [gd_resource type="Resource" script_class="TicketResource" load_steps=2 format=3]
 
-[ext_resource type="Script" path="res://resources/tickets/TicketResource.gd" id="1_ticket"]
+[ext_resource type="Script" uid="uid://ccptkdfdnunvq" path="res://resources/tickets/TicketResource.gd" id="1_ticket"]
 
 [resource]
 script = ExtResource("1_ticket")
 ticket_id = "CORE-MELTDOWN-001"
 title = "HVAC Override: Thermal Critical"
-description = "IoT Alert: The Server Room cooling system has been manually disabled via remote command. Temperature sensors report a rapid spike to 95°C.
+description = "THERMAL CRITICAL: The server room cooling system has been hacked and turned off. 
 
-If the servers overheat, the hardware will physically melt. You must reset the IoT controller immediately via the Terminal."
+[b]Instruction:[/b] If the servers overheat, the hardware will physically melt. Open the SOC Terminal and type [b]isolate IOT-THERMOSTAT-01[/b] to kill the attacker's control over the HVAC system."
 severity = "Critical"
 category = "System"
-steps = ["Scan IOT-THERMOSTAT-01", "Isolate compromised controller", "Reboot HVAC service"]
+steps = Array[String](["Identify compromised IoT sensor", "Isolate IOT-THERMOSTAT-01 via Terminal", "Verify cooling system restoration"])
 required_tool = "terminal"
 base_time = 120.0
 hidden_risks = ["Scanning wrong IoT device"]
 required_log_ids = ["LOG-CORE-MELTDOWN-001"]
 required_host_isolation = "IOT-THERMOSTAT-01"
+required_host_restoration = ""
+required_root_cause = ""
+on_complete_event = ""
 kill_chain_path = "Infrastructure Attack"
 kill_chain_stage = 3

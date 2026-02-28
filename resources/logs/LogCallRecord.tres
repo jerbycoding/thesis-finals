@@ -1,15 +1,16 @@
 [gd_resource type="Resource" script_class="LogResource" load_steps=2 format=3]
 
-[ext_resource type="Script" path="res://resources/logs/LogResource.gd" id="1_log"]
+[ext_resource type="Script" uid="uid://jcpwo8vm7t0k" path="res://resources/logs/LogResource.gd" id="1_log"]
 
 [resource]
 script = ExtResource("1_log")
 log_id = "LOG-VOIP-001"
-timestamp = "14:10:05"
-source = "VoIP Server"
-category = "Security"
-message = "Suspicious call pattern: 50+ short calls from external number to internal extensions."
-severity = 3
+timestamp = "10:30:15"
+source = "VoIP Gateway"
+category = "System"
+message = "Incoming call reported by user 'jsmith'. External source claiming to be Helpdesk."
+severity = 2
 related_ticket = "SOCIAL-001"
-ip_address = "198.51.100.99"
-hostname = "VOIP-SRV-01"
+ip_address = ""
+hostname = "WS-FINANCE-09"
+is_revealed = false

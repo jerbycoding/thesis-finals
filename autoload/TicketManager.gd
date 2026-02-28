@@ -73,10 +73,18 @@ func _on_app_opened(app_name: String, _window_id: String):
 			EmailSystem.reveal_emails_for_ticket(ticket.ticket_id)
 
 func start_ambient_spawning():
-	print("TicketManager: Ambient noise spawning STARTED.")
+	var multiplier = 1.0
+	if ConfigManager and GlobalConstants:
+		var tier = ConfigManager.settings.gameplay.difficulty_level
+		var data = GlobalConstants.DIFFICULTY_DATA.get(tier, GlobalConstants.DIFFICULTY_DATA[GlobalConstants.DIFFICULTY.ANALYST])
+		multiplier = data.time_mult
+		
+	var final_interval = ambient_spawn_interval * multiplier
+	print("TicketManager: Ambient noise spawning STARTED. Interval: %.1fs" % final_interval)
+	
 	is_ambient_spawning_enabled = true
 	if is_instance_valid(ambient_spawn_timer):
-		ambient_spawn_timer.start()
+		ambient_spawn_timer.start(final_interval)
 
 func stop_ambient_spawning():
 	print("TicketManager: Ambient noise spawning STOPPED.")
@@ -238,6 +246,9 @@ func clear_active_data():
 	active_timers.clear()
 	active_tickets.clear()
 	completed_tickets.clear()
+	
+	if TerminalSystem:
+		TerminalSystem.clear_all_connections()
 
 func add_ticket(ticket: TicketResource):
 	if not ticket or not ticket.validate():
@@ -289,8 +300,15 @@ func _reveal_evidence_for_ticket(ticket: TicketResource):
 func _apply_procedural_network_state(ticket: TicketResource):
 	if NetworkState and not ticket.truth_packet.is_empty():
 		var victim = ticket.truth_packet.get("victim_host", "")
-		if not victim.is_empty() and victim != "WS-UNKNOWN" and ticket.category in ["Malware", "Ransomware"]:
-			NetworkState.update_host_state(victim, {"status": "INFECTED"})
+		var attacker = ticket.truth_packet.get("attacker_ip", "")
+		
+		# Validation Authority: Only bridge if host exists in corporate inventory
+		if not victim.is_empty() and victim != "WS-UNKNOWN":
+			if ticket.category in ["Malware", "Ransomware"]:
+				NetworkState.update_host_state(victim, {"status": "INFECTED"})
+			
+			if TerminalSystem and not attacker.is_empty():
+				TerminalSystem.register_connection(victim, attacker)
 
 func _on_ticket_timeout_timer(ticket_id: String):
 	var active_ticket = get_ticket_by_id(ticket_id)
@@ -312,6 +330,12 @@ func complete_ticket(ticket_id: String, completion_type: String = "compliant"):
 	for i in range(active_tickets.size()):
 		var ticket = active_tickets[i]
 		if ticket.ticket_id == ticket_id:
+			# Cleanup Forensic Bridge before removal
+			if TerminalSystem and not ticket.truth_packet.is_empty():
+				var victim = ticket.truth_packet.get("victim_host", "")
+				var attacker = ticket.truth_packet.get("attacker_ip", "")
+				TerminalSystem.unregister_connection(victim, attacker)
+
 			if completion_type == GlobalConstants.COMPLETION_TYPE.COMPLIANT and not ValidationManager.can_complete_compliant(ticket):
 				completion_type = GlobalConstants.COMPLETION_TYPE.EFFICIENT
 

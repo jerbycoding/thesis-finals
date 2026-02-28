@@ -19,6 +19,7 @@ var current_active_arc: Array = []
 const SHIFT_DIR = "res://resources/shifts/"
 
 var shift_start_time: float = 0.0
+var last_chaos_time: float = 0.0
 var current_event_index: int = 0
 var _is_shift_active: bool = false
 var event_timer: Timer
@@ -72,10 +73,16 @@ func _on_chaos_tick():
 	if current_shift_resource.random_event_pool.is_empty():
 		return
 		
+	# SAFETY: Global 30s cooldown between any random events
+	var time_since_chaos = (Time.get_ticks_msec() - last_chaos_time) / 1000.0
+	if time_since_chaos < 30.0:
+		return
+
 	# 35% chance to trigger a random event every tick
 	if randf() < 0.35:
 		var event = current_shift_resource.random_event_pool.pick_random()
 		print("🎲 CHAOS ENGINE: Triggering random event: ", event.get("event", "Unnamed"))
+		last_chaos_time = Time.get_ticks_msec()
 		_trigger_event(event)
 
 func _discover_shifts():

@@ -32,6 +32,8 @@ class_name ShiftResource
 @export_group("Minigame Configuration")
 @export_enum("NONE", "AUDIT", "RECOVERY") var minigame_type: String = "NONE"
 @export var required_floor: int = 1 # 1=SOC, 2=Exec, -1=Vault, -2=Hub
+@export var calibration_config: CalibrationMinigameConfig
+@export var recovery_config: HardwareRecoveryConfig
 
 func _to_string() -> String:
 	return "[Shift: %s (%d events)]" % [shift_name, event_sequence.size()]

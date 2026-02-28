@@ -1,18 +1,25 @@
 [gd_resource type="Resource" script_class="EmailResource" load_steps=2 format=3]
 
-[ext_resource type="Script" path="res://resources/EmailResource.gd" id="1_email"]
+[ext_resource type="Script" uid="uid://fkoqi7e7v8ey" path="res://resources/EmailResource.gd" id="1_email"]
 
 [resource]
 script = ExtResource("1_email")
 email_id = "EMAIL-SUPPLY-001"
 sender = "support@global-it-solutions.biz"
 subject = "URGENT: Mandatory Security Patch for Endpoint Protection"
-body = "Dear Valued Partner,\n\nA critical zero-day vulnerability has been discovered in our Endpoint Protection software. We have released an emergency patch that must be applied immediately to all client systems.\n\nPlease download and install the patch from the following secure link:\n\n[global-it-solutions.biz/patch/emergency_fix.exe]\n\nFailure to apply this patch within 12 hours will leave your network vulnerable to exploitation.\n\nRegards,\nGlobal IT Solutions Support Team"
-attachments = []
-headers = {"status": {"spf": "FAIL", "dkim": "FAIL", "dmarc": "FAIL"}}
+body = "Dear Valued Partner,\n\nA critical zero-day vulnerability has been discovered in our Endpoint Protection software. We have released an emergency patch that must be applied immediately to all client systems.\n\nPlease download and install the patch from the following link:\n\nhttp://global-it-solutions.biz/patch/emergency_fix.exe\n\nFailure to apply this patch within 12 hours will leave your network vulnerable to exploitation.\n\nRegards,\nGlobal IT Solutions Support Team"
+attachments = Array[String]([])
+headers = {
+"dkim": "FAIL",
+"dmarc": "FAIL",
+"spf": "FAIL"
+}
 is_malicious = true
 is_urgent = true
-clues = ["suspicious_link", "spoofed_sender", "suspicious_domain"]
+threat_category = 1
+clues = Array[String](["suspicious_link", "spoofed_sender", "suspicious_domain"])
 related_ticket = "SUPPLY-CHAIN-001"
+is_focused = true
+suspicious_ip = "185.22.4.102"
 suspicious_domain = "global-it-solutions.biz"
 

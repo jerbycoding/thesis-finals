@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="EmailResource" load_steps=2 format=3]
 
-[ext_resource type="Script" path="res://resources/EmailResource.gd" id="1_email"]
+[ext_resource type="Script" uid="uid://fkoqi7e7v8ey" path="res://resources/EmailResource.gd" id="1_email"]
 
 [resource]
 script = ExtResource("1_email")
@@ -16,13 +16,20 @@ Please find the consolidated report attached (PDF). Due to document sensitivity,
 Do not forward. Do not print. Destroy after review.
 
 Group Finance | Internal Audit Liaison"
-attachments = ["Audit_Report_Q1_Final.pdf"]
-headers = {"status": {"spf": "PASS", "dkim": "PASS", "dmarc": "PASS"}}
+attachments = Array[String](["Audit_Report_Q1_Final.pdf"])
+headers = {
+"dkim": "PASS",
+"dmarc": "PASS",
+"spf": "PASS"
+}
 is_malicious = true
 is_urgent = true
 threat_category = 2
-clues = ["bad_attachment"]
-related_ticket = "ZERODAY-001"
+clues = Array[String](["bad_attachment"])
+related_ticket = "DATA-EXFIL-001"
+is_focused = true
 suspicious_ip = "{ip}"
 suspicious_domain = "{malicious_url}"
-quarantine_hidden_risks = {"attachments": "missed_process_injection_before_isolate"}
+quarantine_hidden_risks = {
+"attachments": "missed_process_injection_before_isolate"
+}

@@ -1,6 +1,7 @@
-[gd_resource type="Resource" script_class="ShiftResource" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="ShiftResource" load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://resources/ShiftResource.gd" id="1_shift"]
+[ext_resource type="Resource" uid="uid://sundayrecoveryres1" path="res://resources/minigames/SundayRecovery.tres" id="2_recovery"]
 
 [resource]
 script = ExtResource("1_shift")
@@ -21,3 +22,4 @@ threat_impact = "Permanent loss of forensic history and backups; prevents the or
 threat_indicators = ["Disk parity errors in RAID configurations.", "Mechanical blade failure alerts in the vault.", "Inability to mount encrypted backup volumes."]
 minigame_type = "RECOVERY"
 required_floor = -1
+recovery_config = ExtResource("2_recovery")
