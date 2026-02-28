@@ -7,7 +7,7 @@
 script = ExtResource("1_ticket")
 ticket_id = "VPN-ANOMALY-001"
 title = "Impossible Travel Alert"
-description = "CRITICAL: Credential Theft Suspected. An employee account has logged in from two different countries within minutes. This is physically impossible.\n\n[b]Instruction:[/b] Use the SIEM to compare the two login IPs. Identify the malicious IP (the one from Tokyo) and type it into the [b]Root Cause[/b] box to flag the account for review."
+description = "Geographic login anomalies detected. Multiple connections are originating from the [color=#006CFF]VPN GATEWAY[/color] simultaneously. Identify the unauthorized origin to secure the credentials."
 severity = "High"
 category = "Authentication"
 steps = ["Compare login locations in SIEM", "Enter Malicious IP in Root Cause box", "Flag account for administrative review"]

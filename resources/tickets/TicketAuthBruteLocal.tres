@@ -6,9 +6,7 @@
 script = ExtResource("1_ticket")
 ticket_id = "AUTH-BRUTE-LOCAL"
 title = "Critical Alert: Internal Account Brute-Force"
-description = "CRITICAL: Internal Brute-Force Attack. A computer inside our own office is trying to guess passwords for other users. This usually means that machine is infected with a 'worm'. 
-
-[b]Instruction:[/b] Use the SIEM to identify the Source Workstation (the machine doing the attacking). Once found, open the SOC Terminal and use the [color=#006CFF]isolate [hostname][/color] command to cut its network access."
+description = "An internal [color=#006CFF]MARKETING[/color] workstation is hammering our servers with unauthorized access attempts. Identify the specific host and neutralize its connection."
 severity = "High"
 category = "Unauthorized Access"
 steps = Array[String](["Identify attack source in SIEM", "Verify targeting patterns", "Isolate MARKETING-WS-02 via Terminal"])

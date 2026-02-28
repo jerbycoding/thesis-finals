@@ -6,9 +6,7 @@
 script = ExtResource("1_ticket")
 ticket_id = "SPEAR-PHISH-002"
 title = "Spear Phish: Fake Invoice for CFO"
-description = "The CFO's office has forwarded a suspicious email from a 'vendor' with an attached invoice. The CFO's executive assistant reported that they do not recognize the vendor.
-
-Investigate the email for signs of spoofing and scan the attached 'invoice.exe' for malware."
+description = "A high-priority [color=#006CFF]INVOICE[/color] has been flagged by the CFO's office. Verify the authenticity of the sender and analyze the attachment for embedded malicious logic."
 severity = "High"
 category = "Phishing"
 steps = ["Inspect email headers for spoofing", "Scan attachment for malware", "Quarantine email if malicious"]

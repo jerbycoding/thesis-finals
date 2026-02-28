@@ -6,9 +6,7 @@
 script = ExtResource("1_ticket")
 ticket_id = "CRYPTOMINER-HUNT-001"
 title = "High CPU Anomaly: Cryptominer Suspected"
-description = "Task Manager reports abnormal CPU load across the subnet. A user also reported their fan spinning loudly.
-
-Investigate logs to identify the process and host."
+description = "System performance anomaly: Multiple workstations are reporting abnormal [color=#006CFF]CPU LOAD[/color]. Investigate the process list to identify unauthorized mining software."
 severity = "High"
 category = "Malware"
 steps = ["Check Task Manager for CPU spikes", "Find host in SIEM logs (xmr-stak.exe)", "Scan and Isolate host"]

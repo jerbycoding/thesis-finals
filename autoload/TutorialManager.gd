@@ -177,6 +177,10 @@ func _on_shift_started(shift_id: String):
 		is_tutorial_active = true
 		if GameState: GameState.is_guided_mode = true
 		
+		# EXPLICIT SPAWNER KILL (Sprint 13 Fix)
+		if TicketManager:
+			TicketManager.stop_ambient_spawning()
+		
 		# INJECT TRAINING FILTERS
 		if LogSystem:
 			LogSystem.active_filter = func(log: LogResource, t_id: String):

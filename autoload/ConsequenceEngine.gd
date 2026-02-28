@@ -76,6 +76,8 @@ func trigger_consequence(consequence_id: String):
 	match consequence_id:
 		GlobalConstants.CONSEQUENCE_ID.MISSED_ATTACHMENT_SCAN:
 			_schedule_followup_ticket("MALWARE-CLEANUP-NARRATIVE", 30.0, "Narrative-driven malware cleanup due to missed attachment scan")
+		GlobalConstants.CONSEQUENCE_ID.MALWARE_CLEANUP:
+			_schedule_followup_ticket(GlobalConstants.CONSEQUENCE_ID.MALWARE_CLEANUP, 30.0, "Delayed malware outbreak from unverified quarantine")
 		_:
 			print("⚠ Unknown consequence ID received: ", consequence_id)
 

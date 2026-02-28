@@ -6,9 +6,7 @@
 script = ExtResource("1_ticket")
 ticket_id = "CORE-MELTDOWN-001"
 title = "HVAC Override: Thermal Critical"
-description = "THERMAL CRITICAL: The server room cooling system has been hacked and turned off. 
-
-[b]Instruction:[/b] If the servers overheat, the hardware will physically melt. Open the SOC Terminal and type [b]isolate IOT-THERMOSTAT-01[/b] to kill the attacker's control over the HVAC system."
+description = "HVAC cooling loops have been manually disabled. The server vault is reporting a [color=#006CFF]THERMAL CRITICAL[/color] status. Neutralize the compromised control sensor before hardware failure occurs."
 severity = "Critical"
 category = "System"
 steps = Array[String](["Identify compromised IoT sensor", "Isolate IOT-THERMOSTAT-01 via Terminal", "Verify cooling system restoration"])

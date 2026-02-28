@@ -7,9 +7,7 @@
 script = ExtResource("1_ticket")
 ticket_id = "SOCIAL-001"
 title = "Verify Potential Phone Scam"
-description = "Alert: A user reported a call from someone claiming to be 'IT Support' asking for their password. 
-
-[b]Instruction:[/b] We need to see if the user fell for it. Open the [b]SIEM Viewer[/b] and search for user 'jsmith'. Look for any successful logins that happened around the time of the reported call. Attach the login log to confirm the status."
+description = "A user named [color=#006CFF]JSMITH[/color] reported a suspicious phone call from someone claiming to be IT Support. Verify if any successful logins occurred around the time of the incident to confirm account integrity."
 severity = "Low"
 category = "Social Engineering"
 steps = Array[String](["Search SIEM for 'jsmith'", "Identify successful logins", "Attach log evidence"])

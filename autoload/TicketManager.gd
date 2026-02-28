@@ -41,6 +41,10 @@ func _setup_system_connections():
 	EventBus.terminal_command_run.connect(_on_terminal_command_run)
 	EventBus.narrative_spawn_ticket.connect(spawn_ticket_by_id)
 	EventBus.shift_started.connect(func(_id): 
+		if GameState and GameState.is_guided_mode:
+			stop_ambient_spawning()
+			return
+			
 		if NarrativeDirector and NarrativeDirector.current_shift_resource:
 			if NarrativeDirector.current_shift_resource.minigame_type == "NONE":
 				start_ambient_spawning()
@@ -73,6 +77,9 @@ func _on_app_opened(app_name: String, _window_id: String):
 			EmailSystem.reveal_emails_for_ticket(ticket.ticket_id)
 
 func start_ambient_spawning():
+	if GameState and GameState.is_guided_mode:
+		return
+		
 	var multiplier = 1.0
 	if ConfigManager and GlobalConstants:
 		var tier = ConfigManager.settings.gameplay.difficulty_level

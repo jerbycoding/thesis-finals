@@ -6,7 +6,7 @@
 script = ExtResource("1_ticket")
 ticket_id = "RANSOM-001"
 title = "Ransomware Alert: Critical Server Locked!"
-description = "Our FINANCE-SRV-01 has been encrypted. Ransom demand received. Immediate action required: isolate the infected server and use the Decryption Tool to initiate data recovery."
+description = "Mass file corruption detected. Multiple users report that the [color=#006CFF]FINANCE-SRV-01[/color] has been locked with a ransom demand. Isolate the server and initiate data recovery immediately."
 severity = "Critical"
 category = "Ransomware"
 steps = Array[String](["Isolate FINANCE-SRV-01 using Network Map or Terminal", "Launch Decryption Tool to recover data", "Verify server status is GREEN"])

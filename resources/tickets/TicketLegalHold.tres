@@ -6,9 +6,7 @@
 script = ExtResource("1_ticket")
 ticket_id = "SHADOW-IT-003"
 title = "Legal Hold: Intent Verification"
-description = "The Legal department has placed a hold on all activity related to the data breach from MARKETING-WS-02. We need to verify if the data transfer was an intentional act of exfiltration or a gross negligence of policy.
-
-Locate the timestamp of the initial application installation to build the timeline of intent."
+description = "The Legal department has placed a hold on activity related to the Marketing data breach. We must establish a [color=#006CFF]TIMELINE OF INTENT[/color] by identifying the specific moment the unsanctioned application was first installed on the workstation."
 severity = "Medium"
 category = "Forensics"
 steps = ["Locate app installation event in SIEM", "Identify associated user credentials", "Submit findings to Legal"]

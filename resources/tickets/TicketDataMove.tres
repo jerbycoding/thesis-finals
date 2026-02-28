@@ -7,9 +7,7 @@
 script = ExtResource("2_ticket")
 ticket_id = "SHADOW-IT-002"
 title = "Escalation: Large Data Transfer"
-description = "CRITICAL: Live Data Leak. A workstation is uploading gigabytes of data to a personal cloud account. 
-
-[b]Instruction:[/b] This is a policy violation in progress. Open the SOC Terminal and type [b]isolate MARKETING-WS-02[/b] to stop the upload immediately."
+description = "A data exfiltration threshold has been exceeded on [color=#006CFF]MARKETING-WS-02[/color]. Massive volumes of data are being synced to an external account. Terminate the active session immediately."
 severity = "High"
 category = "Data Breach"
 steps = Array[String](["Verify transfer size in SIEM", "Identify exfiltrated files", "Isolate MARKETING-WS-02 via Terminal"])

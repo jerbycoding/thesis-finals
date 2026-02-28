@@ -6,9 +6,7 @@
 script = ExtResource("1_ticket")
 ticket_id = "DDOS-MITIGATION-001"
 title = "Emergency: Network Slowness"
-description = "The network is lagging. 
-
-[b]Instruction:[/b] One of our servers is being flooded with traffic. Run the [b]netstat[/b] command on the server in the Terminal. Look for an external IP that has multiple connections. Type that IP into the [b]Root Cause[/b] box below to identify the source of the flood."
+description = "Multiple services are reporting extreme latency. The firewall is flagging a massive [color=#006CFF]UDP FLOOD[/color] targeting our gateways. Identify the external origin IP to mitigate the impact."
 severity = "Critical"
 category = "DDoS"
 steps = Array[String](["Run 'netstat' on affected server", "Identify high-volume IP address", "Enter IP in Root Cause box"])

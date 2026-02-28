@@ -6,9 +6,7 @@
 script = ExtResource("1_ticket")
 ticket_id = "KILL-SWITCH-001"
 title = "CRITICAL: Backup Wipe Initiated"
-description = "EXTINCTION ALERT: Attackers are deleting our server backups. 
-
-[b]Instruction:[/b] You must act fast. Find the attacker's IP in the SIEM logs and type it into the [b]Root Cause[/b] box below. This will terminate their remote session and save the data."
+description = "Extinction alert: Our server backups are being purged in real-time. Identify the remote session executing the [color=#006CFF]RM -RF[/color] command to preserve organizational history."
 severity = "Critical"
 category = "Data Breach"
 steps = Array[String](["Identify 'rm -rf' command in SIEM", "Locate Attacker IP address", "Enter IP in Root Cause box"])

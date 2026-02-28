@@ -32,5 +32,5 @@ is_focused = true
 suspicious_ip = "104.21.4.22"
 suspicious_domain = "verify-corp.support"
 quarantine_hidden_risks = {
-"links": "malware_outbreak"
+"links": "MALWARE-CLEANUP-FOLLOWUP"
 }

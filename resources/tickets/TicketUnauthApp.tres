@@ -7,9 +7,7 @@
 script = ExtResource("2_ticket")
 ticket_id = "SHADOW-IT-001"
 title = "Policy Violation: Unauthorized Cloud App"
-description = "Network monitoring has detected repeated outbound traffic to 'dropbox.com' from a workstation in the Marketing department. Corporate policy strictly prohibits the use of unsanctioned cloud storage for company data.
-
-Investigate the source and identify the user. This is a potential starting point for data exfiltration."
+description = "Network telemetry indicates persistent outbound traffic to [color=#006CFF]DROPBOX[/color] from the Marketing subnet. Investigate the source workstation to identify the unsanctioned cloud storage usage."
 severity = "Low"
 category = "Unauthorized Access"
 steps = ["Identify Marketing workstation in SIEM", "Verify traffic destination", "Issue policy reminder via email"]

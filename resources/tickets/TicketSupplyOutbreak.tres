@@ -6,9 +6,7 @@
 script = ExtResource("1_ticket")
 ticket_id = "SUPPLY-CHAIN-003"
 title = "Critical: Multi-Host Subnet Outbreak"
-description = "CRITICAL ALERT: Lateral movement has been confirmed. The infection from the compromised server has spread to multiple workstations within the same subnet. This is now a full-scale subnet outbreak.
-
-Immediate containment of the entire subnet may be necessary. Identify all infected hosts and isolate them to prevent further spread to the production network."
+description = "Lateral movement confirmed. Automated alerts indicate a full-scale [color=#006CFF]SUBNET OUTBREAK[/color] originating from the compromised server. Identify all affected workstations and neutralize the pivot attempts."
 severity = "Critical"
 category = "Malware"
 steps = ["Identify all workstations communicating with the infected server", "Isolate all infected workstations in the subnet", "Verify that the outbreak is contained"]

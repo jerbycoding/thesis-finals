@@ -6,9 +6,7 @@
 script = ExtResource("1_ticket")
 ticket_id = "MOLE-HUNT-001"
 title = "Conflicting Access Logs"
-description = "ALERT: Admin Login Anomaly. A system reboot was triggered using the 'admin' account, but IT Support claims they were asleep. 
-
-[b]Instruction:[/b] Search the SIEM for 'admin'. Identify the IP address used for the 02:00 AM login. Type that IP into the [b]Root Cause[/b] box below to confirm if it was an external attacker."
+description = "System logs recorded a high-level [color=#006CFF]ADMIN[/color] session during off-hours, but the primary account holder was unavailable. Identify the IP origin of the 02:00 AM login to verify if the session was hijacked."
 severity = "High"
 category = "Insider Threat"
 steps = Array[String](["Search SIEM for 'admin' activity", "Verify IP location of 02:00 AM login", "Enter IP in Root Cause box"])

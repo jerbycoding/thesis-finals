@@ -6,7 +6,7 @@
 script = ExtResource("1_ticket")
 ticket_id = "SYS-MAINT-GENERIC"
 title = "Scheduled System Maintenance"
-description = "Regular patch management window for internal file server. Verify system availability after update cycle completes."
+description = "Routine operational task: A [color=#006CFF]SYSTEM PATCH[/color] was recently deployed to the file servers. Verify the success of the update cycle to ensure service availability."
 severity = "Low"
 category = "General"
 steps = Array[String](["Monitor patch progress logs", "Verify service 'smbd' is operational", "Confirm connectivity from test workstation"])

@@ -7,9 +7,7 @@
 script = ExtResource("1_ticket")
 ticket_id = "INSIDER-001"
 title = "Suspicious Data Access: User Anomaly"
-description = "ALERT: Unauthorized Data Access. User 'John Smith' has been flagged for accessing sensitive directories that do not match his role permissions. 
-
-[b]Instruction:[/b] Search the SIEM for user 'smith'. Identify the 'jsmith' login that accessed the restricted 'HR-PRIVATE' folder and attach it as evidence."
+description = "Automated monitoring has flagged user [color=#006CFF]JSMITH[/color] for accessing restricted directories that fall outside his standard role permissions. Locate the unauthorized folder access event to document the anomaly."
 severity = "High"
 category = "Insider Threat"
 steps = Array[String](["Search SIEM for 'smith' activity", "Identify 'Unauthorized' folder access", "Attach log evidence"])

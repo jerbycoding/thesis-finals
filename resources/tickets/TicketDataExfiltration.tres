@@ -6,7 +6,7 @@
 script = ExtResource("1_ticket")
 ticket_id = "DATA-EXFIL-001"
 title = "Data Exfiltration Alert"
-description = "Suspicious outbound traffic detected. Email contains external IP address. Use the Terminal 'trace' command to identify the internal origin host and block the connection via SIEM firewall."
+description = "Massive outbound traffic spikes detected. Internal sensors indicate a potential [color=#006CFF]EXFILTRATION[/color] attempt in progress. Identify the source host and block the malicious stream."
 severity = "Critical"
 category = "Data Breach"
 steps = Array[String](["Check email for suspicious IP address", "Use Terminal 'trace' to find origin host", "Block connection at firewall (SIEM)"])

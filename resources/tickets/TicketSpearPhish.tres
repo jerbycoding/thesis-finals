@@ -7,7 +7,7 @@
 script = ExtResource("1_ticket")
 ticket_id = "SPEAR-PHISH-001"
 title = "Spear Phishing Investigation"
-description = "CEO reports receiving suspicious email claiming to be from finance department. Email contains executable attachment. Investigate using Email Analyzer."
+description = "The CEO was targeted with a suspicious [color=#006CFF]ATTACHMENT[/color]. Confirm if our automated gateway filters successfully neutralized the malicious payload."
 severity = "High"
 category = "Phishing"
 steps = Array[String](["Inspect email headers for spoofing", "Scan attachment for malware", "Check sender domain reputation"])

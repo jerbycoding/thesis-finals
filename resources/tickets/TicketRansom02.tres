@@ -6,9 +6,7 @@
 script = ExtResource("1_ticket")
 ticket_id = "RANSOM-002"
 title = "Ransomware: Public Web Server Locked"
-description = "Our public-facing web server (WEB-SRV-01) has been encrypted by ransomware. A ransom note has been found in the root directory.
-
-This is a critical blow to our public reputation. Isolate the server immediately and initiate emergency data recovery procedures."
+description = "Public services are failing. Multiple reports confirm the [color=#006CFF]WEB-SRV-01[/color] has been encrypted by a known ransomware strain. Isolate the server and initiate emergency restoration."
 severity = "Critical"
 category = "Ransomware"
 steps = ["Isolate WEB-SRV-01 via Terminal", "Launch Decryption Tool", "Verify web service restoration"]

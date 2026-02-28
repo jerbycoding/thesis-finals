@@ -6,9 +6,7 @@
 script = ExtResource("1_ticket")
 ticket_id = "TICKET-NOISE-001"
 title = "Routine Request: Password Reset"
-description = "ADMINISTRATIVE REQUEST: User 'j.doe' needs a password reset. 
-
-[b]Instruction:[/b] This is a low-priority 'management' task. You do not need to use the SIEM or Terminal. Simply review the request, click the [b]Complete[/b] button, and select [b]Compliant[/b] to clear it from your queue."
+description = "Standard administrative request: User needs an [color=#006CFF]ACCOUNT RESET[/color]. Verify the employee identity and finalize the credential update to clear the queue."
 severity = "Low"
 category = "General"
 steps = Array[String](["Review user request", "Acknowledge identity verification", "Complete as Compliant"])

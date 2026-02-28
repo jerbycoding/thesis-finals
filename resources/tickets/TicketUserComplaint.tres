@@ -6,9 +6,7 @@
 script = ExtResource("1_ticket")
 ticket_id = "USER-COMPLAINT-FOLLOWUP"
 title = "User Complaint Investigation"
-description = "A user has filed a complaint regarding service disruption or an overly aggressive security action (e.g., a legitimate email being quarantined).
-
-Review the user's report and the associated system logs to determine the validity of the complaint."
+description = "Stakeholder feedback: A user has filed a [color=#006CFF]COMPLAINT[/color] regarding a recent security action. Review the report and justify the procedural deviation."
 severity = "Low"
 category = "General"
 steps = ["Review user complaint email", "Cross-reference with system logs", "Apologize or justify action"]

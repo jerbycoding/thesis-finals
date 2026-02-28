@@ -7,9 +7,7 @@
 script = ExtResource("1_ticket")
 ticket_id = "AUTH-FAIL-GENERIC"
 title = "Routine Check: Multiple Failed Logins"
-description = "ROUTINE ALERT: A series of failed login attempts was detected for user 'jsmith' earlier this morning. This likely indicates a forgotten password. 
-
-[b]Instruction:[/b] Open the [b]SIEM Viewer[/b] and search for 'smith'. Identify the cluster of 'Failed Login' events from earlier today and attach one as evidence to clear the alert."
+description = "A user named Smith reported issues during [color=#006CFF]LOGIN[/color]. Search the historical logs to verify if this was a standard forgotten password or a targeted lockout attempt."
 severity = "Low"
 category = "Authentication"
 steps = Array[String](["Open SIEM Viewer", "Search for 'smith' in historical logs", "Attach one 'Failed Login' log entry"])

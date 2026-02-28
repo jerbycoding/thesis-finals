@@ -6,7 +6,7 @@
 script = ExtResource("1_ticket")
 ticket_id = "TICKET-NOISE-002"
 title = "New Hardware Request: Monitor"
-description = "User 'a.smith' is requesting a secondary monitor for their workstation. Forward to procurement for approval."
+description = "Hardware procurement request: A user is requesting a [color=#006CFF]SECONDARY MONITOR[/color]. Verify the request details and forward to the facilities department."
 severity = "Low"
 category = "General"
 steps = ["Acknowledge request", "Forward to Procurement", "Close ticket"]

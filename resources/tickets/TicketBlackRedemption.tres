@@ -6,7 +6,7 @@
 script = ExtResource("1_ticket")
 ticket_id = "BLACK-TICKET-REDEMPTION"
 title = "REDEMPTION: Full Forensic Post-Mortem"
-description = "CRITICAL FAILURE RECOVERY. Adhere to zero-trust forensics. You must identify the full scope of the breach by cross-referencing all missing logs and artifacts. Successful completion will purge your record of past procedural deviations."
+description = "CRITICAL FAILURE RECOVERY. The board has initiated a full audit. You must employ [color=#006CFF]ZERO-TRUST FORENSICS[/color] to reconstruct the entire breach timeline. Identify the initial delivery vector, trace the lateral movement, and verify the exfiltration path to stabilize the organization."
 severity = "Critical"
 category = "Forensics"
 steps = Array[String](["Identify initial delivery vector", "Trace lateral movement logs", "Verify data recovery integrity"])

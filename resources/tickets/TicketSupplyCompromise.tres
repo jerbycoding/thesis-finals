@@ -7,9 +7,7 @@
 script = ExtResource("2_ticket")
 ticket_id = "SUPPLY-CHAIN-001"
 title = "Suspicious Software Update"
-description = "Alert: An employee received a link to update their browser from a non-corporate site. 
-
-[b]Instruction:[/b] Check the Email Analyzer for the 'Fake Update' email. If the link doesn't look like our official site, use the SOC Terminal to run the [b]scan [hostname][/b] command on their machine to see if they installed it."
+description = "An employee received a suspicious software update. Investigate the delivery vector and perform an endpoint scan to determine if a malicious [color=#006CFF]BROWSER PATCH[/color] was executed on the workstation."
 severity = "Medium"
 category = "Phishing"
 steps = Array[String](["Check link in Email Analyzer", "Run Terminal Scan on host", "Attach scan result log"])

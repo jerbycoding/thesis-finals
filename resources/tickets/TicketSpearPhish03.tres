@@ -6,9 +6,7 @@
 script = ExtResource("1_ticket")
 ticket_id = "SPEAR-PHISH-003"
 title = "Spear Phish: Internal Document Leak"
-description = "An employee has reported a suspicious email that appears to be an internal conversation they were not supposed to be on. It contains a link to a 'Confidential Project Document'.
-
-This could be a sophisticated internal spear-phishing attack. Investigate the link and the sender's authenticity."
+description = "Internal communications appear to be compromised. An employee reported a suspicious thread originating from the domain [color=#006CFF]CORP-MAIL.IO[/color]. Verify the legitimacy of the conversation."
 severity = "High"
 category = "Phishing"
 steps = ["Analyze email for signs of internal spoofing", "Check link reputation", "Report findings"]
