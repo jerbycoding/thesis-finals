@@ -17,8 +17,11 @@ static func get_resource_paths(dir_path: String, extension: String = ".tres") ->
 				if file_name != "." and file_name != "..":
 					paths.append_array(get_resource_paths(full_path, extension))
 			else:
-				if file_name.ends_with(extension):
-					paths.append(full_path)
+				# In exported builds, .tres files become .tres.remap.
+				# We check the "clean" name but append the original path for Godot's loader.
+				var clean_name = file_name.replace(".remap", "").replace(".import", "")
+				if clean_name.ends_with(extension):
+					paths.append(dir_path.path_join(clean_name))
 			file_name = dir.get_next()
 		dir.list_dir_end()
 	else:
