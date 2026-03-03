@@ -1,16 +1,22 @@
-[gd_scene load_steps=5 format=3 uid="uid://dbsthw3ss0g7g"]
+[gd_scene load_steps=9 format=3 uid="uid://dbsthw3ss0g7g"]
 
 [ext_resource type="Script" uid="uid://0n0s8d3okds1" path="res://scripts/ui/StartupLogo.gd" id="1_logo"]
+[ext_resource type="Shader" path="res://shaders/ui/SOC_Screen.gdshader" id="2_shader"]
+[ext_resource type="Shader" path="res://shaders/ui/DataRain.gdshader" id="3_datarain"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_datarain"]
+shader = ExtResource("3_datarain")
+shader_parameter/scroll_speed = 1.2
+shader_parameter/density = 0.08
+shader_parameter/color = Color(0, 1, 0, 0.05)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_logo_bg"]
 bg_color = Color(0, 0.4, 0, 1)
 expand_margin_left = 20.0
-expand_margin_top = 5.0
 expand_margin_right = 20.0
-expand_margin_bottom = 5.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_progress_bg"]
-bg_color = Color(0, 0.1, 0, 1)
+bg_color = Color(0, 0, 0, 1)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
@@ -18,7 +24,15 @@ border_width_bottom = 1
 border_color = Color(0, 0.4, 0, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_progress_fill"]
-bg_color = Color(0, 0.8, 0, 1)
+bg_color = Color(0, 1, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_crt"]
+shader = ExtResource("2_shader")
+shader_parameter/scanline_intensity = 0.15
+shader_parameter/aberration_amount = 0.002
+shader_parameter/glitch_intensity = 0.0
+shader_parameter/vignette_strength = 0.8
+shader_parameter/pulse_speed = 2.0
 
 [node name="StartupLogo" type="Control"]
 layout_mode = 3
@@ -29,7 +43,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_logo")
 
-[node name="Background" type="ColorRect" parent="."]
+[node name="BlackBase" type="ColorRect" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -38,9 +52,9 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 1)
 
-[node name="DataStream" type="RichTextLabel" parent="."]
+[node name="DataStream" type="ColorRect" parent="."]
 unique_name_in_owner = true
-modulate = Color(1, 1, 1, 0.05)
+material = SubResource("ShaderMaterial_datarain")
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -48,82 +62,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-theme_override_font_sizes/normal_font_size = 12
-bbcode_enabled = true
-text = "0xA1B2C3D4E5F6
-0xB2C3D4E5F6A1
-0xC3D4E5F6A1B2
-0xD4E5F6A1B2C3"
-scroll_active = false
-autowrap_mode = 0
-
-[node name="CornerDecor" type="Control" parent="."]
-unique_name_in_owner = true
-modulate = Color(1, 1, 1, 0)
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-
-[node name="TopLeft" type="Label" parent="CornerDecor"]
-layout_mode = 0
-offset_left = 20.0
-offset_top = 20.0
-offset_right = 60.0
-offset_bottom = 43.0
-theme_override_colors/font_color = Color(0, 0.6, 0, 1)
-theme_override_font_sizes/font_size = 32
-text = "┌"
-
-[node name="TopRight" type="Label" parent="CornerDecor"]
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -60.0
-offset_top = 20.0
-offset_right = -20.0
-offset_bottom = 65.0
-grow_horizontal = 0
-theme_override_colors/font_color = Color(0, 0.6, 0, 1)
-theme_override_font_sizes/font_size = 32
-text = "┐"
-horizontal_alignment = 2
-
-[node name="BottomLeft" type="Label" parent="CornerDecor"]
-layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_left = 20.0
-offset_top = -65.0
-offset_right = 60.0
-offset_bottom = -20.0
-grow_vertical = 0
-theme_override_colors/font_color = Color(0, 0.6, 0, 1)
-theme_override_font_sizes/font_size = 32
-text = "└"
-
-[node name="BottomRight" type="Label" parent="CornerDecor"]
-layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -60.0
-offset_top = -65.0
-offset_right = -20.0
-offset_bottom = -20.0
-grow_horizontal = 0
-grow_vertical = 0
-theme_override_colors/font_color = Color(0, 0.6, 0, 1)
-theme_override_font_sizes/font_size = 32
-text = "┘"
-horizontal_alignment = 2
 
 [node name="CenterContainer" type="CenterContainer" parent="."]
 layout_mode = 1
@@ -136,52 +74,51 @@ grow_vertical = 2
 [node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_constants/separation = 30
+theme_override_constants/separation = 20
+
+[node name="BootLog" type="RichTextLabel" parent="CenterContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+theme_override_colors/default_color = Color(0, 0.6, 0, 1)
+theme_override_font_sizes/normal_font_size = 18
+bbcode_enabled = true
+scroll_active = false
+autowrap_mode = 0
 
 [node name="LogoText" type="Label" parent="CenterContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 80
+theme_override_font_sizes/font_size = 96
 theme_override_styles/normal = SubResource("StyleBoxFlat_logo_bg")
 text = " VERIFY.EXE "
 horizontal_alignment = 1
 
 [node name="Subtitle" type="Label" parent="CenterContainer/VBoxContainer"]
 unique_name_in_owner = true
-modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0.6, 0, 1)
 theme_override_font_sizes/font_size = 24
 text = "A SECURITY SIMULATION"
 horizontal_alignment = 1
 
-[node name="BootBar" type="ProgressBar" parent="CenterContainer/VBoxContainer"]
+[node name="ProgressBar" type="ProgressBar" parent="CenterContainer/VBoxContainer"]
 unique_name_in_owner = true
-modulate = Color(1, 1, 1, 0)
-custom_minimum_size = Vector2(0, 8)
+custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 theme_override_styles/background = SubResource("StyleBoxFlat_progress_bg")
 theme_override_styles/fill = SubResource("StyleBoxFlat_progress_fill")
+value = 50.0
 show_percentage = false
 
-[node name="BootLog" type="RichTextLabel" parent="."]
+[node name="PostProcessOverlay" type="ColorRect" parent="."]
 unique_name_in_owner = true
-layout_mode = 0
-offset_left = 40.0
-offset_top = 40.0
-offset_right = 440.0
-offset_bottom = 240.0
-theme_override_colors/default_color = Color(0, 0.6, 0, 1)
-theme_override_font_sizes/normal_font_size = 14
-bbcode_enabled = true
-scroll_active = false
-scroll_following = true
-
-[node name="CenterContainer2" type="CenterContainer" parent="."]
+material = SubResource("ShaderMaterial_crt")
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2

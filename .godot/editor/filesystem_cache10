@@ -1,8 +1,9 @@
 ea4bc82a6ad023ab7ee23ee620429895
-::res://::1772536209
+::res://::1772536686
 export_presets.cfg::TextFile/TextFile::-1::1772457340::0::1::::<><><>0<>0<><>::
 GEMINI.md::TextFile/TextFile::-1::1771640827::0::1::::<><><>0<>0<><>::
 icon.svg::CompressedTexture2D/CompressedTexture2D::7091867411920504896::1770122318::1771168245::1::::<><><>0<>0<>5b327e56230975567e18cb50030fcae6<>res://.godot/imported/icon.svg-218a8f2b3041327d8a5756f3a245f83b.ctex::
+image.png::CompressedTexture2D::6244521174908729770::1772536686::1772536760::1::::<><><>0<>0<>d42d2e1c245aab2bd5b8100c71e73d79<>res://.godot/imported/image.png-2de165adb17dfebcee8a7cd6c9833936.ctex::
 ::res://addons/::1772340193
 ::res://addons/gdUnit4/::1772340193
 GdUnitRunner.cfg::TextFile/TextFile::-1::1771170871::0::1::::<><><>0<>0<><>::
@@ -31,7 +32,7 @@ GdUnitResultAssert.gd::GDScript/GDScript::8256532853776460157::1770122317::0::1:
 GdUnitSceneRunner.gd::GDScript/GDScript::1057322312890969450::1770122317::0::1::::GdUnitSceneRunner<>RefCounted<><>0<>0<><>::
 GdUnitSignalAssert.gd::GDScript/GDScript::8803905317259318606::1770122317::0::1::::GdUnitSignalAssert<>GdUnitAssert<><>0<>0<><>::
 GdUnitStringAssert.gd::GDScript/GDScript::1876050861502090733::1770122317::0::1::::GdUnitStringAssert<>GdUnitAssert<><>0<>0<><>::
-GdUnitTestSuite.gd::GDScript/GDScript::510617612849165689::1770122317::0::1::::GdUnitTestSuite<>Node<>res://addons/gdUnit4/src/ui/settings/logo.png<>0<>0<><>::
+GdUnitTestSuite.gd::GDScript/GDScript::510617612849165689::1770122317::0::1::::GdUnitTestSuite<>Node<><>0<>0<><>::
 GdUnitTuple.gd::GDScript/GDScript::4329062086269031495::1770122317::0::1::::GdUnitTuple<>RefCounted<><>0<>0<><>::
 GdUnitValueExtractor.gd::GDScript/GDScript::9212568493946468759::1770122317::0::1::::GdUnitValueExtractor<>RefCounted<><>0<>0<><>::
 GdUnitVectorAssert.gd::GDScript/GDScript::2545298993084310201::1770122317::0::1::::GdUnitVectorAssert<>GdUnitAssert<><>0<>0<><>::
@@ -1343,8 +1344,8 @@ terminal_beep.ogg::AudioStreamOggVorbis/AudioStreamOggVorbis::560363922868406973
 ui_data_processing.ogg::AudioStreamOggVorbis/AudioStreamOggVorbis::1178846722164182493::1770122318::1770122431::1::::<><><>0<>0<>7b99d0c86691a77cfc9f579e0be0adb6<>res://.godot/imported/ui_data_processing.ogg-e575c0b8128786d2d942770ab9e8a9df.oggvorbisstr::
 ui_window_open.ogg::AudioStreamOggVorbis/AudioStreamOggVorbis::5136081647037336021::1770122318::1770122431::1::::<><><>0<>0<>5fff328ec81b419791ad4a00fad8154a<>res://.godot/imported/ui_window_open.ogg-c710018e22897568e0173e340d689a4a.oggvorbisstr::
 ::res://assets/shaders/::1772340210
-::res://assets/themes/::1772536104
-EnterpriseTheme.tres::Theme::8122993098592022960::1772536104::0::1::::<><><>0<>0<><>::
+::res://assets/themes/::1772536226
+EnterpriseTheme.tres::Theme::8122993098592022960::1772536226::0::1::::<><><>0<>0<><>::
 ::res://assets/wallpapers/::1772340210
 Microsoft_Surface_Duo.jpg::CompressedTexture2D/CompressedTexture2D::7920939511533492659::1770965645::1771168249::1::::<><><>0<>0<>91b5ea921cf9aadbf2a895e565e9b09f<>res://.godot/imported/Microsoft_Surface_Duo.jpg-298fb8eb5d5e89580cbdded2c21f34dd.ctex::
 ::res://autoload/::1772340210
@@ -1710,45 +1711,45 @@ TRN-002.tres::Resource/TicketResource::-1::1770122318::0::1::::<><><>0<>0<><>::r
 TRN-003.tres::Resource/TicketResource::-1::1772005893::0::1::::<><><>0<>0<><>::res://resources/tickets/TicketResource.gd
 TRN-004.tres::Resource/TicketResource::-1::1771994567::0::1::::<><><>0<>0<><>::res://resources/tickets/TicketResource.gd
 TRN-005.tres::Resource/TicketResource::-1::1772015220::0::1::::<><><>0<>0<><>::res://resources/tickets/TicketResource.gd
-::res://scenes/::1772536170
-InteractableComputer.tscn::PackedScene::4702004120436743986::1772536168::0::1::::<><><>0<>0<><>::uid://bjy8b0vcfuc0r::::res://scenes/3d/props/graybox/Prop_ComputerSet.tscn<>uid://byfr15ei8bwp6::::res://assets/props/glb files/Boss Table.glb<>uid://iyjyew21g2r4::::res://assets/props/graybox/Mug.glb<>uid://dbu7rn0d7neqy::::res://assets/props/glb files/from unity/chair.glb
+::res://scenes/::1772536668
+InteractableComputer.tscn::PackedScene::4702004120436743986::1772536667::0::1::::<><><>0<>0<><>::uid://bjy8b0vcfuc0r::::res://scenes/3d/props/graybox/Prop_ComputerSet.tscn<>uid://byfr15ei8bwp6::::res://assets/props/glb files/Boss Table.glb<>uid://iyjyew21g2r4::::res://assets/props/graybox/Mug.glb<>uid://dbu7rn0d7neqy::::res://assets/props/glb files/from unity/chair.glb
 office_playground.tscn::PackedScene/PackedScene::420236152595432538::1770122318::0::1::::<><><>0<>0<><>::
-Player3D.tscn::PackedScene::4289467525721536014::1772536170::0::1::::<><><>0<>0<><>::uid://dx3637o27a75s::::res://scripts/PlayerController.gd<>uid://clra78uil2mle::::res://scripts/3d/PlayerAnimator.gd<>uid://c8x6y708bab0e::::res://scenes/ui/UnifiedHUD.tscn<>uid://pwr7hj6luthk::::res://scenes/ui/InteractionPrompt.tscn<>uid://dotgpl1o3q8uw::::res://scenes/ui/MaintenanceHUD.tscn<>uid://bgk20yi3egwfp::::res://scenes/ui/TabletHUD.tscn<>uid://dny42b338pxg0::::res://resources/minigames/DefaultRecoveryConfig.tres<>res://resources/minigames/DefaultCalibrationConfig.tres<>uid://bcsmu50suq5yh::::res://assets/Animations Godot/NPC/NPC_HOODIE.fbx
-SOC_Office.tscn::PackedScene::7525059325672913338::1772536169::0::1::::<><><>0<>0<><>::uid://b2d35yngg7u75::::res://scenes/Player3D.tscn<>uid://byh82hlg10odp::::res://scenes/3d/props/graybox/Graybox_Elevator.tscn<>uid://dh3hcvpwq0ufa::::res://scripts/3d/RoomTeleporter.gd<>uid://u3cbxyg0evr3::::res://scenes/3d/props/graybox/Graybox_Plant.tscn<>uid://bo2wtbo786bid::::res://scripts/3d/WorkstationTeleporter.gd<>uid://bdvy7nngneys2::::res://assets/props/FBX/Separated/Clock.fbx<>uid://depawy1mgva8::::res://scripts/3d/TutorialTrigger.gd<>uid://dgkhv2v8v8v8w::::res://scenes/3d/TutorialWaypoint.tscn<>uid://ciscr6kwnpufy::::res://assets/props/FBX/Separated/Painting_Small.fbx<>uid://vokjpeqaekwc::::res://assets/props/glb files/Message board.glb<>uid://cr3bl3upt5unc::::res://assets/props/office_pack/FBX/Separated FBX files/Sofa_1_Alt.fbx<>uid://btnu8a43ektel::::res://assets/props/glb files/Air Vent.glb<>uid://n28x3hn5cby1::::res://assets/props/glb files/Doorway Front.glb<>uid://b1qbl70qyl3bl::::res://scripts/EnvironmentDirector.gd
-::res://scenes/2d/::1772536169
+Player3D.tscn::PackedScene::4289467525721536014::1772536668::0::1::::<><><>0<>0<><>::uid://dx3637o27a75s::::res://scripts/PlayerController.gd<>uid://clra78uil2mle::::res://scripts/3d/PlayerAnimator.gd<>uid://c8x6y708bab0e::::res://scenes/ui/UnifiedHUD.tscn<>uid://pwr7hj6luthk::::res://scenes/ui/InteractionPrompt.tscn<>uid://dotgpl1o3q8uw::::res://scenes/ui/MaintenanceHUD.tscn<>uid://bgk20yi3egwfp::::res://scenes/ui/TabletHUD.tscn<>uid://dny42b338pxg0::::res://resources/minigames/DefaultRecoveryConfig.tres<>res://resources/minigames/DefaultCalibrationConfig.tres<>uid://bcsmu50suq5yh::::res://assets/Animations Godot/NPC/NPC_HOODIE.fbx
+SOC_Office.tscn::PackedScene::7525059325672913338::1772536667::0::1::::<><><>0<>0<><>::uid://b2d35yngg7u75::::res://scenes/Player3D.tscn<>uid://byh82hlg10odp::::res://scenes/3d/props/graybox/Graybox_Elevator.tscn<>uid://dh3hcvpwq0ufa::::res://scripts/3d/RoomTeleporter.gd<>uid://u3cbxyg0evr3::::res://scenes/3d/props/graybox/Graybox_Plant.tscn<>uid://bo2wtbo786bid::::res://scripts/3d/WorkstationTeleporter.gd<>uid://bdvy7nngneys2::::res://assets/props/FBX/Separated/Clock.fbx<>uid://depawy1mgva8::::res://scripts/3d/TutorialTrigger.gd<>uid://dgkhv2v8v8v8w::::res://scenes/3d/TutorialWaypoint.tscn<>uid://ciscr6kwnpufy::::res://assets/props/FBX/Separated/Painting_Small.fbx<>uid://vokjpeqaekwc::::res://assets/props/glb files/Message board.glb<>uid://cr3bl3upt5unc::::res://assets/props/office_pack/FBX/Separated FBX files/Sofa_1_Alt.fbx<>uid://btnu8a43ektel::::res://assets/props/glb files/Air Vent.glb<>uid://n28x3hn5cby1::::res://assets/props/glb files/Doorway Front.glb<>uid://b1qbl70qyl3bl::::res://scripts/EnvironmentDirector.gd
+::res://scenes/2d/::1772536668
 AmbientDesktop.tscn::PackedScene/PackedScene::6955094882558933159::1770965645::0::1::::<><><>0<>0<><>::uid://c28t6vqktfrln::::res://scripts/2d/DesktopClock.gd<>uid://cj224q24ol6oc::::res://scripts/2d/AmbientDesktop.gd<>uid://dk37ymi787rod::::res://assets/wallpapers/Microsoft_Surface_Duo.jpg<>uid://dny3rlbltexc7::::res://assets/themes/EnterpriseTheme.tres
 AmbientWindow.tscn::PackedScene/PackedScene::-1::1770122318::0::1::::<><><>0<>0<><>::res://scripts/2d/AmbientWindow.gd<>uid://dny3rlbltexc7::::res://assets/themes/EnterpriseTheme.tres
-ComputerDesktop.tscn::PackedScene::6856415194316956033::1772536169::0::1::::<><><>0<>0<><>::uid://b22xof43jxemv::::res://scripts/2d/ComputerDesktop.gd<>uid://c28t6vqktfrln::::res://scripts/2d/DesktopClock.gd<>uid://cbi6smmdpx4yu::::res://scripts/2d/ExitButton.gd<>uid://dk37ymi787rod::::res://assets/wallpapers/Microsoft_Surface_Duo.jpg<>uid://dny3rlbltexc7::::res://assets/themes/EnterpriseTheme.tres<>uid://unh4acpyvw0m::::res://scenes/ui/RunbookSidebar.tscn
+ComputerDesktop.tscn::PackedScene::6856415194316956033::1772536668::0::1::::<><><>0<>0<><>::uid://b22xof43jxemv::::res://scripts/2d/ComputerDesktop.gd<>uid://c28t6vqktfrln::::res://scripts/2d/DesktopClock.gd<>uid://cbi6smmdpx4yu::::res://scripts/2d/ExitButton.gd<>uid://dk37ymi787rod::::res://assets/wallpapers/Microsoft_Surface_Duo.jpg<>uid://dny3rlbltexc7::::res://assets/themes/EnterpriseTheme.tres<>uid://unh4acpyvw0m::::res://scenes/ui/RunbookSidebar.tscn
 DesktopIcon.tscn::PackedScene/PackedScene::4752045637239739698::1770965645::0::1::::<><><>0<>0<><>::uid://c5q2x7o2ycf::::res://scripts/2d/DesktopIcon.gd<>uid://c0auxrvmfy530::::res://assets/icons/handbook.png<>uid://dny3rlbltexc7::::res://assets/themes/EnterpriseTheme.tres
 DesktopSearchBar.tscn::PackedScene/PackedScene::144282887795983329::1770965645::0::1::::<><><>0<>0<><>::uid://dny3rlbltexc7::::res://assets/themes/EnterpriseTheme.tres
-StartMenu.tscn::PackedScene::188525316565373116::1772536168::0::1::::<><><>0<>0<><>::uid://b27qlb4stdilg::::res://scripts/2d/StartMenu.gd<>uid://dny3rlbltexc7::::res://assets/themes/EnterpriseTheme.tres
-StartMenuAppButton.tscn::PackedScene::124529606189520060::1772536168::0::1::::<><><>0<>0<><>::uid://dny3rlbltexc7::::res://assets/themes/EnterpriseTheme.tres<>uid://dhjtqbi1ie4ca::::res://scripts/2d/StartMenuAppButton.gd
+StartMenu.tscn::PackedScene::188525316565373116::1772536667::0::1::::<><><>0<>0<><>::uid://b27qlb4stdilg::::res://scripts/2d/StartMenu.gd<>uid://dny3rlbltexc7::::res://assets/themes/EnterpriseTheme.tres
+StartMenuAppButton.tscn::PackedScene::124529606189520060::1772536667::0::1::::<><><>0<>0<><>::uid://dny3rlbltexc7::::res://assets/themes/EnterpriseTheme.tres<>uid://dhjtqbi1ie4ca::::res://scripts/2d/StartMenuAppButton.gd
 TaskbarIcon.tscn::PackedScene/PackedScene::7628542742196805820::1771997999::0::1::::<><><>0<>0<><>::res://scripts/2d/TaskbarIcon.gd<>uid://dny3rlbltexc7::::res://assets/themes/EnterpriseTheme.tres
-::res://scenes/2d/apps/::1772536170
+::res://scenes/2d/apps/::1772536668
 App_Decryption.tscn::PackedScene/PackedScene::301625866900118778::1770965645::0::1::::<><><>0<>0<><>::uid://7w0tlxraktjy::::res://scripts/2d/apps/App_Decryption.gd
 App_EmailAnalyzer.tscn::PackedScene/PackedScene::5367763231028105184::1772003407::0::1::::<><><>0<>0<><>::uid://cnlitr17gagoc::::res://scripts/2d/apps/app_EmailAnalyzer.gd<>res://scenes/2d/apps/components/ForensicReportModal.tscn<>uid://dny3rlbltexc7::::res://assets/themes/EnterpriseTheme.tres
 App_Handbook.tscn::PackedScene/PackedScene::8233202455911855875::1770965645::0::1::::<><><>0<>0<><>::uid://o22ilymgwhaa::::res://scripts/2d/apps/App_Handbook.gd<>uid://dny3rlbltexc7::::res://assets/themes/EnterpriseTheme.tres
-App_NetworkMapper.tscn::PackedScene::5595719077309924843::1772536169::0::1::::<><><>0<>0<><>::uid://dqxaypiaoiy7k::::res://scripts/2d/apps/App_NetworkMapper.gd<>uid://dny3rlbltexc7::::res://assets/themes/EnterpriseTheme.tres
-App_ShiftReport.tscn::PackedScene::6526091236993731902::1772536169::0::1::::<><><>0<>0<><>::uid://b7fmbt1rr1q0::::res://scripts/2d/apps/App_ShiftReport.gd
-App_SIEMViewer.tscn::PackedScene::421262301393169306::1772536168::0::1::::<><><>0<>0<><>::uid://cxaow56baqegs::::res://scripts/2d/apps/App_SIEMViewer.gd<>uid://dny3rlbltexc7::::res://assets/themes/EnterpriseTheme.tres
+App_NetworkMapper.tscn::PackedScene::5595719077309924843::1772536667::0::1::::<><><>0<>0<><>::uid://dqxaypiaoiy7k::::res://scripts/2d/apps/App_NetworkMapper.gd<>uid://dny3rlbltexc7::::res://assets/themes/EnterpriseTheme.tres
+App_ShiftReport.tscn::PackedScene::6526091236993731902::1772536668::0::1::::<><><>0<>0<><>::uid://b7fmbt1rr1q0::::res://scripts/2d/apps/App_ShiftReport.gd
+App_SIEMViewer.tscn::PackedScene::421262301393169306::1772536667::0::1::::<><><>0<>0<><>::uid://cxaow56baqegs::::res://scripts/2d/apps/App_SIEMViewer.gd<>uid://dny3rlbltexc7::::res://assets/themes/EnterpriseTheme.tres
 App_TaskManager.tscn::PackedScene/PackedScene::6942716443225775878::1770122318::0::1::::<><><>0<>0<><>::uid://bkxhbti8i8gqn::::res://scripts/2d/apps/App_TaskManager.gd<>uid://dny3rlbltexc7::::res://assets/themes/EnterpriseTheme.tres
 App_Terminal.tscn::PackedScene/PackedScene::6539878515375920555::1770965645::0::1::::<><><>0<>0<><>::uid://1b1t5ow8n8ns::::res://scripts/2d/apps/App_Terminal.gd<>uid://dny3rlbltexc7::::res://assets/themes/EnterpriseTheme.tres
 App_TicketQueue.tscn::PackedScene/PackedScene::6902859125699045762::1771994010::0::1::::<><><>0<>0<><>::uid://biay8aieuagch::::res://scripts/2d/apps/app_TicketQueue.gd<>uid://c5x6y708bab0c::::res://scenes/2d/apps/components/CompletionModal.tscn<>uid://dny3rlbltexc7::::res://assets/themes/EnterpriseTheme.tres
-::res://scenes/2d/apps/components/::1772536171
-CompletionModal.tscn::PackedScene::6927914171568048712::1772536171::0::1::::<><><>0<>0<><>::uid://cqrecl4u4gg7o::::res://scripts/2d/apps/components/CompletionModal.gd
-EmailListEntry.tscn::PackedScene::3228213022340025187::1772536170::0::1::::<><><>0<>0<><>::uid://e3getwdtdogp::::res://scripts/2d/apps/components/EmailListEntry.gd
+::res://scenes/2d/apps/components/::1772536668
+CompletionModal.tscn::PackedScene::6927914171568048712::1772536668::0::1::::<><><>0<>0<><>::uid://cqrecl4u4gg7o::::res://scripts/2d/apps/components/CompletionModal.gd
+EmailListEntry.tscn::PackedScene::3228213022340025187::1772536668::0::1::::<><><>0<>0<><>::uid://e3getwdtdogp::::res://scripts/2d/apps/components/EmailListEntry.gd
 ForensicReportModal.tscn::PackedScene/PackedScene::7138480702482145865::1770122318::0::1::::<><><>0<>0<><>::res://scripts/2d/apps/components/ForensicReportModal.gd
 LogEntry.tscn::PackedScene/PackedScene::7138480702482145864::1772003916::0::1::::<><><>0<>0<><>::uid://vt0n5ed46ips::::res://scripts/2d/apps/components/LogEntry.gd
 NetworkNode.tscn::PackedScene/PackedScene::7138577220061793566::1770122318::0::1::::<><><>0<>0<><>::uid://cptn1rl510fq5::::res://scripts/2d/apps/components/NetworkNode.gd
 TicketArtifactTag.tscn::PackedScene/PackedScene::4331108739957375894::1770965645::0::1::::<><><>0<>0<><>::uid://c8w0aibcjpmal::::res://scripts/2d/apps/components/TicketArtifactTag.gd<>uid://dny3rlbltexc7::::res://assets/themes/EnterpriseTheme.tres
 TicketCard.tscn::PackedScene/PackedScene::8603370686416155829::1772000020::0::1::::<><><>0<>0<><>::uid://p3uitm5au0vw::::res://scripts/2d/apps/components/TicketCard.gd
 WindowFrame.tscn::PackedScene/PackedScene::4247484232174536357::1770965645::0::1::::<><><>0<>0<><>::uid://cy3db0qsjcwgt::::res://scripts/2d/apps/components/WindowFrame.gd<>uid://dny3rlbltexc7::::res://assets/themes/EnterpriseTheme.tres
-::res://scenes/3d/::1772536169
+::res://scenes/3d/::1772536668
 AnalystWingRoom.tscn::PackedScene/PackedScene::9064328878909028625::1771564564::0::1::::<><><>0<>0<><>::uid://b2d35yngg7u75::::res://scenes/Player3D.tscn<>uid://dh3hcvpwq0ufa::::res://scripts/3d/RoomTeleporter.gd<>uid://bckc0uyxlcl5a::::res://scenes/3d/NPC_ITSupport.tscn<>uid://cbtxaxbi3vfve::::res://scenes/3d/NPC_Auditor.tscn<>uid://51dxnshn20xb::::res://scenes/3d/NPC_Helpdesk.tscn<>uid://dwbve6j0xiv10::::res://assets/props/graybox/L-Sofa.glb<>uid://n28x3hn5cby1::::res://assets/props/glb files/Doorway Front.glb<>uid://u3cbxyg0evr3::::res://scenes/3d/props/graybox/Graybox_Plant.tscn<>uid://bdvy7nngneys2::::res://assets/props/FBX/Separated/Clock.fbx<>uid://djpxbstsc0q6s::::res://assets/props/glb files/server rack.glb<>uid://byfr15ei8bwp6::::res://assets/props/glb files/Boss Table.glb<>uid://cpgbiq11dtsg8::::res://scripts/3d/ScrollingMaterial.gd<>uid://dy166yjkmbgmk::::res://scripts/3d/WarWall.gd
 BriefingRoom.tscn::PackedScene/PackedScene::501666097004752805::1771564563::0::1::::<><><>0<>0<><>::uid://cteip62nveuo7::::res://assets/props/glb files/4 Bulb Grey Light - LRG Tubes.glb<>uid://brbwiujepsoub::::res://assets/props/New Inherit props/doorway_front.tscn<>uid://5nk42502me65::::res://assets/props/glb files/from unity/small_bamboo_deco.glb<>uid://byfr15ei8bwp6::::res://assets/props/glb files/Boss Table.glb<>uid://bymrwh1vl1caj::::res://assets/props/glb files/Boss Chair.glb<>uid://buavt2cavw0mq::::res://assets/props/glb files/Boss Phone.glb<>uid://xmsjrrhfiju7::::res://assets/props/glb files/Boss Couch.glb<>uid://7h3frpqgc4np::::res://assets/props/glb files/from unity/nature_deco_plant.glb<>uid://d11ne6fqqw6i6::::res://assets/props/glb files/Air conditioner (1).glb<>uid://cax2jvad3thrr::::res://assets/props/glb files/mona.glb<>uid://clls0cdipsksh::::res://assets/props/glb files/Light switch.glb<>uid://bj6fqeyaxgnsx::::res://assets/props/glb files/Boss Lamp.glb<>uid://bce5yftu67neq::::res://assets/props/glb files/from unity/pencilbox.glb<>uid://hbywtyygb4pp::::res://assets/props/New Inherit props/file cabinet.tscn<>uid://dbiesj6skn043::::res://assets/props/FBX/Separated/Stapler.fbx<>uid://cnpejg0fdvkgh::::res://assets/props/New Inherit props/trash_bin_small.tscn<>uid://p1culve1240p::::res://assets/props/FBX/Separated/Office_Files_A.fbx<>uid://h13fbnjvbmig::::res://assets/props/FBX/Separated/Office_Files_C.fbx<>uid://dyjym17034s5o::::res://assets/props/FBX/Separated/mousepad_003.tscn<>uid://dberps7drmvm6::::res://assets/props/FBX/Separated/keyboard_a_pwr_5p_1_dluw_2.tscn<>uid://cfoaiyaaxv311::::res://assets/props/FBX/Separated/computer_screen_2.tscn<>uid://ku4e30eftaqt::::res://assets/props/FBX/Separated/system_unit_002.tscn<>uid://bdys54uwli5r::::res://assets/props/FBX/Separated/computer_mouse_2.tscn<>uid://cv8w6k2rvnv3k::::res://assets/props/FBX/Separated/cylinder_2.tscn<>uid://ceta2wna3gome::::res://scenes/3d/NPC_CISO.tscn<>uid://dh3hcvpwq0ufa::::res://scripts/3d/RoomTeleporter.gd
-ExecutiveSuite.tscn::PackedScene::3062662243269629233::1772536169::0::1::::<><><>0<>0<><>::uid://b2d35yngg7u75::::res://scenes/Player3D.tscn<>uid://ceta2wna3gome::::res://scenes/3d/NPC_CISO.tscn<>uid://dh3hcvpwq0ufa::::res://scripts/3d/RoomTeleporter.gd<>uid://byav1eqq5v48f::::res://scenes/3d/props/graybox/Prop_Desk.tscn<>uid://d4ne0p5l7d6w::::res://scenes/3d/props/graybox/Graybox_Chair.tscn<>uid://byh82hlg10odp::::res://scenes/3d/props/graybox/Graybox_Elevator.tscn<>uid://dtc3v3ufo5y87::::res://scenes/3d/props/graybox/Graybox_Sofa.tscn<>uid://b0gqano663ehk::::res://scenes/3d/props/graybox/Graybox_PlantPot.tscn
+ExecutiveSuite.tscn::PackedScene::3062662243269629233::1772536668::0::1::::<><><>0<>0<><>::uid://b2d35yngg7u75::::res://scenes/Player3D.tscn<>uid://ceta2wna3gome::::res://scenes/3d/NPC_CISO.tscn<>uid://dh3hcvpwq0ufa::::res://scripts/3d/RoomTeleporter.gd<>uid://byav1eqq5v48f::::res://scenes/3d/props/graybox/Prop_Desk.tscn<>uid://d4ne0p5l7d6w::::res://scenes/3d/props/graybox/Graybox_Chair.tscn<>uid://byh82hlg10odp::::res://scenes/3d/props/graybox/Graybox_Elevator.tscn<>uid://dtc3v3ufo5y87::::res://scenes/3d/props/graybox/Graybox_Sofa.tscn<>uid://b0gqano663ehk::::res://scenes/3d/props/graybox/Graybox_PlantPot.tscn
 JuniorAnalystRoom.tscn::PackedScene/PackedScene::4905807116240184387::1771564563::0::1::::<><><>0<>0<><>::uid://b2d35yngg7u75::::res://scenes/Player3D.tscn<>uid://dh3hcvpwq0ufa::::res://scripts/3d/RoomTeleporter.gd<>uid://n28x3hn5cby1::::res://assets/props/glb files/Doorway Front.glb<>uid://bnel3fy2gmnyi::::res://assets/props/glb files/Desk.glb<>uid://b0yssn23aaupa::::res://scenes/3d/props/graybox/Graybox_BookShelf.tscn<>uid://u3cbxyg0evr3::::res://scenes/3d/props/graybox/Graybox_Plant.tscn<>uid://ciscr6kwnpufy::::res://assets/props/FBX/Separated/Painting_Small.fbx<>uid://b8j8y76543210::::res://scenes/3d/NPC_JuniorAnalyst.tscn
-MainMenu3D.tscn::PackedScene::6969317848065736836::1772536168::0::1::::<><><>0<>0<><>::uid://gnsos5w1l23p::::res://scripts/3d/MainMenu3D.gd<>uid://byav1eqq5v48f::::res://scenes/3d/props/graybox/Prop_Desk.tscn<>uid://bjy8b0vcfuc0r::::res://scenes/3d/props/graybox/Prop_ComputerSet.tscn<>res://scenes/3d/props/graybox/Prop_Mug.tscn<>uid://csc2n03kuskvt::::res://assets/props/graybox/Cell phone.glb<>uid://c7c8toku8jd3b::::res://scenes/3d/props/graybox/Prop_DeskLamp.tscn<>uid://bodtc8b7dv4df::::res://assets/props/items/storage_shelf/storage_shelf.glb<>uid://c7c8toku8jd3c::::res://scenes/3d/props/graybox/Prop_WallClock.tscn
+MainMenu3D.tscn::PackedScene::6969317848065736836::1772536667::0::1::::<><><>0<>0<><>::uid://gnsos5w1l23p::::res://scripts/3d/MainMenu3D.gd<>uid://byav1eqq5v48f::::res://scenes/3d/props/graybox/Prop_Desk.tscn<>uid://bjy8b0vcfuc0r::::res://scenes/3d/props/graybox/Prop_ComputerSet.tscn<>res://scenes/3d/props/graybox/Prop_Mug.tscn<>uid://csc2n03kuskvt::::res://assets/props/graybox/Cell phone.glb<>uid://c7c8toku8jd3b::::res://scenes/3d/props/graybox/Prop_DeskLamp.tscn<>uid://bodtc8b7dv4df::::res://assets/props/items/storage_shelf/storage_shelf.glb<>uid://c7c8toku8jd3c::::res://scenes/3d/props/graybox/Prop_WallClock.tscn
 NetworkHub.tscn::PackedScene/PackedScene::3409964208507794708::1771564565::0::1::::<><><>0<>0<><>::uid://b2d35yngg7u75::::res://scenes/Player3D.tscn<>uid://dh3hcvpwq0ufa::::res://scripts/3d/RoomTeleporter.gd<>uid://kix0ll2kuom7::::res://scenes/3d/props/graybox/Prop_AuditRouter.tscn<>uid://cbr4jn67g1n0l::::res://scenes/3d/props/graybox/Graybox_HVAC.tscn<>res://scenes/3d/props/graybox/Graybox_UPS.tscn<>uid://bcxiimotr1s2a::::res://scenes/3d/props/graybox/Graybox_CeilingLight.tscn<>uid://c8n7m6l5k4j32::::res://scenes/3d/NPC_NetworkSpecialist.tscn<>uid://byh82hlg10odp::::res://scenes/3d/props/graybox/Graybox_Elevator.tscn<>uid://cpgbiq11dtsg8::::res://scripts/3d/ScrollingMaterial.gd
 NPC_Auditor.tscn::PackedScene/PackedScene::4883651089168589322::1771420427::0::1::::<><><>0<>0<><>::uid://dyfwcs8exxajl::::res://scripts/3d/NPC_Auditor.gd<>uid://bdqlmaf1svcw8::::res://assets/Animations Godot/NPC/NPC_COAT.fbx<>uid://d1uxcww1mbc73::::res://scripts/3d/MixamoAnimator.gd
 NPC_CISO.tscn::PackedScene/PackedScene::5092869311334729988::1771420427::0::1::::<><><>0<>0<><>::uid://c04nuo4vx3swt::::res://scripts/3d/NPC_CISO.gd<>uid://dpeaev8gkv35a::::res://assets/Animations Godot/NPC/NPC_OLD.fbx<>uid://d1uxcww1mbc73::::res://scripts/3d/MixamoAnimator.gd
@@ -1806,11 +1807,11 @@ Prop_ServerBlade.tscn::PackedScene/PackedScene::1654834815109315411::1771168070:
 Prop_ServerRack.tscn::PackedScene/PackedScene::8609705639676868310::1770122318::0::1::::<><><>0<>0<><>::
 Prop_ServerSlot.tscn::PackedScene/PackedScene::5330561067723342375::1771168070::0::1::::<><><>0<>0<><>::uid://bj2scmdyp1x75::::res://scripts/3d/HardwareSocket.gd
 Prop_WallClock.tscn::PackedScene/PackedScene::7025051461884956190::1770965645::0::1::::<><><>0<>0<><>::uid://cwyajod0qanr7::::res://assets/props/items/clock/clock/clock.glb<>res://scripts/3d/Prop_WallClock.gd
-::res://scenes/ui/::1772536171
+::res://scenes/ui/::1772536669
 ATG_SelectionBox.tscn::PackedScene/PackedScene::-1::1771956464::0::1::::<><><>0<>0<><>::res://scripts/ui/ATG_SelectionBox.gd
 AuditSelectionModal.tscn::PackedScene/PackedScene::1329827495621177889::1770122318::0::1::::<><><>0<>0<><>::
 CalibrationMinigame.tscn::PackedScene/PackedScene::4011264136504972860::1770122318::0::1::::<><><>0<>0<><>::uid://bctqk4eg6cltx::::res://scripts/ui/CalibrationMinigame.gd<>uid://c8v2y708bab0g::::res://scenes/ui/RouterTechnicalTable.tscn
-CertificationSummary.tscn::PackedScene::7439377191360978319::1772536171::0::1::::<><><>0<>0<><>::uid://co0dk525653jw::::res://scripts/ui/CertificationSummary.gd
+CertificationSummary.tscn::PackedScene::7439377191360978319::1772536668::0::1::::<><><>0<>0<><>::uid://co0dk525653jw::::res://scripts/ui/CertificationSummary.gd
 CommsMessage.tscn::PackedScene/PackedScene::7601502863169564422::1770122318::0::1::::<><><>0<>0<><>::uid://duacxcqphyhdl::::res://scripts/ui/CommsMessage.gd
 CommsSidebar.tscn::PackedScene/PackedScene::7601502863169564423::1770122318::0::1::::<><><>0<>0<><>::uid://8pi3e41xdhot::::res://scripts/ui/CommsSidebar.gd
 DiagnosticUI.tscn::PackedScene/PackedScene::3107174797257716758::1770122318::0::1::::<><><>0<>0<><>::uid://cubwtw6wws6he::::res://scripts/ui/DiagnosticUI.gd
@@ -1825,19 +1826,19 @@ PauseMenu.tscn::PackedScene/PackedScene::6923873536005111399::1770122318::0::1::
 RaidSyncMinigame.tscn::PackedScene/PackedScene::2388586520852872121::1770122318::0::1::::<><><>0<>0<><>::uid://c10xp4aw7k5xm::::res://scripts/ui/RaidSyncMinigame.gd
 RouterTechnicalTable.tscn::PackedScene/PackedScene::7134109079002960460::1770122318::0::1::::<><><>0<>0<><>::
 RuleSliderMinigame.tscn::PackedScene/PackedScene::6660255343603670911::1770122318::0::1::::<><><>0<>0<><>::uid://blp666g34hr4d::::res://scripts/ui/RuleSliderMinigame.gd
-RunbookSidebar.tscn::PackedScene::1431090594340095934::1772536171::0::1::::<><><>0<>0<><>::uid://17op1hkk5tm3::::res://scripts/ui/RunbookSidebar.gd
-StartupLogo.tscn::PackedScene::7267777017321417734::1772536168::0::1::::<><><>0<>0<><>::uid://0n0s8d3okds1::::res://scripts/ui/StartupLogo.gd<>uid://duwqwidumqc4l::::res://shaders/ui/SOC_Screen.gdshader
+RunbookSidebar.tscn::PackedScene::1431090594340095934::1772536669::0::1::::<><><>0<>0<><>::uid://17op1hkk5tm3::::res://scripts/ui/RunbookSidebar.gd
+StartupLogo.tscn::PackedScene::7267777017321417734::1772536669::0::1::::<><><>0<>0<><>::uid://0n0s8d3okds1::::res://scripts/ui/StartupLogo.gd<>res://shaders/ui/SOC_Screen.gdshader<>res://shaders/ui/DataRain.gdshader
 TabletHUD.tscn::PackedScene/PackedScene::2829882800910847489::1770122318::0::1::::<><><>0<>0<><>::uid://cafg5ykjbli6y::::res://scripts/ui/TabletHUD.gd
-TerminalMenu2D.tscn::PackedScene::6925599657332202163::1772536169::0::1::::<><><>0<>0<><>::uid://g8e76u36ht3i::::res://scripts/ui/TerminalMenu.gd
+TerminalMenu2D.tscn::PackedScene::6925599657332202163::1772536668::0::1::::<><><>0<>0<><>::uid://g8e76u36ht3i::::res://scripts/ui/TerminalMenu.gd
 ThreatIntelDossier.tscn::PackedScene/PackedScene::7025051461884956191::1772099014::0::1::::<><><>0<>0<><>::res://scripts/ui/ThreatIntelDossier.gd
 TransitionOverlay.tscn::PackedScene/PackedScene::2576322169248672352::1770965645::0::1::::<><><>0<>0<><>::res://scripts/ui/TransitionOverlay.gd<>uid://c6j8v8u8k8u8m::::res://scenes/ui/MatrixRain.tscn
-TutorialHUD.tscn::PackedScene::7601502863169564421::1772536171::0::1::::<><><>0<>0<><>::uid://d3kvvit4crikr::::res://scripts/ui/TutorialHUD.gd
-UnifiedHUD.tscn::PackedScene::7138480702482145866::1772536171::0::1::::<><><>0<>0<><>::uid://doose6hv773vh::::res://scripts/ui/UnifiedHUD.gd
+TutorialHUD.tscn::PackedScene::7601502863169564421::1772536668::0::1::::<><><>0<>0<><>::uid://d3kvvit4crikr::::res://scripts/ui/TutorialHUD.gd
+UnifiedHUD.tscn::PackedScene::7138480702482145866::1772536669::0::1::::<><><>0<>0<><>::uid://doose6hv773vh::::res://scripts/ui/UnifiedHUD.gd
 VirtualCursor.tscn::PackedScene/PackedScene::8751564240405323964::1770965645::0::1::::<><><>0<>0<><>::uid://dlyytcig7ttyd::::res://assets/cursor/png.png
-::res://scenes/ui/endings/::1772536171
-Ending_Bankrupt.tscn::PackedScene::108986556264489::1772536171::0::1::::<><><>0<>0<><>::uid://cbomiqhmxfbln::::res://scripts/ui/EndingScreen.gd
-Ending_Fired.tscn::PackedScene::2733141343::1772536171::0::1::::<><><>0<>0<><>::uid://cbomiqhmxfbln::::res://scripts/ui/EndingScreen.gd
-Ending_Promotion.tscn::PackedScene::3289255521290::1772536171::0::1::::<><><>0<>0<><>::uid://cbomiqhmxfbln::::res://scripts/ui/EndingScreen.gd
+::res://scenes/ui/endings/::1772536669
+Ending_Bankrupt.tscn::PackedScene::108986556264489::1772536669::0::1::::<><><>0<>0<><>::uid://cbomiqhmxfbln::::res://scripts/ui/EndingScreen.gd
+Ending_Fired.tscn::PackedScene::2733141343::1772536669::0::1::::<><><>0<>0<><>::uid://cbomiqhmxfbln::::res://scripts/ui/EndingScreen.gd
+Ending_Promotion.tscn::PackedScene::3289255521290::1772536669::0::1::::<><><>0<>0<><>::uid://cbomiqhmxfbln::::res://scripts/ui/EndingScreen.gd
 ::res://scripts/::1772340220
 CollisionGenerator.gd::GDScript/GDScript::7941182949597650257::1770122318::0::1::::<>Node<><>0<>0<><>::
 EnvironmentDirector.gd::GDScript/GDScript::4244442743199438389::1771771900::0::1::::<>Node<><>0<>0<><>::
@@ -1927,7 +1928,7 @@ PauseMenu.gd::GDScript/GDScript::6413544355668641901::1771687600::0::1::::<>Cont
 RaidSyncMinigame.gd::GDScript/GDScript::6650785547788665378::1770122318::0::1::::<>Control<><>0<>0<><>::
 RuleSliderMinigame.gd::GDScript/GDScript::3191402855213088425::1770122318::0::1::::<>Control<><>0<>0<><>::
 RunbookSidebar.gd::GDScript/GDScript::1891848224415712528::1772079485::0::1::::<>PanelContainer<><>0<>0<><>::
-StartupLogo.gd::GDScript::1783109810059302138::1772536141::0::1::::<>Control<><>0<>0<><>::
+StartupLogo.gd::GDScript::1783109810059302138::1772536615::0::1::::<>Control<><>0<>0<><>::
 TabletHUD.gd::GDScript/GDScript::4783582408349392094::1771771046::0::1::::<>Control<><>0<>0<><>::
 TerminalCredits.gd::GDScript/GDScript::834099880045777155::1771688143::0::1::::<>Control<><>0<>0<><>::
 TerminalMenu.gd::GDScript/GDScript::489559201522048564::1772100833::0::1::::<>Control<><>0<>0<><>::
@@ -1942,7 +1943,9 @@ crt_screen.gdshader::Shader/Shader::8092443915117379276::1770965646::0::1::::<><
 greyscale.gdshader::Shader/Shader::1023864813441234285::1771956679::0::1::::<><><>0<>0<><>::
 matrix_rain.gdshader::Shader/Shader::1224545000095315150::1770965646::0::1::::<><><>0<>0<><>::
 terminal_crt.gdshader::Shader/Shader::1909857144137991303::1771693821::0::1::::<><><>0<>0<><>::
-::res://shaders/ui/::1772536142
+::res://shaders/ui/::1772536599
+DataRain.gdshader::Shader::-1::1772536599::0::1::::<><><>0<>0<><>::
+SOC_Screen.gdshader::Shader::-1::1772536343::0::1::::<><><>0<>0<><>::
 ::res://sprint/::1772340221
 roadmap_fullgame.md::TextFile/TextFile::-1::1770122318::0::1::::<><><>0<>0<><>::
 sprint_01_integrity_engine_report.md::TextFile/TextFile::-1::1770122318::0::1::::<><><>0<>0<><>::
