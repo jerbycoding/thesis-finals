@@ -1,2 +1,0 @@
-.\addons\gdUnit4\runtest.cmd -a res://tests/unit --godot_bin "C:\Users\Lander\OneDrive\Desktop\Godot\godot.exe"
-.\addons\gdUnit4\runtest.cmd -i res://tests/unit/test_npc_animator_diagnostics.gd --godot_bin "C:\Users\Lander\OneDrive\Desktop\Godot\godot.exe"

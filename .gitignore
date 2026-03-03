@@ -1,0 +1,8 @@
+# Godot 4+ specific ignores
+.godot/
+/android/
+addons/
+test/ 
+ai_references/
+thesis/
+VERIFY.EXE_DOCUMENTATION/
