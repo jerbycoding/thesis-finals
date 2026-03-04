@@ -1,0 +1,15 @@
+# Shift 3: Discovery-Style Investigation Manual (Refined with Literal Search Anchors)
+
+| Ticket ID               | Discovery Style Description (Narrative Clue + [color=#006CFF]Search Anchor[/color])                                                                                                                     | The Forensic Search Path (Discovery Logic)                                                                                                 |
+|:------------------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------|
+| **MALWARE-CONTAIN-001** | "An internal host is exhibiting automated communication patterns consistent with a malware [color=#006CFF]BEACON[/color]. Identify the source and initiate emergency network isolation."                | **SIEM** (Search `BEACON`) -> Locate `LOG-MALWARE-001` -> Identify Host `{host}` -> **Terminal** (`isolate {host}`).                       |
+| **MALWARE-POLY-001**    | "The outbreak is evolving. A secondary host is exhibiting [color=#006CFF]POLYMORPHIC[/color] behavior, rotating file names to evade detection. Verify the infected host name to authorize containment." | **SIEM** (Search `POLYMORPHIC`) -> Locate `LOG-MAL-002-A` -> Identify Host `{victim_host}` -> **Terminal** (`isolate {victim_host}`).      |
+| **DDOS-MITIGATION-001** | "Multiple services are reporting extreme latency. The firewall is flagging a massive [color=#006CFF]UDP FLOOD[/color] targeting our gateways. Identify the external origin IP to mitigate the impact."  | **SIEM** (Search `UDP FLOOD`) -> Locate `LogDDoSFlood` -> Identify `{attacker_ip}` -> Enter IP in Root Cause box.                          |
+| **RANSOM-001**          | "Mass file corruption detected. Multiple users report that the [color=#006CFF]FINANCE-SRV-01[/color] has been locked with a ransom demand. Isolate the server and initiate data recovery immediately."  | **SIEM** (Search `FINANCE-SRV-01`) -> Locate `LOG-RANSOM-FILE-ACTIVITY` -> **Terminal** (`isolate FINANCE-SRV-01`) -> **Decryption Tool**. |
+
+---
+
+### Analysis of Shift 3 Discovery Strategy
+*   **Behavioral Focus:** This shift teaches players to search for *types of attacks* (Beacon, Polymorphic, Flood) rather than just user names. This matches the "Outbreak" theme where the specific user is less important than the virus behavior.
+*   **Technical Fulfillment:** For the first time, players must use the **Root Cause** input for the DDoS incident. The anchor [color=#006CFF]UDP FLOOD[/color] leads them to the log that contains the required IP.
+*   **Critical Asset Handling:** The [color=#006CFF]FINANCE-SRV-01[/color] anchor emphasizes the importance of protecting high-value targets, preparing the player for the "Total War" scenarios in Week 2.

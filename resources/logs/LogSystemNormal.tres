@@ -12,4 +12,4 @@ message = "SYSTEM PATCH cycle v4.4.2 applied successfully. Service 'smbd' status
 severity = 1
 related_ticket = "SYS-MAINT-GENERIC"
 ip_address = ""
-hostname = "FILE-SRV-01"
+hostname = "{host}"

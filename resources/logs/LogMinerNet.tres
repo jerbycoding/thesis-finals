@@ -12,5 +12,5 @@ message = "Connection established to known mining pool 'stratum+tcp://xmr.pool.c
 severity = 4
 related_ticket = "CRYPTOMINER-HUNT-001"
 ip_address = "85.12.44.11"
-hostname = "WORKSTATION-22"
+hostname = "{host}"
 is_revealed = false

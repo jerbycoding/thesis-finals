@@ -4,7 +4,7 @@
 
 [resource]
 script = ExtResource("1_log")
-log_id = "LOG-MAL-002-A"
+log_id = "LOG-MAL-POLY-01"
 timestamp = "11:15:00"
 source = "SysMon"
 category = "Security"
