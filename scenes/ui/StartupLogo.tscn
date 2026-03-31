@@ -1,7 +1,7 @@
 [gd_scene load_steps=9 format=3 uid="uid://dbsthw3ss0g7g"]
 
 [ext_resource type="Script" uid="uid://0n0s8d3okds1" path="res://scripts/ui/StartupLogo.gd" id="1_logo"]
-[ext_resource type="Shader" path="res://shaders/ui/SOC_Screen.gdshader" id="2_shader"]
+[ext_resource type="Shader" uid="uid://duwqwidumqc4l" path="res://shaders/ui/SOC_Screen.gdshader" id="2_shader"]
 [ext_resource type="Shader" uid="uid://by8n03weni5wy" path="res://shaders/ui/DataRain.gdshader" id="3_datarain"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_datarain"]

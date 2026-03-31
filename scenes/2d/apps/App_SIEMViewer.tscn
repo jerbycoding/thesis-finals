@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://gacemu2at0jm"]
 
-[ext_resource type="Script" uid="uid://cxaow56baqegs" path="res://scripts/2d/apps/App_SIEMViewer.gd" id="1_siem"]
+[ext_resource type="Script" uid="uid://cxaow56baqegs" path="res://scripts/2d/apps/app_SIEMViewer.gd" id="1_siem"]
 [ext_resource type="Theme" uid="uid://dny3rlbltexc7" path="res://assets/themes/EnterpriseTheme.tres" id="2_theme"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_TopBar"]
