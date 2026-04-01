@@ -277,6 +277,16 @@ func _focus_window(window: Control):
 		focused_window = window
 		_update_window_z_indices()
 
+# === SOLO DEV PHASE 1: Role Switching Support ===
+func set_theme(role: GameState.Role):
+	"""
+	Apply role-specific theme to desktop.
+	Phase 1 stub - full theme implementation in Phase 6.
+	"""
+	print("DesktopWindowManager: Setting theme for ", "HACKER" if role == GameState.Role.HACKER else "ANALYST", " (stub)")
+	# Phase 6 TODO: Load HackerTheme.tres or Analyst theme
+	# For now, just print confirmation
+
 func _update_window_z_indices():
 	var current_z = window_z_index_base
 	var windows_to_sort: Array = []

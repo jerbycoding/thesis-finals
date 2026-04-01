@@ -3,7 +3,9 @@
 [resource]
 script = ExtResource("1_script")
 hostname = "WORKSTATION-22"
-ip_address = "10.0.5.22"
+ip_address = "10.0.2.22"
 is_critical = false
 os_type = "Windows"
 initial_status = "CLEAN"
+vulnerability_score = 0.5
+is_honeypot = false

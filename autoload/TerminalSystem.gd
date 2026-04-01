@@ -60,7 +60,14 @@ var commands: Dictionary = {
 		"description": "List known hostnames",
 		"syntax": "list",
 		"risk_level": 0
+	},
+	# === SOLO DEV PHASE 2: HACKER CAMPAIGN ===
+	"exploit": {
+		"description": "Exploit host vulnerability",
+		"syntax": "exploit [hostname]",
+		"risk_level": 5
 	}
+	# ============================================
 }
 
 func _ready():
@@ -159,15 +166,19 @@ func _execute_command_internal(command_name: String, args: Array) -> Dictionary:
 			result = await _cmd_logs(args)
 		"list":
 			result = _cmd_list()
+		# === SOLO DEV PHASE 2: HACKER COMMAND ===
+		"exploit":
+			result = _cmd_exploit(args)
+		# =======================================
 		_:
 			result = {"success": false, "output": "Error: Command not implemented"}
-			
+
 	# GLOBAL EMIT
 	if result.get("success", false):
 		EventBus.terminal_command_run.emit(command_name, args)
-		
+
 	EventBus.terminal_command_executed.emit(command_name, result.get("success", false), result.get("output", ""))
-	
+
 	# If we have an output but didn't stream it, emit it now as final
 	if not result.get("output", "").is_empty():
 		command_output_received.emit(result.output, false)
@@ -397,18 +408,32 @@ func _cmd_list() -> Dictionary:
 	var output = "[b]" + CorporateVoice.get_phrase("known_hostnames") + "[/b]\n\n"
 	var hostnames = NetworkState.get_all_hostnames()
 	
+	# === DEBUG: Print to console ===
+	print("TERMINAL DEBUG: hostnames.count = ", hostnames.size())
+	for h in hostnames:
+		print("  - ", h)
+	# ==============================
+
 	if hostnames.is_empty():
 		output += CorporateVoice.get_phrase("no_known_hosts")
 	else:
 		hostnames.sort() # Sort alphabetically for readability
 		for hostname in hostnames:
 			var host_info = NetworkState.get_host_state(hostname)
+			var host_resource = NetworkState.get_host(hostname)
 			var status_text = ""
 			if host_info and host_info.get("isolated", false):
 				status_text = " ([color=orange]ISOLATED[/color])" # Use orange for isolated status
-				
+			
+			# === PHASE 2: Show vulnerability score for hacker campaign ===
+			if GameState and GameState.current_role == GameState.Role.HACKER:
+				var vuln_score = host_resource.vulnerability_score if host_resource else 0.5
+				var vuln_color = "green" if vuln_score > 0.6 else ("yellow" if vuln_score > 0.3 else "red")
+				status_text += " ([color=%s]VULN: %.0f%%[/color])" % [vuln_color, vuln_score * 100]
+			# ================================================================
+
 			output += "- " + hostname + status_text + "\n"
-		
+
 	return {"success": true, "output": output}
 
 func _cmd_trace(args: Array) -> Dictionary:
@@ -451,6 +476,84 @@ func _cmd_trace(args: Array) -> Dictionary:
 		output += "\n[color=yellow]Trace complete. Origin is outside local network.[/color]"
 		
 	return {"success": true, "output": output}
+
+
+# === SOLO DEV PHASE 2: HACKER CAMPAIGN COMMANDS ===
+func _cmd_exploit(args: Array) -> Dictionary:
+	"""
+	Exploit host vulnerability.
+	6-step execution: Null Guard → Ownership → Honeypot → Success/Fail → Signal
+	"""
+	# === STEP 1: NULL GUARD ===
+	if args.is_empty():
+		return {"success": false, "output": "[color=red]ERROR: Missing hostname.[/color]\nSyntax: exploit [hostname]\nExample: exploit WEB-SRV-01"}
+	
+	var hostname = args[0].to_upper()
+	var host_info = NetworkState.get_host_state(hostname)
+	
+	if host_info.is_empty():
+		return {"success": false, "output": "[color=red]ERROR: Host not found.[/color]\nUse 'list' to see known hostnames."}
+	
+	# === STEP 2: OWNERSHIP GUARD ===
+	if GameState.hacker_footholds.has(hostname):
+		return {"success": false, "output": "[color=yellow]Host already compromised.[/color]\n%s is under your control." % hostname}
+	
+	# === STEP 3: HONEYPOT BRANCH ===
+	var host_resource = NetworkState.get_host(hostname)
+	if host_resource and host_resource.is_honeypot:
+		# Honeypot detected! Instant fail but still emit signal
+		var result_data = _create_exploit_payload(hostname, "HONEYPOT")
+		EventBus.offensive_action_performed.emit(result_data)
+		
+		return {
+			"success": false,
+			"output": "[color=red]⚠ HONEYPOT DETECTED![/color]\nThis system was a trap!\nYour access has been logged."
+		}
+	
+	# === STEP 4: SUCCESS/FAIL CHECK ===
+	var roll = randf()  # 0.0-1.0
+	var vulnerability = host_resource.vulnerability_score if host_resource else 0.5
+	var success = roll < vulnerability
+	
+	# === STEP 5 & 6: RESULT PATH ===
+	if success:
+		# SUCCESS! Add to footholds
+		var timestamp = Time.get_unix_time_from_system()
+		GameState.hacker_footholds[hostname] = timestamp
+		
+		# Emit success signal
+		var result_data = _create_exploit_payload(hostname, "SUCCESS")
+		EventBus.offensive_action_performed.emit(result_data)
+		
+		return {
+			"success": true,
+			"output": "[color=green]✓ EXPLOIT SUCCESSFUL![/color]\nVulnerability exploited: %s\nAccess level: ROOT\nFoothold established." % hostname
+		}
+	else:
+		# FAILED! But still emit signal (trace still increases)
+		var result_data = _create_exploit_payload(hostname, "FAILED")
+		EventBus.offensive_action_performed.emit(result_data)
+		
+		return {
+			"success": false,
+			"output": "[color=red]✗ EXPLOIT FAILED![/color]\nTarget defenses blocked the attack.\nVulnerability score: %.0f%%" % (vulnerability * 100)
+		}
+
+func _create_exploit_payload(hostname: String, result: String) -> Dictionary:
+	"""Helper: Create standardized signal payload for exploit actions."""
+	var shift_day = 0
+	if NarrativeDirector:
+		shift_day = NarrativeDirector.current_day if NarrativeDirector.has_node("NarrativeDirector") else 0
+	
+	return {
+		"action_type": "exploit",
+		"target": hostname,
+		"timestamp": Time.get_unix_time_from_system(),
+		"result": result,  # SUCCESS, FAILED, or HONEYPOT
+		"trace_cost": GlobalConstants.TRACE_COST.EXPLOIT,
+		"shift_day": shift_day
+	}
+# ================================================
 
 
 func lock_terminal(seconds: float):

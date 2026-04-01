@@ -118,11 +118,34 @@ func _on_terminal_action(action_id: String):
 		"start_campaign":
 			GameState.is_campaign_session = true
 			_start_shift_sequence()
+		"hacker_campaign":  # NEW: SOLO DEV PHASE 1
+			_start_hacker_campaign()
 		"continue":
 			if SaveSystem:
 				SaveSystem.load_game()
 		"quit":
 			_start_quit_sequence()
+
+func _start_hacker_campaign():
+	"""
+	SOLO DEV PHASE 1: Start Hacker Campaign
+	Sets role to HACKER and jumps to HackerRoom
+	"""
+	if is_transitioning: return
+	is_transitioning = true
+	
+	# Set role to Hacker
+	if GameState:
+		GameState.switch_role(GameState.Role.HACKER)
+		GameState.is_campaign_session = true
+	
+	# Clear any existing save data for fresh start
+	if SaveSystem:
+		SaveSystem.new_game_setup()
+	
+	# Jump directly to HackerRoom (skip briefing for now)
+	if TransitionManager:
+		TransitionManager.play_secure_login("res://scenes/3d/HackerRoom.tscn", "", "[ HACKER CAMPAIGN ]")
 
 func _start_shift_sequence():
 	if is_transitioning: return

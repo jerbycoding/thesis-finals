@@ -225,87 +225,95 @@ func change_scene_to(path: String, narrative_to_start_after: String = "", title_
 			push_error("TransitionManager: Cannot start narrative, NarrativeDirector not found!")
 
 func play_secure_login(target_path: String, narrative: String = "", title_card: String = ""):
-	if is_transitioning: 
+	if is_transitioning:
 		push_warning("TransitionManager: play_secure_login blocked. Target: " + target_path)
 		return
 	is_transitioning = true
 	EventBus.transition_started.emit()
+
+	# === SOLO DEV PHASE 1: ROLE-BASED THEMING ===
+	var current_role = GameState.Role.ANALYST if GameState else GameState.Role.ANALYST
+	if GameState:
+		current_role = GameState.current_role
 	
+	print(">>> TRANSITION: Current role = ", "HACKER" if current_role == GameState.Role.HACKER else "ANALYST")
+	var login_steps = _get_login_steps_for_role(current_role)
+	var theme_color = _get_theme_color_for_role(current_role)
+	print(">>> TRANSITION: Theme color = ", theme_color)
+	# =============================================
+
 	# IMMERSION CHECK: If in 2D mode, force stand up before overlay
 	if GameState.is_in_2d_mode():
 		_force_stand_up()
 		await get_tree().create_timer(0.8).timeout
-	
+
 	# PERFORM CORE CLEANUP (Shared with change_scene_to)
 	_perform_scene_cleanup(target_path, title_card)
-	
+
 	overlay_instance.show()
 	var login_ui = overlay_instance.get_node("%LoginContainer")
 	var auth_label = overlay_instance.get_node("%AuthLabel")
 	var progress = overlay_instance.get_node("%InitProgressBar")
 	var matrix = overlay_instance.get_node("%MatrixRain")
-	
+
 	login_ui.visible = true
 	progress.value = 0
-	
-	# Start Matrix Rain
+
+	# === APPLY ROLE THEME ===
 	if matrix:
+		matrix.set_color(theme_color)
 		matrix.activate()
 		matrix.set_speed(0.5)
 	
+	# Theme progress bar fill color
+	var progress_style = progress.get_theme_stylebox("fill")
+	if progress_style is StyleBoxFlat:
+		progress_style.bg_color = theme_color
+	# ========================
+
 	overlay_instance.fade_in()
 	await overlay_instance.fade_finished
-	EventBus.transition_obscured.emit()
-	
-	# POLISHED LOADING SEQUENCE
-	var steps = [
-		{"text": "INITIALIZING SECURE KERNEL...", "val": 15.0, "wait": 0.6},
-		{"text": "MOUNTING ENCRYPTED VOLUMES...", "val": 45.0, "wait": 0.4},
-		{"text": "ESTABLISHING SECURE VPN TUNNEL...", "val": 52.0, "wait": 1.0},
-		{"text": "SYNCING SIEM LOG DATABASE...", "val": 85.0, "wait": 0.5},
-		{"text": "ENFORCING ZERO-TRUST PROTOCOLS...", "val": 98.0, "wait": 0.3},
-		{"text": "BIOMETRIC MATCH CONFIRMED. ACCESS GRANTED.", "val": 100.0, "wait": 0.8}
-	]
-	
-	for i in range(steps.size()):
-		var step = steps[i]
+
+	# POLISHED LOADING SEQUENCE (Role-themed)
+	for i in range(login_steps.size()):
+		var step = login_steps[i]
 		auth_label.text = step.text
 		auth_label.modulate = Color.WHITE
-		
+
 		# 1. Progress and Matrix Sync
 		var p_tween = create_tween().set_parallel(true)
 		p_tween.tween_property(progress, "value", step.val, 0.3).set_trans(Tween.TRANS_QUINT).set_ease(Tween.EASE_OUT)
-		
+
 		if matrix:
 			# Speed up rain based on progress (0.5 to 4.0)
 			var target_speed = 0.5 + (step.val / 100.0) * 3.5
 			p_tween.tween_method(matrix.set_speed, matrix.rect.material.get_shader_parameter("speed"), target_speed, 0.3)
-		
+
 		var jittered_wait = step.wait * randf_range(0.85, 1.15)
 		await get_tree().create_timer(jittered_wait).timeout
-		
+
 		# 2. Feedback
 		auth_label.text = step.text + " [ OK ]"
-		auth_label.modulate = Color.GREEN
+		auth_label.modulate = theme_color
 		if AudioManager: AudioManager.play_terminal_beep(-10.0)
-		
+
 		# 3. Final Step Surge
-		if i == steps.size() - 1:
+		if i == login_steps.size() - 1:
 			overlay_instance.shake_screen(20.0, 0.4)
 			overlay_instance.flash_green()
 			if matrix:
 				matrix.set_speed(10.0) # Hyper-speed for impact
 				matrix.set_brightness(2.0)
 			if AudioManager: AudioManager.play_sfx(AudioManager.SFX.ui_window_open, 0.0)
-		
+
 		await get_tree().create_timer(0.15).timeout
-	
+
 	# Scene Change
 	get_tree().change_scene_to_file(target_path)
 	await get_tree().create_timer(0.3).timeout
-	
+
 	login_ui.visible = false
-	
+
 	# --- THREAT INTELLIGENCE DOSSIER PHASE ---
 	if not narrative.is_empty() and NarrativeDirector:
 		var shift_res = NarrativeDirector.shift_library.get(narrative)
@@ -313,30 +321,30 @@ func play_secure_login(target_path: String, narrative: String = "", title_card: 
 		if shift_res and not shift_res.threat_title.is_empty() and not dossier_presented_this_sequence:
 			print(">>> THREAT_INTEL: Interrupting for shift dossier: ", shift_res.threat_title)
 			dossier_presented_this_sequence = true
-			
+
 			# Enforce UI-only mode for dossier interaction
 			GameState.set_mode(GameState.GameMode.MODE_UI_ONLY)
-			
+
 			dossier_instance.setup(shift_res)
 			dossier_instance.show_dossier() # Internal logic handles visibility
-			
+
 			# Wait for player to read and click proceed
 			await dossier_instance.acknowledged
 	# ------------------------------------------
-	
+
 	# Evaporate Matrix
 	if matrix:
 		await matrix.evaporate()
-	
+
 	overlay_instance.fade_out()
 	await overlay_instance.fade_finished
-	
+
 	is_transitioning = false
 	EventBus.transition_completed.emit()
-	
+
 	# Sprint 13 Fix: Clear suppression flag after the entire transition chain is complete
 	dossier_presented_this_sequence = false
-	
+
 	if not narrative.is_empty():
 		if NarrativeDirector:
 			print(">>> TRANSITION ACTION: Starting narrative '", narrative, "' after dossier.")
@@ -379,10 +387,45 @@ func _force_stand_up():
 	if GameState.active_bridge:
 		GameState.active_bridge.deactivate()
 		GameState.active_bridge = null
-		
+
 	var player = get_tree().root.find_child("Player3D", true, false)
 	if player and player.has_method("stand_up"):
 		player.stand_up()
-	
+
 	GameState.set_mode(GameState.GameMode.MODE_3D)
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+
+# === SOLO DEV PHASE 1: ROLE-BASED LOGIN THEMING ===
+func _get_theme_color_for_role(role: GameState.Role) -> Color:
+	"""Return theme color for role (blue for Analyst, green for Hacker)."""
+	if role == GameState.Role.HACKER:
+		return Color(0, 1, 0, 1)  # Green
+	else:
+		return Color(0, 0.6, 1, 1)  # Blue
+
+func _get_login_steps_for_role(role: GameState.Role) -> Array[Dictionary]:
+	"""Return role-specific login sequence messages."""
+	print(">>> LOGIN: Getting steps for role = ", "HACKER" if role == GameState.Role.HACKER else "ANALYST")
+	if role == GameState.Role.HACKER:
+		# HACKER-THEMED LOGIN (Green, aggressive, underground)
+		print(">>> LOGIN: Returning HACKER steps")
+		return [
+			{"text": "INJECTING EXPLOIT PAYLOAD...", "val": 15.0, "wait": 0.6},
+			{"text": "BYPASSING FIREWALL RULES...", "val": 45.0, "wait": 0.4},
+			{"text": "ESTABLISHING ROOT ACCESS...", "val": 52.0, "wait": 1.0},
+			{"text": "LOADING RAT MODULE...", "val": 85.0, "wait": 0.5},
+			{"text": "COVERING TRACKS...", "val": 98.0, "wait": 0.3},
+			{"text": "ACCESS GRANTED. WELCOME.", "val": 100.0, "wait": 0.8}
+		]
+	else:
+		# ANALYST LOGIN (Blue, corporate, professional)
+		print(">>> LOGIN: Returning ANALYST steps")
+		return [
+			{"text": "INITIALIZING SECURE KERNEL...", "val": 15.0, "wait": 0.6},
+			{"text": "MOUNTING ENCRYPTED VOLUMES...", "val": 45.0, "wait": 0.4},
+			{"text": "ESTABLISHING SECURE VPN TUNNEL...", "val": 52.0, "wait": 1.0},
+			{"text": "SYNCING SIEM LOG DATABASE...", "val": 85.0, "wait": 0.5},
+			{"text": "ENFORCING ZERO-TRUST PROTOCOLS...", "val": 98.0, "wait": 0.3},
+			{"text": "BIOMETRIC MATCH CONFIRMED. ACCESS GRANTED.", "val": 100.0, "wait": 0.8}
+		]
+# ================================================

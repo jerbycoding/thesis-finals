@@ -77,10 +77,21 @@ func _build_boot_sequence():
 		" ",
 		"> SELECT_OPERATIONAL_MODE:"
 	]
-	
+
 	if has_save:
 		boot_sequence.append("  [1] RESUME_ACTIVE_SESSION")
 		boot_sequence.append("  [2] START_NEW_CAMPAIGN")
+		boot_sequence.append("  [3] HACKER_CAMPAIGN (BETA)")
+		boot_sequence.append("  [4] TRAINING_SIMULATION")
+		boot_sequence.append("  [5] CAMPAIGN_ARCHIVE")
+		boot_sequence.append("  [6] SYSTEM_CONFIGURATION")
+		boot_sequence.append("  [7] CREDITS_INFO")
+		boot_sequence.append("  [8] TERMINATE_SESSION")
+		if is_veteran:
+			boot_sequence.append("  [9] SHIFT_OVERRIDE (VETERAN_ACCESS)")
+	else:
+		boot_sequence.append("  [1] START_NEW_CAMPAIGN")
+		boot_sequence.append("  [2] HACKER_CAMPAIGN (BETA)")
 		boot_sequence.append("  [3] TRAINING_SIMULATION")
 		boot_sequence.append("  [4] CAMPAIGN_ARCHIVE")
 		boot_sequence.append("  [5] SYSTEM_CONFIGURATION")
@@ -88,16 +99,7 @@ func _build_boot_sequence():
 		boot_sequence.append("  [7] TERMINATE_SESSION")
 		if is_veteran:
 			boot_sequence.append("  [8] SHIFT_OVERRIDE (VETERAN_ACCESS)")
-	else:
-		boot_sequence.append("  [1] START_NEW_CAMPAIGN")
-		boot_sequence.append("  [2] TRAINING_SIMULATION")
-		boot_sequence.append("  [3] CAMPAIGN_ARCHIVE")
-		boot_sequence.append("  [4] SYSTEM_CONFIGURATION")
-		boot_sequence.append("  [5] CREDITS_INFO")
-		boot_sequence.append("  [6] TERMINATE_SESSION")
-		if is_veteran:
-			boot_sequence.append("  [7] SHIFT_OVERRIDE (VETERAN_ACCESS)")
-	
+
 	boot_sequence.append(" ")
 	boot_sequence.append("> AWAITING_INPUT_")
 
@@ -138,21 +140,23 @@ func _handle_main_menu_input(keycode: int):
 		match keycode:
 			KEY_1: _on_action_selected("continue")
 			KEY_2: _try_action("start_new")
+			KEY_3: _try_action("hacker_campaign")  # NEW: Hacker Campaign
+			KEY_4: _try_action("training")
+			KEY_5: _show_archive()
+			KEY_6: _show_config()
+			KEY_7: _show_credits()
+			KEY_8: _on_action_selected("quit")
+			KEY_9: if is_veteran: _show_level_select()
+	else:
+		match keycode:
+			KEY_1: _try_action("start_new")
+			KEY_2: _try_action("hacker_campaign")  # NEW: Hacker Campaign
 			KEY_3: _try_action("training")
 			KEY_4: _show_archive()
 			KEY_5: _show_config()
 			KEY_6: _show_credits()
 			KEY_7: _on_action_selected("quit")
 			KEY_8: if is_veteran: _show_level_select()
-	else:
-		match keycode:
-			KEY_1: _try_action("start_new")
-			KEY_2: _try_action("training")
-			KEY_3: _show_archive()
-			KEY_4: _show_config()
-			KEY_5: _show_credits()
-			KEY_6: _on_action_selected("quit")
-			KEY_7: if is_veteran: _show_level_select()
 
 func _try_action(action_id: String):
 	if has_save:

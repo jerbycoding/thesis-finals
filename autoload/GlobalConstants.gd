@@ -4,6 +4,38 @@ extends Node
 
 # --- Core Gameplay Identifiers ---
 
+# === SOLO DEV PHASE 1: ROLE SYSTEM ===
+const ROLE = {
+	"ANALYST": "analyst",
+	"HACKER": "hacker"
+}
+
+# Hacker Campaign App IDs (Phase 2+)
+const HACKER_APP = {
+	"EXPLOIT": "hacker_exploit",
+	"SCANNER": "hacker_scanner", 
+	"RANSOMWARE": "hacker_ransomware",
+	"BACKDOOR": "hacker_backdoor",
+	"KEYLOGGER": "hacker_keylogger"
+}
+
+# Hacker Permission Levels
+const HACKER_PERMISSION = {
+	"USER": 0,
+	"ADMIN": 1,
+	"ROOT": 2,
+	"SYSTEM": 3
+}
+
+# Hacker Foothold States
+const HACKER_FOOTHOLD = {
+	"NONE": "none",
+	"INITIAL": "initial",
+	"PERSISTENT": "persistent",
+	"COMPROMISED": "compromised"
+}
+# =====================================
+
 const COMPLETION_TYPE = {
 	"COMPLIANT": "compliant",
 	"EFFICIENT": "efficient",
@@ -29,14 +61,21 @@ const CONSEQUENCE_ID = {
 	"MALWARE_CLEANUP": "MALWARE-CLEANUP-FOLLOWUP",
 	"DATA_BREACH": "DATA-BREACH-CRITICAL",
 	"PROCEDURAL_VIOLATION": "PROCEDURAL-VIOLATION-FOLLOWUP",
-	
+
 	# From NarrativeDirector
 	"MISSED_ATTACHMENT_SCAN": "missed_attachment_scan",
-	
+
 	# Generic
 	"DATA_LOSS": "data_loss",
 	"ESCALATION": "escalation",
-	"BLACK_TICKET": "black_ticket"
+	"BLACK_TICKET": "black_ticket",
+
+	# === SOLO DEV PHASE 1: HACKER CAMPAIGN ===
+	"HACKER_DETECTED": "hacker_detected",
+	"HACKER_SUCCESS": "hacker_success",
+	"RANSOMWARE_DEPLOYED": "ransomware_deployed",
+	"FOOTHOLD_LOST": "foothold_lost",
+	"EXPLOIT_FAILED": "exploit_failed"
 }
 
 const RISK_TYPE = {
@@ -44,7 +83,11 @@ const RISK_TYPE = {
 	"DATA_BREACH": "data_breach",
 	"PHISHING": "phishing",
 	"MISCONFIG": "misconfiguration",
-	"ATTACHMENT_SCAN_MISSED": "missed_attachment_scan"
+	"ATTACHMENT_SCAN_MISSED": "missed_attachment_scan",
+	# === SOLO DEV PHASE 1: HACKER CAMPAIGN ===
+	"HACKER_INTRUSION": "hacker_intrusion",
+	"EXPLOIT_DETECTED": "exploit_detected",
+	"RANSOMWARE_ATTACK": "ransomware_attack"
 }
 
 const EMAIL_DECISION = {
@@ -89,7 +132,9 @@ const SCENES = {
 	"HUB": "res://scenes/3d/NetworkHub.tscn",
 	"BRIEFING": "res://scenes/3d/BriefingRoom.tscn",
 	"TITLE": "res://scenes/ui/TitleScreen.tscn",
-	"MAIN_MENU": "res://scenes/3d/MainMenu3D.tscn"
+	"MAIN_MENU": "res://scenes/3d/MainMenu3D.tscn",
+	# === SOLO DEV PHASE 1: HACKER CAMPAIGN ===
+	"HACKER_ROOM": "res://scenes/3d/HackerRoom.tscn"
 }
 
 # --- Physical World & Interaction ---
@@ -169,6 +214,39 @@ const UI_COLORS = {
 	"GRID_LINE": Color("#EEEEEE")     # Subtle grid lines
 }
 
+# === SOLO DEV PHASE 1: HACKER THEME COLORS ===
+const HACKER_COLORS = {
+	"PRIMARY": Color(0, 1, 0, 1),        # Pure green (terminal)
+	"BRIGHT": Color(0.2, 1, 0.2, 1),     # Bright green (highlights)
+	"DIM": Color(0, 0.5, 0, 1),          # Dim green (background elements)
+	"ALERT": Color(1, 0, 0, 1),          # Red (alerts/warnings)
+	"WARNING": Color(1, 0.8, 0, 1),      # Yellow (caution)
+	"BG_DARK": Color(0, 0.05, 0, 1)      # Near-black with green tint
+}
+
+# === PHASE 2 PREP: TRACE COSTS ===
+# Trace level increases when hacker performs actions
+const TRACE_COST = {
+	"EXPLOIT": 15.0,      # Running exploit against host
+	"PHISH": 10.0,        # Sending phishing email
+	"RANSOMWARE": 40.0,   # Deploying ransomware (HIGH!)
+	"BACKDOOR": 20.0,     # Installing persistent backdoor
+	"KEYLOGGER": 5.0,     # Installing keylogger (low profile)
+	"SCAN": 3.0,          # Network scan (minimal trace)
+	"DECAY_RATE": 1.0     # Trace decay per second
+}
+
+# === PHASE 3 PREP: RIVAL AI THRESHOLDS ===
+const RIVAL_AI = {
+	"SEARCHING_THRESHOLD": 30.0,    # Trace level where AI starts searching
+	"LOCKDOWN_THRESHOLD": 70.0,     # Trace level where AI initiates lockdown
+	"BASE_ISOLATION_SECONDS": 20.0, # Base time to isolate hacker
+	"DETECT_SCAN_CHANCE": 0.1,      # Chance to detect network scan
+	"DETECT_EXPLOIT_CHANCE": 0.3,   # Chance to detect exploit attempt
+	"DETECT_RANSOMWARE_CHANCE": 0.9 # Ransomware is almost always detected
+}
+# ================================================
+
 # --- Narrative & Event Identifiers ---
 
 const NARRATIVE_EVENT_TYPE = {
@@ -191,7 +269,12 @@ const EVENTS = {
 	"CRYPTO_SPIKE": "CRYPTO_SPIKE",
 	"ISP_THROTTLING": "ISP_THROTTLING",
 	"POWER_FLICKER": "POWER_FLICKER",
-	"GOSSIP_FLOOD": "GOSSIP_FLOOD"
+	"GOSSIP_FLOOD": "GOSSIP_FLOOD",
+	# === SOLO DEV PHASE 1: HACKER CAMPAIGN ===
+	"HACKER_SCAN": "HACKER_SCAN",
+	"HACKER_EXPLOIT": "HACKER_EXPLOIT",
+	"HACKER_RANSOMWARE": "HACKER_RANSOMWARE",
+	"HACKER_FOOTPRINT": "HACKER_FOOTPRINT"
 }
 
 # Standardized Severity Levels

@@ -56,3 +56,12 @@ func clear_pool(scene_path: String = ""):
 		for node in _pool[scene_path]:
 			node.queue_free()
 		_pool.erase(scene_path)
+
+## === SOLO DEV PHASE 1: Role Switching Support ===
+func flush():
+	"""Clear all active pooled UI elements (called during role switch)."""
+	for scene_path in _active:
+		for node in _active[scene_path]:
+			if is_instance_valid(node):
+				node.queue_free()
+		_active[scene_path].clear()

@@ -33,6 +33,13 @@ signal terminal_locked(seconds: float)
 signal terminal_unlocked()
 signal critical_host_isolated(hostname: String)
 
+# === SOLO DEV PHASE 2: HACKER CAMPAIGN SIGNALS ===
+signal offensive_action_performed(data: Dictionary)
+# Payload keys: { action_type, target, timestamp, result, trace_cost, shift_day }
+# action_type: "exploit", "phish", "pivot", "spoof"
+# result: "SUCCESS", "FAILED", "HONEYPOT"
+# ================================================
+
 # --- Narrative & Shift Signals ---
 signal shift_started(shift_id: String)
 signal shift_ended(results: Dictionary)

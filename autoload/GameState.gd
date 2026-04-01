@@ -2,6 +2,16 @@ extends Node
 
 enum GameMode { MODE_3D, MODE_2D, MODE_DIALOGUE, MODE_MINIGAME, MODE_UI_ONLY }
 
+# === SOLO DEV PHASE 1: ROLE SYSTEM ===
+enum Role { ANALYST, HACKER }
+var current_role: Role = Role.ANALYST
+var is_campaign_session: bool = false  # Tracks if session started via 'New Campaign'
+
+# Hacker role state variables (Phase 2+)
+var current_foothold := ""
+var hacker_footholds := {}  # hostname -> timestamp
+# =====================================
+
 var current_mode = GameMode.MODE_3D
 var current_computer = null
 var desktop_instance = null
@@ -9,12 +19,11 @@ var active_bridge = null # NEW: Track active 3D monitor bridge
 var is_paused: bool = false
 var pause_menu_instance: Control = null
 var is_guided_mode: bool = false
-var is_campaign_session: bool = false # Tracks if session started via 'New Campaign'
 
 func _ready():
 	# Initial state enforcement
 	set_mode(GameMode.MODE_3D)
-	
+
 	# Instantiate pause menu but keep it hidden
 	var pause_scene = load("res://scenes/ui/PauseMenu.tscn")
 	if pause_scene:
@@ -83,3 +92,55 @@ func reset_to_default():
 	is_paused = false
 	is_guided_mode = false
 	set_mode(GameMode.MODE_3D)
+
+# === SOLO DEV PHASE 1: ROLE SWITCHING ===
+func switch_role(new_role: Role) -> bool:
+	"""
+	Minimum viable role switching (6-step sequence).
+	Returns true if successful, false if blocked.
+	"""
+	# Step 1: Minigame Guard - Check if any minigame is active in the scene tree
+	if _is_minigame_active():
+		push_warning("GameState: Cannot switch role during active minigame")
+		return false
+	
+	# Step 2: Flush UI Pools (Phase 1 stub - UIObjectPool is not an autoload)
+	# Phase 2 TODO: Get UIObjectPool from active DesktopWindowManager instance
+	
+	# Step 3: Swap Network Context
+	if NetworkState:
+		NetworkState.switch_context(new_role)
+	
+	# Step 4: Set Final Role
+	current_role = new_role
+	print("GameState: Role switched to ", "HACKER" if new_role == Role.HACKER else "ANALYST")
+	
+	# Step 5: Load UI Theme
+	if DesktopWindowManager:
+		DesktopWindowManager.set_theme(new_role)
+	
+	# Step 6: Reset Hacker Variables (when switching back to Analyst)
+	if new_role == Role.ANALYST:
+		current_foothold = ""
+		hacker_footholds.clear()
+	
+	return true
+
+func _is_minigame_active() -> bool:
+	"""Check if any minigame is currently active in the scene tree."""
+	# Look for any node of type MinigameBase that is visible
+	for node in get_tree().get_nodes_in_group("minigames"):
+		if node is Control and node.visible:
+			return true
+	
+	# Fallback: Check if DesktopWindowManager has any open minigame windows
+	if DesktopWindowManager and DesktopWindowManager.open_windows:
+		for window in DesktopWindowManager.open_windows.values():
+			if window and window.visible:
+				# Check if window content is a minigame
+				if window.has_node("Content") and window.get_node("Content") is Control:
+					var content = window.get_node("Content")
+					if content.get_script() and content.get_script().resource_path.contains("Minigame"):
+						return true
+	
+	return false

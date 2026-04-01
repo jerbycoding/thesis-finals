@@ -10,12 +10,22 @@ class_name HostResource
 # Potential initial state overrides
 @export_enum("CLEAN", "SUSPICIOUS", "INFECTED") var initial_status: String = "CLEAN"
 
+# === SOLO DEV PHASE 2: HACKER CAMPAIGN FIELDS ===
+@export_range(0.0, 1.0, 0.05) var vulnerability_score: float = 0.5  # 0.0-1.0 exploit success chance
+@export var is_honeypot: bool = false  # If true, instant LOCKDOWN in Phase 3
+# ================================================
+
 func _to_string() -> String:
 	return "[Host: %s (%s)]" % [hostname, ip_address]
 
 func validate() -> bool:
 	if hostname.is_empty() or hostname == "UNKNOWN-HOST":
 		return false
+	# === PHASE 2: Validate vulnerability_score ===
+	if vulnerability_score < 0.0 or vulnerability_score > 1.0:
+		push_warning("HostResource: %s has invalid vulnerability_score (%f). Must be 0.0-1.0" % [hostname, vulnerability_score])
+		return false
+	# ============================================
 	return true
 
 func get_status_string() -> String:
@@ -36,3 +46,12 @@ func get_status_string() -> String:
 
 func get_criticality_string() -> String:
 	return "Critical" if is_critical else "Standard"
+
+# === PHASE 2: Hacker Campaign Helpers ===
+func get_vulnerability_percent() -> int:
+	"""Returns vulnerability_score as percentage (0-100)."""
+	return int(vulnerability_score * 100)
+
+func is_vulnerable() -> bool:
+	"""Returns true if host can be exploited (vulnerability_score > 0)."""
+	return vulnerability_score > 0.0

@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(del *)",
+      "Bash(f *)",
+      "Bash(do *)",
+      "Bash(type *)",
+      "Bash(echo)",
+      "Bash(echo *)",
+      "Bash(move *)",
+      "Bash(findstr *)"
+    ]
+  },
+  "$version": 3
+}

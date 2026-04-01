@@ -1,5 +1,9 @@
 # HACKER ROLE: "THE REMOTE OPERATOR" (Symmetric Adversarial Design)
 
+> **Document Type:** Design Overview & Narrative Pitch
+> **Technical Authority:** For implementation details, see [GEMINI.md](./GEMINI.md)
+> **Key Architecture:** `Role.HACKER` (not `MODE_HACKER` — Role is orthogonal to GameMode)
+
 ## 1. Core Concept: The Pressure Cooker
 The Hacker Role is a **Symmetric Mirror** of the SOC Analyst. Instead of navigating a corporate office, the player is confined to a single, high-fidelity 3D "Home Office." This role leverages the existing **Kill Chain Engine**, **Heat Manager**, and **Procedural Truth System** but flips the player's intent from **Defense** to **Offense**.
 
@@ -15,7 +19,7 @@ Since there is no navigation, the 3D room serves as a **Physical Stress Simulato
 *   **Physical Heat Indicators:** Instead of just a UI bar, the "Trace Level" (Heat) is reflected in the 3D world:
     *   **Low Trace:** Calm rain, lo-fi music, static lighting.
     *   **Medium Trace:** Police scanners on the desk start crackling; red/blue lights reflect in the window.
-    *   **High Trace:** Power flickers, hardware cooling fans get louder, and the "Integrity Manager" (HP) becomes the literal door to the room. If the door is breached, the "Trace" hit 100%.
+    *   **High Trace:** Power flickers, hardware cooling fans get louder. *(Narrative metaphor: The "Integrity Manager" door represents the Trace breach — technically, `TraceLevelManager` triggers the fail state, not `IntegrityManager`.)*
 *   **Tactile Interactions:** 
     *   **Physical Phone:** Used for "Social Engineering" dialogue and receiving stolen 2FA codes.
     *   **Manual Reset:** A physical router on the desk that the player must interact with to "Reset IP" (temporarily dropping Heat but freezing all active downloads).
@@ -46,6 +50,12 @@ The Hacker's goal is to compile a **Master Exfiltration Resource**.
 *   **Trace Level (100%):** The SOC AI correlates your behavior, traces your IP, and the "Physical Integrity" of your room is compromised (Police Breach).
 *   **Integrity Hit:** The company's automated "Wiper Scripts" delete your footholds before the Exfil is complete.
 
+### Post-Shift: Mirror Mode
+After each shift (except Day 1), the player sees a **Forensic Report** comparing:
+*   **Left Panel:** Actions performed (from `HackerHistory.gd`)
+*   **Right Panel:** How they appeared in SIEM logs (from `LogSystem.gd`)
+*   **Correlation Lines:** Show which logs matched which actions — the educational centerpiece of the thesis.
+
 ---
 
 ## 5. Technical Implementation (Architectural Reuse)
@@ -53,25 +63,25 @@ The Hacker's goal is to compile a **Master Exfiltration Resource**.
 This role is a "Thesis-Level" implementation because it requires **zero new core systems**.
 
 *   **ArchetypeAnalyzer:** Feeds the "AI Analyst" behavior profile.
-*   **HeatManager:** Swaps "Analyst Stress" for "Hacker Trace Level."
+*   **HeatManager:** Remains Analyst-only. Hacker uses a **new separate singleton** `TraceLevelManager.gd`.
 *   **Procedural Truth System:** Generates the "Vulnerabilities" and "Credential Sets" for the Hacker to find.
 *   **VariableRegistry:** Populates the technical indicators (MACs, IPs, Firmware) used in both modes to ensure semantic consistency.
-*   **GameState.gd:** Adds `MODE_HACKER` to enforce the desk-bound 3D constraints and multi-monitor authority.
+*   **GameState.gd:** Adds `Role.HACKER` enum value. Note: `Role` is orthogonal to `GameMode` (MODE_3D, MODE_2D, etc.).
 
 ---
 
 ## 6. Desktop Reuse Strategy: "Symmetric Workspace"
 
-The existing `ComputerDesktop.tscn` is a versatile container that can be dynamically "skinned" based on the `GameState.current_mode`.
+The existing `ComputerDesktop.tscn` is a versatile container that can be dynamically "skinned" based on the `GameState.current_role`.
 
 ### Implementation Steps:
-1.  **Hacker Theme Injection:** 
+1.  **Hacker Theme Injection:**
     *   Create `HackerTheme.tres` (Darker colors, Red/Amber accents).
-    *   In `ComputerDesktop._ready()`, check `if GameState.current_mode == GameState.MODE_HACKER:`.
+    *   In `ComputerDesktop._ready()`, check `if GameState.current_role == GameState.Role.HACKER:`.
     *   Apply the `HackerTheme` and change the wallpaper to a dark, high-contrast texture.
 2.  **App Filtering (The "Toolbox"):**
-    *   Create a `hacker_permission_profile.tres`.
-    *   Whitelist hacker-specific `AppConfigResource` files (e.g., "Phish-Crafter", "Log Poisoner").
+    *   Create a `HackerAppProfile.tres`.
+    *   Whitelist hacker-specific `AppConfigResource` files (e.g., `App_PhishCrafter`, `App_LogPoisoner`).
     *   `DesktopWindowManager` will automatically only show these icons in the Start Menu and on the desktop.
 3.  **App Inversion:**
     *   Existing apps (SIEM, Terminal) will be "wrapped" in hacker-specific scenes that reuse the underlying logic but change the UI labels and "Action" triggers (e.g., "Scan" → "Exploit").
@@ -90,8 +100,8 @@ A key technical highlight of this design is its **90%+ reusability** of existing
 | :--- | :--- | :--- |
 | `VariableRegistry` | 100% | Ensures MAC/IP/Firmware consistency between hacker recon and SIEM records. |
 | `NetworkState` | 100% | Used by the hacker to identify "Pivots" and "Vulnerable" nodes. |
-| `HeatManager` | 90% | Renamed to **"Trace Level"**; scales AI analyst response speed and detection probability. |
-| `IntegrityManager`| 90% | Renamed to **"Stealth Integrity"**; depletion triggers a physical "Police Breach" fail state. |
+| `HeatManager` | Analyst Only | Hacker uses **new** `TraceLevelManager.gd` (separate singleton). |
+| `IntegrityManager`| 90% | **Bypassed** for Hacker — Organization Damage is Analyst-only. Hacker fails via Trace Level 100%. |
 | `TerminalSystem` | 70% | Core command parsing is reused; adds offensive commands (`exploit`, `spoof`, `pivot`). |
 | `LogSystem` | Inverted | Instead of receiving logs, the Hacker **injects** spoofed logs to poison the SIEM. |
 | `EmailSystem` | Inverted | Instead of analyzing emails, the Hacker **dispatches** phishing templates to victims. |

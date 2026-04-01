@@ -38,9 +38,9 @@ func _ready():
 func _register_hosts_from_folder():
 	print("🌐 NetworkState: Discovering hosts from %s..." % HOST_DIR)
 	host_states.clear()
-	
+
 	var loaded_hosts = FileUtil.load_and_validate_resources(HOST_DIR, "HostResource")
-	
+
 	for res in loaded_hosts:
 		# Register host using resource data
 		var initial_state = {
@@ -53,8 +53,8 @@ func _register_hosts_from_folder():
 		}
 		host_states[res.hostname] = initial_state
 		host_resources[res.hostname] = res
-		print("  ✓ Registered Host: %s [%s]" % [res.hostname, res.ip_address])
-	
+		print("  ✓ Registered Host: %s [%s] - Vuln: %.0f%%" % [res.hostname, res.ip_address, res.vulnerability_score * 100])
+
 	print("🌐 NetworkState: Library ready: %d hosts." % host_states.size())
 	hosts_updated.emit()
 
@@ -155,3 +155,14 @@ func get_all_hostnames() -> Array[String]:
 	var string_keys: Array[String] = []
 	string_keys.assign(host_states.keys())
 	return string_keys
+
+# === SOLO DEV PHASE 1: Role Switching Support ===
+# Stub for dual-context support (full implementation in Phase 2)
+func switch_context(new_role: GameState.Role):
+	"""
+	Switch between Analyst and Hacker network contexts.
+	For Phase 1, this is a stub that does nothing.
+	Full dual-context implementation comes in Phase 2.
+	"""
+	print("NetworkState: Context switch to ", "HACKER" if new_role == GameState.Role.HACKER else "ANALYST", " (stub)")
+	# Phase 2 TODO: Implement dual status maps

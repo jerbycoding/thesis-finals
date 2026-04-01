@@ -37,21 +37,28 @@ func _process(delta):
 
 func _apply_change(delta: float, silent: bool = false):
 	var adjusted_delta = delta
-	
+
+	# === SOLO DEV PHASE 1: HACKER CAMPAIGN GUARD ===
+	# Prevent integrity damage during Hacker shifts (you're the attacker!)
+	if delta < 0 and GameState and GameState.current_role == GameState.Role.HACKER:
+		print("🛡️ IntegrityManager: Blocked damage during Hacker shift")
+		return # Skip damage application
+	# ================================================================
+
 	# APPLY DIFFICULTY SCALING (Skip for minor decay)
 	if not silent and ConfigManager and GlobalConstants:
 		var tier = ConfigManager.settings.gameplay.difficulty_level
 		var multipliers = GlobalConstants.DIFFICULTY_DATA.get(tier, GlobalConstants.DIFFICULTY_DATA[GlobalConstants.DIFFICULTY.ANALYST])
 		adjusted_delta *= multipliers.damage_mult
-	
+
 	var old_integrity = current_integrity
-	
+
 	# SANDBOX INTERCEPTION (Section 5: Failure Resilience)
 	if delta < 0 and GameState and GameState.is_guided_mode:
 		print("🛡️ IntegrityManager: Intercepted violation during certification. Emitting warning.")
 		EventBus.consequence_triggered.emit("procedural_warning", {"delta": delta})
 		return # Do not reduce health in sandbox
-		
+
 	current_integrity = clamp(current_integrity + adjusted_delta, 0.0, max_integrity)
 	
 	# Only emit signals if value actually changed (optimization)
