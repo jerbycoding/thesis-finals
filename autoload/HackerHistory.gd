@@ -116,8 +116,16 @@ func _load_from_disk():
 		push_warning("HackerHistory: Failed to parse save file - starting fresh")
 		return
 	
-	history = json.data
-	print("💾 HISTORY: Loaded %d entries from disk" % history.size())
+	# Type cast: json.data is Array, we need Array[Dictionary]
+	var loaded_data = json.data
+	if loaded_data is Array:
+		history.clear()
+		for entry in loaded_data:
+			if entry is Dictionary:
+				history.append(entry)
+		print("💾 HISTORY: Loaded %d entries from disk" % history.size())
+	else:
+		push_warning("HackerHistory: Save file has invalid format - starting fresh")
 
 # === PUBLIC API ===
 

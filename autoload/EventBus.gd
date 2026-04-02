@@ -54,6 +54,14 @@ signal dialogue_choice_selected(choice: Dictionary)
 signal world_event_triggered(event_id: String, active: bool, duration: float)
 signal campaign_ended(type: String)
 
+# === SOLO DEV PHASE 3: RIVAL AI SIGNALS ===
+signal ai_state_changed(old_state: int, new_state: int)
+signal ai_searching_started()
+signal ai_lockdown_started()
+signal isolation_countdown_started(time_remaining: float)
+signal connection_lost()
+# ===========================================
+
 # --- System & UI Signals ---
 signal game_mode_changed(mode: int)
 signal app_opened(app_name: String, window_id: String)

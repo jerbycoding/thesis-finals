@@ -2,6 +2,12 @@
 # Central authority for gameplay rules and logic validation.
 extends Node
 
+# === SOLO DEV PHASE 2: ROLE GUARD ===
+# ROLE GUARD: This manager's rules apply only to the Analyst campaign.
+# Hacker commands bypass validation entirely. Do not add hacker-specific
+# validation logic here - that belongs in Phase 3+ systems.
+# ================================
+
 # --- Ticket Validation ---
 
 ## Checks if a ticket meets the requirements for a "Compliant" resolution.

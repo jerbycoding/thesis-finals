@@ -395,6 +395,16 @@ func _force_stand_up():
 	GameState.set_mode(GameState.GameMode.MODE_3D)
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
+# === SOLO DEV PHASE 3: ISOLATION WARNING STUB ===
+func show_isolation_warning(time_remaining: float):
+	"""
+	Phase 6: Show UI overlay with countdown timer.
+	Phase 3: Console print only (stub).
+	"""
+	print("⚠️ ISOLATION WARNING: Connection lost in %.0f seconds!" % time_remaining)
+	print("   [Phase 6: Show visual countdown UI here]")
+# ================================================
+
 # === SOLO DEV PHASE 1: ROLE-BASED LOGIN THEMING ===
 func _get_theme_color_for_role(role: GameState.Role) -> Color:
 	"""Return theme color for role (blue for Analyst, green for Hacker)."""

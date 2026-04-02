@@ -38,12 +38,14 @@ func _process(delta):
 func _apply_change(delta: float, silent: bool = false):
 	var adjusted_delta = delta
 
-	# === SOLO DEV PHASE 1: HACKER CAMPAIGN GUARD ===
-	# Prevent integrity damage during Hacker shifts (you're the attacker!)
+	# === SOLO DEV PHASE 2: ROLE GUARD ===
+	# ROLE GUARD: Organization Damage is handled by the Analyst campaign.
+	# In _apply_change(), check: if GameState.current_role == Role.HACKER: return
+	# This prevents integrity damage during Hacker shifts (you're the attacker!)
 	if delta < 0 and GameState and GameState.current_role == GameState.Role.HACKER:
 		print("🛡️ IntegrityManager: Blocked damage during Hacker shift")
 		return # Skip damage application
-	# ================================================================
+	# ================================
 
 	# APPLY DIFFICULTY SCALING (Skip for minor decay)
 	if not silent and ConfigManager and GlobalConstants:

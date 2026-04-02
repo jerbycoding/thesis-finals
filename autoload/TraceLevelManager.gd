@@ -6,6 +6,7 @@ extends Node
 signal trace_level_changed(new_level: float)
 signal trace_critical()  # Emitted at 80%+ (AI responds in Phase 3)
 signal trace_maxed()     # Emitted at 100% (instant lockdown in Phase 3)
+signal trace_crossed_threshold(old_threshold: int, new_threshold: int)  # === PHASE 3: For AI state machine ===
 
 # === CONFIGURATION ===
 const MAX_TRACE = 100.0
@@ -65,6 +66,12 @@ func _on_decay_tick():
 	var old_trace = trace_level
 	
 	trace_level = max(MIN_TRACE, trace_level - decay_amount)
+	
+	# === PHASE 3: Emit threshold crossing signal ===
+	var old_boundary = int(old_trace / 10.0)
+	var new_boundary = int(trace_level / 10.0)
+	if old_boundary != new_boundary:
+		trace_crossed_threshold.emit(old_boundary * 10, new_boundary * 10)
 	
 	# Emit signal if changed significantly
 	if abs(old_trace - trace_level) >= 0.5:

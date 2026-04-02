@@ -49,6 +49,7 @@ ResourceAuditManager="*res://autoload/ResourceAuditManager.gd"
 DebugTools="*res://autoload/DebugTools.gd"
 TraceLevelManager="*res://autoload/TraceLevelManager.gd"
 HackerHistory="*res://autoload/HackerHistory.gd"
+RivalAI="*res://autoload/RivalAI.gd"
 
 [display]
 

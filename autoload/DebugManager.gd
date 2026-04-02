@@ -88,6 +88,13 @@ func _input(event):
 		return
 
 	# sequential Navigation (F1 / F2) and Chaos Event (F7)
+	# === SOLO DEV PHASE 3: ROLE GUARD ===
+	# F7 Chaos Event is Analyst-campaign only (Hacker uses F7 for Trace)
+	if GameState and GameState.current_role == GameState.Role.HACKER:
+		if event.keycode == KEY_F7:
+			return  # Let TraceLevelManager handle F7 in Hacker campaign
+	# ================================
+	
 	if not event.shift_pressed and not event.ctrl_pressed:
 		if event.keycode == KEY_F1:
 			_jump_previous_shift()

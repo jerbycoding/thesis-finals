@@ -2,6 +2,12 @@
 # Autoload singleton that tracks player choices and triggers consequences
 extends Node
 
+# === SOLO DEV PHASE 2: ROLE GUARD ===
+# ROLE GUARD: This engine must NOT consume hacker signals like
+# 'offensive_action_performed'. Hacker actions do not advance the
+# Analyst's Kill Chain. This engine is Analyst-campaign only.
+# ================================
+
 const CONSEQUENCE_EVAL_INTERVAL: float = 15.0 # Evaluate every 15 seconds
 
 var choice_log: Array = []

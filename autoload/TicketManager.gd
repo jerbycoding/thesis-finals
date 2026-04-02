@@ -2,6 +2,12 @@
 # Autoload singleton that manages all tickets in the game
 extends Node
 
+# === SOLO DEV PHASE 2: ROLE GUARD ===
+# ROLE GUARD: This manager must not attach hacker actions to Analyst tickets.
+# Hacker campaign has its own systems (HackerHistory, TraceLevelManager).
+# Do not connect to 'offensive_action_performed' signal here.
+# ================================
+
 var active_tickets: Array[TicketResource] = []
 var completed_tickets: Array[TicketResource] = []
 var active_timers: Dictionary = {} # ticket_id: Timer
