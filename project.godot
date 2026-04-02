@@ -47,6 +47,8 @@ NotificationManager="*res://autoload/NotificationManager.gd"
 TutorialManager="*res://autoload/TutorialManager.gd"
 ResourceAuditManager="*res://autoload/ResourceAuditManager.gd"
 DebugTools="*res://autoload/DebugTools.gd"
+TraceLevelManager="*res://autoload/TraceLevelManager.gd"
+HackerHistory="*res://autoload/HackerHistory.gd"
 
 [display]
 

@@ -24,6 +24,10 @@ func _ready():
 	print("========================================")
 
 func _input(event):
+	# === ROLE GUARD: Only process input in Hacker campaign ===
+	if GameState and GameState.current_role == GameState.Role.ANALYST:
+		return  # Skip Hacker debug keys in Analyst campaign
+	
 	if not debug_enabled:
 		return
 	

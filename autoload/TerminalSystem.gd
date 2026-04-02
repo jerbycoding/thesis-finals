@@ -551,7 +551,7 @@ func _create_exploit_payload(hostname: String, result: String) -> Dictionary:
 		"timestamp": Time.get_unix_time_from_system(),
 		"result": result,  # SUCCESS, FAILED, or HONEYPOT
 		"trace_cost": GlobalConstants.TRACE_COST.EXPLOIT,
-		"shift_day": shift_day
+		"shift_day": shift_day  # === PHASE 2: Added for HackerHistory ===
 	}
 # ================================================
 
