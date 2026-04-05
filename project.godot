@@ -50,6 +50,8 @@ DebugTools="*res://autoload/DebugTools.gd"
 TraceLevelManager="*res://autoload/TraceLevelManager.gd"
 HackerHistory="*res://autoload/HackerHistory.gd"
 RivalAI="*res://autoload/RivalAI.gd"
+BountyLedger="*res://autoload/BountyLedger.gd"
+ContractManager="*res://autoload/ContractManager.gd"
 
 [display]
 

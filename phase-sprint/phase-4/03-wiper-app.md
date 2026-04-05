@@ -1,4 +1,6 @@
-# TASK 3: "WIPER" SCRIPTS (EVIDENCE DESTRUCTION)
+# TASK 3b: "WIPER" SCRIPTS (EVIDENCE DESTRUCTION) — ⏸️ CUT FROM MVHR
+
+**Status:** ⏸️ **DEFERRED TO PHASE 6+** (Not required for MVHR thesis defense)
 
 ## Description
 [REVISED] Provide a tool for trace reduction and forensic cleaning with precision tiers and proper guards.

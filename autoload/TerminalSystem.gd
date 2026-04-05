@@ -66,6 +66,11 @@ var commands: Dictionary = {
 		"description": "Exploit host vulnerability",
 		"syntax": "exploit [hostname]",
 		"risk_level": 5
+	},
+	"pivot": {
+		"description": "Move laterally to adjacent host (evades isolation during LOCKDOWN)",
+		"syntax": "pivot [hostname]",
+		"risk_level": 3
 	}
 	# ============================================
 }
@@ -169,6 +174,8 @@ func _execute_command_internal(command_name: String, args: Array) -> Dictionary:
 		# === SOLO DEV PHASE 2: HACKER COMMAND ===
 		"exploit":
 			result = _cmd_exploit(args)
+		"pivot":
+			result = _cmd_pivot(args)
 		# =======================================
 		_:
 			result = {"success": false, "output": "Error: Command not implemented"}
@@ -501,10 +508,13 @@ func _cmd_exploit(args: Array) -> Dictionary:
 	# === STEP 3: HONEYPOT BRANCH ===
 	var host_resource = NetworkState.get_host(hostname)
 	if host_resource and host_resource.is_honeypot:
-		# Honeypot detected! Instant fail but still emit signal
+		# Honeypot detected! Instant LOCKDOWN — emit signal with max trace cost
 		var result_data = _create_exploit_payload(hostname, "HONEYPOT")
+		result_data["trace_cost"] = 100.0  # Instant LOCKDOWN
 		EventBus.offensive_action_performed.emit(result_data)
-		
+
+		print("⚠ HONEYPOT: Exploited %s — instant LOCKDOWN!" % hostname)
+
 		return {
 			"success": false,
 			"output": "[color=red]⚠ HONEYPOT DETECTED![/color]\nThis system was a trap!\nYour access has been logged."
@@ -520,7 +530,10 @@ func _cmd_exploit(args: Array) -> Dictionary:
 		# SUCCESS! Add to footholds
 		var timestamp = Time.get_unix_time_from_system()
 		GameState.hacker_footholds[hostname] = timestamp
-		
+
+		# Set as current foothold for ransomware app targeting
+		GameState.current_foothold = hostname
+
 		# Emit success signal
 		var result_data = _create_exploit_payload(hostname, "SUCCESS")
 		EventBus.offensive_action_performed.emit(result_data)
@@ -544,7 +557,7 @@ func _create_exploit_payload(hostname: String, result: String) -> Dictionary:
 	var shift_day = 0
 	if NarrativeDirector:
 		shift_day = NarrativeDirector.current_day if NarrativeDirector.has_node("NarrativeDirector") else 0
-	
+
 	return {
 		"action_type": "exploit",
 		"target": hostname,
@@ -553,6 +566,88 @@ func _create_exploit_payload(hostname: String, result: String) -> Dictionary:
 		"trace_cost": GlobalConstants.TRACE_COST.EXPLOIT,
 		"shift_day": shift_day  # === PHASE 2: Added for HackerHistory ===
 	}
+
+func _cmd_pivot(args: Array) -> Dictionary:
+	"""
+	Pivot laterally to an adjacent host.
+	Evades RivalAI isolation countdown during LOCKDOWN.
+	Trace is NOT cleared — AI transitions to SEARCHING instead.
+	"""
+	# === STEP 1: NULL GUARD ===
+	if args.is_empty():
+		return {"success": false, "output": "[color=red]ERROR: Missing hostname.[/color]\nSyntax: pivot [hostname]\nExample: pivot DB-SRV-01"}
+
+	var hostname = args[0].to_upper()
+	var host_info = NetworkState.get_host_state(hostname)
+
+	if host_info.is_empty():
+		return {"success": false, "output": "[color=red]ERROR: Host not found.[/color]\nUse 'list' to see known hostnames."}
+
+	# === STEP 2: OWNERSHIP GUARD — must have a foothold to pivot from ===
+	if GameState.hacker_footholds.is_empty():
+		return {"success": false, "output": "[color=red]ERROR: No active footholds.[/color]\nExploit a host first before pivoting."}
+
+	# === STEP 3: PIVOT SUCCESS CHECK ===
+	var host_resource = NetworkState.get_host(hostname)
+	var roll = randf()
+	var vulnerability = host_resource.vulnerability_score if host_resource else 0.5
+	var success = roll < vulnerability
+
+	if success:
+		# Add new host as foothold, keep old ones
+		var timestamp = Time.get_unix_time_from_system()
+		if not GameState.hacker_footholds.has(hostname):
+			GameState.hacker_footholds[hostname] = timestamp
+
+		# Update current foothold
+		var old_foothold = GameState.current_foothold
+		GameState.current_foothold = hostname
+
+		# === PIVOT EVASION: Abort RivalAI isolation if active ===
+		if RivalAI and RivalAI.is_isolation_active:
+			RivalAI.abort_isolation()
+
+		# Emit signal with evasion result
+		var shift_day = 0
+		if NarrativeDirector:
+			shift_day = NarrativeDirector.current_day if NarrativeDirector.has_node("NarrativeDirector") else 0
+
+		EventBus.offensive_action_performed.emit({
+			"action_type": "pivot",
+			"target": hostname,
+			"timestamp": Time.get_unix_time_from_system(),
+			"result": "EVASION",
+			"trace_cost": GlobalConstants.TRACE_COST.PIVOT,
+			"shift_day": shift_day
+		})
+
+		var evasion_note = ""
+		if RivalAI and RivalAI.is_isolation_active == false and old_foothold != "":
+			evasion_note = "\n[color=yellow]🛡 Isolation aborted! AI returned to SEARCHING state.[/color]"
+
+		return {
+			"success": true,
+			"output": "[color=green]✓ PIVOT SUCCESSFUL![/color]\nLateral movement to %s complete.\nNew foothold established.%s" % [hostname, evasion_note]
+		}
+	else:
+		# Pivot failed — still costs trace
+		var shift_day = 0
+		if NarrativeDirector:
+			shift_day = NarrativeDirector.current_day if NarrativeDirector.has_node("NarrativeDirector") else 0
+
+		EventBus.offensive_action_performed.emit({
+			"action_type": "pivot",
+			"target": hostname,
+			"timestamp": Time.get_unix_time_from_system(),
+			"result": "FAILED",
+			"trace_cost": GlobalConstants.TRACE_COST.PIVOT,
+			"shift_day": shift_day
+		})
+
+		return {
+			"success": false,
+			"output": "[color=red]✗ PIVOT FAILED![/color]\nTarget defenses blocked lateral movement.\nVulnerability score: %.0f%%" % (vulnerability * 100)
+		}
 # ================================================
 
 

@@ -1,4 +1,16 @@
-# TASK 5: APP REGISTRATION & METADATA (PAYLOADS)
+# TASK 5b: APP REGISTRATION & METADATA (PAYLOADS) — ⏸️ PARTIALLY COMPLETE
+
+**Status:** ⚠️ **MVHR COMPLETE** (Ransomware + Contracts registered. Exfiltrator + Wiper deferred.)
+
+## What's Done
+- ✅ `resources/apps/ransomware.tres` — AppConfigResource created
+- ✅ `resources/apps/contracts.tres` — AppConfigResource created
+- ✅ `resources/permissions/HackerAppProfile.tres` — both apps whitelisted
+- ✅ Analyst `training_permissions.tres` does NOT include ransomware or contracts
+
+## What's Deferred
+- ⏸️ `resources/apps/exfiltrator.tres` — Phase 6+
+- ⏸️ `resources/apps/wiper.tres` — Phase 6+
 
 ## Description
 [NEW] Create and configure all the necessary metadata files and permissions to register the payload apps for the Hacker campaign.

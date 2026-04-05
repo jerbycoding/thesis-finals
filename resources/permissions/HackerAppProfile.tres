@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="AppPermissionProfile" load_steps=2 format=3]
+
+[ext_resource type="Script" uid="uid://b2gk3w7x5d0qf" path="res://resources/AppPermissionProfile.gd" id="1_perm"]
+
+[resource]
+script = ExtResource("1_perm")
+profile_name = "Hacker Campaign"
+allowed_apps = ["terminal", "siem", "email", "contracts", "ransomware"]
+restricted_message = "ACCESS DENIED: This application is not available in your current network context."

@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="DialogueDataResource" load_steps=2 format=3]
+
+[ext_resource type="Script" uid="uid://c2lpqyroyo4be" path="res://resources/dialogue/DialogueDataResource.gd" id="1_dialogue"]
+
+[resource]
+script = ExtResource("1_dialogue")
+npc_name = "Broker"
+portrait = "🕴️"
+is_randomized = false
+lines = Array[Dictionary]([{
+"text": "Day One. Let's keep this brief."
+}, {
+"text": "You've been contracted to test their defenses. I provide targets. You provide results."
+}, {
+"text": "Your first assignment: deploy a ransomware payload on any accessible host. The contract is waiting on your board."
+}, {
+"text": "Two rules. One — don't get caught. Their AI analyst will trace you if you're reckless."
+}, {
+"text": "Two — don't hit the honeypots. I won't tell you where they are. That's your problem."
+}, {
+"text": "Complete the contract and I'll wire the bounty. Prove yourself, and the real work begins."
+}, {
+"text": "Get to work."
+}])

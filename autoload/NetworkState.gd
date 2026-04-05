@@ -141,6 +141,7 @@ func update_host_state(hostname: String, new_state: Dictionary):
 					"SUSPICIOUS": status_int = GlobalConstants.HOST_STATUS.SUSPICIOUS
 					"INFECTED": status_int = GlobalConstants.HOST_STATUS.INFECTED
 					"ISOLATED": status_int = GlobalConstants.HOST_STATUS.ISOLATED
+					"RANSOMED": status_int = GlobalConstants.HOST_STATUS.RANSOMED
 			else:
 				status_int = status_val
 				
@@ -155,6 +156,29 @@ func get_all_hostnames() -> Array[String]:
 	var string_keys: Array[String] = []
 	string_keys.assign(host_states.keys())
 	return string_keys
+
+# === SOLO DEV PHASE 4: HACKER CAMPAIGN METHODS ===
+
+func get_footholds() -> Array[String]:
+	"""
+	Returns array of hostnames currently compromised by the hacker.
+	Reads from GameState.hacker_footholds.
+	"""
+	if not GameState or not GameState.hacker_footholds:
+		return []
+	var footholds: Array[String] = []
+	footholds.assign(GameState.hacker_footholds.keys())
+	return footholds
+
+func get_host_vulnerability(hostname: String) -> float:
+	"""
+	Returns vulnerability_score for a host (0.0-1.0).
+	Used by Ransomware app to calculate calibration green zone width.
+	"""
+	var resource = get_host(hostname)
+	if resource:
+		return resource.vulnerability_score
+	return 0.5  # Default fallback
 
 # === SOLO DEV PHASE 1: Role Switching Support ===
 # Stub for dual-context support (full implementation in Phase 2)

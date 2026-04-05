@@ -1,4 +1,6 @@
-# TASK 2: DATA EXFILTRATION (THE STEAL MECHANIC)
+# TASK 2b: DATA EXFILTRATION (THE STEAL MECHANIC) — ⏸️ CUT FROM MVHR
+
+**Status:** ⏸️ **DEFERRED TO PHASE 6+** (Not required for MVHR thesis defense)
 
 ## Description
 [REVISED] Implement a progress-based data theft system with multi-stream support, partial rewards, and LOCKDOWN interruption.

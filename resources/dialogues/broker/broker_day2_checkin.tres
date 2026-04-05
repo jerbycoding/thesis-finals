@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="DialogueDataResource" load_steps=2 format=3]
+
+[ext_resource type="Script" uid="uid://c2lpqyroyo4be" path="res://resources/dialogue/DialogueDataResource.gd" id="1_dialogue"]
+
+[resource]
+script = ExtResource("1_dialogue")
+npc_name = "Broker"
+portrait = "🕴️"
+is_randomized = false
+lines = Array[Dictionary]([{
+"text": "Day Two. You handled yesterday's contract adequately."
+}, {
+"text": "Today's assignment is the same format — ransomware on a target of your choosing."
+}, {
+"text": "But I should warn you: the network has been hardened. They've deployed honeypots."
+}, {
+"text": "If you hit one, their AI will lock you out instantly. No countdown. No second chances."
+}, {
+"text": "Think before you exploit. Not every host is what it appears to be."
+}, {
+"text": "Another contract is on your board. Don't make me regret recommending you."
+}])

@@ -128,24 +128,28 @@ func _on_terminal_action(action_id: String):
 
 func _start_hacker_campaign():
 	"""
-	SOLO DEV PHASE 1: Start Hacker Campaign
-	Sets role to HACKER and jumps to HackerRoom
+	PHASE 5: Start Hacker Campaign
+	Sets role to HACKER, loads Day 1 shift, plays Broker dialogue, jumps to HackerRoom
 	"""
 	if is_transitioning: return
 	is_transitioning = true
-	
+
 	# Set role to Hacker
 	if GameState:
 		GameState.switch_role(GameState.Role.HACKER)
 		GameState.is_campaign_session = true
-	
+
 	# Clear any existing save data for fresh start
 	if SaveSystem:
 		SaveSystem.new_game_setup()
-	
-	# Jump directly to HackerRoom (skip briefing for now)
+
+	# Start the hacker campaign (Day 1) — loads contracts, plays Broker dialogue
+	if NarrativeDirector:
+		NarrativeDirector.start_hacker_campaign()
+
+	# Jump directly to HackerRoom
 	if TransitionManager:
-		TransitionManager.play_secure_login("res://scenes/3d/HackerRoom.tscn", "", "[ HACKER CAMPAIGN ]")
+		TransitionManager.play_secure_login("res://scenes/3d/HackerRoom.tscn", "", "[ HACKER CAMPAIGN — DAY 1 ]")
 
 func _start_shift_sequence():
 	if is_transitioning: return

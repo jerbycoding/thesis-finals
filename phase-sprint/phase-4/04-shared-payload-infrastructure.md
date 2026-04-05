@@ -1,4 +1,18 @@
-# TASK 4: SHARED PAYLOAD INFRASTRUCTURE
+# TASK 4b: SHARED PAYLOAD INFRASTRUCTURE — ⏸️ PARTIALLY DEFERRED
+
+**Status:** ⏸️ **PARTIALLY DEFERRED** (MVHR subset complete, Exfiltrator/Wiper deferred)
+
+## What's Done (MVHR Subset)
+- ✅ `BountyLedger.gd` created + autoloaded
+- ✅ Shared eligibility gate in `App_Ransomware.gd` (`_can_launch()` checks foothold + isolation)
+- ✅ `RANSOMED` status in NetworkState
+
+## What's Deferred (Exfiltrator/Wiper)
+- ⏸️ `IntelligenceInventory.gd` — not needed for ransomware MVHR
+- ⏸️ `GameState.hacker_inventory` + `hacker_exfiltrated_hosts` — exfiltration only
+- ⏸️ `LogSystem.prune_logs_for_host()` — Wiper only
+- ⏸️ `HostResource.data_volume` + `network_bandwidth` — exfiltration only
+- ⏸️ `HackerHistory` tick collapsing — exfiltration only
 
 ## Description
 [NEW] Implement the shared singletons, `GameState` variables, and global methods required by all three payload apps. This is a critical dependency for Tasks 1, 2, and 3.

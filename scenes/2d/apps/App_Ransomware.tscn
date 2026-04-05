@@ -1,18 +1,19 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=4 format=3 uid="uid://ransomware2026app"]
 
-[ext_resource type="Script" path="res://scenes/2d/apps/App_Ransomware.gd" id="1_ransomware"]
-[ext_resource type="Theme" uid="uid://dny3rlbltexc7" path="res://assets/themes/EnterpriseTheme.tres" id="2_theme"]
+[ext_resource type="Script" path="res://scripts/2d/apps/App_Ransomware.gd" id="1_script"]
+[ext_resource type="PackedScene" uid="uid://ransomcalib2026" path="res://scenes/ui/RansomCalibration.tscn" id="2_calib"]
+[ext_resource type="Theme" uid="uid://dny3rlbltexc7" path="res://assets/themes/EnterpriseTheme.tres" id="3_theme"]
 
 [node name="App_Ransomware" type="Control"]
-custom_minimum_size = Vector2(600, 500)
+custom_minimum_size = Vector2(600, 400)
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = ExtResource("2_theme")
-script = ExtResource("1_ransomware")
+theme = ExtResource("3_theme")
+script = ExtResource("1_script")
 
 [node name="Background" type="ColorRect" parent="."]
 layout_mode = 1
@@ -21,9 +22,9 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.02, 0.05, 0.02, 1)
+color = Color(0.0509804, 0.02, 0.02, 1)
 
-[node name="VBox" type="VBoxContainer" parent="."]
+[node name="VBox" type="VBoxContainer" parent="Background"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -32,176 +33,52 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 0
 
-[node name="Header" type="PanelContainer" parent="VBox"]
+[node name="Header" type="PanelContainer" parent="Background/VBox"]
 layout_mode = 2
 theme_type_variation = &"HeaderPanel"
 
-[node name="HeaderLabel" type="Label" parent="VBox/Header"]
+[node name="HeaderLabel" type="Label" parent="Background/VBox/Header"]
 layout_mode = 2
 theme_type_variation = &"TechnicalHeader"
-text = "RANSOMWARE DEPLOYMENT PROTOCOL"
+text = "RANSOMWARE DEPLOYMENT"
 vertical_alignment = 1
 
-[node name="Content" type="VBoxContainer" parent="VBox"]
+[node name="Content" type="VBoxContainer" parent="Background/VBox"]
 layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
 theme_override_constants/separation = 15
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
 
-[node name="Margin" type="MarginContainer" parent="Content"]
+[node name="StatusLabel" type="Label" parent="Background/VBox/Content"]
+unique_name_in_owner = true
 layout_mode = 2
-theme_override_constants/margin_left = 20
-theme_override_constants/margin_top = 20
-theme_override_constants/margin_right = 20
-theme_override_constants/margin_bottom = 20
+theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(1, 0.5, 0.3, 1)
+autowrap_mode = 3
+text = "Initializing ransomware payload..."
 
-[node name="FormVBox" type="VBoxContainer" parent="Content/Margin"]
+[node name="HostLabel" type="Label" parent="Background/VBox/Content"]
+unique_name_in_owner = true
 layout_mode = 2
-theme_override_constants/separation = 12
+theme_override_font_sizes/font_size = 18
+theme_override_colors/font_color = Color(1, 0.3, 0.3, 1)
+text = "Target: ---"
 
-[node name="Row1" type="HBoxContainer" parent="Content/Margin/FormVBox"]
+[node name="StartButton" type="Button" parent="Background/VBox/Content"]
+unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/separation = 10
+custom_minimum_size = Vector2(0, 40)
+text = "DEPLOY PAYLOAD"
 
-[node name="TargetLabel" type="Label" parent="Content/Margin/FormVBox/Row1"]
+[node name="CalibrationContainer" type="MarginContainer" parent="Background/VBox/Content"]
+unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 0
-text = "Target Host:"
-vertical_alignment = 1
-custom_minimum_size = Vector2(100, 0)
-
-[node name="HostDropdown" type="OptionButton" parent="Content/Margin/FormVBox/Row1"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="Row2" type="HBoxContainer" parent="Content/Margin/FormVBox"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/separation = 10
-
-[node name="RansomLabel" type="Label" parent="Content/Margin/FormVBox/Row2"]
-layout_mode = 2
-size_flags_horizontal = 0
-text = "Ransom Amount:"
-vertical_alignment = 1
-custom_minimum_size = Vector2(100, 0)
-
-[node name="RansomAmount" type="Label" parent="Content/Margin/FormVBox/Row2"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "$50,000"
-add_theme_color_override("font_color", Color(0.2, 1, 0.2, 1))
-vertical_alignment = 1
-
-[node name="Row3" type="HBoxContainer" parent="Content/Margin/FormVBox"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/separation = 10
-
-[node name="EncryptionLabel" type="Label" parent="Content/Margin/FormVBox/Row3"]
-layout_mode = 2
-size_flags_horizontal = 0
-text = "Encryption:"
-vertical_alignment = 1
-custom_minimum_size = Vector2(100, 0)
-
-[node name="EncryptionType" type="Label" parent="Content/Margin/FormVBox/Row3"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "AES-256"
-vertical_alignment = 1
-
-[node name="HSeparator" type="HSeparator" parent="Content/Margin/FormVBox"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="CalibrationContainer" type="VBoxContainer" parent="Content/Margin/FormVBox"]
-layout_mode = 2
-size_flags_horizontal = 3
+size_flags_vertical = 3
 visible = false
-theme_override_constants/separation = 10
 
-[node name="CalibrationLabel" type="Label" parent="Content/Margin/FormVBox/CalibrationContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "CALIBRATE PAYLOAD"
-horizontal_alignment = 1
-
-[node name="CalibrationBarContainer" type="Panel" parent="Content/Margin/FormVBox/CalibrationContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-custom_minimum_size = Vector2(0, 50)
-
-[node name="CalibrationBar" type="ColorRect" parent="Content/Margin/FormVBox/CalibrationContainer/CalibrationBarContainer"]
+[node name="RansomCalibration" parent="Background/VBox/Content/CalibrationContainer" instance=ExtResource("2_calib")]
+unique_name_in_owner = true
+visible = false
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 0.0
-offset_top = 10.0
-offset_right = 10.0
-offset_bottom = -10.0
-color = Color(0.2, 0.8, 0.2, 1)
-
-[node name="GreenZone" type="ColorRect" parent="Content/Margin/FormVBox/CalibrationContainer/CalibrationBarContainer"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 150.0
-offset_top = 10.0
-offset_right = 250.0
-offset_bottom = -10.0
-color = Color(0, 1, 0, 0.3)
-
-[node name="CalibrationProgress" type="Label" parent="Content/Margin/FormVBox/CalibrationContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Progress: 0/3"
-horizontal_alignment = 1
-
-[node name="HSeparator2" type="HSeparator" parent="Content/Margin/FormVBox"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="StatusContainer" type="VBoxContainer" parent="Content/Margin/FormVBox"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/separation = 5
-
-[node name="StatusLabel" type="Label" parent="Content/Margin/FormVBox/StatusContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Status: READY"
-add_theme_color_override("font_color", Color(0.2, 1, 0.2, 1))
-
-[node name="TraceLabel" type="Label" parent="Content/Margin/FormVBox/StatusContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Trace Cost: +40.0 ⚠️"
-add_theme_color_override("font_color", Color(1, 0.5, 0, 1))
-
-[node name="BountyLabel" type="Label" parent="Content/Margin/FormVBox/StatusContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Bounty: $15,000 💰"
-add_theme_color_override("font_color", Color(1, 1, 0, 1))
-
-[node name="HSeparator3" type="HSeparator" parent="Content/Margin/FormVBox"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="DeployButton" type="Button" parent="Content/Margin/FormVBox"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "🚀 DEPLOY RANSOMWARE"
-add_theme_font_size_override("font_size", 16)
-custom_minimum_size = Vector2(0, 45)
-
-[node name="InstructionsLabel" type="Label" parent="Content/Margin/FormVBox"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "[SPACE] to calibrate | [ESC] to abort"
-horizontal_alignment = 1
-add_theme_color_override("font_color", Color(0.6, 0.6, 0.6, 1))

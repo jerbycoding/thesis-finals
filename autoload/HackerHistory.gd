@@ -25,6 +25,8 @@ func _ready():
 	# Connect to offensive action signal
 	if EventBus:
 		EventBus.offensive_action_performed.connect(_on_offensive_action)
+		EventBus.rival_ai_isolation_complete.connect(_on_isolation_complete)
+		EventBus.connection_lost.connect(_on_connection_lost)
 	
 	# Ensure save directory exists
 	_ensure_save_directory()
@@ -73,6 +75,46 @@ func _on_offensive_action(data: Dictionary):
 	_write_to_disk()
 	
 	# Emit signal for UI updates
+	history_updated.emit(history.size())
+
+func _on_isolation_complete(hostname: String):
+	"""
+	Record when RivalAI isolation is aborted (pivot evasion succeeded).
+	"""
+	var entry = {
+		"action_type": "isolation_aborted",
+		"target": hostname if hostname != "" else "unknown",
+		"timestamp": Time.get_unix_time_from_system(),
+		"result": "EVASION_SUCCESS",
+		"trace_cost": 0.0,
+		"shift_day": current_shift_day,
+		"note": "Pivot evasion aborted AI isolation countdown"
+	}
+
+	history.append(entry)
+	_write_to_disk()
+
+	print("📝 HISTORY: Recorded isolation aborted (pivot) on %s" % entry.target)
+	history_updated.emit(history.size())
+
+func _on_connection_lost():
+	"""
+	Record when isolation timer reaches zero (game over).
+	"""
+	var entry = {
+		"action_type": "connection_lost",
+		"target": GameState.current_foothold if GameState.current_foothold != "" else "unknown",
+		"timestamp": Time.get_unix_time_from_system(),
+		"result": "ISOLATED",
+		"trace_cost": 0.0,
+		"shift_day": current_shift_day,
+		"note": "RivalAI isolation countdown reached zero — connection terminated"
+	}
+
+	history.append(entry)
+	_write_to_disk()
+
+	print("📝 HISTORY: Recorded connection lost (game over)")
 	history_updated.emit(history.size())
 
 func _write_to_disk():

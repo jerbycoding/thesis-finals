@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="HackerShiftResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/HackerShiftResource.gd" id="1_shift"]
+
+[resource]
+script = ExtResource("1_shift")
+day_number = 3
+contract_ids = ["ransom_any"]
+honeypot_hosts = []
+broker_dialogue_id = "day3_reveal"

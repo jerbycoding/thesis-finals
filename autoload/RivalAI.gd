@@ -156,11 +156,11 @@ func _on_isolation_timeout():
 	"""Connection lost - game over state."""
 	print("🚨 RivalAI: CONNECTION LOST - Hacker isolated!")
 	is_isolation_active = false
-	
-	# Emit game over signal
+
+	# Emit game over signal (only this — timeout is NOT an abort/evasion)
 	if EventBus:
 		EventBus.connection_lost.emit()
-	
+
 	# Phase 6: Show game over UI
 	# For now, just print message
 
@@ -197,6 +197,26 @@ func get_state_duration() -> float:
 func get_isolation_time_remaining() -> float:
 	"""Returns isolation countdown time remaining."""
 	return isolation_timer if is_isolation_active else 0.0
+
+func abort_isolation():
+	"""
+	Pivot evasion: abort the isolation countdown.
+	Transitions to SEARCHING (not IDLE) — trace is NOT cleared.
+	Race condition guard: checks is_isolation_active as first step.
+	"""
+	if not is_isolation_active:
+		return  # Not isolating, nothing to abort
+
+	print("🤖 RivalAI: PIVOT DETECTED — aborting isolation, returning to SEARCHING")
+	is_isolation_active = false
+	isolation_timer = 0.0
+
+	# Transition back to SEARCHING (evasion succeeded but trace remains)
+	if current_state == AIState.ISOLATING:
+		_transition_to(AIState.SEARCHING)
+
+	if EventBus:
+		EventBus.rival_ai_isolation_complete.emit(GameState.current_foothold)
 
 func reset_ai():
 	"""Reset AI to IDLE state (new shift)."""

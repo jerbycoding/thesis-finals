@@ -1,0 +1,125 @@
+[gd_scene load_steps=3 format=3 uid="uid://contractboard2026"]
+
+[ext_resource type="Script" path="res://scripts/2d/apps/App_ContractBoard.gd" id="1_script"]
+[ext_resource type="Theme" uid="uid://dny3rlbltexc7" path="res://assets/themes/EnterpriseTheme.tres" id="2_theme"]
+
+[node name="App_ContractBoard" type="Control"]
+custom_minimum_size = Vector2(700, 500)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_theme")
+script = ExtResource("1_script")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.0509804, 0.0509804, 0.0666667, 1)
+
+[node name="VBox" type="VBoxContainer" parent="Background"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 0
+
+[node name="Header" type="PanelContainer" parent="Background/VBox"]
+layout_mode = 2
+theme_type_variation = &"HeaderPanel"
+
+[node name="HeaderLabel" type="Label" parent="Background/VBox/Header"]
+layout_mode = 2
+theme_type_variation = &"TechnicalHeader"
+text = "CONTRACT BOARD"
+vertical_alignment = 1
+
+[node name="Content" type="VBoxContainer" parent="Background/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 15
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="ActiveSection" type="PanelContainer" parent="Background/VBox/Content"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ActiveMargin" type="MarginContainer" parent="Background/VBox/Content/ActiveSection"]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="ActiveVBox" type="VBoxContainer" parent="Background/VBox/Content/ActiveSection/ActiveMargin"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="ActiveTitle" type="Label" parent="Background/VBox/Content/ActiveSection/ActiveMargin/ActiveVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(1, 0.85, 0.2, 1)
+text = "ACTIVE CONTRACT"
+
+[node name="ContractName" type="Label" parent="Background/VBox/Content/ActiveSection/ActiveMargin/ActiveVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "No active contract"
+
+[node name="ContractDesc" type="Label" parent="Background/VBox/Content/ActiveSection/ActiveMargin/ActiveVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.6)
+autowrap_mode = 3
+text = "Accept a contract from the available contracts below."
+
+[node name="StatusLabel" type="Label" parent="Background/VBox/Content/ActiveSection/ActiveMargin/ActiveVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.5)
+text = ""
+
+[node name="AcceptButton" type="Button" parent="Background/VBox/Content/ActiveSection/ActiveMargin/ActiveVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "ACCEPT CONTRACT"
+
+[node name="HSeparator" type="HSeparator" parent="Background/VBox/Content"]
+layout_mode = 2
+
+[node name="AvailableSection" type="PanelContainer" parent="Background/VBox/Content"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="AvailableMargin" type="MarginContainer" parent="Background/VBox/Content/AvailableSection"]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="AvailableVBox" type="VBoxContainer" parent="Background/VBox/Content/AvailableSection/AvailableMargin"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="AvailableTitle" type="Label" parent="Background/VBox/Content/AvailableSection/AvailableMargin/AvailableVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(0.5, 0.8, 1, 1)
+text = "AVAILABLE CONTRACTS"
+
+[node name="ContractList" type="VBoxContainer" parent="Background/VBox/Content/AvailableSection/AvailableMargin/AvailableVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 10

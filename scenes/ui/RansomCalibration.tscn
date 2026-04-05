@@ -1,0 +1,130 @@
+[gd_scene load_steps=3 format=3 uid="uid://y1kw2tsq7uhd"]
+
+[ext_resource type="Script" path="res://scripts/ui/RansomCalibration.gd" id="1_script"]
+[ext_resource type="Theme" uid="uid://dny3rlbltexc7" path="res://assets/themes/EnterpriseTheme.tres" id="2_theme"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Bar"]
+bg_color = Color(0.15, 0.15, 0.15, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.4, 0.4, 0.4, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Target"]
+bg_color = Color(0.1, 0.6, 0.2, 0.4)
+border_width_left = 2
+border_width_top = 1
+border_width_right = 2
+border_width_bottom = 1
+border_color = Color(0.2, 1, 0.4, 0.8)
+
+[node name="RansomCalibration" type="Control"]
+custom_minimum_size = Vector2(500, 250)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_theme")
+script = ExtResource("1_script")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.02, 0.02, 0.05, 1)
+
+[node name="VBox" type="VBoxContainer" parent="Background"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 15
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 15
+
+[node name="TitleLabel" type="Label" parent="Background/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(0.5, 0.8, 1, 1)
+text = "CALIBRATE ENCRYPTION KEY"
+horizontal_alignment = 1
+
+[node name="InstructionsLabel" type="Label" parent="Background/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.5)
+theme_override_font_sizes/font_size = 11
+text = "Click HIT when the needle aligns with the green zone. 3 hits required."
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="BarContainer" type="CenterContainer" parent="Background/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="BarBackground" type="Panel" parent="Background/VBox/BarContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(400, 40)
+visible = false
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_Bar")
+
+[node name="TargetZone" type="Panel" parent="Background/VBox/BarContainer/BarBackground"]
+unique_name_in_owner = true
+offset_left = 100.0
+offset_top = 2.0
+offset_right = 200.0
+offset_bottom = 38.0
+visible = false
+theme_override_styles/panel = SubResource("StyleBoxFlat_Target")
+
+[node name="Needle" type="ColorRect" parent="Background/VBox/BarContainer/BarBackground"]
+unique_name_in_owner = true
+offset_left = 0.0
+offset_top = 5.0
+offset_right = 3.0
+offset_bottom = 35.0
+visible = false
+color = Color(1, 1, 1, 1)
+
+[node name="HitsLabel" type="Label" parent="Background/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+theme_override_colors/font_color = Color(1, 1, 1, 0.8)
+text = "Hits: 0/3"
+horizontal_alignment = 1
+
+[node name="ButtonHBox" type="HBoxContainer" parent="Background/VBox"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 20
+
+[node name="StartButton" type="Button" parent="Background/VBox/ButtonHBox"]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(150, 40)
+text = "START CALIBRATION"
+
+[node name="HitButton" type="Button" parent="Background/VBox/ButtonHBox"]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(120, 40)
+visible = false
+text = "HIT"
+
+[node name="FailButton" type="Button" parent="Background/VBox/ButtonHBox"]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(100, 40)
+visible = false
+text = "ABORT"

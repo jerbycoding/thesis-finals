@@ -3,6 +3,9 @@
 # coordinating NPC interactions, ticket spawns, and consequences.
 extends Node
 
+# Preload custom resource classes for type hints
+const HackerShiftResource = preload("res://scripts/resources/HackerShiftResource.gd")
+
 var current_shift_name: String = ""
 var shift_report_scene = preload("res://scenes/2d/apps/App_ShiftReport.tscn")
 
@@ -44,10 +47,19 @@ func get_current_floor_requirement() -> int:
 		return current_shift_resource.required_floor
 	return 1 # Default to SOC
 
+# === SOLO DEV PHASE 2: HACKER CAMPAIGN ===
+const HACKER_SHIFT_DIR = "res://resources/hacker_shifts/"
+var hacker_shift_library: Dictionary = {}  # day_number -> HackerShiftResource
+var current_hacker_day: int = 0
+# ============================================
+
 func _ready():
 	# Discover all shifts in the folder
 	_discover_shifts()
 	
+	# Discover hacker shifts
+	_discover_hacker_shifts()
+
 	# Connect to EventBus for critical failures
 	EventBus.narrative_spawn_consequence.connect(func(id): _trigger_event({"type": GlobalConstants.NARRATIVE_EVENT_TYPE.SPAWN_CONSEQUENCE, "consequence_id": id}))
 	EventBus.consequence_triggered.connect(_on_consequence_triggered)
@@ -100,6 +112,29 @@ func _discover_shifts():
 		print("  - Registered Shift: %s" % res.shift_id)
 		
 	print("🎬 NARRATIVE_DEBUG: Library ready: %d shifts." % shift_library.size())
+
+func _discover_hacker_shifts():
+	print("🎬 HACKER: Discovering shifts in %s..." % HACKER_SHIFT_DIR)
+	hacker_shift_library.clear()
+
+	var dir = DirAccess.open(HACKER_SHIFT_DIR)
+	if not dir:
+		print("  ⚠ HACKER: Shift directory not found: %s" % HACKER_SHIFT_DIR)
+		return
+
+	dir.list_dir_begin()
+	var file_name = dir.get_next()
+	while file_name != "":
+		if file_name.ends_with(".tres"):
+			var full_path = HACKER_SHIFT_DIR + file_name
+			var res = load(full_path)
+			if res is HackerShiftResource and res.validate():
+				hacker_shift_library[res.day_number] = res
+				print("  ✓ Loaded Day %d: %d contracts, %d honeypots" % [res.day_number, res.contract_ids.size(), res.honeypot_hosts.size()])
+		file_name = dir.get_next()
+	dir.list_dir_end()
+
+	print("🎬 HACKER: Library ready: %d days." % hacker_shift_library.size())
 
 func prepare_shift(shift_id: String):
 	if not shift_library.has(shift_id):
@@ -222,6 +257,70 @@ func stop_shift():
 	_is_shift_active = false
 	event_timer.stop()
 	chaos_timer.stop()
+
+# === SOLO DEV PHASE 5: HACKER CAMPAIGN ===
+
+func start_hacker_campaign():
+	"""Start the hacker campaign from Day 1."""
+	current_hacker_day = 1
+	_load_hacker_shift(1)
+
+func _load_hacker_shift(day: int):
+	"""Load a specific hacker shift day."""
+	if not hacker_shift_library.has(day):
+		push_error("NarrativeDirector: No hacker shift for day %d" % day)
+		return
+
+	var shift = hacker_shift_library[day]
+	current_hacker_day = day
+
+	print("🎬 HACKER: Loading Day %d" % day)
+
+	# Load contracts for this shift
+	if ContractManager:
+		ContractManager.load_shift_contracts(shift)
+
+	# Emit shift started signal FIRST (before dialogue)
+	if EventBus:
+		EventBus.hacker_shift_started.emit(day)
+
+	# Play broker dialogue AFTER shift loads (called externally after transition completes)
+	if shift.broker_dialogue_id != "":
+		_pending_broker_dialogue = shift.broker_dialogue_id
+
+# Store pending dialogue to play after transition
+var _pending_broker_dialogue: String = ""
+
+func play_pending_broker_dialogue():
+	"""Play the pending broker dialogue if one is queued."""
+	if _pending_broker_dialogue != "":
+		_start_broker_dialogue(_pending_broker_dialogue)
+		_pending_broker_dialogue = ""
+
+func _start_broker_dialogue(dialogue_id: String):
+	"""Start broker dialogue using DialogueManager."""
+	if not DialogueManager:
+		return
+
+	var path = "res://resources/dialogues/broker/broker_%s.tres" % dialogue_id
+	if ResourceLoader.exists(path):
+		var res = load(path)
+		if res:
+			DialogueManager.start_dialogue(null, res)
+			print("🎬 HACKER: Broker dialogue started: %s" % dialogue_id)
+	else:
+		print("⚠ HACKER: Broker dialogue not found: %s" % path)
+
+func advance_hacker_day():
+	"""Progress to the next hacker day."""
+	var next_day = current_hacker_day + 1
+	if next_day > 3:
+		print("🎬 HACKER: Campaign complete (Days 4-7 deferred)")
+		# TODO: End campaign or continue
+		return
+
+	_load_hacker_shift(next_day)
+# ============================================
 
 func reset_to_default():
 	print("NarrativeDirector: Resetting to default state.")

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites id="2026-04-05" name="report_3" tests="31" failures="0" skipped="0" flaky="0" time="0.000">
+	<testsuite id="0" name="phase5_hacker_shift_test" package="test" timestamp="2026-04-05T12:20:27" hostname="localhost" tests="31" failures="0" errors="0" skipped="0" flaky="0" time="2.276">
+		<testcase name="test_hacker_shift_resource_default_values" classname="phase5_hacker_shift_test" time="0.044">
+		</testcase>
+		<testcase name="test_hacker_shift_resource_validate_default" classname="phase5_hacker_shift_test" time="0.032">
+		</testcase>
+		<testcase name="test_hacker_shift_resource_validate_invalid_day" classname="phase5_hacker_shift_test" time="0.042">
+		</testcase>
+		<testcase name="test_hacker_shift_resource_validate_empty_contracts" classname="phase5_hacker_shift_test" time="0.033">
+		</testcase>
+		<testcase name="test_hacker_shift_resource_set_day" classname="phase5_hacker_shift_test" time="0.030">
+		</testcase>
+		<testcase name="test_hacker_shift_resource_set_honeypots" classname="phase5_hacker_shift_test" time="0.031">
+		</testcase>
+		<testcase name="test_hacker_shift_resource_set_broker_dialogue" classname="phase5_hacker_shift_test" time="0.045">
+		</testcase>
+		<testcase name="test_hacker_shift_resource_to_string" classname="phase5_hacker_shift_test" time="0.029">
+		</testcase>
+		<testcase name="test_hacker_shift_resource_clear_shift_state" classname="phase5_hacker_shift_test" time="0.048">
+		</testcase>
+		<testcase name="test_day_1_tres_exists" classname="phase5_hacker_shift_test" time="0.028">
+		</testcase>
+		<testcase name="test_day_2_tres_exists" classname="phase5_hacker_shift_test" time="0.030">
+		</testcase>
+		<testcase name="test_day_3_tres_exists" classname="phase5_hacker_shift_test" time="0.031">
+		</testcase>
+		<testcase name="test_day_1_loads_correctly" classname="phase5_hacker_shift_test" time="0.028">
+		</testcase>
+		<testcase name="test_day_2_loads_correctly" classname="phase5_hacker_shift_test" time="0.029">
+		</testcase>
+		<testcase name="test_day_3_loads_correctly" classname="phase5_hacker_shift_test" time="0.032">
+		</testcase>
+		<testcase name="test_day_1_values" classname="phase5_hacker_shift_test" time="0.032">
+		</testcase>
+		<testcase name="test_day_2_has_honeypot" classname="phase5_hacker_shift_test" time="0.031">
+		</testcase>
+		<testcase name="test_day_3_values" classname="phase5_hacker_shift_test" time="0.032">
+		</testcase>
+		<testcase name="test_all_shifts_validate" classname="phase5_hacker_shift_test" time="0.029">
+		</testcase>
+		<testcase name="test_hacker_shift_started_signal_exists" classname="phase5_hacker_shift_test" time="0.030">
+		</testcase>
+		<testcase name="test_contract_manager_has_load_shift_contracts" classname="phase5_hacker_shift_test" time="0.032">
+		</testcase>
+		<testcase name="test_contract_manager_preloads_hacker_shift_resource" classname="phase5_hacker_shift_test" time="0.030">
+		</testcase>
+		<testcase name="test_narrative_director_has_start_hacker_campaign" classname="phase5_hacker_shift_test" time="0.030">
+		</testcase>
+		<testcase name="test_narrative_director_has_advance_hacker_day" classname="phase5_hacker_shift_test" time="0.082">
+		</testcase>
+		<testcase name="test_narrative_director_has_discover_hacker_shifts" classname="phase5_hacker_shift_test" time="0.032">
+		</testcase>
+		<testcase name="test_narrative_director_hacker_shift_library_populated" classname="phase5_hacker_shift_test" time="0.027">
+		</testcase>
+		<testcase name="test_narrative_director_has_day_1" classname="phase5_hacker_shift_test" time="0.031">
+		</testcase>
+		<testcase name="test_narrative_director_has_day_2" classname="phase5_hacker_shift_test" time="0.030">
+		</testcase>
+		<testcase name="test_narrative_director_has_day_3" classname="phase5_hacker_shift_test" time="0.029">
+		</testcase>
+		<testcase name="test_narrative_director_day_1_is_correct_type" classname="phase5_hacker_shift_test" time="0.027">
+		</testcase>
+		<testcase name="test_narrative_director_current_hacker_day_starts_at_0" classname="phase5_hacker_shift_test" time="0.032">
+		</testcase>
+	</testsuite>
+</testsuites>

@@ -59,8 +59,18 @@ signal ai_state_changed(old_state: int, new_state: int)
 signal ai_searching_started()
 signal ai_lockdown_started()
 signal isolation_countdown_started(time_remaining: float)
+signal rival_ai_isolation_complete(hostname: String)
 signal connection_lost()
 # ===========================================
+
+# === SOLO DEV PHASE 4: CONTRACT SIGNALS ===
+signal contract_accepted(contract_id: String)
+signal contract_completed(contract_id: String)
+# ==========================================
+
+# === SOLO DEV PHASE 5: HACKER CAMPAIGN SIGNALS ===
+signal hacker_shift_started(day: int)
+# ================================================
 
 # --- System & UI Signals ---
 signal game_mode_changed(mode: int)

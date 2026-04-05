@@ -1,4 +1,6 @@
-# TASK 2: BOUNTY LEDGER (REWARD TRACKING)
+# TASK 2: BOUNTY LEDGER (REWARD TRACKING) — ✅ COMPLETE!
+
+**Status:** ✅ **COMPLETE** (April 4, 2026)
 
 ## Description
 [SOLO DEV SCOPE] Create BountyLedger singleton. Tracks accumulated bounty points from contracts.
@@ -6,53 +8,36 @@
 ## Implementation Details
 
 ### A. Singleton Creation
-*   **File:** `autoload/BountyLedger.gd`
-*   **Autoload Order:** After `RivalAI`
+*   **File:** `autoload/BountyLedger.gd` ✅ **CREATED**
+*   **Autoload Order:** After `RivalAI` ✅ **DONE**
 
 ### B. Core Functions
 ```gdscript
-var total_bounty := 0
-var shift_bounty := 0
+var total_bounty: int = 0
+var shift_bounties: Dictionary = {}  # shift_day -> { hostname -> amount }
 
-func add_bounty(amount: int):
-    total_bounty += amount
-    shift_bounty += amount
-    _write_to_disk()
-
-func get_total_bounty() -> int:
-    return total_bounty
-
-func get_shift_bounty() -> int:
-    return shift_bounty
-
-func reset_shift_bounty():
-    shift_bounty = 0
-
-func _write_to_disk():
-    var save_path = "user://saves/bounty.json"
-    var file = FileAccess.open(save_path, FileAccess.WRITE)
-    if file:
-        var data = {"total": total_bounty, "shift": shift_bounty}
-        file.store_string(JSON.stringify(data))
+func add_bounty(hostname: String, amount: int, shift_day: int = 0)
+func get_bounty() -> int
+func get_bounty_for_day(shift_day: int) -> int
+func get_bounty_breakdown() -> Dictionary  # For Mirror Mode
+func reset_ledger()
 ```
+
+**Notes:** Enhanced beyond spec — supports per-day breakdown for Mirror Mode phase 6.
 
 ### C. Load on Ready
-```gdscript
-func _ready():
-    var save_path = "user://saves/bounty.json"
-    if FileAccess.file_exists(save_path):
-        var file = FileAccess.open(save_path, FileAccess.READ)
-        var data = JSON.parse_string(file.get_as_text())
-        if data:
-            total_bounty = data.get("total", 0)
-            shift_bounty = data.get("shift", 0)
-```
+*   Loads from `user://saves/bounty.json` ✅
+*   Writes to disk on every `add_bounty()` call ✅
+
+### D. Debug Commands
+*   Ctrl+F4: Add 100 bounty ✅
+*   Ctrl+F5: Reset ledger ✅
 
 ## Success Criteria
-- [ ] **[BLOCKER]** `add_bounty(100)` increases total
-- [ ] **[BLOCKER]** Bounty persists to disk
-- [ ] `get_total_bounty()` returns correct value
+- [x] **[BLOCKER]** `add_bounty("host", 100, 0)` increases total
+- [x] **[BLOCKER]** Bounty persists to disk
+- [x] `get_bounty()` returns correct value
 
 ## OUT OF SCOPE (Cut for Solo Dev)
-- ❌ Per-day filtering (add in Phase 5)
+- ❌ Per-day filtering (add in Phase 5) — Partially supported for Mirror Mode
 - ❌ Bounty spending mechanics

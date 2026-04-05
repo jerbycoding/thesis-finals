@@ -128,28 +128,382 @@ Required for Mirror Mode correlation engine.
 
 ---
 
-## Critical File Paths
+## Project Directory Structure
+
+> **Last updated:** April 4, 2026 — reflects actual filesystem state
+
+### autoload/ (32 `.gd` files — all registered as singletons)
+
 ```
 autoload/
-├── GameState.gd              # Role enum + switch_role()
-├── TraceLevelManager.gd      # NEW — trace level authority
-├── RivalAI.gd                # NEW — AI Analyst simulator
-└── HackerHistory.gd          # NEW — forensic action log
-
-scenes/
-├── 3d/HackerRoom.tscn        # NEW — hacker's safe house
-└── 2d/apps/
-    ├── App_LogPoisoner.tscn  # NEW — inject false SIEM logs
-    ├── App_PhishCrafter.tscn # NEW — send phishing emails
-    ├── App_Ransomware.tscn   # NEW — encrypt hosts (CalibrationMinigame)
-    ├── App_Exfiltrator.tscn  # NEW — steal data (RaidSyncMinigame)
-    └── App_Wiper.tscn        # NEW — destroy evidence (RuleSliderMinigame)
-
-resources/
-├── hacker_shifts/day_{1-7}.tres
-├── permissions/HackerAppProfile.tres
-└── dialogues/broker/
+├── ─── State & Core ───
+├── GameState.gd              # GameMode + Role enum, switch_role() 11-step sequence
+├── GlobalConstants.gd        # Enums, trace costs, thresholds, event IDs, save paths
+├── EventBus.gd               # 40+ decoupled signals; role boundary guards
+├── VariableRegistry.gd       # Procedural truth packets (IPs, MACs, hostnames)
+├── ConfigManager.gd          # User settings persistence (graphics, audio, difficulty)
+│
+├── ─── Analyst Campaign ───
+├── TicketManager.gd          # Ticket lifecycle + evidence attachment
+├── LogSystem.gd              # SIEM log authority, reveal pool, pruning
+├── EmailSystem.gd            # Email analysis: headers, attachments, links
+├── TerminalSystem.gd         # scan/isolate/trace/restore + exploit/pivot (Hacker)
+├── NetworkState.gd           # Host topology, dual-context (ANALYST/HACKER)
+├── IntegrityManager.gd       # Org HP (0-100%), role guard bypasses for Hacker
+├── ConsequenceEngine.gd      # Kill Chain escalation, NPC relationships
+├── ValidationManager.gd      # IR gameplay rules, role guard for Hacker
+├── HeatManager.gd            # Week progression, heat multiplier, vulnerability buffer
+├── ArchetypeAnalyzer.gd      # Player behavior → AI profile for RivalAI mirroring
+├── CorporateVoice.gd         # Corporate-speak phrase generator
+├── TutorialManager.gd        # Guided mode certification sequence
+│
+├── ─── Narrative & Progression ───
+── NarrativeDirector.gd      # Shift flow, event scheduling, scripted triggers
+├── DialogueManager.gd        # NPC dialogue trees, remote dialogue fallback
+├── TimeManager.gd            # Centralized timer registry, clear_all_timers() on role switch
+│
+├── ─── UI & Window Management ───
+── DesktopWindowManager.gd   # Window lifecycle, app permissions, theme switching
+├── NotificationManager.gd    # Toast notifications (success/warning/error/info)
+├── TransitionManager.gd      # 3D↔2D transitions, secure login, connection lost
+├── FPSManager.gd             # Framerate watchdog, shader quality fallback <30fps
+├── UIObjectPool.gd           # UI component pooling, flush() on role switch
+│
+├── ─── Audio & Immersion ───
+── AudioManager.gd           # SFX, music, ambient loops
+│
+├── ─── Debug & QA ───
+├── DebugManager.gd           # F1-F12 hotkeys, debug HUD
+├── DebugTools.gd             # Additional debug utilities
+├── ResourceAuditManager.gd   # Connectivity audit (shifts→tickets→logs)
+│
+├── ─── Hacker Role (Phase 1-3 Complete) ───
+├── HackerHistory.gd          # Forensic log, disk persistence, isolation recording
+├── TraceLevelManager.gd      # Trace meter 0-100%, passive decay, isolation lock
+├── RivalAI.gd                # AI state machine: IDLE→SEARCHING→LOCKDOWN→ISOLATING
+│
+├── ─── Hacker Role (Phase 4+ Pending) ───
+└── BountyLedger.gd           # TODO — bounty tracking from contracts
+    IntelligenceInventory.gd  # TODO — exfiltrated data storage
 ```
+
+### scenes/ (120 `.tscn` files)
+
+```
+scenes/
+├── InteractableComputer.tscn # 3D computer interaction trigger
+├── Player3D.tscn             # First-person player controller
+├── SOC_Office.tscn           # Main SOC office 3D environment
+├── office_playground.tscn    # Dev/test playground
+│
+├── 3d/
+│   ├── ─── Rooms ───
+│   ├── HackerRoom.tscn       # Hacker campaign safe house
+│   ├── AnalystWingRoom.tscn
+│   ├── BriefingRoom.tscn
+│   ├── ExecutiveSuite.tscn
+│   ├── JuniorAnalystRoom.tscn
+│   ├── SeniorAnalystOffice.tscn
+│   ├── ServerVault.tscn
+│   ├── WorkstationRoom.tscn
+│   ├── NetworkHub.tscn
+│   ├── MainMenu3D.tscn
+│   ├── TutorialWaypoint.tscn
+│   │
+│   ├── ─── NPCs ───
+│   ├── NPC_Auditor.tscn
+│   ├── NPC_CISO.tscn
+│   ├── NPC_Helpdesk.tscn
+│   ├── NPC_ITSupport.tscn
+│   ├── NPC_JuniorAnalyst.tscn
+│   ├── NPC_NetworkSpecialist.tscn
+│   ├── NPC_SeniorAnalyst.tscn
+│   ├── NPC_VaultTechnician.tscn
+│   ├── NPC_Victim.tscn
+│   │
+│   └── props/
+│       ├── Prop_Router.tscn
+│       └── graybox/          # 30+ graybox placeholder props (desks, servers, etc.)
+│
+├── 2d/
+│   ├── ComputerDesktop.tscn  # Main desktop container (taskbar, start menu, window area)
+│   ├── AmbientDesktop.tscn   # 3D monitor projection mirror
+│   ├── AmbientWindow.tscn    # Ambient 3D monitor app frame
+│   ├── DesktopIcon.tscn
+│   ├── DesktopSearchBar.tscn
+│   ├── StartMenu.tscn
+│   ├── StartMenuAppButton.tscn
+│   ├── TaskbarIcon.tscn
+│   │
+│   └── apps/
+│       ├── ─── Analyst Apps (9) ───
+│       ├── App_Decryption.tscn       # Anti-ransomware puzzle minigame
+│       ├── App_EmailAnalyzer.tscn    # Email inspection tool
+│       ├── App_Handbook.tscn         # SOC reference guide
+│       ├── App_NetworkMapper.tscn    # Network topology viewer
+│       ├── App_ShiftReport.tscn      # End-of-shift summary
+│       ├── App_SIEMViewer.tscn       # Log stream viewer
+│       ├── App_TaskManager.tscn      # Active ticket dashboard
+│       ├── App_Terminal.tscn         # Command-line interface
+│       ├── App_TicketQueue.tscn      # Ticket list
+│       │
+│       └── components/
+│           ├── WindowFrame.tscn      # Draggable/resizable app wrapper
+│           ├── CompletionModal.tscn
+│           ├── EmailListEntry.tscn
+│           ├── ForensicReportModal.tscn
+│           ├── LogEntry.tscn
+│           ├── NetworkNode.tscn
+│           ├── TicketArtifactTag.tscn
+│           └── TicketCard.tscn
+│
+└── ui/
+    ├── ─── HUD & Overlays ───
+    ├── UnifiedHUD.tscn         # Main in-game HUD
+    ├── TabletHUD.tscn          # Tablet-mode HUD
+    ├── TutorialHUD.tscn
+    ├── MaintenanceHUD.tscn
+    ├── NotificationToast.tscn
+    ├── PauseMenu.tscn
+    ├── StartupLogo.tscn
+    ├── TransitionOverlay.tscn
+    ├── MatrixRain.tscn
+    │
+    ├── ─── Dialogue & Comms ───
+    ├── DialogueBox.tscn
+    ├── CommsSidebar.tscn
+    ├── CommsMessage.tscn
+    │
+    ├── ─── Minigames ───
+    ├── CalibrationMinigame.tscn    # Oscillating bar skill check (used by Decryption)
+    ├── RaidSyncMinigame.tscn       # Multi-stream timing (TODO: Exfiltrator)
+    ├── RuleSliderMinigame.tscn     # Precision sliders (TODO: Wiper)
+    │
+    ├── ─── Specialty UI ───
+    ├── ForensicTablet.tscn
+    ├── ThreatIntelDossier.tscn
+    ├── DiagnosticUI.tscn
+    ├── ATG_SelectionBox.tscn
+    ├── AuditSelectionModal.tscn
+    ├── CertificationSummary.tscn
+    ├── ElevatorUI.tscn
+    ├── InteractionPrompt.tscn
+    ├── RouterTechnicalTable.tscn
+    ├── RunbookSidebar.tscn
+    ├── TerminalMenu2D.tscn
+    │
+    └── endings/
+        ├── Ending_Bankrupt.tscn
+        └── Ending_Fired.tscn
+```
+
+### scripts/ (93 `.gd` files — scene scripts, not autoloads)
+
+```
+scripts/
+├── PlayerController.gd       # 3D FPS controller
+├── CollisionGenerator.gd     # Physics collision mesh generation
+├── EnvironmentDirector.gd    # 3D environment state management
+├── FileUtil.gd               # Resource loading utilities
+│
+├── 2d/
+│   ├── ComputerDesktop.gd    # Main desktop logic
+│   ├── AmbientDesktop.gd     # 3D monitor sync with real desktop
+│   ├── AmbientWindow.gd      # Ambient app frame (loads scenes read-only)
+│   ├── DesktopClock.gd
+│   ├── DesktopIcon.gd
+│   ├── ExitButton.gd
+│   ├── StartMenu.gd
+│   ├── StartMenuAppButton.gd
+│   ├── TaskbarIcon.gd
+│   ├── NotificationToast.gd
+│   ├── ConsequenceTester.gd
+│   ├── KillChainTester.gd
+│   │
+│   └── apps/
+│       ├── App_Decryption.gd
+│       ├── app_EmailAnalyzer.gd
+│       ├── App_Handbook.gd
+│       ├── App_NetworkMapper.gd
+│       ├── App_ShiftReport.gd
+│       ├── app_SIEMViewer.gd
+│       ├── App_TaskManager.gd
+│       ├── app_Terminal.gd
+│       ├── app_TicketQueue.gd
+│       │
+│       └── components/
+│           ├── WindowFrame.gd          # Draggable window frame, load_content()
+│           ├── CompletionModal.gd
+│           ├── EmailListEntry.gd
+│           ├── ForensicReportModal.gd
+│           ├── LogEntry.gd
+│           ├── NetworkNode.gd
+│           ├── TicketArtifactTag.gd
+│           └── TicketCard.gd
+│
+├── 3d/
+│   ├── ─── Player & Movement ───
+│   ├── PlayerAnimator.gd
+│   ├── MainMenu3D.gd
+│   │
+│   ├── ─── Interaction ───
+│   ├── MonitorInputBridge.gd           # Projects 2D desktop onto 3D monitor
+│   ├── InteractableDoor.gd
+│   ├── InteractableAuditNode.gd
+│   ├── AutoDoor.gd
+│   ├── SlidingDoor.gd
+│   ├── SwingingDoor.gd
+│   ├── RoomTeleporter.gd
+│   ├── WorkstationTeleporter.gd
+│   │
+│   ├── ─── NPCs ───
+│   ├── NPC.gd                            # Base NPC behavior
+│   ├── NPC_Auditor.gd
+│   ├── NPC_CISO.gd
+│   ├── NPC_Helpdesk.gd
+│   ├── NPC_ITSupport.gd
+│   ├── NPC_JuniorAnalyst.gd
+│   ├── NPC_SeniorAnalyst.gd
+│   ├── NPC_Victim.gd
+│   ├── PatrolNPC.gd
+│   ├── NPC_Helpdesk.gd
+│   │
+│   ├── ─── Props & Environment ───
+│   ├── Prop_Monitor.gd
+│   ├── Prop_WallClock.gd
+│   ├── PropSpawner.gd
+│   ├── HostStatusMonitor.gd
+│   ├── PatchPanel.gd
+│   ├── CarryableHardware.gd
+│   ├── HardwareSocket.gd
+│   ├── HardwareSpawner.gd
+│   ├── GuidingLights.gd
+│   ├── MixamoAnimator.gd
+│   ├── ScrollingMaterial.gd
+│   │
+│   └── ── Tutorial ───
+│       ├── TutorialTrigger.gd
+│       ├── TutorialWaypoint.gd
+│       └── WarWall.gd
+│
+└── ui/
+    ├── ─── HUD ───
+    ├── UnifiedHUD.gd
+    ├── TabletHUD.gd
+    ├── TutorialHUD.gd
+    ├── MaintenanceHUD.gd
+    ├── PauseMenu.gd
+    │
+    ├── ─── Minigames ───
+    ├── MinigameBase.gd                   # Base class for all minigames
+    ├── CalibrationMinigame.gd
+    ├── RaidSyncMinigame.gd
+    ├── RuleSliderMinigame.gd
+    │
+    ├── ─── Dialogue & Narrative ───
+    ├── DialogueBox.gd
+    ├── CommsSidebar.gd
+    ├── CommsMessage.gd
+    ├── ThreatIntelDossier.gd
+    │
+    ├── ─── Specialty ───
+    ├── ForensicTablet.gd
+    ├── DiagnosticUI.gd
+    ├── ATG_SelectionBox.gd
+    ├── AuditSelectionModal.gd
+    ├── CertificationSummary.gd
+    ├── ElevatorUI.gd
+    ├── InteractionPrompt.gd
+    ├── RouterTechnicalTable.gd
+    ├── RunbookSidebar.gd
+    ├── TerminalMenu2D.gd
+    ├── MatrixRain.gd
+    ├── VirtualCursor.gd
+    │
+    ├── ─── Endings ───
+    ├── EndingScreen.gd
+    ├── TerminalCredits.gd
+    │
+    └── UIObjectPool.gd                   # UI component pooling
+```
+
+### resources/ (340+ files)
+
+```
+resources/
+├── ─── Core Resource Classes ───
+├── AppConfigResource.gd        # App metadata: app_id, scene_path, restrictions
+├── AppPermissionProfile.gd     # Permission gating for app visibility
+├── EmailResource.gd
+├── HostResource.gd             # + vulnerability_score, is_honeypot, bounty_value
+├── LogResource.gd
+├── ShiftResource.gd
+├── TicketResource.gd
+├── DialogueDataResource.gd
+│
+├── apps/                       # AppConfig instances (8 apps registered)
+│   ├── decrypt.tres
+│   ├── email.tres
+│   ├── handbook.tres
+│   ├── network.tres
+│   ├── siem.tres
+│   ├── taskmanager.tres
+│   ├── terminal.tres
+│   └── tickets.tres
+│
+├── dialogue/                   # NPC dialogue trees
+│   ├── DialogueDataResource.gd
+│   ├── ciso_*.tres             # CISO briefings, tutorial dialogue
+│   ├── senior_analyst_*.tres   # Senior analyst interactions
+│   ├── helpdesk_default.tres
+│   ├── it_support_*.tres
+│   ├── auditor_default.tres
+│   ├── junior_analyst_default.tres
+│   ├── network_specialist_default.tres
+│   ├── vault_technician_default.tres
+│   ├── victim_patrol_default.tres
+│   └── staff_random_chatter.tres
+│
+├── emails/                     # Email instances (~50 emails)
+│   ├── EMAIL-TRN-*.tres        # Tutorial emails
+│   ├── EmailPhishing*.tres     # Phishing templates
+│   ├── EmailSocialEng.tres
+│   ├── EmailRansomNote.tres
+│   ├── EmailShadow*.tres
+│   ├── EmailNoise_*.tres       # Flavour/noise emails
+│   └── ...
+│
+├── hosts/                      # Host definitions
+├── logs/                       # Log templates
+├── shifts/                     # Analyst shift definitions
+├── tickets/                    # Ticket definitions
+├── variable_pools/             # Procedural truth pools (IPs, MACs, etc.)
+│
+├── ─── Phase 4+ Hacker Content (NOT YET CREATED) ───
+├── hacker_shifts/              # TODO — hacker campaign shifts (day_1-7.tres)
+├── permissions/                # TODO — HackerAppProfile.tres
+├── dialogues/broker/           # TODO — Broker dialogue trees
+├── contracts/                  # TODO — ContractResource instances
+└── intelligence/               # TODO — IntelligenceResource instances
+```
+
+---
+
+## How Apps Load (Critical Pattern for Phase 4+)
+
+**Two loading paths — both use `AppConfigResource` from `resources/apps/`:**
+
+| Path | Where | What it does | Works? |
+|------|-------|-------------|--------|
+| **DesktopWindowManager** | Live desktop (2D) | `WindowFrame.instantiate()` → `load_content(scene)` → adds to `ContentContainer` | ✅ Working |
+| **AmbientWindow** | 3D monitor view | `load(scene_path).instantiate()` → `_freeze_node_recursive()` → adds to `ContentArea` | ⚠️ Read-only mirror |
+
+**Key pattern for new Hacker apps:**
+1. Create `.tscn` scene with root `Control` + script
+2. Mark **every** interactive node with `unique_name_in_owner = true` in the `.tscn`
+3. Script uses `%NodeName` for all `@onready` references — **never** `$path/to/node`
+4. Create `AppConfigResource` (`.tres`) in `resources/apps/`
+5. Test via live desktop first — ambient 3D view is secondary
 
 ---
 
@@ -177,10 +531,10 @@ resources/
 |-------|--------|--------------|
 | Phase 1: Foundation | ✅ Consolidated | 7 tasks (01-04c) |
 | Phase 2: Offensive Loop | ✅ Consolidated | 6 tasks (01-06) |
-| Phase 3: AI Counter-Measures | ✅ Consolidated | 4 tasks (01-04) |
-| Phase 4: High-Impact Payloads | ✅ Consolidated | 5 tasks (01-05) |
-| Phase 5: Narrative Arc | ✅ Consolidated | 6 tasks (01-06) |
-| Phase 6: Integration & Polish | ✅ Consolidated | 5 tasks (01-05) — duplicates removed |
+| Phase 3: AI Counter-Measures | ✅ **100% COMPLETE** | 5 tasks (01-05) |
+| Phase 4: High-Impact Payloads | ✅ **100% COMPLETE** | 5 tasks (01-05). MVHR loop verified in Godot. |
+| Phase 5: Narrative Arc | ⏳ **READY TO START** | 5 tasks (01-shift system, 02-broker dialogue, 03-honeypot, 04-save/load, 05-role switch flow). Sprint plan prepared in `phase-sprint/phase-5/`. |
+| Phase 6: Integration & Polish | ⏳ Pending | Mirror Mode, glitch aesthetics, final testing. |
 
 ---
 

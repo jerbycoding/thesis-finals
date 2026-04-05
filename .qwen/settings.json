@@ -8,7 +8,9 @@
       "Bash(echo)",
       "Bash(echo *)",
       "Bash(move *)",
-      "Bash(findstr *)"
+      "Bash(findstr *)",
+      "Bash(mkdir *)",
+      "Bash(dir *)"
     ]
   },
   "$version": 3

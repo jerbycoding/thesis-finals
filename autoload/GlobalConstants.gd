@@ -122,7 +122,8 @@ const HOST_STATUS = {
 	"CLEAN": 0,
 	"SUSPICIOUS": 1,
 	"INFECTED": 2,
-	"ISOLATED": 3
+	"ISOLATED": 3,
+	"RANSOMED": 4
 }
 
 # --- Scene Paths ---
@@ -228,6 +229,7 @@ const HACKER_COLORS = {
 # Trace level increases when hacker performs actions
 const TRACE_COST = {
 	"EXPLOIT": 15.0,      # Running exploit against host
+	"PIVOT": 5.0,         # Lateral movement (low trace, evasion tool)
 	"PHISH": 10.0,        # Sending phishing email
 	"RANSOMWARE": 40.0,   # Deploying ransomware (HIGH!)
 	"BACKDOOR": 20.0,     # Installing persistent backdoor
