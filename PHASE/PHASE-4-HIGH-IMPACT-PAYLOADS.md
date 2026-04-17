@@ -35,7 +35,7 @@ Offensive apps will use the existing minigame logic but invert the result:
 This ensures the "Feel" of technical interaction remains consistent across both roles while saving development time.
 
 ## 6. Phase 4 Success Criteria (Verification Checklist)
-1.  [ ] **Ransomware Success:** Completing the puzzle sets host status to `RANSOMED`.
-2.  [ ] **Exfiltration Sync:** Finish 100% transfer and verify the new resource is in the inventory.
-3.  [ ] **Wiper Cleanup:** Verify that using the Wiper app successfully removes offensive logs from the SIEM view.
-4.  [ ] **Trace Spikes:** Verify that using "Loud" payloads (Ransomware) spikes the Trace Level immediately.
+1.  [x] **Ransomware Success:** Completing the puzzle sets host status to `RANSOMED`.
+2.  [x] **Exfiltration Sync:** Finish 100% transfer and verify the new resource is in the inventory.
+3.  [x] **Wiper Cleanup:** Verify that using the Wiper app successfully removes offensive logs from the SIEM view.
+4.  [x] **Trace Spikes:** Verify that using "Loud" payloads (Ransomware) spikes the Trace Level immediately.

@@ -51,9 +51,9 @@ func _on_world_event(event_id: String, active: bool, duration: float):
 
 func _start_false_flag_flood(duration: float):
 	print("LogSystem: Starting FALSE_FLAG log flood...")
-	var end_time = Time.get_ticks_msec() + (duration * 1000.0)
+	var end_time = ShiftClock.elapsed_seconds + duration
 	
-	while Time.get_ticks_msec() < end_time:
+	while ShiftClock.elapsed_seconds < end_time:
 		_spawn_noise_log()
 		await get_tree().create_timer(randf_range(0.5, 2.0)).timeout
 
@@ -63,7 +63,8 @@ func _spawn_noise_log():
 		
 	var log_res = LogResource.new()
 	log_res.log_id = "NOISE-" + str(randi() % 9999)
-	log_res.timestamp = Time.get_time_string_from_system()
+	log_res.timestamp_seconds = ShiftClock.elapsed_seconds
+	log_res.timestamp = ShiftClock.get_time_string()
 	log_res.source = noise_pool.sources.pick_random()
 	log_res.category = "System"
 	log_res.severity = randi_range(1, 2) # Random Info/Low severity
@@ -102,6 +103,8 @@ func reveal_logs_for_ticket(ticket_id: String):
 		if should_reveal:
 			if not _is_log_active(log.log_id):
 				var instance = log.duplicate()
+				instance.timestamp_seconds = ShiftClock.elapsed_seconds
+				instance.timestamp = ShiftClock.get_time_string()
 				active_logs.append(instance)
 				EventBus.log_added.emit(instance)
 				count += 1
@@ -209,9 +212,52 @@ func mark_log_reviewed(log_id: String):
 func is_log_reviewed(log_id: String) -> bool:
 	return log_id in reviewed_logs
 
-func get_unreviewed_logs() -> Array[LogResource]:
-	var filtered: Array[LogResource] = []
-	for log in all_logs:
-		if log.log_id not in reviewed_logs:
-			filtered.append(log)
-	return filtered
+# === SOLO DEV PHASE 4: HACKER CAMPAIGN METHODS ===
+
+func prune_logs_for_host(hostname: String, scope: String = "ALL") -> Array:
+	"""
+	Removes logs matching a specific host.
+	Hacker Role only. Used by App_Wiper.
+	Returns array of removed LogResource entries.
+	"""
+	if GameState.current_role != GameState.Role.HACKER:
+		return []
+		
+	var removed_logs: Array[LogResource] = []
+	var remaining_logs: Array[LogResource] = []
+	
+	for log in active_logs:
+		var should_prune = false
+		if log.hostname == hostname:
+			match scope:
+				"ALL":
+					should_prune = true
+				"OFFENSIVE":
+					# Heuristic: Logs with High/Critical severity or from security sources
+					if log.severity >= 4 or log.source in ["IDS", "Firewall", "Authentication"]:
+						should_prune = true
+				"NOISE":
+					if log.log_id.begins_with("NOISE-"):
+						should_prune = true
+		
+		if should_prune:
+			removed_logs.append(log)
+		else:
+			remaining_logs.append(log)
+			
+	if removed_logs.size() > 0:
+		active_logs = remaining_logs
+		# Force SIEM refresh via EventBus
+		EventBus.logs_cleared.emit()
+		for log in active_logs:
+			EventBus.log_added.emit(log)
+		
+		print("📋 LogSystem: Pruned %d logs for %s (Scope: %s)" % [removed_logs.size(), hostname, scope])
+		
+	return removed_logs
+
+func get_logs_for_shift(day: int) -> Array[LogResource]:
+	"""Returns all logs generated during a specific day for Mirror Mode."""
+	# For now, we return all logs since we don't have multi-day persistence in LogSystem yet.
+	# Phase 6 will implement full shift history.
+	return active_logs.duplicate()

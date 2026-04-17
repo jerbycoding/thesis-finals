@@ -32,7 +32,8 @@ Perform exhaustive regression testing.
 *   **Mode Switch Stress Test:** Switch between Analyst and Hacker saves 5 times in a row and verify that the `NetworkState` is correctly cleared and reloaded each time.
 
 ## 6. Phase 6 Success Criteria (Verification Checklist)
-1.  [ ] **Campaign Choice:** The player can start a new game in either role from the Title Screen.
-2.  [ ] **Mirror Mode Report:** The split-screen report correctly displays `HackerHistory` data against `LogSystem` data.
-3.  [ ] **Glitch UI:** The desktop visual effects respond dynamically to the Trace Level.
-4.  [ ] **Stable Progression:** The game is fully playable from Day 1 to Day 7 in both roles without state corruption.
+1.  [x] **Campaign Choice:** The player can start a new game in either role from the Title Screen.
+2.  [x] **Unified Time:** All forensic timestamps (HackerHistory and SIEM logs) use `ShiftClock.elapsed_seconds` for perfect correlation.
+3.  [ ] **Mirror Mode Report:** The split-screen report correctly displays `HackerHistory` data against `LogSystem` data.
+4.  [ ] **Glitch UI:** The desktop visual effects respond dynamically to the Trace Level.
+5.  [ ] **Stable Progression:** The game is fully playable from Day 1 to Day 7 in both roles without state corruption. (Partial: Days 1-3 stable).

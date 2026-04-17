@@ -13,6 +13,7 @@ const HackerShiftResource = preload("res://scripts/resources/HackerShiftResource
 # === CONTRACT TRACKING ===
 var active_contract: ContractResource = null
 var available_contracts: Array[ContractResource] = []
+var current_shift_contracts: Array[ContractResource] = [] # FILTERED list for the current day
 
 # === LOAD PATH ===
 const CONTRACT_DIR = "res://resources/contracts/"
@@ -31,30 +32,121 @@ func _ready():
 		EventBus.offensive_action_performed.connect(_on_offensive_action)
 		EventBus.host_status_changed.connect(_on_host_status_changed)
 
-func _on_offensive_action(data: Dictionary):
-	"""Check if a ransomware action completes the active contract."""
-	if not active_contract or not active_contract.is_accepted or active_contract.is_completed:
-		return
+func _on_offensive_action(_data: Dictionary):
+	"""
+	Hacker performed an offensive action.
+	In the new system, we don't auto-complete. The player must use the 
+	Contract Board app to SUBMIT their work once technical requirements are met.
+	"""
+	pass
 
-	if data.get("action_type") != "ransomware" or data.get("result") != "SUCCESS":
-		return
-
-	# Ransomware succeeded — check if target host matches contract
-	var target = data.get("target", "")
-	if active_contract.required_payload == "RANSOMWARE":
-		# Contract requires ANY host to be ransomed (not specific target)
-		# OR if contract has a specific target, check match
-		complete_contract()
-
-func _on_host_status_changed(hostname: String, new_status: int):
-	"""Check if host becoming RANSOMED completes the active contract."""
-	if not active_contract or not active_contract.is_accepted or active_contract.is_completed:
-		return
-
-	if new_status == GlobalConstants.HOST_STATUS.RANSOMED:
-		complete_contract()
+func _on_host_status_changed(_hostname: String, _new_status: int):
+	"""Check if host status change makes active contract ready to submit."""
+	# In the new system, we don't auto-complete. The player must SUBMIT.
+	pass
 
 # === PUBLIC API ===
+
+func is_contract_ready(contract: ContractResource) -> bool:
+	"""Checks if all technical requirements for a contract are met."""
+	if not contract: return false
+	
+	# 1. Check Ransomware Requirement
+	if contract.required_payload == ContractResource.PayloadType.RANSOMWARE or \
+	   contract.required_payload == ContractResource.PayloadType.BOTH:
+		if contract.target_hostname == "":
+			# ANY host case: check if any host is ransomed
+			var found_ransomed = false
+			var all_hosts = NetworkState.get_all_hostnames()
+			for h in all_hosts:
+				var host_state = NetworkState.get_host_state(h)
+				var status = str(host_state.get("status", ""))
+				if status == "4" or status == "RANSOMED":
+					found_ransomed = true
+					break
+			if not found_ransomed:
+				return false
+		else:
+			# Specific target case
+			var host_state = NetworkState.get_host_state(contract.target_hostname)
+			var status = str(host_state.get("status", ""))
+			if not (status == "4" or status == "RANSOMED"):
+				return false
+			
+	# 2. Check Exfiltration Requirement
+	if contract.required_payload == ContractResource.PayloadType.EXFILTRATION or \
+	   contract.required_payload == ContractResource.PayloadType.BOTH:
+		if not IntelligenceInventory or not IntelligenceInventory.has_data_type(contract.required_data_type):
+			return false
+			
+	# 3. Check Wiper Requirement
+	if contract.required_payload == ContractResource.PayloadType.WIPER:
+		var host_state = NetworkState.get_host_state(contract.target_hostname)
+		if not host_state.get("is_wiped", false):
+			return false
+			
+	return true
+
+func submit_contract(contract: ContractResource) -> bool:
+	"""
+	Executes the 7-step verification sequence for contract submission.
+	"""
+	if not contract or not contract.is_accepted or contract.is_completed:
+		return false
+		
+	if not is_contract_ready(contract):
+		return false
+		
+	# --- START 7-STEP VERIFICATION ---
+	
+	# 1 & 2. (Checked in is_contract_ready)
+	
+	# 3. Consume Item (if exfiltration was required)
+	if contract.required_payload in [ContractResource.PayloadType.EXFILTRATION, ContractResource.PayloadType.BOTH]:
+		# Find and consume the item
+		var items = IntelligenceInventory.get_all_items()
+		for item in items:
+			if item.get("data_type") == contract.required_data_type:
+				IntelligenceInventory.consume_item(item.get("item_id"))
+				break
+	
+	# 4. Award Bounty
+	if BountyLedger:
+		var day = NarrativeDirector.current_hacker_day if NarrativeDirector else 0
+		BountyLedger.add_bounty(contract.target_hostname, contract.bounty_reward, day)
+		
+	# 5. Mark Completed & Emit
+	contract.is_completed = true
+	EventBus.contract_completed.emit(contract.ticket_id)
+	
+	if contract.ticket_id == "final_intel":
+		print("🏆 CONTRACT: Final objective reached. Campaign complete.")
+		if EventBus.has_signal("hacker_campaign_complete"):
+			EventBus.hacker_campaign_complete.emit()
+		elif EventBus.has_signal("campaign_ended"):
+			EventBus.campaign_ended.emit("victory")
+	
+	# 6. Trigger Narrative
+	if not contract.completion_dialogue_id.is_empty() and NarrativeDirector:
+		NarrativeDirector.start_broker_dialogue(contract.completion_dialogue_id)
+		
+	# 7. Forensic Record
+	if HackerHistory:
+		HackerHistory.add_entry({
+			"action_type": "contract_submitted",
+			"target": contract.ticket_id,
+			"timestamp": ShiftClock.elapsed_seconds if "ShiftClock" in self else 0.0,
+			"result": "SUCCESS",
+			"note": "Contract '%s' verified and payout processed." % contract.title
+		})
+		
+	print("💼 CONTRACT SUBMITTED: %s" % contract.title)
+	
+	# Auto-save
+	if SaveSystem:
+		SaveSystem.save_game()
+		
+	return true
 
 func load_contracts():
 	"""Load all ContractResource files from CONTRACT_DIR using FileUtil."""
@@ -69,27 +161,28 @@ func load_contracts():
 	print("💼 CONTRACTS: %d available" % available_contracts.size())
 
 func load_shift_contracts(shift: HackerShiftResource):
-	"""Load contracts for a specific hacker shift day."""
+	"""Load and filter contracts for a specific hacker shift day."""
 	active_contract = null
+	current_shift_contracts.clear()
 
-	# Reset all contracts
+	# Reset state of all known contracts
 	for contract in available_contracts:
 		contract.clear_state()
 
-	# Filter by shift's contract IDs
-	print("💼 CONTRACTS: Loading %d contracts for Day %d" % [shift.contract_ids.size(), shift.day_number])
+	print("💼 CONTRACTS: Filtering %d contracts for Day %d" % [shift.contract_ids.size(), shift.day_number])
 
-	# No need to reload — contracts are already loaded in _ready()
-	# Just log what's available for this shift
 	for contract_id in shift.contract_ids:
 		var found = false
 		for contract in available_contracts:
-			if contract.contract_id == contract_id:
-				print("  ✓ Available: %s" % contract.title)
+			if contract.ticket_id == contract_id:
+				current_shift_contracts.append(contract)
+				print("  ✓ Added to Shift: %s" % contract.title)
 				found = true
 				break
 		if not found:
-			print("  ⚠ Contract not found: %s" % contract_id)
+			print("  ⚠ Contract resource not found in library: %s" % contract_id)
+	
+	print("💼 CONTRACTS: Shift library ready with %d items." % current_shift_contracts.size())
 
 func accept_contract(contract: ContractResource) -> bool:
 	"""Accept a contract from the available list."""
@@ -111,7 +204,7 @@ func accept_contract(contract: ContractResource) -> bool:
 	print("💼 CONTRACT ACCEPTED: %s (Bounty: $%d)" % [contract.title, contract.bounty_reward])
 
 	if EventBus:
-		EventBus.contract_accepted.emit(contract.contract_id)
+		EventBus.contract_accepted.emit(contract.ticket_id)
 
 	return true
 
@@ -125,7 +218,7 @@ func complete_contract():
 	# Award bounty
 	if BountyLedger:
 		BountyLedger.add_bounty(
-			active_contract.contract_id,
+			active_contract.ticket_id,
 			active_contract.bounty_reward,
 			0  # TODO: pass actual shift_day
 		)
@@ -140,13 +233,25 @@ func complete_contract():
 		)
 
 	if EventBus:
-		EventBus.contract_completed.emit(active_contract.contract_id)
+		EventBus.contract_completed.emit(active_contract.ticket_id)
+
+	# PHASE 5: Auto-save on contract completion (hacker campaign persistence)
+	if SaveSystem:
+		SaveSystem.save_game()
 
 func get_active_contract() -> ContractResource:
 	return active_contract
 
 func get_available_contracts() -> Array[ContractResource]:
-	return available_contracts.duplicate()
+	return current_shift_contracts.duplicate()
+
+func get_completed_ids() -> Array[String]:
+	"""Returns array of completed contract IDs (for save system)."""
+	var ids: Array[String] = []
+	for contract in available_contracts:
+		if contract.is_completed:
+			ids.append(contract.ticket_id)
+	return ids
 
 func reset_contracts():
 	"""Clear all contracts (new shift/campaign)."""

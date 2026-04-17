@@ -13,6 +13,7 @@ class_name HackerShiftResource
 
 @export_group("Narrative")
 @export var broker_dialogue_id: String = ""  # e.g. "day1_intro" → loads broker_day1_intro.tres
+@export var scripted_events: Array[Dictionary] = [] # {time: float, type: string, ...}
 
 func _to_string() -> String:
 	return "[HackerShift: Day %d (%d contracts)]" % [day_number, contract_ids.size()]

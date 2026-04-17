@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ContractResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/ContractResource.gd" id="1_contract"]
+
+[resource]
+script = ExtResource("1_contract")
+ticket_id = "ransom_database"
+title = "Lock the DB"
+description = "Targets identified: DB-SRV-01. Encrypt the database to disrupt operations. High visibility, high reward."
+target_hostname = "DB-SRV-01"
+required_payload = 0
+bounty_reward = 250
+difficulty_rating = 2

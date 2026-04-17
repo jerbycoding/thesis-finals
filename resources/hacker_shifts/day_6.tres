@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="HackerShiftResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/HackerShiftResource.gd" id="1_shift"]
+
+[resource]
+script = ExtResource("1_shift")
+day_number = 6
+contract_ids = Array[String](["dual_target"])
+honeypot_hosts = Array[String](["FIN-WKSTN-01"])
+broker_dialogue_id = "day6_intro"
+scripted_events = Array[Dictionary]([{
+"state": "SEARCHING",
+"time": 30.0,
+"type": "rival_ai_escalation"
+}, {
+"state": "LOCKDOWN",
+"time": 90.0,
+"type": "rival_ai_escalation"
+}])

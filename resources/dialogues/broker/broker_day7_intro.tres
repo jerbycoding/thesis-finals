@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="DialogueDataResource" load_steps=2 format=3]
+
+[ext_resource type="Script" uid="uid://c2lpqyroyo4be" path="res://resources/dialogue/DialogueDataResource.gd" id="1_dialogue"]
+
+[resource]
+script = ExtResource("1_dialogue")
+npc_name = "Broker"
+portrait = "🕴️"
+is_randomized = false
+lines = Array[Dictionary]([{
+"text": "I'm sure you're wondering who I am."
+}, {
+"text": "Check the exfiltrated comms from Day 4. The metadata in 'sender_id' is quite revealing."
+}, {
+"text": "I'm sitting three desks away from you, Analyst. Or should I say, Colleague?"
+}])

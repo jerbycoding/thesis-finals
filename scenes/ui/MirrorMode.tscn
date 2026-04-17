@@ -1,0 +1,120 @@
+[gd_scene load_steps=2 format=3 uid="uid://mirror_mode"]
+
+[ext_resource type="Script" path="res://scripts/ui/MirrorMode.gd" id="1_script"]
+
+[node name="MirrorMode" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+script = ExtResource("1_script")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.02, 0.02, 0.02, 0.95)
+
+[node name="MainVBox" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 40.0
+offset_top = 40.0
+offset_right = -40.0
+offset_bottom = -40.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_constants/separation = 20
+
+[node name="Header" type="PanelContainer" parent="MainVBox"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="ReportTitle" type="Label" parent="MainVBox/Header"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 1
+theme_override_colors/font_color = Color(0, 1, 0, 1)
+theme_override_font_sizes/font_size = 32
+text = "FORENSIC CORRELATION: DAY 1"
+horizontal_alignment = 1
+
+[node name="HSplit" type="HSplitContainer" parent="MainVBox"]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 1
+theme_override_constants/separation = 40
+split_offset = 0
+
+[node name="HackerPanel" type="VBoxContainer" parent="MainVBox/HSplit"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+theme_override_constants/separation = 10
+
+[node name="Label" type="Label" parent="MainVBox/HSplit/HackerPanel"]
+layout_mode = 2
+mouse_filter = 1
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_font_sizes/font_size = 20
+text = "HACKER ACTIONS (GROUND TRUTH)"
+
+[node name="Scroll" type="ScrollContainer" parent="MainVBox/HSplit/HackerPanel"]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 0
+
+[node name="HackerList" type="VBoxContainer" parent="MainVBox/HSplit/HackerPanel/Scroll"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+theme_override_constants/separation = 5
+
+[node name="SIEMPanel" type="VBoxContainer" parent="MainVBox/HSplit"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+theme_override_constants/separation = 10
+
+[node name="Label" type="Label" parent="MainVBox/HSplit/SIEMPanel"]
+layout_mode = 2
+mouse_filter = 1
+theme_override_colors/font_color = Color(0, 0.5, 1, 1)
+theme_override_font_sizes/font_size = 20
+text = "SIEM LOGS (ANALYST PERCEPTION)"
+
+[node name="Scroll" type="ScrollContainer" parent="MainVBox/HSplit/SIEMPanel"]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 0
+
+[node name="SIEMList" type="VBoxContainer" parent="MainVBox/HSplit/SIEMPanel/Scroll"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+theme_override_constants/separation = 5
+
+[node name="Footer" type="HBoxContainer" parent="MainVBox"]
+layout_mode = 2
+alignment = 1
+mouse_filter = 1
+
+[node name="ProceedButton" type="Button" parent="MainVBox/Footer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(300, 60)
+layout_mode = 2
+mouse_filter = 0
+theme_override_font_sizes/font_size = 24
+text = "DISMISS REPORT"

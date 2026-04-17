@@ -95,6 +95,11 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "ACCEPT CONTRACT"
 
+[node name="SubmitButton" type="Button" parent="Background/VBox/Content/ActiveSection/ActiveMargin/ActiveVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "SUBMIT CONTRACT"
+
 [node name="HSeparator" type="HSeparator" parent="Background/VBox/Content"]
 layout_mode = 2
 

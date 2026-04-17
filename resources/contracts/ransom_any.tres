@@ -1,12 +1,12 @@
 [gd_resource type="Resource" script_class="ContractResource" load_steps=2 format=3]
 
-[ext_resource type="Script" uid="uid://vf7k8bnp1syu" path="res://scripts/resources/ContractResource.gd" id="1_contract"]
+[ext_resource type="Script" path="res://scripts/resources/ContractResource.gd" id="1_contract"]
 
 [resource]
 script = ExtResource("1_contract")
-contract_id = "ransom_any"
+ticket_id = "ransom_any"
 title = "Ransom Any Host"
 description = "Deploy ransomware on any accessible host. The target doesn't matter — just spread the infection."
-required_payload = "RANSOMWARE"
+required_payload = 0
 bounty_reward = 100
-difficulty = 1
+difficulty_rating = 1

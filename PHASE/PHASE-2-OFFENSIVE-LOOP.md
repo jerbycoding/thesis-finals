@@ -35,7 +35,7 @@ Invert `EmailSystem.gd` logic to allow the player to initiate the "Infiltration"
 Offensive apps (Terminal, Email, SIEM) will **inherit** from their Analyst counterparts. This ensures they maintain consistent visual logic (scrolling, windows, buttons) while overriding core action functions.
 
 ## 7. Phase 2 Success Criteria (Verification Checklist)
-1.  [ ] **Command Unlock:** Offensive terminal commands are only available in `Hacker` role.
-2.  [ ] **Pivot Tracking:** `GameState.current_foothold` correctly updates the terminal's "Local IP."
+1.  [x] **Command Unlock:** Offensive terminal commands are only available in `Hacker` role.
+2.  [x] **Pivot Tracking:** `GameState.current_foothold` correctly updates the terminal's "Local IP."
 3.  [ ] **Log Injection:** An injected "Poison" log correctly appears in the Analyst's SIEM app.
-4.  [ ] **Forensic Storage:** Every `exploit` and `phish` attempt is recorded in `HackerHistory`.
+4.  [x] **Forensic Storage:** Every `exploit` and `pivot` attempt is recorded in `HackerHistory`. (Note: `phish` and `spoof` recording implemented, commands pending).

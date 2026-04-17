@@ -50,7 +50,7 @@ func _on_ticket_completed(ticket: TicketResource, completion_type: String, _time
 			"original_id": ticket.ticket_id,
 			"attacker_ip": ticket.truth_packet.get("attacker_ip", ""),
 			"victim_host": ticket.truth_packet.get("victim_host", ""),
-			"timestamp": Time.get_ticks_msec()
+			"timestamp": ShiftClock.elapsed_seconds
 		}
 		
 		vulnerability_buffer.append(vulnerability)
@@ -69,6 +69,33 @@ func reset_to_default():
 	current_week = 1
 	heat_multiplier = 1.0
 	vulnerability_buffer.clear()
+
+var cached_analyst_heat: float = 1.0
+var cached_analyst_week: int = 1
+var cached_analyst_buffer: Array[Dictionary] = []
+
+func cache_and_reset(new_role: GameState.Role):
+	"""
+	Master logic for role switching. 
+	Caches Analyst state when switching to Hacker, and restores it when returning.
+	"""
+	if new_role == GameState.Role.HACKER:
+		# Save Analyst heat
+		cached_analyst_heat = heat_multiplier
+		cached_analyst_week = current_week
+		cached_analyst_buffer = vulnerability_buffer.duplicate(true)
+		
+		# Reset for Hacker (Hacker heat is shift-based, not week-based)
+		heat_multiplier = 1.0
+		current_week = 1
+		vulnerability_buffer.clear()
+		print("🔥 HeatManager: Analyst state cached. Hacker baseline set.")
+	else:
+		# Restore Analyst heat
+		heat_multiplier = cached_analyst_heat
+		current_week = cached_analyst_week
+		vulnerability_buffer = cached_analyst_buffer.duplicate(true)
+		print("🔥 HeatManager: Analyst state restored (%.2fx)." % heat_multiplier)
 
 func load_state(data: Dictionary):
 	current_week = data.get("current_week", 1)

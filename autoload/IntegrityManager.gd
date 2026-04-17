@@ -40,11 +40,9 @@ func _apply_change(delta: float, silent: bool = false):
 
 	# === SOLO DEV PHASE 2: ROLE GUARD ===
 	# ROLE GUARD: Organization Damage is handled by the Analyst campaign.
-	# In _apply_change(), check: if GameState.current_role == Role.HACKER: return
-	# This prevents integrity damage during Hacker shifts (you're the attacker!)
-	if delta < 0 and GameState and GameState.current_role == GameState.Role.HACKER:
-		print("🛡️ IntegrityManager: Blocked damage during Hacker shift")
-		return # Skip damage application
+	# Hacker actions (ransoms, exploits) must NOT affect organization health.
+	if GameState and GameState.current_role == GameState.Role.HACKER:
+		return # Block ALL integrity changes during hacker shifts
 	# ================================
 
 	# APPLY DIFFICULTY SCALING (Skip for minor decay)
@@ -84,6 +82,8 @@ func _apply_change(delta: float, silent: bool = false):
 # --- Event Handlers ---
 
 func _on_ticket_completed(_ticket: Resource, completion_type: String, _time_taken: float):
+	if GameState and GameState.current_role == GameState.Role.HACKER: return
+	
 	var delta = 0.0
 	match completion_type:
 		GlobalConstants.COMPLETION_TYPE.COMPLIANT: delta = GlobalConstants.INTEGRITY.DELTA_COMPLIANT
@@ -96,10 +96,14 @@ func _on_ticket_completed(_ticket: Resource, completion_type: String, _time_take
 		_apply_change(delta)
 
 func _on_ticket_ignored(_ticket: Resource):
+	if GameState and GameState.current_role == GameState.Role.HACKER: return
+	
 	print("IntegrityManager: Ticket Ignored -> Delta: %+.1f" % GlobalConstants.INTEGRITY.DELTA_TIMEOUT)
 	_apply_change(GlobalConstants.INTEGRITY.DELTA_TIMEOUT)
 
 func _on_consequence_triggered(type: String, _details: Dictionary):
+	if GameState and GameState.current_role == GameState.Role.HACKER: return
+	
 	if type == GlobalConstants.CONSEQUENCE_ID.DATA_LOSS or type == GlobalConstants.CONSEQUENCE_ID.MAJOR_BREACH:
 		print("IntegrityManager: Major Breach -> Delta: %+.1f" % GlobalConstants.INTEGRITY.DELTA_BREACH)
 		_apply_change(GlobalConstants.INTEGRITY.DELTA_BREACH)
@@ -108,6 +112,10 @@ func _on_consequence_triggered(type: String, _details: Dictionary):
 		_apply_change(GlobalConstants.INTEGRITY.DELTA_VIOLATION)
 
 func _on_shift_started(_id):
+	if GameState and GameState.current_role == GameState.Role.HACKER:
+		stop_decay()
+		return
+		
 	start_decay()
 
 func _on_shift_ended(_results):

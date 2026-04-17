@@ -533,8 +533,8 @@ resources/
 | Phase 2: Offensive Loop | ✅ Consolidated | 6 tasks (01-06) |
 | Phase 3: AI Counter-Measures | ✅ **100% COMPLETE** | 5 tasks (01-05) |
 | Phase 4: High-Impact Payloads | ✅ **100% COMPLETE** | 5 tasks (01-05). MVHR loop verified in Godot. |
-| Phase 5: Narrative Arc | ⏳ **READY TO START** | 5 tasks (01-shift system, 02-broker dialogue, 03-honeypot, 04-save/load, 05-role switch flow). Sprint plan prepared in `phase-sprint/phase-5/`. |
-| Phase 6: Integration & Polish | ⏳ Pending | Mirror Mode, glitch aesthetics, final testing. |
+| Phase 5: Narrative Arc | ✅ **100% COMPLETE** | 5 tasks (01-shift system, 02-broker dialogue, 03-honeypot, 04-save/load, 05-role switch flow). 3-day campaign with unique contracts, `submit` command, auto-save. |
+| Phase 6: Integration & Polish | ⏳ **READY TO START** | 5 tasks (01-Mirror Mode, 02-glitch aesthetics, 03-LogSystem extension, 04-HackerHistory extension, 05-final audit). Sprint plan prepared in `phase-sprint/phase-6/`. |
 
 ---
 

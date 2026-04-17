@@ -34,7 +34,7 @@ func _ready():
 		TraceLevelManager.trace_level_changed.connect(_on_trace_level_changed)
 	
 	# Initial state
-	state_enter_time = Time.get_unix_time_from_system()
+	state_enter_time = ShiftClock.elapsed_seconds
 
 func _process(delta: float):
 	_update_ai_state()
@@ -78,7 +78,7 @@ func _transition_to(new_state: AIState):
 	# Change state
 	previous_state = current_state
 	current_state = new_state
-	state_enter_time = Time.get_unix_time_from_system()
+	state_enter_time = ShiftClock.elapsed_seconds
 	
 	# Enter new state
 	_enter_state(new_state)
@@ -166,6 +166,11 @@ func _on_isolation_timeout():
 
 # === PUBLIC API ===
 
+func force_state(new_state: AIState):
+	"""Forces the AI into a specific state. Used for scripted narrative events."""
+	print("🤖 RivalAI: Scripted escalation forced state -> %s" % AIState.keys()[new_state])
+	_transition_to(new_state)
+
 func get_state() -> AIState:
 	"""Returns current AI state."""
 	return current_state
@@ -192,7 +197,7 @@ func is_isolating() -> bool:
 
 func get_state_duration() -> float:
 	"""Returns time spent in current state (seconds)."""
-	return Time.get_unix_time_from_system() - state_enter_time
+	return ShiftClock.elapsed_seconds - state_enter_time
 
 func get_isolation_time_remaining() -> float:
 	"""Returns isolation countdown time remaining."""
@@ -222,7 +227,7 @@ func reset_ai():
 	"""Reset AI to IDLE state (new shift)."""
 	current_state = AIState.IDLE
 	previous_state = AIState.IDLE
-	state_enter_time = Time.get_unix_time_from_system()
+	state_enter_time = ShiftClock.elapsed_seconds
 	is_isolation_active = false
 	isolation_timer = 0.0
 	print("🤖 RivalAI: Reset to IDLE state")

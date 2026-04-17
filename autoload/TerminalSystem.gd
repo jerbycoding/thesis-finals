@@ -71,6 +71,21 @@ var commands: Dictionary = {
 		"description": "Move laterally to adjacent host (evades isolation during LOCKDOWN)",
 		"syntax": "pivot [hostname]",
 		"risk_level": 3
+	},
+	"submit": {
+		"description": "Submit vulnerability report to broker (advance to next day)",
+		"syntax": "submit",
+		"risk_level": 0
+	},
+	"spoof": {
+		"description": "Mask network identity (reduces trace cost of next actions)",
+		"syntax": "spoof [mac/ip]",
+		"risk_level": 2
+	},
+	"phish": {
+		"description": "Establish foothold via social engineering (Low Trace)",
+		"syntax": "phish [hostname]",
+		"risk_level": 2
 	}
 	# ============================================
 }
@@ -176,6 +191,12 @@ func _execute_command_internal(command_name: String, args: Array) -> Dictionary:
 			result = _cmd_exploit(args)
 		"pivot":
 			result = _cmd_pivot(args)
+		"submit":
+			result = _cmd_submit(args)
+		"spoof":
+			result = _cmd_spoof(args)
+		"phish":
+			result = await _cmd_phish(args)
 		# =======================================
 		_:
 			result = {"success": false, "output": "Error: Command not implemented"}
@@ -528,7 +549,7 @@ func _cmd_exploit(args: Array) -> Dictionary:
 	# === STEP 5 & 6: RESULT PATH ===
 	if success:
 		# SUCCESS! Add to footholds
-		var timestamp = Time.get_unix_time_from_system()
+		var timestamp = ShiftClock.elapsed_seconds
 		GameState.hacker_footholds[hostname] = timestamp
 
 		# Set as current foothold for ransomware app targeting
@@ -556,12 +577,12 @@ func _create_exploit_payload(hostname: String, result: String) -> Dictionary:
 	"""Helper: Create standardized signal payload for exploit actions."""
 	var shift_day = 0
 	if NarrativeDirector:
-		shift_day = NarrativeDirector.current_day if NarrativeDirector.has_node("NarrativeDirector") else 0
+		shift_day = NarrativeDirector.current_hacker_day if NarrativeDirector.has_node("NarrativeDirector") else 0
 
 	return {
 		"action_type": "exploit",
 		"target": hostname,
-		"timestamp": Time.get_unix_time_from_system(),
+		"timestamp": ShiftClock.elapsed_seconds,
 		"result": result,  # SUCCESS, FAILED, or HONEYPOT
 		"trace_cost": GlobalConstants.TRACE_COST.EXPLOIT,
 		"shift_day": shift_day  # === PHASE 2: Added for HackerHistory ===
@@ -595,7 +616,7 @@ func _cmd_pivot(args: Array) -> Dictionary:
 
 	if success:
 		# Add new host as foothold, keep old ones
-		var timestamp = Time.get_unix_time_from_system()
+		var timestamp = ShiftClock.elapsed_seconds
 		if not GameState.hacker_footholds.has(hostname):
 			GameState.hacker_footholds[hostname] = timestamp
 
@@ -610,12 +631,12 @@ func _cmd_pivot(args: Array) -> Dictionary:
 		# Emit signal with evasion result
 		var shift_day = 0
 		if NarrativeDirector:
-			shift_day = NarrativeDirector.current_day if NarrativeDirector.has_node("NarrativeDirector") else 0
+			shift_day = NarrativeDirector.current_hacker_day if NarrativeDirector.has_node("NarrativeDirector") else 0
 
 		EventBus.offensive_action_performed.emit({
 			"action_type": "pivot",
 			"target": hostname,
-			"timestamp": Time.get_unix_time_from_system(),
+			"timestamp": ShiftClock.elapsed_seconds,
 			"result": "EVASION",
 			"trace_cost": GlobalConstants.TRACE_COST.PIVOT,
 			"shift_day": shift_day
@@ -633,12 +654,12 @@ func _cmd_pivot(args: Array) -> Dictionary:
 		# Pivot failed — still costs trace
 		var shift_day = 0
 		if NarrativeDirector:
-			shift_day = NarrativeDirector.current_day if NarrativeDirector.has_node("NarrativeDirector") else 0
+			shift_day = NarrativeDirector.current_hacker_day if NarrativeDirector.has_node("NarrativeDirector") else 0
 
 		EventBus.offensive_action_performed.emit({
 			"action_type": "pivot",
 			"target": hostname,
-			"timestamp": Time.get_unix_time_from_system(),
+			"timestamp": ShiftClock.elapsed_seconds,
 			"result": "FAILED",
 			"trace_cost": GlobalConstants.TRACE_COST.PIVOT,
 			"shift_day": shift_day
@@ -647,6 +668,125 @@ func _cmd_pivot(args: Array) -> Dictionary:
 		return {
 			"success": false,
 			"output": "[color=red]✗ PIVOT FAILED![/color]\nTarget defenses blocked lateral movement.\nVulnerability score: %.0f%%" % (vulnerability * 100)
+		}
+
+# === SOLO DEV PHASE 5: HACKER DAY ADVANCEMENT ===
+func _cmd_submit(_args: Array) -> Dictionary:
+	"""Submit vulnerability report and advance to next day. HACKER ONLY."""
+	if not GameState or GameState.current_role != GameState.Role.HACKER:
+		return {"success": false, "output": "[color=red]ERROR: This command is only available in the Hacker campaign.[/color]"}
+
+	if not NarrativeDirector or not NarrativeDirector.has_method("advance_hacker_day"):
+		return {"success": false, "output": "[color=red]ERROR: Narrative system not initialized.[/color]"}
+
+	var current_day = NarrativeDirector.current_hacker_day
+	NarrativeDirector.advance_hacker_day()
+	var next_day = NarrativeDirector.current_hacker_day
+
+	if next_day > current_day:
+		return {
+			"success": true,
+			"output": "[color=green]✓ VULNERABILITY REPORT SUBMITTED.[/color]\nPayment confirmed. Next assignment available.\nLoading Day %d..." % next_day
+		}
+	else:
+		return {
+			"success": true,
+			"output": "[color=yellow]✓ VULNERABILITY REPORT SUBMITTED.[/color]\nCampaign complete. No further assignments available."
+		}
+
+func _cmd_spoof(args: Array) -> Dictionary:
+	"""
+	Mask network identity.
+	Reduces trace_cost of subsequent actions until rotation or detection.
+	"""
+	if args.is_empty():
+		return {"success": false, "output": "[color=red]ERROR: Identity mask required.[/color]\nSyntax: spoof [mac/ip]"}
+	
+	var mask = args[0]
+	GameState.active_spoof_identity = {
+		"mask": mask,
+		"timestamp": ShiftClock.elapsed_seconds,
+		"efficiency": 0.5 # 50% trace reduction
+	}
+	
+	# Emit signal
+	EventBus.offensive_action_performed.emit({
+		"action_type": "spoof",
+		"target": mask,
+		"timestamp": ShiftClock.elapsed_seconds,
+		"result": "SUCCESS",
+		"trace_cost": GlobalConstants.TRACE_COST.SPOOF,
+		"shift_day": NarrativeDirector.current_hacker_day if NarrativeDirector else 0
+	})
+	
+	return {
+		"success": true,
+		"output": "[color=green]✓ IDENTITY MASKED.[/color]\nMAC/IP Spoof active: %s\nTrace footprint reduced by 50%%." % mask
+	}
+
+func _cmd_phish(args: Array) -> Dictionary:
+	"""
+	Establish foothold via social engineering.
+	Low Trace, but success is dependent on Heat level and host vulnerability.
+	"""
+	if args.is_empty():
+		return {"success": false, "output": "[color=red]ERROR: Target host required.[/color]\nSyntax: phish [hostname]"}
+		
+	var hostname = args[0].to_upper()
+	var host_info = NetworkState.get_host_state(hostname)
+	
+	if host_info.is_empty():
+		return {"success": false, "output": CorporateVoice.get_phrase("unknown_host")}
+		
+	if GameState.hacker_footholds.has(hostname):
+		return {"success": false, "output": "[color=yellow]Target already compromised.[/color]"}
+
+	command_output_received.emit("[b]PREPARING PHISHING CAMPAIGN: " + hostname + "[/b]\n", true)
+	command_output_received.emit("Gathering OSINT data...\n", true)
+	await get_tree().create_timer(1.0).timeout
+	command_output_received.emit("Crafting spear-phish payload...\n", true)
+	await get_tree().create_timer(1.5).timeout
+	command_output_received.emit("Sending delivery packets...\n", true)
+	await get_tree().create_timer(0.5).timeout
+	
+	# Success Formula: (vulnerability_score * 0.8) / HeatManager.heat_multiplier
+	var host_res = NetworkState.get_host(hostname)
+	var vuln = host_res.vulnerability_score if host_res else 0.5
+	var heat = HeatManager.heat_multiplier if HeatManager else 1.0
+	
+	var success_chance = (vuln * 0.8) / heat
+	var roll = randf()
+	
+	if roll < success_chance:
+		GameState.hacker_footholds[hostname] = ShiftClock.elapsed_seconds
+		GameState.current_foothold = hostname
+		
+		EventBus.offensive_action_performed.emit({
+			"action_type": "phish",
+			"target": hostname,
+			"timestamp": ShiftClock.elapsed_seconds,
+			"result": "SUCCESS",
+			"trace_cost": GlobalConstants.TRACE_COST.PHISH,
+			"shift_day": NarrativeDirector.current_hacker_day if NarrativeDirector else 0
+		})
+		
+		return {
+			"success": true,
+			"output": "[color=green]✓ PHISHING SUCCESSFUL.[/color]\nUser clicked malicious link on %s.\nReverse shell established. Access level: USER." % hostname
+		}
+	else:
+		EventBus.offensive_action_performed.emit({
+			"action_type": "phish",
+			"target": hostname,
+			"timestamp": ShiftClock.elapsed_seconds,
+			"result": "FAILED",
+			"trace_cost": GlobalConstants.TRACE_COST.PHISH,
+			"shift_day": NarrativeDirector.current_hacker_day if NarrativeDirector else 0
+		})
+		
+		return {
+			"success": false,
+			"output": "[color=red]✗ PHISHING FAILED.[/color]\nPayload quarantined by end-user or gateway filters.\nTrace footprints detected."
 		}
 # ================================================
 
@@ -662,3 +802,7 @@ func _unlock_terminal():
 
 func is_terminal_locked() -> bool:
 	return is_locked
+
+func inject_system_message(text: String):
+	"""Injects a message directly into the terminal output without a command."""
+	command_output_received.emit("\n" + text + "\n", false)

@@ -232,6 +232,9 @@ const TRACE_COST = {
 	"PIVOT": 5.0,         # Lateral movement (low trace, evasion tool)
 	"PHISH": 10.0,        # Sending phishing email
 	"RANSOMWARE": 40.0,   # Deploying ransomware (HIGH!)
+	"EXFILTRATION_PER_STREAM": 5.0, # Multi-stream data theft
+	"WIPER": 3.0,         # Log destruction
+	"SPOOF": 8.0,         # MAC/IP spoofing
 	"BACKDOOR": 20.0,     # Installing persistent backdoor
 	"KEYLOGGER": 5.0,     # Installing keylogger (low profile)
 	"SCAN": 3.0,          # Network scan (minimal trace)

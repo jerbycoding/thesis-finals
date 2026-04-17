@@ -33,7 +33,7 @@ Maintain immersion by reskinning the "Secure Login" sequence.
 *   **Metric Diversion:** `IntegrityManager.gd` must bypass "Organization Damage" if `current_role == Role.HACKER`.
 
 ## 6. Phase 1 Success Criteria (Verification Checklist)
-1.  [ ] **Role Persistance:** Starting a "Hacker Campaign" correctly sets `GameState.current_role`.
-2.  [ ] **Themed Login:** The secure login screen displays hacker-specific strings and "Matrix Green" colors.
-3.  [ ] **Anchor Validation:** The player camera correctly "sits" at the hacker desk.
-4.  [ ] **State Separation:** Loading a Hacker save does not show the Analyst's current tickets or organization health.
+1.  [x] **Role Persistance:** Starting a "Hacker Campaign" correctly sets `GameState.current_role`.
+2.  [x] **Themed Login:** The secure login screen displays hacker-specific strings and "Matrix Green" colors.
+3.  [x] **Anchor Validation:** The player camera correctly "sits" at the hacker desk.
+4.  [x] **State Separation:** Loading a Hacker save does not show the Analyst's current tickets or organization health. (Partial: Basic separation working).

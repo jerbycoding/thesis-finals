@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ContractResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/ContractResource.gd" id="1_contract"]
+
+[resource]
+script = ExtResource("1_contract")
+ticket_id = "exfiltrate_comms"
+title = "Whisper in the Dark"
+description = "I need the internal communications from {VAR:WEB-SRV-01:name}. Use the Exfiltrator to pull all 'comms' data streams."
+narrative_text = "Targets identified: {VAR:WEB-SRV-01:name}. Our client is interested in what they say behind closed doors. Use the Exfiltrator payload to steal their internal communications archive. Expect resistance; their AI is learning your patterns."
+target_hostname = "WEB-SRV-01"
+required_payload = 1
+required_data_type = "comms"
+bounty_reward = 300
+difficulty_rating = 2
+completion_dialogue_id = "day4_outro"

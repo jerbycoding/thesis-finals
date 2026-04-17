@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="DialogueDataResource" load_steps=2 format=3]
+
+[ext_resource type="Script" uid="uid://c2lpqyroyo4be" path="res://resources/dialogue/DialogueDataResource.gd" id="1_dialogue"]
+
+[resource]
+script = ExtResource("1_dialogue")
+npc_name = "Broker"
+portrait = "🕴️"
+is_randomized = false
+lines = Array[Dictionary]([{
+"text": "The SIEM is quiet. For now."
+}, {
+"text": "You're getting good at this. Almost professional."
+}, {
+"text": "Rest while you can. Tomorrow, we go for the core."
+}])

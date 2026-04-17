@@ -83,6 +83,13 @@ func _on_offensive_action(data: Dictionary):
 	Adds trace_cost to current trace level.
 	"""
 	var cost = data.get("trace_cost", 0.0)
+	
+	# Apply Spoofing Discount (Hacker only)
+	if cost > 0 and GameState and not GameState.active_spoof_identity.is_empty():
+		var discount = GameState.active_spoof_identity.get("efficiency", 0.0)
+		cost *= (1.0 - discount)
+		print("🛡️ TRACE: Spoof active (-%.0f%%) → Final cost: %.1f" % [discount * 100, cost])
+
 	var action_type = data.get("action_type", "unknown")
 	var target = data.get("target", "unknown")
 	var result = data.get("result", "unknown")
@@ -90,7 +97,7 @@ func _on_offensive_action(data: Dictionary):
 	# Accumulate trace
 	var old_trace = trace_level
 	trace_level = min(MAX_TRACE, trace_level + cost)
-	last_action_timestamp = Time.get_unix_time_from_system()
+	last_action_timestamp = ShiftClock.elapsed_seconds
 	
 	# Debug output
 	print("🔍 TRACE: %s on %s (%s) → +%.1f trace (%.0f → %.0f)" % [

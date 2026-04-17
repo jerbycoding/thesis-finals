@@ -127,9 +127,7 @@ func _update_time_display():
 		time_label.add_theme_color_override("font_color", Color(0.4, 0.6, 1.0, 1)) # Light Blue
 		return
 
-	var current_time = Time.get_ticks_msec()
-	var remaining_msec = max(0, ticket.expiry_timestamp - current_time)
-	var remaining_time = remaining_msec / 1000.0
+	var remaining_time = max(0, ticket.expiry_timestamp - ShiftClock.elapsed_seconds)
 	
 	var minutes = int(remaining_time) / 60
 	var seconds = int(remaining_time) % 60

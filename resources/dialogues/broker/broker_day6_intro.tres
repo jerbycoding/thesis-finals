@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="DialogueDataResource" load_steps=2 format=3]
+
+[ext_resource type="Script" uid="uid://c2lpqyroyo4be" path="res://resources/dialogue/DialogueDataResource.gd" id="1_dialogue"]
+
+[resource]
+script = ExtResource("1_dialogue")
+npc_name = "Broker"
+portrait = "🕴️"
+is_randomized = false
+lines = Array[Dictionary]([{
+"text": "The blueprints for their security core. That is our target."
+}, {
+"text": "They've isolated the server, but you have a foothold on the web bridge. Use it."
+}, {
+"text": "Exfiltrate the data, then ransom the host to delete our ingress point."
+}])

@@ -64,6 +64,9 @@ func _initialize_engine():
 	_start_evaluation_loop()
 
 func _start_evaluation_loop():
+	if GameState and GameState.current_role == GameState.Role.HACKER:
+		return # Kill Chain does not advance during Hacker shifts
+		
 	if TimeManager:
 		TimeManager.register_timer("consequence_eval", CONSEQUENCE_EVAL_INTERVAL, func():
 			_evaluate_consequences()
@@ -71,12 +74,14 @@ func _start_evaluation_loop():
 		)
 
 func trigger_consequence(consequence_id: String):
+	if GameState and GameState.current_role == GameState.Role.HACKER: return
+	
 	print("🚨 CONSECUTIVE TRIGGERED by NarrativeDirector: ", consequence_id)
 	
 	choice_log.append({
 		"type": "consequence_triggered",
 		"consequence_type": consequence_id,
-		"timestamp": Time.get_ticks_msec()
+		"timestamp": ShiftClock.elapsed_seconds
 	})
 	
 	match consequence_id:
@@ -88,14 +93,20 @@ func trigger_consequence(consequence_id: String):
 			print("⚠ Unknown consequence ID received: ", consequence_id)
 
 func _on_consequence_triggered_globally(type: String, details: Dictionary):
+	if GameState and GameState.current_role == GameState.Role.HACKER: return
+	
 	if type == GlobalConstants.CONSEQUENCE_ID.PROCEDURAL_VIOLATION:
 		var hostname = details.get("hostname", "Unknown")
 		_schedule_followup_ticket("AUDIT-PROC-001", 10.0, "Procedural violation: Unjustified isolation of " + hostname, "N/A", hostname)
 
 func _on_critical_host_isolated(hostname: String):
+	if GameState and GameState.current_role == GameState.Role.HACKER: return
+	
 	_schedule_followup_ticket(GlobalConstants.CONSEQUENCE_ID.SERVICE_OUTAGE, 20.0, "Service outage on " + hostname + " due to network isolation.", "N/A", hostname)
 
 func _on_ticket_ignored(ticket: TicketResource):
+	if GameState and GameState.current_role == GameState.Role.HACKER: return
+	
 	print("🚨 ConsequenceEngine: Ticket IGNORED (Timed out): ", ticket.ticket_id)
 	ignored_tickets_in_shift += 1
 	
@@ -126,6 +137,8 @@ func _on_ticket_ignored(ticket: TicketResource):
 	EventBus.consequence_triggered.emit("ticket_ignored", {"ticket_id": ticket.ticket_id, "severity": ticket.severity})
 
 func _on_ticket_completed(ticket: TicketResource, completion_type: String, time_taken: float):
+	if GameState and GameState.current_role == GameState.Role.HACKER: return
+	
 	print("🚨 ConsequenceEngine: Ticket COMPLETED: ", ticket.ticket_id, " as ", completion_type)
 	
 	log_player_choice("ticket_completed", {
@@ -138,6 +151,8 @@ func _on_ticket_completed(ticket: TicketResource, completion_type: String, time_
 	_evaluate_kill_chain_escalation(ticket, completion_type)
 
 func _on_email_decision_processed(email: EmailResource, decision: String, inspection_state: Dictionary):
+	if GameState and GameState.current_role == GameState.Role.HACKER: return
+	
 	log_email_decision(email.email_id, decision, email)
 	
 	if decision == GlobalConstants.EMAIL_DECISION.APPROVE:
@@ -301,14 +316,14 @@ func _schedule_followup_ticket(ticket_id: String, delay_seconds: float, reason: 
 		"reason": reason,
 		"original_id": original_id,
 		"target_host": target_host,
-		"trigger_time": Time.get_ticks_msec() + (delay_seconds * 1000)
+		"trigger_time": ShiftClock.elapsed_seconds + delay_seconds
 	}
 	
 	scheduled_consequences.append(consequence_data)
 	EventBus.followup_ticket_scheduled.emit(ticket_id, delay_seconds)
 
 	if TimeManager:
-		var timer_id = "followup_" + ticket_id + "_" + original_id + "_" + str(Time.get_ticks_msec())
+		var timer_id = "followup_" + ticket_id + "_" + original_id + "_" + str(ShiftClock.elapsed_seconds)
 		TimeManager.register_timer(timer_id, delay_seconds, _spawn_followup_ticket.bind(ticket_id, reason, original_id, target_host))
 
 func _spawn_followup_ticket(ticket_id: String, reason: String, original_id: String = "N/A", target_host: String = ""):
@@ -338,7 +353,7 @@ func _spawn_followup_ticket(ticket_id: String, reason: String, original_id: Stri
 func log_player_choice(choice_type: String, choice_data: Dictionary):
 	var log_entry = choice_data.duplicate()
 	log_entry["type"] = choice_type
-	log_entry["timestamp"] = Time.get_ticks_msec()
+	log_entry["timestamp"] = ShiftClock.elapsed_seconds
 	choice_log.append(log_entry)
 
 func log_email_decision(email_id: String, decision: String, email: EmailResource):
@@ -346,7 +361,7 @@ func log_email_decision(email_id: String, decision: String, email: EmailResource
 		"type": "email_decision",
 		"email_id": email_id,
 		"decision": decision,
-		"timestamp": Time.get_ticks_msec(),
+		"timestamp": ShiftClock.elapsed_seconds,
 		"is_malicious": email.is_malicious,
 		"related_ticket": email.related_ticket
 	}
@@ -371,9 +386,9 @@ func load_state(relationships: Dictionary, choices: Array, scheduled: Array = []
 	if TimeManager: TimeManager.clear_all_timers()
 	
 	# Re-register pending consequences
-	var current_time = Time.get_ticks_msec()
+	var current_time = ShiftClock.elapsed_seconds
 	for cons in scheduled:
-		var delay = (cons.trigger_time - current_time) / 1000.0
+		var delay = cons.trigger_time - current_time
 		# Clamp to minimum 0.5s to ensure timer actually fires if it was just about to
 		if delay > -5.0: # Even if slightly in the past, trigger it shortly after load
 			_schedule_followup_ticket(cons.ticket_id, max(0.5, delay), cons.reason, cons.original_id)

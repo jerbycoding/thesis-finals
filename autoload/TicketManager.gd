@@ -186,8 +186,8 @@ func load_state(active_ids: Array, completed_ids: Array):
 			var base_time = max(0.1, instance.base_time)
 			var final_time = HeatManager.get_scaled_time(base_time) if HeatManager else base_time
 			
-			instance.spawn_timestamp = Time.get_ticks_msec()
-			instance.expiry_timestamp = instance.spawn_timestamp + (final_time * 1000.0)
+			instance.spawn_timestamp = ShiftClock.elapsed_seconds
+			instance.expiry_timestamp = instance.spawn_timestamp + final_time
 			
 			active_tickets.append(instance)
 			_create_ticket_timer(instance)
@@ -289,8 +289,8 @@ func add_ticket(ticket: TicketResource):
 	var base_time = max(0.1, ticket.base_time)
 	var final_time = HeatManager.get_scaled_time(base_time) if HeatManager else base_time
 	
-	ticket.spawn_timestamp = Time.get_ticks_msec()
-	ticket.expiry_timestamp = ticket.spawn_timestamp + (final_time * 1000.0)
+	ticket.spawn_timestamp = ShiftClock.elapsed_seconds
+	ticket.expiry_timestamp = ticket.spawn_timestamp + final_time
 	
 	active_tickets.append(ticket)
 	_create_ticket_timer(ticket)
@@ -352,7 +352,7 @@ func complete_ticket(ticket_id: String, completion_type: String = "compliant"):
 			if completion_type == GlobalConstants.COMPLETION_TYPE.COMPLIANT and not ValidationManager.can_complete_compliant(ticket):
 				completion_type = GlobalConstants.COMPLETION_TYPE.EFFICIENT
 
-			var time_taken = (Time.get_ticks_msec() - ticket.spawn_timestamp) / 1000.0
+			var time_taken = ShiftClock.elapsed_seconds - ticket.spawn_timestamp
 			active_tickets.remove_at(i)
 			completed_tickets.append(ticket)
 			

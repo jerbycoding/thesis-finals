@@ -13,6 +13,11 @@ class_name HostResource
 # === SOLO DEV PHASE 2: HACKER CAMPAIGN FIELDS ===
 @export_range(0.0, 1.0, 0.05) var vulnerability_score: float = 0.5  # 0.0-1.0 exploit success chance
 @export var is_honeypot: bool = false  # If true, instant LOCKDOWN in Phase 3
+@export var data_volume: int = 3 # Number of exfiltration streams (Phase 4)
+@export var network_bandwidth: float = 1.0 # Multiplier for exfiltration speed (Phase 4)
+@export var data_type: String = "generic" # Type of intel produced: "credentials", "comms", etc.
+@export var data_label: String = "Internal Data" # Visual label for stolen data
+@export var bounty_value: int = 100 # Points awarded on successful exfiltration/ransom
 # ================================================
 
 func _to_string() -> String:

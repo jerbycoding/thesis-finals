@@ -1,7 +1,7 @@
 # TASK 2: 3D "REMOTE OFFICE" SCAFFOLDING
 
 ## Description
-[REVISED] Create the physical "Safe House" environment for the hacker, ensuring all necessary visual and audio systems are correctly registered.
+Create the physical "Safe House" environment for the hacker, ensuring all necessary visual and audio systems are correctly registered.
 
 ## Implementation Details
 *   **Scene:** Create `scenes/3d/HackerRoom.tscn`.
@@ -13,8 +13,8 @@
 *   **Transition:** Verify `TransitionManager.gd`'s sitting animation anchors correctly in the smaller room.
 
 ## Success Criteria
-- [ ] **[BLOCKER]** The `ViewAnchor` node in `HackerRoom.tscn`'s computer shares the identical name with the Analyst's `ViewAnchor`.
-- [ ] `HackerRoom.tscn` exists and is navigable.
-- [ ] `MonitorInputBridge` correctly renders the UI on the 3D monitor model.
-- [ ] `TransitionManager` transitions cleanly to the computer view without errors.
-- [ ] Entering the Hacker Room triggers the correct ambient audio loop via `AudioManager`.
+- [x] **[BLOCKER]** The `ViewAnchor` node in `HackerRoom.tscn`'s computer shares the identical name with the Analyst's `ViewAnchor`.
+- [x] `HackerRoom.tscn` exists and is navigable.
+- [x] `MonitorInputBridge` correctly renders the UI on the 3D monitor model.
+- [x] `TransitionManager` transitions cleanly to the computer view without errors.
+- [x] Entering the Hacker Room triggers the correct ambient audio loop via `AudioManager`.

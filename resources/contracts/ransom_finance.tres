@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="ContractResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/ContractResource.gd" id="1_contract"]
+
+[resource]
+script = ExtResource("1_contract")
+ticket_id = "ransom_finance"
+title = "Finance Freeze"
+description = "Establish a foothold on any workstation in the FINANCE department and deploy ransomware. Ensure the payout is worth the risk."
+required_payload = 0
+bounty_reward = 150
+difficulty_rating = 1

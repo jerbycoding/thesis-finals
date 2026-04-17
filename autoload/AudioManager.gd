@@ -195,6 +195,20 @@ func update_ambient_audio(floor_num: int):
 	)
 	tween.tween_property(ambient_player, "volume_db", -15.0, 1.0)
 
+func swap_ambient_loop(role: GameState.Role):
+	"""
+	Master logic for role switching.
+	Swaps the background ambiance loop based on current role.
+	"""
+	# Currently using floor-based logic, but this adds a role-based layer
+	if role == GameState.Role.HACKER:
+		print("🔊 AudioManager: Swapping to HACKER ambiance (underground)")
+		# For now, let's use a darker version or just ensure it matches the room
+		update_ambient_audio(0) # Use desktop hum as baseline
+	else:
+		print("🔊 AudioManager: Swapping to ANALYST ambiance (corporate)")
+		update_ambient_audio(1) # Back to office
+
 func update_music_intensity(is_emergency: bool):
 	var track = SFX.music_emergency if is_emergency else SFX.music_standard
 	play_music(track)

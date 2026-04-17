@@ -8,4 +8,4 @@ is_critical = true
 os_type = "Linux"
 initial_status = "CLEAN"
 vulnerability_score = 0.2
-is_honeypot = true
+is_honeypot = false

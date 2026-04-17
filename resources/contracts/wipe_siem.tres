@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ContractResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/ContractResource.gd" id="1_contract"]
+
+[resource]
+script = ExtResource("1_contract")
+ticket_id = "wipe_siem"
+title = "Digital Ghost"
+description = "They're onto us. Clean up your footprints on {VAR:DB-SRV-01:name}. Use the Wiper script to overwrite their offensive logs."
+narrative_text = "The AI Analyst is tracing our last operation back to {VAR:DB-SRV-01:name}. If they find the source, the whole network goes into lockdown. Use the Wiper payload to overwrite all offensive telemetry on that node. Make us invisible."
+target_hostname = "DB-SRV-01"
+required_payload = 3
+bounty_reward = 200
+difficulty_rating = 1
+completion_dialogue_id = "day5_outro"

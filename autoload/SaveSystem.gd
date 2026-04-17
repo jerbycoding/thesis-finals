@@ -61,7 +61,16 @@ func save_game():
 		# --- Progress State ---
 		"active_tickets": _get_ticket_ids_from_array(TicketManager.get_active_tickets()),
 		"completed_tickets": _get_ticket_ids_from_array(TicketManager.completed_tickets),
-		"choice_log": ConsequenceEngine.get_choice_history()
+		"choice_log": ConsequenceEngine.get_choice_history(),
+
+		# --- SOLO DEV PHASE 5: HACKER CAMPAIGN ---
+		"hacker_role": {
+			"current_day": NarrativeDirector.current_hacker_day if NarrativeDirector else 0,
+			"bounty": BountyLedger.get_bounty() if BountyLedger else 0,
+			"footholds": GameState.hacker_footholds.duplicate() if GameState else {},
+			"current_foothold": GameState.current_foothold if GameState else "",
+			"completed_contracts": ContractManager.get_completed_ids() if ContractManager else []
+		}
 	}
 	
 	var file = FileAccess.open(SAVE_PATH, FileAccess.WRITE)
@@ -156,7 +165,24 @@ func _distribute_loaded_data(data: Dictionary):
 	
 	if data.has("next_shift_name"):
 		loaded_shift_id = data.next_shift_name
-	
+
+	# === SOLO DEV PHASE 5: HACKER CAMPAIGN RESTORE ===
+	if data.has("hacker_role"):
+		var hacker_data = data.hacker_role
+		if BountyLedger:
+			BountyLedger.set_bounty(hacker_data.get("bounty", 0))
+		if GameState:
+			GameState.hacker_footholds = hacker_data.get("footholds", {})
+			GameState.current_foothold = hacker_data.get("current_foothold", "")
+		# Note: Contract completion state is restored via contract IDs matching
+		# ContractManager will load contracts from disk, then we'd need to re-mark
+		# completed ones — but for MVHR, bounty + footholds is sufficient
+		print("💾 SaveSystem: Hacker data restored (Day %d, Bounty: $%d, Footholds: %d)" % [
+			hacker_data.get("current_day", 0),
+			hacker_data.get("bounty", 0),
+			hacker_data.get("footholds", {}).size()
+		])
+
 	print("Save data distributed to all managers. Loaded Shift: ", loaded_shift_id)
 
 # Helper function to convert an array of TicketResource objects to an array of their IDs.

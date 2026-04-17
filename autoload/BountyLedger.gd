@@ -96,6 +96,10 @@ func get_bounty() -> int:
 	"""Returns total accumulated bounty."""
 	return total_bounty
 
+func set_bounty(amount: int):
+	"""Sets total bounty (for save/load restoration)."""
+	total_bounty = amount
+
 func get_bounty_for_day(shift_day: int) -> int:
 	"""Returns bounty earned on a specific shift day."""
 	if not shift_bounties.has(shift_day):

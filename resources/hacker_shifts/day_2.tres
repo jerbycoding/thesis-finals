@@ -5,6 +5,11 @@
 [resource]
 script = ExtResource("1_shift")
 day_number = 2
-contract_ids = ["ransom_any"]
-honeypot_hosts = ["FINANCE-SRV-01"]
+contract_ids = Array[String](["ransom_finance"])
+honeypot_hosts = Array[String](["WEB-SRV-01"])
 broker_dialogue_id = "day2_checkin"
+scripted_events = Array[Dictionary]([{
+"state": "SEARCHING",
+"time": 60.0,
+"type": "rival_ai_escalation"
+}])

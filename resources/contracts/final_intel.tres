@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ContractResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/ContractResource.gd" id="1_contract"]
+
+[resource]
+script = ExtResource("1_contract")
+ticket_id = "final_intel"
+title = "Zero Sum"
+description = "The last piece of the puzzle. Exfiltrate the 'credentials' from {VAR:DB-SRV-01:name}. Everything depends on this."
+narrative_text = "The time has come to finish this. The final credentials for the master admin account are stored on {VAR:DB-SRV-01:name}. Exfiltrate them. Once I have those, our contract is complete. Do not fail me now."
+target_hostname = "DB-SRV-01"
+required_payload = 1
+required_data_type = "credentials"
+bounty_reward = 1000
+difficulty_rating = 3
+completion_dialogue_id = "day7_reveal"

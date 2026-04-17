@@ -84,7 +84,7 @@ func _on_isolation_complete(hostname: String):
 	var entry = {
 		"action_type": "isolation_aborted",
 		"target": hostname if hostname != "" else "unknown",
-		"timestamp": Time.get_unix_time_from_system(),
+		"timestamp": ShiftClock.elapsed_seconds,
 		"result": "EVASION_SUCCESS",
 		"trace_cost": 0.0,
 		"shift_day": current_shift_day,
@@ -104,7 +104,7 @@ func _on_connection_lost():
 	var entry = {
 		"action_type": "connection_lost",
 		"target": GameState.current_foothold if GameState.current_foothold != "" else "unknown",
-		"timestamp": Time.get_unix_time_from_system(),
+		"timestamp": ShiftClock.elapsed_seconds,
 		"result": "ISOLATED",
 		"trace_cost": 0.0,
 		"shift_day": current_shift_day,
@@ -171,6 +171,21 @@ func _load_from_disk():
 
 # === PUBLIC API ===
 
+func add_entry(data: Dictionary):
+	"""
+	Manually add a forensic entry. 
+	Used for narrative events and non-offensive actions.
+	"""
+	if not data.has("shift_day"):
+		data["shift_day"] = current_shift_day
+	
+	if not data.has("timestamp"):
+		data["timestamp"] = ShiftClock.elapsed_seconds if "ShiftClock" in self else 0.0
+		
+	history.append(data)
+	_write_to_disk()
+	history_updated.emit(history.size())
+
 func get_history() -> Array:
 	"""Returns complete history array."""
 	return history
@@ -211,18 +226,13 @@ func clear_history():
 
 func get_entries_for_day(day: int) -> Array:
 	"""
-	Returns all actions from specific shift day.
-	Phase 6: Filter by shift_day field
-	Phase 2: Return all (stub)
+	Returns all actions from a specific shift day.
 	"""
-	# TODO Phase 5: Filter by shift_day
-	# var filtered: Array = []
-	# for entry in history:
-	#     if entry.get("shift_day") == day:
-	#         filtered.append(entry)
-	# return filtered
-	
-	return history  # Phase 2 stub
+	var filtered: Array = []
+	for entry in history:
+		if entry.get("shift_day", 0) == day:
+			filtered.append(entry)
+	return filtered
 
 func get_timeline() -> Array:
 	"""

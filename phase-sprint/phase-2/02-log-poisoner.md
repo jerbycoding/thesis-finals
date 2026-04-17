@@ -1,7 +1,7 @@
 # TASK 2: THE "LOG POISONER" (SIEM INVERSION)
 
 ## Description
-[REVISED] Enable decoupled log injection to manipulate the defender's SIEM, ensuring logs are correctly flagged for Mirror Mode and linked to the active spoof identity.
+Enable decoupled log injection to manipulate the defender's SIEM, ensuring logs are correctly flagged for Mirror Mode and linked to the active spoof identity.
 
 ## Implementation Details
 *   **Resource:** Create `PoisonLogResource.gd` (inheriting from `LogResource`).

@@ -27,7 +27,7 @@ Modify the `NarrativeDirector` to handle the hacker arc.
 The `NarrativeDirector` will act as the "Director of Chaos." It will trigger `RivalAI` escalations (Phase 3) at specific narrative points, regardless of the player's actual Trace Level, to simulate "Scripted Detection" events.
 
 ## 6. Phase 5 Success Criteria (Verification Checklist)
-1.  [ ] **Contract Acceptance:** The player can accept and fulfill a "Contract" objective.
-2.  [ ] **Variable Consistency:** All technical data in the contract matches the SIEM/Terminal output.
-3.  [ ] **Honeypot Trigger:** Exploiting a Honeypot host correctly triggers a `LOCKDOWN` state in the AI.
-4.  [ ] **Bounty Tracking:** Contract rewards are correctly persisted in the `SaveSystem`.
+1.  [x] **Contract Acceptance:** The player can accept and fulfill a "Contract" objective.
+2.  [x] **Variable Consistency:** All technical data in the contract matches the SIEM/Terminal output. (Partial: Basic matching implemented).
+3.  [x] **Honeypot Trigger:** Exploiting a Honeypot host correctly triggers a `LOCKDOWN` state in the AI. (Note: Triggers instant 100% trace).
+4.  [x] **Bounty Tracking:** Contract rewards are correctly persisted in the `SaveSystem`. (Note: BountyLedger persistence implemented).

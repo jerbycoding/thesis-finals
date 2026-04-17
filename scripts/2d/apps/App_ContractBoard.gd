@@ -9,12 +9,16 @@ const ContractResource = preload("res://scripts/resources/ContractResource.gd")
 @onready var contract_desc = %ContractDesc
 @onready var status_label = %StatusLabel
 @onready var accept_button = %AcceptButton
+@onready var submit_button = %SubmitButton
 @onready var contract_list = %ContractList
 
 var _refresh_timer: Timer = null
 
 func _ready():
 	_refresh_contracts()
+	
+	if submit_button:
+		submit_button.pressed.connect(_on_submit_pressed)
 
 	# Set up refresh timer for contract completion detection
 	_refresh_timer = Timer.new()
@@ -33,15 +37,26 @@ func _refresh_contracts():
 	if active and active.is_accepted:
 		# Show active contract
 		contract_name.text = active.title
-		contract_desc.text = active.description
+		contract_desc.text = active.get_formatted_narrative()
 
 		if active.is_completed:
 			status_label.text = "STATUS: COMPLETE ✅"
 			status_label.add_theme_color_override("font_color", Color(0.3, 1, 0.3, 1))
 			accept_button.visible = false
+			submit_button.visible = false
 		else:
-			status_label.text = "STATUS: IN PROGRESS"
-			status_label.add_theme_color_override("font_color", Color(1, 0.85, 0.2, 1))
+			var ready = ContractManager.is_contract_ready(active)
+			if ready:
+				status_label.text = "STATUS: READY TO SUBMIT"
+				status_label.add_theme_color_override("font_color", Color(0, 1, 0, 1))
+				submit_button.visible = true
+				submit_button.disabled = false
+			else:
+				status_label.text = "STATUS: IN PROGRESS"
+				status_label.add_theme_color_override("font_color", Color(1, 0.85, 0.2, 1))
+				submit_button.visible = true
+				submit_button.disabled = true
+				
 			accept_button.visible = false
 
 		# Show available contracts below
@@ -52,6 +67,7 @@ func _refresh_contracts():
 		contract_desc.text = "Accept a contract from the available contracts below."
 		status_label.text = ""
 		accept_button.visible = false
+		submit_button.visible = false
 
 		# Show all available contracts
 		_populate_available_contracts(null)
@@ -75,7 +91,7 @@ func _populate_available_contracts(active_contract: ContractResource):
 		return
 
 	for contract in available:
-		if active_contract and active_contract.contract_id == contract.contract_id:
+		if active_contract and active_contract.ticket_id == contract.ticket_id:
 			continue  # Skip active
 
 		var panel = PanelContainer.new()
@@ -118,4 +134,10 @@ func _populate_available_contracts(active_contract: ContractResource):
 
 func _on_accept_pressed(contract: ContractResource):
 	if ContractManager.accept_contract(contract):
+		_refresh_contracts()
+
+func _on_submit_pressed():
+	var active = ContractManager.get_active_contract()
+	if active and ContractManager.submit_contract(active):
+		if AudioManager: AudioManager.play_sfx(AudioManager.SFX.notification_success)
 		_refresh_contracts()

@@ -1,10 +1,10 @@
 # TASK 4: THE "PHISH-CRAFTER" (EMAIL INVERSION)
 
 ## Description
-[REVISED] Invert `EmailSystem.gd` logic to allow the player to initiate the "Infiltration" stage, with clear success and failure paths.
+Invert `EmailSystem.gd` logic to allow the player to initiate the "Infiltration" stage, with clear success and failure paths.
 
 ## Implementation Details
-*   **Scene:** Create `App_PhishCrafter.tscn`.
+*   **Scene:** [ ] Create `App_PhishCrafter.tscn`.
 *   **Mechanic:** Implement a probability-based success check: `(Urgency + Authority) / HeatManager.heat_multiplier`.
 *   **Success Path:** A successful phish emits `EventBus.hacker_foothold_established(hostname)`.
     *   **Rationale:** This signal **must** be distinct from any Analyst-side signals to ensure `ConsequenceEngine` does not consume it and advance the Analyst's Kill Chain.

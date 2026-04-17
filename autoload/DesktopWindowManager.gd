@@ -128,6 +128,11 @@ func open_app(app_name: String, force_new: bool = false):
 	window.window_id = window_id
 	window.set_title(config.title)
 	
+	# Apply default size from config if provided
+	if config.default_size != Vector2.ZERO:
+		window.size = config.default_size
+		window.custom_minimum_size = config.default_size
+	
 	# Store reference IMMEDIATELY to prevent race conditions during 'await'
 	open_windows[window_id] = window
 	

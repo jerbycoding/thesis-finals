@@ -141,6 +141,10 @@ func _input(event):
 func _handle_bridge_input(event) -> bool:
 	# Pure 3D Input Forwarding to interactive monitors
 	if GameState and GameState.active_bridge:
+		# ROLE GUARD: If in UI-only mode (reports, menus), do not intercept
+		if GameState.current_mode == GameState.GameMode.MODE_UI_ONLY:
+			return false
+
 		if event is InputEventMouseButton:
 			GameState.active_bridge.handle_mouse_button(event)
 			get_viewport().set_input_as_handled()

@@ -6,6 +6,11 @@ extends Node
 var _pool: Dictionary = {} # scene_path: Array[Node]
 var _active: Dictionary = {} # scene_path: Array[Node]
 
+func _ready():
+	# Ensure the pool is cleaned up during role transitions
+	if EventBus:
+		EventBus.flush_ui_pools.connect(flush)
+
 ## Returns an instance of the specified scene, either from the pool or by instantiating.
 func acquire(scene: PackedScene) -> Node:
 	var path = scene.resource_path

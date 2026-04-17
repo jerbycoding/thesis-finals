@@ -4,6 +4,7 @@ class_name LogResource
 
 @export var log_id: String
 @export var timestamp: String # "HH:MM:SS" format
+@export var timestamp_seconds: float = 0.0 # Unified correlation time
 @export var source: String # "Firewall", "IDS", "Authentication", "System"
 @export var category: String # "Security", "System", "Network"
 @export_multiline var message: String # Max 60 chars recommended

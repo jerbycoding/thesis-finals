@@ -50,6 +50,10 @@ func can_action_email(inspection_state: Dictionary) -> bool:
 
 ## Checks if a host is authorized for isolation (must be scanned first).
 func can_isolate_host(hostname: String) -> bool:
+	# ROLE GUARD: Hacker bypasses procedural rules
+	if GameState and GameState.current_role == GameState.Role.HACKER:
+		return true
+
 	# During tutorial, allow failure (don't block the button/command)
 	if GameState and GameState.is_guided_mode:
 		return true

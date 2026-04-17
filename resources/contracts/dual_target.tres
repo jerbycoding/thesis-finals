@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ContractResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/ContractResource.gd" id="1_contract"]
+
+[resource]
+script = ExtResource("1_contract")
+ticket_id = "dual_target"
+title = "The Double Tap"
+description = "High intensity operation. I need the 'blueprint' from {VAR:WEB-SRV-01:name} AND the server must be RANSOMED to cover our tracks."
+narrative_text = "This is it. We need the final architectural blueprints for their new security core. Target: {VAR:WEB-SRV-01:name}. You must exfiltrate the 'blueprint' data and then deploy ransomware to encrypt the remains. COVER. YOUR. TRACKS."
+target_hostname = "WEB-SRV-01"
+required_payload = 2
+required_data_type = "blueprint"
+bounty_reward = 500
+difficulty_rating = 3
+completion_dialogue_id = "day6_outro"

@@ -6,10 +6,12 @@ enum GameMode { MODE_3D, MODE_2D, MODE_DIALOGUE, MODE_MINIGAME, MODE_UI_ONLY }
 enum Role { ANALYST, HACKER }
 var current_role: Role = Role.ANALYST
 var is_campaign_session: bool = false  # Tracks if session started via 'New Campaign'
+var role_transition_in_progress: bool = false # Master transition guard
 
 # Hacker role state variables (Phase 2+)
 var current_foothold := ""
 var hacker_footholds := {}  # hostname -> timestamp
+var active_spoof_identity := {} # MAC/IP spoof mask
 # =====================================
 
 var current_mode = GameMode.MODE_3D
@@ -96,33 +98,53 @@ func reset_to_default():
 # === SOLO DEV PHASE 1: ROLE SWITCHING ===
 func switch_role(new_role: Role) -> bool:
 	"""
-	Minimum viable role switching (6-step sequence).
-	Returns true if successful, false if blocked.
+	Full 11-step role switching sequence.
+	Ensures state isolation and system cleanup.
 	"""
-	# Step 1: Minigame Guard - Check if any minigame is active in the scene tree
+	# 1. Minigame Guard
 	if _is_minigame_active():
-		push_warning("GameState: Cannot switch role during active minigame")
+		push_warning("GameState: Master Switch BLOCKED (Minigame Active)")
 		return false
 	
-	# Step 2: Flush UI Pools (Phase 1 stub - UIObjectPool is not an autoload)
-	# Phase 2 TODO: Get UIObjectPool from active DesktopWindowManager instance
+	# 2. Set Dirty Flag
+	role_transition_in_progress = true
 	
-	# Step 3: Swap Network Context
+	# 3. Clear All Timers
+	if TimeManager:
+		TimeManager.clear_all_timers()
+	
+	# 4. Flush UI Pools
+	if EventBus:
+		EventBus.flush_ui_pools.emit()
+	
+	# 5. Switch Network Context
 	if NetworkState:
 		NetworkState.switch_context(new_role)
 	
-	# Step 4: Set Final Role
+	# 6. Cache/Reset Heat
+	if HeatManager:
+		HeatManager.cache_and_reset(new_role)
+	
+	# 7. Swap Ambient Audio
+	if AudioManager:
+		AudioManager.swap_ambient_loop(new_role)
+	
+	# 8. Set Final Role
 	current_role = new_role
-	print("GameState: Role switched to ", "HACKER" if new_role == Role.HACKER else "ANALYST")
+	print("🛡️ GameState: ROLE_SWITCH COMPLETE -> ", "HACKER" if new_role == Role.HACKER else "ANALYST")
 	
-	# Step 5: Load UI Theme
-	if DesktopWindowManager:
-		DesktopWindowManager.set_theme(new_role)
-	
-	# Step 6: Reset Hacker Variables (when switching back to Analyst)
+	# 9. Variable Reset (Analyst return)
 	if new_role == Role.ANALYST:
 		current_foothold = ""
 		hacker_footholds.clear()
+		active_spoof_identity.clear()
+	
+	# 10. Load UI Theme & Permissions
+	if DesktopWindowManager:
+		DesktopWindowManager.set_theme(new_role)
+	
+	# 11. Clear Dirty Flag
+	role_transition_in_progress = false
 	
 	return true
 

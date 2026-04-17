@@ -12,7 +12,10 @@ const HOSTS = {
 }
 
 # The single source of truth for host information.
-var host_states: Dictionary = {}
+var host_states: Dictionary = {} # Reference to the active context map
+var analyst_host_states: Dictionary = {}
+var hacker_host_states: Dictionary = {}
+
 var host_resources: Dictionary = {} # hostname -> HostResource
 
 const HOST_DIR = "res://resources/hosts/"
@@ -37,7 +40,8 @@ func _ready():
 
 func _register_hosts_from_folder():
 	print("🌐 NetworkState: Discovering hosts from %s..." % HOST_DIR)
-	host_states.clear()
+	analyst_host_states.clear()
+	hacker_host_states.clear()
 
 	var loaded_hosts = FileUtil.load_and_validate_resources(HOST_DIR, "HostResource")
 
@@ -51,11 +55,21 @@ func _register_hosts_from_folder():
 			"ip": res.ip_address,
 			"os": res.os_type
 		}
-		host_states[res.hostname] = initial_state
+		
+		# Create independent copies for each role
+		analyst_host_states[res.hostname] = initial_state.duplicate()
+		hacker_host_states[res.hostname] = initial_state.duplicate()
+		
 		host_resources[res.hostname] = res
 		print("  ✓ Registered Host: %s [%s] - Vuln: %.0f%%" % [res.hostname, res.ip_address, res.vulnerability_score * 100])
 
-	print("🌐 NetworkState: Library ready: %d hosts." % host_states.size())
+	# Set active pointer based on current role
+	if GameState and GameState.current_role == GameState.Role.HACKER:
+		host_states = hacker_host_states
+	else:
+		host_states = analyst_host_states
+
+	print("🌐 NetworkState: Library ready: %d hosts (Isolated Contexts Active)." % analyst_host_states.size())
 	hosts_updated.emit()
 
 var lateral_movement_active: bool = false
@@ -116,8 +130,21 @@ func get_all_hosts() -> Array:
 
 func load_state(data: Dictionary):
 	if data:
-		host_states = data
-		print("NetworkState state loaded.")
+		if data.has("analyst_host_states") and data.has("hacker_host_states"):
+			analyst_host_states = data.analyst_host_states
+			hacker_host_states = data.hacker_host_states
+			# Update active pointer
+			if GameState and GameState.current_role == GameState.Role.HACKER:
+				host_states = hacker_host_states
+			else:
+				host_states = analyst_host_states
+			print("NetworkState: Dual context states loaded.")
+		else:
+			# Fallback for old save format
+			host_states = data
+			analyst_host_states = data.duplicate(true)
+			hacker_host_states = data.duplicate(true)
+			print("NetworkState: Legacy state loaded into both contexts.")
 
 func reset_to_default():
 	print("NetworkState: Resetting all host states to resource defaults.")
@@ -181,12 +208,16 @@ func get_host_vulnerability(hostname: String) -> float:
 	return 0.5  # Default fallback
 
 # === SOLO DEV PHASE 1: Role Switching Support ===
-# Stub for dual-context support (full implementation in Phase 2)
 func switch_context(new_role: GameState.Role):
 	"""
 	Switch between Analyst and Hacker network contexts.
-	For Phase 1, this is a stub that does nothing.
-	Full dual-context implementation comes in Phase 2.
+	Preserves in-memory state for both roles simultaneously.
 	"""
-	print("NetworkState: Context switch to ", "HACKER" if new_role == GameState.Role.HACKER else "ANALYST", " (stub)")
-	# Phase 2 TODO: Implement dual status maps
+	if new_role == GameState.Role.HACKER:
+		host_states = hacker_host_states
+		print("🌐 NetworkState: Switched to HACKER context.")
+	else:
+		host_states = analyst_host_states
+		print("🌐 NetworkState: Switched to ANALYST context.")
+	
+	hosts_updated.emit()

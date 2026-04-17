@@ -1,0 +1,117 @@
+[gd_scene load_steps=2 format=3 uid="uid://cx7j8p3y1k2mx"]
+
+[ext_resource type="Script" path="res://scripts/2d/apps/App_Wiper.gd" id="1_script"]
+
+[node name="App_Wiper" type="Control"]
+custom_minimum_size = Vector2(600, 450)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_script")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0.05, 0, 1)
+
+[node name="VBox" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 15
+
+[node name="Header" type="Label" parent="VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 1, 0, 1)
+theme_override_font_sizes/font_size = 24
+text = "EVIDENCE WIPER v2.4"
+horizontal_alignment = 1
+
+[node name="HostLabel" type="Label" parent="VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Target Sector: NONE"
+
+[node name="StatusLabel" type="Label" parent="VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Standby..."
+autowrap_mode = 3
+
+[node name="GameArea" type="Control" parent="VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="SectorSlider" type="VSlider" parent="VBox/GameArea"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_right = 36.0
+grow_horizontal = 2
+grow_vertical = 2
+min_value = 50.0
+max_value = 350.0
+value = 200.0
+
+[node name="LogClusterContainer" type="Control" parent="VBox/GameArea"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="WipeLine" type="ColorRect" parent="VBox/GameArea"]
+layout_mode = 1
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 29.0
+offset_right = 31.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 1, 0, 0.3)
+
+[node name="Footer" type="HBoxContainer" parent="VBox"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="VBox" type="VBoxContainer" parent="VBox/Footer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="IntegrityLabel" type="Label" parent="VBox/Footer/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Destruction Progress: 0%"
+
+[node name="ScrubProgress" type="ProgressBar" parent="VBox/Footer/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+step = 1.0
+
+[node name="StartButton" type="Button" parent="VBox/Footer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 40)
+layout_mode = 2
+text = "INITIATE WIPE"

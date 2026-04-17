@@ -176,12 +176,20 @@ func _resize_to_fit_content(content: Node):
 	var border = get_node_or_null("Border")
 	if border:
 		var needed_size = border.get_combined_minimum_size()
-		size = needed_size
-		custom_minimum_size = needed_size
 		
+		# Ensure window is at least as large as the content needs
+		var target_size = Vector2(
+			max(size.x, needed_size.x),
+			max(size.y, needed_size.y)
+		)
+		
+		# Clamp to screen limits
 		var screen_size = get_viewport().get_visible_rect().size
-		size.x = min(size.x, screen_size.x * 0.95)
-		size.y = min(size.y, screen_size.y * 0.85)
+		target_size.x = min(target_size.x, screen_size.x * 0.95)
+		target_size.y = min(target_size.y, screen_size.y * 0.85)
+		
+		size = target_size
+		custom_minimum_size = needed_size # Only force min size to content needs
 
 func set_title(title: String):
 	window_title = title

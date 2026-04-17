@@ -73,6 +73,76 @@ func generate_truth_packet(ticket_id: String) -> Dictionary:
 	print("VariableRegistry: Generated Truth Packet for %s [%s]" % [ticket_id, packet.context_id])
 	return packet
 
+# === PHASE 5: TOKEN RESOLUTION ===
+
+func resolve_tokens(text: String) -> String:
+	"""
+	Resolves tokens in the format {VAR:hostname:field} or {VAR:field}.
+	If resolution fails, returns [REDACTED].
+	"""
+	var regex = RegEx.new()
+	regex.compile("\\{VAR:([^:}]+)(?::([^}]+))?\\}")
+	
+	var results = regex.search_all(text)
+	var final_text = text
+	
+	# Process in reverse to avoid index shifting if we were using offset, 
+	# but string.replace is easier if tokens are unique. 
+	# Since they might not be, let's use a simple loop with a set of unique tokens.
+	var unique_tokens = []
+	for r in results:
+		var t = r.get_string()
+		if t not in unique_tokens:
+			unique_tokens.append(t)
+			
+	for token in unique_tokens:
+		# Find the result for this token
+		var match_res = null
+		for r in results:
+			if r.get_string() == token:
+				match_res = r
+				break
+		
+		if not match_res: continue
+		
+		var part1 = match_res.get_string(1)
+		var part2 = match_res.get_string(2)
+		
+		var replacement = "[REDACTED]"
+		
+		if part2 != "":
+			# Format: {VAR:hostname:field}
+			var hostname = part1.to_upper()
+			var field = part2.to_lower()
+			replacement = _get_host_variable(hostname, field)
+		else:
+			# Format: {VAR:field} - use current foothold
+			var field = part1.to_lower()
+			var hostname = GameState.current_foothold if GameState else ""
+			if not hostname.is_empty():
+				replacement = _get_host_variable(hostname, field)
+				
+		final_text = final_text.replace(token, replacement)
+		
+	return final_text
+
+func _get_host_variable(hostname: String, field: String) -> String:
+	if not NetworkState: return "[REDACTED]"
+	
+	var res = NetworkState.get_host(hostname)
+	if not res: return "[REDACTED]"
+	
+	match field:
+		"ip", "ip_address": return res.ip_address
+		"os", "os_type": return res.os_type
+		"name", "hostname": return res.hostname
+		"vuln", "vulnerability": return str(int(res.vulnerability_score * 100)) + "%"
+		"label", "data_label": return res.data_label
+		"type", "data_type": return res.data_type
+		_: return "[REDACTED]"
+
+# =================================
+
 func generate_partner_packet(ticket_id: String) -> Dictionary:
 	"""Generates procedural data for Supply Chain incidents involving third-party partners."""
 	var base = generate_truth_packet(ticket_id)

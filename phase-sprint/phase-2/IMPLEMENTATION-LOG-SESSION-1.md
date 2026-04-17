@@ -82,7 +82,7 @@ Implement Phase 2 foundation for **Hacker Campaign** - offensive terminal comman
     "timestamp": Time.get_unix_time_from_system(),
     "result": "SUCCESS" | "FAILED" | "HONEYPOT",
     "trace_cost": GlobalConstants.TRACE_COST.EXPLOIT,
-    "shift_day": NarrativeDirector.current_day
+    "shift_day": NarrativeDirector.current_hacker_day
 }
 ```
 

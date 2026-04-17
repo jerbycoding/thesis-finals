@@ -5,6 +5,11 @@
 [resource]
 script = ExtResource("1_shift")
 day_number = 3
-contract_ids = ["ransom_any"]
-honeypot_hosts = []
+contract_ids = Array[String](["ransom_database"])
+honeypot_hosts = Array[String](["FIN-WKSTN-03"])
 broker_dialogue_id = "day3_reveal"
+scripted_events = Array[Dictionary]([{
+"hostname": "FIN-WKSTN-01",
+"time": 45.0,
+"type": "emergency_patch"
+}])

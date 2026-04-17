@@ -70,6 +70,8 @@ signal contract_completed(contract_id: String)
 
 # === SOLO DEV PHASE 5: HACKER CAMPAIGN SIGNALS ===
 signal hacker_shift_started(day: int)
+signal hacker_campaign_complete()
+signal mirror_mode_closed()
 # ================================================
 
 # --- System & UI Signals ---
@@ -86,6 +88,7 @@ signal request_prompt(text: String, active: bool)
 signal game_loaded()
 signal timer_finished(timer_id: String)
 signal permissions_updated()
+signal flush_ui_pools() # NEW: Signal for role transition cleanup
 
 # --- Transition Signals ---
 signal transition_started()

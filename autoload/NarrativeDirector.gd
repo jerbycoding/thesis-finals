@@ -51,6 +51,8 @@ func get_current_floor_requirement() -> int:
 const HACKER_SHIFT_DIR = "res://resources/hacker_shifts/"
 var hacker_shift_library: Dictionary = {}  # day_number -> HackerShiftResource
 var current_hacker_day: int = 0
+var hacker_event_timer: Timer
+var active_hacker_events: Array = []
 # ============================================
 
 func _ready():
@@ -72,6 +74,12 @@ func _ready():
 	add_child(event_timer)
 	event_timer.one_shot = true
 	event_timer.timeout.connect(_on_event_timer_timeout)
+	
+	# Initialize hacker event timer (0.5s polling loop)
+	hacker_event_timer = Timer.new()
+	add_child(hacker_event_timer)
+	hacker_event_timer.wait_time = 0.5
+	hacker_event_timer.timeout.connect(_on_hacker_event_tick)
 
 	# Initialize chaos timer
 	chaos_timer = Timer.new()
@@ -86,7 +94,7 @@ func _on_chaos_tick():
 		return
 		
 	# SAFETY: Global 30s cooldown between any random events
-	var time_since_chaos = (Time.get_ticks_msec() - last_chaos_time) / 1000.0
+	var time_since_chaos = ShiftClock.elapsed_seconds - last_chaos_time
 	if time_since_chaos < 30.0:
 		return
 
@@ -94,7 +102,7 @@ func _on_chaos_tick():
 	if randf() < 0.35:
 		var event = current_shift_resource.random_event_pool.pick_random()
 		print("🎲 CHAOS ENGINE: Triggering random event: ", event.get("event", "Unnamed"))
-		last_chaos_time = Time.get_ticks_msec()
+		last_chaos_time = ShiftClock.elapsed_seconds
 		_trigger_event(event)
 
 func _discover_shifts():
@@ -167,7 +175,7 @@ func start_shift(shift_id: String):
 	current_active_arc = current_shift_resource.event_sequence.duplicate()
 
 	_is_shift_active = true
-	shift_start_time = Time.get_ticks_msec()
+	shift_start_time = ShiftClock.elapsed_seconds
 	current_event_index = 0
 	
 	EventBus.shift_started.emit(shift_id)
@@ -279,14 +287,75 @@ func _load_hacker_shift(day: int):
 	# Load contracts for this shift
 	if ContractManager:
 		ContractManager.load_shift_contracts(shift)
+		
+	# Initialize scripted events
+	active_hacker_events = shift.scripted_events.duplicate()
+	active_hacker_events.sort_custom(func(a, b): return a.get("time", 0) < b.get("time", 0))
 
 	# Emit shift started signal FIRST (before dialogue)
 	if EventBus:
 		EventBus.hacker_shift_started.emit(day)
+		
+	# Start polling loop
+	hacker_event_timer.start()
 
 	# Play broker dialogue AFTER shift loads (called externally after transition completes)
 	if shift.broker_dialogue_id != "":
 		_pending_broker_dialogue = shift.broker_dialogue_id
+
+func _on_hacker_event_tick():
+	if GameState.current_role != GameState.Role.HACKER:
+		hacker_event_timer.stop()
+		return
+		
+	var current_time = ShiftClock.elapsed_seconds
+	
+	# Check for scripted events
+	while not active_hacker_events.is_empty() and active_hacker_events[0].get("time", 0) <= current_time:
+		var event = active_hacker_events.pop_front()
+		_trigger_hacker_event(event)
+
+func _trigger_hacker_event(event: Dictionary):
+	var type = event.get("type", "")
+	print("🎬 HACKER EVENT: ", type)
+	
+	match type:
+		"emergency_patch":
+			var hostname = event.get("hostname", "")
+			if hostname != "" and NetworkState:
+				NetworkState.update_host_state(hostname, {"status": "CLEAN", "scanned": true})
+				# Remove from footholds
+				if hostname in GameState.hacker_footholds:
+					GameState.hacker_footholds.erase(hostname)
+					if GameState.current_foothold == hostname:
+						GameState.current_foothold = ""
+						
+				TerminalSystem.inject_system_message("⚠ CRITICAL: Remote connection to %s lost. Host has been patched by system administrator." % hostname)
+				
+				if HackerHistory:
+					HackerHistory.add_entry({
+						"action_type": "event_emergency_patch",
+						"target": hostname,
+						"timestamp": ShiftClock.elapsed_seconds,
+						"result": "FOOTHOLD_LOST",
+						"note": "Host patched by AI Analyst"
+					})
+					
+		"rival_ai_escalation":
+			var state_name = event.get("state", "SEARCHING")
+			if RivalAI:
+				var state_enum = RivalAI.AIState.get(state_name, RivalAI.AIState.SEARCHING)
+				RivalAI.force_state(state_enum)
+				
+		"broker_message":
+			var dialogue_id = event.get("dialogue_id", "")
+			if dialogue_id != "":
+				start_broker_dialogue(dialogue_id)
+				
+		"honeypot_reveal":
+			var hostname = event.get("hostname", "")
+			# Visual only? Or affects mechanics
+			TerminalSystem.inject_system_message("🎬 INTEL: Node %s has been identified as a honeypot trap by external reconnaissance." % hostname)
 
 # Store pending dialogue to play after transition
 var _pending_broker_dialogue: String = ""
@@ -294,10 +363,10 @@ var _pending_broker_dialogue: String = ""
 func play_pending_broker_dialogue():
 	"""Play the pending broker dialogue if one is queued."""
 	if _pending_broker_dialogue != "":
-		_start_broker_dialogue(_pending_broker_dialogue)
+		start_broker_dialogue(_pending_broker_dialogue)
 		_pending_broker_dialogue = ""
 
-func _start_broker_dialogue(dialogue_id: String):
+func start_broker_dialogue(dialogue_id: String):
 	"""Start broker dialogue using DialogueManager."""
 	if not DialogueManager:
 		return
@@ -312,14 +381,60 @@ func _start_broker_dialogue(dialogue_id: String):
 		print("⚠ HACKER: Broker dialogue not found: %s" % path)
 
 func advance_hacker_day():
-	"""Progress to the next hacker day."""
+	"""Progress to the next hacker day. Auto-saves before advancing."""
+	var current_day = current_hacker_day
 	var next_day = current_hacker_day + 1
-	if next_day > 3:
-		print("🎬 HACKER: Campaign complete (Days 4-7 deferred)")
-		# TODO: End campaign or continue
+	
+	# Cache current mode to restore after report
+	var previous_mode = GameState.current_mode if GameState else 0
+	
+	# Show Mirror Mode for the day just completed
+	_show_mirror_mode(current_day)
+	
+	# Force mouse visibility for the report
+	if GameState: GameState.set_mode(GameState.GameMode.MODE_UI_ONLY)
+	
+	await EventBus.mirror_mode_closed
+	
+	# Restore previous mode and hide OS cursor if we are returning to the desktop
+	if GameState: 
+		GameState.set_mode(previous_mode)
+		if previous_mode == GameState.GameMode.MODE_2D:
+			Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
+	
+	if next_day > 7:
+		print("🎬 HACKER: Campaign complete!")
+		# Auto-save at campaign end
+		if SaveSystem:
+			SaveSystem.save_game()
 		return
 
+	# Save before advancing to next day
+	if SaveSystem:
+		SaveSystem.save_game()
+
 	_load_hacker_shift(next_day)
+
+func _show_mirror_mode(day: int):
+	print("🎬 HACKER: Showing Mirror Mode for Day %d" % day)
+	var mirror_scene = load("res://scenes/ui/MirrorMode.tscn")
+	if mirror_scene:
+		# Wrap in high-layer CanvasLayer to ensure it's on top and clickable
+		var layer = CanvasLayer.new()
+		layer.layer = 120 # Above dialogue (110)
+		layer.name = "MirrorModeLayer"
+		get_tree().root.add_child(layer)
+		
+		var mirror_instance = mirror_scene.instantiate()
+		layer.add_child(mirror_instance)
+		mirror_instance.show_report(day)
+		
+		# Ensure layer is cleaned up when dashboard is closed
+		mirror_instance.tree_exited.connect(func(): layer.queue_free())
+	else:
+		push_error("NarrativeDirector: Failed to load MirrorMode.tscn")
+		# Emit fallback signal so advancement doesn't hang
+		EventBus.mirror_mode_closed.emit()
 # ============================================
 
 func reset_to_default():
@@ -356,7 +471,7 @@ func force_random_event():
 func get_shift_timer() -> float:
 	if not _is_shift_active:
 		return 0.0
-	return (Time.get_ticks_msec() - shift_start_time) / 1000.0
+	return ShiftClock.elapsed_seconds
 
 func is_shift_active() -> bool:
 	return _is_shift_active
