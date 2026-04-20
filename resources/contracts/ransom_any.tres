@@ -10,3 +10,4 @@ description = "Deploy ransomware on any accessible host. The target doesn't matt
 required_payload = 0
 bounty_reward = 100
 difficulty_rating = 1
+tactical_hint = "Use the Terminal to 'list' hosts, then 'scan' a target to find vulnerabilities. Once ready, use 'exploit' to gain access and deploy Ransomware."

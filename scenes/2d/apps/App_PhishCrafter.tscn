@@ -1,0 +1,144 @@
+[gd_scene load_steps=3 format=3 uid="uid://bitv4oefmx7ub"]
+
+[ext_resource type="Script" path="res://scripts/2d/apps/App_PhishCrafter.gd" id="1_script"]
+[ext_resource type="Theme" uid="uid://dny3rlbltexc7" path="res://assets/themes/EnterpriseTheme.tres" id="2_theme"]
+
+[node name="App_PhishCrafter" type="Control"]
+custom_minimum_size = Vector2(600, 480)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_theme")
+script = ExtResource("1_script")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.0509804, 0.0509804, 0.0666667, 1)
+
+[node name="VBox" type="VBoxContainer" parent="Background"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 15
+
+[node name="Header" type="PanelContainer" parent="Background/VBox"]
+layout_mode = 2
+theme_type_variation = &"HeaderPanel"
+
+[node name="HeaderLabel" type="Label" parent="Background/VBox/Header"]
+layout_mode = 2
+theme_type_variation = &"TechnicalHeader"
+text = "PHISH CRAFTER v1.4"
+vertical_alignment = 1
+
+[node name="MainContent" type="MarginContainer" parent="Background/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="ContentVBox" type="VBoxContainer" parent="Background/VBox/MainContent"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="ConfigGroup" type="VBoxContainer" parent="Background/VBox/MainContent/ContentVBox"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="TargetSection" type="HBoxContainer" parent="Background/VBox/MainContent/ContentVBox/ConfigGroup"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="TargetLabel" type="Label" parent="Background/VBox/MainContent/ContentVBox/ConfigGroup/TargetSection"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "SELECT TARGET NODE:"
+
+[node name="TargetDropdown" type="OptionButton" parent="Background/VBox/MainContent/ContentVBox/ConfigGroup/TargetSection"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(250, 35)
+layout_mode = 2
+item_count = 1
+selected = 0
+popup/item_0/text = "Scanning Network..."
+popup/item_0/id = 0
+
+[node name="LureSection" type="VBoxContainer" parent="Background/VBox/MainContent/ContentVBox/ConfigGroup"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="LureLabel" type="Label" parent="Background/VBox/MainContent/ContentVBox/ConfigGroup/LureSection"]
+layout_mode = 2
+text = "CAMPAIGN LURE:"
+
+[node name="LureOptions" type="HBoxContainer" parent="Background/VBox/MainContent/ContentVBox/ConfigGroup/LureSection"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="InvoiceCheck" type="CheckBox" parent="Background/VBox/MainContent/ContentVBox/ConfigGroup/LureSection/LureOptions"]
+unique_name_in_owner = true
+layout_mode = 2
+button_pressed = true
+text = "Urgent Invoice"
+
+[node name="PasswordCheck" type="CheckBox" parent="Background/VBox/MainContent/ContentVBox/ConfigGroup/LureSection/LureOptions"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "IT Password Reset"
+
+[node name="PayrollCheck" type="CheckBox" parent="Background/VBox/MainContent/ContentVBox/ConfigGroup/LureSection/LureOptions"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Payroll Update"
+
+[node name="ControlSection" type="VBoxContainer" parent="Background/VBox/MainContent/ContentVBox"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="LaunchButton" type="Button" parent="Background/VBox/MainContent/ContentVBox/ControlSection"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 45)
+layout_mode = 2
+text = "LAUNCH PHISHING CAMPAIGN"
+
+[node name="CampaignProgress" type="ProgressBar" parent="Background/VBox/MainContent/ContentVBox/ControlSection"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+show_percentage = false
+
+[node name="LogSection" type="VBoxContainer" parent="Background/VBox/MainContent/ContentVBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 5
+
+[node name="LogLabel" type="Label" parent="Background/VBox/MainContent/ContentVBox/LogSection"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+theme_override_colors/font_color = Color(1, 1, 1, 0.4)
+text = "OPERATION TELEMETRY:"
+
+[node name="LogPanel" type="PanelContainer" parent="Background/VBox/MainContent/ContentVBox/LogSection"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="LogOutput" type="RichTextLabel" parent="Background/VBox/MainContent/ContentVBox/LogSection/LogPanel"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/normal_font_size = 13
+bbcode_enabled = true
+text = "[color=gray]Phish Crafter initialized. Awaiting target selection...[/color]"
+scroll_following = true

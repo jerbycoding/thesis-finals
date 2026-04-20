@@ -7,6 +7,7 @@ const ContractResource = preload("res://scripts/resources/ContractResource.gd")
 
 @onready var contract_name = %ContractName
 @onready var contract_desc = %ContractDesc
+@onready var tactical_hint = %TacticalHint
 @onready var status_label = %StatusLabel
 @onready var accept_button = %AcceptButton
 @onready var submit_button = %SubmitButton
@@ -38,6 +39,12 @@ func _refresh_contracts():
 		# Show active contract
 		contract_name.text = active.title
 		contract_desc.text = active.get_formatted_narrative()
+		
+		if active.tactical_hint != "":
+			tactical_hint.text = "TACTICAL ADVICE: " + active.tactical_hint
+			tactical_hint.visible = true
+		else:
+			tactical_hint.visible = false
 
 		if active.is_completed:
 			status_label.text = "STATUS: COMPLETE ✅"

@@ -8,3 +8,4 @@ app_id = "contracts"
 scene_path = "res://scenes/2d/apps/App_ContractBoard.tscn"
 title = "Contract Board"
 default_size = Vector2(700, 500)
+required_role = 1

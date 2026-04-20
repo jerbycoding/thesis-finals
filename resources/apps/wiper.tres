@@ -8,4 +8,5 @@ app_id = "wiper"
 scene_path = "res://scenes/2d/apps/App_Wiper.tscn"
 title = "Evidence Wiper"
 default_size = Vector2(600, 450)
+required_role = 1
 is_restricted = false

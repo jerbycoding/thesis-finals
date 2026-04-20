@@ -433,34 +433,43 @@ func _cmd_logs(args: Array) -> Dictionary:
 	return {"success": true, "output": output}
 
 func _cmd_list() -> Dictionary:
-	var output = "[b]" + CorporateVoice.get_phrase("known_hostnames") + "[/b]\n\n"
 	var hostnames = NetworkState.get_all_hostnames()
 	
-	# === DEBUG: Print to console ===
-	print("TERMINAL DEBUG: hostnames.count = ", hostnames.size())
-	for h in hostnames:
-		print("  - ", h)
-	# ==============================
-
 	if hostnames.is_empty():
-		output += CorporateVoice.get_phrase("no_known_hosts")
-	else:
-		hostnames.sort() # Sort alphabetically for readability
-		for hostname in hostnames:
-			var host_info = NetworkState.get_host_state(hostname)
-			var host_resource = NetworkState.get_host(hostname)
-			var status_text = ""
-			if host_info and host_info.get("isolated", false):
-				status_text = " ([color=orange]ISOLATED[/color])" # Use orange for isolated status
+		return {"success": true, "output": "No nodes found in local segment."}
+	
+	hostnames.sort()
+	
+	var output = "[b]Hostname             Status          Details[/b]\n"
+	output += "--------------------------------------------------\n"
+	
+	for hostname in hostnames:
+		var host_info = NetworkState.get_host_state(hostname)
+		var host_resource = NetworkState.get_host(hostname)
+		
+		var status_text = "ONLINE"
+		var color = "green"
+		
+		if host_info and host_info.get("isolated", false):
+			status_text = "ISOLATED"
+			color = "orange"
+		elif host_info and host_info.get("status") == "INFECTED":
+			status_text = "THREAT"
+			color = "red"
 			
-			# === PHASE 2: Show vulnerability score for hacker campaign ===
-			if GameState and GameState.current_role == GameState.Role.HACKER:
-				var vuln_score = host_resource.vulnerability_score if host_resource else 0.5
-				var vuln_color = "green" if vuln_score > 0.6 else ("yellow" if vuln_score > 0.3 else "red")
-				status_text += " ([color=%s]VULN: %.0f%%[/color])" % [vuln_color, vuln_score * 100]
-			# ================================================================
-
-			output += "- " + hostname + status_text + "\n"
+		var details = ""
+		if GameState and GameState.current_role == GameState.Role.HACKER:
+			var vuln = host_resource.vulnerability_score if host_resource else 0.5
+			var v_color = "green" if vuln > 0.6 else ("yellow" if vuln > 0.3 else "red")
+			details = "[color=%s]VULN: %.0f%%[/color]" % [v_color, vuln * 100]
+		else:
+			details = host_resource.os_version if host_resource else "Unknown OS"
+			
+		# Simple manual padding for tabular look
+		var padding = " ".repeat(max(1, 20 - hostname.length()))
+		var status_padding = " ".repeat(max(1, 15 - status_text.length()))
+		
+		output += "%s%s[color=%s]%s[/color]%s%s\n" % [hostname, padding, color, status_text, status_padding, details]
 
 	return {"success": true, "output": output}
 

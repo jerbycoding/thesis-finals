@@ -8,3 +8,4 @@ app_id = "network"
 scene_path = "res://scenes/2d/apps/App_NetworkMapper.tscn"
 title = "Network Topology"
 default_size = Vector2(800, 600)
+required_role = 2

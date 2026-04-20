@@ -8,3 +8,4 @@ app_id = "ransomware"
 scene_path = "res://scenes/2d/apps/App_Ransomware.tscn"
 title = "Ransomware"
 default_size = Vector2(600, 400)
+required_role = 1

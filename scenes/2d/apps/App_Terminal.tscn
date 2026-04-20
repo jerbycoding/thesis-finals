@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://c0f73xjhjju8b"]
 
-[ext_resource type="Script" uid="uid://1b1t5ow8n8ns" path="res://scripts/2d/apps/App_Terminal.gd" id="1_terminal"]
+[ext_resource type="Script" path="res://scripts/2d/apps/app_Terminal.gd" id="1_terminal"]
 [ext_resource type="Theme" uid="uid://dny3rlbltexc7" path="res://assets/themes/EnterpriseTheme.tres" id="2_theme"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_input"]
@@ -23,9 +23,9 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.0627451, 0.0627451, 0.0627451, 1)
+color = Color(0.0470588, 0.0470588, 0.0470588, 1)
 
-[node name="VBox" type="VBoxContainer" parent="."]
+[node name="MainVBox" type="VBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -34,79 +34,59 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 0
 
-[node name="MainContent" type="MarginContainer" parent="VBox"]
+[node name="OutputMargin" type="MarginContainer" parent="MainVBox"]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_constants/margin_left = 30
-theme_override_constants/margin_top = 30
-theme_override_constants/margin_right = 30
-theme_override_constants/margin_bottom = 20
-
-[node name="Layout" type="VBoxContainer" parent="VBox/MainContent"]
-layout_mode = 2
-theme_override_constants/separation = 25
-
-[node name="OutputText" type="RichTextLabel" parent="VBox/MainContent/Layout"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_font_sizes/normal_font_size = 12
-bbcode_enabled = true
-text = "soc@terminal:~$ _"
-
-[node name="MetadataBox" type="PanelContainer" parent="VBox/MainContent/Layout"]
-unique_name_in_owner = true
-visible = false
-custom_minimum_size = Vector2(0, 120)
-layout_mode = 2
-
-[node name="Margin" type="MarginContainer" parent="VBox/MainContent/Layout/MetadataBox"]
-layout_mode = 2
 theme_override_constants/margin_left = 15
-theme_override_constants/margin_top = 10
+theme_override_constants/margin_top = 15
 theme_override_constants/margin_right = 15
-theme_override_constants/margin_bottom = 10
+theme_override_constants/margin_bottom = 5
 
-[node name="MetadataLabel" type="RichTextLabel" parent="VBox/MainContent/Layout/MetadataBox/Margin"]
+[node name="ScrollContainer" type="ScrollContainer" parent="MainVBox/OutputMargin"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_font_sizes/normal_font_size = 11
-bbcode_enabled = true
-text = "Metadata..."
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 3
 
-[node name="Footer" type="PanelContainer" parent="VBox"]
-custom_minimum_size = Vector2(0, 35)
-layout_mode = 2
-theme_type_variation = &"HeaderPanel"
-
-[node name="Legend" type="Label" parent="VBox/Footer"]
-layout_mode = 2
-theme_type_variation = &"TechnicalHeader"
-theme_override_colors/font_color = Color(1, 1, 1, 0.4)
-theme_override_font_sizes/font_size = 10
-text = " [ENTER] Run Command   [ESC] Exit Utility "
-horizontal_alignment = 1
-
-[node name="InputArea" type="PanelContainer" parent="VBox"]
-custom_minimum_size = Vector2(0, 40)
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxEmpty_input")
-
-[node name="HBox" type="HBoxContainer" parent="VBox/InputArea"]
-layout_mode = 2
-
-[node name="Prompt" type="Label" parent="VBox/InputArea/HBox"]
-custom_minimum_size = Vector2(40, 0)
-layout_mode = 2
-theme_override_colors/font_color = Color(0.2, 1, 0.2, 1)
-text = " > "
-horizontal_alignment = 1
-
-[node name="CommandInput" type="LineEdit" parent="VBox/InputArea/HBox"]
+[node name="OutputText" type="RichTextLabel" parent="MainVBox/OutputMargin/ScrollContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_colors/caret_color = Color(0.2, 1, 0.2, 1)
+size_flags_vertical = 3
+theme_override_constants/line_separation = 2
+theme_override_font_sizes/normal_font_size = 13
+bbcode_enabled = true
+text = "Microsoft Windows [Version 10.0.19045.3803]
+(c) Microsoft Corporation. All rights reserved.
+
+"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+
+[node name="InputArea" type="MarginContainer" parent="MainVBox"]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 10
+
+[node name="HBox" type="HBoxContainer" parent="MainVBox/InputArea"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="PromptLabel" type="Label" parent="MainVBox/InputArea/HBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+text = "C:\\WINDOWS\\system32> "
+
+[node name="CommandInput" type="LineEdit" parent="MainVBox/InputArea/HBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/caret_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 13
 theme_override_styles/focus = SubResource("StyleBoxEmpty_input")
 theme_override_styles/read_only = SubResource("StyleBoxEmpty_input")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_input")

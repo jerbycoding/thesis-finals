@@ -109,6 +109,44 @@ theme_override_styles/background = SubResource("StyleBoxFlat_Progress")
 value = 100.0
 show_percentage = false
 
+[node name="TraceGroup" type="VBoxContainer" parent="ModuleLayout/Body/VBox"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="HBox" type="HBoxContainer" parent="ModuleLayout/Body/VBox/TraceGroup"]
+layout_mode = 2
+
+[node name="TraceLabel" type="Label" parent="ModuleLayout/Body/VBox/TraceGroup/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 10
+text = "TRACE_LEVEL"
+
+[node name="TraceValue" type="Label" parent="ModuleLayout/Body/VBox/TraceGroup/HBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_font_sizes/font_size = 10
+text = "0%"
+
+[node name="TraceBar" type="ProgressBar" parent="ModuleLayout/Body/VBox/TraceGroup"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 6)
+layout_mode = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_Progress")
+value = 10.0
+show_percentage = false
+
+[node name="TraceStatus" type="Label" parent="ModuleLayout/Body/VBox/TraceGroup"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.4, 0.4, 0.4, 1)
+theme_override_font_sizes/font_size = 8
+text = "STATUS: STEALTH"
+
 [node name="HSeparator" type="HSeparator" parent="ModuleLayout/Body/VBox"]
 layout_mode = 2
 theme_override_constants/separation = 10

@@ -282,6 +282,10 @@ func _load_hacker_shift(day: int):
 	var shift = hacker_shift_library[day]
 	current_hacker_day = day
 
+	# SYNC: Update HackerHistory authority
+	if HackerHistory:
+		HackerHistory.current_shift_day = day
+
 	print("🎬 HACKER: Loading Day %d" % day)
 
 	# Load contracts for this shift

@@ -8,3 +8,4 @@ app_id = "handbook"
 scene_path = "res://scenes/2d/apps/App_Handbook.tscn"
 title = "SOC Handbook"
 default_size = Vector2(700, 500)
+required_role = 2

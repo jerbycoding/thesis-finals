@@ -8,3 +8,4 @@ app_id = "email"
 scene_path = "res://scenes/2d/apps/App_EmailAnalyzer.tscn"
 title = "Email Analyzer"
 default_size = Vector2(900, 700)
+required_role = 0

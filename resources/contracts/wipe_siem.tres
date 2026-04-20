@@ -12,4 +12,5 @@ target_hostname = "DB-SRV-01"
 required_payload = 3
 bounty_reward = 200
 difficulty_rating = 1
+tactical_hint = "If the RivalAI starts a lockdown, use the Evidence Wiper to 'Scrub Offensive Logs'. This removes the traces the AI uses to track your location."
 completion_dialogue_id = "day5_outro"

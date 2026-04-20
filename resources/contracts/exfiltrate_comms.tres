@@ -13,4 +13,5 @@ required_payload = 1
 required_data_type = "comms"
 bounty_reward = 300
 difficulty_rating = 2
+tactical_hint = "Exfiltration is a passive income stream. Once you have a foothold, open the Data Exfiltrator to drain credits while you work on other targets."
 completion_dialogue_id = "day4_outro"

@@ -13,4 +13,5 @@ required_payload = 1
 required_data_type = "credentials"
 bounty_reward = 1000
 difficulty_rating = 3
+tactical_hint = "The AI Analyst is at maximum sensitivity. Use the Terminal 'spoof' command to reduce your trace footprint before each offensive action."
 completion_dialogue_id = "day7_reveal"

@@ -3,26 +3,17 @@ extends Control
 
 var command_history: Array[String] = []
 var history_index: int = -1
-var current_ticket_id: String = ""
 
 @onready var output_text: RichTextLabel = %OutputText
 @onready var command_input: LineEdit = %CommandInput
-@onready var metadata_box: PanelContainer = %MetadataBox
-@onready var metadata_label: RichTextLabel = %MetadataLabel
-
-# --- Typewriter Logic ---
-var _output_queue: Array[String] = []
-var _is_typing: bool = false
-var _typewriter_speed: float = 0.01
-var _current_tween: Tween
+@onready var prompt_label: Label = %PromptLabel
+@onready var scroll_container: ScrollContainer = %ScrollContainer
 
 var is_glitch_active: bool = false
+var current_prompt_text: String = "C:\\SOC\\Analyst> "
 
 func _ready():
-	print("======= App_Terminal (TUI Redesign) Ready =======")
-	
-	visible = true
-	modulate = Color.WHITE
+	_setup_role_identity()
 	
 	command_input.text_submitted.connect(_on_command_submitted)
 	command_input.gui_input.connect(_on_command_gui_input)
@@ -33,8 +24,27 @@ func _ready():
 	
 	EventBus.world_event_triggered.connect(_on_world_event)
 	
-	_append_output("[color=gray]SOC_CORE v4.4 Operating System[/color]\n[color=gray]Unauthorized access is strictly prohibited.[/color]\n\n")
-	_append_output("Type [color=cyan]help[/color] to list available forensic modules.\n\n")
+	# Scroll to bottom on size change
+	output_text.resized.connect(_scroll_to_bottom)
+
+func _setup_role_identity():
+	if not GameState: return
+	
+	if GameState.current_role == GameState.Role.HACKER:
+		current_prompt_text = "root@remote-terminal:~# "
+		prompt_label.text = current_prompt_text
+		prompt_label.add_theme_color_override("font_color", Color(0, 1, 0, 1)) # Green
+		command_input.add_theme_color_override("font_color", Color(0, 1, 0, 1))
+		command_input.add_theme_color_override("caret_color", Color(0, 1, 0, 1))
+		
+		output_text.text = "[color=#00FF00]HackerOS v2.1 (Kernel 5.15.0-hacker)[/color]\n[color=#00FF00]Authorized access only. All actions are logged.[/color]\n\n"
+	else:
+		current_prompt_text = "C:\\SOC\\Analyst> "
+		prompt_label.text = current_prompt_text
+		prompt_label.add_theme_color_override("font_color", Color(0.8, 0.8, 0.8, 1)) # Light Gray
+		command_input.add_theme_color_override("font_color", Color(0.9, 0.9, 0.9, 1))
+		
+		output_text.text = "Microsoft Windows [Version 10.0.19045.3803]\n(c) Microsoft Corporation. All rights reserved.\n\n"
 
 func _on_world_event(event_id: String, active: bool, _duration: float):
 	if event_id == GlobalConstants.EVENTS.ZERO_DAY or event_id == GlobalConstants.EVENTS.DDOS_ATTACK:
@@ -43,7 +53,6 @@ func _on_world_event(event_id: String, active: bool, _duration: float):
 func _on_terminal_output_received(text: String, _is_partial: bool):
 	var processed_text = text
 	if is_glitch_active and randf() < 0.2:
-		# Simulate data corruption during Zero Day
 		var glitch_chars = "01#!@$%%^&*()_+"
 		var text_chars = text.split("")
 		for i in range(min(5, text.length())):
@@ -54,51 +63,73 @@ func _on_terminal_output_received(text: String, _is_partial: bool):
 				
 	_append_output(processed_text)
 
-func _on_command_gui_input(event):
+func _on_command_gui_input(event: InputEvent):
 	if event is InputEventKey and event.pressed:
-		# Don't play for non-character keys like Enter or Shift
 		if event.unicode > 31: 
 			if AudioManager: AudioManager.play_dynamic_typing()
+		
+		# Tab Completion
+		if event.keycode == KEY_TAB:
+			_handle_tab_completion()
+			get_viewport().set_input_as_handled()
+
+func _handle_tab_completion():
+	var input = command_input.text.strip_edges()
+	if input.is_empty(): return
+	
+	var parts = input.split(" ")
+	var to_complete = parts[-1].to_upper()
+	
+	if parts.size() > 1:
+		# Complete hostnames
+		var hostnames = NetworkState.get_all_hostnames()
+		for host in hostnames:
+			if host.to_upper().begins_with(to_complete):
+				parts[-1] = host
+				command_input.text = " ".join(parts) + " "
+				command_input.caret_column = command_input.text.length()
+				return
+	else:
+		# Complete commands
+		if TerminalSystem:
+			for cmd in TerminalSystem.commands.keys():
+				if cmd.begins_with(input.to_lower()):
+					command_input.text = cmd + " "
+					command_input.caret_column = command_input.text.length()
+					return
 
 func _on_command_submitted(command: String):
-	if command.strip_edges().is_empty(): return
+	var cmd_trimmed = command.strip_edges()
+	if cmd_trimmed.is_empty(): 
+		_append_output("\n" + current_prompt_text + "\n")
+		return
 	
 	if AudioManager: AudioManager.play_terminal_beep()
 	
-	if command_history.is_empty() or command_history.back() != command:
-		command_history.append(command)
+	if command_history.is_empty() or command_history.back() != cmd_trimmed:
+		command_history.append(cmd_trimmed)
 		
 	history_index = command_history.size()
 	command_input.text = ""
 	
-	_append_output("[color=gray]> " + command + "[/color]\n")
+	# Log the command to history
+	_append_output(current_prompt_text + cmd_trimmed + "\n")
 	
 	if TerminalSystem:
-		var result = await TerminalSystem.execute_command(command)
-		
-		# Metadata box is for one-shot summary data (status, list, etc.)
-		if "status" in command.to_lower() or "list" in command.to_lower():
-			_show_metadata(result.output)
+		await TerminalSystem.execute_command(cmd_trimmed)
+		# NOTE: Output is handled by _on_terminal_output_received signal
 	else:
 		_append_output("[color=red]SYSTEM_ERROR: Module backend unreachable.[/color]\n")
-
-func _show_metadata(text: String):
-	metadata_box.visible = true
-	metadata_label.text = text
 	
-	# Small animation
-	metadata_box.modulate.a = 0
-	var tween = create_tween()
-	tween.tween_property(metadata_box, "modulate:a", 1.0, 0.2)
+	_scroll_to_bottom()
 
 func _append_output(text: String):
 	output_text.append_text(text)
-	_scroll_to_bottom()
+	# Trigger scroll on next frame to account for size updates
+	_scroll_to_bottom.call_deferred()
 
 func _scroll_to_bottom():
-	var scroll_container = output_text.get_parent()
-	if scroll_container is ScrollContainer:
-		await get_tree().process_frame
+	if scroll_container:
 		scroll_container.scroll_vertical = scroll_container.get_v_scroll_bar().max_value
 
 func _input(event):

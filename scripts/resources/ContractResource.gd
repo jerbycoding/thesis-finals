@@ -9,6 +9,7 @@ enum PayloadType { RANSOMWARE, EXFILTRATION, BOTH, WIPER }
 # === PHASE 5: 12-FIELD SCHEMA ===
 @export_group("Contract Metadata")
 @export var narrative_text: String = "" # Raw text with {VAR:...} tokens
+@export var tactical_hint: String = "" # Educational/Tactical hint for the player
 @export var target_hostname: String = ""
 @export var is_optional: bool = false
 @export var difficulty_rating: int = 1 # 1-3 scale

@@ -8,3 +8,4 @@ app_id = "taskmanager"
 scene_path = "res://scenes/2d/apps/App_TaskManager.tscn"
 title = "Task Manager"
 default_size = Vector2(600, 400)
+required_role = 2

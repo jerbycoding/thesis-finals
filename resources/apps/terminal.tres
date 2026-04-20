@@ -8,3 +8,4 @@ app_id = "terminal"
 scene_path = "res://scenes/2d/apps/App_Terminal.tscn"
 title = "Terminal"
 default_size = Vector2(650, 450)
+required_role = 2

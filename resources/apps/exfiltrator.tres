@@ -8,4 +8,5 @@ app_id = "exfiltrator"
 scene_path = "res://scenes/2d/apps/App_Exfiltrator.tscn"
 title = "Data Exfiltrator"
 default_size = Vector2(600, 500)
+required_role = 1
 is_restricted = false

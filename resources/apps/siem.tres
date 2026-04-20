@@ -8,3 +8,4 @@ app_id = "siem"
 scene_path = "res://scenes/2d/apps/App_SIEMViewer.tscn"
 title = "SIEM Log Viewer"
 default_size = Vector2(750, 550)
+required_role = 0

@@ -146,6 +146,9 @@ func switch_role(new_role: Role) -> bool:
 	# 11. Clear Dirty Flag
 	role_transition_in_progress = false
 	
+	# 12. Global Role Switch Signal
+	EventBus.role_switched.emit(new_role)
+	
 	return true
 
 func _is_minigame_active() -> bool:

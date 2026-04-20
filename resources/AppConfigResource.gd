@@ -7,6 +7,9 @@ class_name AppConfig
 @export var title: String = ""
 @export var default_size: Vector2 = Vector2(600, 400)
 
+enum RoleRequirement { ANALYST, HACKER, BOTH }
+@export var required_role: RoleRequirement = RoleRequirement.BOTH
+
 @export_group("Restrictions")
 @export var is_restricted: bool = false
 @export var required_category: String = "" # e.g., "Ransomware"

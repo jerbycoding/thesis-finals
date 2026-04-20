@@ -8,3 +8,4 @@ app_id = "tickets"
 scene_path = "res://scenes/2d/apps/App_TicketQueue.tscn"
 title = "Ticket Queue"
 default_size = Vector2(500, 600)
+required_role = 0

@@ -13,4 +13,5 @@ required_payload = 2
 required_data_type = "blueprint"
 bounty_reward = 500
 difficulty_rating = 3
+tactical_hint = "Maximize your payout by exfiltrating all available data streams BEFORE deploying Ransomware. Remember to spoof your identity frequently."
 completion_dialogue_id = "day6_outro"

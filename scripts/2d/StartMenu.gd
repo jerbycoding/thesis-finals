@@ -10,6 +10,9 @@ func _ready():
 	visible = false
 	_populate_apps()
 	
+	if EventBus:
+		EventBus.role_switched.connect(func(_new_role): _populate_apps())
+	
 	# High-Clarity: Standardize headers to white
 	var headers = [get_node_or_null("Margin/VBox/PinnedSection/Label"), get_node_or_null("Margin/VBox/AllAppsSection/Label")]
 	for h in headers:
@@ -52,15 +55,13 @@ func _populate_apps():
 	# Clear
 	for child in app_grid.get_children(): child.queue_free()
 		
-	# Get sorted apps
-	var apps = DesktopWindowManager.app_configs.keys()
-	apps.sort()
+	# Get filtered and sorted apps
+	var apps = DesktopWindowManager.get_apps_for_current_role()
+	apps.sort_custom(func(a, b): return a.title < b.title)
 	
-	for app_id in apps:
-		var config = DesktopWindowManager.app_configs[app_id]
-		
+	for config in apps:
 		# Create grid button
-		var btn = _create_app_button(app_id, config.title)
+		var btn = _create_app_button(config.app_id, config.title)
 		app_grid.add_child(btn)
 
 func _create_app_button(app_id: String, title: String) -> Control:

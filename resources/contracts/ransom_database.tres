@@ -11,3 +11,4 @@ target_hostname = "DB-SRV-01"
 required_payload = 0
 bounty_reward = 250
 difficulty_rating = 2
+tactical_hint = "High-security servers like DB-SRV-01 are hard to exploit directly. Use the Phish Crafter to target a user on that node for a lower-trace entry."

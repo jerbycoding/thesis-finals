@@ -8,9 +8,18 @@ extends Control
 @onready var timer_label: Label = %TimerLabel
 @onready var status_label: Label = %StatusLabel
 
+# Hacker UI Nodes
+@onready var trace_group: VBoxContainer = %TraceGroup
+@onready var trace_bar: ProgressBar = %TraceBar
+@onready var trace_value: Label = %TraceValue
+@onready var trace_status: Label = %TraceStatus
+
 var target_integrity: float = 100.0
+var pulse_time: float = 0.0
 
 func _ready():
+	_setup_role_ui()
+	
 	if IntegrityManager:
 		target_integrity = IntegrityManager.current_integrity
 		IntegrityManager.integrity_changed.connect(_on_integrity_changed)
@@ -19,9 +28,55 @@ func _ready():
 	EventBus.ticket_completed.connect(_on_ticket_completed)
 	integrity_bar.modulate = GlobalConstants.UI_COLORS.SUCCESS_FLAT
 
-var pulse_time = 0.0
+func _setup_role_ui():
+	var is_hacker = GameState and GameState.current_role == GameState.Role.HACKER
+	
+	# Show/Hide groups based on role
+	if trace_group: trace_group.visible = is_hacker
+	if %IntegrityGroup: %IntegrityGroup.visible = not is_hacker
+	
+	if is_hacker:
+		# Hacker-specific initialization
+		_update_trace_display(0.0)
+		# Update status for hacker mode
+		status_label.text = "NETWORK_ACCESS: ACTIVE"
 
 func _process(delta):
+	# Role-Based Update
+	if GameState and GameState.current_role == GameState.Role.HACKER:
+		_process_hacker_ui(delta)
+	else:
+		_process_analyst_ui(delta)
+
+	# Update Timer
+	_process_timer()
+
+func _process_hacker_ui(_delta):
+	if not TraceLevelManager: return
+	
+	var current_trace = TraceLevelManager.get_trace_level()
+	trace_bar.value = current_trace
+	trace_value.text = "%d%%" % int(current_trace)
+	
+	# Update Status and Colors
+	if current_trace >= 100:
+		trace_status.text = "STATUS: LOCKDOWN"
+		trace_status.add_theme_color_override("font_color", Color.RED)
+		trace_bar.modulate = Color.RED
+	elif current_trace >= 75:
+		trace_status.text = "STATUS: DETECTED"
+		trace_status.add_theme_color_override("font_color", Color.ORANGE)
+		trace_bar.modulate = Color.ORANGE
+	elif current_trace >= 40:
+		trace_status.text = "STATUS: SUSPICIOUS"
+		trace_status.add_theme_color_override("font_color", Color.YELLOW)
+		trace_bar.modulate = Color.YELLOW
+	else:
+		trace_status.text = "STATUS: STEALTH"
+		trace_status.add_theme_color_override("font_color", Color.GREEN)
+		trace_bar.modulate = Color.GREEN
+
+func _process_analyst_ui(delta):
 	# Smooth Transition
 	if integrity_bar:
 		integrity_bar.value = move_toward(integrity_bar.value, target_integrity, delta * 30.0)
@@ -44,7 +99,7 @@ func _process(delta):
 			integrity_bar.modulate = GlobalConstants.UI_COLORS.SUCCESS_FLAT
 			integrity_bar.modulate.a = 1.0
 
-	# Update Timer
+func _process_timer():
 	if GameState and GameState.is_guided_mode:
 		timer_label.visible = false
 		status_label.text = "MODE: CERTIFICATION"
@@ -63,13 +118,15 @@ func _process(delta):
 		else:
 			timer_label.text = "00:00"
 			
-		status_label.text = "SHIFT_STATUS: ACTIVE"
-		status_label.add_theme_color_override("font_color", Color.BLACK)
+		if GameState and GameState.current_role != GameState.Role.HACKER:
+			status_label.text = "SHIFT_STATUS: ACTIVE"
+			status_label.add_theme_color_override("font_color", Color.BLACK)
 	else:
 		timer_label.text = "00:00"
 		timer_label.visible = true
-		status_label.text = "SHIFT_STATUS: STANDBY"
-		status_label.add_theme_color_override("font_color", GlobalConstants.UI_COLORS.TEXT_SECONDARY)
+		if GameState and GameState.current_role != GameState.Role.HACKER:
+			status_label.text = "SHIFT_STATUS: STANDBY"
+			status_label.add_theme_color_override("font_color", GlobalConstants.UI_COLORS.TEXT_SECONDARY)
 
 func _on_integrity_changed(new_value: float, delta: float):
 	target_integrity = new_value
@@ -78,6 +135,10 @@ func _on_integrity_changed(new_value: float, delta: float):
 		_flash_label(integrity_label, GlobalConstants.UI_COLORS.ERROR_FLAT)
 	else:
 		_flash_label(integrity_label, GlobalConstants.UI_COLORS.SUCCESS_FLAT)
+
+func _update_trace_display(value: float):
+	if trace_value:
+		trace_value.text = "%d%%" % int(value)
 
 func _update_integrity_display(value: float):
 	if integrity_value:

@@ -50,6 +50,15 @@ func can_open_app(app_name: String) -> Dictionary:
 	
 	var config = app_configs[app_name]
 	
+	# ROLE GUARD: Only allow apps for the current role
+	if GameState and config.required_role != AppConfig.RoleRequirement.BOTH:
+		var current_role_req = AppConfig.RoleRequirement.HACKER if GameState.current_role == GameState.Role.HACKER else AppConfig.RoleRequirement.ANALYST
+		if config.required_role != current_role_req:
+			return {
+				"allowed": false,
+				"reason": "ACCESS DENIED: This application is restricted to a different operational role."
+			}
+
 	# Check Active Profile (Tutorial/Narrative Restrictions)
 	if active_permission_profile != null:
 		if not active_permission_profile.is_allowed(app_name):
@@ -77,6 +86,19 @@ func can_open_app(app_name: String) -> Dictionary:
 		"allowed": allowed,
 		"reason": config.restriction_message if not allowed else ""
 	}
+
+func get_apps_for_current_role() -> Array[AppConfig]:
+	"""Returns a list of apps allowed for the current role."""
+	var allowed_apps: Array[AppConfig] = []
+	var current_role = GameState.current_role if GameState else GameState.Role.ANALYST
+	var current_req = AppConfig.RoleRequirement.HACKER if current_role == GameState.Role.HACKER else AppConfig.RoleRequirement.ANALYST
+
+	for app_id in app_configs:
+		var config = app_configs[app_id]
+		if config.required_role == AppConfig.RoleRequirement.BOTH or config.required_role == current_req:
+			allowed_apps.append(config)
+	
+	return allowed_apps
 
 func open_app(app_name: String, force_new: bool = false):
 	if not app_configs.has(app_name):
@@ -158,7 +180,7 @@ func open_app(app_name: String, force_new: bool = false):
 			# Wait a frame to ensure content is loaded
 			await get_tree().process_frame
 		else:
-			print("ERROR: DesktopWindowManager: Failed to load app scene resource")
+			print("ERROR: DesktopWindowManager: Failed to load app_scene resource")
 			_cleanup_failed_window(window_id)
 			return null
 	else:

@@ -10,3 +10,4 @@ description = "Establish a foothold on any workstation in the FINANCE department
 required_payload = 0
 bounty_reward = 150
 difficulty_rating = 1
+tactical_hint = "Workstations have higher vulnerability scores. Gain a foothold on a workstation, then 'pivot' to adjacent servers to bypass central firewalls."
