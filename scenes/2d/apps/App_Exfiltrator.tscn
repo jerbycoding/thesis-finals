@@ -1,15 +1,25 @@
-[gd_scene load_steps=2 format=3 uid="uid://dg7j8p3y1k2mx"]
+[gd_scene load_steps=4 format=3 uid="uid://exfiltrator2026"]
 
 [ext_resource type="Script" path="res://scripts/2d/apps/App_Exfiltrator.gd" id="1_script"]
+[ext_resource type="Theme" uid="uid://dny3rlbltexc7" path="res://assets/themes/EnterpriseTheme.tres" id="2_theme"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Graph"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0, 1, 0.25, 0.1)
 
 [node name="App_Exfiltrator" type="Control"]
-custom_minimum_size = Vector2(600, 500)
+custom_minimum_size = Vector2(650, 500)
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("2_theme")
 script = ExtResource("1_script")
 
 [node name="Background" type="ColorRect" parent="."]
@@ -19,67 +29,160 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0, 0.05, 0, 1)
+color = Color(0.0196078, 0.0196078, 0.0196078, 1)
 
-[node name="VBox" type="VBoxContainer" parent="."]
+[node name="MainVBox" type="VBoxContainer" parent="Background"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 20.0
-offset_top = 20.0
-offset_right = -20.0
-offset_bottom = -20.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 15
+theme_override_constants/separation = 0
 
-[node name="Header" type="Label" parent="VBox"]
+[node name="Header" type="PanelContainer" parent="Background/MainVBox"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0, 1, 0, 1)
-theme_override_font_sizes/font_size = 24
-text = "DATA EXFILTRATOR v1.0"
-horizontal_alignment = 1
+theme_type_variation = &"HeaderPanel"
 
-[node name="HostLabel" type="Label" parent="VBox"]
-unique_name_in_owner = true
+[node name="HeaderLabel" type="Label" parent="Background/MainVBox/Header"]
 layout_mode = 2
-text = "Target: NONE"
+theme_type_variation = &"TechnicalHeader"
+text = "TACTICAL_TRAFFIC_SNIFFER v2.1"
+vertical_alignment = 1
 
-[node name="StatusLabel" type="Label" parent="VBox"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "Standby..."
-autowrap_mode = 3
-
-[node name="HSeparator" type="HSeparator" parent="VBox"]
-layout_mode = 2
-
-[node name="Scroll" type="ScrollContainer" parent="VBox"]
+[node name="MainMargin" type="MarginContainer" parent="Background/MainVBox"]
 layout_mode = 2
 size_flags_vertical = 3
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
 
-[node name="StreamContainer" type="VBoxContainer" parent="VBox/Scroll"]
-unique_name_in_owner = true
+[node name="ContentVBox" type="VBoxContainer" parent="Background/MainVBox/MainMargin"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="MetricsRow" type="HBoxContainer" parent="Background/MainVBox/MainMargin/ContentVBox"]
+layout_mode = 2
+theme_override_constants/separation = 30
+
+[node name="TargetGroup" type="VBoxContainer" parent="Background/MainVBox/MainMargin/ContentVBox/MetricsRow"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/separation = 10
 
-[node name="HSeparator2" type="HSeparator" parent="VBox"]
+[node name="Label" type="Label" parent="Background/MainVBox/MainMargin/ContentVBox/MetricsRow/TargetGroup"]
 layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.8, 0, 0.4)
+theme_override_font_sizes/font_size = 9
+text = "// TARGET_NODE_IDENTITY"
 
-[node name="Footer" type="HBoxContainer" parent="VBox"]
+[node name="HostLabel" type="Label" parent="Background/MainVBox/MainMargin/ContentVBox/MetricsRow/TargetGroup"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 1, 0, 1)
+theme_override_font_sizes/font_size = 16
+text = "NOT_CONNECTED"
+
+[node name="StatsGroup" type="HBoxContainer" parent="Background/MainVBox/MainMargin/ContentVBox/MetricsRow"]
 layout_mode = 2
 theme_override_constants/separation = 20
 
-[node name="ProgressSummary" type="Label" parent="VBox/Footer"]
+[node name="RateGroup" type="VBoxContainer" parent="Background/MainVBox/MainMargin/ContentVBox/MetricsRow/StatsGroup"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Background/MainVBox/MainMargin/ContentVBox/MetricsRow/StatsGroup/RateGroup"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.8, 0, 0.4)
+theme_override_font_sizes/font_size = 9
+text = "BIT_RATE"
+
+[node name="RateLabel" type="Label" parent="Background/MainVBox/MainMargin/ContentVBox/MetricsRow/StatsGroup/RateGroup"]
 unique_name_in_owner = true
+layout_mode = 2
+text = "0.0 KB/s"
+
+[node name="PacketGroup" type="VBoxContainer" parent="Background/MainVBox/MainMargin/ContentVBox/MetricsRow/StatsGroup"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Background/MainVBox/MainMargin/ContentVBox/MetricsRow/StatsGroup/PacketGroup"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.8, 0, 0.4)
+theme_override_font_sizes/font_size = 9
+text = "PACKET_COUNT"
+
+[node name="PacketLabel" type="Label" parent="Background/MainVBox/MainMargin/ContentVBox/MetricsRow/StatsGroup/PacketGroup"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "000000"
+
+[node name="GraphSection" type="VBoxContainer" parent="Background/MainVBox/MainMargin/ContentVBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 5
+
+[node name="Label" type="Label" parent="Background/MainVBox/MainMargin/ContentVBox/GraphSection"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.8, 0, 0.4)
+theme_override_font_sizes/font_size = 9
+text = "// NETWORK_TRAFFIC_OSCILLOSCOPE"
+
+[node name="GraphPanel" type="PanelContainer" parent="Background/MainVBox/MainMargin/ContentVBox/GraphSection"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_Graph")
+
+[node name="GraphCanvas" type="Control" parent="Background/MainVBox/MainMargin/ContentVBox/GraphSection/GraphPanel"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="FeedSection" type="VBoxContainer" parent="Background/MainVBox/MainMargin/ContentVBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 120)
+theme_override_constants/separation = 5
+
+[node name="Label" type="Label" parent="Background/MainVBox/MainMargin/ContentVBox/FeedSection"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.8, 0, 0.4)
+theme_override_font_sizes/font_size = 9
+text = "// INTERCEPTED_DATA_STREAM"
+
+[node name="FeedPanel" type="PanelContainer" parent="Background/MainVBox/MainMargin/ContentVBox/FeedSection"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="IntelFeed" type="RichTextLabel" parent="Background/MainVBox/MainMargin/ContentVBox/FeedSection/FeedPanel"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/normal_font_size = 11
+bbcode_enabled = true
+text = "[color=gray]Handshake standby...[/color]"
+scroll_following = true
+
+[node name="ControlRow" type="HBoxContainer" parent="Background/MainVBox/MainMargin/ContentVBox"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="VBox" type="VBoxContainer" parent="Background/MainVBox/MainMargin/ContentVBox/ControlRow"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Overall Progress: 0%"
+alignment = 1
 
-[node name="StartButton" type="Button" parent="VBox/Footer"]
+[node name="StatusLabel" type="Label" parent="Background/MainVBox/MainMargin/ContentVBox/ControlRow/VBox"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(200, 40)
 layout_mode = 2
-text = "INITIATE EXFILTRATION"
+theme_override_colors/font_color = Color(1, 1, 1, 0.4)
+theme_override_font_sizes/font_size = 11
+text = "Ready to initiate multi-stream exfiltration."
+
+[node name="ProgressSummary" type="Label" parent="Background/MainVBox/MainMargin/ContentVBox/ControlRow/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 1, 0, 1)
+theme_override_font_sizes/font_size = 13
+text = "OVERALL_PROGRESS: 0%"
+
+[node name="StartButton" type="Button" parent="Background/MainVBox/MainMargin/ContentVBox/ControlRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(250, 45)
+layout_mode = 2
+text = "INITIALIZE_PACKET_CAPTURE"

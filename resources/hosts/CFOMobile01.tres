@@ -7,5 +7,5 @@ ip_address = "10.0.6.1"
 is_critical = true
 os_type = "Windows"
 initial_status = "CLEAN"
-vulnerability_score = 0.12
+vulnerability_score = 0.9
 is_honeypot = false

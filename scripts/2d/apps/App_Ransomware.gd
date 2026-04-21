@@ -1,6 +1,5 @@
 # App_Ransomware.gd
-# Phase 4: Win condition — deploy ransomware on current foothold
-# Pattern: @onready var = %NodeName (unique_name_in_owner)
+# Phase 4 Redesign: Crypto-Locker industrial dashboard with reactive "Kill Screen".
 extends Control
 
 @onready var status_label = %StatusLabel
@@ -8,8 +7,12 @@ extends Control
 @onready var start_button = %StartButton
 @onready var calibration_container = %CalibrationContainer
 @onready var ransom_calibration = %RansomCalibration
+@onready var background = %Background
+@onready var encryption_counter = %EncryptionCounter
 
 var target_hostname := ""
+var _is_pulsing := false
+var _pulse_time := 0.0
 
 func _ready():
 	start_button.pressed.connect(_on_deploy_pressed)
@@ -21,7 +24,7 @@ func _ready():
 
 	# Validate eligibility
 	if not _can_launch():
-		status_label.text = "ERROR: No active foothold. Exploit a host first."
+		status_label.text = "ERROR: System authorization failure. Establish foothold first."
 		status_label.add_theme_color_override("font_color", Color(1, 0.3, 0.3, 1))
 		start_button.disabled = true
 		return
@@ -29,48 +32,40 @@ func _ready():
 	# Get target from GameState
 	target_hostname = GameState.current_foothold if GameState else ""
 	if target_hostname.is_empty():
-		status_label.text = "ERROR: Could not determine target host."
+		status_label.text = "ERROR: Target node identity missing."
 		start_button.disabled = true
 		return
 
-	host_label.text = "Target: %s" % target_hostname
+	host_label.text = target_hostname
 
 	# Check if host is already RANSOMED
 	var host_state = NetworkState.get_host_state(target_hostname) if NetworkState else {}
 	var status = host_state.get("status", 0)
-	var is_ransomed = false
-	if status is int:
-		is_ransomed = (status == 4)
-	elif status is String:
-		is_ransomed = (status == "RANSOMED")
+	var is_ransomed = (status == 4 or status == "RANSOMED")
+	
 	if is_ransomed:
-		status_label.text = "ALREADY ENCRYPTED\nHost %s is already under your control.\nNo further action required." % target_hostname
+		status_label.text = "TARGET_ALREADY_ENCRYPTED\nControl established. No further action required."
 		status_label.add_theme_color_override("font_color", Color(0.3, 1, 0.3, 1))
 		start_button.disabled = true
-		start_button.visible = true
+		start_button.text = "PAYLOAD_VERIFIED"
 		return
 
-	status_label.text = "Ready to deploy ransomware payload on %s.\nTrace cost: +40.0 on success, +20.0 on failure." % target_hostname
+	status_label.text = "Awaiting authorization for encryption sequence..."
 
 func _can_launch() -> bool:
-	# Must have a foothold
 	if not GameState or GameState.current_foothold.is_empty():
 		return false
-
-	# Cannot launch during AI isolation
 	if RivalAI and RivalAI.is_isolation_active:
-		status_label.text = "BLOCKED: AI isolation in progress. Cannot deploy during lockdown."
+		status_label.text = "BLOCKED: Active Lockdown detected. Handshake impossible."
 		return false
-
 	return true
 
 func _on_deploy_pressed():
-	if not _can_launch():
-		return
+	if not _can_launch(): return
 
 	start_button.disabled = true
-	start_button.text = "PAYLOAD ACTIVE"
-	status_label.text = "Initiating calibration sequence..."
+	start_button.text = "PAYLOAD_ACTIVE"
+	status_label.text = "Initializing calibration sequence..."
 
 	# Show minigame
 	calibration_container.visible = true
@@ -79,14 +74,16 @@ func _on_deploy_pressed():
 		ransom_calibration._on_start_pressed()
 
 func _on_minigame_success():
-	# Set host to RANSOMED
+	# 1. Update World State
 	if NetworkState:
 		NetworkState.update_host_state(target_hostname, {"status": "RANSOMED"})
 		print("🔒 RANSOMWARE: %s is now RANSOMED" % target_hostname)
 
-	# Emit offensive action — SUCCESS
+	# 2. Trigger "Kill Screen" Sequence
+	_start_kill_sequence()
+
+	# 3. Emit offensive action with 90% Trace Jump
 	if EventBus:
-		# RANSOMWARE LOUDNESS: Jump trace to 90% or add massive cost
 		var current_trace = TraceLevelManager.get_trace_level() if TraceLevelManager else 0.0
 		var jump_cost = max(40.0, 90.0 - current_trace)
 		
@@ -98,38 +95,56 @@ func _on_minigame_success():
 			"trace_cost": jump_cost
 		})
 
-	# Add bounty
+	# 4. Add bounty
 	if BountyLedger:
 		BountyLedger.add_bounty(target_hostname, 100)
 
-	status_label.text = "PAYLOAD DEPLOYED SUCCESSFULLY\nHost %s is now encrypted." % target_hostname
-	status_label.add_theme_color_override("font_color", Color(0.3, 1, 0.3, 1))
-
-	# Close after delay
-	await get_tree().create_timer(2.0).timeout
+func _start_kill_sequence():
+	_is_pulsing = true
+	calibration_container.visible = false
+	status_label.text = "ENCRYPTION_INITIALIZED: TARGET_IS_DONE"
+	status_label.add_theme_color_override("font_color", Color.RED)
+	
+	encryption_counter.visible = true
+	
+	# Animate Counter: 0 -> 48,209 files
+	var tween = create_tween()
+	var final_count = randi_range(30000, 60000)
+	tween.tween_method(func(v): encryption_counter.text = "FILES_LOCKED: %d" % int(v), 0, final_count, 2.5).set_trans(Tween.TRANS_QUINT).set_ease(Tween.EASE_OUT)
+	
+	if AudioManager:
+		AudioManager.play_notification("error") # Use error sound as a makeshift klaxon
+	
+	# Close after sequence
+	await tween.finished
+	await get_tree().create_timer(1.0).timeout
 	_close_app()
 
 func _on_minigame_failed():
-	# Emit offensive action — FAILED (half trace cost)
 	if EventBus:
 		EventBus.offensive_action_performed.emit({
 			"action_type": "ransomware",
 			"target": target_hostname,
-			"timestamp": 0,  # TODO: ShiftClock.elapsed_seconds
+			"timestamp": ShiftClock.elapsed_seconds if "ShiftClock" in self else 0,
 			"result": "FAILED",
-			"trace_cost": GlobalConstants.TRACE_COST.get("RANSOMWARE", 40.0) * 0.5
+			"trace_cost": 20.0
 		})
 
-	status_label.text = "PAYLOAD DEPLOYMENT FAILED\nCalibration failed. Partial trace cost applied.\nYou may retry."
+	status_label.text = "PAYLOAD_FAILURE: CALIBRATION_ERROR\nYou may retry after re-authorizing."
 	status_label.add_theme_color_override("font_color", Color(1, 0.3, 0.3, 1))
 
-	# Re-enable button
+	# Re-enable
 	start_button.disabled = false
-	start_button.text = "DEPLOY PAYLOAD"
+	start_button.text = "RE-INITIALIZE_SEQUENCE"
+
+func _process(delta):
+	if _is_pulsing:
+		_pulse_time += delta * 4.0
+		var pulse = (sin(_pulse_time) + 1.0) / 2.0
+		background.color = lerp(Color(0.02, 0, 0), Color(0.2, 0, 0), pulse)
 
 func _close_app():
-	"""Request window close via parent."""
 	if get_parent() and get_parent().has_method("close_window"):
 		get_parent().close_window()
-	elif get_viewport() and get_viewport().gui_get_focus_owner():
+	else:
 		queue_free()

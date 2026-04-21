@@ -307,12 +307,26 @@ func _focus_window(window: Control):
 # === SOLO DEV PHASE 1: Role Switching Support ===
 func set_theme(role: GameState.Role):
 	"""
-	Apply role-specific theme to desktop.
-	Phase 1 stub - full theme implementation in Phase 6.
+	Apply role-specific theme to the desktop and open windows.
 	"""
-	print("DesktopWindowManager: Setting theme for ", "HACKER" if role == GameState.Role.HACKER else "ANALYST", " (stub)")
-	# Phase 6 TODO: Load HackerTheme.tres or Analyst theme
-	# For now, just print confirmation
+	var theme_path = "res://assets/themes/HackerTheme.tres" if role == GameState.Role.HACKER else "res://assets/themes/EnterpriseTheme.tres"
+	var new_theme = load(theme_path)
+	
+	if not new_theme:
+		push_error("DesktopWindowManager: Failed to load theme: " + theme_path)
+		return
+		
+	print("DesktopWindowManager: Applying theme: ", theme_path)
+	
+	# Apply to Desktop Instance (Root of all 2D UI)
+	if GameState and GameState.desktop_instance:
+		GameState.desktop_instance.theme = new_theme
+	
+	# Apply to all currently open windows
+	for window_id in open_windows:
+		var window = open_windows[window_id]
+		if is_instance_valid(window):
+			window.theme = new_theme
 
 func _update_window_z_indices():
 	var current_z = window_z_index_base

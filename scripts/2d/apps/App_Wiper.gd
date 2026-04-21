@@ -1,21 +1,23 @@
 # App_Wiper.gd
-# Phase 4: Evidence destruction payload.
-# Repurposes RuleSliderMinigame logic for "Log Overwriting".
+# Phase 4 Redesign: Sector Zero-Fill (Hex Scrubber)
 extends Control
 
 @onready var status_label = %StatusLabel
 @onready var host_label = %HostLabel
 @onready var start_button = %StartButton
-@onready var log_cluster_container = %LogClusterContainer
-@onready var slider = %SectorSlider
+@onready var hex_grid = %HexGrid
 @onready var scrub_progress = %ScrubProgress
 @onready var integrity_label = %IntegrityLabel
 
 var target_hostname := ""
 var is_active := false
 var overwrite_integrity: float = 0.0
-var scrub_timer: float = 0.0
-const SCRUB_RATE = 0.8
+var _grid_cells: Array[Label] = []
+var _evidence_spawn_timer: float = 0.0
+const EVIDENCE_SPAWN_RATE = 0.6
+
+# --- Mouse State ---
+var _is_mouse_down: bool = false
 
 func _ready():
 	start_button.pressed.connect(_on_start_pressed)
@@ -23,12 +25,14 @@ func _ready():
 	if not _can_launch(): return
 
 	target_hostname = GameState.current_foothold
-	host_label.text = "Target: %s" % target_hostname
+	host_label.text = target_hostname
+	
+	_initialize_grid()
 	status_label.text = "Sectors mapped. Ready to initiate evidence destruction script."
 
 func _can_launch() -> bool:
 	if not GameState or GameState.current_role != GameState.Role.HACKER:
-		status_label.text = "ERROR: Role mismatch."
+		status_label.text = "ERROR: System role mismatch."
 		start_button.disabled = true
 		return false
 		
@@ -38,17 +42,48 @@ func _can_launch() -> bool:
 		return false
 
 	if RivalAI and RivalAI.is_isolation_active:
-		status_label.text = "BLOCKED: Emergency lockdown in effect. Local storage unmounted."
+		status_label.text = "BLOCKED: Lockdown in effect. Local storage unmounted."
 		start_button.disabled = true
 		return false
 		
 	return true
 
+func _initialize_grid():
+	# Clear existing
+	for child in hex_grid.get_children(): child.queue_free()
+	_grid_cells.clear()
+	
+	# Increase to 256 cells (16x16) to fill space
+	for i in range(256):
+		var lbl = Label.new()
+		lbl.text = _get_random_hex()
+		lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		lbl.add_theme_font_size_override("font_size", 14) # Increased font size
+		lbl.add_theme_color_override("font_color", Color(1, 1, 1, 0.15))
+		
+		# Ensure each cell takes up meaningful space
+		lbl.custom_minimum_size = Vector2(24, 24)
+		lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		lbl.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		
+		lbl.mouse_filter = Control.MOUSE_FILTER_PASS
+		
+		# Connect mouse events for scrubbing
+		lbl.mouse_entered.connect(_on_cell_scrubbed.bind(lbl))
+		
+		hex_grid.add_child(lbl)
+		_grid_cells.append(lbl)
+
+func _get_random_hex() -> String:
+	var chars = "0123456789ABCDEF"
+	return chars[randi() % 16] + chars[randi() % 16]
+
 func _on_start_pressed():
 	if not _can_launch(): return
 	
 	start_button.disabled = true
-	start_button.text = "WIPING SECTORS..."
+	start_button.text = "WIPE_ACTIVE"
 	is_active = true
 	overwrite_integrity = 0.0
 	_update_ui()
@@ -62,6 +97,10 @@ func _on_start_pressed():
 		"trace_cost": GlobalConstants.TRACE_COST.WIPER
 	})
 
+func _input(event):
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+		_is_mouse_down = event.pressed
+
 func _process(delta: float):
 	if not is_active: return
 	
@@ -70,70 +109,43 @@ func _process(delta: float):
 		_handle_interruption()
 		return
 		
-	scrub_timer += delta
-	if scrub_timer >= SCRUB_RATE:
-		scrub_timer = 0
-		_spawn_log_cluster()
+	_evidence_spawn_timer += delta
+	if _evidence_spawn_timer >= EVIDENCE_SPAWN_RATE:
+		_evidence_spawn_timer = 0
+		_spawn_evidence()
+
+func _spawn_evidence():
+	# Pick a random cell and turn it RED (Evidence)
+	var cell = _grid_cells.pick_random()
+	if not cell.get_meta("is_evidence", false) and cell.text != "00":
+		cell.add_theme_color_override("font_color", Color.RED)
+		cell.set_meta("is_evidence", true)
+
+func _on_cell_scrubbed(cell: Label):
+	if not is_active or not _is_mouse_down: return
 	
-	# Update clusters
-	for cluster in log_cluster_container.get_children():
-		cluster.position.x += delta * 250.0
+	if cell.get_meta("is_evidence", false):
+		# SUCCESS: Wiped evidence
+		cell.text = "00"
+		cell.add_theme_color_override("font_color", Color.GREEN)
+		cell.set_meta("is_evidence", false)
+		overwrite_integrity += 5.0
+		if AudioManager: AudioManager.play_terminal_beep(-15.0)
+		_update_ui()
+		_check_win_condition()
+	elif cell.text != "00":
+		# NOISE: Wiping healthy system data
+		cell.modulate = Color.ORANGE
+		var t = create_tween()
+		t.tween_property(cell, "modulate", Color.WHITE, 0.2)
 		
-		# Collision check
-		if cluster.position.x > 290 and cluster.position.x < 310:
-			_check_cluster_collision(cluster)
-			continue
-			
-		if cluster.position.x > 450:
-			cluster.queue_free()
-
-func _spawn_log_cluster():
-	var c = ColorRect.new()
-	c.custom_minimum_size = Vector2(16, 16)
-	c.position = Vector2(0, randf_range(50, 350))
-	
-	# Red clusters = Evidence (GOOD to wipe), Green = System Logs (BAD to wipe, causes noise)
-	var is_evidence = randf() < 0.5
-	c.color = Color.RED if is_evidence else Color.GREEN
-	c.set_meta("evidence", is_evidence)
-	
-	log_cluster_container.add_child(c)
-
-func _check_cluster_collision(cluster):
-	var c_y = cluster.position.y
-	var s_y = slider.value
-	
-	var in_wipe_zone = abs(c_y - s_y) < 40
-	var is_evidence = cluster.get_meta("evidence")
-	
-	if in_wipe_zone:
-		# Overwritten!
-		if is_evidence:
-			overwrite_integrity += 10.0
-			if AudioManager: AudioManager.play_terminal_beep(-5.0)
-		else:
-			# Wiping legitimate logs creates noise!
-			overwrite_integrity -= 5.0
-			if EventBus: EventBus.offensive_action_performed.emit({
-				"action_type": "wiper_noise",
-				"target": target_hostname,
-				"timestamp": ShiftClock.elapsed_seconds,
-				"result": "NOISE_GENERATED",
-				"trace_cost": 2.0
-			})
-	else:
-		# Missed evidence cluster
-		if is_evidence:
-			overwrite_integrity -= 2.0
-			
-	cluster.queue_free()
-	_update_ui()
-	_check_win_condition()
+		overwrite_integrity -= 1.0 # Cleanup penalty
+		_update_ui()
 
 func _update_ui():
 	overwrite_integrity = clamp(overwrite_integrity, 0, 100)
 	scrub_progress.value = overwrite_integrity
-	integrity_label.text = "Destruction Progress: %d%%" % int(overwrite_integrity)
+	integrity_label.text = "DESTRUCTION: %d%%" % int(overwrite_integrity)
 
 func _check_win_condition():
 	if overwrite_integrity >= 100:
@@ -141,15 +153,15 @@ func _check_win_condition():
 
 func _handle_interruption():
 	is_active = false
-	status_label.text = "PROCESS KILLED BY SYSTEM LOCKDOWN"
-	status_label.add_theme_color_override("font_color", Color(1, 0, 0, 1))
+	status_label.text = "PROCESS_KILLED: AI_LOCKDOWN"
+	status_label.add_theme_color_override("font_color", Color.RED)
 	start_button.disabled = false
-	start_button.text = "RETRY WIPER"
+	start_button.text = "RETRY_WIPE"
 
 func _complete_wipe():
 	is_active = false
-	status_label.text = "WIPE SUCCESSFUL. Evidence destroyed, trace reduced."
-	status_label.add_theme_color_override("font_color", Color(0, 1, 0, 1))
+	status_label.text = "WIPE SUCCESSFUL. Forensics sanitized."
+	status_label.add_theme_color_override("font_color", Color.GREEN)
 	
 	# === LOG GAP DETECTION RISK (20% cumulative per use) ===
 	var host_info = NetworkState.get_host_state(target_hostname)
@@ -158,28 +170,24 @@ func _complete_wipe():
 	
 	var alert_chance = use_count * 0.20
 	if randf() < alert_chance:
-		print("⚠ LOG GAP: Analyst detected forensic inconsistencies on %s!" % target_hostname)
 		if EventBus: EventBus.offensive_action_performed.emit({
 			"action_type": "log_integrity_violation",
 			"target": target_hostname,
 			"timestamp": ShiftClock.elapsed_seconds,
 			"result": "ALERT_TRIGGERED",
-			"trace_cost": 15.0 # Large penalty for being caught hiding
+			"trace_cost": 15.0
 		})
 		if NotificationManager:
-			NotificationManager.show_notification("⚠ CRITICAL: Log Integrity Violation detected by Analyst!", "error")
+			NotificationManager.show_notification("⚠ CRITICAL: Log Integrity Violation detected!", "error")
 	
 	# EFFECT 1: Prune logs from SIEM
-	if LogSystem:
-		LogSystem.prune_logs_for_host(target_hostname, "OFFENSIVE")
+	if LogSystem: LogSystem.prune_logs_for_host(target_hostname, "OFFENSIVE")
 	
-	# EFFECT 2: Mark host as wiped in NetworkState
-	if NetworkState:
-		NetworkState.update_host_state(target_hostname, {"is_wiped": true})
+	# EFFECT 2: Mark host as wiped
+	if NetworkState: NetworkState.update_host_state(target_hostname, {"is_wiped": true})
 		
 	# EFFECT 3: Reduce Trace Level
-	if TraceLevelManager:
-		TraceLevelManager.add_trace(-20.0) # Reward for successful cleanup
+	if TraceLevelManager: TraceLevelManager.add_trace(-20.0)
 		
 	# Emit forensic action
 	EventBus.offensive_action_performed.emit({
@@ -190,7 +198,6 @@ func _complete_wipe():
 		"trace_cost": 0.0
 	})
 	
-	# Close app
 	get_tree().create_timer(3.0).timeout.connect(_close_app)
 
 func _close_app():

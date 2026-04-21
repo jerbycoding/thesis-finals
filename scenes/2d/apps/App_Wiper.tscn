@@ -1,15 +1,17 @@
-[gd_scene load_steps=2 format=3 uid="uid://cx7j8p3y1k2mx"]
+[gd_scene load_steps=4 format=3 uid="uid://cx7j8p3y1k2mx"]
 
 [ext_resource type="Script" path="res://scripts/2d/apps/App_Wiper.gd" id="1_script"]
+[ext_resource type="Theme" uid="uid://dny3rlbltexc7" path="res://assets/themes/EnterpriseTheme.tres" id="2_theme"]
 
 [node name="App_Wiper" type="Control"]
-custom_minimum_size = Vector2(600, 450)
+custom_minimum_size = Vector2(700, 500)
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("2_theme")
 script = ExtResource("1_script")
 
 [node name="Background" type="ColorRect" parent="."]
@@ -19,99 +21,118 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0, 0.05, 0, 1)
+color = Color(0.0196078, 0.0196078, 0.0196078, 1)
 
-[node name="VBox" type="VBoxContainer" parent="."]
+[node name="MainVBox" type="VBoxContainer" parent="Background"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 20.0
-offset_top = 20.0
-offset_right = -20.0
-offset_bottom = -20.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 15
+theme_override_constants/separation = 0
 
-[node name="Header" type="Label" parent="VBox"]
+[node name="Header" type="PanelContainer" parent="Background/MainVBox"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0, 1, 0, 1)
-theme_override_font_sizes/font_size = 24
-text = "EVIDENCE WIPER v2.4"
-horizontal_alignment = 1
+theme_type_variation = &"HeaderPanel"
 
-[node name="HostLabel" type="Label" parent="VBox"]
-unique_name_in_owner = true
+[node name="HeaderLabel" type="Label" parent="Background/MainVBox/Header"]
 layout_mode = 2
-text = "Target Sector: NONE"
+theme_type_variation = &"TechnicalHeader"
+text = "SECTOR_ZERO_FILL // FORENSIC_CLEANUP_UTILITY"
+vertical_alignment = 1
 
-[node name="StatusLabel" type="Label" parent="VBox"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "Standby..."
-autowrap_mode = 3
-
-[node name="GameArea" type="Control" parent="VBox"]
+[node name="MainMargin" type="MarginContainer" parent="Background/MainVBox"]
 layout_mode = 2
 size_flags_vertical = 3
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
 
-[node name="SectorSlider" type="VSlider" parent="VBox/GameArea"]
-unique_name_in_owner = true
-layout_mode = 1
-anchors_preset = 13
-anchor_left = 0.5
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = 20.0
-offset_right = 36.0
-grow_horizontal = 2
-grow_vertical = 2
-min_value = 50.0
-max_value = 350.0
-value = 200.0
-
-[node name="LogClusterContainer" type="Control" parent="VBox/GameArea"]
-unique_name_in_owner = true
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="WipeLine" type="ColorRect" parent="VBox/GameArea"]
-layout_mode = 1
-anchors_preset = 13
-anchor_left = 0.5
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = 29.0
-offset_right = 31.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0, 1, 0, 0.3)
-
-[node name="Footer" type="HBoxContainer" parent="VBox"]
+[node name="HBox" type="HBoxContainer" parent="Background/MainVBox/MainMargin"]
 layout_mode = 2
 theme_override_constants/separation = 20
 
-[node name="VBox" type="VBoxContainer" parent="VBox/Footer"]
+[node name="GridSection" type="VBoxContainer" parent="Background/MainVBox/MainMargin/HBox"]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_constants/separation = 8
 
-[node name="IntegrityLabel" type="Label" parent="VBox/Footer/VBox"]
+[node name="Label" type="Label" parent="Background/MainVBox/MainMargin/HBox/GridSection"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.8, 0, 0.4)
+theme_override_font_sizes/font_size = 9
+text = "// RAW_MEMORY_DUMP_VIEWER"
+
+[node name="GridPanel" type="PanelContainer" parent="Background/MainVBox/MainMargin/HBox/GridSection"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="HexGrid" type="GridContainer" parent="Background/MainVBox/MainMargin/HBox/GridSection/GridPanel"]
 unique_name_in_owner = true
 layout_mode = 2
-text = "Destruction Progress: 0%"
+theme_override_constants/horizontal_separation = 2
+theme_override_constants/vertical_separation = 2
+columns = 16
 
-[node name="ScrubProgress" type="ProgressBar" parent="VBox/Footer/VBox"]
+[node name="ControlSection" type="VBoxContainer" parent="Background/MainVBox/MainMargin/HBox"]
+custom_minimum_size = Vector2(220, 0)
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="TargetInfo" type="VBoxContainer" parent="Background/MainVBox/MainMargin/HBox/ControlSection"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Label" type="Label" parent="Background/MainVBox/MainMargin/HBox/ControlSection/TargetInfo"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.8, 0, 0.4)
+theme_override_font_sizes/font_size = 9
+text = "TARGET_SECTOR"
+
+[node name="HostLabel" type="Label" parent="Background/MainVBox/MainMargin/HBox/ControlSection/TargetInfo"]
 unique_name_in_owner = true
 layout_mode = 2
-step = 1.0
+theme_override_colors/font_color = Color(0, 1, 0, 1)
+theme_override_font_sizes/font_size = 16
+text = "NONE"
 
-[node name="StartButton" type="Button" parent="VBox/Footer"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(200, 40)
+[node name="HSeparator" type="HSeparator" parent="Background/MainVBox/MainMargin/HBox/ControlSection"]
 layout_mode = 2
-text = "INITIATE WIPE"
+
+[node name="Telemetry" type="VBoxContainer" parent="Background/MainVBox/MainMargin/HBox/ControlSection"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Label" type="Label" parent="Background/MainVBox/MainMargin/HBox/ControlSection/Telemetry"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.8, 0, 0.4)
+theme_override_font_sizes/font_size = 9
+text = "FORENSIC_INTEGRITY"
+
+[node name="IntegrityLabel" type="Label" parent="Background/MainVBox/MainMargin/HBox/ControlSection/Telemetry"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "DESTRUCTION: 0%"
+
+[node name="ScrubProgress" type="ProgressBar" parent="Background/MainVBox/MainMargin/HBox/ControlSection/Telemetry"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 8)
+layout_mode = 2
+show_percentage = false
+
+[node name="StatusLabel" type="Label" parent="Background/MainVBox/MainMargin/HBox/ControlSection"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(1, 1, 1, 0.3)
+theme_override_font_sizes/font_size = 11
+text = "Initialize script to map memory sectors."
+autowrap_mode = 3
+
+[node name="StartButton" type="Button" parent="Background/MainVBox/MainMargin/HBox/ControlSection"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 45)
+layout_mode = 2
+text = "INITIALIZE_WIPE"

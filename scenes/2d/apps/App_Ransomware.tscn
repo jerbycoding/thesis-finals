@@ -1,30 +1,31 @@
-[gd_scene load_steps=4 format=3 uid="uid://ransomware2026app"]
+[gd_scene load_steps=5 format=3 uid="uid://ransomware2026"]
 
 [ext_resource type="Script" path="res://scripts/2d/apps/App_Ransomware.gd" id="1_script"]
-[ext_resource type="PackedScene" uid="uid://ransomcalib2026" path="res://scenes/ui/RansomCalibration.tscn" id="2_calib"]
-[ext_resource type="Theme" uid="uid://dny3rlbltexc7" path="res://assets/themes/EnterpriseTheme.tres" id="3_theme"]
+[ext_resource type="Theme" uid="uid://dny3rlbltexc7" path="res://assets/themes/EnterpriseTheme.tres" id="2_theme"]
+[ext_resource type="PackedScene" uid="uid://duw88rgr8v43o" path="res://scenes/2d/minigames/RansomCalibration.tscn" id="3_minigame"]
 
 [node name="App_Ransomware" type="Control"]
-custom_minimum_size = Vector2(600, 400)
+custom_minimum_size = Vector2(700, 500)
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = ExtResource("3_theme")
+theme = ExtResource("2_theme")
 script = ExtResource("1_script")
 
 [node name="Background" type="ColorRect" parent="."]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.0509804, 0.02, 0.02, 1)
+color = Color(0.0196078, 0.0196078, 0.0196078, 1)
 
-[node name="VBox" type="VBoxContainer" parent="Background"]
+[node name="MainVBox" type="VBoxContainer" parent="Background"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -33,52 +34,139 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 0
 
-[node name="Header" type="PanelContainer" parent="Background/VBox"]
+[node name="Header" type="PanelContainer" parent="Background/MainVBox"]
 layout_mode = 2
 theme_type_variation = &"HeaderPanel"
 
-[node name="HeaderLabel" type="Label" parent="Background/VBox/Header"]
+[node name="HeaderLabel" type="Label" parent="Background/MainVBox/Header"]
 layout_mode = 2
 theme_type_variation = &"TechnicalHeader"
-text = "RANSOMWARE DEPLOYMENT"
+text = "CRYPTO_LOCKER: FINAL_PAYLOAD_DEPLOYMENT"
 vertical_alignment = 1
 
-[node name="Content" type="VBoxContainer" parent="Background/VBox"]
+[node name="MainMargin" type="MarginContainer" parent="Background/MainVBox"]
 layout_mode = 2
-theme_override_constants/separation = 15
+size_flags_vertical = 3
+theme_override_constants/margin_left = 25
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 25
+theme_override_constants/margin_bottom = 25
+
+[node name="ContentVBox" type="VBoxContainer" parent="Background/MainVBox/MainMargin"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="TargetSection" type="PanelContainer" parent="Background/MainVBox/MainMargin/ContentVBox"]
+layout_mode = 2
+
+[node name="TargetMargin" type="MarginContainer" parent="Background/MainVBox/MainMargin/ContentVBox/TargetSection"]
+layout_mode = 2
 theme_override_constants/margin_left = 15
 theme_override_constants/margin_top = 15
 theme_override_constants/margin_right = 15
 theme_override_constants/margin_bottom = 15
 
-[node name="StatusLabel" type="Label" parent="Background/VBox/Content"]
+[node name="HBox" type="HBoxContainer" parent="Background/MainVBox/MainMargin/ContentVBox/TargetSection/TargetMargin"]
+layout_mode = 2
+theme_override_constants/separation = 40
+
+[node name="TargetID" type="VBoxContainer" parent="Background/MainVBox/MainMargin/ContentVBox/TargetSection/TargetMargin/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="Background/MainVBox/MainMargin/ContentVBox/TargetSection/TargetMargin/HBox/TargetID"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.8, 0, 0.4)
+theme_override_font_sizes/font_size = 9
+text = "// TARGET_NODE_LOCKED_IN_CROSSHAIRS"
+
+[node name="HostLabel" type="Label" parent="Background/MainVBox/MainMargin/ContentVBox/TargetSection/TargetMargin/HBox/TargetID"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 14
-theme_override_colors/font_color = Color(1, 0.5, 0.3, 1)
-autowrap_mode = 3
-text = "Initializing ransomware payload..."
+theme_override_colors/font_color = Color(0, 1, 0, 1)
+theme_override_font_sizes/font_size = 24
+text = "NOT_CONNECTED"
 
-[node name="HostLabel" type="Label" parent="Background/VBox/Content"]
-unique_name_in_owner = true
+[node name="CryptoStats" type="VBoxContainer" parent="Background/MainVBox/MainMargin/ContentVBox/TargetSection/TargetMargin/HBox"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 18
-theme_override_colors/font_color = Color(1, 0.3, 0.3, 1)
-text = "Target: ---"
+alignment = 1
 
-[node name="StartButton" type="Button" parent="Background/VBox/Content"]
-unique_name_in_owner = true
+[node name="Algo" type="Label" parent="Background/MainVBox/MainMargin/ContentVBox/TargetSection/TargetMargin/HBox/CryptoStats"]
 layout_mode = 2
-custom_minimum_size = Vector2(0, 40)
-text = "DEPLOY PAYLOAD"
+theme_override_colors/font_color = Color(1, 1, 1, 0.3)
+theme_override_font_sizes/font_size = 10
+text = "ALGO: AES-4096 / RSA-8192"
 
-[node name="CalibrationContainer" type="MarginContainer" parent="Background/VBox/Content"]
-unique_name_in_owner = true
+[node name="Entropy" type="Label" parent="Background/MainVBox/MainMargin/ContentVBox/TargetSection/TargetMargin/HBox/CryptoStats"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.3)
+theme_override_font_sizes/font_size = 10
+text = "ENTROPY_KEY: [ ENCRYPTED ]"
+
+[node name="WarningBlock" type="PanelContainer" parent="Background/MainVBox/MainMargin/ContentVBox"]
+layout_mode = 2
+
+[node name="ColorRect" type="ColorRect" parent="Background/MainVBox/MainMargin/ContentVBox/WarningBlock"]
+layout_mode = 2
+color = Color(0.15, 0.05, 0, 1)
+
+[node name="Margin" type="MarginContainer" parent="Background/MainVBox/MainMargin/ContentVBox/WarningBlock"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 8
+
+[node name="WarningLabel" type="Label" parent="Background/MainVBox/MainMargin/ContentVBox/WarningBlock/Margin"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.6, 0, 1)
+theme_override_font_sizes/font_size = 11
+text = "[!] ALERT: DEPLOYMENT WILL TRIGGER MAXIMUM SIEM RESPONSE. TRACE FOOTPRINT WILL SPIKE TO >90%."
+horizontal_alignment = 1
+
+[node name="InteractionStack" type="VBoxContainer" parent="Background/MainVBox/MainMargin/ContentVBox"]
 layout_mode = 2
 size_flags_vertical = 3
-visible = false
+theme_override_constants/separation = 15
 
-[node name="RansomCalibration" parent="Background/VBox/Content/CalibrationContainer" instance=ExtResource("2_calib")]
+[node name="CalibrationContainer" type="PanelContainer" parent="Background/MainVBox/MainMargin/ContentVBox/InteractionStack"]
 unique_name_in_owner = true
 visible = false
-layout_mode = 1
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="RansomCalibration" parent="Background/MainVBox/MainMargin/ContentVBox/InteractionStack/CalibrationContainer" instance=ExtResource("3_minigame")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="StatusArea" type="VBoxContainer" parent="Background/MainVBox/MainMargin/ContentVBox/InteractionStack"]
+layout_mode = 2
+alignment = 1
+
+[node name="StatusLabel" type="Label" parent="Background/MainVBox/MainMargin/ContentVBox/InteractionStack/StatusArea"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.5)
+theme_override_font_sizes/font_size = 12
+text = "Awaiting authorization for encryption sequence..."
+horizontal_alignment = 1
+
+[node name="EncryptionCounter" type="Label" parent="Background/MainVBox/MainMargin/ContentVBox/InteractionStack/StatusArea"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_font_sizes/font_size = 18
+text = "FILES_LOCKED: 00000"
+horizontal_alignment = 1
+
+[node name="ControlSection" type="VBoxContainer" parent="Background/MainVBox/MainMargin/ContentVBox"]
+layout_mode = 2
+
+[node name="StartButton" type="Button" parent="Background/MainVBox/MainMargin/ContentVBox/ControlSection"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_font_sizes/font_size = 18
+text = "INITIALIZE_ENCRYPTION_SEQUENCE"

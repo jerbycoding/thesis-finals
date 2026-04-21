@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3 uid="uid://contractboard2026"]
+[gd_scene load_steps=4 format=3 uid="uid://contractboard2026"]
 
 [ext_resource type="Script" path="res://scripts/2d/apps/App_ContractBoard.gd" id="1_script"]
 [ext_resource type="Theme" uid="uid://dny3rlbltexc7" path="res://assets/themes/EnterpriseTheme.tres" id="2_theme"]
@@ -21,7 +21,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.0509804, 0.0509804, 0.0666667, 1)
+color = Color(0.0196078, 0.0196078, 0.0196078, 1)
 
 [node name="VBox" type="VBoxContainer" parent="Background"]
 layout_mode = 1
@@ -39,100 +39,137 @@ theme_type_variation = &"HeaderPanel"
 [node name="HeaderLabel" type="Label" parent="Background/VBox/Header"]
 layout_mode = 2
 theme_type_variation = &"TechnicalHeader"
-text = "CONTRACT BOARD"
+text = "ENCRYPTED_CHANNEL: BROKER_NODE"
 vertical_alignment = 1
 
-[node name="Content" type="VBoxContainer" parent="Background/VBox"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Background/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="MainMargin" type="MarginContainer" parent="Background/VBox/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="ContentVBox" type="VBoxContainer" parent="Background/VBox/ScrollContainer/MainMargin"]
+layout_mode = 2
+theme_override_constants/separation = 25
+
+[node name="ActiveAssignmentSection" type="VBoxContainer" parent="Background/VBox/ScrollContainer/MainMargin/ContentVBox"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="ActiveHeader" type="Label" parent="Background/VBox/ScrollContainer/MainMargin/ContentVBox/ActiveAssignmentSection"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.8, 0, 0.4)
+theme_override_font_sizes/font_size = 10
+text = "// ACTIVE_ASSIGNMENT_DOSSIER"
+
+[node name="DossierPanel" type="PanelContainer" parent="Background/VBox/ScrollContainer/MainMargin/ContentVBox/ActiveAssignmentSection"]
+layout_mode = 2
+
+[node name="DossierMargin" type="MarginContainer" parent="Background/VBox/ScrollContainer/MainMargin/ContentVBox/ActiveAssignmentSection/DossierPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="DossierVBox" type="VBoxContainer" parent="Background/VBox/ScrollContainer/MainMargin/ContentVBox/ActiveAssignmentSection/DossierPanel/DossierMargin"]
 layout_mode = 2
 theme_override_constants/separation = 15
-theme_override_constants/margin_left = 15
-theme_override_constants/margin_top = 15
-theme_override_constants/margin_right = 15
-theme_override_constants/margin_bottom = 15
 
-[node name="ActiveSection" type="PanelContainer" parent="Background/VBox/Content"]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="ActiveMargin" type="MarginContainer" parent="Background/VBox/Content/ActiveSection"]
-layout_mode = 2
-theme_override_constants/margin_left = 15
-theme_override_constants/margin_top = 15
-theme_override_constants/margin_right = 15
-theme_override_constants/margin_bottom = 15
-
-[node name="ActiveVBox" type="VBoxContainer" parent="Background/VBox/Content/ActiveSection/ActiveMargin"]
-layout_mode = 2
-theme_override_constants/separation = 12
-
-[node name="ActiveTitle" type="Label" parent="Background/VBox/Content/ActiveSection/ActiveMargin/ActiveVBox"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 14
-theme_override_colors/font_color = Color(1, 0.85, 0.2, 1)
-text = "ACTIVE CONTRACT"
-
-[node name="ContractName" type="Label" parent="Background/VBox/Content/ActiveSection/ActiveMargin/ActiveVBox"]
+[node name="ContractName" type="Label" parent="Background/VBox/ScrollContainer/MainMargin/ContentVBox/ActiveAssignmentSection/DossierPanel/DossierMargin/DossierVBox"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
+theme_override_colors/font_color = Color(0, 1, 0, 1)
+theme_override_font_sizes/font_size = 22
 text = "No active contract"
 
-[node name="ContractDesc" type="Label" parent="Background/VBox/Content/ActiveSection/ActiveMargin/ActiveVBox"]
+[node name="ContractDesc" type="RichTextLabel" parent="Background/VBox/ScrollContainer/MainMargin/ContentVBox/ActiveAssignmentSection/DossierPanel/DossierMargin/DossierVBox"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 0.6)
-text = "Accept a contract from the available contracts below."
+theme_override_colors/default_color = Color(1, 1, 1, 0.7)
+theme_override_font_sizes/normal_font_size = 14
+bbcode_enabled = true
+text = "Awaiting connection to Broker node. Select a target from the open market below to initialize mission parameters."
+fit_content = true
 autowrap_mode = 3
 
-[node name="TacticalHint" type="Label" parent="Background/VBox/Content/ActiveSection/ActiveMargin/ActiveVBox"]
+[node name="IntelBlock" type="PanelContainer" parent="Background/VBox/ScrollContainer/MainMargin/ContentVBox/ActiveAssignmentSection/DossierPanel/DossierMargin/DossierVBox"]
 unique_name_in_owner = true
-layout_mode = 2
-theme_override_colors/font_color = Color(0, 0.8, 1, 0.8)
-theme_override_font_sizes/font_size = 12
-text = ""
-autowrap_mode = 3
-
-[node name="StatusLabel" type="Label" parent="Background/VBox/Content/ActiveSection/ActiveMargin/ActiveVBox"]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 0.5)
-text = ""
-
-[node name="AcceptButton" type="Button" parent="Background/VBox/Content/ActiveSection/ActiveMargin/ActiveVBox"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "ACCEPT CONTRACT"
-
-[node name="SubmitButton" type="Button" parent="Background/VBox/Content/ActiveSection/ActiveMargin/ActiveVBox"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "SUBMIT CONTRACT"
-
-[node name="HSeparator" type="HSeparator" parent="Background/VBox/Content"]
+visible = false
 layout_mode = 2
 
-[node name="AvailableSection" type="PanelContainer" parent="Background/VBox/Content"]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="AvailableMargin" type="MarginContainer" parent="Background/VBox/Content/AvailableSection"]
+[node name="IntelMargin" type="MarginContainer" parent="Background/VBox/ScrollContainer/MainMargin/ContentVBox/ActiveAssignmentSection/DossierPanel/DossierMargin/DossierVBox/IntelBlock"]
 layout_mode = 2
 theme_override_constants/margin_left = 15
-theme_override_constants/margin_top = 15
+theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 15
-theme_override_constants/margin_bottom = 15
+theme_override_constants/margin_bottom = 10
 
-[node name="AvailableVBox" type="VBoxContainer" parent="Background/VBox/Content/AvailableSection/AvailableMargin"]
+[node name="IntelVBox" type="VBoxContainer" parent="Background/VBox/ScrollContainer/MainMargin/ContentVBox/ActiveAssignmentSection/DossierPanel/DossierMargin/DossierVBox/IntelBlock/IntelMargin"]
 layout_mode = 2
-theme_override_constants/separation = 12
+theme_override_constants/separation = 5
 
-[node name="AvailableTitle" type="Label" parent="Background/VBox/Content/AvailableSection/AvailableMargin/AvailableVBox"]
+[node name="IntelHeader" type="Label" parent="Background/VBox/ScrollContainer/MainMargin/ContentVBox/ActiveAssignmentSection/DossierPanel/DossierMargin/DossierVBox/IntelBlock/IntelMargin/IntelVBox"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 14
-theme_override_colors/font_color = Color(0.5, 0.8, 1, 1)
-text = "AVAILABLE CONTRACTS"
+theme_override_colors/font_color = Color(1, 0.7, 0, 1)
+theme_override_font_sizes/font_size = 10
+text = "[!] BROKER_INTEL_LEAK:"
 
-[node name="ContractList" type="VBoxContainer" parent="Background/VBox/Content/AvailableSection/AvailableMargin/AvailableVBox"]
+[node name="TacticalHint" type="Label" parent="Background/VBox/ScrollContainer/MainMargin/ContentVBox/ActiveAssignmentSection/DossierPanel/DossierMargin/DossierVBox/IntelBlock/IntelMargin/IntelVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.8, 0.4, 0.8)
+theme_override_font_sizes/font_size = 13
+text = "Tactical advice goes here."
+autowrap_mode = 3
+
+[node name="StatusArea" type="HBoxContainer" parent="Background/VBox/ScrollContainer/MainMargin/ContentVBox/ActiveAssignmentSection/DossierPanel/DossierMargin/DossierVBox"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="StatusLabel" type="Label" parent="Background/VBox/ScrollContainer/MainMargin/ContentVBox/ActiveAssignmentSection/DossierPanel/DossierMargin/DossierVBox/StatusArea"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 1, 1, 0.3)
+theme_override_font_sizes/font_size = 12
+text = "CONNECTION_STATUS: IDLE"
+
+[node name="AcceptButton" type="Button" parent="Background/VBox/ScrollContainer/MainMargin/ContentVBox/ActiveAssignmentSection/DossierPanel/DossierMargin/DossierVBox/StatusArea"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 40)
+layout_mode = 2
+text = "INITIATE_HANDSHAKE"
+
+[node name="SubmitButton" type="Button" parent="Background/VBox/ScrollContainer/MainMargin/ContentVBox/ActiveAssignmentSection/DossierPanel/DossierMargin/DossierVBox/StatusArea"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 40)
+layout_mode = 2
+text = "UPLOAD_PAYLOAD_EVIDENCE"
+
+[node name="HSeparator" type="HSeparator" parent="Background/VBox/ScrollContainer/MainMargin/ContentVBox"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="MarketSection" type="VBoxContainer" parent="Background/VBox/ScrollContainer/MainMargin/ContentVBox"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="MarketHeader" type="Label" parent="Background/VBox/ScrollContainer/MainMargin/ContentVBox/MarketSection"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.8, 0, 0.4)
+theme_override_font_sizes/font_size = 10
+text = "// OPEN_MARKET_BOUNTIES"
+
+[node name="ContractList" type="VBoxContainer" parent="Background/VBox/ScrollContainer/MainMargin/ContentVBox/MarketSection"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 10
