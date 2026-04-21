@@ -86,12 +86,16 @@ func _on_minigame_success():
 
 	# Emit offensive action — SUCCESS
 	if EventBus:
+		# RANSOMWARE LOUDNESS: Jump trace to 90% or add massive cost
+		var current_trace = TraceLevelManager.get_trace_level() if TraceLevelManager else 0.0
+		var jump_cost = max(40.0, 90.0 - current_trace)
+		
 		EventBus.offensive_action_performed.emit({
 			"action_type": "ransomware",
 			"target": target_hostname,
-			"timestamp": 0,  # TODO: ShiftClock.elapsed_seconds
+			"timestamp": ShiftClock.elapsed_seconds if "ShiftClock" in self else 0,
 			"result": "SUCCESS",
-			"trace_cost": GlobalConstants.TRACE_COST.get("RANSOMWARE", 40.0)
+			"trace_cost": jump_cost
 		})
 
 	# Add bounty

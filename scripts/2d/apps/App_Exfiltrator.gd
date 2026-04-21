@@ -14,6 +14,10 @@ var streams: Array = []
 var stream_progress: Array = []
 var stream_finished: Array = []
 
+var bandwidth_timer: float = 0.0
+const BANDWIDTH_ALERT_INTERVAL = 10.0
+const BANDWIDTH_TRACE_PENALTY = 5.0
+
 const STREAM_SCENE = preload("res://scenes/2d/apps/components/ExfiltrationStream.tscn")
 
 func _ready():
@@ -119,8 +123,31 @@ func _process(delta: float):
 	var avg_progress = total_progress / streams.size()
 	progress_summary.text = "Overall Progress: %d%%" % int(avg_progress)
 	
+	# === BANDWIDTH ALERT LOGIC ===
+	bandwidth_timer += delta
+	if bandwidth_timer >= BANDWIDTH_ALERT_INTERVAL:
+		bandwidth_timer = 0.0
+		_trigger_bandwidth_alert()
+	
 	if all_done:
 		_complete_exfiltration(1.0)
+
+func _trigger_bandwidth_alert():
+	# Emit signal to increase trace due to large outbound traffic
+	EventBus.offensive_action_performed.emit({
+		"action_type": "exfiltration_bandwidth_alert",
+		"target": target_hostname,
+		"timestamp": ShiftClock.elapsed_seconds,
+		"result": "ALERT_TRIGGERED",
+		"trace_cost": BANDWIDTH_TRACE_PENALTY
+	})
+	
+	if NotificationManager:
+		NotificationManager.show_notification("⚠ WARNING: Large outbound transfer detected on %s." % target_hostname, "warning")
+	
+	# Visual feedback in the app
+	status_label.text = "⚠ ALERT: Bandwidth spikes detected by target IDS!"
+	status_label.add_theme_color_override("font_color", Color(1, 0.5, 0, 1))
 
 func _handle_interruption():
 	is_active = false

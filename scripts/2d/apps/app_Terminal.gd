@@ -92,7 +92,15 @@ func _handle_tab_completion():
 	else:
 		# Complete commands
 		if TerminalSystem:
+			var current_role = GameState.current_role if GameState else 0
 			for cmd in TerminalSystem.commands.keys():
+				var cmd_def = TerminalSystem.commands[cmd]
+				
+				# Role Guard for tab completion
+				if cmd_def.has("role") and cmd_def.role != 2:
+					if cmd_def.role != current_role:
+						continue
+						
 				if cmd.begins_with(input.to_lower()):
 					command_input.text = cmd + " "
 					command_input.caret_column = command_input.text.length()

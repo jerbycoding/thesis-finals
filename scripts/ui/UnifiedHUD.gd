@@ -4,6 +4,7 @@ extends Control
 @onready var integrity_bar: ProgressBar = %IntegrityBar
 @onready var integrity_label: Label = %IntegrityLabel
 @onready var integrity_value: Label = %IntegrityValue
+@onready var integrity_group: VBoxContainer = %IntegrityGroup
 
 @onready var timer_label: Label = %TimerLabel
 @onready var status_label: Label = %StatusLabel
@@ -26,14 +27,15 @@ func _ready():
 		_update_integrity_display(target_integrity)
 	
 	EventBus.ticket_completed.connect(_on_ticket_completed)
-	integrity_bar.modulate = GlobalConstants.UI_COLORS.SUCCESS_FLAT
+	if integrity_bar:
+		integrity_bar.modulate = GlobalConstants.UI_COLORS.SUCCESS_FLAT
 
 func _setup_role_ui():
 	var is_hacker = GameState and GameState.current_role == GameState.Role.HACKER
 	
 	# Show/Hide groups based on role
 	if trace_group: trace_group.visible = is_hacker
-	if %IntegrityGroup: %IntegrityGroup.visible = not is_hacker
+	if integrity_group: integrity_group.visible = not is_hacker
 	
 	if is_hacker:
 		# Hacker-specific initialization

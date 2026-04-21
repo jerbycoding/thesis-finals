@@ -15,79 +15,93 @@ var trace_overrides: Dictionary = {} # IP -> String (Resolved Name)
 signal command_output_received(text: String, is_partial: bool)
 
 # Available commands
+# Roles: 0 = ANALYST, 1 = HACKER, 2 = BOTH
 var commands: Dictionary = {
 	"help": {
 		"description": "Show available commands",
 		"syntax": "help",
-		"risk_level": 0
+		"risk_level": 0,
+		"role": 2
 	},
 	"scan": {
-		"description": "Scan host for malware",
+		"description": "Scan host for technical details/malware",
 		"syntax": "scan [hostname]",
-		"risk_level": 1
+		"risk_level": 1,
+		"role": 2
 	},
 	"netstat": {
 		"description": "Show active network connections",
 		"syntax": "netstat [hostname]",
-		"risk_level": 1
+		"risk_level": 1,
+		"role": 0
 	},
 	"trace": {
 		"description": "Trace IP to origin host",
 		"syntax": "trace [ip_address]",
-		"risk_level": 1
+		"risk_level": 1,
+		"role": 0
 	},
 	"isolate": {
 		"description": "Disconnect host from network (HIGH RISK)",
 		"syntax": "isolate [hostname]",
-		"risk_level": 5
+		"risk_level": 5,
+		"role": 0
 	},
 	"restore": {
 		"description": "Reconnect an isolated host to the network",
 		"syntax": "restore [hostname]",
-		"risk_level": 1
+		"risk_level": 1,
+		"role": 0
 	},
 	"status": {
 		"description": "Show system status",
 		"syntax": "status",
-		"risk_level": 0
+		"risk_level": 0,
+		"role": 2
 	},
 	"logs": {
 		"description": "Get recent logs from host",
 		"syntax": "logs [hostname]",
-		"risk_level": 2
+		"risk_level": 2,
+		"role": 0
 	},
 	"list": {
 		"description": "List known hostnames",
 		"syntax": "list",
-		"risk_level": 0
+		"risk_level": 0,
+		"role": 2
 	},
 	# === SOLO DEV PHASE 2: HACKER CAMPAIGN ===
 	"exploit": {
 		"description": "Exploit host vulnerability",
 		"syntax": "exploit [hostname]",
-		"risk_level": 5
+		"risk_level": 5,
+		"role": 1
 	},
 	"pivot": {
-		"description": "Move laterally to adjacent host (evades isolation during LOCKDOWN)",
+		"description": "Move laterally to adjacent host",
 		"syntax": "pivot [hostname]",
-		"risk_level": 3
+		"risk_level": 3,
+		"role": 1
 	},
 	"submit": {
 		"description": "Submit vulnerability report to broker (advance to next day)",
 		"syntax": "submit",
-		"risk_level": 0
+		"risk_level": 0,
+		"role": 1
 	},
 	"spoof": {
-		"description": "Mask network identity (reduces trace cost of next actions)",
+		"description": "Mask network identity",
 		"syntax": "spoof [mac/ip]",
-		"risk_level": 2
+		"risk_level": 2,
+		"role": 1
 	},
 	"phish": {
 		"description": "Establish foothold via social engineering (Low Trace)",
 		"syntax": "phish [hostname]",
-		"risk_level": 2
+		"risk_level": 2,
+		"role": 1
 	}
-	# ============================================
 }
 
 func _ready():
@@ -147,6 +161,19 @@ func execute_command(command_line: String) -> Dictionary:
 	var command_name = parts[0].to_lower()
 	var args = parts.slice(1) if parts.size() > 1 else []
 	
+	# === ROLE GUARD ===
+	if commands.has(command_name):
+		var cmd_def = commands[command_name]
+		var current_role = GameState.current_role if GameState else 0 # Default to Analyst
+		
+		# If command is role-restricted and doesn't match current role (and is not BOTH)
+		if cmd_def.has("role") and cmd_def.role != 2:
+			if cmd_def.role != current_role:
+				return {
+					"success": false, 
+					"output": "[color=red]Error: Command '%s' not recognized.[/color]" % command_name
+				}
+
 	# Check if terminal is locked
 	if is_locked:
 		var remaining = lock_timer.time_left
@@ -215,16 +242,25 @@ func _execute_command_internal(command_name: String, args: Array) -> Dictionary:
 
 
 func _cmd_help() -> Dictionary:
-	var output = "[b]Available Commands:[/b]\n\n"
+	var output = "[b]AVAILABLE TERMINAL COMMANDS[/b]\n"
+	output += "--------------------------------------------------\n"
+
+	var current_role = GameState.current_role if GameState else 0
+
 	for cmd_name in commands:
 		var cmd = commands[cmd_name]
-		output += "[color=green]" + cmd_name + "[/color] - " + cmd.description + "\n"
-		output += "  Syntax: " + cmd.syntax + "\n"
-		output += "  Risk Level: " + str(cmd.risk_level) + "/5\n\n"
-	
-	output += "[i]Tip: For detailed guides on all SOC tools, open the [color=cyan]SOC Handbook[/color] on your desktop.[/i]\n"
-	return {"success": true, "output": output}
 
+		# Filter based on role
+		if cmd.has("role") and cmd.role != 2:
+			if cmd.role != current_role:
+				continue
+
+		var syntax = cmd.syntax
+		var padding = " ".repeat(max(1, 20 - syntax.length()))
+		output += "[color=green]%s[/color]%s - %s\n" % [syntax, padding, cmd.description]
+
+	output += "\n[i]Tip: For detailed guides, open the [color=cyan]Handbook[/color] on your desktop.[/i]\n"
+	return {"success": true, "output": output}
 func _cmd_scan(args: Array) -> Dictionary:
 	if args.is_empty():
 		return {"success": false, "output": CorporateVoice.get_formatted_phrase("command_requires_hostname", {"command": "scan"})}
@@ -459,9 +495,14 @@ func _cmd_list() -> Dictionary:
 			
 		var details = ""
 		if GameState and GameState.current_role == GameState.Role.HACKER:
-			var vuln = host_resource.vulnerability_score if host_resource else 0.5
-			var v_color = "green" if vuln > 0.6 else ("yellow" if vuln > 0.3 else "red")
-			details = "[color=%s]VULN: %.0f%%[/color]" % [v_color, vuln * 100]
+			# Show Effective Vulnerability (which decays after failed attempts)
+			var vuln = host_info.get("effective_vulnerability", host_resource.vulnerability_score if host_resource else 0.5)
+			var v_color = "green" if vuln > 0.25 else ("yellow" if vuln > 0.1 else "red")
+			
+			if vuln < 0.05:
+				details = "[color=red][HARDENED][/color]"
+			else:
+				details = "[color=%s]VULN: %.0f%%[/color]" % [v_color, vuln * 100]
 		else:
 			details = host_resource.os_version if host_resource else "Unknown OS"
 			
@@ -519,7 +560,7 @@ func _cmd_trace(args: Array) -> Dictionary:
 func _cmd_exploit(args: Array) -> Dictionary:
 	"""
 	Exploit host vulnerability.
-	6-step execution: Null Guard → Ownership → Honeypot → Success/Fail → Signal
+	6-step execution: Null Guard → Hardening → Ownership → Honeypot → Success/Fail → Signal
 	"""
 	# === STEP 1: NULL GUARD ===
 	if args.is_empty():
@@ -531,6 +572,14 @@ func _cmd_exploit(args: Array) -> Dictionary:
 	if host_info.is_empty():
 		return {"success": false, "output": "[color=red]ERROR: Host not found.[/color]\nUse 'list' to see known hostnames."}
 	
+	# === STEP 1.5: HARDENING GUARD ===
+	var attack_count = host_info.get("attack_count", 0)
+	if attack_count >= 3:
+		return {
+			"success": false,
+			"output": "[color=red]⚠ ACCESS DENIED: SYSTEM HARDENED[/color]\nMultiple failed exploit attempts detected. The target has patched the vulnerability.\n[i]Tactical Advice: Technical exploits are no longer possible. Use Phishing or Lateral Pivoting.[/i]"
+		}
+
 	# === STEP 2: OWNERSHIP GUARD ===
 	if GameState.hacker_footholds.has(hostname):
 		return {"success": false, "output": "[color=yellow]Host already compromised.[/color]\n%s is under your control." % hostname}
@@ -552,7 +601,7 @@ func _cmd_exploit(args: Array) -> Dictionary:
 	
 	# === STEP 4: SUCCESS/FAIL CHECK ===
 	var roll = randf()  # 0.0-1.0
-	var vulnerability = host_resource.vulnerability_score if host_resource else 0.5
+	var vulnerability = host_info.get("effective_vulnerability", host_resource.vulnerability_score if host_resource else 0.5)
 	var success = roll < vulnerability
 	
 	# === STEP 5 & 6: RESULT PATH ===
@@ -573,13 +622,32 @@ func _cmd_exploit(args: Array) -> Dictionary:
 			"output": "[color=green]✓ EXPLOIT SUCCESSFUL![/color]\nVulnerability exploited: %s\nAccess level: ROOT\nFoothold established." % hostname
 		}
 	else:
-		# FAILED! But still emit signal (trace still increases)
+		# FAILED! 
+		attack_count += 1
+		
+		# SUCCESS CHANCE DECAY: Reduce vulnerability by 60% after every fail
+		var new_vuln = vulnerability * 0.4
+		NetworkState.update_host_state(hostname, {
+			"attack_count": attack_count,
+			"effective_vulnerability": new_vuln
+		})
+		
+		var trace_cost = GlobalConstants.TRACE_COST.EXPLOIT
+		var hardening_note = ""
+		
+		if attack_count == 2:
+			trace_cost *= 2.0
+			hardening_note = "\n[color=orange][!] ALERT: Target IDS has flagged your IP. Detection risk DOUBLED.[/color]\n[color=red]Terminal locked for 15 seconds.[/color]"
+			lock_terminal(15.0)
+		
+		# Still emit signal (trace still increases)
 		var result_data = _create_exploit_payload(hostname, "FAILED")
+		result_data["trace_cost"] = trace_cost # Apply hardening multiplier
 		EventBus.offensive_action_performed.emit(result_data)
 		
 		return {
 			"success": false,
-			"output": "[color=red]✗ EXPLOIT FAILED![/color]\nTarget defenses blocked the attack.\nVulnerability score: %.0f%%" % (vulnerability * 100)
+			"output": "[color=red]✗ EXPLOIT FAILED![/color]\nTarget defenses blocked the attack.\nVulnerability score: %.0f%% (Attempts: %d/3)%s" % [vulnerability * 100, attack_count, hardening_note]
 		}
 
 func _create_exploit_payload(hostname: String, result: String) -> Dictionary:
@@ -763,7 +831,14 @@ func _cmd_phish(args: Array) -> Dictionary:
 	var vuln = host_res.vulnerability_score if host_res else 0.5
 	var heat = HeatManager.heat_multiplier if HeatManager else 1.0
 	
-	var success_chance = (vuln * 0.8) / heat
+	# Apply Security Awareness Penalty (50% reduction per failure)
+	var phish_fail_count = host_info.get("phish_fail_count", 0)
+	var awareness_multiplier = 1.0
+	if phish_fail_count > 0:
+		awareness_multiplier = pow(0.5, phish_fail_count)
+		command_output_received.emit("[color=orange][!] WARNING: Target has 'Security Awareness' active. Success chance reduced.[/color]\n", true)
+	
+	var success_chance = (vuln * 0.8 * awareness_multiplier) / heat
 	var roll = randf()
 	
 	if roll < success_chance:
@@ -784,6 +859,10 @@ func _cmd_phish(args: Array) -> Dictionary:
 			"output": "[color=green]✓ PHISHING SUCCESSFUL.[/color]\nUser clicked malicious link on %s.\nReverse shell established. Access level: USER." % hostname
 		}
 	else:
+		# Update failure count for awareness penalty
+		phish_fail_count += 1
+		NetworkState.update_host_state(hostname, {"phish_fail_count": phish_fail_count})
+		
 		EventBus.offensive_action_performed.emit({
 			"action_type": "phish",
 			"target": hostname,
@@ -795,7 +874,7 @@ func _cmd_phish(args: Array) -> Dictionary:
 		
 		return {
 			"success": false,
-			"output": "[color=red]✗ PHISHING FAILED.[/color]\nPayload quarantined by end-user or gateway filters.\nTrace footprints detected."
+			"output": "[color=red]✗ PHISHING FAILED.[/color]\nPayload quarantined by end-user or gateway filters.\n[color=orange]Host security awareness increased (Attempts: %d).[/color]" % phish_fail_count
 		}
 # ================================================
 

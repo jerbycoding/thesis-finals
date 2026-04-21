@@ -151,6 +151,24 @@ func _complete_wipe():
 	status_label.text = "WIPE SUCCESSFUL. Evidence destroyed, trace reduced."
 	status_label.add_theme_color_override("font_color", Color(0, 1, 0, 1))
 	
+	# === LOG GAP DETECTION RISK (20% cumulative per use) ===
+	var host_info = NetworkState.get_host_state(target_hostname)
+	var use_count = host_info.get("wiper_use_count", 0) + 1
+	NetworkState.update_host_state(target_hostname, {"wiper_use_count": use_count})
+	
+	var alert_chance = use_count * 0.20
+	if randf() < alert_chance:
+		print("⚠ LOG GAP: Analyst detected forensic inconsistencies on %s!" % target_hostname)
+		if EventBus: EventBus.offensive_action_performed.emit({
+			"action_type": "log_integrity_violation",
+			"target": target_hostname,
+			"timestamp": ShiftClock.elapsed_seconds,
+			"result": "ALERT_TRIGGERED",
+			"trace_cost": 15.0 # Large penalty for being caught hiding
+		})
+		if NotificationManager:
+			NotificationManager.show_notification("⚠ CRITICAL: Log Integrity Violation detected by Analyst!", "error")
+	
 	# EFFECT 1: Prune logs from SIEM
 	if LogSystem:
 		LogSystem.prune_logs_for_host(target_hostname, "OFFENSIVE")

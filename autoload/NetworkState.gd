@@ -53,8 +53,14 @@ func _register_hosts_from_folder():
 			"isolated": false,
 			"scanned": false,
 			"ip": res.ip_address,
-			"os": res.os_type
-		}
+			"os": res.os_type,
+			"effective_vulnerability": res.vulnerability_score, # NEW: For success chance decay
+			"attack_count": 0,  # Tracks failed exploit attempts for hardening
+			"phish_fail_count": 0, # Tracks failed phishing attempts for awareness penalty
+			"wiper_use_count": 0 # NEW: Tracks wiper usage for log integrity alert risk
+			}
+
+
 		
 		# Create independent copies for each role
 		analyst_host_states[res.hostname] = initial_state.duplicate()
