@@ -186,8 +186,10 @@ func _complete_wipe():
 	# EFFECT 2: Mark host as wiped
 	if NetworkState: NetworkState.update_host_state(target_hostname, {"is_wiped": true})
 		
-	# EFFECT 3: Reduce Trace Level
-	if TraceLevelManager: TraceLevelManager.add_trace(-20.0)
+	# EFFECT 3: Reduce Trace Level & Static Heat
+	if TraceLevelManager:
+		TraceLevelManager.reduce_trace(20.0)
+		TraceLevelManager.reduce_static_heat(15.0)
 		
 	# Emit forensic action
 	EventBus.offensive_action_performed.emit({

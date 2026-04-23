@@ -173,6 +173,16 @@ func execute_command(command_line: String) -> Dictionary:
 					"success": false, 
 					"output": "[color=red]Error: Command '%s' not recognized.[/color]" % command_name
 				}
+		
+		# === LOCKDOWN GUARD: Block offensive hacker commands during isolation ===
+		if current_role == 1 and RivalAI and RivalAI.is_isolation_active:
+			# Allowed commands during lockdown: pivot (escape hatch), help, list, status
+			var allowed = ["pivot", "help", "list", "status"]
+			if command_name not in allowed:
+				return {
+					"success": false,
+					"output": "[color=red]⚠ CRITICAL: SYSTEM LOCKDOWN IN PROGRESS[/color]\n[color=orange]Offensive modules unmounted by security filters. Only evasion protocols active.[/color]\n[i]Target trace confirmed. You must [color=cyan]pivot[/color] to an adjacent host immediately![/i]"
+				}
 
 	# Check if terminal is locked
 	if is_locked:

@@ -11,13 +11,17 @@ signal trace_crossed_threshold(old_threshold: int, new_threshold: int)  # === PH
 # === CONFIGURATION ===
 const MAX_TRACE = 100.0
 const MIN_TRACE = 0.0
-const DECAY_RATE = 1.0  # Trace points per second
+const DECAY_RATE = 1.0  # Base trace points per second
+const COOLDOWN_DURATION = 3.0  # Delay before decay starts
+const STATIC_HEAT_RATIO = 0.25  # 25% of trace costs become permanent
 
 # Current trace level
 var trace_level: float = 0.0
+var static_heat: float = 0.0
 
-# Decay timer
+# Timers
 var decay_timer: Timer
+var cooldown_timer: Timer
 
 # State tracking
 var is_decay_active: bool = true
@@ -29,43 +33,70 @@ var show_debug_display: bool = false  # Set to true for real-time display
 func _ready():
 	print("========================================")
 	print("TraceLevelManager initialized")
-	print("  Decay Rate: %.1f/sec" % DECAY_RATE)
+	print("  Base Decay Rate: %.1f/sec" % DECAY_RATE)
 	print("  Max Trace: %.0f" % MAX_TRACE)
+	print("  Static Ratio: %.0f%%" % (STATIC_HEAT_RATIO * 100))
 	print("========================================")
 	
 	# Connect to offensive action signal
 	if EventBus:
 		EventBus.offensive_action_performed.connect(_on_offensive_action)
 	
-	# Setup decay timer
+	# Setup timers
 	_setup_decay_timer()
+	_setup_cooldown_timer()
 
 func _setup_decay_timer():
 	"""Initialize passive decay timer (ticks every 0.5 seconds)."""
 	decay_timer = Timer.new()
+	decay_timer.name = "DecayTimer"
 	decay_timer.wait_time = 0.5  # Check twice per second for smooth decay
 	decay_timer.timeout.connect(_on_decay_tick)
 	add_child(decay_timer)
 	decay_timer.start()
 
+func _setup_cooldown_timer():
+	"""Initialize post-action cooldown timer."""
+	cooldown_timer = Timer.new()
+	cooldown_timer.name = "CooldownTimer"
+	cooldown_timer.one_shot = true
+	cooldown_timer.wait_time = COOLDOWN_DURATION
+	cooldown_timer.timeout.connect(_on_cooldown_finished)
+	add_child(cooldown_timer)
+
+func _on_cooldown_finished():
+	"""Called when trace can start decaying again."""
+	if EventBus:
+		EventBus.trace_cooldown_ended.emit()
+	print("🔍 TRACE: Cooldown finished, decay resumed.")
+
 func _on_decay_tick():
 	"""Passive decay logic - reduces trace over time."""
-	if not is_decay_active:
+	if not is_decay_active or not cooldown_timer.is_stopped():
 		return
 	
 	# Don't decay during minigames (Phase 2+)
 	if _is_minigame_active():
 		return
 	
-	# Don't decay if trace is already at 0
-	if trace_level <= MIN_TRACE:
+	# Don't decay if trace is already at floor
+	if trace_level <= static_heat:
 		return
 	
-	# Calculate decay for this tick (0.5 sec = half of decay rate)
-	var decay_amount = DECAY_RATE * decay_timer.wait_time
+	# === STATE-BASED DECAY MULTIPLIERS ===
+	var state_multiplier = 1.0
+	if RivalAI:
+		match RivalAI.get_state():
+			RivalAI.AIState.IDLE: state_multiplier = 1.0
+			RivalAI.AIState.SEARCHING: state_multiplier = 0.5
+			RivalAI.AIState.LOCKDOWN, RivalAI.AIState.ISOLATING: state_multiplier = 0.2
+	
+	# Calculate decay for this tick (scaled by state)
+	var decay_amount = DECAY_RATE * decay_timer.wait_time * state_multiplier
 	var old_trace = trace_level
 	
-	trace_level = max(MIN_TRACE, trace_level - decay_amount)
+	# Floor at static_heat
+	trace_level = max(static_heat, trace_level - decay_amount)
 	
 	# === PHASE 3: Emit threshold crossing signal ===
 	var old_boundary = int(old_trace / 10.0)
@@ -74,7 +105,7 @@ func _on_decay_tick():
 		trace_crossed_threshold.emit(old_boundary * 10, new_boundary * 10)
 	
 	# Emit signal if changed significantly
-	if abs(old_trace - trace_level) >= 0.5:
+	if abs(old_trace - trace_level) >= 0.1: # Reduced from 0.5 for smoother slow decay
 		trace_level_changed.emit(trace_level)
 
 func _on_offensive_action(data: Dictionary):
@@ -94,9 +125,23 @@ func _on_offensive_action(data: Dictionary):
 	var target = data.get("target", "unknown")
 	var result = data.get("result", "unknown")
 	
-	# Accumulate trace
+	# 1. Accumulate trace
 	var old_trace = trace_level
 	trace_level = min(MAX_TRACE, trace_level + cost)
+	
+	# 2. Accumulate Static Heat (portion of cost)
+	if cost > 0:
+		var added_static = cost * STATIC_HEAT_RATIO
+		static_heat = min(MAX_TRACE, static_heat + added_static)
+		print("🔍 TRACE: Static heat increased by %.1f (Floor: %.0f%%)" % [added_static, static_heat])
+	
+	# 3. Handle Cooldown
+	if cost > 0:
+		cooldown_timer.start()
+		if EventBus:
+			EventBus.trace_cooldown_started.emit(COOLDOWN_DURATION)
+		print("🔍 TRACE: Action detected. Decay paused for %.0fs." % COOLDOWN_DURATION)
+	
 	last_action_timestamp = ShiftClock.elapsed_seconds
 	
 	# Debug output
@@ -167,10 +212,23 @@ func reduce_trace(amount: float):
 	print("🔍 TRACE: Manual reduce %.1f (%.0f → %.0f)" % [amount, old_trace, trace_level])
 
 func reset_trace():
-	"""Reset trace to 0 (for new shift/session)."""
+	"""Reset trace and static heat to 0 (for new shift/session)."""
 	trace_level = 0.0
+	static_heat = 0.0
 	trace_level_changed.emit(trace_level)
-	print("🔍 TRACE: Reset to 0")
+	print("🔍 TRACE: Reset to 0 (including static heat)")
+
+func reduce_static_heat(amount: float):
+	"""Reduces the static floor (used by Wiper tool)."""
+	var old_static = static_heat
+	static_heat = max(0.0, static_heat - amount)
+	print("🔍 TRACE: Static heat reduced by %.1f (%.0f%% → %.0f%%)" % [amount, old_static, static_heat])
+	
+	# If trace is currently at the floor, update it
+	if trace_level <= old_static:
+		var old_trace = trace_level
+		trace_level = max(static_heat, trace_level - amount)
+		trace_level_changed.emit(trace_level)
 
 func pause_decay(pause: bool):
 	"""Manually pause/resume decay (for cutscenes, etc.)."""

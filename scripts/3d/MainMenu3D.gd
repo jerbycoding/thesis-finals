@@ -21,6 +21,10 @@ func _ready():
 		GameState.set_mode(GameState.GameMode.MODE_UI_ONLY)
 	
 	# Store base transform for parallax
+	# NEW: Centered and zoomed camera
+	camera.position = Vector3(0, 1.15, 0.4)
+	camera.rotation = Vector3(deg_to_rad(-10), 0, 0) # Slight downward tilt
+	
 	base_camera_pos = camera.position
 	base_camera_rot = camera.rotation
 	

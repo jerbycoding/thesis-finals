@@ -87,13 +87,14 @@ func _on_app_opened(_app_name: String, window_id: String):
 	# Auto-close start menu when app opens
 	if start_menu_instance: start_menu_instance.visible = false
 
-func _add_taskbar_icon(window: Control):
-	if not tasks_container or not window: return
+func _add_taskbar_icon(window):
+	if not tasks_container or not is_instance_valid(window): return
 	
 	# Check if icon already exists
 	for child in tasks_container.get_children():
-		if child.has_method("get_target_window") and child.target_window == window:
-			return
+		if is_instance_valid(child) and child.has_method("get_target_window"):
+			if child.target_window == window:
+				return
 			
 	var icon = taskbar_icon_scene.instantiate()
 	tasks_container.add_child(icon)

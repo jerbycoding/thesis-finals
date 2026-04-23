@@ -106,6 +106,14 @@ func _process_timer():
 		timer_label.visible = false
 		status_label.text = "MODE: CERTIFICATION"
 		status_label.add_theme_color_override("font_color", GlobalConstants.UI_COLORS.INFO_BLUE)
+	elif GameState and GameState.current_role == GameState.Role.HACKER:
+		timer_label.visible = true
+		# Hacker Mode: Show ELAPSED time since there's no countdown
+		var time_elapsed = ShiftClock.elapsed_seconds if ShiftClock else 0.0
+		var m = int(time_elapsed) / 60
+		var s = int(time_elapsed) % 60
+		timer_label.text = "%02d:%02d" % [m, s]
+		# Status for hacker is already handled in _setup_role_ui
 	elif NarrativeDirector and NarrativeDirector.is_shift_active():
 		timer_label.visible = true
 		var time_elapsed = NarrativeDirector.get_shift_timer()
@@ -124,11 +132,10 @@ func _process_timer():
 			status_label.text = "SHIFT_STATUS: ACTIVE"
 			status_label.add_theme_color_override("font_color", Color.BLACK)
 	else:
-		timer_label.text = "00:00"
-		timer_label.visible = true
+		# Hide timer and standby status in menus/non-shift areas
+		timer_label.visible = false
 		if GameState and GameState.current_role != GameState.Role.HACKER:
-			status_label.text = "SHIFT_STATUS: STANDBY"
-			status_label.add_theme_color_override("font_color", GlobalConstants.UI_COLORS.TEXT_SECONDARY)
+			status_label.text = "" # Clear standby status to avoid clutter
 
 func _on_integrity_changed(new_value: float, delta: float):
 	target_integrity = new_value

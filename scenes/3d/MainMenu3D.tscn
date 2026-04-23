@@ -1,10 +1,9 @@
-[gd_scene load_steps=20 format=3 uid="uid://c6j8v8u8k8u8k"]
+[gd_scene load_steps=17 format=3 uid="uid://c6j8v8u8k8u8k"]
 
 [ext_resource type="Script" uid="uid://gnsos5w1l23p" path="res://scripts/3d/MainMenu3D.gd" id="1_script"]
 [ext_resource type="PackedScene" uid="uid://byav1eqq5v48f" path="res://scenes/3d/props/graybox/Prop_Desk.tscn" id="2_desk"]
 [ext_resource type="PackedScene" uid="uid://bjy8b0vcfuc0r" path="res://scenes/3d/props/graybox/Prop_ComputerSet.tscn" id="3_comp"]
 [ext_resource type="PackedScene" path="res://scenes/3d/props/graybox/Prop_Mug.tscn" id="4_mug"]
-[ext_resource type="PackedScene" uid="uid://csc2n03kuskvt" path="res://assets/props/graybox/Cell phone.glb" id="6_phone"]
 [ext_resource type="PackedScene" uid="uid://c7c8toku8jd3b" path="res://scenes/3d/props/graybox/Prop_DeskLamp.tscn" id="7_lamp"]
 [ext_resource type="PackedScene" uid="uid://bodtc8b7dv4df" path="res://assets/props/items/storage_shelf/storage_shelf.glb" id="8_shelf"]
 [ext_resource type="PackedScene" uid="uid://c7c8toku8jd3c" path="res://scenes/3d/props/graybox/Prop_WallClock.tscn" id="9_clock"]
@@ -38,27 +37,6 @@ volumetric_fog_length = 16.0
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_StickyNote"]
 albedo_color = Color(1, 0.95, 0.4, 1)
 roughness = 0.8
-
-[sub_resource type="Animation" id="Animation_PhoneBlink"]
-length = 2.0
-loop_mode = 1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("PhoneLED:light_energy")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 1, 2),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [0.0, 0.5, 0.0]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_Phone"]
-_data = {
-&"Blink": SubResource("Animation_PhoneBlink")
-}
 
 [sub_resource type="Curve" id="Curve_1"]
 _data = [Vector2(0, 0), 0.0, 1.4, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
@@ -132,21 +110,6 @@ font_size = 14
 
 [node name="Prop_Mug" parent="." instance=ExtResource("4_mug")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0.82, 0.2)
-
-[node name="CellPhone" parent="." instance=ExtResource("6_phone")]
-transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, 0.5, 0.82, 0.3)
-
-[node name="PhoneLED" type="OmniLight3D" parent="CellPhone"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.02, 0.05)
-light_color = Color(1, 0.6, 0, 1)
-light_energy = 0.0
-omni_range = 0.2
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="CellPhone"]
-libraries = {
-&"": SubResource("AnimationLibrary_Phone")
-}
-autoplay = "Blink"
 
 [node name="Prop_DeskLamp" parent="." instance=ExtResource("7_lamp")]
 transform = Transform3D(-0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, -0.707107, -0.8, 0.82, -0.2)

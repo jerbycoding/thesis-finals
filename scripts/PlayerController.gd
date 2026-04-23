@@ -365,3 +365,27 @@ func set_near_npc(npc_node, is_near):
 			if near_npc.has_method("set_highlight"): near_npc.set_highlight(false)
 			near_npc = null
 		EventBus.request_prompt.emit("", false)
+
+func play_tackle_animation():
+	"""Simulates being tackled to the ground during a breach."""
+	movement_enabled = false
+	modal_active = true
+	
+	var tween = create_tween()
+	tween.set_parallel(true)
+	tween.set_trans(Tween.TRANS_ELASTIC)
+	tween.set_ease(Tween.EASE_OUT)
+	
+	# Drop to floor
+	tween.tween_property(camera, "position:y", 0.5, 0.4)
+	# Tilt camera sideways
+	tween.tween_property(camera, "rotation:z", deg_to_rad(75), 0.5)
+	# Tilt camera down
+	tween.tween_property(camera, "rotation:x", deg_to_rad(-20), 0.5)
+	
+	# Shake
+	var shake_tween = create_tween()
+	for i in range(10):
+		var offset = Vector2(randf_range(-0.1, 0.1), randf_range(-0.1, 0.1))
+		shake_tween.tween_property(camera, "h_offset", offset.x, 0.05)
+		shake_tween.tween_property(camera, "v_offset", offset.y, 0.05)

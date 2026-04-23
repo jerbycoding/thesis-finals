@@ -2,6 +2,7 @@
 extends Control
 
 @onready var text_label: RichTextLabel = %TerminalLabel
+@onready var button_container: VBoxContainer = %ButtonContainer
 @onready var input_timer: Timer = $InputTimer
 
 enum MenuState { BOOTING, MAIN, CONFIRMING, ARCHIVE, CONFIGING, CREDITS, DIFFICULTY, LEVEL_SELECT, ASK_TUTORIAL }
@@ -79,39 +80,25 @@ func _build_boot_sequence():
 	]
 
 	if has_save:
-		boot_sequence.append("  [1] RESUME_ACTIVE_SESSION")
-		boot_sequence.append("  [2] START_NEW_CAMPAIGN")
-		boot_sequence.append("  [3] HACKER_CAMPAIGN (BETA)")
-		boot_sequence.append("  [4] TRAINING_SIMULATION")
-		boot_sequence.append("  [5] CAMPAIGN_ARCHIVE")
-		boot_sequence.append("  [6] SYSTEM_CONFIGURATION")
-		boot_sequence.append("  [7] CREDITS_INFO")
-		boot_sequence.append("  [8] TERMINATE_SESSION")
-		if is_veteran:
-			boot_sequence.append("  [9] SHIFT_OVERRIDE (VETERAN_ACCESS)")
+		pass
 	else:
-		boot_sequence.append("  [1] START_NEW_CAMPAIGN")
-		boot_sequence.append("  [2] HACKER_CAMPAIGN (BETA)")
-		boot_sequence.append("  [3] TRAINING_SIMULATION")
-		boot_sequence.append("  [4] CAMPAIGN_ARCHIVE")
-		boot_sequence.append("  [5] SYSTEM_CONFIGURATION")
-		boot_sequence.append("  [6] CREDITS_INFO")
-		boot_sequence.append("  [7] TERMINATE_SESSION")
-		if is_veteran:
-			boot_sequence.append("  [8] SHIFT_OVERRIDE (VETERAN_ACCESS)")
+		pass
 
 	boot_sequence.append(" ")
-	boot_sequence.append("> AWAITING_INPUT_")
+	boot_sequence.append("> SYSTEM_READY. AWAITING_AUTHORIZATION...")
 
 func _start_boot_sequence():
 	current_state = MenuState.BOOTING
+	_clear_buttons()
+	
 	for line in boot_sequence:
 		text_label.text += line + "\n"
 		if line.strip_edges() != "":
 			if AudioManager:
 				AudioManager.play_sfx(AudioManager.SFX.button_click)
-		await get_tree().create_timer(0.05).timeout
+		await get_tree().create_timer(0.02).timeout
 	
+	_show_main_menu_options()
 	current_state = MenuState.MAIN
 
 func _input(event):
@@ -319,10 +306,68 @@ func _show_credits():
 		await get_tree().create_timer(0.08).timeout
 	current_state = MenuState.CREDITS
 
+func _show_main_menu_options():
+	_clear_buttons()
+	
+	if has_save:
+		_create_menu_button("RESUME_SESSION", "continue", "1")
+		_create_menu_button("NEW_CAMPAIGN", "start_new", "2")
+		_create_menu_button("HACKER_MODE", "hacker_campaign", "3")
+		_create_menu_button("TRAINING", "training", "4")
+		_create_menu_button("ARCHIVE", "archive", "5")
+		_create_menu_button("SETTINGS", "config", "6")
+		_create_menu_button("CREDITS", "credits", "7")
+		_create_menu_button("TERMINATE", "quit", "8")
+		if is_veteran:
+			_create_menu_button("OVERRIDE", "level_select", "9")
+	else:
+		_create_menu_button("START_CAMPAIGN", "start_new", "1")
+		_create_menu_button("HACKER_MODE", "hacker_campaign", "2")
+		_create_menu_button("TRAINING", "training", "3")
+		_create_menu_button("ARCHIVE", "archive", "4")
+		_create_menu_button("SETTINGS", "config", "5")
+		_create_menu_button("CREDITS", "credits", "6")
+		_create_menu_button("TERMINATE", "quit", "7")
+		if is_veteran:
+			_create_menu_button("OVERRIDE", "level_select", "8")
+
+func _create_menu_button(label_text: String, action_id: String, shortcut: String = ""):
+	var btn = Button.new()
+	btn.text = " [%s] %s " % [shortcut, label_text] if shortcut != "" else " %s " % label_text
+	btn.alignment = HORIZONTAL_ALIGNMENT_LEFT
+	btn.flat = true
+	
+	# Styling via code for terminal feel
+	btn.add_theme_color_override("font_color", Color(0, 0.8, 0.2))
+	btn.add_theme_color_override("font_hover_color", Color(0, 1, 0.5))
+	btn.add_theme_font_size_override("font_size", 18)
+	
+	btn.pressed.connect(func(): _on_button_pressed(action_id))
+	btn.mouse_entered.connect(func(): if AudioManager: AudioManager.play_ui_hover())
+	
+	if button_container:
+		button_container.add_child(btn)
+
+func _on_button_pressed(action_id: String):
+	if current_state == MenuState.BOOTING: return
+	
+	match action_id:
+		"archive": _show_archive()
+		"config": _show_config()
+		"credits": _show_credits()
+		"level_select": _show_level_select()
+		"start_new", "training", "hacker_campaign", "continue", "quit":
+			_try_action(action_id)
+
+func _clear_buttons():
+	if button_container:
+		for child in button_container.get_children():
+			child.queue_free()
+
 func _show_main_menu():
-	text_label.text = ""
-	_build_boot_sequence()
-	_start_boot_sequence()
+	text_label.text = "VERIFY_OS :: SYSTEM_READY\n---------------------------------\n"
+	_show_main_menu_options()
+	current_state = MenuState.MAIN
 
 func _handle_confirmation_input(keycode: int):
 	match keycode:

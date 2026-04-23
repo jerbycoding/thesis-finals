@@ -54,6 +54,11 @@ func _clear_checks(active_node: CheckBox):
 func _on_launch_pressed():
 	if is_running: return
 	
+	# Check for Lockdown
+	if RivalAI and RivalAI.is_isolation_active:
+		_log("⚠ CRITICAL: Active Lockdown detected. Handshake unmounted.", "red")
+		return
+
 	selected_hostname = target_dropdown.get_item_text(target_dropdown.selected)
 	if selected_hostname == "" or selected_hostname == "No targets found":
 		return

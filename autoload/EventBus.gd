@@ -61,6 +61,8 @@ signal ai_lockdown_started()
 signal isolation_countdown_started(time_remaining: float)
 signal rival_ai_isolation_complete(hostname: String)
 signal connection_lost()
+signal trace_cooldown_started(duration: float)
+signal trace_cooldown_ended()
 # ===========================================
 
 # === SOLO DEV PHASE 4: CONTRACT SIGNALS ===

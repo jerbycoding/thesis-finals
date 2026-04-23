@@ -87,12 +87,23 @@ func is_in_2d_mode():
 	return current_mode == GameMode.MODE_2D
 
 func reset_to_default():
-	print("GameState: Resetting node references for scene change.")
+	print("GameState: Full system reset for scene change.")
 	current_computer = null
 	active_bridge = null
 	desktop_instance = null
 	is_paused = false
 	is_guided_mode = false
+	
+	# Reset Hacker State
+	current_foothold = ""
+	hacker_footholds.clear()
+	active_spoof_identity.clear()
+	
+	# Reset Managers
+	if TraceLevelManager: TraceLevelManager.reset_trace()
+	if RivalAI: RivalAI.reset_ai()
+	if NarrativeDirector: NarrativeDirector.reset_to_default()
+	
 	set_mode(GameMode.MODE_3D)
 
 # === SOLO DEV PHASE 1: ROLE SWITCHING ===

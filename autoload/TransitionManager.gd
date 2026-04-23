@@ -16,7 +16,83 @@ func _ready():
 	get_tree().root.call_deferred("add_child", dossier_instance)
 	dossier_instance.hide()
 	
+	# Connect to breach signal
+	if EventBus:
+		EventBus.connection_lost.connect(_on_connection_lost)
+	
 	print("TransitionManager ready")
+
+func _on_connection_lost():
+	"""
+	Triggered when trace hits 100% and countdown expires.
+	Simulates authorities breaching the hacker's location.
+	"""
+	if is_transitioning: return
+	is_transitioning = true
+	
+	# Stop the shift immediately to hide HUD and stop timers
+	if NarrativeDirector:
+		NarrativeDirector.stop_shift()
+	
+	print("🚨 BREACH SEQUENCE INITIATED!")
+	EventBus.transition_started.emit()
+	
+	# 1. Audio Sting (Sudden Silence + Loud Bang)
+	if AudioManager:
+		AudioManager.stop_music()
+		# Play multiple loud "thuds" for the door breach
+		await get_tree().create_timer(0.5).timeout
+		# Using notification_error as a placeholder for a 'heavy' sound
+		AudioManager.play_sfx(AudioManager.SFX.notification_error, 5.0) 
+		await get_tree().create_timer(0.3).timeout
+		AudioManager.play_sfx(AudioManager.SFX.notification_error, 10.0) 
+		
+	# 2. Visual Glitch (Flickering static on terminal)
+	if overlay_instance:
+		# Use screen shake for impact
+		overlay_instance.shake_screen(30.0, 0.5)
+		await overlay_instance.play_glitch_static(3.0) # 3 seconds of static
+		
+	# 3. Forced Scene Exit (Simulate RAID in 3D)
+	# We reload the HackerRoom but could eventually add specific "Raid" props
+	_perform_scene_cleanup("res://scenes/3d/HackerRoom.tscn", "CONNECTION_TERMINATED")
+	
+	# Stand up the player instantly
+	_force_stand_up()
+	
+	get_tree().change_scene_to_file("res://scenes/3d/HackerRoom.tscn")
+	
+	# Wait for scene load
+	await get_tree().create_timer(0.5).timeout
+	
+	# 4. Final Flash (Red/Blue strobe + Arrest sequence)
+	overlay_instance.fade_out()
+	await overlay_instance.fade_finished
+	
+	# Trigger strobe and tackle
+	overlay_instance.play_police_strobe(5.0)
+	
+	var player = get_tree().root.find_child("Player3D", true, false)
+	if player and player.has_method("play_tackle_animation"):
+		player.play_tackle_animation()
+	
+	# Play megaphones/shouting
+	if AudioManager:
+		AudioManager.play_notification("error")
+		await get_tree().create_timer(1.0).timeout
+		AudioManager.play_sfx(AudioManager.SFX.consequence_alert, 5.0)
+	
+	# Wait for cutscene to "feel" right
+	await get_tree().create_timer(4.0).timeout
+	
+	# 5. Show Booking Report
+	var day = NarrativeDirector.current_hacker_day if NarrativeDirector else 1
+	overlay_instance.show_booking_report(day)
+	
+	print("🚨 BREACH COMPLETE: Player caught. Redirecting to summary.")
+	
+	is_transitioning = false
+	EventBus.transition_completed.emit()
 
 func enter_desktop_mode(computer_node):
 	if is_transitioning:
