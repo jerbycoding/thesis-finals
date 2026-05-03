@@ -8,19 +8,12 @@ func setup(window: Control):
 	target_window = window
 	%Label.text = window.window_title
 	
-	# Try to get app icon by convention
+	# Get app icon from configuration
 	var app_id = window.window_id.split("_")[0]
-	var icon_name = app_id
-	
-	# Handle specific mappings where ID doesn't match filename
-	match app_id:
-		"tickets": icon_name = "ticket"
-		"decrypt": icon_name = "decryption"
-		"taskmanager": icon_name = "resources"
-	
-	var path = "res://assets/icons/" + icon_name + ".png"
-	if ResourceLoader.exists(path):
-		%IconRect.texture = load(path)
+	if DesktopWindowManager and DesktopWindowManager.app_configs.has(app_id):
+		var config = DesktopWindowManager.app_configs[app_id]
+		if config.icon:
+			%IconRect.texture = config.icon
 	
 	pressed.connect(_on_pressed)
 

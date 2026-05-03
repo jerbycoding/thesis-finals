@@ -413,10 +413,25 @@ func advance_hacker_day():
 			SaveSystem.save_game()
 		return
 
+	# Update global stats before advancing to next day
+	if SaveSystem:
+		var bounty_earned = BountyLedger.get_bounty_for_day(current_day) if BountyLedger else 0
+		var footholds = GameState.hacker_footholds.size() if GameState else 0
+		var max_trace = TraceLevelManager.get_trace_level() if TraceLevelManager else 0.0
+		
+		SaveSystem.update_global_stats("hacker", {
+			"bounty_earned": bounty_earned,
+			"footholds_established": footholds,
+			"max_trace": max_trace
+		})
+
 	# Save before advancing to next day
 	if SaveSystem:
 		SaveSystem.save_game()
 
+	# Ensure clock is running for hacker shift forensics
+	if ShiftClock: ShiftClock.start_clock()
+	
 	_load_hacker_shift(next_day)
 
 func _show_mirror_mode(day: int):
@@ -651,10 +666,16 @@ func _handle_shift_end(event_data: Dictionary):
 		report_layer.add_child(report_instance)
 		report_instance.show_report(results)
 		
-		# Pass the next shift ID to the report for continuation
 		if current_shift_resource and not current_shift_resource.next_shift_id.is_empty():
 			print("NarrativeDirector: Next shift defined: ", current_shift_resource.next_shift_id)
 			report_instance.set_next_shift(current_shift_resource.next_shift_id)
+		
+		# Update global stats for profile
+		if SaveSystem:
+			SaveSystem.update_global_stats("analyst", {
+				"tickets_resolved": results.get("tickets_completed", 0),
+				"final_integrity": IntegrityManager.current_integrity if IntegrityManager else 100.0
+			})
 		
 		EventBus.shift_ended.emit(results)
 		print("NarrativeDirector: Shift report sequence complete.")

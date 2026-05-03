@@ -5,7 +5,9 @@ extends Control
 @onready var button_container: VBoxContainer = %ButtonContainer
 @onready var input_timer: Timer = $InputTimer
 
-enum MenuState { BOOTING, MAIN, CONFIRMING, ARCHIVE, CONFIGING, CREDITS, DIFFICULTY, LEVEL_SELECT, ASK_TUTORIAL }
+var command_input: LineEdit
+
+enum MenuState { BOOTING, MAIN, CONFIRMING, ARCHIVE, CONFIGING, CREDITS, DIFFICULTY, LEVEL_SELECT, ASK_TUTORIAL, PROFILE, NAME_ENTRY }
 var current_state = MenuState.BOOTING
 var pending_action: String = ""
 var has_save: bool = false
@@ -22,7 +24,30 @@ func _ready():
 	is_veteran = ConfigManager.settings.gameplay.campaign_completed if ConfigManager else false
 	_load_shift_data()
 	_build_boot_sequence()
+	_setup_cli_input()
 	_start_boot_sequence()
+
+func _setup_cli_input():
+	# Hide the button column (The "Column" the user doesn't like)
+	var action_side = get_node_or_null("MarginContainer/HBoxContainer/ActionSide")
+	if action_side:
+		action_side.visible = false
+	
+	# Create the CLI Input field
+	command_input = LineEdit.new()
+	command_input.name = "CLI_Input"
+	command_input.placeholder_text = "ENTER_COMMAND..."
+	command_input.flat = true
+	command_input.add_theme_color_override("font_color", Color(0, 1, 0.5))
+	command_input.add_theme_font_size_override("font_size", 32)
+	
+	# Add to the LogSide container
+	var log_side = get_node_or_null("MarginContainer/HBoxContainer/LogSide")
+	if log_side:
+		log_side.add_child(command_input)
+	
+	command_input.text_submitted.connect(_on_command_submitted)
+	command_input.visible = false # Hide until boot complete
 
 func _load_shift_data():
 	var raw_list = []
@@ -89,7 +114,6 @@ func _build_boot_sequence():
 
 func _start_boot_sequence():
 	current_state = MenuState.BOOTING
-	_clear_buttons()
 	
 	for line in boot_sequence:
 		text_label.text += line + "\n"
@@ -111,6 +135,9 @@ func _input(event):
 			_handle_confirmation_input(event.keycode)
 		elif current_state == MenuState.ASK_TUTORIAL:
 			_handle_tutorial_ask_input(event.keycode)
+		elif current_state == MenuState.PROFILE:
+			_show_main_menu()
+			_on_action_selected("menu_back")
 		elif current_state == MenuState.ARCHIVE:
 			_handle_archive_input(event.keycode)
 		elif current_state == MenuState.CONFIGING:
@@ -132,8 +159,9 @@ func _handle_main_menu_input(keycode: int):
 			KEY_5: _show_archive()
 			KEY_6: _show_config()
 			KEY_7: _show_credits()
-			KEY_8: _on_action_selected("quit")
-			KEY_9: if is_veteran: _show_level_select()
+			KEY_7: _on_action_selected("quit")
+			KEY_8: if is_veteran: _show_level_select()
+			KEY_P: _show_profile()
 	else:
 		match keycode:
 			KEY_1: _try_action("start_new")
@@ -144,6 +172,7 @@ func _handle_main_menu_input(keycode: int):
 			KEY_6: _show_credits()
 			KEY_7: _on_action_selected("quit")
 			KEY_8: if is_veteran: _show_level_select()
+			KEY_P: _show_profile()
 
 func _try_action(action_id: String):
 	if has_save:
@@ -305,67 +334,127 @@ func _show_credits():
 		if AudioManager: AudioManager.play_terminal_beep(-15.0)
 		await get_tree().create_timer(0.08).timeout
 	current_state = MenuState.CREDITS
+	if command_input: command_input.visible = true
+
+func _on_command_submitted(text: String):
+	var cmd = text.strip_edges().to_lower()
+	command_input.clear()
+	
+	# Visual feedback in log
+	text_label.text += "\n[color=cyan]ANALYST@VERIFY_OS:~$ %s[/color]" % cmd
+	
+	if current_state == MenuState.NAME_ENTRY:
+		_handle_name_registration(text.strip_edges())
+	elif current_state == MenuState.MAIN:
+		_parse_main_commands(cmd)
+	elif current_state == MenuState.PROFILE or current_state == MenuState.CREDITS or current_state == MenuState.ARCHIVE:
+		if cmd == "back" or cmd == "exit" or cmd == "menu":
+			_show_main_menu()
+			_on_action_selected("menu_back")
+
+func _parse_main_commands(cmd: String):
+	# Handle shortcut numbers or full words
+	match cmd:
+		"login", "1": if has_save: _on_action_selected("continue")
+		"new", "2": _try_action("start_new")
+		"hacker", "3": _try_action("hacker_campaign")
+		"training", "4": _try_action("training")
+		"archive", "5": _show_archive()
+		"settings", "config", "6": _show_config()
+		"credits", "7": _show_credits()
+		"quit", "exit", "8": _on_action_selected("quit")
+		"dossier", "profile", "p": _show_profile()
+	
+	# Special command for setting name
+	if cmd.begins_with("setname "):
+		var new_name = cmd.replace("setname ", "").strip_edges()
+		if SaveSystem:
+			SaveSystem.set_player_name(new_name)
+			text_label.text += "\n[color=green]SUCCESS: Identity updated to [%s][/color]" % SaveSystem.global_stats.meta.player_name
+		if AudioManager: AudioManager.play_notification("info")
+
+func _handle_name_registration(raw_name: String):
+	if raw_name.length() < 3:
+		text_label.text += "\n[color=red]ERROR: Name too short. Try again: [/color]"
+		return
+		
+	if SaveSystem:
+		SaveSystem.set_player_name(raw_name)
+		text_label.text += "\n[color=green]IDENTITY_VERIFIED: [%s][/color]" % SaveSystem.global_stats.meta.player_name
+		text_label.text += "\n[color=green]AUTHORIZATION_GRANTED. REBOOTING_MENU...[/color]"
+		if AudioManager: AudioManager.play_notification("info")
+		await get_tree().create_timer(1.0).timeout
+		_show_main_menu()
+
+func _show_profile():
+	current_state = MenuState.PROFILE
+	if command_input: command_input.visible = true # Keep CLI active for 'back'
+	
+	if not SaveSystem: return
+	
+	var a = SaveSystem.global_stats.analyst
+	var h = SaveSystem.global_stats.hacker
+	var name = SaveSystem.global_stats.meta.player_name
+	
+	text_label.text = "PERSONNEL_DOSSIER :: CLASSIFIED_RECORD\n"
+	text_label.text += "-----------------------------------------------------------\n"
+	text_label.text += "IDENTITY: [ %s ]\n" % name
+	text_label.text += "STATUS:   ACTIVE_DUTY\n"
+	text_label.text += "===========================================================\n\n"
+	
+	text_label.text += "[color=cyan][ ANALYST_HISTORY ][/color]\n"
+	text_label.text += "  > SHIFTS_COMPLETED: %d\n" % a.shifts_completed
+	text_label.text += "  > TICKETS_RESOLVED: %d\n" % a.tickets_resolved
+	text_label.text += "  > AVG_INTEGRITY:    %.1f%%\n\n" % a.avg_integrity
+	
+	text_label.text += "[color=red][ HACKER_HISTORY ][/color]\n"
+	text_label.text += "  > DAYS_SURVIVED:    %d\n" % h.days_survived
+	text_label.text += "  > TOTAL_BOUNTY:     $%d\n" % h.total_bounty
+	text_label.text += "  > MAX_TRACE_LEVEL:  %.1f%%\n\n" % h.max_trace_level
+	
+	text_label.text += "-----------------------------------------------------------\n"
+	text_label.text += "  LAST_ACTIVE: %s\n" % SaveSystem.global_stats.meta.last_played
+	text_label.text += "\n  [ESC] RETURN_TO_TERMINAL"
+	
+	if AudioManager: AudioManager.play_notification("info")
 
 func _show_main_menu_options():
-	_clear_buttons()
 	
-	if has_save:
-		_create_menu_button("RESUME_SESSION", "continue", "1")
-		_create_menu_button("NEW_CAMPAIGN", "start_new", "2")
-		_create_menu_button("HACKER_MODE", "hacker_campaign", "3")
-		_create_menu_button("TRAINING", "training", "4")
-		_create_menu_button("ARCHIVE", "archive", "5")
-		_create_menu_button("SETTINGS", "config", "6")
-		_create_menu_button("CREDITS", "credits", "7")
-		_create_menu_button("TERMINATE", "quit", "8")
-		if is_veteran:
-			_create_menu_button("OVERRIDE", "level_select", "9")
-	else:
-		_create_menu_button("START_CAMPAIGN", "start_new", "1")
-		_create_menu_button("HACKER_MODE", "hacker_campaign", "2")
-		_create_menu_button("TRAINING", "training", "3")
-		_create_menu_button("ARCHIVE", "archive", "4")
-		_create_menu_button("SETTINGS", "config", "5")
-		_create_menu_button("CREDITS", "credits", "6")
-		_create_menu_button("TERMINATE", "quit", "7")
-		if is_veteran:
-			_create_menu_button("OVERRIDE", "level_select", "8")
+	# Instead of buttons, we list commands in the text label
+	text_label.text += "AVAILABLE_COMMANDS:\n"
+	text_label.text += "  [1] LOGIN         - Resume active session\n"
+	text_label.text += "  [2] NEW           - Start new campaign\n"
+	text_label.text += "  [3] HACKER        - Initialize hacker mode\n"
+	text_label.text += "  [4] TRAINING      - Certification module\n"
+	text_label.text += "  [5] ARCHIVE       - Review mission logs\n"
+	text_label.text += "  [6] CONFIG        - System settings\n"
+	text_label.text += "  [7] CREDITS       - View attribution\n"
+	text_label.text += "  [8] QUIT          - Terminate process\n\n"
+	text_label.text += "  [P] DOSSIER       - View personnel file\n"
+	text_label.text += "  [ ] SETNAME [val] - Update analyst identity\n"
+	text_label.text += "-----------------------------------------------------------\n"
+	text_label.text += "AWAITING_INPUT...\n"
+	
+	if command_input:
+		command_input.visible = true
+		command_input.grab_focus()
 
-func _create_menu_button(label_text: String, action_id: String, shortcut: String = ""):
-	var btn = Button.new()
-	btn.text = " [%s] %s " % [shortcut, label_text] if shortcut != "" else " %s " % label_text
-	btn.alignment = HORIZONTAL_ALIGNMENT_LEFT
-	btn.flat = true
-	
-	# Styling via code for terminal feel
-	btn.add_theme_color_override("font_color", Color(0, 0.8, 0.2))
-	btn.add_theme_color_override("font_hover_color", Color(0, 1, 0.5))
-	btn.add_theme_font_size_override("font_size", 18)
-	
-	btn.pressed.connect(func(): _on_button_pressed(action_id))
-	btn.mouse_entered.connect(func(): if AudioManager: AudioManager.play_ui_hover())
-	
-	if button_container:
-		button_container.add_child(btn)
-
-func _on_button_pressed(action_id: String):
-	if current_state == MenuState.BOOTING: return
-	
-	match action_id:
-		"archive": _show_archive()
-		"config": _show_config()
-		"credits": _show_credits()
-		"level_select": _show_level_select()
-		"start_new", "training", "hacker_campaign", "continue", "quit":
-			_try_action(action_id)
-
-func _clear_buttons():
-	if button_container:
-		for child in button_container.get_children():
-			child.queue_free()
+func _prompt_for_name():
+	current_state = MenuState.NAME_ENTRY
+	text_label.text = "\n\n  [!] SECURITY_ALERT: UNREGISTERED_ANALYST_DETECTED\n  -----------------------------------------------------------\n  Identity link required for terminal authorization.\n\n  PLEASE ENTER FULL NAME: "
+	if AudioManager: AudioManager.play_notification("warning")
 
 func _show_main_menu():
-	text_label.text = "VERIFY_OS :: SYSTEM_READY\n---------------------------------\n"
+	if SaveSystem and SaveSystem.global_stats.meta.player_name == "ANALYST_PENDING":
+		_prompt_for_name()
+		return
+		
+	var name = "ANALYST"
+	if SaveSystem: name = SaveSystem.global_stats.meta.player_name
+	
+	text_label.text = "[color=cyan]HELLO, %s.[/color]\n" % name
+	text_label.text += "VERIFY_OS :: SYSTEM_READY\n"
+	text_label.text += "-----------------------------------------------------------\n"
 	_show_main_menu_options()
 	current_state = MenuState.MAIN
 

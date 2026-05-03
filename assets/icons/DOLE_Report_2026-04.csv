@@ -1,0 +1,16 @@
+"DOLE MONTHLY EMPLOYMENT REPORT (RKS FORM 5)"
+"Reporting Period:","April 2026"
+
+"SUMMARY OF WORKFORCE"
+"Total Active Workforce at End of Month",6
+"Total New Hires",3
+"Total Separations",0
+
+"LIST OF NEW HIRES"
+"Employee Number",Name,Position,"Date Hired",Salary
+EMP-2026-0004,"Maria Ibarra","Production Operator (Electronics)",2026-04-16,"15,000.00"
+EMP-2026-0005,"mark guimba","Japanese Interpreter",2026-04-25,"20,000.00"
+EMP-2026-0006,"qsdasd asdasd","Production Operator (Electronics)",2026-04-25,"15,000.00"
+
+"LIST OF SEPARATIONS"
+"Employee Number",Name,Position,"Date Separated",Reason

@@ -6,6 +6,34 @@ extends Node
 
 # The path to the save file in the user's data directory.
 const SAVE_PATH = "user://savegame.json"
+const GLOBAL_STATS_PATH = "user://global_stats.json"
+
+var global_stats = {
+	"analyst": {
+		"shifts_completed": 0,
+		"total_integrity_preserved": 0.0,
+		"avg_integrity": 100.0,
+		"tickets_resolved": 0
+	},
+	"hacker": {
+		"days_survived": 0,
+		"total_bounty": 0,
+		"footholds_established": 0,
+		"max_trace_level": 0.0
+	},
+	"meta": {
+		"total_playtime": 0.0,
+		"last_played": "",
+		"player_name": "ANALYST_PENDING"
+	}
+}
+
+func set_player_name(new_name: String):
+	global_stats.meta.player_name = new_name.to_upper().replace(" ", "_")
+	save_global_stats()
+
+func _ready():
+	load_global_stats()
 
 # Collects data from all managers and writes it to the save file.
 func save_game():
@@ -109,6 +137,59 @@ func load_game() -> bool:
 func has_save_file() -> bool:
 	return FileAccess.file_exists(SAVE_PATH)
 
+# --- GLOBAL STATS (PHASE 1) ---
+
+func save_global_stats():
+	var file = FileAccess.open(GLOBAL_STATS_PATH, FileAccess.WRITE)
+	if file:
+		var json_string = JSON.stringify(global_stats, "\t")
+		file.store_string(json_string)
+		file.close()
+		print("💾 SaveSystem: Global stats saved.")
+
+func load_global_stats():
+	if not FileAccess.file_exists(GLOBAL_STATS_PATH):
+		save_global_stats() # Initialize file
+		return
+		
+	var file = FileAccess.open(GLOBAL_STATS_PATH, FileAccess.READ)
+	if file:
+		var json_parser = JSON.new()
+		var error = json_parser.parse(file.get_as_text())
+		file.close()
+		if error == OK:
+			var data = json_parser.get_data()
+			# Deep merge to ensure compatibility if we add new keys later
+			for category in data:
+				if global_stats.has(category):
+					for key in data[category]:
+						global_stats[category][key] = data[category][key]
+			print("💾 SaveSystem: Global stats loaded.")
+
+func update_global_stats(role: String, data: Dictionary):
+	"""
+	Call this at the end of a shift to record results.
+	'role' should be "analyst" or "hacker"
+	'data' should contain keys matching the global_stats sub-dictionaries.
+	"""
+	if not global_stats.has(role): return
+	
+	match role:
+		"analyst":
+			global_stats.analyst.shifts_completed += 1
+			global_stats.analyst.tickets_resolved += data.get("tickets_resolved", 0)
+			var integrity = data.get("final_integrity", 100.0)
+			global_stats.analyst.total_integrity_preserved += integrity
+			global_stats.analyst.avg_integrity = global_stats.analyst.total_integrity_preserved / global_stats.analyst.shifts_completed
+		"hacker":
+			global_stats.hacker.days_survived += 1
+			global_stats.hacker.total_bounty += data.get("bounty_earned", 0)
+			global_stats.hacker.footholds_established += data.get("footholds_established", 0)
+			global_stats.hacker.max_trace_level = max(global_stats.hacker.max_trace_level, data.get("max_trace", 0.0))
+	
+	global_stats.meta.last_played = Time.get_datetime_string_from_system()
+	save_global_stats()
+
 func new_game_setup():
 	print("💾 SaveSystem: Executing master reset for New Game.")
 	
@@ -124,7 +205,11 @@ func new_game_setup():
 	if LogSystem: LogSystem.clear_active_data()
 	if EmailSystem: EmailSystem.clear_active_data()
 	
-	# 3. Preservation Logic: Do not delete physical file until a NEW save is issued.
+	# 3. Purge Hacker/Forensic slates
+	if HackerHistory: HackerHistory.clear_history()
+	if BountyLedger: BountyLedger.reset_ledger()
+	
+	# 4. Preservation Logic: Do not delete physical file until a NEW save is issued.
 	# This prevents accidental data loss if 'Start Game' is clicked by mistake.
 	# if has_save_file():
 	# 	DirAccess.remove_absolute(SAVE_PATH)

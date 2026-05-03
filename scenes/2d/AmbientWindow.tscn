@@ -1,6 +1,6 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=3 format=3 uid="uid://dxyfoy5msgpnl"]
 
-[ext_resource type="Script" path="res://scripts/2d/AmbientWindow.gd" id="1_ambient_win"]
+[ext_resource type="Script" uid="uid://b6pngqfx3cgn4" path="res://scripts/2d/AmbientWindow.gd" id="1_ambient_win"]
 [ext_resource type="Theme" uid="uid://dny3rlbltexc7" path="res://assets/themes/EnterpriseTheme.tres" id="2_theme"]
 
 [node name="AmbientWindow" type="PanelContainer"]
@@ -57,4 +57,3 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(1, 1, 1, 0.02)
-

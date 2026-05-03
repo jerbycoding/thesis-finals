@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://b8x6q57l146ve"]
 
-[ext_resource type="Script" uid="uid://c5q2x7o2ycf" path="res://scripts/2d/DesktopIcon.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://bcm7fk2kmj2uy" path="res://scripts/2d/DesktopIcon.gd" id="1_script"]
 [ext_resource type="Texture2D" uid="uid://c0auxrvmfy530" path="res://assets/icons/handbook.png" id="2_icon"]
 [ext_resource type="Theme" uid="uid://dny3rlbltexc7" path="res://assets/themes/EnterpriseTheme.tres" id="3_theme"]
 
@@ -16,12 +16,12 @@ custom_minimum_size = Vector2(80, 90)
 offset_right = 80.0
 offset_bottom = 90.0
 theme = ExtResource("3_theme")
+theme_override_colors/icon_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_pressed_color = Color(0.6, 0.8, 1, 1)
+theme_override_colors/icon_normal_color = Color(1, 1, 1, 0.9)
 theme_override_styles/hover = SubResource("StyleBoxFlat_Hover")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_Hover")
 theme_override_styles/normal = SubResource("StyleBoxFlat_Hover")
-theme_override_colors/icon_normal_color = Color(1, 1, 1, 0.9)
-theme_override_colors/icon_pressed_color = Color(0.6, 0.8, 1, 1)
-theme_override_colors/icon_hover_color = Color(1, 1, 1, 1)
 flat = true
 icon_alignment = 1
 vertical_icon_alignment = 0

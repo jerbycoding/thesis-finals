@@ -41,7 +41,7 @@ func _ready():
 	# Check if host is already RANSOMED
 	var host_state = NetworkState.get_host_state(target_hostname) if NetworkState else {}
 	var status = host_state.get("status", 0)
-	var is_ransomed = (status == 4 or status == "RANSOMED")
+	var is_ransomed = (str(status) == "4" or str(status) == "RANSOMED")
 	
 	if is_ransomed:
 		status_label.text = "TARGET_ALREADY_ENCRYPTED\nControl established. No further action required."

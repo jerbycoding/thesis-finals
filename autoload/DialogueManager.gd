@@ -29,6 +29,13 @@ func start_dialogue(requesting_npc: Node, dialogue_resource: DialogueDataResourc
 		print("ERROR: DialogueManager started with a null dialogue resource.")
 		return
 
+	# AUTO-EXIT COMPUTER: If the player is in 2D mode, force them to stand up before talking
+	if GameState.current_mode == GameState.GameMode.MODE_2D and TransitionManager:
+		print("DialogueManager: Narrative Interruption! Forcing exit from desktop mode.")
+		TransitionManager.exit_desktop_mode()
+		# Brief wait to allow the camera to start moving before the UI appears
+		await get_tree().create_timer(0.2).timeout
+
 	# Validation Step: Ensure the dialogue data is safe to run
 	if not validate_dialogue(dialogue_resource):
 		var npc_name = requesting_npc.npc_name if is_instance_valid(requesting_npc) else "Unknown"

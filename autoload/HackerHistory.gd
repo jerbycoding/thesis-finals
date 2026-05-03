@@ -46,6 +46,10 @@ func _on_offensive_action(data: Dictionary):
 	Record offensive action to forensic history.
 	Called automatically via EventBus signal.
 	"""
+	# === ROLE GUARD: Only record if active role is HACKER ===
+	if GameState and GameState.current_role != GameState.Role.HACKER:
+		return
+
 	# Validate payload has required keys
 	var required_keys = ["action_type", "target", "timestamp", "result", "trace_cost"]
 	for key in required_keys:
@@ -78,6 +82,10 @@ func _on_offensive_action(data: Dictionary):
 	history_updated.emit(history.size())
 
 func _on_isolation_complete(hostname: String):
+	# === ROLE GUARD: Only record if active role is HACKER ===
+	if GameState and GameState.current_role != GameState.Role.HACKER:
+		return
+
 	"""
 	Record when RivalAI isolation is aborted (pivot evasion succeeded).
 	"""
@@ -98,6 +106,10 @@ func _on_isolation_complete(hostname: String):
 	history_updated.emit(history.size())
 
 func _on_connection_lost():
+	# === ROLE GUARD: Only record if active role is HACKER ===
+	if GameState and GameState.current_role != GameState.Role.HACKER:
+		return
+
 	"""
 	Record when isolation timer reaches zero (game over).
 	"""

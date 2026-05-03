@@ -662,17 +662,12 @@ func _cmd_exploit(args: Array) -> Dictionary:
 
 func _create_exploit_payload(hostname: String, result: String) -> Dictionary:
 	"""Helper: Create standardized signal payload for exploit actions."""
-	var shift_day = 0
-	if NarrativeDirector:
-		shift_day = NarrativeDirector.current_hacker_day if NarrativeDirector.has_node("NarrativeDirector") else 0
-
 	return {
 		"action_type": "exploit",
 		"target": hostname,
 		"timestamp": ShiftClock.elapsed_seconds,
 		"result": result,  # SUCCESS, FAILED, or HONEYPOT
-		"trace_cost": GlobalConstants.TRACE_COST.EXPLOIT,
-		"shift_day": shift_day  # === PHASE 2: Added for HackerHistory ===
+		"trace_cost": GlobalConstants.TRACE_COST.EXPLOIT
 	}
 
 func _cmd_pivot(args: Array) -> Dictionary:
@@ -767,6 +762,17 @@ func _cmd_submit(_args: Array) -> Dictionary:
 		return {"success": false, "output": "[color=red]ERROR: Narrative system not initialized.[/color]"}
 
 	var current_day = NarrativeDirector.current_hacker_day
+	
+	# Log the submission action for forensics
+	if EventBus:
+		EventBus.offensive_action_performed.emit({
+			"action_type": "report_submission",
+			"target": "BROKER_UPLINK",
+			"timestamp": ShiftClock.elapsed_seconds,
+			"result": "SUCCESS",
+			"trace_cost": 0.0
+		})
+	
 	NarrativeDirector.advance_hacker_day()
 	var next_day = NarrativeDirector.current_hacker_day
 

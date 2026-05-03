@@ -67,6 +67,9 @@ func show_report(day: int):
 	var hacker_nodes = []
 	if HackerHistory:
 		history = HackerHistory.get_entries_for_day(day)
+		# Sort by timestamp ascending
+		history.sort_custom(func(a, b): return a.get("timestamp", 0.0) < b.get("timestamp", 0.0))
+		
 		for entry in history:
 			var item = ENTRY_SCENE.instantiate()
 			hacker_list.add_child(item)
@@ -78,6 +81,9 @@ func show_report(day: int):
 	var siem_nodes = []
 	if LogSystem:
 		logs = LogSystem.get_logs_for_shift(day)
+		# Sort by timestamp ascending
+		logs.sort_custom(func(a, b): return a.timestamp_seconds < b.timestamp_seconds)
+		
 		for log in logs:
 			var item = ENTRY_SCENE.instantiate()
 			siem_list.add_child(item)

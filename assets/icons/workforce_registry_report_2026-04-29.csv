@@ -1,0 +1,4 @@
+ID,"Employee No",Name,Email,Phone,Position,Department,Status,"Date Hired",Client
+6,EMP-2026-0006,"qsdasd asdasd",jerby.yi@yahoo.com,09946072368,"Production Operator (Electronics)",N/A,Active,2026-04-25,"Nidec Philippines Corp."
+5,EMP-2026-0005,"mark guimba",you@example.com,09090909090,"Japanese Interpreter",N/A,Active,2026-04-25,"Fuji Electric Philippines Inc."
+4,EMP-2026-0004,"Maria Ibarra",maria.ibarra@example.com,09187654321,"Production Operator (Electronics)",N/A,Active,2026-04-16,"Nidec Philippines Corp."

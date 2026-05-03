@@ -127,8 +127,29 @@ func _on_terminal_action(action_id: String):
 		"continue":
 			if SaveSystem:
 				SaveSystem.load_game()
+		"profile_opened":
+			_lean_camera(true)
+		"menu_back":
+			_lean_camera(false)
 		"quit":
 			_start_quit_sequence()
+
+func _lean_camera(zoomed: bool):
+	"""Subtle camera lean for reading dossier/profile."""
+	var target_pos = base_camera_pos
+	var target_fov = 75.0 # Default FOV
+	
+	if zoomed:
+		# Lean closer to the monitor
+		target_pos = base_camera_pos + (camera.global_transform.basis.z * -0.15)
+		target_fov = 68.0
+	
+	var tween = create_tween().set_parallel(true)
+	tween.tween_property(camera, "position", target_pos, 0.6).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	tween.tween_property(camera, "fov", target_fov, 0.6).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	
+	# Update base position so parallax doesn't snap back
+	tween.chain().tween_callback(func(): base_camera_pos = target_pos)
 
 func _start_hacker_campaign():
 	"""

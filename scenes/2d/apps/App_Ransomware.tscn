@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://scripts/2d/apps/App_Ransomware.gd" id="1_script"]
 [ext_resource type="Theme" uid="uid://dny3rlbltexc7" path="res://assets/themes/EnterpriseTheme.tres" id="2_theme"]
-[ext_resource type="PackedScene" uid="uid://duw88rgr8v43o" path="res://scenes/2d/minigames/RansomCalibration.tscn" id="3_minigame"]
+[ext_resource type="PackedScene" uid="uid://y1kw2tsq7uhd" path="res://scenes/ui/RansomCalibration.tscn" id="3_minigame"]
 
 [node name="App_Ransomware" type="Control"]
 custom_minimum_size = Vector2(700, 500)

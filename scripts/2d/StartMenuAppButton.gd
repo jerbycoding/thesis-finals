@@ -61,16 +61,11 @@ func _apply_visuals():
 	if label:
 		label.text = cached_title
 	
-	# Icon logic
-	var icon_name = app_id
-	match app_id:
-		"tickets": icon_name = "ticket"
-		"decrypt": icon_name = "decryption"
-		"taskmanager": icon_name = "resources"
-	
-	var icon_path = "res://assets/icons/" + icon_name + ".png"
-	if ResourceLoader.exists(icon_path) and icon_rect:
-		icon_rect.texture = load(icon_path)
+	# Get app icon from configuration
+	if DesktopWindowManager and DesktopWindowManager.app_configs.has(app_id):
+		var config = DesktopWindowManager.app_configs[app_id]
+		if config.icon and icon_rect:
+			icon_rect.texture = config.icon
 
 func set_glow(active: bool):
 	if _glow_tween:

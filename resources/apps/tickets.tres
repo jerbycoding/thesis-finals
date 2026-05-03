@@ -1,11 +1,13 @@
-[gd_resource type="Resource" script_class="AppConfig" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="AppConfig" load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://resources/AppConfigResource.gd" id="1_config"]
+[ext_resource type="Texture2D" path="res://assets/icons/ticket.png" id="2_icon"]
 
 [resource]
 script = ExtResource("1_config")
 app_id = "tickets"
 scene_path = "res://scenes/2d/apps/App_TicketQueue.tscn"
 title = "Ticket Queue"
+icon = ExtResource("2_icon")
 default_size = Vector2(500, 600)
 required_role = 0

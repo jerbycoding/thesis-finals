@@ -5,6 +5,7 @@ class_name AppConfig
 @export var app_id: String = ""
 @export var scene_path: String = ""
 @export var title: String = ""
+@export var icon: Texture2D
 @export var default_size: Vector2 = Vector2(600, 400)
 
 enum RoleRequirement { ANALYST, HACKER, BOTH }

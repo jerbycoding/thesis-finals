@@ -1,0 +1,17 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://xdn4y1q1g1xk"
+
+[deps]
+
+files=["res://assets/icons/workforce_registry_report_2026-04-29.Employee No.translation", "res://assets/icons/workforce_registry_report_2026-04-29.Name.translation", "res://assets/icons/workforce_registry_report_2026-04-29.Email.translation", "res://assets/icons/workforce_registry_report_2026-04-29.Phone.translation", "res://assets/icons/workforce_registry_report_2026-04-29.Position.translation", "res://assets/icons/workforce_registry_report_2026-04-29.Department.translation", "res://assets/icons/workforce_registry_report_2026-04-29.Status.translation", "res://assets/icons/workforce_registry_report_2026-04-29.Date Hired.translation", "res://assets/icons/workforce_registry_report_2026-04-29.Client.translation"]
+
+source_file="res://assets/icons/workforce_registry_report_2026-04-29.csv"
+dest_files=["res://assets/icons/workforce_registry_report_2026-04-29.Employee No.translation", "res://assets/icons/workforce_registry_report_2026-04-29.Name.translation", "res://assets/icons/workforce_registry_report_2026-04-29.Email.translation", "res://assets/icons/workforce_registry_report_2026-04-29.Phone.translation", "res://assets/icons/workforce_registry_report_2026-04-29.Position.translation", "res://assets/icons/workforce_registry_report_2026-04-29.Department.translation", "res://assets/icons/workforce_registry_report_2026-04-29.Status.translation", "res://assets/icons/workforce_registry_report_2026-04-29.Date Hired.translation", "res://assets/icons/workforce_registry_report_2026-04-29.Client.translation"]
+
+[params]
+
+compress=true
+delimiter=0
