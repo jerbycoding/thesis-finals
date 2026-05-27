@@ -48,6 +48,7 @@ func _calculate_metrics_from_history() -> Dictionary:
 		"risks_taken": 0,
 		"consequences_triggered": 0,
 		"npc_approval": 0.0,
+		"total_verifications": 0,
 		"tools_used": {} 
 	}
 	
@@ -69,6 +70,7 @@ func _calculate_metrics_from_history() -> Dictionary:
 			"tool_used":
 				var tool = entry.get("tool_name", "unknown")
 				m.tools_used[tool] = m.tools_used.get(tool, 0) + 1
+				m.total_verifications += 1
 				
 	if m.tickets_completed > 0:
 		m.avg_completion_time = m.total_completion_time / m.tickets_completed
@@ -76,11 +78,28 @@ func _calculate_metrics_from_history() -> Dictionary:
 	return m
 
 func _calculate_archetype(m: Dictionary) -> String:
-	var m_struct = OpenStruct.new(m)
-	for archetype_name in ARCHETYPE_DEFINITIONS:
-		var definition = ARCHETYPE_DEFINITIONS[archetype_name]
-		if definition.condition.call(m_struct):
-			return archetype_name
+	"""
+	DECISION TREE ALGORITHM:
+	Pillar 3 Research Contribution - Symmetrically classifying player behavior.
+	"""
+	# --- LEVEL 1: NEGLIGENCE CHECK (The Baseline) ---
+	if m.tickets_ignored > 0 and m.tickets_completed <= m.tickets_ignored:
+		return GlobalConstants.ARCHETYPE.NEGLIGENT
+
+	# --- LEVEL 2: PROCEDURAL ADHERENCE (Verification Rate) ---
+	if m.tickets_completed > 0:
+		var v_rate = float(m.total_verifications) / m.tickets_completed
+		
+		# BRANCH A: Thoroughness (The "By-the-Book" Path)
+		if m.risks_taken == 0 and v_rate >= 0.8:
+			return GlobalConstants.ARCHETYPE.BY_THE_BOOK
+			
+		# BRANCH B: Tactical Speed (The "Cowboy" Path)
+		# Prioritizes rapid resolution and accepts procedural risk
+		if m.avg_completion_time < 45.0 or m.risks_taken >= 3:
+			return GlobalConstants.ARCHETYPE.COWBOY
+
+	# --- LEVEL 3: DEFAULT (Pragmatic / Balanced) ---
 	return GlobalConstants.ARCHETYPE.PRAGMATIC
 
 # Helper: Log tool usage via ConsequenceEngine to ensure it persists in history

@@ -71,7 +71,7 @@ func _perform_room_jump(scene_path: String, role: GameState.Role):
 	if GameState and GameState.is_in_2d_mode():
 		print(">>> DEBUG: Exiting desktop mode...")
 		if EventBus:
-			EventBus.exit_desktop.emit()
+				EventBus.exit_desktop.emit()
 		# Force mode reset
 		GameState.set_mode(GameState.GameMode.MODE_3D)
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)

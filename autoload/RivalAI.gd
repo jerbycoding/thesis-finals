@@ -11,23 +11,62 @@ var current_state: AIState = AIState.IDLE
 var previous_state: AIState = AIState.IDLE
 var state_enter_time: float = 0.0
 
-# === CONFIGURATION ===
-const TRACE_THRESHOLD_SEARCHING = 30.0
-const TRACE_THRESHOLD_LOCKDOWN = 70.0
-const ISOLATION_COUNTDOWN = 20.0
+# === CONFIGURATION (DYNAMICALLY SCALED BY ARCHETYPE) ===
+var TRACE_THRESHOLD_SEARCHING = 30.0
+var TRACE_THRESHOLD_LOCKDOWN = 70.0
+var ISOLATION_COUNTDOWN = 20.0
+var noise_immunity: float = 0.0 # Chance to ignore poison logs (By-the-Book scaling)
 
 # === ISOLATION STATE ===
 var is_isolation_active: bool = false
 var isolation_timer: float = 0.0
 
 func _ready():
+	_apply_archetype_scaling()
+	
 	print("========================================")
 	print("RivalAI initialized")
 	print("  Searching Threshold: %.0f%%" % TRACE_THRESHOLD_SEARCHING)
 	print("  Lockdown Threshold: %.0f%%" % TRACE_THRESHOLD_LOCKDOWN)
 	print("  Isolation Countdown: %.0fs" % ISOLATION_COUNTDOWN)
-	print("  Debug: Alt+F1-F5 (AI state control)")
+	print("  Archetype Profile: ", _get_archetype_name())
 	print("========================================")
+
+func _apply_archetype_scaling():
+	"""
+	SYMMETRIC MIRRORING:
+	Adjusts AI analyst behavior based on the player's performance in the SOC.
+	"""
+	if not ArchetypeAnalyzer: return
+	
+	var results = ArchetypeAnalyzer.get_analysis_results()
+	var archetype = results.get("archetype", GlobalConstants.ARCHETYPE.PRAGMATIC)
+	
+	match archetype:
+		GlobalConstants.ARCHETYPE.COWBOY:
+			# Cowboy AI: Faster but easier to distract
+			ISOLATION_COUNTDOWN = 15.0
+			TRACE_THRESHOLD_SEARCHING = 35.0
+			noise_immunity = 0.1
+		GlobalConstants.ARCHETYPE.BY_THE_BOOK:
+			# By-the-Book AI: Thorough and harder to spoof
+			ISOLATION_COUNTDOWN = 25.0
+			TRACE_THRESHOLD_SEARCHING = 20.0
+			noise_immunity = 0.5
+		GlobalConstants.ARCHETYPE.NEGLIGENT:
+			# Negligent AI: Slow and easy to bypass
+			ISOLATION_COUNTDOWN = 35.0
+			TRACE_THRESHOLD_SEARCHING = 50.0
+			noise_immunity = 0.0
+		_:
+			# Pragmatic: Balanced baseline
+			ISOLATION_COUNTDOWN = 20.0
+			TRACE_THRESHOLD_SEARCHING = 30.0
+			noise_immunity = 0.2
+
+func _get_archetype_name() -> String:
+	if not ArchetypeAnalyzer: return "Unknown"
+	return ArchetypeAnalyzer.get_analysis_results().get("archetype", "Pragmatic")
 	
 	# Connect to trace signal
 	if TraceLevelManager:
